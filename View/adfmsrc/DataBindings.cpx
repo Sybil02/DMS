@@ -21,15 +21,6 @@
           path="dms.dynamicShell.dynamicTabShellPageDef"/>
     <page id="__indexPageDef" path="view.pageDefs.indexPageDef"/>
     <page id="__loginPageDef" path="dms.login.loginPageDef"/>
-    <page id="__userlistPageDef" path="dms.user.userlistPageDef"/>
-    <page id="__usereditPageDef" path="dms.user.usereditPageDef"/>
-    <page id="__DmsUser_curd_taskflow_DmsUser_curd_taskflow_CreateInsertPageDef"
-          path="view.pageDefs.DmsUser_curd_taskflow_DmsUser_curd_taskflow_CreateInsertPageDef"/>
-    <page id="__DmsUser_curd_taskflow_DmsUser_curd_taskflow_ExecutePageDef"
-          path="view.pageDefs.DmsUser_curd_taskflow_DmsUser_curd_taskflow_ExecutePageDef"/>
-    <page id="__DmsUser_curd_taskflow_DmsUser_curd_taskflow_CommitPageDef"
-          path="view.pageDefs.DmsUser_curd_taskflow_DmsUser_curd_taskflow_CommitPageDef"/>
-    <page id="__editpasswordPageDef" path="dms.user.editpasswordPageDef"/>
     <page id="__testPageDef1" path="view.pageDefs.testPageDef"/>
     <page id="__settingsPageDef" path="view.pageDefs.settingsPageDef"/>
     <page id="__editPageDef" path="dms.user.editPageDef"/>

@@ -50,27 +50,45 @@ values ('10005', 'en', 'DMS_LANGUAGE', 'en', 'English', 20, sysdate, sysdate, '1
 /*==============================================================*/
 truncate table dms_function;
 insert into dms_function(id,function_locale,name,created_at,updated_at,updated_by,created_by,action,category,seq,p_function_id)
-values('10000','zh_CN','主页',sysdate,sysdate,'10000','10000','index','通用',10000,null);
+values('100000','zh_CN','主页',sysdate,sysdate,'10000','10000','index','通用',100000,null);
 insert into dms_function(id,function_locale,name,created_at,updated_at,updated_by,created_by,action,category,seq,p_function_id)
-values('10000','en','Home',sysdate,sysdate,'10000','10000','GoHome','index',10000,null);
+values('100000','en','Home',sysdate,sysdate,'10000','10000','GoHome','index',100000,null);
+
 insert into dms_function(id,function_locale,name,created_at,updated_at,updated_by,created_by,action,category,seq,p_function_id)
-values('10100','zh_CN','设置',sysdate,sysdate,'10000','10000','settings','设置',10100,null);
+values('101000','zh_CN','设置',sysdate,sysdate,'10000','10000','settings','设置',101000,null);
 insert into dms_function(id,function_locale,name,created_at,updated_at,updated_by,created_by,action,category,seq,p_function_id)
-values('10100','en','Setting',sysdate,sysdate,'10000','10000','settings','Settings',10100,null);
+values('101000','en','Setting',sysdate,sysdate,'10000','10000','settings','Settings',101000,null);
+
+insert into dms_function(id,function_locale,name,created_at,updated_at,updated_by,created_by,action,category,seq,p_function_id)
+values('101010','zh_CN','用户管理',sysdate,sysdate,'10000','10000','','用户管理',101010,'101000');
+insert into dms_function(id,function_locale,name,created_at,updated_at,updated_by,created_by,action,category,seq,p_function_id)
+values('101010','en','User Manage',sysdate,sysdate,'10000','10000','','User Manage',101010,'101000');
+
+insert into dms_function(id,function_locale,name,created_at,updated_at,updated_by,created_by,action,category,seq,p_function_id)
+values('101011','zh_CN','帐号管理',sysdate,sysdate,'10000','10000','/WEB-INF/dmsUser/user_manage_tsk.xml#user_manage_tsk','用户管理',101011,'101010');
+insert into dms_function(id,function_locale,name,created_at,updated_at,updated_by,created_by,action,category,seq,p_function_id)
+values('10111','en','Account Management',sysdate,sysdate,'10000','10000','/WEB-INF/dmsUser/user_manage_tsk.xml#user_manage_tsk','User Manage',101011,'101010');
 
 /*==============================================================*/
 /* 初始化菜单                                                     */
 /*==============================================================*/
 truncate table dms_menu;
 insert into dms_menu(id,locale,seq,label,enable_flag,p_id,function_id,created_at,updated_at,updated_by,created_by)
-values('10000','zh_CN',10000,'主页','Y',null,'10000',sysdate,sysdate,'10000','10000');
+values('100000','zh_CN',100000,'主页','Y',null,'100000',sysdate,sysdate,'10000','10000');
 insert into dms_menu(id,locale,seq,label,enable_flag,p_id,function_id,created_at,updated_at,updated_by,created_by)
-values('10000','en',10000,'Home','Y',null,'10000',sysdate,sysdate,'10000','10000');
+values('100000','en',100000,'Home','Y',null,'100000',sysdate,sysdate,'10000','10000');
+
 insert into dms_menu(id,locale,seq,label,enable_flag,p_id,function_id,created_at,updated_at,updated_by,created_by)
-values('10100','zh_CN',10100,'设置','Y',null,'10100',sysdate,sysdate,'10000','10000');
+values('101000','zh_CN',101000,'设置','Y',null,'101000',sysdate,sysdate,'10000','10000');
 insert into dms_menu(id,locale,seq,label,enable_flag,p_id,function_id,created_at,updated_at,updated_by,created_by)
-values('10100','en',10100,'Settings','Y',null,'10100',sysdate,sysdate,'10000','10000');
+values('101000','en',101000,'Settings','Y',null,'101000',sysdate,sysdate,'10000','10000');
+
 insert into dms_menu(id,locale,seq,label,enable_flag,p_id,function_id,created_at,updated_at,updated_by,created_by)
-values('10110','zh_CN',10110,'用户管理','Y','10100','10100',sysdate,sysdate,'10000','10000');
+values('101010','zh_CN',10110,'用户管理','Y','101000','101010',sysdate,sysdate,'10000','10000');
 insert into dms_menu(id,locale,seq,label,enable_flag,p_id,function_id,created_at,updated_at,updated_by,created_by)
-values('10110','en',10110,'User Manage','Y','10100','10100',sysdate,sysdate,'10000','10000');
+values('101010','en',10110,'User Manage','Y','101000','101010',sysdate,sysdate,'10000','10000');
+
+insert into dms_menu(id,locale,seq,label,enable_flag,p_id,function_id,created_at,updated_at,updated_by,created_by)
+values('101011','zh_CN',101011,'帐号管理','Y','101010','101011',sysdate,sysdate,'10000','10000');
+insert into dms_menu(id,locale,seq,label,enable_flag,p_id,function_id,created_at,updated_at,updated_by,created_by)
+values('101011','en',101011,'Account Management','Y','101010','101011',sysdate,sysdate,'10000','10000');
