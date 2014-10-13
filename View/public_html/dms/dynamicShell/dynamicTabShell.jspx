@@ -1,0 +1,343 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.1"
+          xmlns:f="http://java.sun.com/jsf/core"
+          xmlns:h="http://java.sun.com/jsf/html"
+          xmlns:af="http://xmlns.oracle.com/adf/faces/rich"
+          xmlns:c="http://java.sun.com/jsp/jstl/core">
+  <c:set var="viewBundle" value="#{adfBundle['dms_v']}"/>
+  <jsp:directive.page contentType="text/html;charset=windows-1252"/>
+  <af:pageTemplateDef var="attrs">
+    <af:xmlContent>
+      <component xmlns="http://xmlns.oracle.com/adf/faces/rich/component">
+        <display-name>Dms Tabs Shell</display-name>
+        <facet>
+          <facet-name>navigation</facet-name>
+        </facet>
+        <facet>
+          <facet-name>globalLinks</facet-name>
+        </facet>
+        <facet>
+          <facet-name>status</facet-name>
+        </facet>
+        <facet>
+          <facet-name>globalToolbar</facet-name>
+        </facet>
+        <facet>
+          <facet-name>globalSearch</facet-name>
+        </facet>
+        <facet>
+          <facet-name>globalTabs</facet-name>
+        </facet>
+        <facet>
+          <facet-name>welcome</facet-name>
+        </facet>
+        <facet>
+          <facet-name>innerToolbar</facet-name>
+        </facet>
+        <attribute>
+          <attribute-name>brandingTitle</attribute-name>
+          <attribute-class>java.lang.String</attribute-class>
+          <default-value>Navigation Shell</default-value>
+        </attribute>
+        <attribute>
+          <attribute-name>headerSplitterPosition</attribute-name>
+          <attribute-class>int</attribute-class>
+          <default-value>20</default-value>
+        </attribute>
+        <attribute>
+          <attribute-name>headerSplitterDisabled</attribute-name>
+          <attribute-class>boolean</attribute-class>
+          <default-value>false</default-value>
+        </attribute>
+        <attribute>
+          <attribute-name>navSplitterPosition</attribute-name>
+          <attribute-class>int</attribute-class>
+          <default-value>300</default-value>
+        </attribute>
+        <attribute>
+          <attribute-name>navSplitterDisabled</attribute-name>
+          <attribute-class>boolean</attribute-class>
+          <default-value>false</default-value>
+        </attribute>
+        <attribute>
+          <attribute-name>globalAreaSplitterPosition</attribute-name>
+          <attribute-class>int</attribute-class>
+          <default-value>20</default-value>
+        </attribute>
+        <attribute>
+          <attribute-name>statusWidth</attribute-name>
+          <attribute-class>java.lang.String</attribute-class>
+          <default-value>200px</default-value>
+        </attribute>
+        <attribute>
+          <attribute-name>tooManyTabsPopupTitle</attribute-name>
+          <attribute-class>java.lang.String</attribute-class>
+          <default-value>Too Many Tabs Open</default-value>
+        </attribute>
+        <attribute>
+          <attribute-name>tooManyTabsPopupText</attribute-name>
+          <attribute-class>java.lang.String</attribute-class>
+          <default-value>You have too many tabs open. You will need to close
+                         some tabs before opening new ones.</default-value>
+        </attribute>
+        <attribute>
+          <attribute-name>dirtyTabPopupTitle</attribute-name>
+          <attribute-class>java.lang.String</attribute-class>
+          <default-value>Current Tab is Dirty</default-value>
+        </attribute>
+        <attribute>
+          <attribute-name>dirtyTabPopupText</attribute-name>
+          <attribute-class>java.lang.String</attribute-class>
+          <default-value>The current tab is dirty, would you like to close it
+                         anyway?</default-value>
+        </attribute>
+        <attribute>
+          <attribute-name>logoImagePath</attribute-name>
+          <attribute-class>java.lang.String</attribute-class>
+          <default-value>/dms/dynamicShell/images/logo.png</default-value>
+        </attribute>
+      </component>
+    </af:xmlContent>
+    <af:panelSplitter splitterPosition="#{attrs.headerSplitterPosition}"
+                      styleClass="AFBrandingSplitter" firstBorder="none"
+                      secondBorder="none" orientation="vertical"
+                      id="pt_headerPs"
+                      disabled="#{attrs.headerSplitterDisabled}">
+      <f:facet name="first">
+        <af:panelGroupLayout id="pt_gPbl" layout="scroll"
+                             styleClass="AFBrandingBar">
+          <af:panelBorderLayout id="pt_brBar">
+            <!--logo-->
+            <f:facet name="start">
+              <af:panelGroupLayout id="pt_brLogo" styleClass="AFBrandingBarItem"
+                                   inlineStyle="height:20px">
+                <af:image source="#{attrs.logoImagePath}"
+                          inlineStyle="height:20px"
+                          rendered="#{attrs.logoImagePath != null}" id="pt_i1"/>
+              </af:panelGroupLayout>
+            </f:facet>
+            <!--Title-->
+            <f:facet name="innerStart">
+              <af:panelGroupLayout id="pt_titleWrp"
+                                   styleClass="AFBrandingBarItem"
+                                   inlineStyle="height:20px">
+                <af:outputText value="#{attrs.brandingTitle}"
+                               styleClass="AFBrandingBarTitle"
+                               inlineStyle="font-size:14px;margin-top:3px"
+                               id="pt_ot1"/>
+              </af:panelGroupLayout>
+            </f:facet>
+            <af:panelBorderLayout id="pt_sepWrp">
+              <f:facet name="end">
+                <af:panelGroupLayout id="pt_statPgl" layout="horizontal"
+                                     styleClass="AFBrandingBarItem"
+                                     inlineStyle="height:20px;font-size:14px"
+                                     valign="middle">
+                  <!--Global Link Area-->
+                  <af:facetRef facetName="globalLinks"/>
+                  <!--Status Area-->
+                  <af:panelGroupLayout layout="horizontal"
+                                       inlineStyle="width: 200px;"
+                                       id="pt_pgl1">
+                    <af:facetRef facetName="status"/>
+                  </af:panelGroupLayout>
+                  <f:facet name="separator">
+                    <af:spacer width="20" id="pt_brEndSp2"/>
+                  </f:facet>
+                </af:panelGroupLayout>
+              </f:facet>
+            </af:panelBorderLayout>
+            <f:facet name="innerEnd">              
+              <af:panelGroupLayout styleClass="AFBrandingBarItem" id="pt_pgl3" inlineStyle="height:20px;font-size:14px" halign="right">
+                <af:outputLabel value="#{af:formatString(viewBundle['login.user_welcome'],sessionScope.cur_user.name)}"
+                                id="pt_ol1">
+                </af:outputLabel>
+                <af:commandLink text="#{viewBundle['login.logout']}"
+                                id="pt_cl1" action="#{LoginBean.logout}"/>
+                <af:spacer width="50px" height="18px" id="pt_brEndSp"/>
+              </af:panelGroupLayout>
+            </f:facet>
+            <!--Stauts Indicator-->
+            <f:facet name="end">
+              <af:panelGroupLayout id="pt_statWrp" layout="horizontal"
+                                   styleClass="AFBrandingBarItem"
+                                   inlineStyle="height:20px">
+                <af:statusIndicator id="pt_statInd"
+                                    inlineStyle="padding:0em 0.5em 0px 0.5em"/>
+              </af:panelGroupLayout>
+            </f:facet>
+          </af:panelBorderLayout>
+        </af:panelGroupLayout>
+      </f:facet>
+      <f:facet name="second">
+        <af:decorativeBox id="contentBody" theme="contentBody"
+                          inlineStyle="margin-bottom:0px;border-bottom:0px">
+          <f:facet name="center">
+            <af:panelSplitter id="pt_psGT"
+                              splitterPosition="#{attrs.globalAreaSplitterPosition}"
+                              orientation="vertical"
+                              firstLandmark="complementary" disabled="true">
+              <f:facet name="first">
+                <af:panelStretchLayout id="pt_pbl1" startWidth="auto"
+                                       endWidth="auto"
+                                       binding="#{viewScope.dmsTabContext.toolbarArea}"
+                                       rendered="#{attrs.globalAreaSplitterPosition>0}">
+                  <f:facet name="start">
+                    <af:facetRef facetName="globalToolbar"/>
+                  </f:facet>
+                  <f:facet name="end">
+                    <af:facetRef facetName="globalSearch"/>
+                  </f:facet>
+                </af:panelStretchLayout>
+              </f:facet>
+              <f:facet name="second">
+                <af:decorativeBox id="pt_db8" theme="light" topHeight="23px">
+                  <f:facet name="top">
+                    <af:panelStretchLayout endWidth="auto" id="ptpsl2"
+                                           centerLandmark="navigation"
+                                           endLandmark="search">
+                      <f:facet name="center">
+                        <af:facetRef facetName="globalTabs"/>
+                      </f:facet>
+                    </af:panelStretchLayout>
+                  </f:facet>
+                  <f:facet name="center">
+                    <af:panelSplitter orientation="horizontal"
+                                      splitterPosition="#{attrs.navSplitterPosition}"
+                                      id="pt_ps1"
+                                      disabled="#{attrs.navSplitterDisabled}">
+                      <f:facet name="first">
+                        <af:decorativeBox id="pt_db9" theme="light">
+                          <f:facet name="top"/>
+                          <f:facet name="center">
+                            <af:facetRef facetName="navigation"/>
+                          </f:facet>
+                        </af:decorativeBox>
+                      </f:facet>
+                      <f:facet name="second">
+                        <af:panelStretchLayout topHeight="auto" id="pt_psl3">
+                          <f:facet name="top">
+                            <af:panelGroupLayout id="pt_pgl2"
+                                                 binding="#{viewScope.dmsTabContext.innerToolbarArea}">
+                              <af:facetRef facetName="innerToolbar"/>
+                            </af:panelGroupLayout>
+                          </f:facet>
+                          <f:facet name="center">
+                            <af:panelStretchLayout topHeight="auto" id="pt_psl4"
+                                                   binding="#{viewScope.dmsTabContext.contentArea}">
+                              <f:facet name="top">
+                                <af:panelBorderLayout id="pt_psl6"
+                                                      styleClass="AFStretchWidth"
+                                                      rendered="#{viewScope.dmsTabContext.tabsRendered}">
+                                  <af:navigationPane id="pt_np1"
+                                                     binding="#{viewScope.dmsTabContext.tabsNavigationPane}"
+                                                     rendered="#{viewScope.dmsTabContext.selectedTabIndex != -1}"
+                                                     value="#{viewScope.dmsTabContext.tabMenuModel}"
+                                                     var="tab">
+                                    <f:facet name="nodeStamp">
+                                      <af:commandNavigationItem id="tabIndex"
+                                                                rendered="#{tab.active}"
+                                                                actionListener="#{viewScope.dmsTabContext.tabActivatedEvent}"
+                                                                inlineStyle="#{tab.dirty ? 'font-style: italic' : ''}"
+                                                                partialSubmit="true"
+                                                                text="#{tab.title}"
+                                                                immediate="true">
+                                        <f:attribute name="tabIndex"
+                                                     value="#{tab.index}"/>
+                                      </af:commandNavigationItem>
+                                    </f:facet>
+                                  </af:navigationPane>
+                                  <f:facet name="end">
+                                    <af:commandImageLink icon="/dms/dynamicShell/images/close.png"
+                                                         hoverIcon="/dms/dynamicShell/images/closeHover.png"
+                                                         actionListener="#{viewScope.dmsTabContext.tabRemovedEvent}"
+                                                         rendered="#{viewScope.dmsTabContext.selectedTabIndex != -1}"
+                                                         immediate="true"
+                                                         partialSubmit="true"
+                                                         id="pt_cil1"/>
+                                  </f:facet>
+                                </af:panelBorderLayout>
+                              </f:facet>
+                              <f:facet name="center">
+                                <af:group id="pt_g1">
+                                  <af:panelStretchLayout id="pt_psl5"
+                                                         rendered="#{viewScope.dmsTabContext.selectedTabIndex == -1}">
+                                    <f:facet name="center">
+                                      <af:facetRef facetName="welcome"/>
+                                    </f:facet>
+                                  </af:panelStretchLayout>
+                                  <af:region value="#{viewScope.dmsTabContext.tabs[0].binding.regionModel}"
+                                             id="pt_region0"
+                                             rendered="#{viewScope.dmsTabContext.selectedTabIndex == 0}"/>
+                                  <af:region value="#{viewScope.dmsTabContext.tabs[1].binding.regionModel}"
+                                             id="pt_region1"
+                                             rendered="#{viewScope.dmsTabContext.selectedTabIndex == 1}"/>
+                                  <af:region value="#{viewScope.dmsTabContext.tabs[2].binding.regionModel}"
+                                             id="pt_region2"
+                                             rendered="#{viewScope.dmsTabContext.selectedTabIndex == 2}"/>
+                                  <af:region value="#{viewScope.dmsTabContext.tabs[3].binding.regionModel}"
+                                             id="pt_region3"
+                                             rendered="#{viewScope.dmsTabContext.selectedTabIndex == 3}"/>
+                                  <af:region value="#{viewScope.dmsTabContext.tabs[4].binding.regionModel}"
+                                             id="pt_region4"
+                                             rendered="#{viewScope.dmsTabContext.selectedTabIndex == 4}"/>
+                                  <af:region value="#{viewScope.dmsTabContext.tabs[5].binding.regionModel}"
+                                             id="pt_region5"
+                                             rendered="#{viewScope.dmsTabContext.selectedTabIndex == 5}"/>
+                                  <af:region value="#{viewScope.dmsTabContext.tabs[6].binding.regionModel}"
+                                             id="pt_region6"
+                                             rendered="#{viewScope.dmsTabContext.selectedTabIndex == 6}"/>
+                                  <af:region value="#{viewScope.dmsTabContext.tabs[7].binding.regionModel}"
+                                             id="pt_region7"
+                                             rendered="#{viewScope.dmsTabContext.selectedTabIndex == 7}"/>
+                                  <af:region value="#{viewScope.dmsTabContext.tabs[8].binding.regionModel}"
+                                             id="pt_region8"
+                                             rendered="#{viewScope.dmsTabContext.selectedTabIndex == 8}"/>
+                                  <af:region value="#{viewScope.dmsTabContext.tabs[9].binding.regionModel}"
+                                             id="pt_region9"
+                                             rendered="#{viewScope.dmsTabContext.selectedTabIndex == 9}"/>
+                                  <af:region value="#{viewScope.dmsTabContext.tabs[10].binding.regionModel}"
+                                             id="pt_region10"
+                                             rendered="#{viewScope.dmsTabContext.selectedTabIndex == 10}"/>
+                                  <af:region value="#{viewScope.dmsTabContext.tabs[11].binding.regionModel}"
+                                             id="pt_region11"
+                                             rendered="#{viewScope.dmsTabContext.selectedTabIndex == 11}"/>
+                                  <af:region value="#{viewScope.dmsTabContext.tabs[12].binding.regionModel}"
+                                             id="pt_region12"
+                                             rendered="#{viewScope.dmsTabContext.selectedTabIndex == 12}"/>
+                                  <af:region value="#{viewScope.dmsTabContext.tabs[13].binding.regionModel}"
+                                             id="pt_region13"
+                                             rendered="#{viewScope.dmsTabContext.selectedTabIndex == 13}"/>
+                                  <af:region value="#{viewScope.dmsTabContext.tabs[14].binding.regionModel}"
+                                             id="pt_region14"
+                                             rendered="#{viewScope.dmsTabContext.selectedTabIndex == 14}"/>
+                                </af:group>
+                              </f:facet>
+                            </af:panelStretchLayout>
+                          </f:facet>
+                        </af:panelStretchLayout>
+                      </f:facet>
+                    </af:panelSplitter>
+                  </f:facet>
+                </af:decorativeBox>
+              </f:facet>
+            </af:panelSplitter>
+          </f:facet>
+        </af:decorativeBox>
+      </f:facet>
+    </af:panelSplitter>
+    <af:popup id="pt_toomanytabs" clientComponent="true" contentDelivery="lazy"
+              binding="#{viewScope.dmsTabContext.tooManyTabsPopup}">
+      <af:dialog title="#{attrs.tooManyTabsPopupTitle}" type="ok" id="pt_d1">
+        <af:outputText value="#{attrs.tooManyTabsPopupText}" id="pt_ot2"/>
+      </af:dialog>
+    </af:popup>
+    <af:popup id="pt_tabdirty" clientComponent="true" contentDelivery="lazy"
+              binding="#{viewScope.dmsTabContext.tabDirtyPopup}">
+      <af:dialog title="#{attrs.dirtyTabPopupTitle}" type="yesNo" id="pt_d2"
+                 dialogListener="#{viewScope.dmsTabContext.handleDirtyTabDialog}">
+        <af:outputText value="#{attrs.dirtyTabPopupText}" id="pt_ot3"/>
+      </af:dialog>
+    </af:popup>
+  </af:pageTemplateDef>
+</jsp:root>

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pageDefinition xmlns="http://xmlns.oracle.com/adfm/uimodel"
+                version="11.1.1.64.93" id="usereditPageDef" Package="dms.user">
+  <parameters/>
+  <executables>
+    <variableIterator id="variables"/>
+    <iterator Binds="DmsUserView" RangeSize="25"
+              DataControl="DmsModuleDataControl" id="DmsUserViewIterator"/>
+  </executables>
+  <bindings>
+    <attributeValues IterBinding="DmsUserViewIterator" id="Id">
+      <AttrNames>
+        <Item Value="Id"/>
+      </AttrNames>
+    </attributeValues>
+    <attributeValues IterBinding="DmsUserViewIterator" id="Acc">
+      <AttrNames>
+        <Item Value="Acc"/>
+      </AttrNames>
+    </attributeValues>
+    <attributeValues IterBinding="DmsUserViewIterator" id="Pwd">
+      <AttrNames>
+        <Item Value="Pwd"/>
+      </AttrNames>
+    </attributeValues>
+    <attributeValues IterBinding="DmsUserViewIterator" id="LockFlag">
+      <AttrNames>
+        <Item Value="LockFlag"/>
+      </AttrNames>
+    </attributeValues>
+    <attributeValues IterBinding="DmsUserViewIterator" id="EnableFlag">
+      <AttrNames>
+        <Item Value="EnableFlag"/>
+      </AttrNames>
+    </attributeValues>
+    <attributeValues IterBinding="DmsUserViewIterator" id="RetryCount">
+      <AttrNames>
+        <Item Value="RetryCount"/>
+      </AttrNames>
+    </attributeValues>
+    <attributeValues IterBinding="DmsUserViewIterator" id="LockTime">
+      <AttrNames>
+        <Item Value="LockTime"/>
+      </AttrNames>
+    </attributeValues>
+    <attributeValues IterBinding="DmsUserViewIterator" id="UpdatedAt">
+      <AttrNames>
+        <Item Value="UpdatedAt"/>
+      </AttrNames>
+    </attributeValues>
+    <attributeValues IterBinding="DmsUserViewIterator" id="CreatedAt">
+      <AttrNames>
+        <Item Value="CreatedAt"/>
+      </AttrNames>
+    </attributeValues>
+    <attributeValues IterBinding="DmsUserViewIterator" id="CreatedBy">
+      <AttrNames>
+        <Item Value="CreatedBy"/>
+      </AttrNames>
+    </attributeValues>
+    <attributeValues IterBinding="DmsUserViewIterator" id="UpdatedBy">
+      <AttrNames>
+        <Item Value="UpdatedBy"/>
+      </AttrNames>
+    </attributeValues>
+    <attributeValues IterBinding="DmsUserViewIterator" id="Name">
+      <AttrNames>
+        <Item Value="Name"/>
+      </AttrNames>
+    </attributeValues>
+    <attributeValues IterBinding="DmsUserViewIterator" id="Sex">
+      <AttrNames>
+        <Item Value="Sex"/>
+      </AttrNames>
+    </attributeValues>
+    <attributeValues IterBinding="DmsUserViewIterator" id="Mail">
+      <AttrNames>
+        <Item Value="Mail"/>
+      </AttrNames>
+    </attributeValues>
+    <attributeValues IterBinding="DmsUserViewIterator" id="Locale">
+      <AttrNames>
+        <Item Value="Locale"/>
+      </AttrNames>
+    </attributeValues>
+    <attributeValues IterBinding="DmsUserViewIterator" id="Phone">
+      <AttrNames>
+        <Item Value="Phone"/>
+      </AttrNames>
+    </attributeValues>
+    <attributeValues IterBinding="DmsUserViewIterator" id="OtherInfo">
+      <AttrNames>
+        <Item Value="OtherInfo"/>
+      </AttrNames>
+    </attributeValues>
+  </bindings>
+</pageDefinition>

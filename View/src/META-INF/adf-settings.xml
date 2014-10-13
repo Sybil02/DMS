@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="windows-1252" ?>
+<adf-settings xmlns="http://xmlns.oracle.com/adf/settings">
+<adfc-controller-config 
+xmlns="http://xmlns.oracle.com/adf/controller/config">
+<lifecycle>
+<phase-listener>
+<listener-id>checkLoginPhaseListener</listener-id>
+<class>common.CheckLoginPhaseListener</class>
+</phase-listener>
+</lifecycle>
+</adfc-controller-config> 
+</adf-settings>

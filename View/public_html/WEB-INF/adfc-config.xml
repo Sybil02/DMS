@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<adfc-config xmlns="http://xmlns.oracle.com/adf/controller" version="1.2">
+  <view id="login">
+    <page>/dms/login/login.jspx</page>
+  </view>
+  <view id="index">
+    <page>/index.jspx</page>
+  </view>
+  <view id="settings">
+    <page>/settings.jspx</page>
+  </view>
+  <control-flow-rule id="__17">
+    <from-activity-id id="__18">*</from-activity-id>
+    <control-flow-case id="__20">
+      <from-outcome id="__21">DoLogin</from-outcome>
+      <to-activity-id id="__19">login</to-activity-id>
+    </control-flow-case>
+  </control-flow-rule>
+  <control-flow-rule id="__28">
+    <from-activity-id id="__27">*</from-activity-id>
+    <control-flow-case id="__30">
+      <from-outcome id="__31">GoHome</from-outcome>
+      <to-activity-id id="__29">index</to-activity-id>
+    </control-flow-case>
+  </control-flow-rule>
+  <control-flow-rule id="__13">
+    <from-activity-id id="__14">*</from-activity-id>
+    <control-flow-case id="__16">
+      <from-outcome id="__26">GoSetting</from-outcome>
+      <to-activity-id id="__15">settings</to-activity-id>
+    </control-flow-case>
+  </control-flow-rule>
+  <managed-bean id="__1">
+    <managed-bean-name id="__4">dmsTabContext</managed-bean-name>
+    <managed-bean-class id="__2">dms.dynamicShell.TabContext</managed-bean-class>
+    <managed-bean-scope id="__3">view</managed-bean-scope>
+  </managed-bean>
+  <managed-bean id="__5">
+    <managed-bean-name id="__6">LoginBean</managed-bean-name>
+    <managed-bean-class id="__8">dms.login.LoginBean</managed-bean-class>
+    <managed-bean-scope id="__7">request</managed-bean-scope>
+  </managed-bean>
+  <managed-bean id="__11">
+    <managed-bean-name id="__10">SysPreferenceBean</managed-bean-name>
+    <managed-bean-class id="__12">dms.common.SysPreferenceBean</managed-bean-class>
+    <managed-bean-scope id="__9">application</managed-bean-scope>
+  </managed-bean>
+  <managed-bean id="__25">
+    <managed-bean-name id="__23">MainPageMBean</managed-bean-name>
+    <managed-bean-class id="__22">dms.common.MainPageMBean</managed-bean-class>
+    <managed-bean-scope id="__24">request</managed-bean-scope>
+  </managed-bean>
+  <managed-bean id="__34">
+    <managed-bean-name id="__33">MenuBean</managed-bean-name>
+    <managed-bean-class id="__32">dms.Menu.MenuBean</managed-bean-class>
+    <managed-bean-scope id="__35">view</managed-bean-scope>
+  </managed-bean>
+</adfc-config>

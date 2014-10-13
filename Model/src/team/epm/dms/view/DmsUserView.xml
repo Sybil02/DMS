@@ -1,0 +1,402 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE ViewObject SYSTEM "jbo_03_01.dtd">
+<!---->
+<ViewObject
+  xmlns="http://xmlns.oracle.com/bc4j"
+  Name="DmsUserView"
+  Version="11.1.1.64.93"
+  InheritPersonalization="true"
+  SelectList="DmsUser.ID, 
+       DmsUser.ACC, 
+       DmsUser.PWD, 
+       DmsUser.LOCK_FLAG, 
+       DmsUser.ENABLE_FLAG, 
+       DmsUser.RETRY_COUNT, 
+       DmsUser.LOCK_TIME, 
+       DmsUser.UPDATED_AT, 
+       DmsUser.CREATED_AT, 
+       DmsUser.CREATED_BY, 
+       DmsUser.UPDATED_BY, 
+       DmsUser.NAME, 
+       DmsUser.SEX, 
+       DmsUser.MAIL, 
+       DmsUser.LOCALE, 
+       DmsUser.PHONE, 
+       DmsUser.OTHER_INFO"
+  FromList="DMS_USER DmsUser"
+  BindingStyle="OracleName"
+  CustomQuery="false"
+  PageIterMode="Full"
+  UseGlueCode="false"
+  RowClass="team.epm.dms.view.DmsUserViewRowImpl"
+  ComponentClass="team.epm.dms.view.DmsUserViewImpl">
+  <DesignTime>
+    <Attr Name="_codeGenFlag2" Value="Access|Coll|VarAccess"/>
+    <Attr Name="_isCodegen" Value="true"/>
+  </DesignTime>
+  <ViewAccessor
+    Name="LKUP_YES_NO"
+    ViewObjectName="team.epm.dms.view.DmsLookupView">
+    <ViewCriteriaUsage
+      Name="DmsLookupViewCriteria"
+      FullName="team.epm.dms.view.DmsLookupView.DmsLookupViewCriteria"/>
+    <ParameterMap>
+      <PIMap Variable="locale">
+        <TransientExpression><![CDATA[this.Locale]]></TransientExpression>
+      </PIMap>
+      <PIMap Variable="lookupType">
+        <TransientExpression><![CDATA["YES_NO"]]></TransientExpression>
+      </PIMap>
+    </ParameterMap>
+  </ViewAccessor>
+  <ViewAccessor
+    Name="LKUP_DMS_SEX"
+    ViewObjectName="team.epm.dms.view.DmsLookupView">
+    <ViewCriteriaUsage
+      Name="DmsLookupViewCriteria"
+      FullName="team.epm.dms.view.DmsLookupView.DmsLookupViewCriteria"/>
+    <ParameterMap>
+      <PIMap Variable="locale">
+        <TransientExpression><![CDATA[this.Locale]]></TransientExpression>
+      </PIMap>
+      <PIMap Variable="lookupType">
+        <TransientExpression><![CDATA["DMS_SEX"]]></TransientExpression>
+      </PIMap>
+    </ParameterMap>
+  </ViewAccessor>
+  <ViewAccessor
+    Name="LKUP_DMS_LANGUAGE"
+    ViewObjectName="team.epm.dms.view.DmsLookupView">
+    <ViewCriteriaUsage
+      Name="DmsLookupViewCriteria"
+      FullName="team.epm.dms.view.DmsLookupView.DmsLookupViewCriteria"/>
+    <ParameterMap>
+      <PIMap Variable="locale">
+        <TransientExpression><![CDATA[this.Locale]]></TransientExpression>
+      </PIMap>
+      <PIMap Variable="lookupType">
+        <TransientExpression><![CDATA["DMS_LANGUAGE"]]></TransientExpression>
+      </PIMap>
+    </ParameterMap>
+  </ViewAccessor>
+  <ListBinding
+    Name="LOV_LockFlag"
+    ListVOName="LKUP_YES_NO"
+    ListRangeSize="-1"
+    NullValueFlag="none"
+    NullValueId="LOV_LockFlag_LOVUIHints_NullValueId"
+    MRUCount="0">
+    <AttrArray Name="AttrNames">
+      <Item Value="LockFlag"/>
+    </AttrArray>
+    <AttrArray Name="ListAttrNames">
+      <Item Value="Code"/>
+    </AttrArray>
+    <AttrArray Name="ListDisplayAttrNames">
+      <Item Value="Meaning"/>
+    </AttrArray>
+    <DisplayCriteria/>
+  </ListBinding>
+  <ListBinding
+    Name="LOV_EnableFlag"
+    ListVOName="LKUP_YES_NO"
+    ListRangeSize="-1"
+    NullValueFlag="none"
+    NullValueId="LOV_EnableFlag_LOVUIHints_NullValueId"
+    MRUCount="0">
+    <AttrArray Name="AttrNames">
+      <Item Value="EnableFlag"/>
+    </AttrArray>
+    <AttrArray Name="ListAttrNames">
+      <Item Value="Code"/>
+    </AttrArray>
+    <AttrArray Name="ListDisplayAttrNames">
+      <Item Value="Meaning"/>
+    </AttrArray>
+    <DisplayCriteria/>
+  </ListBinding>
+  <ListBinding
+    Name="LOV_Sex"
+    ListVOName="LKUP_DMS_SEX"
+    ListRangeSize="-1"
+    NullValueFlag="none"
+    NullValueId="LOV_Sex_LOVUIHints_NullValueId"
+    MRUCount="0">
+    <AttrArray Name="AttrNames">
+      <Item Value="Sex"/>
+    </AttrArray>
+    <AttrArray Name="ListAttrNames">
+      <Item Value="Code"/>
+    </AttrArray>
+    <AttrArray Name="ListDisplayAttrNames">
+      <Item Value="Meaning"/>
+    </AttrArray>
+    <DisplayCriteria/>
+  </ListBinding>
+  <ListBinding
+    Name="LOV_Locale"
+    ListVOName="LKUP_DMS_LANGUAGE"
+    ListRangeSize="-1"
+    NullValueFlag="none"
+    NullValueId="LOV_Locale_LOVUIHints_NullValueId"
+    MRUCount="0">
+    <AttrArray Name="AttrNames">
+      <Item Value="Locale"/>
+    </AttrArray>
+    <AttrArray Name="ListAttrNames">
+      <Item Value="Code"/>
+    </AttrArray>
+    <AttrArray Name="ListDisplayAttrNames">
+      <Item Value="Meaning"/>
+    </AttrArray>
+    <DisplayCriteria/>
+  </ListBinding>
+  <EntityUsage
+    Name="DmsUser"
+    Entity="team.epm.dms.model.DmsUser"/>
+  <ViewAttribute
+    Name="Id"
+    IsNotNull="true"
+    PrecisionRule="true"
+    EntityAttrName="Id"
+    EntityUsage="DmsUser"
+    AliasName="ID"
+    IsUpdateable="while_insert">
+    <TransientExpression><![CDATA[java.util.UUID.randomUUID().toString().replace("-", "")]]></TransientExpression>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="Acc"
+    PrecisionRule="true"
+    EntityAttrName="Acc"
+    EntityUsage="DmsUser"
+    AliasName="ACC"
+    IsUpdateable="while_insert">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="dms_user.acc"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="Pwd"
+    PrecisionRule="true"
+    EntityAttrName="Pwd"
+    EntityUsage="DmsUser"
+    AliasName="PWD">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="dms_user.pwd"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="LockFlag"
+    PrecisionRule="true"
+    EntityAttrName="LockFlag"
+    EntityUsage="DmsUser"
+    AliasName="LOCK_FLAG"
+    LOVName="LOV_LockFlag"
+    DefaultValue='N'>
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="dms_user.lockFlag"/>
+        <CONTROLTYPE
+          Value="choice"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="EnableFlag"
+    PrecisionRule="true"
+    EntityAttrName="EnableFlag"
+    EntityUsage="DmsUser"
+    AliasName="ENABLE_FLAG"
+    LOVName="LOV_EnableFlag"
+    DefaultValue='Y'>
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="dms_user.enableFlag"/>
+        <CONTROLTYPE
+          Value="choice"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="RetryCount"
+    PrecisionRule="true"
+    EntityAttrName="RetryCount"
+    EntityUsage="DmsUser"
+    AliasName="RETRY_COUNT"
+    DefaultValue="0">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="dms_user.retryCount"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="LockTime"
+    PrecisionRule="true"
+    EntityAttrName="LockTime"
+    EntityUsage="DmsUser"
+    AliasName="LOCK_TIME">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="dms_user.locktime"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="UpdatedAt"
+    PrecisionRule="true"
+    EntityAttrName="UpdatedAt"
+    EntityUsage="DmsUser"
+    AliasName="UPDATED_AT">
+    <TransientExpression><![CDATA[adf.currentDateTime]]></TransientExpression>
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="updatedAt"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="CreatedAt"
+    PrecisionRule="true"
+    EntityAttrName="CreatedAt"
+    EntityUsage="DmsUser"
+    AliasName="CREATED_AT"
+    IsUpdateable="while_insert">
+    <TransientExpression><![CDATA[adf.currentDateTime]]></TransientExpression>
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="createdAt"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="CreatedBy"
+    PrecisionRule="true"
+    EntityAttrName="CreatedBy"
+    EntityUsage="DmsUser"
+    AliasName="CREATED_BY">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="createdBy"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="UpdatedBy"
+    PrecisionRule="true"
+    EntityAttrName="UpdatedBy"
+    EntityUsage="DmsUser"
+    AliasName="UPDATED_BY">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="updatedBy"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="Name"
+    PrecisionRule="true"
+    EntityAttrName="Name"
+    EntityUsage="DmsUser"
+    AliasName="NAME">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="dms_user.name"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="Sex"
+    PrecisionRule="true"
+    EntityAttrName="Sex"
+    EntityUsage="DmsUser"
+    AliasName="SEX"
+    LOVName="LOV_Sex"
+    DefaultValue="M">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="dms_user.sex"/>
+        <CONTROLTYPE
+          Value="choice"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="Mail"
+    PrecisionRule="true"
+    EntityAttrName="Mail"
+    EntityUsage="DmsUser"
+    AliasName="MAIL">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="dms_user.mail"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="Locale"
+    PrecisionRule="true"
+    EntityAttrName="Locale"
+    EntityUsage="DmsUser"
+    AliasName="LOCALE"
+    LOVName="LOV_Locale"
+    DefaultValue="zh_CN">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="dms_user.locale"/>
+        <CONTROLTYPE
+          Value="choice"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="Phone"
+    PrecisionRule="true"
+    EntityAttrName="Phone"
+    EntityUsage="DmsUser"
+    AliasName="PHONE">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="dms_user.phone"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="OtherInfo"
+    PrecisionRule="true"
+    EntityAttrName="OtherInfo"
+    EntityUsage="DmsUser"
+    AliasName="OTHER_INFO">
+    <Properties>
+      <SchemaBasedProperties>
+        <DISPLAYWIDTH
+          Value="200"/>
+        <LABEL
+          ResId="dms_user.otherInfo"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
+  <ResourceBundle>
+    <PropertiesBundle
+      PropertiesFile="ModelBundle"/>
+  </ResourceBundle>
+</ViewObject>

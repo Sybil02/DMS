@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE JboProject SYSTEM "jbo_03_01.dtd">
+<!---->
+<JboProject
+  xmlns="http://xmlns.oracle.com/bc4j"
+  Name="Model"
+  Version="11.1.1.64.93"
+  SeparateXMLFiles="true"
+  PackageName=""
+  ExportIntfPackage="">
+  <DesignTime>
+    <Attr Name="_jprName" Value="../Model.jpr"/>
+    <Attr Name="_appModuleNames1" Value="team.epm.module.DcmModule"/>
+    <Attr Name="_appModuleNames0" Value="team.epm.module.DmsModule"/>
+    <Attr Name="_NamedConnection" Value="DMSConn"/>
+  </DesignTime>
+  <Containee
+    Name="model"
+    PackageName="team.epm.dcm.model"
+    ObjectType="JboPackage">
+    <DesignTime>
+      <Attr Name="_EO" Value="true"/>
+    </DesignTime>
+  </Containee>
+  <Containee
+    Name="view"
+    PackageName="team.epm.dcm.view"
+    ObjectType="JboPackage">
+    <DesignTime>
+      <Attr Name="_VO" Value="true"/>
+    </DesignTime>
+  </Containee>
+  <Containee
+    Name="model"
+    PackageName="team.epm.dms.model"
+    ObjectType="JboPackage">
+    <DesignTime>
+      <Attr Name="_EO" Value="true"/>
+    </DesignTime>
+  </Containee>
+  <Containee
+    Name="view"
+    PackageName="team.epm.dms.view"
+    ObjectType="JboPackage">
+    <DesignTime>
+      <Attr Name="_VO" Value="true"/>
+    </DesignTime>
+  </Containee>
+  <Containee
+    Name="module"
+    PackageName="team.epm.module"
+    ObjectType="JboPackage">
+    <DesignTime>
+      <Attr Name="_AM" Value="true"/>
+    </DesignTime>
+  </Containee>
+</JboProject>

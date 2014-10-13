@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE ViewObject SYSTEM "jbo_03_01.dtd">
+<!---->
+<ViewObject
+  xmlns="http://xmlns.oracle.com/bc4j"
+  Name="DcmTemplateValidationView"
+  Version="11.1.1.64.93"
+  InheritPersonalization="true"
+  SelectList="DcmTemplateValidation.ID, 
+       DcmTemplateValidation.COLUMN_ID, 
+       DcmTemplateValidation.VALIDATION_ID, 
+       DcmTemplateValidation.SEQ, 
+       DcmTemplateValidation.CREATED_AT, 
+       DcmTemplateValidation.UPDATED_AT, 
+       DcmTemplateValidation.UPDATED_BY, 
+       DcmTemplateValidation.CREATED_BY"
+  FromList="DCM_TEMPLATE_VALIDATION DcmTemplateValidation"
+  BindingStyle="OracleName"
+  CustomQuery="false"
+  PageIterMode="Full"
+  UseGlueCode="false">
+  <DesignTime>
+    <Attr Name="_codeGenFlag2" Value="Access|VarAccess"/>
+  </DesignTime>
+  <EntityUsage
+    Name="DcmTemplateValidation"
+    Entity="team.epm.dcm.model.DcmTemplateValidation"/>
+  <ViewAttribute
+    Name="Id"
+    IsNotNull="true"
+    PrecisionRule="true"
+    EntityAttrName="Id"
+    EntityUsage="DcmTemplateValidation"
+    AliasName="ID"/>
+  <ViewAttribute
+    Name="ColumnId"
+    PrecisionRule="true"
+    EntityAttrName="ColumnId"
+    EntityUsage="DcmTemplateValidation"
+    AliasName="COLUMN_ID"/>
+  <ViewAttribute
+    Name="ValidationId"
+    PrecisionRule="true"
+    EntityAttrName="ValidationId"
+    EntityUsage="DcmTemplateValidation"
+    AliasName="VALIDATION_ID"/>
+  <ViewAttribute
+    Name="Seq"
+    PrecisionRule="true"
+    EntityAttrName="Seq"
+    EntityUsage="DcmTemplateValidation"
+    AliasName="SEQ"/>
+  <ViewAttribute
+    Name="CreatedAt"
+    PrecisionRule="true"
+    EntityAttrName="CreatedAt"
+    EntityUsage="DcmTemplateValidation"
+    AliasName="CREATED_AT"/>
+  <ViewAttribute
+    Name="UpdatedAt"
+    PrecisionRule="true"
+    EntityAttrName="UpdatedAt"
+    EntityUsage="DcmTemplateValidation"
+    AliasName="UPDATED_AT"/>
+  <ViewAttribute
+    Name="UpdatedBy"
+    PrecisionRule="true"
+    EntityAttrName="UpdatedBy"
+    EntityUsage="DcmTemplateValidation"
+    AliasName="UPDATED_BY"/>
+  <ViewAttribute
+    Name="CreatedBy"
+    PrecisionRule="true"
+    EntityAttrName="CreatedBy"
+    EntityUsage="DcmTemplateValidation"
+    AliasName="CREATED_BY"/>
+</ViewObject>

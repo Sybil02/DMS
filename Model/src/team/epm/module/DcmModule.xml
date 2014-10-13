@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE AppModule SYSTEM "jbo_03_01.dtd">
+<!---->
+<AppModule
+  xmlns="http://xmlns.oracle.com/bc4j"
+  Name="DcmModule"
+  Version="11.1.1.64.93"
+  InheritPersonalization="true"
+  ClearCacheOnRollback="true">
+  <DesignTime>
+    <Attr Name="_deployType" Value="0"/>
+  </DesignTime>
+  <ViewUsage
+    Name="DcmCombinationView"
+    ViewObjectName="team.epm.dcm.view.DcmCombinationView"/>
+  <ViewUsage
+    Name="DcmErrorView"
+    ViewObjectName="team.epm.dcm.view.DcmErrorView"/>
+  <ViewUsage
+    Name="DcmJobView"
+    ViewObjectName="team.epm.dcm.view.DcmJobView"/>
+  <ViewUsage
+    Name="DcmRoleTemplateView"
+    ViewObjectName="team.epm.dcm.view.DcmRoleTemplateView"/>
+  <ViewUsage
+    Name="DcmTemplateColumnView"
+    ViewObjectName="team.epm.dcm.view.DcmTemplateColumnView"/>
+  <ViewUsage
+    Name="DcmTemplateCombinationView"
+    ViewObjectName="team.epm.dcm.view.DcmTemplateCombinationView"/>
+  <ViewUsage
+    Name="DcmTemplateCtrlView"
+    ViewObjectName="team.epm.dcm.view.DcmTemplateCtrlView"/>
+  <ViewUsage
+    Name="DcmTemplateValidationView"
+    ViewObjectName="team.epm.dcm.view.DcmTemplateValidationView"/>
+  <ViewUsage
+    Name="DcmTemplateView"
+    ViewObjectName="team.epm.dcm.view.DcmTemplateView"/>
+  <ViewUsage
+    Name="DcmValidationView"
+    ViewObjectName="team.epm.dcm.view.DcmValidationView"/>
+</AppModule>

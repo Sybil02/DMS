@@ -1,0 +1,25 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<BC4JConfig version="11.1" xmlns="http://xmlns.oracle.com/bc4j/configuration">
+   <AppModuleConfigBag ApplicationName="team.epm.module.DmsModule">
+      <AppModuleConfig name="DmsModuleLocal" ApplicationName="team.epm.module.DmsModule" DeployPlatform="LOCAL" jbo.project="Model">
+         <Security AppModuleJndiName="team.epm.module.DmsModule"/>
+         <Custom JDBCDataSource="java:comp/env/jdbc/DMSConnDS"/>
+      </AppModuleConfig>
+      <AppModuleConfig name="DmsModuleShared" ApplicationName="team.epm.module.DmsModule" DeployPlatform="LOCAL" jbo.project="Model">
+         <AM-Pooling jbo.ampool.maxpoolsize="1" jbo.ampool.isuseexclusive="false"/>
+         <Security AppModuleJndiName="team.epm.module.DmsModule"/>
+         <Custom JDBCDataSource="java:comp/env/jdbc/DMSConnDS"/>
+      </AppModuleConfig>
+   </AppModuleConfigBag>
+   <AppModuleConfigBag ApplicationName="team.epm.module.DcmModule">
+      <AppModuleConfig name="DcmModuleLocal" ApplicationName="team.epm.module.DcmModule" DeployPlatform="LOCAL" jbo.project="Model">
+         <Security AppModuleJndiName="team.epm.module.DcmModule"/>
+         <Custom JDBCDataSource="java:comp/env/jdbc/DMSConnDS"/>
+      </AppModuleConfig>
+      <AppModuleConfig name="DcmModuleShared" ApplicationName="team.epm.module.DcmModule" DeployPlatform="LOCAL" jbo.project="Model">
+         <AM-Pooling jbo.ampool.maxpoolsize="1" jbo.ampool.isuseexclusive="false"/>
+         <Security AppModuleJndiName="team.epm.module.DcmModule"/>
+         <Custom JDBCDataSource="java:comp/env/jdbc/DMSConnDS"/>
+      </AppModuleConfig>
+   </AppModuleConfigBag>
+</BC4JConfig>

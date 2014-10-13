@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pageDefinition xmlns="http://xmlns.oracle.com/adfm/uimodel"
+                version="11.1.1.64.93" id="editPageDef" Package="dms.user">
+  <parameters/>
+  <executables>
+    <variableIterator id="variables"/>
+    <iterator Binds="DmsUserView" RangeSize="25"
+              DataControl="DmsModuleDataControl" id="DmsUserViewIterator"/>
+  </executables>
+  <bindings>
+    <tree IterBinding="DmsUserViewIterator" id="DmsUserView">
+      <nodeDefinition DefName="team.epm.dms.view.DmsUserView"
+                      Name="DmsUserView0">
+        <AttrNames>
+          <Item Value="Acc"/>
+          <Item Value="Name"/>
+          <Item Value="Sex"/>
+          <Item Value="Phone"/>
+          <Item Value="Mail"/>
+          <Item Value="Locale"/>
+          <Item Value="LockFlag"/>
+          <Item Value="LockTime"/>
+          <Item Value="EnableFlag"/>
+          <Item Value="OtherInfo"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <action IterBinding="DmsUserViewIterator" id="CreateInsert"
+            RequiresUpdateModel="false" Action="createInsertRow"/>
+    <action id="Rollback" RequiresUpdateModel="true"
+            Action="rollbackTransaction" DataControl="DmsModuleDataControl"/>
+    <action id="Commit" RequiresUpdateModel="true" Action="commitTransaction"
+            DataControl="DmsModuleDataControl"/>
+    <attributeValues IterBinding="DmsUserViewIterator" id="Acc">
+      <AttrNames>
+        <Item Value="Acc"/>
+      </AttrNames>
+    </attributeValues>
+    <attributeValues IterBinding="DmsUserViewIterator" id="Pwd">
+      <AttrNames>
+        <Item Value="Pwd"/>
+      </AttrNames>
+    </attributeValues>
+    <list IterBinding="DmsUserViewIterator" StaticList="false"
+          Uses="LOV_LockFlag" id="LockFlag" DTSupportsMRU="true"/>
+    <list IterBinding="DmsUserViewIterator" StaticList="false"
+          Uses="LOV_EnableFlag" id="EnableFlag" DTSupportsMRU="true"/>
+    <attributeValues IterBinding="DmsUserViewIterator" id="Name">
+      <AttrNames>
+        <Item Value="Name"/>
+      </AttrNames>
+    </attributeValues>
+    <list IterBinding="DmsUserViewIterator" StaticList="false" Uses="LOV_Sex"
+          id="Sex" DTSupportsMRU="true"/>
+    <attributeValues IterBinding="DmsUserViewIterator" id="Mail">
+      <AttrNames>
+        <Item Value="Mail"/>
+      </AttrNames>
+    </attributeValues>
+    <list IterBinding="DmsUserViewIterator" StaticList="false" Uses="LOV_Locale"
+          id="Locale" DTSupportsMRU="true"/>
+    <attributeValues IterBinding="DmsUserViewIterator" id="Phone">
+      <AttrNames>
+        <Item Value="Phone"/>
+      </AttrNames>
+    </attributeValues>
+    <attributeValues IterBinding="DmsUserViewIterator" id="OtherInfo">
+      <AttrNames>
+        <Item Value="OtherInfo"/>
+      </AttrNames>
+    </attributeValues>
+  </bindings>
+</pageDefinition>

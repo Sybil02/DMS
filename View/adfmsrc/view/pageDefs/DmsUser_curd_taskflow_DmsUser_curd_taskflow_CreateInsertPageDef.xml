@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pageDefinition xmlns="http://xmlns.oracle.com/adfm/uimodel"
+                version="11.1.1.64.93"
+                id="DmsUser_curd_taskflow_DmsUser_curd_taskflow_CreateInsertPageDef"
+                Package="view.pageDefs" SkipValidation="true">
+  <parameters/>
+  <executables>
+    <iterator Binds="DmsUserView" RangeSize="25"
+              DataControl="DmsModuleDataControl" id="DmsUserViewIterator"/>
+  </executables>
+  <bindings>
+    <action IterBinding="DmsUserViewIterator" id="CreateInsert"
+            RequiresUpdateModel="true" Action="createInsertRow"/>
+  </bindings>
+</pageDefinition>

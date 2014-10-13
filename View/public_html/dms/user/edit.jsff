@@ -1,0 +1,285 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.1"
+          xmlns:af="http://xmlns.oracle.com/adf/faces/rich"
+          xmlns:f="http://java.sun.com/jsf/core"
+          xmlns:c="http://java.sun.com/jsp/jstl/core">
+  <c:set var="viewBundle" value="#{adfBundle['dms_v']}"/>
+  <af:panelStretchLayout id="psl1" topHeight="45%">
+    <f:facet name="top">
+      <af:panelCollection id="pc1">
+        <f:facet name="menus"/>
+        <f:facet name="toolbar">
+          <af:toolbar id="t2">
+            <af:commandButton actionListener="#{bindings.CreateInsert.execute}"
+                              text="#{viewBundle['dms.common.new']}"
+                              disabled="#{!bindings.CreateInsert.enabled}"
+                              id="cb1"/>
+            <af:commandButton actionListener="#{bindings.Rollback.execute}"
+                              text="#{viewBundle['dms.common.rollback']}"
+                              disabled="#{!bindings.Rollback.enabled}"
+                              immediate="true" id="cb2" partialTriggers="t1">
+              <af:resetActionListener/>
+            </af:commandButton>
+            <af:commandButton actionListener="#{bindings.Commit.execute}"
+                              text="#{viewBundle['dms.common.save']}"
+                              disabled="#{!bindings.Commit.enabled}" id="cb3"
+                              partialTriggers="t1"/>
+          </af:toolbar>
+        </f:facet>
+        <f:facet name="statusbar"/>
+        <af:table value="#{bindings.DmsUserView.collectionModel}" var="row"
+                  rows="#{bindings.DmsUserView.rangeSize}"
+                  emptyText="#{viewBundle['dms.common.nodata']}"
+                  fetchSize="#{bindings.DmsUserView.rangeSize}"
+                  rowBandingInterval="0"
+                  selectedRowKeys="#{bindings.DmsUserView.collectionModel.selectedRow}"
+                  selectionListener="#{bindings.DmsUserView.collectionModel.makeCurrent}"
+                  rowSelection="single" id="t1"
+                  partialTriggers="::cb1 ::cb2 ::cb3 :::it2 :::it13 :::soc4 :::soc3 :::soc1 :::soc2 :::it4 :::it5 :::it6"
+                  binding="#{backingBeanScope.EditUserMBean.userTree}">
+          <af:column sortProperty="#{bindings.DmsUserView.hints.Acc.name}"
+                     sortable="true"
+                     headerText="#{bindings.DmsUserView.hints.Acc.label}"
+                     id="c10">
+            <af:outputText value="#{row.Acc}" id="ot4"/>
+          </af:column>
+          <af:column sortProperty="#{bindings.DmsUserView.hints.Name.name}"
+                     sortable="true"
+                     headerText="#{bindings.DmsUserView.hints.Name.label}"
+                     id="c3">
+            <af:outputText value="#{row.Name}" id="ot6"/>
+          </af:column>
+          <af:column sortProperty="#{bindings.DmsUserView.hints.Sex.name}"
+                     sortable="true"
+                     headerText="#{bindings.DmsUserView.hints.Sex.label}"
+                     id="c4">
+            <c:set value="DMS_SEX-#{row.Sex}-#{sessionScope.cur_user.locale}"
+                   var="sex_lkp"></c:set>
+            <af:outputText value="#{applicationScope.lookup[sex_lkp]}"
+                           id="ot8"/>
+          </af:column>
+          <af:column sortProperty="#{bindings.DmsUserView.hints.Mail.name}"
+                     sortable="true"
+                     headerText="#{bindings.DmsUserView.hints.Mail.label}"
+                     id="c8">
+            <af:outputText value="#{row.Mail}" id="ot2"/>
+          </af:column>
+          <af:column sortProperty="#{bindings.DmsUserView.hints.Phone.name}"
+                     sortable="true"
+                     headerText="#{bindings.DmsUserView.hints.Phone.label}"
+                     id="c2">
+            <af:outputText value="#{row.Phone}" id="ot3"/>
+          </af:column>
+          <af:column sortProperty="#{bindings.DmsUserView.hints.Locale.name}"
+                     sortable="true"
+                     headerText="#{bindings.DmsUserView.hints.Locale.label}"
+                     id="c7">
+            <c:set value="DMS_LANGUAGE-#{row.Locale}-#{sessionScope.cur_user.locale}"
+                   var="lang_lkp"></c:set>
+            <af:outputText value="#{applicationScope.lookup[lang_lkp]}"
+                           id="ot1"/>
+          </af:column>
+          <af:column sortProperty="#{bindings.DmsUserView.hints.EnableFlag.name}"
+                     sortable="true"
+                     headerText="#{bindings.DmsUserView.hints.EnableFlag.label}"
+                     id="c6">
+            <c:set value="YES_NO-#{row.EnableFlag}-#{sessionScope.cur_user.locale}"
+                   var="yn_lkp"></c:set>
+            <af:outputText value="#{applicationScope.lookup[yn_lkp]}" id="ot9"/>
+          </af:column>
+          <af:column sortProperty="#{bindings.DmsUserView.hints.LockFlag.name}"
+                     sortable="true"
+                     headerText="#{bindings.DmsUserView.hints.LockFlag.label}"
+                     id="c5">
+            <c:set value="YES_NO-#{row.LockFlag}-#{sessionScope.cur_user.locale}"
+                   var="yn_lkp"></c:set>
+            <af:outputText value="#{applicationScope.lookup[yn_lkp]}" id="ot7"/>
+          </af:column>
+          <af:column sortProperty="#{bindings.DmsUserView.hints.LockTime.name}"
+                     sortable="true"
+                     headerText="#{bindings.DmsUserView.hints.LockTime.label}"
+                     id="c1">
+            <af:outputText value="#{row.LockTime}" id="ot5">
+              <af:convertDateTime pattern="#{bindings.DmsUserView.hints.LockTime.format}"/>
+            </af:outputText>
+          </af:column>
+          <af:column sortProperty="#{bindings.DmsUserView.hints.OtherInfo.name}"
+                     sortable="true"
+                     headerText="#{bindings.DmsUserView.hints.OtherInfo.label}"
+                     id="c9">
+            <af:outputText value="#{row.OtherInfo}" id="ot10"/>
+          </af:column>
+        </af:table>
+      </af:panelCollection>
+    </f:facet>
+    <f:facet name="center">
+      <af:panelGroupLayout layout="scroll"
+                           xmlns:af="http://xmlns.oracle.com/adf/faces/rich"
+                           id="pgl1" partialTriggers="pc1:t1">
+        <af:panelGridLayout id="pgl2">
+          <af:gridRow marginTop="5px" height="auto" id="gr1">
+            <af:gridCell marginStart="5px" width="auto" id="gc10">
+              <af:panelFormLayout id="pfl1" labelWidth="60px"
+                                  labelAlignment="start">
+                <af:inputText value="#{bindings.Acc.inputValue}"
+                              label="#{bindings.Acc.hints.label}"
+                              required="#{bindings.Acc.hints.mandatory}"
+                              maximumLength="#{bindings.Acc.hints.precision}"
+                              shortDesc="#{bindings.Acc.hints.tooltip}"
+                              inlineStyle="text-align:left !important;"
+                              id="it1">
+                  <f:validator binding="#{bindings.Acc.validator}"/>
+                </af:inputText>
+              </af:panelFormLayout>
+            </af:gridCell>
+            <af:gridCell marginStart="25px" marginEnd="5px" width="auto"
+                         id="gc11">
+              <af:panelFormLayout id="pfl2" labelWidth="60px">
+                <af:inputText value="#{bindings.Name.inputValue}"
+                              label="#{bindings.Name.hints.label}"
+                              required="#{bindings.Name.hints.mandatory}"
+                              maximumLength="#{bindings.Name.hints.precision}"
+                              shortDesc="#{bindings.Name.hints.tooltip}"
+                              id="it2"
+                              autoSubmit="true">
+                  <f:validator binding="#{bindings.Name.validator}"/>
+                </af:inputText>
+              </af:panelFormLayout>
+            </af:gridCell>
+          </af:gridRow>
+          <af:gridRow marginTop="5px" height="auto" id="gr6">
+            <af:gridCell marginStart="5px" width="auto" id="gc8">
+              <af:panelFormLayout id="pfl3" labelWidth="60px">
+                <af:inputText value=""
+                              label="#{bindings.Pwd.hints.label}"
+                              required="#{bindings.Pwd.hints.mandatory}"
+                              maximumLength="#{bindings.Pwd.hints.precision}"
+                              shortDesc="#{bindings.Pwd.hints.tooltip}" id="it3"
+                              secret="true"
+                              binding="#{backingBeanScope.EditUserMBean.pwd}"
+                              partialTriggers="pc1:t1">
+                  <f:validator binding="#{bindings.Pwd.validator}"/>
+                </af:inputText>
+              </af:panelFormLayout>
+            </af:gridCell>
+            <af:gridCell marginStart="5px" marginEnd="5px" width="auto"
+                         id="gc2">
+              <af:panelFormLayout id="pfl4" labelWidth="60px">
+                <af:inputText value=""
+                              label="#{viewBundle['dms_user.comfirm_password']}"
+                              maximumLength="#{bindings.Pwd.hints.precision}"
+                              shortDesc="#{bindings.Pwd.hints.tooltip}"
+                              id="it13" secret="true"
+                              binding="#{backingBeanScope.EditUserMBean.newPwd}"
+                              autoSubmit="true"
+                              validator="#{backingBeanScope.EditUserMBean.validatePassword}"
+                              partialTriggers="pc1:t1">
+                </af:inputText>
+              </af:panelFormLayout>
+            </af:gridCell>
+          </af:gridRow>
+          <af:gridRow marginTop="5px" height="auto" id="gr4">
+            <af:gridCell marginStart="5px" width="auto" id="gc5" columnSpan="2">
+              <af:panelGridLayout id="pgl3">
+                <af:gridRow marginTop="5px" marginBottom="5px" height="auto"
+                            id="gr7">
+                  <af:gridCell id="gc15">
+                    <af:panelFormLayout id="pfl5" labelWidth="60px">
+                      <af:selectOneChoice value="#{bindings.Sex.inputValue}"
+                                          label="#{bindings.Sex.label}"
+                                          required="#{bindings.Sex.hints.mandatory}"
+                                          shortDesc="#{bindings.Sex.hints.tooltip}"
+                                          id="soc4"
+                                          autoSubmit="true">
+                        <f:selectItems value="#{bindings.Sex.items}" id="si4"/>
+                      </af:selectOneChoice>
+                    </af:panelFormLayout>
+                  </af:gridCell>
+                  <af:gridCell marginStart="15px" width="auto" id="gc13">
+                    <af:selectOneChoice value="#{bindings.EnableFlag.inputValue}"
+                                        label="#{bindings.EnableFlag.label}"
+                                        required="#{bindings.EnableFlag.hints.mandatory}"
+                                        shortDesc="#{bindings.EnableFlag.hints.tooltip}"
+                                        id="soc3"
+                                        autoSubmit="true">
+                      <f:selectItems value="#{bindings.EnableFlag.items}"
+                                     id="si3"/>
+                    </af:selectOneChoice>
+                  </af:gridCell>
+                  <af:gridCell marginStart="15px" width="auto" id="gc14">
+                    <af:selectOneChoice value="#{bindings.LockFlag.inputValue}"
+                                        label="#{bindings.LockFlag.label}"
+                                        required="#{bindings.LockFlag.hints.mandatory}"
+                                        shortDesc="#{bindings.LockFlag.hints.tooltip}"
+                                        id="soc1"
+                                        autoSubmit="true">
+                      <f:selectItems value="#{bindings.LockFlag.items}"
+                                     id="si1"/>
+                    </af:selectOneChoice>
+                  </af:gridCell>
+                  <af:gridCell marginStart="15px" marginEnd="5px" width="auto"
+                               id="gc3">
+                    <af:selectOneChoice value="#{bindings.Locale.inputValue}"
+                                        label="#{bindings.Locale.label}"
+                                        required="#{bindings.Locale.hints.mandatory}"
+                                        shortDesc="#{bindings.Locale.hints.tooltip}"
+                                        id="soc2"
+                                        autoSubmit="true">
+                      <f:selectItems value="#{bindings.Locale.items}" id="si2"/>
+                    </af:selectOneChoice>
+                  </af:gridCell>
+                </af:gridRow>
+              </af:panelGridLayout>
+            </af:gridCell>
+          </af:gridRow>
+          <af:gridRow marginTop="5px" height="auto" id="gr5">
+            <af:gridCell marginStart="5px" width="auto" id="gc6">
+              <af:panelFormLayout id="pfl6"  labelWidth="60px">
+                <af:inputText value="#{bindings.Mail.inputValue}"
+                              label="#{bindings.Mail.hints.label}"
+                              required="#{bindings.Mail.hints.mandatory}"
+                              maximumLength="#{bindings.Mail.hints.precision}"
+                              shortDesc="#{bindings.Mail.hints.tooltip}"
+                              id="it4"
+                              autoSubmit="true">
+                  <f:validator binding="#{bindings.Mail.validator}"/>
+                </af:inputText>
+              </af:panelFormLayout>
+            </af:gridCell>
+            <af:gridCell marginStart="5px" marginEnd="5px" width="auto"
+                         id="gc9">
+              <af:panelFormLayout id="pfl7" labelWidth="60px">
+                <af:inputText value="#{bindings.Phone.inputValue}"
+                              label="#{bindings.Phone.hints.label}"
+                              required="#{bindings.Phone.hints.mandatory}"
+                              maximumLength="#{bindings.Phone.hints.precision}"
+                              shortDesc="#{bindings.Phone.hints.tooltip}"
+                              id="it5"
+                              autoSubmit="true">
+                  <f:validator binding="#{bindings.Phone.validator}"/>
+                </af:inputText>
+              </af:panelFormLayout>
+            </af:gridCell>
+          </af:gridRow>
+          <af:gridRow marginTop="5px" height="auto" id="gr3">
+            <af:gridCell marginStart="5px" width="auto" id="gc1" columnSpan="2">
+              <af:panelFormLayout id="pfl8" labelWidth="60px">
+                <af:inputText value="#{bindings.OtherInfo.inputValue}"
+                              label="#{bindings.OtherInfo.hints.label}"
+                              required="#{bindings.OtherInfo.hints.mandatory}"
+                              columns="70"
+                              rows="4"
+                              maximumLength="#{bindings.OtherInfo.hints.precision}"
+                              shortDesc="#{bindings.OtherInfo.hints.tooltip}"
+                              id="it6"
+                              autoSubmit="true">
+                  <f:validator binding="#{bindings.OtherInfo.validator}"/>
+                </af:inputText>
+              </af:panelFormLayout>
+            </af:gridCell>
+          </af:gridRow>
+        </af:panelGridLayout>
+      </af:panelGroupLayout>
+    </f:facet>
+  </af:panelStretchLayout>
+</jsp:root>

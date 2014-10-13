@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pageDefinition xmlns="http://xmlns.oracle.com/adfm/uimodel"
+                version="11.1.1.64.93" id="loginPageDef" Package="dms.login">
+  <parameters/>
+  <executables>
+    <variableIterator id="variables"/>
+    <iterator id="DmsUserViewIterator" Binds="DmsUserView"
+              DataControl="DmsModuleDataControl" RangeSize="25"/>
+    <iterator id="DmsLookupView1Iterator" Binds="DmsLookupView1"
+              DataControl="DmsModuleDataControl" RangeSize="25"/>
+  </executables>
+  <bindings/>
+</pageDefinition>
