@@ -6,9 +6,19 @@ import java.io.UnsupportedEncodingException;
 
 import java.security.NoSuchAlgorithmException;
 
+import java.sql.Timestamp;
+
+import java.util.Date;
+
+import javax.naming.NamingException;
+
+import oracle.adf.share.ADFContext;
+
+import oracle.adf.share.logging.ADFLogger;
+
 import oracle.jbo.AttributeList;
+import oracle.jbo.ExprEval;
 import oracle.jbo.Key;
-import oracle.jbo.domain.Date;
 import oracle.jbo.domain.Number;
 import oracle.jbo.server.AttributeDefImpl;
 import oracle.jbo.server.EntityDefImpl;
@@ -22,21 +32,14 @@ import oracle.jbo.server.TransactionEvent;
 // ---------------------------------------------------------------------
 public class DmsUserImpl extends EntityImpl {
     private static EntityDefImpl mDefinitionObject;
-
+    private static ADFLogger logger=ADFLogger.createADFLogger(DmsUserImpl.class);
     @Override
     protected void prepareForDML(int operation, TransactionEvent transactionEvent) {
         super.prepareForDML(operation, transactionEvent);
-        /*
-        if ((operation == DML_INSERT) || (operation==DML_UPDATE)){
-            String encypt_pwd;
-            try {
-                encypt_pwd=DigestUtils.digestSHA1((getAcc() + "").trim() +
-                                   (getPwd() + "").trim());
-                setPwd(encypt_pwd);
-            } catch (Exception e) {
-                e.printStackTrace();
-            } 
-        }*/
+        if (operation==DML_UPDATE){
+            this.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
+            this.setUpdatedBy(this.getDBTransaction().getSession().getUserData().get("userId")+"");
+        }
     }
 
     /**

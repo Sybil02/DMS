@@ -1,5 +1,10 @@
 package team.epm.module;
 
+import java.util.Map;
+
+import oracle.adf.share.ADFContext;
+
+import oracle.jbo.Session;
 import oracle.jbo.server.ApplicationModuleImpl;
 import oracle.jbo.server.ViewObjectImpl;
 
@@ -144,5 +149,15 @@ public class DmsModuleImpl extends ApplicationModuleImpl {
      */
     public ViewObjectImpl getDmsLookupView1() {
         return (ViewObjectImpl)findViewObject("DmsLookupView1");
+    }
+
+    @Override
+    protected void prepareSession(Session session) {
+        super.prepareSession(session);
+        Map sessionScope = ADFContext.getCurrent().getSessionScope();
+        Object userId=sessionScope.get("userId");
+        if(userId!=null){
+            this.getSession().getUserData().put("userId", userId);
+        }
     }
 }

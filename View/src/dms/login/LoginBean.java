@@ -29,6 +29,8 @@ import javax.faces.event.PhaseEvent;
 
 import javax.faces.event.PhaseId;
 
+import javax.naming.NamingException;
+
 import javax.servlet.http.HttpSession;
 
 import oracle.adf.controller.ControllerContext;
@@ -123,6 +125,10 @@ public class LoginBean implements Serializable {
 
     private void initUserPreference(DmsUserViewRowImpl user) {
         ADFContext.getCurrent().getSessionScope().put("cur_user", new Person(user));
+        ApplicationModule applicationModule = user.getApplicationModule();
+        applicationModule.getSession().getUserData().put("userId",user.getId());
+        ADFContext.getCurrent().getSessionScope().put("userId", user.getId());
+        
         Map lookup = (Map)ADFContext.getCurrent().getApplicationScope().get("lookup");
         if(lookup==null){
             Map<String,String> lkp=new HashMap<String,String>();

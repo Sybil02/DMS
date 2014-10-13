@@ -286,7 +286,9 @@
     PrecisionRule="true"
     EntityAttrName="CreatedBy"
     EntityUsage="DmsUser"
-    AliasName="CREATED_BY">
+    AliasName="CREATED_BY"
+    IsUpdateable="while_insert">
+    <TransientExpression><![CDATA[adf.userSession.userData.userId]]></TransientExpression>
     <Properties>
       <SchemaBasedProperties>
         <LABEL
@@ -300,6 +302,7 @@
     EntityAttrName="UpdatedBy"
     EntityUsage="DmsUser"
     AliasName="UPDATED_BY">
+    <TransientExpression><![CDATA[adf.userSession.userData.userId]]></TransientExpression>
     <Properties>
       <SchemaBasedProperties>
         <LABEL
