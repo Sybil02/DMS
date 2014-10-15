@@ -7,11 +7,13 @@
       <property
          name="activityId">edit</property>
       <property
-         name="page">/dms/user/edit.jsff</property>
-      <property
          name="start">true</property>
       <property
+         name="page">/dms/user/edit.jsff</property>
+      <property
          name="description">&lt;html>&lt;p>&lt;b>edit&lt;/b> (Default Activity)&lt;/p>&lt;p>Activity Type:  View&lt;/p></property>
+      <property
+         name="trainStop">false</property>
       <property
          name="exceptionHandler">false</property>
       <property

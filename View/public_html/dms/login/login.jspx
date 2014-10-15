@@ -31,7 +31,7 @@
                              text="#{viewBundle['login.reset_password']}"
                              id="login_reset_pwd"/>
                   <af:commandButton text="#{viewBundle['login.login_action']}"
-                               id="login_action" inlineStyle="margin-left:45px;width:50px"
+                               id="login_action" inlineStyle="margin-left:35px;width:50px"
                                     action="#{LoginBean.login}"/>
                 </af:panelGroupLayout>
               </f:facet>

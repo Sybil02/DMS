@@ -217,6 +217,16 @@ public class DmsUserViewRowImpl extends ViewRowImpl {
                 obj.setAttributeInternal(index(), value);
             }
         }
+        ,
+        LST_USER {
+            public Object get(DmsUserViewRowImpl obj) {
+                return obj.getLST_USER();
+            }
+
+            public void put(DmsUserViewRowImpl obj, Object value) {
+                obj.setAttributeInternal(index(), value);
+            }
+        }
         ;
         private static AttributesEnum[] vals = null;
         private static final int firstIndex = 0;
@@ -266,6 +276,7 @@ public class DmsUserViewRowImpl extends ViewRowImpl {
     public static final int LKUP_YES_NO = AttributesEnum.LKUP_YES_NO.index();
     public static final int LKUP_DMS_SEX = AttributesEnum.LKUP_DMS_SEX.index();
     public static final int LKUP_DMS_LANGUAGE = AttributesEnum.LKUP_DMS_LANGUAGE.index();
+    public static final int LST_USER = AttributesEnum.LST_USER.index();
 
     /**
      * This is the default constructor (do not remove).
@@ -573,6 +584,13 @@ public class DmsUserViewRowImpl extends ViewRowImpl {
      */
     public RowSet getLKUP_DMS_LANGUAGE() {
         return (RowSet)getAttributeInternal(LKUP_DMS_LANGUAGE);
+    }
+
+    /**
+     * Gets the view accessor <code>RowSet</code> LST_USER.
+     */
+    public RowSet getLST_USER() {
+        return (RowSet)getAttributeInternal(LST_USER);
     }
 
     /**

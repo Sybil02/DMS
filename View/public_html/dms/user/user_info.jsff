@@ -5,131 +5,10 @@
           xmlns:c="http://java.sun.com/jsp/jstl/core">
   <c:set var="viewBundle" value="#{adfBundle['dms_v']}"/>
   <af:panelStretchLayout id="psl1" topHeight="45%">
-    <f:facet name="top">
-      <af:panelCollection id="pc1">
-        <f:facet name="menus"/>
-        <f:facet name="toolbar">
-          <af:toolbar id="t2">
-            <af:commandButton actionListener="#{bindings.CreateInsert.execute}"
-                              text="#{viewBundle['dms.common.new']}"
-                              disabled="#{!bindings.CreateInsert.enabled}"
-                              id="cb1"/>
-            <af:commandButton actionListener="#{bindings.Rollback.execute}"
-                              text="#{viewBundle['dms.common.rollback']}"
-                              disabled="#{!bindings.Rollback.enabled}"
-                              immediate="true" id="cb2" partialTriggers="t1">
-              <af:resetActionListener/>
-            </af:commandButton>
-            <af:commandButton actionListener="#{bindings.Commit.execute}"
-                              text="#{viewBundle['dms.common.save']}"
-                              disabled="#{!bindings.Commit.enabled}" id="cb3"
-                              partialTriggers="t1"/>
-          </af:toolbar>
-        </f:facet>
-        <f:facet name="statusbar"/>
-        <af:table value="#{bindings.DmsUserView.collectionModel}" var="row"
-                  rows="#{bindings.DmsUserView.rangeSize}"
-                  emptyText="#{viewBundle['dms.common.nodata']}"
-                  fetchSize="#{bindings.DmsUserView.rangeSize}"
-                  rowBandingInterval="0"
-                  selectedRowKeys="#{bindings.DmsUserView.collectionModel.selectedRow}"
-                  selectionListener="#{bindings.DmsUserView.collectionModel.makeCurrent}"
-                  rowSelection="single" id="t1"
-                  partialTriggers="::cb1 ::cb2 ::cb3 :::it2 :::it13 :::soc4 :::soc3 :::soc1 :::soc2 :::it4 :::it5 :::it6"
-                  binding="#{backingBeanScope.EditUserMBean.userTree}">
-          <af:column sortProperty="#{bindings.DmsUserView.hints.Acc.name}"
-                     sortable="true"
-                     headerText="#{bindings.DmsUserView.hints.Acc.label}"
-                     id="c10">
-            <af:outputText value="#{row.Acc}" id="ot4"/>
-          </af:column>
-          <af:column sortProperty="#{bindings.DmsUserView.hints.Name.name}"
-                     sortable="true"
-                     headerText="#{bindings.DmsUserView.hints.Name.label}"
-                     id="c3">
-            <af:outputText value="#{row.Name}" id="ot6"/>
-          </af:column>
-          <af:column sortProperty="#{bindings.DmsUserView.hints.Sex.name}"
-                     sortable="true"
-                     headerText="#{bindings.DmsUserView.hints.Sex.label}"
-                     id="c4">
-            <af:selectOneChoice value="#{row.bindings.Sex.inputValue}"
-                                label="#{row.bindings.Sex.label}"
-                                required="#{bindings.DmsUserView.hints.Sex.mandatory}"
-                                shortDesc="#{bindings.DmsUserView.hints.Sex.tooltip}"
-                                id="soc5" readOnly="true">
-              <f:selectItems value="#{row.bindings.Sex.items}" id="si5"/>
-            </af:selectOneChoice>
-          </af:column>
-          <af:column sortProperty="#{bindings.DmsUserView.hints.Mail.name}"
-                     sortable="true"
-                     headerText="#{bindings.DmsUserView.hints.Mail.label}"
-                     id="c8">
-            <af:outputText value="#{row.Mail}" id="ot2"/>
-          </af:column>
-          <af:column sortProperty="#{bindings.DmsUserView.hints.Phone.name}"
-                     sortable="true"
-                     headerText="#{bindings.DmsUserView.hints.Phone.label}"
-                     id="c2">
-            <af:outputText value="#{row.Phone}" id="ot3"/>
-          </af:column>
-          <af:column sortProperty="#{bindings.DmsUserView.hints.Locale.name}"
-                     sortable="true"
-                     headerText="#{bindings.DmsUserView.hints.Locale.label}"
-                     id="c7">
-            <af:selectOneChoice value="#{row.bindings.Locale.inputValue}"
-                                label="#{row.bindings.Locale.label}"
-                                required="#{bindings.DmsUserView.hints.Locale.mandatory}"
-                                shortDesc="#{bindings.DmsUserView.hints.Locale.tooltip}"
-                                id="soc6" readOnly="true">
-              <f:selectItems value="#{row.bindings.Locale.items}" id="si6"/>
-            </af:selectOneChoice>
-          </af:column>
-          <af:column sortProperty="#{bindings.DmsUserView.hints.EnableFlag.name}"
-                     sortable="true"
-                     headerText="#{bindings.DmsUserView.hints.EnableFlag.label}"
-                     id="c6">
-            <af:selectOneChoice value="#{row.bindings.EnableFlag.inputValue}"
-                                label="#{row.bindings.EnableFlag.label}"
-                                required="#{bindings.DmsUserView.hints.EnableFlag.mandatory}"
-                                shortDesc="#{bindings.DmsUserView.hints.EnableFlag.tooltip}"
-                                id="soc7" readOnly="true">
-              <f:selectItems value="#{row.bindings.EnableFlag.items}" id="si7"/>
-            </af:selectOneChoice>
-          </af:column>
-          <af:column sortProperty="#{bindings.DmsUserView.hints.LockFlag.name}"
-                     sortable="true"
-                     headerText="#{bindings.DmsUserView.hints.LockFlag.label}"
-                     id="c5">
-            <af:selectOneChoice value="#{row.bindings.LockFlag.inputValue}"
-                                label="#{row.bindings.LockFlag.label}"
-                                required="#{bindings.DmsUserView.hints.LockFlag.mandatory}"
-                                shortDesc="#{bindings.DmsUserView.hints.LockFlag.tooltip}"
-                                id="soc8" readOnly="true">
-              <f:selectItems value="#{row.bindings.LockFlag.items}" id="si8"/>
-            </af:selectOneChoice>
-          </af:column>
-          <af:column sortProperty="#{bindings.DmsUserView.hints.LockTime.name}"
-                     sortable="true"
-                     headerText="#{bindings.DmsUserView.hints.LockTime.label}"
-                     id="c1">
-            <af:outputText value="#{row.LockTime}" id="ot5">
-              <af:convertDateTime pattern="#{bindings.DmsUserView.hints.LockTime.format}"/>
-            </af:outputText>
-          </af:column>
-          <af:column sortProperty="#{bindings.DmsUserView.hints.OtherInfo.name}"
-                     sortable="true"
-                     headerText="#{bindings.DmsUserView.hints.OtherInfo.label}"
-                     id="c9">
-            <af:outputText value="#{row.OtherInfo}" id="ot10"/>
-          </af:column>
-        </af:table>
-      </af:panelCollection>
-    </f:facet>
     <f:facet name="center">
       <af:panelGroupLayout layout="scroll"
                            xmlns:af="http://xmlns.oracle.com/adf/faces/rich"
-                           id="pgl1" partialTriggers="pc1:t1">
+                           id="pgl1">
         <af:panelGridLayout id="pgl2">
           <af:gridRow marginTop="5px" height="auto" id="gr1">
             <af:gridCell marginStart="5px" width="auto" id="gc10">
@@ -171,8 +50,7 @@
                               shortDesc="#{bindings.Pwd.hints.tooltip}" id="it3"
                               secret="true"
                               autoSubmit="true"
-                              binding="#{backingBeanScope.EditUserMBean.pwd}"
-                              partialTriggers="pc1:t1">
+                              binding="#{backingBeanScope.EditUserMBean.pwd}">
                   <f:validator binding="#{bindings.Pwd.validator}"/>
                 </af:inputText>
               </af:panelFormLayout>
@@ -187,8 +65,7 @@
                               id="it13" secret="true"
                               binding="#{backingBeanScope.EditUserMBean.newPwd}"
                               autoSubmit="true"
-                              validator="#{backingBeanScope.EditUserMBean.validatePassword}"
-                              partialTriggers="pc1:t1">
+                              validator="#{backingBeanScope.EditUserMBean.validatePassword}">
                 </af:inputText>
               </af:panelFormLayout>
             </af:gridCell>
@@ -210,13 +87,15 @@
                       </af:selectOneChoice>
                     </af:panelFormLayout>
                   </af:gridCell>
-                  <af:gridCell marginStart="15px" width="auto" id="gc13">
+                  <af:gridCell marginStart="15px"  width="auto" id="gc13">
                     <af:selectOneChoice value="#{bindings.EnableFlag.inputValue}"
                                         label="#{bindings.EnableFlag.label}"
                                         required="#{bindings.EnableFlag.hints.mandatory}"
                                         shortDesc="#{bindings.EnableFlag.hints.tooltip}"
                                         id="soc3"
-                                        autoSubmit="true">
+                                        autoSubmit="true"
+                                        readOnly="true"
+                                        inlineStyle="margin-top:5px">
                       <f:selectItems value="#{bindings.EnableFlag.items}"
                                      id="si3"/>
                     </af:selectOneChoice>
@@ -227,7 +106,9 @@
                                         required="#{bindings.LockFlag.hints.mandatory}"
                                         shortDesc="#{bindings.LockFlag.hints.tooltip}"
                                         id="soc1"
-                                        autoSubmit="true">
+                                        autoSubmit="true"
+                                        readOnly="true"
+                                        inlineStyle="margin-top:5px">
                       <f:selectItems value="#{bindings.LockFlag.items}"
                                      id="si1"/>
                     </af:selectOneChoice>
@@ -291,6 +172,22 @@
                   <f:validator binding="#{bindings.OtherInfo.validator}"/>
                 </af:inputText>
               </af:panelFormLayout>
+            </af:gridCell>
+          </af:gridRow>
+          <af:gridRow id="gr2">
+            <af:gridCell id="gc4" columnSpan="2" halign="center">
+              <af:commandButton actionListener="#{bindings.Commit.execute}"
+                                text="#{viewBundle['dms.common.save']}"
+                                disabled="#{!bindings.Commit.enabled}"
+                                id="cb1"
+                                partialTriggers="it2 it13 soc4 soc2 it4 it5 it6"/>
+              <af:commandButton actionListener="#{bindings.Rollback.execute}"
+                              text="#{viewBundle['dms.common.rollback']}"
+                              disabled="#{!bindings.Rollback.enabled}"
+                              immediate="true" id="cb2"
+                              partialTriggers="it2 it13 soc4 soc2 it4 it5 it6">
+              <af:resetActionListener/>
+            </af:commandButton>
             </af:gridCell>
           </af:gridRow>
         </af:panelGridLayout>

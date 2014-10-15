@@ -13,8 +13,8 @@
   UseGlueCode="false"
   RowClass="team.epm.dms.model.DmsUserImpl">
   <DesignTime>
-    <Attr Name="_codeGenFlag2" Value="Init|Delete|Access|DML"/>
     <AttrArray Name="_publishEvents"/>
+    <Attr Name="_codeGenFlag2" Value="Access"/>
     <Attr Name="_isCodegen" Value="true"/>
   </DesignTime>
   <Attribute

@@ -1,6 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <adfc-config xmlns="http://xmlns.oracle.com/adf/controller" version="1.2">
   <task-flow-definition id="user_info_tsk">
+    <default-activity id="__1">user_info</default-activity>
+    <transaction id="__3">
+      <new-transaction/>
+    </transaction>
+    <data-control-scope id="__4">
+      <isolated/>
+    </data-control-scope>
+    <managed-bean id="__6">
+      <managed-bean-name id="__7">EditUserMBean</managed-bean-name>
+      <managed-bean-class id="__8">dms.user.EditUserMBean</managed-bean-class>
+      <managed-bean-scope id="__9">backingBean</managed-bean-scope>
+    </managed-bean>
+    <view id="user_info">
+      <page>/dms/user/user_info.jsff</page>
+    </view>
     <use-page-fragments/>
   </task-flow-definition>
 </adfc-config>

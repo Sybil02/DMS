@@ -2,9 +2,12 @@
 <adfc-config xmlns="http://xmlns.oracle.com/adf/controller" version="1.2">
   <task-flow-definition id="user_manage_tsk">
     <default-activity id="__1">edit</default-activity>
-    <transaction id="__2">
+    <transaction id="__7">
       <new-transaction/>
     </transaction>
+    <data-control-scope id="__8">
+      <isolated/>
+    </data-control-scope>
     <managed-bean id="__6">
       <managed-bean-name id="__4">EditUserMBean</managed-bean-name>
       <managed-bean-class id="__5">dms.user.EditUserMBean</managed-bean-class>

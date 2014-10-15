@@ -31,6 +31,7 @@ import javax.faces.event.PhaseId;
 
 import javax.naming.NamingException;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import oracle.adf.controller.ControllerContext;
@@ -50,6 +51,8 @@ import oracle.jbo.client.Configuration;
 
 import team.epm.dms.view.DmsUserViewImpl;
 import team.epm.dms.view.DmsUserViewRowImpl;
+
+import weblogic.servlet.security.ServletAuthentication;
 
 public class LoginBean implements Serializable {
     private String msg;
@@ -124,35 +127,30 @@ public class LoginBean implements Serializable {
     }
 
     private void initUserPreference(DmsUserViewRowImpl user) {
-        ADFContext.getCurrent().getSessionScope().put("cur_user", new Person(user));
+        ADFContext.getCurrent().getSessionScope().put("cur_user",
+                                                      new Person(user));
         ApplicationModule applicationModule = user.getApplicationModule();
-        applicationModule.getSession().getUserData().put("userId",user.getId());
+        applicationModule.getSession().getUserData().put("userId",
+                                                         user.getId());
         ADFContext.getCurrent().getSessionScope().put("userId", user.getId());
-        
-        Map lookup = (Map)ADFContext.getCurrent().getApplicationScope().get("lookup");
-        if(lookup==null){
-            Map<String,String> lkp=new HashMap<String,String>();
-            DCIteratorBinding binding =
-                ADFUtils.findIterator("DmsLookupView1Iterator");
-            ViewObject view=binding.getViewObject();
-            view.executeQuery();
-            while(view.hasNext()){
-                Row row=view.next();
-                String key=row.getAttribute("LookupType")+"-"
-                           +row.getAttribute("Code")+"-"
-                           +row.getAttribute("Locale");
-                lkp.put(key, row.getAttribute("Meaning").toString());
-            }
-            ADFContext.getCurrent().getApplicationScope().put("lookup", lkp);
-        }
     }
 
     public void logout() {
         ADFContext.getCurrent().getSessionScope().remove("cur_user");
         ExternalContext ectx =
             FacesContext.getCurrentInstance().getExternalContext();
+
+        HttpSession session = (HttpSession)ectx.getSession(false);
+        session.invalidate();
+
+        HttpServletRequest request = (HttpServletRequest)ectx.getRequest();
+        ServletAuthentication.logout(request);
+        ServletAuthentication.invalidateAll(request);
+        ServletAuthentication.killCookie(request);
+
         try {
-            ectx.redirect(ControllerContext.getInstance().getGlobalViewActivityURL("login"));
+            String url = ectx.getRequestContextPath() + "/faces/login";
+            ectx.redirect(url);
         } catch (IOException e) {
             _logger.severe(e);
         }

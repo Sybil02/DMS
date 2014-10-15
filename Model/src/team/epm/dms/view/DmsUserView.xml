@@ -29,7 +29,9 @@
   PageIterMode="Full"
   UseGlueCode="false"
   RowClass="team.epm.dms.view.DmsUserViewRowImpl"
-  ComponentClass="team.epm.dms.view.DmsUserViewImpl">
+  ComponentClass="team.epm.dms.view.DmsUserViewImpl"
+  ComponentInterface="team.epm.dms.view.common.DmsUserView"
+  ClientProxyName="team.epm.dms.view.client.DmsUserViewClient">
   <DesignTime>
     <Attr Name="_codeGenFlag2" Value="Access|Coll|VarAccess"/>
     <Attr Name="_isCodegen" Value="true"/>
@@ -79,6 +81,10 @@
       </PIMap>
     </ParameterMap>
   </ViewAccessor>
+  <ViewAccessor
+    Name="LST_USER"
+    ViewObjectName="team.epm.dms.view.DmsUserView"
+    RowLevelBinds="true"/>
   <ListBinding
     Name="LOV_LockFlag"
     ListVOName="LKUP_YES_NO"
@@ -148,6 +154,42 @@
     </AttrArray>
     <AttrArray Name="ListDisplayAttrNames">
       <Item Value="Meaning"/>
+    </AttrArray>
+    <DisplayCriteria/>
+  </ListBinding>
+  <ListBinding
+    Name="LOV_CreatedBy"
+    ListVOName="LST_USER"
+    ListRangeSize="-1"
+    NullValueFlag="start"
+    NullValueId="${adfBundle['oracle.javatools.resourcebundle.SystemBundle']['NULL_VALUE_RESID']}"
+    MRUCount="0">
+    <AttrArray Name="AttrNames">
+      <Item Value="CreatedBy"/>
+    </AttrArray>
+    <AttrArray Name="ListAttrNames">
+      <Item Value="Id"/>
+    </AttrArray>
+    <AttrArray Name="ListDisplayAttrNames">
+      <Item Value="Name"/>
+    </AttrArray>
+    <DisplayCriteria/>
+  </ListBinding>
+  <ListBinding
+    Name="LOV_UpdatedBy"
+    ListVOName="LST_USER"
+    ListRangeSize="-1"
+    NullValueFlag="none"
+    NullValueId="LOV_UpdatedBy_LOVUIHints_NullValueId"
+    MRUCount="0">
+    <AttrArray Name="AttrNames">
+      <Item Value="UpdatedBy"/>
+    </AttrArray>
+    <AttrArray Name="ListAttrNames">
+      <Item Value="Id"/>
+    </AttrArray>
+    <AttrArray Name="ListDisplayAttrNames">
+      <Item Value="Name"/>
     </AttrArray>
     <DisplayCriteria/>
   </ListBinding>
@@ -263,6 +305,10 @@
       <SchemaBasedProperties>
         <LABEL
           ResId="updatedAt"/>
+        <FMT_FORMATTER
+          ResId="team.epm.dms.view.DmsUserView.UpdatedAt_FMT_FORMATTER"/>
+        <FMT_FORMAT
+          ResId="team.epm.dms.view.DmsUserView.UpdatedAt_FMT_FORMAT"/>
       </SchemaBasedProperties>
     </Properties>
   </ViewAttribute>
@@ -278,6 +324,10 @@
       <SchemaBasedProperties>
         <LABEL
           ResId="createdAt"/>
+        <FMT_FORMAT
+          ResId="team.epm.dms.view.DmsUserView.CreatedAt_FMT_FORMAT"/>
+        <FMT_FORMATTER
+          ResId="team.epm.dms.view.DmsUserView.CreatedAt_FMT_FORMATTER"/>
       </SchemaBasedProperties>
     </Properties>
   </ViewAttribute>
@@ -287,12 +337,15 @@
     EntityAttrName="CreatedBy"
     EntityUsage="DmsUser"
     AliasName="CREATED_BY"
-    IsUpdateable="while_insert">
+    IsUpdateable="while_insert"
+    LOVName="LOV_CreatedBy">
     <TransientExpression><![CDATA[adf.userSession.userData.userId]]></TransientExpression>
     <Properties>
       <SchemaBasedProperties>
         <LABEL
           ResId="createdBy"/>
+        <CONTROLTYPE
+          Value="choice"/>
       </SchemaBasedProperties>
     </Properties>
   </ViewAttribute>
@@ -301,12 +354,15 @@
     PrecisionRule="true"
     EntityAttrName="UpdatedBy"
     EntityUsage="DmsUser"
-    AliasName="UPDATED_BY">
+    AliasName="UPDATED_BY"
+    LOVName="LOV_UpdatedBy">
     <TransientExpression><![CDATA[adf.userSession.userData.userId]]></TransientExpression>
     <Properties>
       <SchemaBasedProperties>
         <LABEL
           ResId="updatedBy"/>
+        <CONTROLTYPE
+          Value="choice"/>
       </SchemaBasedProperties>
     </Properties>
   </ViewAttribute>
@@ -402,4 +458,11 @@
     <PropertiesBundle
       PropertiesFile="ModelBundle"/>
   </ResourceBundle>
+  <ClientInterface>
+    <Method
+      Name="queryCurUser">
+      <Return
+        Type="oracle.jbo.RowSetIterator"/>
+    </Method>
+  </ClientInterface>
 </ViewObject>
