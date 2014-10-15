@@ -16,6 +16,7 @@
     <page path="/settings.jspx" usageId="__settingsPageDef"/>
     <page path="/dms/user/edit.jsff" usageId="__editPageDef"/>
     <page path="/dms/user/user_info.jsff" usageId="__user_infoPageDef"/>
+    <page path="/dms/group/edit.jsff" usageId="__editPageDef2"/>
   </pageMap>
   <pageDefinitionUsages>
     <page id="__dynamicTabShellPageDef"
@@ -26,6 +27,8 @@
     <page id="__settingsPageDef" path="view.pageDefs.settingsPageDef"/>
     <page id="__editPageDef" path="dms.user.editPageDef"/>
     <page id="__user_infoPageDef" path="dms.user.user_infoPageDef"/>
+    <page id="__editPageDef1" path="dmsGroup.editPageDef"/>
+    <page id="__editPageDef2" path="dms.group.editPageDef"/>
   </pageDefinitionUsages>
   <dataControlUsages>
     <BC4JDataControl id="DmsModuleDataControl" Package="team.epm.module"
