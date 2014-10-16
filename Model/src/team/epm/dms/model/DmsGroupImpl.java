@@ -2,6 +2,7 @@ package team.epm.dms.model;
 
 import java.sql.Timestamp;
 
+import oracle.jbo.AttributeList;
 import oracle.jbo.Key;
 import oracle.jbo.domain.Date;
 import oracle.jbo.server.AttributeDefImpl;
@@ -15,7 +16,37 @@ import oracle.jbo.server.TransactionEvent;
 // ---    Warning: Do not modify method signatures of generated methods.
 // ---------------------------------------------------------------------
 public class DmsGroupImpl extends EntityImpl {
-    private static EntityDefImpl mDefinitionObject;
+
+    /**
+     * Add attribute defaulting logic in this method.
+     * @param attributeList list of attribute names/values to initialize the row
+     */
+    protected void create(AttributeList attributeList) {
+        super.create(attributeList);
+    }
+
+    /**
+     * Add entity remove logic in this method.
+     */
+    public void remove() {
+        super.remove();
+    }
+
+    /**
+     * Add locking logic here.
+     */
+    public void lock() {
+        super.lock();
+    }
+
+    /**
+     * Custom DML update/insert/delete logic here.
+     * @param operation the operation type
+     * @param e the transaction event
+     */
+    protected void doDML(int operation, TransactionEvent e) {
+        super.doDML(operation, e);
+    }
 
     /**
      * AttributesEnum: generated enum for identifying attributes and accessors. DO NOT MODIFY.
@@ -127,6 +158,9 @@ public class DmsGroupImpl extends EntityImpl {
             return vals;
         }
     }
+
+
+    private static DmsGroupDefImpl mDefinitionObject;
     public static final int ID = AttributesEnum.Id.index();
     public static final int LOCALE = AttributesEnum.Locale.index();
     public static final int NAME = AttributesEnum.Name.index();
@@ -141,7 +175,18 @@ public class DmsGroupImpl extends EntityImpl {
      */
     public DmsGroupImpl() {
     }
-    
+
+
+    /**
+     * @return the definition object for this instance class.
+     */
+    public static synchronized EntityDefImpl getDefinitionObject() {
+        if (mDefinitionObject == null) {
+            mDefinitionObject = (DmsGroupDefImpl)EntityDefImpl.findDefObject("team.epm.dms.model.DmsGroup");
+        }
+        return mDefinitionObject;
+    }
+
     protected void prepareForDML(int operation, TransactionEvent transactionEvent) {
         super.prepareForDML(operation, transactionEvent);
         if (operation==DML_UPDATE){
@@ -321,13 +366,5 @@ public class DmsGroupImpl extends EntityImpl {
         return new Key(new Object[]{id, locale});
     }
 
-    /**
-     * @return the definition object for this instance class.
-     */
-    public static synchronized EntityDefImpl getDefinitionObject() {
-        if (mDefinitionObject == null) {
-            mDefinitionObject = EntityDefImpl.findDefObject("team.epm.dms.model.DmsGroup");
-        }
-        return mDefinitionObject;
-    }
+
 }

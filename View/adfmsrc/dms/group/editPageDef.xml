@@ -4,6 +4,39 @@
   <parameters/>
   <executables>
     <variableIterator id="variables"/>
+    <iterator Binds="DmsGroupView" RangeSize="25"
+              DataControl="DmsModuleDataControl" id="DmsGroupViewIterator"/>
+    <searchRegion Binds="DmsGroupViewIterator" Criteria=""
+                  Customizer="oracle.jbo.uicli.binding.JUSearchBindingCustomizer"
+                  id="DmsGroupViewQuery"/>
   </executables>
-  <bindings/>
+  <bindings>
+    <tree IterBinding="DmsGroupViewIterator" id="DmsGroupView">
+      <nodeDefinition DefName="team.epm.dms.view.DmsGroupView"
+                      Name="DmsGroupView0">
+        <AttrNames>
+          <Item Value="Name"/>
+          <Item Value="EnableFlag"/>
+          <Item Value="UpdatedAt"/>
+          <Item Value="UpdatedBy"/>
+          <Item Value="Id"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <attributeValues IterBinding="DmsGroupViewIterator" id="Name">
+      <AttrNames>
+        <Item Value="Name"/>
+      </AttrNames>
+    </attributeValues>
+    <list IterBinding="DmsGroupViewIterator" StaticList="false"
+          Uses="LOV_Locale" id="Locale" DTSupportsMRU="false"/>
+    <list IterBinding="DmsGroupViewIterator" StaticList="false"
+          Uses="LOV_EnableFlag" id="EnableFlag" DTSupportsMRU="false"/>
+    <action IterBinding="DmsGroupViewIterator" id="CreateInsert"
+            RequiresUpdateModel="true" Action="createInsertRow"/>
+    <action id="Rollback" RequiresUpdateModel="false"
+            Action="rollbackTransaction" DataControl="DmsModuleDataControl"/>
+    <action id="Commit" RequiresUpdateModel="true" Action="commitTransaction"
+            DataControl="DmsModuleDataControl"/>
+  </bindings>
 </pageDefinition>

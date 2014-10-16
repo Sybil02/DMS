@@ -1,2 +1,114 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.1"></jsp:root>
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.1"
+          xmlns:af="http://xmlns.oracle.com/adf/faces/rich"
+          xmlns:f="http://java.sun.com/jsf/core"
+          xmlns:c="http://java.sun.com/jsp/jstl/core">
+  <c:set var="viewBundle" value="#{adfBundle['dms_v']}"/>
+  <af:panelStretchLayout id="psl1" startWidth="60%">
+    <f:facet name="bottom"/>
+    <f:facet name="center">
+      <af:panelGroupLayout layout="scroll"
+                           xmlns:af="http://xmlns.oracle.com/adf/faces/rich"
+                           id="pgl3">
+        <af:panelFormLayout id="pfl1" partialTriggers="pc1:t1">
+          <af:inputText value="#{bindings.Name.inputValue}"
+                        label="#{bindings.Name.hints.label}"
+                        required="#{bindings.Name.hints.mandatory}"
+                        maximumLength="#{bindings.Name.hints.precision}"
+                        shortDesc="#{bindings.Name.hints.tooltip}" id="it1"
+                        autoSubmit="true">
+            <f:validator binding="#{bindings.Name.validator}"/>
+          </af:inputText>
+          <af:selectOneChoice value="#{bindings.EnableFlag.inputValue}"
+                              label="#{bindings.EnableFlag.label}"
+                              required="#{bindings.EnableFlag.hints.mandatory}"
+                              shortDesc="#{bindings.EnableFlag.hints.tooltip}"
+                              id="soc3" autoSubmit="true">
+            <f:selectItems value="#{bindings.EnableFlag.items}" id="si4"/>
+          </af:selectOneChoice>
+        </af:panelFormLayout>
+      </af:panelGroupLayout>
+    </f:facet>
+    <f:facet name="top"/>
+    <f:facet name="end"/>
+    <f:facet name="start">
+      <af:panelGroupLayout id="pgl1" layout="scroll">
+        <af:panelCollection id="pc1" inlineStyle="width:450px;">
+          <f:facet name="menus"/>
+          <f:facet name="toolbar">
+            <af:toolbar id="t2">
+              <af:commandButton actionListener="#{bindings.CreateInsert.execute}"
+                                text="#{viewBundle['dms.common.new']}"
+                                disabled="#{!bindings.CreateInsert.enabled}"
+                                id="cb1" partialTriggers="t1"/>
+              <af:commandButton actionListener="#{bindings.Rollback.execute}"
+                                text="#{viewBundle['dms.common.rollback']}"
+                                disabled="#{!bindings.Rollback.enabled}"
+                                immediate="true" id="cb2" partialTriggers="t1">
+                <af:resetActionListener/>
+              </af:commandButton>
+              <af:commandButton actionListener="#{bindings.Commit.execute}"
+                                text="#{viewBundle['dms.common.save']}"
+                                disabled="#{!bindings.Commit.enabled}"
+                                id="cb3" partialTriggers="t1"/>
+            </af:toolbar>
+          </f:facet>
+          <f:facet name="statusbar"/>
+          <af:table value="#{bindings.DmsGroupView.collectionModel}" var="row"
+                    rows="#{bindings.DmsGroupView.rangeSize}"
+                    emptyText="#{viewBundle['dms.common.nodata']}"
+                    fetchSize="#{bindings.DmsGroupView.rangeSize}"
+                    rowBandingInterval="0"
+                    filterModel="#{bindings.DmsGroupViewQuery.queryDescriptor}"
+                    queryListener="#{bindings.DmsGroupViewQuery.processQuery}"
+                    filterVisible="false" varStatus="vs"
+                    selectedRowKeys="#{bindings.DmsGroupView.collectionModel.selectedRow}"
+                    selectionListener="#{bindings.DmsGroupView.collectionModel.makeCurrent}"
+                    rowSelection="single" id="t1"
+                    partialTriggers="::cb1 ::cb2 ::cb3 :::it1 :::soc3">
+            <af:column sortProperty="#{bindings.DmsGroupView.hints.Name.name}"
+                       filterable="true" sortable="true"
+                       headerText="#{bindings.DmsGroupView.hints.Name.label}"
+                       id="c3">
+              <af:outputText value="#{row.Name}" id="ot1"/>
+            </af:column>
+            <af:column sortProperty="#{bindings.DmsGroupView.hints.EnableFlag.name}"
+                       filterable="true" sortable="true"
+                       headerText="#{bindings.DmsGroupView.hints.EnableFlag.label}"
+                       id="c1">
+              <af:selectOneChoice value="#{row.bindings.EnableFlag.inputValue}"
+                                  label="#{row.bindings.EnableFlag.label}"
+                                  required="#{bindings.DmsGroupView.hints.EnableFlag.mandatory}"
+                                  shortDesc="#{bindings.DmsGroupView.hints.EnableFlag.tooltip}"
+                                  id="soc1" readOnly="true">
+                <f:selectItems value="#{row.bindings.EnableFlag.items}"
+                               id="si1"/>
+              </af:selectOneChoice>
+            </af:column>
+            <af:column sortProperty="#{bindings.DmsGroupView.hints.UpdatedAt.name}"
+                       filterable="true" sortable="true"
+                       headerText="#{bindings.DmsGroupView.hints.UpdatedAt.label}"
+                       id="c2">
+              <af:outputText value="#{row.UpdatedAt}" id="ot2">
+                <af:convertDateTime pattern="#{bindings.DmsGroupView.hints.UpdatedAt.format}"/>
+              </af:outputText>
+            </af:column>
+            <af:column sortProperty="#{bindings.DmsGroupView.hints.UpdatedBy.name}"
+                       filterable="true" sortable="true"
+                       headerText="#{bindings.DmsGroupView.hints.UpdatedBy.label}"
+                       id="c4">
+              <af:selectOneChoice value="#{row.bindings.UpdatedBy.inputValue}"
+                                  label="#{row.bindings.UpdatedBy.label}"
+                                  required="#{bindings.DmsGroupView.hints.UpdatedBy.mandatory}"
+                                  shortDesc="#{bindings.DmsGroupView.hints.UpdatedBy.tooltip}"
+                                  id="soc2" readOnly="true">
+                <f:selectItems value="#{row.bindings.UpdatedBy.items}"
+                               id="si2"/>
+              </af:selectOneChoice>
+            </af:column>
+          </af:table>
+        </af:panelCollection>
+      </af:panelGroupLayout>
+    </f:facet>
+  </af:panelStretchLayout>
+</jsp:root>

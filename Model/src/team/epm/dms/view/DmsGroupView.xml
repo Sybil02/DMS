@@ -20,11 +20,125 @@
   PageIterMode="Full"
   UseGlueCode="false"
   RowClass="team.epm.dms.view.DmsGroupViewRowImpl"
-  ComponentClass="team.epm.dms.view.DmsGroupViewImpl">
+  ComponentClass="team.epm.dms.view.DmsGroupViewImpl"
+  Where="DmsGroup.LOCALE=:locale"
+  OrderBy="DmsGroup.NAME">
   <DesignTime>
     <Attr Name="_codeGenFlag2" Value="Access|Coll|VarAccess"/>
     <Attr Name="_isCodegen" Value="true"/>
   </DesignTime>
+  <Variable
+    Name="locale"
+    Kind="where"
+    Type="java.lang.String">
+    <TransientExpression><![CDATA[adf.context.locale]]></TransientExpression>
+  </Variable>
+  <ViewAccessor
+    Name="LKUP_YES_NO"
+    ViewObjectName="team.epm.dms.view.DmsLookupView">
+    <ViewCriteriaUsage
+      Name="DmsLookupViewCriteria"
+      FullName="team.epm.dms.view.DmsLookupView.DmsLookupViewCriteria"/>
+    <ParameterMap>
+      <PIMap Variable="locale">
+        <TransientExpression><![CDATA[this.Locale]]></TransientExpression>
+      </PIMap>
+      <PIMap Variable="lookupType">
+        <TransientExpression><![CDATA["YES_NO"]]></TransientExpression>
+      </PIMap>
+    </ParameterMap>
+  </ViewAccessor>
+  <ViewAccessor
+    Name="LKUP_LANGUAGE"
+    ViewObjectName="team.epm.dms.view.DmsLookupView">
+    <ViewCriteriaUsage
+      Name="DmsLookupViewCriteria"
+      FullName="team.epm.dms.view.DmsLookupView.DmsLookupViewCriteria"/>
+    <ParameterMap>
+      <PIMap Variable="locale">
+        <TransientExpression><![CDATA[this.Locale]]></TransientExpression>
+      </PIMap>
+      <PIMap Variable="lookupType">
+        <TransientExpression><![CDATA["DMS_LANGUAGE"]]></TransientExpression>
+      </PIMap>
+    </ParameterMap>
+  </ViewAccessor>
+  <ViewAccessor
+    Name="LST_USER"
+    ViewObjectName="team.epm.dms.view.DmsUserView"
+    RowLevelBinds="true"/>
+  <ListBinding
+    Name="LOV_EnableFlag"
+    ListVOName="LKUP_YES_NO"
+    ListRangeSize="-1"
+    NullValueFlag="none"
+    NullValueId="LOV_EnableFlag_LOVUIHints_NullValueId"
+    MRUCount="0">
+    <AttrArray Name="AttrNames">
+      <Item Value="EnableFlag"/>
+    </AttrArray>
+    <AttrArray Name="ListAttrNames">
+      <Item Value="Code"/>
+    </AttrArray>
+    <AttrArray Name="ListDisplayAttrNames">
+      <Item Value="Meaning"/>
+    </AttrArray>
+    <DisplayCriteria/>
+  </ListBinding>
+  <ListBinding
+    Name="LOV_UpdatedBy"
+    ListVOName="LST_USER"
+    ListRangeSize="-1"
+    NullValueFlag="start"
+    NullValueId="${adfBundle['oracle.javatools.resourcebundle.SystemBundle']['NULL_VALUE_RESID']}"
+    MRUCount="0">
+    <AttrArray Name="AttrNames">
+      <Item Value="UpdatedBy"/>
+    </AttrArray>
+    <AttrArray Name="ListAttrNames">
+      <Item Value="Id"/>
+    </AttrArray>
+    <AttrArray Name="ListDisplayAttrNames">
+      <Item Value="Name"/>
+    </AttrArray>
+    <DisplayCriteria/>
+  </ListBinding>
+  <ListBinding
+    Name="LOV_CreatedBy"
+    ListVOName="LST_USER"
+    ListRangeSize="-1"
+    NullValueFlag="start"
+    NullValueId="${adfBundle['oracle.javatools.resourcebundle.SystemBundle']['NULL_VALUE_RESID']}"
+    MRUCount="0">
+    <AttrArray Name="AttrNames">
+      <Item Value="CreatedBy"/>
+    </AttrArray>
+    <AttrArray Name="ListAttrNames">
+      <Item Value="Id"/>
+    </AttrArray>
+    <AttrArray Name="ListDisplayAttrNames">
+      <Item Value="Name"/>
+    </AttrArray>
+    <DisplayCriteria/>
+  </ListBinding>
+  <ListBinding
+    Name="LOV_Locale"
+    ListVOName="LKUP_LANGUAGE"
+    ListRangeSize="-1"
+    NullValueFlag="none"
+    NullValueId="LOV_Locale_LOVUIHints_NullValueId"
+    MRUCount="0">
+    <AttrArray Name="AttrNames">
+      <Item Value="Locale"/>
+    </AttrArray>
+    <AttrArray Name="ListAttrNames">
+      <Item Value="Code"/>
+    </AttrArray>
+    <AttrArray Name="ListDisplayAttrNames">
+      <Item Value="Meaning"/>
+    </AttrArray>
+    <DisplayCriteria/>
+  </ListBinding>
   <EntityUsage
     Name="DmsGroup"
     Entity="team.epm.dms.model.DmsGroup"/>
@@ -34,14 +148,25 @@
     PrecisionRule="true"
     EntityAttrName="Id"
     EntityUsage="DmsGroup"
-    AliasName="ID"/>
+    AliasName="ID">
+    <TransientExpression><![CDATA[java.util.UUID.randomUUID().toString().replace("-", "")]]></TransientExpression>
+  </ViewAttribute>
   <ViewAttribute
     Name="Locale"
     IsNotNull="true"
     PrecisionRule="true"
     EntityAttrName="Locale"
     EntityUsage="DmsGroup"
-    AliasName="LOCALE"/>
+    AliasName="LOCALE"
+    LOVName="LOV_Locale">
+    <TransientExpression><![CDATA[adf.context.locale]]></TransientExpression>
+    <Properties>
+      <SchemaBasedProperties>
+        <CONTROLTYPE
+          Value="choice"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewAttribute
     Name="Name"
     PrecisionRule="true"
@@ -53,29 +178,81 @@
     PrecisionRule="true"
     EntityAttrName="EnableFlag"
     EntityUsage="DmsGroup"
-    AliasName="ENABLE_FLAG"/>
+    AliasName="ENABLE_FLAG"
+    LOVName="LOV_EnableFlag"
+    DefaultValue="Y">
+    <Properties>
+      <SchemaBasedProperties>
+        <CONTROLTYPE
+          Value="choice"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewAttribute
     Name="CreatedAt"
     PrecisionRule="true"
     EntityAttrName="CreatedAt"
     EntityUsage="DmsGroup"
-    AliasName="CREATED_AT"/>
+    AliasName="CREATED_AT"
+    IsUpdateable="while_insert">
+    <TransientExpression><![CDATA[adf.currentDateTime]]></TransientExpression>
+    <Properties>
+      <SchemaBasedProperties>
+        <FMT_FORMATTER
+          ResId="team.epm.dms.view.DmsGroupView.CreatedAt_FMT_FORMATTER"/>
+        <FMT_FORMAT
+          ResId="team.epm.dms.view.DmsGroupView.CreatedAt_FMT_FORMAT"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewAttribute
     Name="UpdatedAt"
     PrecisionRule="true"
     EntityAttrName="UpdatedAt"
     EntityUsage="DmsGroup"
-    AliasName="UPDATED_AT"/>
+    AliasName="UPDATED_AT">
+    <TransientExpression><![CDATA[adf.currentDateTime]]></TransientExpression>
+    <Properties>
+      <SchemaBasedProperties>
+        <FMT_FORMATTER
+          ResId="team.epm.dms.view.DmsGroupView.UpdatedAt_FMT_FORMATTER"/>
+        <FMT_FORMAT
+          ResId="team.epm.dms.view.DmsGroupView.UpdatedAt_FMT_FORMAT"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewAttribute
     Name="UpdatedBy"
     PrecisionRule="true"
     EntityAttrName="UpdatedBy"
     EntityUsage="DmsGroup"
-    AliasName="UPDATED_BY"/>
+    AliasName="UPDATED_BY"
+    LOVName="LOV_UpdatedBy">
+    <TransientExpression><![CDATA[adf.userSession.userData.userId]]></TransientExpression>
+    <Properties>
+      <SchemaBasedProperties>
+        <CONTROLTYPE
+          Value="choice"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewAttribute
     Name="CreatedBy"
     PrecisionRule="true"
     EntityAttrName="CreatedBy"
     EntityUsage="DmsGroup"
-    AliasName="CREATED_BY"/>
+    AliasName="CREATED_BY"
+    LOVName="LOV_CreatedBy">
+    <TransientExpression><![CDATA[adf.userSession.userData.userId]]></TransientExpression>
+    <Properties>
+      <SchemaBasedProperties>
+        <CONTROLTYPE
+          Value="choice"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
+  <ResourceBundle>
+    <PropertiesBundle
+      PropertiesFile="ModelBundle"/>
+  </ResourceBundle>
 </ViewObject>

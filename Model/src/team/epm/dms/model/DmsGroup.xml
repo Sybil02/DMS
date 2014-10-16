@@ -11,9 +11,11 @@
   AliasName="DmsGroup"
   BindingStyle="OracleName"
   UseGlueCode="false"
-  RowClass="team.epm.dms.model.DmsGroupImpl">
+  RowClass="team.epm.dms.model.DmsGroupImpl"
+  CollClass="team.epm.dms.model.DmsGroupCollImpl"
+  DefClass="team.epm.dms.model.DmsGroupDefImpl">
   <DesignTime>
-    <Attr Name="_codeGenFlag2" Value="Access"/>
+    <Attr Name="_codeGenFlag2" Value="Init|Delete|Access|DML|Def|Coll"/>
     <AttrArray Name="_publishEvents"/>
     <Attr Name="_isCodegen" Value="true"/>
   </DesignTime>
@@ -44,6 +46,12 @@
     <DesignTime>
       <Attr Name="_DisplaySize" Value="10"/>
     </DesignTime>
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="dms.common.locale"/>
+      </SchemaBasedProperties>
+    </Properties>
   </Attribute>
   <Attribute
     Name="Name"
@@ -56,6 +64,12 @@
     <DesignTime>
       <Attr Name="_DisplaySize" Value="100"/>
     </DesignTime>
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="dms.usergroup.name"/>
+      </SchemaBasedProperties>
+    </Properties>
   </Attribute>
   <Attribute
     Name="EnableFlag"
@@ -68,6 +82,12 @@
     <DesignTime>
       <Attr Name="_DisplaySize" Value="39"/>
     </DesignTime>
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="dms.usergroup.enabled"/>
+      </SchemaBasedProperties>
+    </Properties>
   </Attribute>
   <Attribute
     Name="CreatedAt"
@@ -79,6 +99,12 @@
     <DesignTime>
       <Attr Name="_DisplaySize" Value="7"/>
     </DesignTime>
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="createdAt"/>
+      </SchemaBasedProperties>
+    </Properties>
   </Attribute>
   <Attribute
     Name="UpdatedAt"
@@ -90,6 +116,12 @@
     <DesignTime>
       <Attr Name="_DisplaySize" Value="7"/>
     </DesignTime>
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="updatedAt"/>
+      </SchemaBasedProperties>
+    </Properties>
   </Attribute>
   <Attribute
     Name="UpdatedBy"
@@ -102,6 +134,12 @@
     <DesignTime>
       <Attr Name="_DisplaySize" Value="32"/>
     </DesignTime>
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="updatedBy"/>
+      </SchemaBasedProperties>
+    </Properties>
   </Attribute>
   <Attribute
     Name="CreatedBy"
@@ -114,6 +152,12 @@
     <DesignTime>
       <Attr Name="_DisplaySize" Value="32"/>
     </DesignTime>
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="createdBy"/>
+      </SchemaBasedProperties>
+    </Properties>
   </Attribute>
   <Key
     Name="PkDmsGroup"
@@ -148,4 +192,8 @@
       <Item Value="team.epm.dms.model.DmsGroup.Locale"/>
     </AttrArray>
   </Key>
+  <ResourceBundle>
+    <PropertiesBundle
+      PropertiesFile="ModelBundle"/>
+  </ResourceBundle>
 </Entity>
