@@ -65,6 +65,11 @@
       <Attr Name="_DisplaySize" Value="100"/>
     </DesignTime>
     <Properties>
+      <CustomProperties>
+        <Property
+          Name="isMutiLnagAttr"
+          Value="true"/>
+      </CustomProperties>
       <SchemaBasedProperties>
         <LABEL
           ResId="dms.usergroup.name"/>

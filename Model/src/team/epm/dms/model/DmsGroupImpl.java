@@ -6,6 +6,7 @@ import oracle.jbo.AttributeList;
 import oracle.jbo.Key;
 import oracle.jbo.domain.Date;
 import oracle.jbo.server.AttributeDefImpl;
+import oracle.jbo.server.EntityCache;
 import oracle.jbo.server.EntityDefImpl;
 import oracle.jbo.server.EntityImpl;
 import oracle.jbo.server.TransactionEvent;
@@ -161,6 +162,8 @@ public class DmsGroupImpl extends EntityImpl {
 
 
     private static DmsGroupDefImpl mDefinitionObject;
+
+
     public static final int ID = AttributesEnum.Id.index();
     public static final int LOCALE = AttributesEnum.Locale.index();
     public static final int NAME = AttributesEnum.Name.index();
@@ -192,6 +195,19 @@ public class DmsGroupImpl extends EntityImpl {
         if (operation==DML_UPDATE){
             this.setUpdatedAt(new Date(new java.sql.Timestamp(System.currentTimeMillis())));
             this.setUpdatedBy(this.getDBTransaction().getSession().getUserData().get("userId")+"");
+        }
+        if(operation==DML_INSERT && !this.getLocale().equals("en")){
+            DmsGroupImpl group = (DmsGroupImpl)this.getDefinitionObject().createBlankInstance2(this.getDBTransaction());
+            group.setId(this.getId());
+            group.setName(this.getName());
+            group.setLocale("en");
+            group.setEnableFlag(this.getEnableFlag());
+            group.setCreatedAt(this.getCreatedAt());
+            group.setUpdatedAt(this.getUpdatedAt());
+            group.setCreatedBy(this.getCreatedBy());
+            group.setUpdatedBy(this.getUpdatedBy());
+            group.doDML(operation, transactionEvent);
+            group.remove();
         }
     }
     

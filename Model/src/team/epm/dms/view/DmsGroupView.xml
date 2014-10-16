@@ -148,7 +148,8 @@
     PrecisionRule="true"
     EntityAttrName="Id"
     EntityUsage="DmsGroup"
-    AliasName="ID">
+    AliasName="ID"
+    IsUpdateable="while_insert">
     <TransientExpression><![CDATA[java.util.UUID.randomUUID().toString().replace("-", "")]]></TransientExpression>
   </ViewAttribute>
   <ViewAttribute
@@ -158,7 +159,8 @@
     EntityAttrName="Locale"
     EntityUsage="DmsGroup"
     AliasName="LOCALE"
-    LOVName="LOV_Locale">
+    LOVName="LOV_Locale"
+    IsUpdateable="while_insert">
     <TransientExpression><![CDATA[adf.context.locale]]></TransientExpression>
     <Properties>
       <SchemaBasedProperties>
