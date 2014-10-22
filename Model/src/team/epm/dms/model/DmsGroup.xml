@@ -67,7 +67,7 @@
     <Properties>
       <CustomProperties>
         <Property
-          Name="isMutiLnagAttr"
+          Name="isMultiLangAttr"
           Value="true"/>
       </CustomProperties>
       <SchemaBasedProperties>
