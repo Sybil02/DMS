@@ -26,18 +26,18 @@
   <Variable
     Name="locale"
     Kind="where"
-    Type="java.lang.String"
-    DefaultValue="zh_CN"/>
+    Type="java.lang.String"/>
   <Variable
     Name="p_id"
     Kind="where"
     Type="java.lang.String"/>
   <SQLQuery>
     <![CDATA[select t1.id, t1.label,t1.p_id,t2.id function_id, t2.action
-  from dms_menu t1, dms_function t2
- where t1.locale = t2.function_locale
+  from dms_menu t1 left join dms_function t2
+   on t1.locale = t2.function_locale
    and t1.function_id = t2.id
-   and t1.locale = :locale
+  where 
+   t1.locale = :locale
    and t1.enable_flag = 'Y'
    and nvl(t1.p_id,' ')=nvl(:p_id,' ')
 order by t1.seq]]>
@@ -119,4 +119,8 @@ order by t1.seq]]>
       <Attr Name="_DisplaySize" Value="100"/>
     </DesignTime>
   </ViewAttribute>
+  <ResourceBundle>
+    <PropertiesBundle
+      PropertiesFile="ModelBundle"/>
+  </ResourceBundle>
 </ViewObject>

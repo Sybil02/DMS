@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pageDefinition xmlns="http://xmlns.oracle.com/adfm/uimodel"
+                version="11.1.1.64.93" id="editPageDef" Package="dms.groupUser">
+  <parameters/>
+  <executables>
+    <variableIterator id="variables"/>
+    <iterator Binds="DmsGroupView" RangeSize="25"
+              DataControl="DmsModuleDataControl" id="DmsGroupViewIterator"/>
+  </executables>
+  <bindings>
+    <list IterBinding="DmsGroupViewIterator" ListOperMode="navigation"
+          ListIter="DmsGroupViewIterator" id="DmsGroupView"
+          DTSupportsMRU="false">
+      <AttrNames>
+        <Item Value="Name"/>
+      </AttrNames>
+    </list>
+  </bindings>
+</pageDefinition>

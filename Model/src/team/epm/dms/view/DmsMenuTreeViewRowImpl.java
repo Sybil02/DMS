@@ -89,6 +89,7 @@ public class DmsMenuTreeViewRowImpl extends ViewRowImpl {
             return vals;
         }
     }
+
     public static final int ID = AttributesEnum.Id.index();
     public static final int LABEL = AttributesEnum.Label.index();
     public static final int PID = AttributesEnum.PId.index();
