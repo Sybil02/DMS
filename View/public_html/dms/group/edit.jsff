@@ -65,7 +65,8 @@
                     selectedRowKeys="#{bindings.DmsGroupView.collectionModel.selectedRow}"
                     selectionListener="#{bindings.DmsGroupView.collectionModel.makeCurrent}"
                     rowSelection="single" id="t1"
-                    partialTriggers="::cb1 ::cb2 ::cb3 :::it1 :::soc3">
+                    partialTriggers="::cb1 ::cb2 ::cb3 :::it1 :::soc3"
+                    autoHeightRows="#{bindings.DmsGroupView.rangeSize}">
             <af:column sortProperty="#{bindings.DmsGroupView.hints.Name.name}"
                        filterable="true" sortable="true"
                        headerText="#{bindings.DmsGroupView.hints.Name.label}"

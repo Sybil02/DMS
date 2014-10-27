@@ -22,7 +22,9 @@
   RowClass="team.epm.dms.view.DmsGroupViewRowImpl"
   ComponentClass="team.epm.dms.view.DmsGroupViewImpl"
   Where="DmsGroup.LOCALE=:locale"
-  OrderBy="DmsGroup.NAME">
+  OrderBy="DmsGroup.NAME"
+  ComponentInterface="team.epm.dms.view.common.DmsGroupView"
+  ClientProxyName="team.epm.dms.view.client.DmsGroupViewClient">
   <DesignTime>
     <Attr Name="_codeGenFlag2" Value="Access|Coll|VarAccess"/>
     <Attr Name="_isCodegen" Value="true"/>
@@ -257,4 +259,11 @@
     <PropertiesBundle
       PropertiesFile="ModelBundle"/>
   </ResourceBundle>
+  <ClientInterface>
+    <Method
+      Name="fetchEnabledGroup">
+      <Return
+        Type="oracle.jbo.RowSet"/>
+    </Method>
+  </ClientInterface>
 </ViewObject>

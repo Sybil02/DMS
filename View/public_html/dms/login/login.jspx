@@ -11,7 +11,17 @@
       <af:form id="f1" defaultCommand="login_action">
         <af:panelStretchLayout id="psl1" startWidth="50%" endWidth="0px"
                                topHeight="30%"
-                               inlineStyle="background:url(../images/login-bg.png);background-repeat:repeat-x; min-height:645px;-webkit-background-size: contain;-moz-background-size: contain;-o-background-size: contain;background-size: contain;">
+                               inlineStyle="
+                               background-image:url(./btn.png); 
+                               -moz-background-size: 100% 100%; 
+                               -o-background-size: 100% 100%; 
+                               -webkit-background-size: 100% 100%; 
+                               background-size: 100% 100%; 
+                               -moz-border-image: url(../images/login-bg.png) 0; 
+                               background-repeat:no-repeat\9; 
+                               background-image:none\9; 
+                               filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../images/login-bg.png', sizingMethod='scale')\9; 
+                               background:url(../images/login-bg.png);background-repeat:repeat-x; min-height:400px;-webkit-background-size: contain;-moz-background-size: contain;-o-background-size: contain;background-size: contain;">
           <f:facet name="bottom"/>
           <f:facet name="center">
             <af:panelFormLayout id="pfl1">
@@ -31,7 +41,8 @@
                              text="#{viewBundle['login.reset_password']}"
                              id="login_reset_pwd"/>
                   <af:commandButton text="#{viewBundle['login.login_action']}"
-                               id="login_action" inlineStyle="margin-left:35px;width:50px"
+                                    id="login_action"
+                                    inlineStyle="margin-left:35px;width:50px"
                                     action="#{LoginBean.login}"/>
                 </af:panelGroupLayout>
               </f:facet>
@@ -48,7 +59,7 @@
       </af:form>
       <af:clientListener type="load"
                          method="document.getElementById('psl1::c').style['margin-left']='-110px'"/>
-                         <af:clientListener type="load"
+      <af:clientListener type="load"
                          method="document.getElementById('login_account::content').focus()"/>
     </af:document>
   </f:view>

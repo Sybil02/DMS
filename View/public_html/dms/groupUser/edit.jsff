@@ -1,14 +1,35 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.1"
           xmlns:af="http://xmlns.oracle.com/adf/faces/rich"
-          xmlns:f="http://java.sun.com/jsf/core">
-  <af:panelGroupLayout id="pgl1" layout="horizontal">
-    <af:selectOneListbox value="#{bindings.DmsGroupView.inputValue}"
-                         label="#{bindings.DmsGroupView.label}"
-                         required="#{bindings.DmsGroupView.hints.mandatory}"
-                         shortDesc="#{bindings.DmsGroupView.hints.tooltip}"
-                         id="sol1">
-      <f:selectItems value="#{bindings.DmsGroupView.items}" id="si1"/>
-    </af:selectOneListbox>
+          xmlns:f="http://java.sun.com/jsf/core"
+          xmlns:c="http://java.sun.com/jsp/jstl/core">
+  <c:set var="viewBundle" value="#{adfBundle['dms_v']}"/>
+  <af:panelGroupLayout id="pgl1" layout="horizontal" inlineStyle="padding-top:5px">
+    <af:table value="#{bindings.DmsGroupView1.collectionModel}" var="row"
+              rows="#{bindings.DmsGroupView1.rangeSize}"
+              emptyText="#{viewBundle['dms.common.nodata']}"
+              fetchSize="#{bindings.DmsGroupView1.rangeSize}"
+              rowBandingInterval="0"
+              selectedRowKeys="#{bindings.DmsGroupView1.collectionModel.selectedRow}"
+              selectionListener="#{bindings.DmsGroupView1.collectionModel.makeCurrent}"
+              rowSelection="single" id="t1" width="180" filterVisible="true"
+              columnStretching="column:c1"
+              autoHeightRows="20">
+      <af:column sortProperty="#{bindings.DmsGroupView1.hints.Name.name}"
+                 sortable="true"
+                 headerText="#{viewBundle['dms.group.list']}"
+                 id="c1" filterable="true">
+        <af:outputText value="#{row.Name}" id="ot1"/>
+      </af:column>
+    </af:table>
+    <af:spacer width="50" height="10" id="s1"/>
+    <af:selectManyShuttle value="#{bindings.DmsUserView.inputValue}"
+                        label="#{bindings.DmsUserView.label}" id="sms1"
+                          simple="true"
+                          leadingHeader="#{viewBundle['dms.user.available_user_list']}"
+                          trailingHeader="#{viewBundle['dms.user.selected_user_list']}"
+                          size="25">
+    <f:selectItems value="#{bindings.DmsUserView.items}" id="si1"/>
+  </af:selectManyShuttle>
   </af:panelGroupLayout>
 </jsp:root>
