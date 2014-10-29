@@ -11,11 +11,11 @@
               fetchSize="#{bindings.DmsGroupView.rangeSize}"
               rowBandingInterval="0"
               selectedRowKeys="#{bindings.DmsGroupView.collectionModel.selectedRow}"
-              selectionListener="#{UserGroupBean.groupSelectListener}"
+              selectionListener="#{backingBeanScope.UserGroupBean.groupSelectListener}"
               rowSelection="single" id="t1" width="180" filterVisible="true"
               columnStretching="column:c1"
               autoHeightRows="20"
-              binding="#{UserGroupBean.groupList}">
+              binding="#{backingBeanScope.UserGroupBean.groupList}">
       <af:column sortProperty="#{bindings.DmsGroupView.hints.Name.name}"
                  sortable="true"
                  headerText="#{viewBundle['dms.group.list']}"
@@ -23,21 +23,16 @@
         <af:outputText value="#{row.Name}" id="ot1"/>
       </af:column>
     </af:table>
-    <af:inputText  id="ot2"
-    value="#{bindings.Id.inputValue}" 
-    visible="true"
-    partialTriggers="t1"
-    autoSubmit="true" binding="#{UserGroupBean.curGroupId}"/>
     <af:spacer width="50" height="10" id="s1"/>
-    <af:selectManyShuttle value="#{UserGroupBean.selectedUserList}"
+    <af:selectManyShuttle value="#{backingBeanScope.UserGroupBean.selectedUserList}"
                         label="#{bindings.DmsUserView.label}" id="sms1"
                           simple="true"
                           leadingHeader="#{viewBundle['dms.user.available_user_list']}"
                           trailingHeader="#{viewBundle['dms.user.selected_user_list']}"
                           size="20"
-                          valueChangeListener="#{UserGroupBean.userGroupListener}"
+                          valueChangeListener="#{backingBeanScope.UserGroupBean.userGroupListener}"
                           autoSubmit="true"
-                          binding="#{UserGroupBean.selectShuttle}"
+                          binding="#{backingBeanScope.UserGroupBean.selectShuttle}"
                           clientComponent="true">
     <f:selectItems value="#{bindings.DmsUserView.items}" id="si1"/>
   </af:selectManyShuttle>

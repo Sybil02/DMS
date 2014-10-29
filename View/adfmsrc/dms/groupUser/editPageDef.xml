@@ -38,10 +38,5 @@
         <Item Value="Name"/>
       </ListDisplayAttrNames>
     </list>
-    <attributeValues IterBinding="fetchEnabledGroupIter" id="Id">
-      <AttrNames>
-        <Item Value="Id"/>
-      </AttrNames>
-    </attributeValues>
   </bindings>
 </pageDefinition>

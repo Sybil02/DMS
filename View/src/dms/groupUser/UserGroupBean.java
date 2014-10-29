@@ -9,6 +9,7 @@ import java.util.List;
 
 import javax.faces.event.ValueChangeEvent;
 
+import oracle.adf.model.BindingContext;
 import oracle.adf.model.binding.DCIteratorBinding;
 import oracle.adf.view.rich.component.rich.data.RichTable;
 
@@ -26,6 +27,8 @@ import oracle.jbo.Row;
 import oracle.jbo.RowSetIterator;
 import oracle.jbo.ViewObject;
 
+import oracle.jbo.uicli.binding.JUCtrlListBinding;
+
 import org.apache.myfaces.trinidad.event.SelectionEvent;
 
 import team.epm.dms.view.DmsUserGroupViewImpl;
@@ -34,26 +37,27 @@ public class UserGroupBean {
     private Integer[] selectedList;
     private RichTable groupList;
     private RichSelectManyShuttle selectShuttle;
-    private RichInputText curGroupId;
 
     public UserGroupBean() {
     }
 
     public void userGroupListener(ValueChangeEvent valueChangeEvent) {
         // Add event code here...
+        BindingContainer bc=BindingContext.getCurrent().getCurrentBindingsEntry();
+        JUCtrlListBinding listBinding = (JUCtrlListBinding)bc.get("DmsUserView");
+        listBinding.clearSelectedIndices();
         RowSetIterator userIter =
             ADFUtils.findIterator("DmsUserViewIterator").getRowSetIterator();
         DCIteratorBinding userGroupIter =
             ADFUtils.findIterator("DmsUserGroupViewIterator");
         DmsUserGroupViewImpl view = (DmsUserGroupViewImpl)userGroupIter.getViewObject();
         
-        //iter.getRowAtRangeIndex(arg0)
         if(valueChangeEvent.getNewValue()!=null){
             Integer[] newValue = (Integer[])valueChangeEvent.getNewValue();
             for(int i:newValue){
                Row row= userIter.getRowAtRangeIndex(i);
                Row userGroup= view.createRow();
-               userGroup.setAttribute("GroupId", this.curGroupId.getValue());
+               userGroup.setAttribute("GroupId", this.getCurGroup().getAttribute("Id"));
                userGroup.setAttribute("UserId", row.getAttribute("Id"));
                view.insertRow(userGroup);
             }
@@ -64,7 +68,7 @@ public class UserGroupBean {
             for(int i:oldValue){
                Row row= userIter.getRowAtRangeIndex(i);
                view.deleteGroupUserByGroupIdAndUserId(row.getAttribute("Id")+"", 
-                                                       this.curGroupId.getValue()+"");
+                                                       this.getCurGroup().getAttribute("Id")+"");
             }
             view.getApplicationModule().getTransaction().commit();
         }
@@ -111,6 +115,9 @@ public class UserGroupBean {
         DmsUtils.makeCurrent(selectionEvent);
         AdfFacesContext adfFacesContext = AdfFacesContext.getCurrentInstance();
         adfFacesContext.addPartialTarget(this.selectShuttle);
+        BindingContainer bc=BindingContext.getCurrent().getCurrentBindingsEntry();
+        JUCtrlListBinding listBinding = (JUCtrlListBinding)bc.get("DmsUserView");
+        listBinding.clearSelectedIndices();
     }
 
     private Row getCurGroup() {
@@ -123,13 +130,5 @@ public class UserGroupBean {
 
     public RichSelectManyShuttle getSelectShuttle() {
         return selectShuttle;
-    }
-
-    public void setCurGroupId(RichInputText curGroupId) {
-        this.curGroupId = curGroupId;
-    }
-
-    public RichInputText getCurGroupId() {
-        return curGroupId;
     }
 }
