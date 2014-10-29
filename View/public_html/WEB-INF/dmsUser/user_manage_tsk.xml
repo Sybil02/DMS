@@ -13,6 +13,11 @@
       <managed-bean-class id="__5">dms.user.EditUserMBean</managed-bean-class>
       <managed-bean-scope id="__3">backingBean</managed-bean-scope>
     </managed-bean>
+    <managed-bean id="__9">
+      <managed-bean-name id="__11">UserGroupBean</managed-bean-name>
+      <managed-bean-class id="__2">dms.groupUser.UserGroupBean</managed-bean-class>
+      <managed-bean-scope id="__10">backingBean</managed-bean-scope>
+    </managed-bean>
     <view id="edit">
       <page>/dms/user/edit.jsff</page>
     </view>

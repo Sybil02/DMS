@@ -90,7 +90,7 @@
     <DesignTime>
       <Attr Name="_DisplaySize" Value="7"/>
     </DesignTime>
-    <TransientExpression><![CDATA[adf.currrentDateTime]]></TransientExpression>
+    <TransientExpression><![CDATA[adf.currentDateTime]]></TransientExpression>
   </Attribute>
   <Attribute
     Name="UpdatedAt"
@@ -102,7 +102,7 @@
     <DesignTime>
       <Attr Name="_DisplaySize" Value="7"/>
     </DesignTime>
-    <TransientExpression><![CDATA[adf.currrentDateTime]]></TransientExpression>
+    <TransientExpression><![CDATA[adf.currentDateTime]]></TransientExpression>
   </Attribute>
   <Attribute
     Name="UpdatedBy"

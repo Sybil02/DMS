@@ -58,7 +58,7 @@
         </af:panelStretchLayout>
       </af:form>
       <af:clientListener type="load"
-                         method="document.getElementById('psl1::c').style['margin-left']='-110px'"/>
+                         method="document.getElementById('psl1::c').style.marginLeft='-110px'"/>
       <af:clientListener type="load"
                          method="document.getElementById('login_account::content').focus()"/>
     </af:document>

@@ -733,7 +733,7 @@ comment on column DMS_GROUP.CREATED_BY is
 create table DMS_GROUP_ROLE 
 (
    ID                   VARCHAR2(32)         not null,
-   GROP_ID              VARCHAR2(32),
+   GROUP_ID              VARCHAR2(32),
    ROLE_ID              VARCHAR2(32),
    CREATED_AT           DATE,
    UPDATED_AT           DATE,
@@ -748,7 +748,7 @@ comment on table DMS_GROUP_ROLE is
 comment on column DMS_GROUP_ROLE.ID is
 '标识ID';
 
-comment on column DMS_GROUP_ROLE.GROP_ID is
+comment on column DMS_GROUP_ROLE.GROUP_ID is
 '用户组ID';
 
 comment on column DMS_GROUP_ROLE.ROLE_ID is
@@ -1118,7 +1118,7 @@ create table DMS_USER_GROUP
 (
    ID                   VARCHAR2(32)         not null,
    USER_ID              VARCHAR2(32),
-   GROP_ID              VARCHAR2(32),
+   GROUP_ID              VARCHAR2(32),
    CREATED_AT           DATE,
    UPDATED_AT           DATE,
    UPDATED_BY           VARCHAR2(32),
@@ -1135,7 +1135,7 @@ comment on column DMS_USER_GROUP.ID is
 comment on column DMS_USER_GROUP.USER_ID is
 '用户ID';
 
-comment on column DMS_USER_GROUP.GROP_ID is
+comment on column DMS_USER_GROUP.GROUP_ID is
 '用户组ID';
 
 comment on column DMS_USER_GROUP.CREATED_AT is

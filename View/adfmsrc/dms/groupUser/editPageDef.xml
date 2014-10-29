@@ -5,9 +5,14 @@
   <executables>
     <variableIterator id="variables"/>
     <methodIterator id="fetchEnabledGroupIter" Binds="fetchEnabledGroup.result"
-                    DataControl="DmsModuleDataControl" RangeSize="25"/>
-    <iterator Binds="DmsUserView" RangeSize="25"
-              DataControl="DmsModuleDataControl" id="DmsUserViewIterator"/>
+                    DataControl="DmsModuleDataControl" RangeSize="-1"/>
+    <iterator Binds="DmsUserView" RangeSize="-1"
+              DataControl="DmsModuleDataControl"
+              id="DmsUserViewIterator"/>
+    <iterator id="DmsUserGroupedViewIterator" Binds="DmsUserGroupedView"
+              DataControl="DmsModuleDataControl" RangeSize="-1"/>
+    <iterator id="DmsUserGroupViewIterator" Binds="DmsUserGroupView"
+              DataControl="DmsModuleDataControl" RangeSize="25"/>
   </executables>
   <bindings>
     <methodAction id="fetchEnabledGroup" RequiresUpdateModel="true"
@@ -15,7 +20,7 @@
                   IsViewObjectMethod="true" DataControl="DmsModuleDataControl"
                   InstanceName="DmsModuleDataControl.DmsGroupView"
                   ReturnName="data.DmsModuleDataControl.methodResults.fetchEnabledGroup_DmsModuleDataControl_DmsGroupView_fetchEnabledGroup_result"/>
-    <tree IterBinding="fetchEnabledGroupIter" id="DmsGroupView1">
+    <tree IterBinding="fetchEnabledGroupIter" id="DmsGroupView">
       <nodeDefinition DefName="team.epm.dms.view.DmsGroupView"
                       Name="DmsGroupView10">
         <AttrNames>
@@ -33,5 +38,10 @@
         <Item Value="Name"/>
       </ListDisplayAttrNames>
     </list>
+    <attributeValues IterBinding="fetchEnabledGroupIter" id="Id">
+      <AttrNames>
+        <Item Value="Id"/>
+      </AttrNames>
+    </attributeValues>
   </bindings>
 </pageDefinition>

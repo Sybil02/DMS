@@ -6,7 +6,7 @@
     <variableIterator id="variables"/>
     <iterator id="DmsUserViewIterator" Binds="DmsUserView"
               DataControl="DmsModuleDataControl" RangeSize="25"/>
-    <iterator id="DmsLookupView1Iterator" Binds="DmsLookupView1"
+    <iterator id="DmsLookupViewIterator" Binds="DmsLookupView"
               DataControl="DmsModuleDataControl" RangeSize="25"/>
   </executables>
   <bindings/>

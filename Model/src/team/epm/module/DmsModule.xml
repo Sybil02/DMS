@@ -58,6 +58,9 @@
     Name="DmsMenuTreeView"
     ViewObjectName="team.epm.dms.view.DmsMenuTreeView"/>
   <ViewUsage
-    Name="DmsLookupView1"
+    Name="DmsLookupView"
     ViewObjectName="team.epm.dms.view.DmsLookupView"/>
+  <ViewUsage
+    Name="DmsUserGroupedView"
+    ViewObjectName="team.epm.dms.view.DmsUserGroupedView"/>
 </AppModule>

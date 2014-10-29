@@ -8,6 +8,7 @@ import oracle.jbo.Session;
 import oracle.jbo.server.ApplicationModuleImpl;
 import oracle.jbo.server.ViewObjectImpl;
 
+import team.epm.dms.view.DmsGroupViewImpl;
 import team.epm.dms.view.DmsMenuTreeViewImpl;
 import team.epm.dms.view.DmsUserViewImpl;
 // ---------------------------------------------------------------------
@@ -144,11 +145,11 @@ public class DmsModuleImpl extends ApplicationModuleImpl {
     }
 
     /**
-     * Container's getter for DmsLookupView1.
-     * @return DmsLookupView1
+     * Container's getter for DmsLookupView.
+     * @return DmsLookupView
      */
-    public ViewObjectImpl getDmsLookupView1() {
-        return (ViewObjectImpl)findViewObject("DmsLookupView1");
+    public ViewObjectImpl getDmsLookupView() {
+        return (ViewObjectImpl)findViewObject("DmsLookupView");
     }
 
     @Override
@@ -159,5 +160,29 @@ public class DmsModuleImpl extends ApplicationModuleImpl {
         if(userId!=null){
             this.getSession().getUserData().put("userId", userId);
         }
+    }
+
+    /**
+     * Container's getter for DmsUserUngroupedView1.
+     * @return DmsUserUngroupedView1
+     */
+    public ViewObjectImpl getDmsUserUngroupedView1() {
+        return (ViewObjectImpl)findViewObject("DmsUserUngroupedView1");
+    }
+
+    /**
+     * Container's getter for DmsUserUngroupedView.
+     * @return DmsUserUngroupedView
+     */
+    public ViewObjectImpl getDmsUserUngroupedView() {
+        return (ViewObjectImpl)findViewObject("DmsUserUngroupedView");
+    }
+
+    /**
+     * Container's getter for DmsUserGroupedView.
+     * @return DmsUserGroupedView
+     */
+    public ViewObjectImpl getDmsUserGroupedView() {
+        return (ViewObjectImpl)findViewObject("DmsUserGroupedView");
     }
 }

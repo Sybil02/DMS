@@ -13,8 +13,8 @@
   UseGlueCode="false"
   RowClass="team.epm.dms.model.DmsGroupRoleImpl">
   <DesignTime>
-    <Attr Name="_codeGenFlag2" Value="Access"/>
     <AttrArray Name="_publishEvents"/>
+    <Attr Name="_codeGenFlag2" Value="Access"/>
     <Attr Name="_isCodegen" Value="true"/>
   </DesignTime>
   <Attribute
@@ -32,9 +32,9 @@
     </DesignTime>
   </Attribute>
   <Attribute
-    Name="GropId"
+    Name="GroupId"
     Precision="32"
-    ColumnName="GROP_ID"
+    ColumnName="GROUP_ID"
     SQLType="VARCHAR"
     Type="java.lang.String"
     ColumnType="VARCHAR2"

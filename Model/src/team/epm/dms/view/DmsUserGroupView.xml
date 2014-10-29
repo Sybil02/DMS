@@ -8,18 +8,19 @@
   InheritPersonalization="true"
   SelectList="DmsUserGroup.ID, 
        DmsUserGroup.USER_ID, 
-       DmsUserGroup.GROP_ID, 
        DmsUserGroup.CREATED_AT, 
        DmsUserGroup.UPDATED_AT, 
        DmsUserGroup.UPDATED_BY, 
-       DmsUserGroup.CREATED_BY"
+       DmsUserGroup.CREATED_BY, 
+       DmsUserGroup.GROUP_ID"
   FromList="DMS_USER_GROUP DmsUserGroup"
   BindingStyle="OracleName"
   CustomQuery="false"
   PageIterMode="Full"
-  UseGlueCode="false">
+  UseGlueCode="false"
+  ComponentClass="team.epm.dms.view.DmsUserGroupViewImpl">
   <DesignTime>
-    <Attr Name="_codeGenFlag2" Value="Access|VarAccess"/>
+    <Attr Name="_codeGenFlag2" Value="Coll|VarAccess"/>
   </DesignTime>
   <ViewAccessor
     Name="LST_USER"
@@ -60,7 +61,7 @@
     NullValueId="${adfBundle['oracle.javatools.resourcebundle.SystemBundle']['NULL_VALUE_RESID']}"
     MRUCount="0">
     <AttrArray Name="AttrNames">
-      <Item Value="GropId"/>
+      <Item Value="GroupId"/>
     </AttrArray>
     <AttrArray Name="ListAttrNames">
       <Item Value="Id"/>
@@ -132,20 +133,6 @@
     </Properties>
   </ViewAttribute>
   <ViewAttribute
-    Name="GropId"
-    PrecisionRule="true"
-    EntityAttrName="GropId"
-    EntityUsage="DmsUserGroup"
-    AliasName="GROP_ID"
-    LOVName="LOV_GropId">
-    <Properties>
-      <SchemaBasedProperties>
-        <CONTROLTYPE
-          Value="choice"/>
-      </SchemaBasedProperties>
-    </Properties>
-  </ViewAttribute>
-  <ViewAttribute
     Name="CreatedAt"
     PrecisionRule="true"
     EntityAttrName="CreatedAt"
@@ -186,4 +173,10 @@
       </SchemaBasedProperties>
     </Properties>
   </ViewAttribute>
+  <ViewAttribute
+    Name="GroupId"
+    PrecisionRule="true"
+    EntityAttrName="GroupId"
+    EntityUsage="DmsUserGroup"
+    AliasName="GROUP_ID"/>
 </ViewObject>

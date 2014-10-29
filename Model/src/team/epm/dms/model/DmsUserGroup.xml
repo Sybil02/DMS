@@ -44,18 +44,6 @@
     </DesignTime>
   </Attribute>
   <Attribute
-    Name="GropId"
-    Precision="32"
-    ColumnName="GROP_ID"
-    SQLType="VARCHAR"
-    Type="java.lang.String"
-    ColumnType="VARCHAR2"
-    TableName="DMS_USER_GROUP">
-    <DesignTime>
-      <Attr Name="_DisplaySize" Value="32"/>
-    </DesignTime>
-  </Attribute>
-  <Attribute
     Name="CreatedAt"
     ColumnName="CREATED_AT"
     SQLType="TIMESTAMP"
@@ -66,7 +54,7 @@
     <DesignTime>
       <Attr Name="_DisplaySize" Value="7"/>
     </DesignTime>
-    <TransientExpression><![CDATA[adf.currrentDateTime]]></TransientExpression>
+    <TransientExpression><![CDATA[adf.currentDateTime]]></TransientExpression>
   </Attribute>
   <Attribute
     Name="UpdatedAt"
@@ -78,7 +66,7 @@
     <DesignTime>
       <Attr Name="_DisplaySize" Value="7"/>
     </DesignTime>
-    <TransientExpression><![CDATA[adf.currrentDateTime]]></TransientExpression>
+    <TransientExpression><![CDATA[adf.currentDateTime]]></TransientExpression>
   </Attribute>
   <Attribute
     Name="UpdatedBy"
@@ -105,6 +93,18 @@
       <Attr Name="_DisplaySize" Value="32"/>
     </DesignTime>
     <TransientExpression><![CDATA[adf.userSession.userData.userId]]></TransientExpression>
+  </Attribute>
+  <Attribute
+    Name="GroupId"
+    Precision="32"
+    ColumnName="GROUP_ID"
+    SQLType="VARCHAR"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    TableName="DMS_USER_GROUP">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="32"/>
+    </DesignTime>
   </Attribute>
   <Key
     Name="PkDmsUserGroup"

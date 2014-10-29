@@ -8,6 +8,11 @@
     <data-control-scope id="__1">
       <isolated/>
     </data-control-scope>
+    <managed-bean id="__5">
+      <managed-bean-name id="__7">UserGroupBean</managed-bean-name>
+      <managed-bean-class id="__6">dms.groupUser.UserGroupBean</managed-bean-class>
+      <managed-bean-scope id="__4">request</managed-bean-scope>
+    </managed-bean>
     <view id="edit">
       <page>/dms/groupUser/edit.jsff</page>
     </view>

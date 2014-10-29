@@ -240,6 +240,15 @@
                   <url path="public_html/"/>
                </list>
             </hash>
+            <hash>
+               <url n="content-folder-url" path="public_html/dms/groupUser/"/>
+               <list n="pattern-filters">
+                  <string v="+dms/groupUser/UserGroupBean.java"/>
+               </list>
+               <list n="url-path">
+                  <url path="public_html/"/>
+               </list>
+            </hash>
          </list>
          <list n="url-path"/>
       </hash>

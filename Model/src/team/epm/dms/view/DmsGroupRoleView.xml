@@ -7,12 +7,12 @@
   Version="11.1.1.64.93"
   InheritPersonalization="true"
   SelectList="DmsGroupRole.ID, 
-       DmsGroupRole.GROP_ID, 
        DmsGroupRole.ROLE_ID, 
        DmsGroupRole.CREATED_AT, 
        DmsGroupRole.UPDATED_AT, 
        DmsGroupRole.UPDATED_BY, 
-       DmsGroupRole.CREATED_BY"
+       DmsGroupRole.CREATED_BY, 
+       DmsGroupRole.GROUP_ID"
   FromList="DMS_GROUP_ROLE DmsGroupRole"
   BindingStyle="OracleName"
   CustomQuery="false"
@@ -31,12 +31,6 @@
     EntityAttrName="Id"
     EntityUsage="DmsGroupRole"
     AliasName="ID"/>
-  <ViewAttribute
-    Name="GropId"
-    PrecisionRule="true"
-    EntityAttrName="GropId"
-    EntityUsage="DmsGroupRole"
-    AliasName="GROP_ID"/>
   <ViewAttribute
     Name="RoleId"
     PrecisionRule="true"
@@ -67,4 +61,10 @@
     EntityAttrName="CreatedBy"
     EntityUsage="DmsGroupRole"
     AliasName="CREATED_BY"/>
+  <ViewAttribute
+    Name="GroupId"
+    PrecisionRule="true"
+    EntityAttrName="GroupId"
+    EntityUsage="DmsGroupRole"
+    AliasName="GROUP_ID"/>
 </ViewObject>
