@@ -11,6 +11,8 @@ import javax.faces.event.ValueChangeEvent;
 
 import oracle.adf.model.BindingContext;
 import oracle.adf.model.binding.DCIteratorBinding;
+import oracle.adf.share.ADFContext;
+import oracle.adf.share.logging.ADFLogger;
 import oracle.adf.view.rich.component.rich.data.RichTable;
 
 import oracle.adf.view.rich.component.rich.input.RichInputText;
@@ -29,11 +31,15 @@ import oracle.jbo.ViewObject;
 
 import oracle.jbo.uicli.binding.JUCtrlListBinding;
 
+import org.apache.commons.lang.ObjectUtils;
+import org.apache.commons.lang.StringUtils;
+import org.apache.myfaces.trinidad.component.core.input.CoreSelectManyShuttle;
 import org.apache.myfaces.trinidad.event.SelectionEvent;
 
 import team.epm.dms.view.DmsUserGroupViewImpl;
 
 public class UserGroupBean {
+    private static ADFLogger logger=ADFLogger.createADFLogger(UserGroupBean.class);
     private Integer[] selectedList;
     private RichTable groupList;
     private RichSelectManyShuttle selectShuttle;
@@ -57,7 +63,7 @@ public class UserGroupBean {
             for(int i:newValue){
                Row row= userIter.getRowAtRangeIndex(i);
                Row userGroup= view.createRow();
-               userGroup.setAttribute("GroupId", this.getCurGroup().getAttribute("Id"));
+               userGroup.setAttribute("GroupId", this.getCurGroupId());
                userGroup.setAttribute("UserId", row.getAttribute("Id"));
                view.insertRow(userGroup);
             }
@@ -68,13 +74,14 @@ public class UserGroupBean {
             for(int i:oldValue){
                Row row= userIter.getRowAtRangeIndex(i);
                view.deleteGroupUserByGroupIdAndUserId(row.getAttribute("Id")+"", 
-                                                       this.getCurGroup().getAttribute("Id")+"");
+                                                       this.getCurGroupId());
             }
             view.getApplicationModule().getTransaction().commit();
         }
     }
 
     public Integer[] getSelectedUserList() {
+        
         List<Integer> selectedUser = new ArrayList<Integer>();
         DCIteratorBinding userIter =
             ADFUtils.findIterator("DmsUserViewIterator");
@@ -82,7 +89,7 @@ public class UserGroupBean {
             ADFUtils.findIterator("DmsUserGroupedViewIterator");
         ViewObject groupedUserview = groupedUserIter.getViewObject();
         groupedUserview.setNamedWhereClauseParam("groupId",
-                                                 this.getCurGroup().getAttribute("Id"));
+                                                 this.getCurGroupId());
         groupedUserview.executeQuery();
         while (groupedUserview.hasNext()) {
             Row row = groupedUserview.next();
@@ -113,17 +120,29 @@ public class UserGroupBean {
     public void groupSelectListener(SelectionEvent selectionEvent) {
         //#{bindings.DmsGroupView.collectionModel.makeCurrent}
         DmsUtils.makeCurrent(selectionEvent);
-        AdfFacesContext adfFacesContext = AdfFacesContext.getCurrentInstance();
+        ADFContext aDFContext = ADFContext.getCurrent();
+        aDFContext.getViewScope().put("curGroupId", this.getCurGroup().getAttribute("Id"));
+        this.selectShuttle.resetValue();
+        AdfFacesContext adfFacesContext = AdfFacesContext.getCurrentInstance();           
         adfFacesContext.addPartialTarget(this.selectShuttle);
+        /*
         BindingContainer bc=BindingContext.getCurrent().getCurrentBindingsEntry();
         JUCtrlListBinding listBinding = (JUCtrlListBinding)bc.get("DmsUserView");
         listBinding.clearSelectedIndices();
+        listBinding.getSelectedIndices();
+        */
     }
 
     private Row getCurGroup() {
         return ADFUtils.findIterator("fetchEnabledGroupIter").getCurrentRow();
     }
-
+    
+    private String getCurGroupId(){
+        String curGroupId=ObjectUtils.toString(ADFContext.getCurrent().getViewScope().get("curGroupId"));
+        curGroupId=curGroupId.length()>0 ? curGroupId :  ObjectUtils.toString(this.getCurGroup().getAttribute("Id"));
+        return curGroupId;
+    }
+    
     public void setSelectShuttle(RichSelectManyShuttle selectShuttle) {
         this.selectShuttle = selectShuttle;
     }
