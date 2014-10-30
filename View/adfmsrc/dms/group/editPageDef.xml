@@ -4,7 +4,7 @@
   <parameters/>
   <executables>
     <variableIterator id="variables"/>
-    <iterator Binds="DmsGroupView" RangeSize="25"
+    <iterator Binds="DmsGroupView" RangeSize="20"
               DataControl="DmsModuleDataControl" id="DmsGroupViewIterator"/>
     <searchRegion Binds="DmsGroupViewIterator" Criteria=""
                   Customizer="oracle.jbo.uicli.binding.JUSearchBindingCustomizer"
