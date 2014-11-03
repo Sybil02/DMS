@@ -75,9 +75,9 @@ insert into dms_function(id,function_locale,name,created_at,updated_at,updated_b
 values('101013','en','User Group Manage',sysdate,sysdate,'10000','10000','/WEB-INF/dmsGroup/edit_group_tsk.xml#edit_group_tsk','User Group Manage',101013,'101010');
 
 insert into dms_function(id,function_locale,name,created_at,updated_at,updated_by,created_by,action,category,seq,p_function_id)
-values('101014','zh_CN','用户组分配',sysdate,sysdate,'10000','10000','/WEB-INF/dmsUserGroup/user_group_tsk.xml#user_group_tsk','用户组管理',101014,'101010');
+values('101014','zh_CN','用户组分配',sysdate,sysdate,'10000','10000','/WEB-INF/dmsGroupUser/user_group_tsk.xml#user_group_tsk','用户组管理',101014,'101010');
 insert into dms_function(id,function_locale,name,created_at,updated_at,updated_by,created_by,action,category,seq,p_function_id)
-values('101014','en','User Group Assign',sysdate,sysdate,'10000','10000','/WEB-INF/dmsUserGroup/user_group_tsk.xml#user_group_tsk','User Group Manage',101014,'101010');
+values('101014','en','User Group Assign',sysdate,sysdate,'10000','10000','/WEB-INF/dmsGroupUser/user_group_tsk.xml#user_group_tsk','User Group Manage',101014,'101010');
 
 /*==============================================================*/
 /* 初始化菜单                                                     */
