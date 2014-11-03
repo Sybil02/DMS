@@ -139,7 +139,7 @@ public class UserGroupBean {
     
     private String getCurGroupId(){
         String curGroupId=ObjectUtils.toString(ADFContext.getCurrent().getViewScope().get("curGroupId"));
-        curGroupId=curGroupId.length()>0 ? curGroupId :  ObjectUtils.toString(this.getCurGroup().getAttribute("Id"));
+        curGroupId=curGroupId.length()>0 ? curGroupId :  ObjectUtils.toString(this.getCurGroup()==null ? "":this.getCurGroup().getAttribute("Id"));
         return curGroupId;
     }
     
