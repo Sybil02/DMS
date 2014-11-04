@@ -60,24 +60,35 @@ insert into dms_function(id,function_locale,name,created_at,updated_at,updated_b
 values('101000','en','Setting',sysdate,sysdate,'10000','10000','settings','Settings',101000,null);
 
 insert into dms_function(id,function_locale,name,created_at,updated_at,updated_by,created_by,action,category,seq,p_function_id)
-values('101011','zh_CN','帐号管理',sysdate,sysdate,'10000','10000','/WEB-INF/dmsUser/user_manage_tsk.xml#user_manage_tsk','用户管理',101011,'101010');
+values('101011','zh_CN','帐号管理',sysdate,sysdate,'10000','10000','/WEB-INF/dmsUser/user_manage_tsk.xml#user_manage_tsk','用户管理',101011,null);
 insert into dms_function(id,function_locale,name,created_at,updated_at,updated_by,created_by,action,category,seq,p_function_id)
-values('101011','en','Account Management',sysdate,sysdate,'10000','10000','/WEB-INF/dmsUser/user_manage_tsk.xml#user_manage_tsk','User Manage',101011,'101010');
+values('101011','en','Account Management',sysdate,sysdate,'10000','10000','/WEB-INF/dmsUser/user_manage_tsk.xml#user_manage_tsk','User Manage',101011,null);
 
 insert into dms_function(id,function_locale,name,created_at,updated_at,updated_by,created_by,action,category,seq,p_function_id)
-values('101012','zh_CN','个人信息',sysdate,sysdate,'10000','10000','/WEB-INF/dmsUser/user_info_tsk.xml#user_info_tsk','用户管理',101012,'101010');
+values('101012','zh_CN','个人信息',sysdate,sysdate,'10000','10000','/WEB-INF/dmsUser/user_info_tsk.xml#user_info_tsk','用户管理',101012,null);
 insert into dms_function(id,function_locale,name,created_at,updated_at,updated_by,created_by,action,category,seq,p_function_id)
-values('101012','en','Personal Info',sysdate,sysdate,'10000','10000','/WEB-INF/dmsUser/user_info_tsk.xml#user_info_tsk','User Manage',101012,'101010');
+values('101012','en','Personal Info',sysdate,sysdate,'10000','10000','/WEB-INF/dmsUser/user_info_tsk.xml#user_info_tsk','User Manage',101012,null);
 
 insert into dms_function(id,function_locale,name,created_at,updated_at,updated_by,created_by,action,category,seq,p_function_id)
-values('101013','zh_CN','用户组管理',sysdate,sysdate,'10000','10000','/WEB-INF/dmsGroup/edit_group_tsk.xml#edit_group_tsk','用户组管理',101013,'101010');
+values('101013','zh_CN','用户组管理',sysdate,sysdate,'10000','10000','/WEB-INF/dmsGroup/edit_group_tsk.xml#edit_group_tsk','用户组管理',101013,null);
 insert into dms_function(id,function_locale,name,created_at,updated_at,updated_by,created_by,action,category,seq,p_function_id)
-values('101013','en','User Group Manage',sysdate,sysdate,'10000','10000','/WEB-INF/dmsGroup/edit_group_tsk.xml#edit_group_tsk','User Group Manage',101013,'101010');
+values('101013','en','User Group Manage',sysdate,sysdate,'10000','10000','/WEB-INF/dmsGroup/edit_group_tsk.xml#edit_group_tsk','User Group Manage',101013,null);
 
 insert into dms_function(id,function_locale,name,created_at,updated_at,updated_by,created_by,action,category,seq,p_function_id)
-values('101014','zh_CN','用户组分配',sysdate,sysdate,'10000','10000','/WEB-INF/dmsGroupUser/user_group_tsk.xml#user_group_tsk','用户组管理',101014,'101010');
+values('101014','zh_CN','用户组分配',sysdate,sysdate,'10000','10000','/WEB-INF/dmsGroupUser/user_group_tsk.xml#user_group_tsk','用户组管理',101014,null);
 insert into dms_function(id,function_locale,name,created_at,updated_at,updated_by,created_by,action,category,seq,p_function_id)
-values('101014','en','User Group Assign',sysdate,sysdate,'10000','10000','/WEB-INF/dmsGroupUser/user_group_tsk.xml#user_group_tsk','User Group Manage',101014,'101010');
+values('101014','en','User Group Assign',sysdate,sysdate,'10000','10000','/WEB-INF/dmsGroupUser/user_group_tsk.xml#user_group_tsk','User Group Manage',101014,null);
+
+
+insert into dms_function(id,function_locale,name,created_at,updated_at,updated_by,created_by,action,category,seq,p_function_id)
+values('101020','zh_CN','值集管理',sysdate,sysdate,'10000','10000','/WEB-INF/valueSet/valueset_edit_tsk.xml#valueset_edit_tsk','值集管理',101020,null);
+insert into dms_function(id,function_locale,name,created_at,updated_at,updated_by,created_by,action,category,seq,p_function_id)
+values('101020','en','Value Set Manage',sysdate,sysdate,'10000','10000','/WEB-INF/valueSet/valueset_edit_tsk.xml#valueset_edit_tsk','Value Set Manage',101020,null);
+
+insert into dms_function(id,function_locale,name,created_at,updated_at,updated_by,created_by,action,category,seq,p_function_id)
+values('101021','zh_CN','值集权限',sysdate,sysdate,'10000','10000','/WEB-INF/valueSet/valueset_edit_tsk.xml#valueset_edit_tsk','值集权限',101021,null);
+insert into dms_function(id,function_locale,name,created_at,updated_at,updated_by,created_by,action,category,seq,p_function_id)
+values('101021','en','Value Set Authority',sysdate,sysdate,'10000','10000','/WEB-INF/valueSet/valueset_edit_tsk.xml#valueset_edit_tsk','Value Set Authority',101021,null);
 
 /*==============================================================*/
 /* 初始化菜单                                                     */
@@ -122,3 +133,18 @@ insert into dms_menu(id,locale,seq,label,enable_flag,p_id,function_id,created_at
 values('101022','zh_CN',101022,'用户组分配','Y','101020','101014',sysdate,sysdate,'10000','10000');
 insert into dms_menu(id,locale,seq,label,enable_flag,p_id,function_id,created_at,updated_at,updated_by,created_by)
 values('101022','en',101022,'User Group Assign','Y','101020','101014',sysdate,sysdate,'10000','10000');
+
+insert into dms_menu(id,locale,seq,label,enable_flag,p_id,function_id,created_at,updated_at,updated_by,created_by)
+values('101030','zh_CN',101030,'值集配置','Y','101000',null,sysdate,sysdate,'10000','10000');
+insert into dms_menu(id,locale,seq,label,enable_flag,p_id,function_id,created_at,updated_at,updated_by,created_by)
+values('101030','en',101030,'Value Set Configuration','Y','101000',null,sysdate,sysdate,'10000','10000');
+
+insert into dms_menu(id,locale,seq,label,enable_flag,p_id,function_id,created_at,updated_at,updated_by,created_by)
+values('101031','zh_CN',101031,'值集管理','Y','101030','101020',sysdate,sysdate,'10000','10000');
+insert into dms_menu(id,locale,seq,label,enable_flag,p_id,function_id,created_at,updated_at,updated_by,created_by)
+values('101031','en',101031,'Value Set Manage','Y','101030','101020',sysdate,sysdate,'10000','10000');
+
+insert into dms_menu(id,locale,seq,label,enable_flag,p_id,function_id,created_at,updated_at,updated_by,created_by)
+values('101032','zh_CN',101032,'值集权限','Y','101030','101021',sysdate,sysdate,'10000','10000');
+insert into dms_menu(id,locale,seq,label,enable_flag,p_id,function_id,created_at,updated_at,updated_by,created_by)
+values('101032','en',101032,'Value Set Authority','Y','101030','101021',sysdate,sysdate,'10000','10000');

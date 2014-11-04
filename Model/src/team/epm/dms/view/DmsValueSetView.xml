@@ -22,6 +22,79 @@
   <DesignTime>
     <Attr Name="_codeGenFlag2" Value="Access|VarAccess"/>
   </DesignTime>
+  <ViewAccessor
+    Name="LKP_LANG"
+    ViewObjectName="team.epm.dms.view.DmsLookupView">
+    <ViewCriteriaUsage
+      Name="DmsLookupViewCriteria"
+      FullName="team.epm.dms.view.DmsLookupView.DmsLookupViewCriteria"/>
+    <ParameterMap>
+      <PIMap Variable="locale">
+        <TransientExpression><![CDATA[this.Locale]]></TransientExpression>
+      </PIMap>
+      <PIMap Variable="lookupType">
+        <TransientExpression><![CDATA["DMS_LANGUAGE"]]></TransientExpression>
+      </PIMap>
+    </ParameterMap>
+  </ViewAccessor>
+  <ViewAccessor
+    Name="LSV_USER"
+    ViewObjectName="team.epm.dms.view.DmsUserView"
+    RowLevelBinds="true"/>
+  <ListBinding
+    Name="LOV_Locale"
+    ListVOName="LKP_LANG"
+    ListRangeSize="-1"
+    NullValueFlag="none"
+    NullValueId="LOV_Locale_LOVUIHints_NullValueId"
+    MRUCount="0">
+    <AttrArray Name="AttrNames">
+      <Item Value="Locale"/>
+    </AttrArray>
+    <AttrArray Name="ListAttrNames">
+      <Item Value="Code"/>
+    </AttrArray>
+    <AttrArray Name="ListDisplayAttrNames">
+      <Item Value="Meaning"/>
+    </AttrArray>
+    <DisplayCriteria/>
+  </ListBinding>
+  <ListBinding
+    Name="LOV_UpdatedBy"
+    ListVOName="LSV_USER"
+    ListRangeSize="-1"
+    NullValueFlag="start"
+    NullValueId="${adfBundle['oracle.javatools.resourcebundle.SystemBundle']['NULL_VALUE_RESID']}"
+    MRUCount="0">
+    <AttrArray Name="AttrNames">
+      <Item Value="UpdatedBy"/>
+    </AttrArray>
+    <AttrArray Name="ListAttrNames">
+      <Item Value="Id"/>
+    </AttrArray>
+    <AttrArray Name="ListDisplayAttrNames">
+      <Item Value="Name"/>
+    </AttrArray>
+    <DisplayCriteria/>
+  </ListBinding>
+  <ListBinding
+    Name="LOV_CreatedBy"
+    ListVOName="LSV_USER"
+    ListRangeSize="-1"
+    NullValueFlag="start"
+    NullValueId="${adfBundle['oracle.javatools.resourcebundle.SystemBundle']['NULL_VALUE_RESID']}"
+    MRUCount="0">
+    <AttrArray Name="AttrNames">
+      <Item Value="CreatedBy"/>
+    </AttrArray>
+    <AttrArray Name="ListAttrNames">
+      <Item Value="Id"/>
+    </AttrArray>
+    <AttrArray Name="ListDisplayAttrNames">
+      <Item Value="Name"/>
+    </AttrArray>
+    <DisplayCriteria/>
+  </ListBinding>
   <EntityUsage
     Name="DmsValueSet"
     Entity="team.epm.dms.model.DmsValueSet"/>
@@ -31,14 +104,24 @@
     PrecisionRule="true"
     EntityAttrName="Id"
     EntityUsage="DmsValueSet"
-    AliasName="ID"/>
+    AliasName="ID"
+    IsUpdateable="while_insert"/>
   <ViewAttribute
     Name="Locale"
     IsNotNull="true"
     PrecisionRule="true"
     EntityAttrName="Locale"
     EntityUsage="DmsValueSet"
-    AliasName="LOCALE"/>
+    AliasName="LOCALE"
+    IsUpdateable="while_insert"
+    LOVName="LOV_Locale">
+    <Properties>
+      <SchemaBasedProperties>
+        <CONTROLTYPE
+          Value="choice"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewAttribute
     Name="Name"
     PrecisionRule="true"
@@ -68,11 +151,27 @@
     PrecisionRule="true"
     EntityAttrName="UpdatedBy"
     EntityUsage="DmsValueSet"
-    AliasName="UPDATED_BY"/>
+    AliasName="UPDATED_BY"
+    LOVName="LOV_UpdatedBy">
+    <Properties>
+      <SchemaBasedProperties>
+        <CONTROLTYPE
+          Value="choice"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewAttribute
     Name="CreatedBy"
     PrecisionRule="true"
     EntityAttrName="CreatedBy"
     EntityUsage="DmsValueSet"
-    AliasName="CREATED_BY"/>
+    AliasName="CREATED_BY"
+    LOVName="LOV_CreatedBy">
+    <Properties>
+      <SchemaBasedProperties>
+        <CONTROLTYPE
+          Value="choice"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
 </ViewObject>
