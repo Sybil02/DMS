@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pageDefinition xmlns="http://xmlns.oracle.com/adfm/uimodel"
+                version="11.1.1.64.93" id="untitled1PageDef"
+                Package="view.pageDefs">
+  <parameters/>
+  <executables>
+    <variableIterator id="variables"/>
+    <iterator Binds="DmsRoleView" RangeSize="25"
+              DataControl="DmsModuleDataControl" id="DmsRoleViewIterator"/>
+  </executables>
+  <bindings>
+    <tree IterBinding="DmsRoleViewIterator" id="DmsRoleView">
+      <nodeDefinition DefName="team.epm.dms.view.DmsRoleView"
+                      Name="DmsRoleView0">
+        <AttrNames>
+          <Item Value="Id"/>
+          <Item Value="Locale"/>
+          <Item Value="RoleName"/>
+          <Item Value="EnableFlag"/>
+          <Item Value="CreatedAt"/>
+          <Item Value="UpdatedAt"/>
+          <Item Value="UpdatedBy"/>
+          <Item Value="CreatedBy"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+  </bindings>
+</pageDefinition>

@@ -22,18 +22,20 @@
         </AttrNames>
       </nodeDefinition>
     </tree>
-    <tree IterBinding="DmsGroupViewIterator" id="DmsGroupView">
-      <nodeDefinition DefName="team.epm.dms.view.DmsGroupView"
-                      Name="DmsGroupView0">
-        <AttrNames>
-          <Item Value="Name"/>
-        </AttrNames>
-      </nodeDefinition>
-    </tree>
     <methodAction id="fetchEnabledRole" RequiresUpdateModel="true"
                   Action="invokeMethod" MethodName="fetchEnabledRole"
                   IsViewObjectMethod="true" DataControl="DmsModuleDataControl"
                   InstanceName="DmsModuleDataControl.DmsRoleView"
                   ReturnName="data.DmsModuleDataControl.methodResults.fetchEnabledRole_DmsModuleDataControl_DmsRoleView_fetchEnabledRole_result"/>
+    <list ListOperMode="multiSelect" IterBinding="DmsGroupViewIterator"
+           ListIter="DmsGroupViewIterator"
+          id="DmsGroupView">
+      <AttrNames>
+        <Item Value="Id"/>
+      </AttrNames>
+      <ListDisplayAttrNames>
+        <Item Value="Name"/>
+      </ListDisplayAttrNames>
+    </list>
   </bindings> 
 </pageDefinition>

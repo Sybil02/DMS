@@ -33,10 +33,16 @@ import team.epm.dms.view.DmsUserGroupViewImpl;
 public class RoleGroupBean {
  
     private static ADFLogger logger=ADFLogger.createADFLogger(RoleGroupBean.class);
+    String allItemsIteratorName = "DmsGroupViewIterator";
+    String allItemsValueAttrName = "Id";
+    String allItemsDisplayAttrName = "Name";
+    String allItemsDescriptionAttrName = "Name";
+    String selectedValuesIteratorName = "GroupSelectedUserViewIterator";
+    String selectedValuesValueAttrName = "UserId";
     private Integer[] selectedList;
     private RichTable roleList;
     private RichSelectManyShuttle selectShuttle;
-
+    List allItems;
     
     public RoleGroupBean() {
 
@@ -99,7 +105,19 @@ public class RoleGroupBean {
                 selectedGroup.toArray(new Integer[selectedGroup.size()]);
         return this.selectedList;
     }
+    
+    public List getAllItems() {
+        if (allItems == null) {
+            allItems =
+                    ADFUtils.selectItemsForIterator(allItemsIteratorName, allItemsValueAttrName,
+                                                    allItemsDisplayAttrName,
+                                                    allItemsDescriptionAttrName);
+        }
 
+
+        return allItems;
+    }
+    
     public void setSelectedUserList(Integer[] selectedList) {
         this.selectedList = selectedList;
     }
@@ -120,7 +138,7 @@ public class RoleGroupBean {
         listBinding.getSelectedIndices();
         */
     }
-
+    
     private Row getCurRole() {
         return ADFUtils.findIterator("fetchEnabledRoleIter").getCurrentRow();
     }

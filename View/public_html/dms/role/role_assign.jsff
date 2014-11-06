@@ -24,16 +24,14 @@
                           
                           valueChangeListener="#{backingBeanScope.RoleGroupBean.selectListener}"
                           binding="#{backingBeanScope.RoleGroupBean.selectShuttle}"
-                                                  
+                          value="#{backingBeanScope.RoleGroupBean.selectedGroupList}"
+                          leadingHeader="#{viewBundle['dms.user.available_user_list']}"
+                          trailingHeader="#{viewBundle['dms.user.selected_user_list']}"                        
                           size="20"
                           simple="true"
                           autoSubmit="true"
                           clientComponent="true">
-      <f:selectItems value="#{bindings.DmsGroupView.items}" id="si1"/>
+      <f:selectItems value="#{backingBeanScope.RoleGroupBean.allItems}" id="si1"/>
     </af:selectManyShuttle>
   </af:panelGroupLayout>
 </jsp:root>
-<!--value="#{backingBeanScope.RoleGroupBean.selectedGroupList}"
-leadingHeader="#{viewBundle['dms.user.available_user_list']}"
-                          trailingHeader="#{viewBundle['dms.user.selected_user_list']}" 
--->

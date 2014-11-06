@@ -16,7 +16,7 @@
               rowSelection="single" id="t1" width="180" filterVisible="true"
               columnStretching="column:c1" autoHeightRows="20"
               binding="#{backingBeanScope.UserGroupBean.groupList}">
-      <af:column sortProperty="#{bindings.DmsGroupView.hints.Name.name}"
+        <af:column sortProperty="#{bindings.DmsGroupView.hints.Name.name}"
                  sortable="true" headerText="#{viewBundle['dms.group.list']}"
                  id="c1" filterable="true">
         <af:outputText value="#{row.Name}" id="ot1"/>
