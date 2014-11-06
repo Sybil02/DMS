@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pageDefinition xmlns="http://xmlns.oracle.com/adfm/uimodel"
+                version="11.1.1.64.93" id="editPageDef" Package="dms.roleGroup">
+  <parameters/>
+  <executables>
+    <variableIterator id="variables"/>
+    <iterator Binds="DmsGroupView" RangeSize="10"
+              DataControl="DmsModuleDataControl" id="DmsGroupViewIterator"/>
+    <iterator id="DmsGroupRoleViewIterator" Binds="DmsGroupRoleView"
+              DataControl="DmsModuleDataControl" RangeSize="25"/>
+    <iterator id="DmsGroupsForRoleViewIterator" Binds="DmsGroupsForRoleView"
+              DataControl="DmsModuleDataControl" RangeSize="25"/>
+    <methodIterator id="fetchEnabledRoleIter" Binds="fetchEnabledRole.result"
+                    DataControl="DmsModuleDataControl" RangeSize="25"/>
+  </executables>
+  <bindings>
+    <tree IterBinding="fetchEnabledRoleIter" id="DmsRoleView">
+      <nodeDefinition DefName="team.epm.dms.view.DmsRoleView"
+                      Name="DmsRoleView0">
+        <AttrNames>
+          <Item Value="RoleName"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <tree IterBinding="DmsGroupViewIterator" id="DmsGroupView">
+      <nodeDefinition DefName="team.epm.dms.view.DmsGroupView"
+                      Name="DmsGroupView0">
+        <AttrNames>
+          <Item Value="Name"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <methodAction id="fetchEnabledRole" RequiresUpdateModel="true"
+                  Action="invokeMethod" MethodName="fetchEnabledRole"
+                  IsViewObjectMethod="true" DataControl="DmsModuleDataControl"
+                  InstanceName="DmsModuleDataControl.DmsRoleView"
+                  ReturnName="data.DmsModuleDataControl.methodResults.fetchEnabledRole_DmsModuleDataControl_DmsRoleView_fetchEnabledRole_result"/>
+  </bindings> 
+</pageDefinition>

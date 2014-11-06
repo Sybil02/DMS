@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.1"
+          xmlns:af="http://xmlns.oracle.com/adf/faces/rich"
+          xmlns:f="http://java.sun.com/jsf/core">
+  <af:panelGroupLayout id="pgl1" layout="horizontal">
+    <af:table value="#{bindings.DmsRoleView.collectionModel}" var="row"
+              rows="#{bindings.DmsRoleView.rangeSize}"
+              emptyText="#{bindings.DmsRoleView.viewable ? 'No data to display.' : 'Access Denied.'}"
+              fetchSize="#{bindings.DmsRoleView.rangeSize}"
+              rowBandingInterval="0"
+              selectedRowKeys="#{bindings.DmsRoleView.collectionModel.selectedRow}"
+              selectionListener="#{bindings.DmsRoleView.collectionModel.makeCurrent}"
+              rowSelection="single" id="t1"
+              binding="#{backingBeanScope.RoleGroupBean.roleList}" width="142">
+      <af:column sortProperty="#{bindings.DmsRoleView.hints.RoleName.name}"
+                 sortable="false"
+                 headerText="#{bindings.DmsRoleView.hints.RoleName.label}"
+                 id="c1">
+        <af:outputText value="#{row.RoleName}" id="ot1"/>
+      </af:column>
+    </af:table>
+    <af:spacer width="10" height="10" id="s1"/>
+    <af:selectManyShuttle label="Label 1" id="sms1"
+                          
+                          valueChangeListener="#{backingBeanScope.RoleGroupBean.selectListener}"
+                          binding="#{backingBeanScope.RoleGroupBean.selectShuttle}"
+                                                  
+                          size="20"
+                          simple="true"
+                          autoSubmit="true"
+                          clientComponent="true">
+      <f:selectItems value="#{bindings.DmsGroupView.items}" id="si1"/>
+    </af:selectManyShuttle>
+  </af:panelGroupLayout>
+</jsp:root>
+<!--value="#{backingBeanScope.RoleGroupBean.selectedGroupList}"
+leadingHeader="#{viewBundle['dms.user.available_user_list']}"
+                          trailingHeader="#{viewBundle['dms.user.selected_user_list']}" 
+-->

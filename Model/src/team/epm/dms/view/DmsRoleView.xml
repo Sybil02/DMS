@@ -19,9 +19,12 @@
   CustomQuery="false"
   PageIterMode="Full"
   UseGlueCode="false"
-  Where="DmsRole.LOCALE=:locale">
+  Where="DmsRole.LOCALE=:locale"
+  ComponentClass="team.epm.dms.view.DmsRoleViewImpl"
+  ComponentInterface="team.epm.dms.view.common.DmsRoleView"
+  ClientProxyName="team.epm.dms.view.client.DmsRoleViewClient">
   <DesignTime>
-    <Attr Name="_codeGenFlag2" Value="Access|VarAccess"/>
+    <Attr Name="_codeGenFlag2" Value="Coll|VarAccess"/>
   </DesignTime>
   <Variable
     Name="locale"
@@ -222,4 +225,11 @@
       </SchemaBasedProperties>
     </Properties>
   </ViewAttribute>
+  <ClientInterface>
+    <Method
+      Name="fetchEnabledRole">
+      <Return
+        Type="oracle.jbo.RowSet"/>
+    </Method>
+  </ClientInterface>
 </ViewObject>

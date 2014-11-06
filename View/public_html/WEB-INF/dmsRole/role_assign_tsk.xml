@@ -1,12 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <adfc-config xmlns="http://xmlns.oracle.com/adf/controller" version="1.2">
   <task-flow-definition id="role_assign_tsk">
+    <default-activity id="__3">role_assign</default-activity>
     <transaction id="__1">
       <new-transaction/>
     </transaction>
     <data-control-scope id="__2">
       <isolated/>
     </data-control-scope>
+    <managed-bean id="__7">
+      <managed-bean-name id="__6">RoleGroupBean</managed-bean-name>
+      <managed-bean-class id="__4">dms.role.RoleGroupBean</managed-bean-class>
+      <managed-bean-scope id="__5">backingBean</managed-bean-scope>
+    </managed-bean>
+    <view id="role_assign">
+      <page>/dms/role/role_assign.jsff</page>
+    </view>
     <use-page-fragments/>
   </task-flow-definition>
 </adfc-config>

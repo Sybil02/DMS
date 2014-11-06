@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <adfc-config xmlns="http://xmlns.oracle.com/adf/controller" version="1.2">
   <task-flow-definition id="role_edit_tsk">
+    <default-activity id="__3">role_edit</default-activity>
     <transaction id="__1">
       <new-transaction/>
     </transaction>
     <data-control-scope id="__2">
       <isolated/>
     </data-control-scope>
+    <view id="role_edit">
+      <page>/dms/role/role_edit.jsff</page>
+    </view>
     <use-page-fragments/>
   </task-flow-definition>
 </adfc-config>

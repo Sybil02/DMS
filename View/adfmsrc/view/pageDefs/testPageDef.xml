@@ -5,6 +5,5 @@
   <executables>
     <variableIterator id="variables"/>
   </executables>
-  <bindings>
-  </bindings>
+  <bindings/>
 </pageDefinition>

@@ -249,6 +249,15 @@
                   <url path="public_html/"/>
                </list>
             </hash>
+            <hash>
+               <url n="content-folder-url" path="adfmsrc/dms/role/"/>
+               <list n="pattern-filters">
+                  <string v="+dms/role/RoleGroupBean.java"/>
+               </list>
+               <list n="url-path">
+                  <url path="adfmsrc/"/>
+               </list>
+            </hash>
          </list>
          <list n="url-path"/>
       </hash>

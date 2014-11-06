@@ -160,7 +160,7 @@
             <value n="JavaScriptRunConfigurationStopOnException" v="false"/>
             <value n="JavaScriptRunConfigurationTransferErrors" v="true"/>
             <value n="name" v="Default"/>
-            <value n="VMName" v="client"/>
+            <value n="VMName" v="server"/>
          </hash>
       </hash>
       <list n="runConfigurationList">

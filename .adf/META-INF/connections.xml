@@ -13,7 +13,7 @@
             <Contents>1521</Contents>
          </StringRefAddr>
          <StringRefAddr addrType="hostname">
-            <Contents>172.16.128.175</Contents>
+            <Contents>localhost</Contents>
          </StringRefAddr>
          <StringRefAddr addrType="user">
             <Contents>dms</Contents>
