@@ -1,7 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.1"
           xmlns:af="http://xmlns.oracle.com/adf/faces/rich"
-          xmlns:f="http://java.sun.com/jsf/core">
+          xmlns:f="http://java.sun.com/jsf/core"
+          xmlns:c="http://java.sun.com/jsp/jstl/core">
+  <c:set var="viewBundle" value="#{adfBundle['dms_v']}"/>
   <af:panelGroupLayout id="pgl1" layout="horizontal">
     <af:table value="#{bindings.DmsRoleView.collectionModel}" var="row"
               rows="#{bindings.DmsRoleView.rangeSize}"
@@ -11,21 +13,22 @@
               selectedRowKeys="#{bindings.DmsRoleView.collectionModel.selectedRow}"
               selectionListener="#{bindings.DmsRoleView.collectionModel.makeCurrent}"
               rowSelection="single" id="t1"
-              binding="#{backingBeanScope.RoleGroupBean.roleList}" width="142">
+              binding="#{backingBeanScope.RoleGroupBean.roleList}" width="180"
+              columnStretching="column:c1" autoHeightRows="20">
       <af:column sortProperty="#{bindings.DmsRoleView.hints.RoleName.name}"
                  sortable="false"
-                 headerText="#{bindings.DmsRoleView.hints.RoleName.label}"
+                 headerText="#{viewBundle['dms.role.list']}"
                  id="c1">
         <af:outputText value="#{row.RoleName}" id="ot1"/>
       </af:column>
     </af:table>
     <af:spacer width="10" height="10" id="s1"/>
-    <af:selectManyShuttle label="Label 1" id="sms1"
+    <af:selectManyShuttle label="#{bindings.DmsGroupView.label}" id="sms1"
                           valueChangeListener="#{backingBeanScope.RoleGroupBean.selectListener}"
                           binding="#{backingBeanScope.RoleGroupBean.selectShuttle}"
                           value="#{backingBeanScope.RoleGroupBean.selectedGroupList}" 
-                          leadingHeader="#{viewBundle['dms.user.available_user_list']}"
-                          trailingHeader="#{viewBundle['dms.user.selected_user_list']}"                                               
+                          leadingHeader="#{viewBundle['dms.user.available_group_list']}"
+                          trailingHeader="#{viewBundle['dms.user.selected_group_list']}"                                               
                           size="20"
                           simple="true"
                           autoSubmit="true"

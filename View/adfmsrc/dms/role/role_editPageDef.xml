@@ -17,6 +17,13 @@
             RequiresUpdateModel="true" Action="createInsertRow"/>
     <action id="Rollback" RequiresUpdateModel="false"
             Action="rollbackTransaction" DataControl="DmsModuleDataControl"/>
+    <action id="Commit" RequiresUpdateModel="true" Action="commitTransaction"
+            DataControl="DmsModuleDataControl"/>
+    <attributeValues IterBinding="DmsRoleViewIterator" id="RoleName">
+      <AttrNames>
+        <Item Value="RoleName"/>
+      </AttrNames>
+    </attributeValues>
     <tree IterBinding="DmsRoleViewIterator" id="DmsRoleView">
       <nodeDefinition DefName="team.epm.dms.view.DmsRoleView"
                       Name="DmsRoleView0">
@@ -28,12 +35,5 @@
         </AttrNames>
       </nodeDefinition>
     </tree>
-    <action id="Commit" RequiresUpdateModel="true" Action="commitTransaction"
-            DataControl="DmsModuleDataControl"/>
-    <attributeValues IterBinding="DmsRoleViewIterator" id="RoleName">
-      <AttrNames>
-        <Item Value="RoleName"/>
-      </AttrNames>
-    </attributeValues>
   </bindings>
 </pageDefinition>

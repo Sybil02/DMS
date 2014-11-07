@@ -55,7 +55,7 @@
           <f:facet name="statusbar"/>
           <af:table value="#{bindings.DmsRoleView.collectionModel}" var="row"
                     rows="#{bindings.DmsRoleView.rangeSize}"
-                    emptyText="#{viewBundle['dms.common.nodata']}"
+                    emptyText="#{bindings.DmsRoleView.viewable ? 'No data to display.' : 'Access Denied.'}"
                     fetchSize="#{bindings.DmsRoleView.rangeSize}"
                     rowBandingInterval="0"
                     filterModel="#{bindings.DmsRoleViewQuery.queryDescriptor}"
@@ -63,37 +63,49 @@
                     filterVisible="true" varStatus="vs"
                     selectedRowKeys="#{bindings.DmsRoleView.collectionModel.selectedRow}"
                     selectionListener="#{bindings.DmsRoleView.collectionModel.makeCurrent}"
-                    rowSelection="single" id="t1"
-                    partialTriggers=":::it1 :::soc1 ::cb1 ::cb2 ::cb3"
-                    autoHeightRows="#{bindings.DmsRoleView.rangeSize}">
+                    rowSelection="single" id="t1" partialTriggers="::cb1">
             <af:column sortProperty="#{bindings.DmsRoleView.hints.RoleName.name}"
                        filterable="true" sortable="true"
                        headerText="#{bindings.DmsRoleView.hints.RoleName.label}"
-                       id="c4">
-              <af:outputText value="#{row.RoleName}" id="ot3"/>
+                       id="c1">
+              <af:outputText value="#{row.RoleName}" id="ot1"/>
             </af:column>
             <af:column sortProperty="#{bindings.DmsRoleView.hints.EnableFlag.name}"
                        filterable="true" sortable="true"
                        headerText="#{bindings.DmsRoleView.hints.EnableFlag.label}"
-                       id="c1">
-              <af:outputText value="#{row.EnableFlag}" id="ot2"/>
+                       id="c4">
+              <af:selectOneChoice value="#{row.bindings.EnableFlag.inputValue}"
+                                  label="#{row.bindings.EnableFlag.label}"
+                                  required="#{bindings.DmsRoleView.hints.EnableFlag.mandatory}"
+                                  shortDesc="#{bindings.DmsRoleView.hints.EnableFlag.tooltip}"
+                                  id="soc2" readOnly="true">
+                <f:selectItems value="#{row.bindings.EnableFlag.items}"
+                               id="si3"/>
+              </af:selectOneChoice>
             </af:column>
             <af:column sortProperty="#{bindings.DmsRoleView.hints.UpdatedAt.name}"
                        filterable="true" sortable="true"
                        headerText="#{bindings.DmsRoleView.hints.UpdatedAt.label}"
-                       id="c3">
+                       id="c2">
               <f:facet name="filter">
                 <af:inputDate value="#{vs.filterCriteria.UpdatedAt}" id="id1"/>
               </f:facet>
-              <af:outputText value="#{row.UpdatedAt}" id="ot1">
+              <af:outputText value="#{row.UpdatedAt}" id="ot2">
                 <af:convertDateTime pattern="#{bindings.DmsRoleView.hints.UpdatedAt.format}"/>
               </af:outputText>
             </af:column>
             <af:column sortProperty="#{bindings.DmsRoleView.hints.UpdatedBy.name}"
                        filterable="true" sortable="true"
                        headerText="#{bindings.DmsRoleView.hints.UpdatedBy.label}"
-                       id="c2">
-              <af:outputText value="#{row.UpdatedBy}" id="ot4"/>
+                       id="c3">
+              <af:selectOneChoice value="#{row.bindings.UpdatedBy.inputValue}"
+                                  label="#{row.bindings.UpdatedBy.label}"
+                                  required="#{bindings.DmsRoleView.hints.UpdatedBy.mandatory}"
+                                  shortDesc="#{bindings.DmsRoleView.hints.UpdatedBy.tooltip}"
+                                  id="soc3" readOnly="true">
+                <f:selectItems value="#{row.bindings.UpdatedBy.items}"
+                               id="si2"/>
+              </af:selectOneChoice>
             </af:column>
           </af:table>
         </af:panelCollection>

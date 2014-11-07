@@ -168,7 +168,14 @@
     PrecisionRule="true"
     EntityAttrName="RoleName"
     EntityUsage="DmsRole"
-    AliasName="ROLE_NAME"/>
+    AliasName="ROLE_NAME">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="team.epm.dms.view.DmsRoleView.RoleName_LABEL"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewAttribute
     Name="EnableFlag"
     PrecisionRule="true"
@@ -178,6 +185,8 @@
     LOVName="LOV_EnableFlag">
     <Properties>
       <SchemaBasedProperties>
+        <LABEL
+          ResId="team.epm.dms.view.DmsRoleView.EnableFlag_LABEL"/>
         <CONTROLTYPE
           Value="choice"/>
       </SchemaBasedProperties>
@@ -195,7 +204,14 @@
     PrecisionRule="true"
     EntityAttrName="UpdatedAt"
     EntityUsage="DmsRole"
-    AliasName="UPDATED_AT"/>
+    AliasName="UPDATED_AT">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="team.epm.dms.view.DmsRoleView.UpdatedAt_LABEL"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewAttribute
     Name="UpdatedBy"
     PrecisionRule="true"
@@ -205,6 +221,8 @@
     LOVName="LOV_UpdatedBy">
     <Properties>
       <SchemaBasedProperties>
+        <LABEL
+          ResId="team.epm.dms.view.DmsRoleView.UpdatedBy_LABEL"/>
         <CONTROLTYPE
           Value="choice"/>
       </SchemaBasedProperties>
@@ -232,4 +250,8 @@
         Type="oracle.jbo.RowSet"/>
     </Method>
   </ClientInterface>
+  <ResourceBundle>
+    <PropertiesBundle
+      PropertiesFile="ModelBundle"/>
+  </ResourceBundle>
 </ViewObject>
