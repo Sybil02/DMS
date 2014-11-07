@@ -1,2 +1,33 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.1"></jsp:root>
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.1"
+          xmlns:af="http://xmlns.oracle.com/adf/faces/rich"
+          xmlns:f="http://java.sun.com/jsf/core"
+          xmlns:c="http://java.sun.com/jsp/jstl/core">
+  <c:set var="viewBundle" value="#{adfBundle['dms_v']}"/>
+  <af:panelGroupLayout id="pgl1" layout="horizontal">
+    <af:table value="#{bindings.DmsRoleView.collectionModel}" var="row"
+              rows="#{bindings.DmsRoleView.rangeSize}"
+              emptyText="#{viewBundle['dms.common.nodata']}"
+              fetchSize="#{bindings.DmsRoleView.rangeSize}"
+              rowBandingInterval="0"
+              selectedRowKeys="#{bindings.DmsRoleView.collectionModel.selectedRow}"
+              selectionListener="#{bindings.DmsRoleView.collectionModel.makeCurrent}"
+              rowSelection="single" id="t1" columnStretching="column:c1"
+              width="120px">
+      <af:column sortProperty="#{bindings.DmsRoleView.hints.RoleName.name}"
+                 sortable="false"
+                 headerText="#{bindings.DmsRoleView.hints.RoleName.label}"
+                 id="c1">
+        <af:outputText value="#{row.RoleName}" id="ot1"/>
+      </af:column>
+    </af:table>
+    <af:spacer width="50" height="10" id="s1"/>
+    <af:selectManyShuttle value="#{bindings.DmsFunctionView.inputValue}"
+                          label="#{bindings.DmsFunctionView.label}" id="sms1"
+                          size="20" simple="true"
+                          leadingHeader="#{viewBundle['dms.function.available_list']}"
+                          trailingHeader="#{viewBundle['dms.function.selected_list']}">
+      <f:selectItems value="#{bindings.DmsFunctionView.items}" id="si2"/>
+    </af:selectManyShuttle>
+  </af:panelGroupLayout>
+</jsp:root>

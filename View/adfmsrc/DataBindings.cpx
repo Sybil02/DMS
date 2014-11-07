@@ -24,7 +24,6 @@
     <page path="/dms/function/authority.jsff" usageId="__authorityPageDef1"/>
     <page path="/dms/role/role_edit.jsff" usageId="__role_editPageDef"/>
     <page path="/dms/role/role_assign.jsff" usageId="__role_assignPageDef"/>
-    <page path="/untitled1.jspx" usageId="__untitled1PageDef"/>
   </pageMap>
   <pageDefinitionUsages>
     <page id="__dynamicTabShellPageDef"
@@ -44,7 +43,6 @@
     <page id="__authorityPageDef1" path="dms.function.authorityPageDef"/>
     <page id="__role_editPageDef" path="dms.role.role_editPageDef"/>
     <page id="__role_assignPageDef" path="dms.role.role_assignPageDef"/>
-    <page id="__untitled1PageDef" path="view.pageDefs.untitled1PageDef"/>
   </pageDefinitionUsages>
   <dataControlUsages>
     <BC4JDataControl id="DmsModuleDataControl" Package="team.epm.module"
