@@ -97,7 +97,7 @@ public class RoleGroupBean {
         while (groupsForRoleview.hasNext()) {
             Row row = groupsForRoleview.next();
             //TODO
-            Key key=new Key(new Object[]{row.getAttribute("Id")});
+            Key key=new Key(new Object[]{row.getAttribute("Id"),row.getAttribute("Locale")});
             groupIter.setCurrentRowWithKey(key.toStringFormat(true));
             Integer indx = groupIter.getCurrentRowIndexInRange();
 

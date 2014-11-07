@@ -13,7 +13,6 @@
   OrderBy="NAME"
  >
   <DesignTime>
-    <Attr Name="_codeGenFlag2" Value="Coll|VarAccess"/>
     <Attr Name="_isExpertMode" Value="true"/>
   </DesignTime>
   <Properties>
@@ -28,7 +27,8 @@
     Type="java.lang.String"/>
   <SQLQuery>
     <![CDATA[SELECT DmsGroup.ID, 
-       DmsGroup.NAME
+       DmsGroup.NAME,
+       DmsGroup.LOCALE
 FROM DMS_GROUP DmsGroup
  WHERE exists (select 1
     from dms_group_role DmsGroupRole 
