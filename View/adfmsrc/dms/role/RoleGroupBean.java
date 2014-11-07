@@ -61,11 +61,32 @@ public class RoleGroupBean {
             ADFUtils.findIterator("DmsGroupRoleViewIterator");
         DmsGroupRoleViewImpl view = (DmsGroupRoleViewImpl)groupRoleIter.getViewObject();
         
-        if(valueChangeEvent.getNewValue()!=null){
+        
             Integer[] newValue = (Integer[])valueChangeEvent.getNewValue();
             Integer[] oldValue = (Integer[])valueChangeEvent.getOldValue();
+            if(newValue==null){
+                for(Integer i:oldValue){                   
+                        Row row= groupIter.getRowAtRangeIndex(i);
+                        view.deleteGroupRoleByGroupIdAndRoleId(this.getCurRoleId(),
+                                                               row.getAttribute("Id")+""
+                                                                );                 
+                }
+                view.getApplicationModule().getTransaction().commit();
+                return ;
+            }
+            if(oldValue==null){
+                for(Integer i:newValue){                   
+                        Row row= groupIter.getRowAtRangeIndex(i);
+                        Row groupRole= view.createRow();
+                        groupRole.setAttribute("RoleId", this.getCurRoleId());
+                        groupRole.setAttribute("GroupId", row.getAttribute("Id"));
+                        view.insertRow(groupRole);                              
+                }
+                view.getApplicationModule().getTransaction().commit();
+                return ;
+            }
             List<Integer> newList=Arrays.asList(newValue);
-            List<Integer> oldList=Arrays.asList(oldValue);
+            List<Integer> oldList=Arrays.asList(oldValue);        
             for(Integer i:newList){
                 if (!oldList.contains(i)){
                     Row row= groupIter.getRowAtRangeIndex(i);
@@ -85,25 +106,7 @@ public class RoleGroupBean {
                 }
             }
             view.getApplicationModule().getTransaction().commit();
-//            for(int i:newValue){
-//               Row row= groupIter.getRowAtRangeIndex(i);
-//               Row groupRole= view.createRow();
-//               groupRole.setAttribute("RoleId", this.getCurRoleId());
-//               groupRole.setAttribute("GroupId", row.getAttribute("Id"));
-//               view.insertRow(groupRole);
-//            }
-//            view.getApplicationModule().getTransaction().commit();
-        }
-//        if(valueChangeEvent.getOldValue()!=null){
-//            Integer[] oldValue = (Integer[])valueChangeEvent.getOldValue();
-//            for(int i:oldValue){
-//               Row row= groupIter.getRowAtRangeIndex(i);
-//               view.deleteGroupRoleByGroupIdAndRoleId(this.getCurRoleId(),
-//                                                      row.getAttribute("Id")+""
-//                                                       );
-//            }
-//            view.getApplicationModule().getTransaction().commit();
-//        }
+
     }
 
     public Integer[] getSelectedGroupList() {
