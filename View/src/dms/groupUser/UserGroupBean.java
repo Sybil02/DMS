@@ -5,6 +5,7 @@ import common.ADFUtils;
 import common.DmsUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.faces.event.ValueChangeEvent;
@@ -58,26 +59,49 @@ public class UserGroupBean {
             ADFUtils.findIterator("DmsUserGroupViewIterator");
         DmsUserGroupViewImpl view = (DmsUserGroupViewImpl)userGroupIter.getViewObject();
         
-        if(valueChangeEvent.getNewValue()!=null){
-            Integer[] newValue = (Integer[])valueChangeEvent.getNewValue();
-            for(int i:newValue){
-               Row row= userIter.getRowAtRangeIndex(i);
-               Row userGroup= view.createRow();
-               userGroup.setAttribute("GroupId", this.getCurGroupId());
-               userGroup.setAttribute("UserId", row.getAttribute("Id"));
-               view.insertRow(userGroup);
+        Integer[] newValue = (Integer[])valueChangeEvent.getNewValue();
+        Integer[] oldValue = (Integer[])valueChangeEvent.getOldValue();
+        
+        if(newValue==null){
+                for(int i:oldValue){
+                   Row row= userIter.getRowAtRangeIndex(i);
+                   view.deleteGroupUserByGroupIdAndUserId(row.getAttribute("Id")+"", 
+                                                           this.getCurGroupId());
+                }
+            view.getApplicationModule().getTransaction().commit();
+            return ;
+        }
+        if(oldValue==null){
+            for(Integer i:newValue){                   
+                Row row= userIter.getRowAtRangeIndex(i);
+                Row userGroup= view.createRow();
+                userGroup.setAttribute("GroupId", this.getCurGroupId());
+                userGroup.setAttribute("UserId", row.getAttribute("Id"));
+                view.insertRow(userGroup);                             
             }
             view.getApplicationModule().getTransaction().commit();
+            return ;
         }
-        if(valueChangeEvent.getOldValue()!=null){
-            Integer[] oldValue = (Integer[])valueChangeEvent.getOldValue();
-            for(int i:oldValue){
-               Row row= userIter.getRowAtRangeIndex(i);
-               view.deleteGroupUserByGroupIdAndUserId(row.getAttribute("Id")+"", 
-                                                       this.getCurGroupId());
+        List<Integer> newList=Arrays.asList(newValue);
+        List<Integer> oldList=Arrays.asList(oldValue);        
+        for(Integer i:newList){
+            if (!oldList.contains(i)){
+                Row row= userIter.getRowAtRangeIndex(i);
+                Row userGroup= view.createRow();
+                userGroup.setAttribute("GroupId", this.getCurGroupId());
+                userGroup.setAttribute("UserId", row.getAttribute("Id"));
+                view.insertRow(userGroup);
+            }              
+        }
+        view.getApplicationModule().getTransaction().commit();
+        for(Integer i:oldValue){
+            if (!newList.contains(i)){
+                Row row= userIter.getRowAtRangeIndex(i);
+                view.deleteGroupUserByGroupIdAndUserId(row.getAttribute("Id")+"", 
+                                                        this.getCurGroupId());
             }
-            view.getApplicationModule().getTransaction().commit();
         }
+        view.getApplicationModule().getTransaction().commit();     
     }
 
     public Integer[] getSelectedUserList() {

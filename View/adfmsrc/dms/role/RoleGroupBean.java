@@ -60,8 +60,7 @@ public class RoleGroupBean {
         DCIteratorBinding groupRoleIter =
             ADFUtils.findIterator("DmsGroupRoleViewIterator");
         DmsGroupRoleViewImpl view = (DmsGroupRoleViewImpl)groupRoleIter.getViewObject();
-        
-        
+              
             Integer[] newValue = (Integer[])valueChangeEvent.getNewValue();
             Integer[] oldValue = (Integer[])valueChangeEvent.getOldValue();
             if(newValue==null){
@@ -106,7 +105,6 @@ public class RoleGroupBean {
                 }
             }
             view.getApplicationModule().getTransaction().commit();
-
     }
 
     public Integer[] getSelectedGroupList() {
