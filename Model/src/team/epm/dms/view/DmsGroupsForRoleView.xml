@@ -25,6 +25,12 @@
     Name="roleId"
     Kind="where"
     Type="java.lang.String"/>
+  <Variable
+    Name="locale"
+    Kind="where"
+    Type="java.lang.String">
+    <TransientExpression><![CDATA[adf.context.locale]]></TransientExpression>
+  </Variable>
   <SQLQuery>
     <![CDATA[SELECT DmsGroup.ID, 
        DmsGroup.NAME,
@@ -34,7 +40,8 @@ FROM DMS_GROUP DmsGroup
     from dms_group_role DmsGroupRole 
    where DmsGroup.Id=DmsGroupRole.Group_Id
      and DmsGroupRole.role_Id=:roleId)
-and DmsGroup.enable_flag='Y']]>
+and DmsGroup.enable_flag='Y'
+and DmsGroup.LOCALE=:locale]]>
   </SQLQuery>
   <EntityUsage
     Name="DmsGroup"
