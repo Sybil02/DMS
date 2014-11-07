@@ -63,7 +63,8 @@
                     filterVisible="true" varStatus="vs"
                     selectedRowKeys="#{bindings.DmsRoleView.collectionModel.selectedRow}"
                     selectionListener="#{bindings.DmsRoleView.collectionModel.makeCurrent}"
-                    rowSelection="single" id="t1" partialTriggers="::cb1">
+                    rowSelection="single" id="t1"
+                    partialTriggers="::cb1 ::cb3 ::cb2 :::it1 :::soc1">
             <af:column sortProperty="#{bindings.DmsRoleView.hints.RoleName.name}"
                        filterable="true" sortable="true"
                        headerText="#{bindings.DmsRoleView.hints.RoleName.label}"

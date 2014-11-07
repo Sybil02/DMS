@@ -11,7 +11,7 @@
               fetchSize="#{bindings.DmsRoleView.rangeSize}"
               rowBandingInterval="0"
               selectedRowKeys="#{bindings.DmsRoleView.collectionModel.selectedRow}"
-              selectionListener="#{bindings.DmsRoleView.collectionModel.makeCurrent}"
+              selectionListener="#{backingBeanScope.RoleGroupBean.roleSelectListener}"
               rowSelection="single" id="t1"
               binding="#{backingBeanScope.RoleGroupBean.roleList}" width="180"
               columnStretching="column:c1" autoHeightRows="20">
