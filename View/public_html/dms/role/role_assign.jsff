@@ -4,7 +4,8 @@
           xmlns:f="http://java.sun.com/jsf/core"
           xmlns:c="http://java.sun.com/jsp/jstl/core">
   <c:set var="viewBundle" value="#{adfBundle['dms_v']}"/>
-  <af:panelGroupLayout id="pgl1" layout="horizontal">
+  <af:panelGroupLayout id="pgl1" layout="horizontal"
+  inlineStyle="padding-top:5px">
     <af:table value="#{bindings.DmsRoleView.collectionModel}" var="row"
               rows="#{bindings.DmsRoleView.rangeSize}"
               emptyText="#{bindings.DmsRoleView.viewable ? 'No data to display.' : 'Access Denied.'}"
@@ -13,7 +14,7 @@
               selectedRowKeys="#{bindings.DmsRoleView.collectionModel.selectedRow}"
               selectionListener="#{backingBeanScope.RoleGroupBean.roleSelectListener}"
               rowSelection="single" id="t1"
-              binding="#{backingBeanScope.RoleGroupBean.roleList}" width="180"
+              binding="#{backingBeanScope.RoleGroupBean.roleList}" width="150"
               columnStretching="column:c1" autoHeightRows="20">
       <af:column sortProperty="#{bindings.DmsRoleView.hints.RoleName.name}"
                  sortable="false"
@@ -22,7 +23,8 @@
         <af:outputText value="#{row.RoleName}" id="ot1"/>
       </af:column>
     </af:table>
-    <af:spacer width="10" height="10" id="s1"/>
+
+    <af:spacer width="50" height="10" id="s1"/>
     <af:selectManyShuttle label="#{bindings.DmsGroupView.label}" id="sms1"
                           valueChangeListener="#{backingBeanScope.RoleGroupBean.selectListener}"
                           binding="#{backingBeanScope.RoleGroupBean.selectShuttle}"
