@@ -28,6 +28,7 @@ import oracle.jbo.uicli.binding.JUCtrlListBinding;
 import org.apache.commons.lang.ObjectUtils;
 import org.apache.myfaces.trinidad.event.SelectionEvent;
 
+import team.epm.dms.view.DmsGroupRoleViewImpl;
 import team.epm.dms.view.DmsUserGroupViewImpl;
 
 public class RoleGroupBean {
@@ -57,7 +58,7 @@ public class RoleGroupBean {
             ADFUtils.findIterator("DmsGroupViewIterator").getRowSetIterator();
         DCIteratorBinding groupRoleIter =
             ADFUtils.findIterator("DmsGroupRoleViewIterator");
-        DmsUserGroupViewImpl view = (DmsUserGroupViewImpl)groupRoleIter.getViewObject();
+        DmsGroupRoleViewImpl view = (DmsGroupRoleViewImpl)groupRoleIter.getViewObject();
         
         if(valueChangeEvent.getNewValue()!=null){
             Integer[] newValue = (Integer[])valueChangeEvent.getNewValue();
@@ -74,8 +75,9 @@ public class RoleGroupBean {
             Integer[] oldValue = (Integer[])valueChangeEvent.getOldValue();
             for(int i:oldValue){
                Row row= groupIter.getRowAtRangeIndex(i);
-               view.deleteGroupUserByGroupIdAndUserId(row.getAttribute("Id")+"", 
-                                                       this.getCurRoleId());
+               view.deleteGroupRoleByGroupIdAndRoleId(this.getCurRoleId(),
+                                                      row.getAttribute("Id")+""
+                                                       );
             }
             view.getApplicationModule().getTransaction().commit();
         }
@@ -97,8 +99,8 @@ public class RoleGroupBean {
             //TODO
             Key key=new Key(new Object[]{row.getAttribute("Id")});
             groupIter.setCurrentRowWithKey(key.toStringFormat(true));
-            int indx = groupIter.getCurrentRowIndexInRange();
-            
+            Integer indx = groupIter.getCurrentRowIndexInRange();
+
             selectedGroup.add(indx);
         }
         this.selectedList =
@@ -106,6 +108,9 @@ public class RoleGroupBean {
         return this.selectedList;
     }
     
+    public void setSelectedGroupList(Integer[] selectedList){
+        this.selectedList=selectedList;
+    }
     public List getAllItems() {
         if (allItems == null) {
             allItems =
