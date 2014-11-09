@@ -62,9 +62,7 @@
     SQLType="VARCHAR"
     Type="java.lang.String"
     ColumnType="VARCHAR2"
-    TableName="DMS_VALUE_SET"
-    RetrievedOnUpdate="true"
-    RetrievedOnInsert="true">
+    TableName="DMS_VALUE_SET">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="10"/>
     </DesignTime>
