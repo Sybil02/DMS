@@ -5,7 +5,35 @@
           xmlns:c="http://java.sun.com/jsp/jstl/core">
   <c:set var="viewBundle" value="#{adfBundle['dms_v']}"/>
   <af:panelStretchLayout id="psl1" startWidth="60%">
-    <f:facet name="bottom"/>
+    <f:facet name="bottom">
+      <af:table value="#{bindings.DmsValueSetView1.collectionModel}" var="row"
+                rows="#{bindings.DmsValueSetView1.rangeSize}"
+                emptyText="#{bindings.DmsValueSetView1.viewable ? 'No data to display.' : 'Access Denied.'}"
+                fetchSize="#{bindings.DmsValueSetView1.rangeSize}"
+                rowBandingInterval="0"
+                selectedRowKeys="#{bindings.DmsValueSetView1.collectionModel.selectedRow}"
+                selectionListener="#{bindings.DmsValueSetView1.collectionModel.makeCurrent}"
+                rowSelection="single" id="t3" partialTriggers="::pc1:cb1">
+        <af:column sortProperty="#{bindings.DmsValueSetView1.hints.Locale.name}"
+                   sortable="false"
+                   headerText="#{bindings.DmsValueSetView1.hints.Locale.label}"
+                   id="c6">
+          <af:outputText value="#{row.Locale}" id="ot6"/>
+        </af:column>
+        <af:column sortProperty="#{bindings.DmsValueSetView1.hints.Name.name}"
+                   sortable="false"
+                   headerText="#{bindings.DmsValueSetView1.hints.Name.label}"
+                   id="c7">
+          <af:outputText value="#{row.Name}" id="ot5"/>
+        </af:column>
+        <af:column sortProperty="#{bindings.DmsValueSetView1.hints.Source.name}"
+                   sortable="false"
+                   headerText="#{bindings.DmsValueSetView1.hints.Source.label}"
+                   id="c5">
+          <af:outputText value="#{row.Source}" id="ot4"/>
+        </af:column>
+      </af:table>
+    </f:facet>
     <f:facet name="center">
       <af:panelGroupLayout layout="scroll"
                            xmlns:af="http://xmlns.oracle.com/adf/faces/rich"
