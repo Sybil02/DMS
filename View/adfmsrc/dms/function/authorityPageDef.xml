@@ -5,6 +5,28 @@
   <parameters/>
   <executables>
     <variableIterator id="variables"/>
+    <iterator Binds="DmsFunctionView" RangeSize="25"
+              DataControl="DmsModuleDataControl" id="DmsFunctionViewIterator"/>
+    <iterator Binds="DmsRoleView" RangeSize="25"
+              DataControl="DmsModuleDataControl" id="DmsRoleViewIterator"/>
   </executables>
-  <bindings/>
+  <bindings>
+    <list IterBinding="DmsFunctionViewIterator" ListOperMode="multiSelect"
+          ListIter="DmsFunctionViewIterator" id="DmsFunctionView">
+      <AttrNames>
+        <Item Value="Id"/>
+      </AttrNames>
+      <ListDisplayAttrNames>
+        <Item Value="Name"/>
+      </ListDisplayAttrNames>
+    </list>
+    <tree IterBinding="DmsRoleViewIterator" id="DmsRoleView">
+      <nodeDefinition DefName="team.epm.dms.view.DmsRoleView"
+                      Name="DmsRoleView0">
+        <AttrNames>
+          <Item Value="RoleName"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+  </bindings>
 </pageDefinition>
