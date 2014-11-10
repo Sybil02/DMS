@@ -7,7 +7,7 @@
   Version="11.1.1.64.93"
   InheritPersonalization="true"
   SelectList="DmsFunction.ID, 
-       DmsFunction.FUNCTION_LOCALE, 
+       DmsFunction.LOCALE, 
        DmsFunction.DESCRIPTION, 
        DmsFunction.NAME, 
        DmsFunction.CREATED_AT, 
@@ -23,10 +23,92 @@
   BindingStyle="OracleName"
   CustomQuery="false"
   PageIterMode="Full"
-  UseGlueCode="false">
+  UseGlueCode="false"
+  ComponentClass="team.epm.dms.view.DmsFunctionViewImpl"
+  Where="DmsFunction.Locale=:locale"
+  OrderBy="DmsFunction.SEQ">
   <DesignTime>
-    <Attr Name="_codeGenFlag2" Value="Access|VarAccess"/>
+    <Attr Name="_codeGenFlag2" Value="Coll|VarAccess"/>
   </DesignTime>
+  <Variable
+    Name="locale"
+    Kind="where"
+    Type="java.lang.String">
+    <TransientExpression><![CDATA[adf.context.locale]]></TransientExpression>
+  </Variable>
+  <ViewAccessor
+    Name="LKP_LANG"
+    ViewObjectName="team.epm.dms.view.DmsLookupView">
+    <ViewCriteriaUsage
+      Name="DmsLookupViewCriteria"
+      FullName="team.epm.dms.view.DmsLookupView.DmsLookupViewCriteria"/>
+    <ParameterMap>
+      <PIMap Variable="locale">
+        <TransientExpression><![CDATA[this.Locale]]></TransientExpression>
+      </PIMap>
+      <PIMap Variable="lookupType">
+        <TransientExpression><![CDATA["DMS_LANGUAGE"]]></TransientExpression>
+      </PIMap>
+    </ParameterMap>
+  </ViewAccessor>
+  <ViewAccessor
+    Name="LST_USER"
+    ViewObjectName="team.epm.dms.view.DmsUserView"
+    RowLevelBinds="true"/>
+  <ListBinding
+    Name="LOV_Locale"
+    ListVOName="LKP_LANG"
+    ListRangeSize="-1"
+    NullValueFlag="start"
+    NullValueId="${adfBundle['oracle.javatools.resourcebundle.SystemBundle']['NULL_VALUE_RESID']}"
+    MRUCount="0">
+    <AttrArray Name="AttrNames">
+      <Item Value="Locale"/>
+    </AttrArray>
+    <AttrArray Name="ListAttrNames">
+      <Item Value="Code"/>
+    </AttrArray>
+    <AttrArray Name="ListDisplayAttrNames">
+      <Item Value="Meaning"/>
+    </AttrArray>
+    <DisplayCriteria/>
+  </ListBinding>
+  <ListBinding
+    Name="LOV_UpdatedBy"
+    ListVOName="LST_USER"
+    ListRangeSize="-1"
+    NullValueFlag="start"
+    NullValueId="${adfBundle['oracle.javatools.resourcebundle.SystemBundle']['NULL_VALUE_RESID']}"
+    MRUCount="0">
+    <AttrArray Name="AttrNames">
+      <Item Value="UpdatedBy"/>
+    </AttrArray>
+    <AttrArray Name="ListAttrNames">
+      <Item Value="Id"/>
+    </AttrArray>
+    <AttrArray Name="ListDisplayAttrNames">
+      <Item Value="Name"/>
+    </AttrArray>
+    <DisplayCriteria/>
+  </ListBinding>
+  <ListBinding
+    Name="LOV_CreatedBy"
+    ListVOName="LST_USER"
+    ListRangeSize="-1"
+    NullValueFlag="start"
+    NullValueId="${adfBundle['oracle.javatools.resourcebundle.SystemBundle']['NULL_VALUE_RESID']}"
+    MRUCount="0">
+    <AttrArray Name="AttrNames">
+      <Item Value="CreatedBy"/>
+    </AttrArray>
+    <AttrArray Name="ListAttrNames">
+      <Item Value="Id"/>
+    </AttrArray>
+    <AttrArray Name="ListDisplayAttrNames">
+      <Item Value="Name"/>
+    </AttrArray>
+    <DisplayCriteria/>
+  </ListBinding>
   <EntityUsage
     Name="DmsFunction"
     Entity="team.epm.dms.model.DmsFunction"/>
@@ -36,14 +118,24 @@
     PrecisionRule="true"
     EntityAttrName="Id"
     EntityUsage="DmsFunction"
-    AliasName="ID"/>
+    AliasName="ID"
+    IsUpdateable="while_insert"/>
   <ViewAttribute
-    Name="FunctionLocale"
+    Name="Locale"
     IsNotNull="true"
     PrecisionRule="true"
-    EntityAttrName="FunctionLocale"
+    EntityAttrName="Locale"
     EntityUsage="DmsFunction"
-    AliasName="FUNCTION_LOCALE"/>
+    AliasName="LOCALE"
+    IsUpdateable="while_insert"
+    LOVName="LOV_Locale">
+    <Properties>
+      <SchemaBasedProperties>
+        <CONTROLTYPE
+          Value="choice"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewAttribute
     Name="Description"
     PrecisionRule="true"
@@ -61,7 +153,8 @@
     PrecisionRule="true"
     EntityAttrName="CreatedAt"
     EntityUsage="DmsFunction"
-    AliasName="CREATED_AT"/>
+    AliasName="CREATED_AT"
+    IsUpdateable="while_insert"/>
   <ViewAttribute
     Name="UpdatedAt"
     PrecisionRule="true"
@@ -73,13 +166,29 @@
     PrecisionRule="true"
     EntityAttrName="UpdatedBy"
     EntityUsage="DmsFunction"
-    AliasName="UPDATED_BY"/>
+    AliasName="UPDATED_BY"
+    LOVName="LOV_UpdatedBy">
+    <Properties>
+      <SchemaBasedProperties>
+        <CONTROLTYPE
+          Value="choice"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewAttribute
     Name="CreatedBy"
     PrecisionRule="true"
     EntityAttrName="CreatedBy"
     EntityUsage="DmsFunction"
-    AliasName="CREATED_BY"/>
+    AliasName="CREATED_BY"
+    LOVName="LOV_CreatedBy">
+    <Properties>
+      <SchemaBasedProperties>
+        <CONTROLTYPE
+          Value="choice"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewAttribute
     Name="Action"
     PrecisionRule="true"
