@@ -6,12 +6,12 @@
   <executables>
     <variableIterator id="variables"/>
     <iterator Binds="DmsRoleView" RangeSize="25"
-              DataControl="DmsModuleDataControl" id="DmsRoleViewIterator"/>
+              DataControl="DmsModuleDataControl" id="fetchEnabledRoleIter"/>
     <iterator Binds="DmsValueSetView" RangeSize="25"
               DataControl="DmsModuleDataControl" id="DmsValueSetViewIterator"/>
   </executables>
   <bindings>
-    <tree IterBinding="DmsRoleViewIterator" id="DmsRoleView">
+    <tree IterBinding="fetchEnabledRoleIter" id="DmsRoleView">
       <nodeDefinition DefName="team.epm.dms.view.DmsRoleView"
                       Name="DmsRoleView0">
         <AttrNames>

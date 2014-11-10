@@ -209,12 +209,12 @@ public class DmsModuleImpl extends ApplicationModuleImpl {
         return (ViewObjectImpl)findViewObject("DmsGroupsForRoleView");
     }
 
-    public List getValuesFromValueSet(String source,
+    public List<Row> getValuesFromValueSet(String source,
                                       String local) {
-        List valueList=new ArrayList<Row>();
-        String sql = "select * from " + source + " where local=" + local + " ";
+        List<Row> valueList=new ArrayList<Row>();
+        String sql = "select ID,MEANING from " + source + " where local='" + local + "' ";
         ViewObject valuesVO =
-            this.createViewObjectFromQueryStmt("Values", sql);
+            this.createViewObjectFromQueryStmt("", sql);
         valuesVO.executeQuery();
         RowSet rows = valuesVO.getRowSet();
         while (rows.hasNext()) {

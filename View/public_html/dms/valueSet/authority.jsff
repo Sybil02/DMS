@@ -12,7 +12,9 @@
                   rows="#{bindings.DmsValueSetView.rangeSize}"
                   emptyText="#{bindings.DmsValueSetView.viewable ? 'No data to display.' : 'Access Denied.'}"
                   fetchSize="#{bindings.DmsValueSetView.rangeSize}"
-                  rowBandingInterval="0" id="t2" width="111">
+                  rowBandingInterval="0" id="t2" width="111"
+                  rowSelection="single"
+                  selectionListener="#{backingBeanScope.ValueSetAuthorityBean.roleSelectListener}">
           <af:column sortProperty="#{bindings.DmsValueSetView.hints.Name.name}"
                      sortable="false"
                      headerText="#{bindings.DmsValueSetView.hints.Name.label}"
@@ -20,8 +22,9 @@
             <af:outputText value="#{row.Name}" id="ot2"/>
           </af:column>
         </af:table>
-        <af:selectManyShuttle label="Label 1" id="sms1">
-          <f:selectItems value="" id="si1"/>
+        <af:selectManyShuttle label="Label 1" id="sms1"
+                              binding="#{backingBeanScope.ValueSetAuthorityBean.selectShuttle}">
+          <f:selectItems value="#{backingBeanScope.ValueSetAuthorityBean.allValue}" id="si1"/>
         </af:selectManyShuttle>
       </af:panelGroupLayout>
     </f:facet>
@@ -32,7 +35,7 @@
                 fetchSize="#{bindings.DmsRoleView.rangeSize}"
                 rowBandingInterval="0"
                 selectedRowKeys="#{bindings.DmsRoleView.collectionModel.selectedRow}"
-                selectionListener="#{bindings.DmsRoleView.collectionModel.makeCurrent}"
+                selectionListener="#{backingBeanScope.ValueSetAuthorityBean.roleSelectListener}"
                 rowSelection="single" id="t1">
         <af:column sortProperty="#{bindings.DmsRoleView.hints.RoleName.name}"
                    sortable="false"

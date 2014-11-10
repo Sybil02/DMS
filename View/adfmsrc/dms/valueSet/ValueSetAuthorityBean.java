@@ -6,6 +6,7 @@ import common.DmsUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+
 import javax.faces.model.SelectItem;
 
 import oracle.adf.share.ADFContext;
@@ -23,6 +24,7 @@ import team.epm.module.DmsModuleImpl;
 public class ValueSetAuthorityBean {
 
     private RichSelectManyShuttle selectShuttle;
+    private List<SelectItem> allItems=new ArrayList<SelectItem>();
     
     public ValueSetAuthorityBean() {
         super();
@@ -33,15 +35,18 @@ public class ValueSetAuthorityBean {
     }
 
     public List getAllValue() {
-        List<SelectItem> selectItems=new ArrayList<SelectItem>();
+        
+        
         String tablename = (String)getCurValueSet().getAttribute("Source");
         String roleId=getCurRoleId();
         DmsModuleImpl am = (DmsModuleImpl)ADFUtils.getApplicationModuleForDataControl("DmsModuleDataControl");
         List<Row> valueList= am.getValuesFromValueSet(tablename,ADFContext.getCurrent().getLocale().toString());
         for(Row row:valueList){
-            SelectItem item=new SelectItem();
+            
+            SelectItem item=new SelectItem(row.getAttribute("ID"),(String)row.getAttribute("MEANING"));
+            allItems.add(item);
         }
-        return null;
+        return allItems;
     }
     public void roleSelectListener(SelectionEvent selectionEvent) {
         DmsUtils.makeCurrent(selectionEvent);
@@ -81,4 +86,6 @@ public class ValueSetAuthorityBean {
     public RichSelectManyShuttle getSelectShuttle() {
         return selectShuttle;
     }
+
+
 }
