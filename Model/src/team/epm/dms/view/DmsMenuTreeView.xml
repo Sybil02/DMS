@@ -34,7 +34,7 @@
   <SQLQuery>
     <![CDATA[select t1.id, t1.label,t1.p_id,t2.id function_id, t2.action
   from dms_menu t1 left join dms_function t2
-   on t1.locale = t2.function_locale
+   on t1.locale = t2.locale
    and t1.function_id = t2.id
   where 
    t1.locale = :locale

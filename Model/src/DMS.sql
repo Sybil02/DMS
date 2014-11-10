@@ -648,7 +648,7 @@ comment on table DMS_FUNCTION is
 comment on column DMS_FUNCTION.ID is
 '标识ID';
 
-comment on column DMS_FUNCTION.FUNCTION_LOCALE is
+comment on column DMS_FUNCTION.LOCALE is
 '语言';
 
 comment on column DMS_FUNCTION.DESCRIPTION is
