@@ -627,7 +627,7 @@ comment on column DMS_AUDIT_MSG.UPDATED_AT is
 create table DMS_FUNCTION 
 (
    ID                   VARCHAR2(32)         not null,
-   FUNCTION_LOCALE      VARCHAR2(10)         not null,
+   LOCALE               VARCHAR2(10)         not null,
    DESCRIPTION          VARCHAR2(1000),
    NAME                 VARCHAR2(100),
    CREATED_AT           DATE,
@@ -639,7 +639,7 @@ create table DMS_FUNCTION
    CATEGORY             VARCHAR2(100),
    SEQ                  INTEGER,
    P_FUNCTION_ID        VARCHAR2(32),
-   constraint PK_DMS_FUNCTION primary key (ID, FUNCTION_LOCALE)
+   constraint PK_DMS_FUNCTION primary key (ID,LOCALE)
 );
 
 comment on table DMS_FUNCTION is

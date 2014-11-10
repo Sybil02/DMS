@@ -38,12 +38,12 @@
     EntityUsage="DmsFunction"
     AliasName="ID"/>
   <ViewAttribute
-    Name="FunctionLocale"
+    Name="Locale"
     IsNotNull="true"
     PrecisionRule="true"
-    EntityAttrName="FunctionLocale"
+    EntityAttrName="Locale"
     EntityUsage="DmsFunction"
-    AliasName="FUNCTION_LOCALE"/>
+    AliasName="LOCALE"/>
   <ViewAttribute
     Name="Description"
     PrecisionRule="true"

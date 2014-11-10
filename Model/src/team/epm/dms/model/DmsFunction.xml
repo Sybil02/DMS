@@ -24,24 +24,28 @@
     Type="java.lang.String"
     ColumnType="VARCHAR2"
     TableName="DMS_FUNCTION"
-    PrimaryKey="true">
+    PrimaryKey="true"
+    IsUpdateable="while_insert">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="32"/>
     </DesignTime>
+    <TransientExpression><![CDATA[java.util.UUID.randomUUID().toString().replace("-", "")]]></TransientExpression>
   </Attribute>
   <Attribute
-    Name="FunctionLocale"
+    Name="Locale"
     IsNotNull="true"
     Precision="10"
-    ColumnName="FUNCTION_LOCALE"
+    ColumnName="LOCALE"
     SQLType="VARCHAR"
     Type="java.lang.String"
     ColumnType="VARCHAR2"
     TableName="DMS_FUNCTION"
-    PrimaryKey="true">
+    PrimaryKey="true"
+    IsUpdateable="while_insert">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="10"/>
     </DesignTime>
+    <TransientExpression><![CDATA[adf.context.locale]]></TransientExpression>
   </Attribute>
   <Attribute
     Name="Description"
@@ -182,7 +186,7 @@
     </DesignTime>
     <AttrArray Name="Attributes">
       <Item Value="team.epm.dms.model.DmsFunction.Id"/>
-      <Item Value="team.epm.dms.model.DmsFunction.FunctionLocale"/>
+      <Item Value="team.epm.dms.model.DmsFunction.Locale"/>
     </AttrArray>
   </Key>
   <Key
@@ -200,11 +204,11 @@
     Name="SysC007080">
     <DesignTime>
       <Attr Name="_DBObjectName" Value="SYS_C007080"/>
-      <Attr Name="_checkCondition" Value='"FUNCTION_LOCALE" IS NOT NULL'/>
+      <Attr Name="_checkCondition" Value='"LOCALE" IS NOT NULL'/>
       <Attr Name="_isCheck" Value="true"/>
     </DesignTime>
     <AttrArray Name="Attributes">
-      <Item Value="team.epm.dms.model.DmsFunction.FunctionLocale"/>
+      <Item Value="team.epm.dms.model.DmsFunction.Locale"/>
     </AttrArray>
   </Key>
 </Entity>
