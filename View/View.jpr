@@ -258,6 +258,15 @@
                   <url path="adfmsrc/"/>
                </list>
             </hash>
+            <hash>
+               <url n="content-folder-url" path="adfmsrc/dms/valueSet/"/>
+               <list n="pattern-filters">
+                  <string v="+dms/valueSet/ValueSetAuthorityBean.java"/>
+               </list>
+               <list n="url-path">
+                  <url path="adfmsrc/"/>
+               </list>
+            </hash>
          </list>
          <list n="url-path"/>
       </hash>

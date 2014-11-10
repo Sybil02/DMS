@@ -1,2 +1,48 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.1"></jsp:root>
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.1"
+          xmlns:af="http://xmlns.oracle.com/adf/faces/rich"
+          xmlns:f="http://java.sun.com/jsf/core">
+  <af:panelStretchLayout id="psl1" startWidth="121px">
+    <f:facet name="bottom"/>
+    <f:facet name="center">
+      <af:panelGroupLayout layout="horizontal"
+                           xmlns:af="http://xmlns.oracle.com/adf/faces/rich"
+                           id="pgl1" valign="top">
+        <af:table value="#{bindings.DmsValueSetView.collectionModel}" var="row"
+                  rows="#{bindings.DmsValueSetView.rangeSize}"
+                  emptyText="#{bindings.DmsValueSetView.viewable ? 'No data to display.' : 'Access Denied.'}"
+                  fetchSize="#{bindings.DmsValueSetView.rangeSize}"
+                  rowBandingInterval="0" id="t2" width="111">
+          <af:column sortProperty="#{bindings.DmsValueSetView.hints.Name.name}"
+                     sortable="false"
+                     headerText="#{bindings.DmsValueSetView.hints.Name.label}"
+                     id="c2">
+            <af:outputText value="#{row.Name}" id="ot2"/>
+          </af:column>
+        </af:table>
+        <af:selectManyShuttle label="Label 1" id="sms1">
+          <f:selectItems value="" id="si1"/>
+        </af:selectManyShuttle>
+      </af:panelGroupLayout>
+    </f:facet>
+    <f:facet name="start">
+      <af:table value="#{bindings.DmsRoleView.collectionModel}" var="row"
+                rows="#{bindings.DmsRoleView.rangeSize}"
+                emptyText="#{bindings.DmsRoleView.viewable ? 'No data to display.' : 'Access Denied.'}"
+                fetchSize="#{bindings.DmsRoleView.rangeSize}"
+                rowBandingInterval="0"
+                selectedRowKeys="#{bindings.DmsRoleView.collectionModel.selectedRow}"
+                selectionListener="#{bindings.DmsRoleView.collectionModel.makeCurrent}"
+                rowSelection="single" id="t1">
+        <af:column sortProperty="#{bindings.DmsRoleView.hints.RoleName.name}"
+                   sortable="false"
+                   headerText="#{bindings.DmsRoleView.hints.RoleName.label}"
+                   id="c1">
+          <af:outputText value="#{row.RoleName}" id="ot1"/>
+        </af:column>
+      </af:table>
+    </f:facet>
+    <f:facet name="end"/>
+    <f:facet name="top"/>
+  </af:panelStretchLayout>
+</jsp:root>

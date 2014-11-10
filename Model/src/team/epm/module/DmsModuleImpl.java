@@ -1,10 +1,22 @@
 package team.epm.module;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import oracle.adf.share.ADFContext;
 
+import oracle.jbo.Row;
+import oracle.jbo.RowSet;
 import oracle.jbo.Session;
+import oracle.jbo.ViewObject;
 import oracle.jbo.server.ApplicationModuleImpl;
 
 
@@ -159,8 +171,8 @@ public class DmsModuleImpl extends ApplicationModuleImpl {
     protected void prepareSession(Session session) {
         super.prepareSession(session);
         Map sessionScope = ADFContext.getCurrent().getSessionScope();
-        Object userId=sessionScope.get("userId");
-        if(userId!=null){
+        Object userId = sessionScope.get("userId");
+        if (userId != null) {
             this.getSession().getUserData().put("userId", userId);
         }
     }
@@ -197,4 +209,17 @@ public class DmsModuleImpl extends ApplicationModuleImpl {
         return (ViewObjectImpl)findViewObject("DmsGroupsForRoleView");
     }
 
+    public List getValuesFromValueSet(String source,
+                                      String local) {
+        List valueList=new ArrayList<Row>();
+        String sql = "select * from " + source + " where local=" + local + " ";
+        ViewObject valuesVO =
+            this.createViewObjectFromQueryStmt("Values", sql);
+        valuesVO.executeQuery();
+        RowSet rows = valuesVO.getRowSet();
+        while (rows.hasNext()) {
+            valueList.add(rows.next());
+        }
+        return valueList;
+    }
 }
