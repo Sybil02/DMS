@@ -23,7 +23,10 @@
           </af:column>
         </af:table>
         <af:selectManyShuttle label="Label 1" id="sms1"
-                              binding="#{backingBeanScope.ValueSetAuthorityBean.selectShuttle}">
+                              binding="#{backingBeanScope.ValueSetAuthorityBean.selectShuttle}"
+                              value="#{backingBeanScope.ValueSetAuthorityBean.selectValue}"
+                              valueChangeListener="#{backingBeanScope.ValueSetAuthorityBean.selectListener}"
+                              autoSubmit="true">
           <f:selectItems value="#{backingBeanScope.ValueSetAuthorityBean.allValue}" id="si1"/>
         </af:selectManyShuttle>
       </af:panelGroupLayout>

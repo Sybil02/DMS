@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -221,5 +222,47 @@ public class DmsModuleImpl extends ApplicationModuleImpl {
             valueList.add(rows.next());
         }
         return valueList;
+    }
+    public List getValuesByRoleAndValueSetName(String roleId,String valueSetId){
+        List values=new ArrayList();
+        ViewObjectImpl view= getDmsRoleValueView();
+        view.setWhereClause("Role_Id=:Role_Id and value_set_id=:ValueSet_Id");
+        view.defineNamedWhereClauseParam("Role_Id", null, null);
+        view.defineNamedWhereClauseParam("ValueSet_Id", null, null);
+        view.setNamedWhereClauseParam("Role_Id", roleId);
+        view.setNamedWhereClauseParam("ValueSet_Id", valueSetId);
+        view.executeQuery();
+        RowSet rows=view.getRowSet();
+        while(rows.hasNext()){
+            values.add(rows.next().getAttribute("ValueId"));
+        }            
+        return values;
+    }
+    public void updateRoleValue(String roleId,List<String> valueIds,String valueSetId){
+        
+        ViewObjectImpl view=getDmsRoleValueView();
+        view.setWhereClause("Role_Id=:Role_Id and value_set_id=:ValueSet_Id");
+        view.defineNamedWhereClauseParam("Role_Id", null, null);
+        view.defineNamedWhereClauseParam("ValueSet_Id", null, null);
+        view.setNamedWhereClauseParam("Role_Id", roleId);
+        view.setNamedWhereClauseParam("ValueSet_Id", valueSetId);
+        view.executeQuery();
+        while(view.hasNext()){
+            Row row=view.next();
+            String value=(String)row.getAttribute("ValueId");
+            if(valueIds.contains(value)){
+                valueIds.remove(value);
+                continue;}
+            else 
+                view.remove();
+        }
+        for(String e:valueIds){
+            Row row=view.createRow();
+            row.setAttribute("RoleId", roleId);
+            row.setAttribute("ValueSetId", valueSetId);
+            row.setAttribute("ValueId", e);
+            view.insertRow(row);
+        }
+        getDBTransaction().commit();
     }
 }
