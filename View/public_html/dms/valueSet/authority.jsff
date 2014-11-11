@@ -1,20 +1,24 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.1"
           xmlns:af="http://xmlns.oracle.com/adf/faces/rich"
-          xmlns:f="http://java.sun.com/jsf/core">
-  <af:panelStretchLayout id="psl1" startWidth="121px">
+          xmlns:f="http://java.sun.com/jsf/core"
+          xmlns:c="http://java.sun.com/jsp/jstl/core">
+  <c:set var="viewBundle" value="#{adfBundle['dms_v']}"/>
+  <af:panelStretchLayout id="psl1" startWidth="123px" endWidth="10px">
     <f:facet name="bottom"/>
     <f:facet name="center">
       <af:panelGroupLayout layout="horizontal"
                            xmlns:af="http://xmlns.oracle.com/adf/faces/rich"
                            id="pgl1" valign="top">
+        <af:spacer width="30" height="10" id="s1"/>
         <af:table value="#{bindings.DmsValueSetView.collectionModel}" var="row"
                   rows="#{bindings.DmsValueSetView.rangeSize}"
                   emptyText="#{bindings.DmsValueSetView.viewable ? 'No data to display.' : 'Access Denied.'}"
                   fetchSize="#{bindings.DmsValueSetView.rangeSize}"
                   rowBandingInterval="0" id="t2" width="111"
                   rowSelection="single"
-                  selectionListener="#{backingBeanScope.ValueSetAuthorityBean.roleSelectListener}">
+                  selectionListener="#{backingBeanScope.ValueSetAuthorityBean.roleSelectListener}"
+                  autoHeightRows="20">
           <af:column sortProperty="#{bindings.DmsValueSetView.hints.Name.name}"
                      sortable="false"
                      headerText="#{bindings.DmsValueSetView.hints.Name.label}"
@@ -22,31 +26,39 @@
             <af:outputText value="#{row.Name}" id="ot2"/>
           </af:column>
         </af:table>
+        <af:spacer width="30" height="10" id="s2"/>
         <af:selectManyShuttle label="Label 1" id="sms1"
                               binding="#{backingBeanScope.ValueSetAuthorityBean.selectShuttle}"
                               value="#{backingBeanScope.ValueSetAuthorityBean.selectValue}"
                               valueChangeListener="#{backingBeanScope.ValueSetAuthorityBean.selectListener}"
-                              autoSubmit="true">
+                              autoSubmit="true"
+                              leadingHeader="#{viewBundle['dms.vlaue.available_list']}"
+                              trailingHeader="#{viewBundle['dms.vlaue.select_list']}">
           <f:selectItems value="#{backingBeanScope.ValueSetAuthorityBean.allValue}" id="si1"/>
         </af:selectManyShuttle>
       </af:panelGroupLayout>
     </f:facet>
     <f:facet name="start">
-      <af:table value="#{bindings.DmsRoleView.collectionModel}" var="row"
-                rows="#{bindings.DmsRoleView.rangeSize}"
-                emptyText="#{bindings.DmsRoleView.viewable ? 'No data to display.' : 'Access Denied.'}"
-                fetchSize="#{bindings.DmsRoleView.rangeSize}"
-                rowBandingInterval="0"
-                selectedRowKeys="#{bindings.DmsRoleView.collectionModel.selectedRow}"
-                selectionListener="#{backingBeanScope.ValueSetAuthorityBean.roleSelectListener}"
-                rowSelection="single" id="t1">
-        <af:column sortProperty="#{bindings.DmsRoleView.hints.RoleName.name}"
-                   sortable="false"
-                   headerText="#{bindings.DmsRoleView.hints.RoleName.label}"
-                   id="c1">
-          <af:outputText value="#{row.RoleName}" id="ot1"/>
-        </af:column>
-      </af:table>
+      <af:panelGroupLayout layout="scroll"
+                           xmlns:af="http://xmlns.oracle.com/adf/faces/rich"
+                           id="pgl2">
+        <af:table value="#{bindings.DmsRoleView.collectionModel}" var="row"
+                  rows="#{bindings.DmsRoleView.rangeSize}"
+                  emptyText="#{bindings.DmsRoleView.viewable ? 'No data to display.' : 'Access Denied.'}"
+                  fetchSize="#{bindings.DmsRoleView.rangeSize}"
+                  rowBandingInterval="0"
+                  selectedRowKeys="#{bindings.DmsRoleView.collectionModel.selectedRow}"
+                  selectionListener="#{backingBeanScope.ValueSetAuthorityBean.roleSelectListener}"
+                  rowSelection="single" id="t1" autoHeightRows="20"
+                  columnStretching="column:c1">
+          <af:column sortProperty="#{bindings.DmsRoleView.hints.RoleName.name}"
+                     sortable="false"
+                     headerText="#{bindings.DmsRoleView.hints.RoleName.label}"
+                     id="c1">
+            <af:outputText value="#{row.RoleName}" id="ot1"/>
+          </af:column>
+        </af:table>
+      </af:panelGroupLayout>
     </f:facet>
     <f:facet name="end"/>
     <f:facet name="top"/>
