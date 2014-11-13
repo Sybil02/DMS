@@ -34,7 +34,6 @@
     <f:facet name="top"/>
     <f:facet name="end"/>
     <f:facet name="start">
-      <af:panelGroupLayout id="pgl1" layout="scroll">
         <af:panelCollection id="pc1" inlineStyle="width:450px;">
           <f:facet name="menus"/>
           <f:facet name="toolbar">
@@ -61,17 +60,18 @@
           <f:facet name="statusbar"/>
           <af:table value="#{bindings.DmsValueSetView.collectionModel}" var="row"
                     rows="#{bindings.DmsValueSetView.rangeSize}"
-                    emptyText="#{bindings.DmsValueSetView.viewable ? 'No data to display.' : 'Access Denied.'}"
+                    emptyText="#{viewBundle['dms.common.nodata']}"
                     fetchSize="#{bindings.DmsValueSetView.rangeSize}"
                     rowBandingInterval="0"
                     filterModel="#{bindings.DmsValueSetViewQuery.queryDescriptor}"
                     queryListener="#{bindings.DmsValueSetViewQuery.processQuery}"
-                    filterVisible="true" varStatus="vs"
+                    filterVisible="false" varStatus="vs"
                     selectedRowKeys="#{bindings.DmsValueSetView.collectionModel.selectedRow}"
                     selectionListener="#{bindings.DmsValueSetView.collectionModel.makeCurrent}"
                     rowSelection="single" id="t1"
                     partialTriggers="::cb1 ::cb2 ::cb3 :::it1 :::it2"
-                    autoHeightRows="#{bindings.DmsGroupView.rangeSize}">
+                    autoHeightRows="#{bindings.DmsGroupView.rangeSize}"
+                    columnStretching="column:c1">
             <af:column sortProperty="#{bindings.DmsValueSetView.hints.Name.name}"
                        filterable="true" sortable="true"
                        headerText="#{bindings.DmsValueSetView.hints.Name.label}"
@@ -79,13 +79,13 @@
               <af:outputText value="#{row.Name}" id="ot3"/>
             </af:column>
             <af:column sortProperty="#{bindings.DmsValueSetView.hints.Source.name}"
-                       filterable="true" sortable="true"
+                       filterable="false" sortable="true"
                        headerText="#{bindings.DmsValueSetView.hints.Source.label}"
                        id="c4" width="106">
               <af:outputText value="#{row.Source}" id="ot1"/>
             </af:column>
             <af:column sortProperty="#{bindings.DmsValueSetView.hints.UpdatedAt.name}"
-                       filterable="true" sortable="true"
+                       filterable="false" sortable="true"
                        headerText="#{bindings.DmsValueSetView.hints.UpdatedAt.label}"
                        id="c2" width="104">
               <f:facet name="filter">
@@ -96,7 +96,7 @@
               </af:outputText>
             </af:column>
             <af:column sortProperty="#{bindings.DmsValueSetView.hints.UpdatedBy.name}"
-                       filterable="true" sortable="true"
+                       filterable="false" sortable="true"
                        headerText="#{bindings.DmsValueSetView.hints.UpdatedBy.label}"
                        id="c1"
                        width="97">
@@ -112,7 +112,6 @@
             </af:column>
           </af:table>
         </af:panelCollection>
-      </af:panelGroupLayout>
     </f:facet>
   </af:panelStretchLayout>
 </jsp:root>

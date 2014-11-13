@@ -282,7 +282,7 @@
                 <af:inputText value="#{bindings.OtherInfo.inputValue}"
                               label="#{bindings.OtherInfo.hints.label}"
                               required="#{bindings.OtherInfo.hints.mandatory}"
-                              columns="70"
+                              columns="60"
                               rows="4"
                               maximumLength="#{bindings.OtherInfo.hints.precision}"
                               shortDesc="#{bindings.OtherInfo.hints.tooltip}"

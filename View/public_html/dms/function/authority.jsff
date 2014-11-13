@@ -4,7 +4,19 @@
           xmlns:f="http://java.sun.com/jsf/core"
           xmlns:c="http://java.sun.com/jsp/jstl/core">
   <c:set var="viewBundle" value="#{adfBundle['dms_v']}"/>
-  <af:panelGroupLayout id="pgl1" layout="horizontal">
+  <af:panelStretchLayout id="psl1" startWidth="180px">
+    <f:facet name="bottom"/>
+    <f:facet name="center">
+    <af:selectManyShuttle value="#{bindings.DmsFunctionView.inputValue}"
+                          label="#{bindings.DmsFunctionView.label}" id="sms1"
+                          size="20" simple="true"
+                          inlineStyle="margin-top:10px;margin-left:50px"
+                          leadingHeader="#{viewBundle['dms.function.available_list']}"
+                          trailingHeader="#{viewBundle['dms.function.selected_list']}">
+      <f:selectItems value="#{bindings.DmsFunctionView.items}" id="si2"/>
+    </af:selectManyShuttle>
+    </f:facet>
+    <f:facet name="start">
     <af:table value="#{bindings.DmsRoleView.collectionModel}" var="row"
               rows="#{bindings.DmsRoleView.rangeSize}"
               emptyText="#{viewBundle['dms.common.nodata']}"
@@ -13,7 +25,8 @@
               selectedRowKeys="#{bindings.DmsRoleView.collectionModel.selectedRow}"
               selectionListener="#{bindings.DmsRoleView.collectionModel.makeCurrent}"
               rowSelection="single" id="t1" columnStretching="column:c1"
-              width="120px">
+              width="180px"
+              inlineStyle="margin-top:10px">
       <af:column sortProperty="#{bindings.DmsRoleView.hints.RoleName.name}"
                  sortable="false"
                  headerText="#{bindings.DmsRoleView.hints.RoleName.label}"
@@ -21,13 +34,8 @@
         <af:outputText value="#{row.RoleName}" id="ot1"/>
       </af:column>
     </af:table>
-    <af:spacer width="50" height="10" id="s1"/>
-    <af:selectManyShuttle value="#{bindings.DmsFunctionView.inputValue}"
-                          label="#{bindings.DmsFunctionView.label}" id="sms1"
-                          size="20" simple="true"
-                          leadingHeader="#{viewBundle['dms.function.available_list']}"
-                          trailingHeader="#{viewBundle['dms.function.selected_list']}">
-      <f:selectItems value="#{bindings.DmsFunctionView.items}" id="si2"/>
-    </af:selectManyShuttle>
-  </af:panelGroupLayout>
+    </f:facet>
+    <f:facet name="end"/>
+    <f:facet name="top"/>
+  </af:panelStretchLayout>
 </jsp:root>

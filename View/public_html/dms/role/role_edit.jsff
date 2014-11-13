@@ -31,7 +31,6 @@
       </af:panelGroupLayout>
     </f:facet>
     <f:facet name="start">
-      <af:panelGroupLayout id="pgl1" layout="scroll">
         <af:panelCollection id="pc1"  inlineStyle="width:450px;">
           <f:facet name="menus"/>
           <f:facet name="toolbar">
@@ -60,11 +59,12 @@
                     rowBandingInterval="0"
                     filterModel="#{bindings.DmsRoleViewQuery.queryDescriptor}"
                     queryListener="#{bindings.DmsRoleViewQuery.processQuery}"
-                    filterVisible="true" varStatus="vs"
+                    filterVisible="false" varStatus="vs"
                     selectedRowKeys="#{bindings.DmsRoleView.collectionModel.selectedRow}"
                     selectionListener="#{bindings.DmsRoleView.collectionModel.makeCurrent}"
                     rowSelection="single" id="t1"
-                    partialTriggers="::cb1 ::cb3 ::cb2 :::it1 :::soc1">
+                    partialTriggers="::cb1 ::cb3 ::cb2 :::it1 :::soc1"
+                    columnStretching="column:c1">
             <af:column sortProperty="#{bindings.DmsRoleView.hints.RoleName.name}"
                        filterable="true" sortable="true"
                        headerText="#{bindings.DmsRoleView.hints.RoleName.label}"
@@ -72,7 +72,7 @@
               <af:outputText value="#{row.RoleName}" id="ot1"/>
             </af:column>
             <af:column sortProperty="#{bindings.DmsRoleView.hints.EnableFlag.name}"
-                       filterable="true" sortable="true"
+                       filterable="false" sortable="true"
                        headerText="#{bindings.DmsRoleView.hints.EnableFlag.label}"
                        id="c4">
               <af:selectOneChoice value="#{row.bindings.EnableFlag.inputValue}"
@@ -85,7 +85,7 @@
               </af:selectOneChoice>
             </af:column>
             <af:column sortProperty="#{bindings.DmsRoleView.hints.UpdatedAt.name}"
-                       filterable="true" sortable="true"
+                       filterable="false" sortable="true"
                        headerText="#{bindings.DmsRoleView.hints.UpdatedAt.label}"
                        id="c2">
               <f:facet name="filter">
@@ -96,7 +96,7 @@
               </af:outputText>
             </af:column>
             <af:column sortProperty="#{bindings.DmsRoleView.hints.UpdatedBy.name}"
-                       filterable="true" sortable="true"
+                       filterable="false" sortable="true"
                        headerText="#{bindings.DmsRoleView.hints.UpdatedBy.label}"
                        id="c3">
               <af:selectOneChoice value="#{row.bindings.UpdatedBy.inputValue}"
@@ -110,7 +110,6 @@
             </af:column>
           </af:table>
         </af:panelCollection>
-      </af:panelGroupLayout>
     </f:facet>
     <f:facet name="end"/>
     <f:facet name="top"/>

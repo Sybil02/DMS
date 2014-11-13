@@ -32,7 +32,6 @@
     <f:facet name="top"/>
     <f:facet name="end"/>
     <f:facet name="start">
-      <af:panelGroupLayout id="pgl1" layout="scroll">
         <af:panelCollection id="pc1" inlineStyle="width:450px;">
           <f:facet name="menus"/>
           <f:facet name="toolbar">
@@ -66,7 +65,8 @@
                     selectionListener="#{bindings.DmsGroupView.collectionModel.makeCurrent}"
                     rowSelection="single" id="t1"
                     partialTriggers="::cb1 ::cb2 ::cb3 :::it1 :::soc3"
-                    autoHeightRows="#{bindings.DmsGroupView.rangeSize}">
+                    autoHeightRows="#{bindings.DmsGroupView.rangeSize}"
+                    columnStretching="column:c1">
             <af:column sortProperty="#{bindings.DmsGroupView.hints.Name.name}"
                        filterable="true" sortable="true"
                        headerText="#{bindings.DmsGroupView.hints.Name.label}"
@@ -74,7 +74,7 @@
               <af:outputText value="#{row.Name}" id="ot1"/>
             </af:column>
             <af:column sortProperty="#{bindings.DmsGroupView.hints.EnableFlag.name}"
-                       filterable="true" sortable="true"
+                       filterable="false" sortable="true"
                        headerText="#{bindings.DmsGroupView.hints.EnableFlag.label}"
                        id="c1">
               <af:selectOneChoice value="#{row.bindings.EnableFlag.inputValue}"
@@ -87,7 +87,7 @@
               </af:selectOneChoice>
             </af:column>
             <af:column sortProperty="#{bindings.DmsGroupView.hints.UpdatedAt.name}"
-                       filterable="true" sortable="true"
+                       filterable="false" sortable="true"
                        headerText="#{bindings.DmsGroupView.hints.UpdatedAt.label}"
                        id="c2">
               <af:outputText value="#{row.UpdatedAt}" id="ot2">
@@ -95,7 +95,7 @@
               </af:outputText>
             </af:column>
             <af:column sortProperty="#{bindings.DmsGroupView.hints.UpdatedBy.name}"
-                       filterable="true" sortable="true"
+                       filterable="false" sortable="true"
                        headerText="#{bindings.DmsGroupView.hints.UpdatedBy.label}"
                        id="c4">
               <af:selectOneChoice value="#{row.bindings.UpdatedBy.inputValue}"
@@ -109,7 +109,6 @@
             </af:column>
           </af:table>
         </af:panelCollection>
-      </af:panelGroupLayout>
     </f:facet>
   </af:panelStretchLayout>
 </jsp:root>

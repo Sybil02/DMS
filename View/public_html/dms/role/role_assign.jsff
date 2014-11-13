@@ -4,27 +4,9 @@
           xmlns:f="http://java.sun.com/jsf/core"
           xmlns:c="http://java.sun.com/jsp/jstl/core">
   <c:set var="viewBundle" value="#{adfBundle['dms_v']}"/>
-  <af:panelGroupLayout id="pgl1" layout="horizontal"
-  inlineStyle="padding-top:5px">
-    <af:table value="#{bindings.DmsRoleView.collectionModel}" var="row"
-              rows="#{bindings.DmsRoleView.rangeSize}"
-              emptyText="#{bindings.DmsRoleView.viewable ? 'No data to display.' : 'Access Denied.'}"
-              fetchSize="#{bindings.DmsRoleView.rangeSize}"
-              rowBandingInterval="0"
-              selectedRowKeys="#{bindings.DmsRoleView.collectionModel.selectedRow}"
-              selectionListener="#{backingBeanScope.RoleGroupBean.roleSelectListener}"
-              rowSelection="single" id="t1"
-              binding="#{backingBeanScope.RoleGroupBean.roleList}" width="150"
-              columnStretching="column:c1" autoHeightRows="20">
-      <af:column sortProperty="#{bindings.DmsRoleView.hints.RoleName.name}"
-                 sortable="false"
-                 headerText="#{viewBundle['dms.role.list']}"
-                 id="c1">
-        <af:outputText value="#{row.RoleName}" id="ot1"/>
-      </af:column>
-    </af:table>
-
-    <af:spacer width="50" height="10" id="s1"/>
+  <af:panelStretchLayout id="psl1" startWidth="180px">
+    <f:facet name="bottom"/>
+    <f:facet name="center">
     <af:selectManyShuttle label="#{bindings.DmsGroupView.label}" id="sms1"
                           valueChangeListener="#{backingBeanScope.RoleGroupBean.selectListener}"
                           binding="#{backingBeanScope.RoleGroupBean.selectShuttle}"
@@ -34,10 +16,34 @@
                           size="20"
                           simple="true"
                           autoSubmit="true"
-                          clientComponent="true">
+                          clientComponent="true"
+                          inlineStyle="margin-top:10px;margin-left:50px">
       <f:selectItems value="#{bindings.DmsGroupView.items}" id="si1"/>
     </af:selectManyShuttle>
-  </af:panelGroupLayout>
+    </f:facet>
+    <f:facet name="start">
+    <af:table value="#{bindings.DmsRoleView.collectionModel}" var="row"
+              rows="#{bindings.DmsRoleView.rangeSize}"
+              emptyText="#{viewBundle['dms.common.nodata']}"
+              fetchSize="#{bindings.DmsRoleView.rangeSize}"
+              rowBandingInterval="0"
+              selectedRowKeys="#{bindings.DmsRoleView.collectionModel.selectedRow}"
+              selectionListener="#{backingBeanScope.RoleGroupBean.roleSelectListener}"
+              rowSelection="single" id="t1"
+              binding="#{backingBeanScope.RoleGroupBean.roleList}" width="180"
+              columnStretching="column:c1" autoHeightRows="20"
+              inlineStyle="margin-top:10px">
+      <af:column sortProperty="#{bindings.DmsRoleView.hints.RoleName.name}"
+                 sortable="false"
+                 headerText="#{viewBundle['dms.role.list']}"
+                 id="c1">
+        <af:outputText value="#{row.RoleName}" id="ot1"/>
+      </af:column>
+    </af:table>
+    </f:facet>
+    <f:facet name="end"/>
+    <f:facet name="top"/>
+  </af:panelStretchLayout>
 </jsp:root>
 
  <!--  -->
