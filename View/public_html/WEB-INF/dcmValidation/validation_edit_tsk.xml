@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<adfc-config xmlns="http://xmlns.oracle.com/adf/controller" version="1.2">
+  <task-flow-definition id="validation_edit_tsk">
+    <default-activity id="__3">validation_edit</default-activity>
+    <transaction id="__2">
+      <new-transaction/>
+    </transaction>
+    <data-control-scope id="__1">
+      <isolated/>
+    </data-control-scope>
+    <view id="validation_edit">
+      <page>/dcm/validation/validation_edit.jsff</page>
+    </view>
+    <use-page-fragments/>
+  </task-flow-definition>
+</adfc-config>
