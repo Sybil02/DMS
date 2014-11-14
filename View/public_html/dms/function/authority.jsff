@@ -7,12 +7,14 @@
   <af:panelStretchLayout id="psl1" startWidth="180px">
     <f:facet name="bottom"/>
     <f:facet name="center">
-    <af:selectManyShuttle value="#{bindings.DmsFunctionView.inputValue}"
+    <af:selectManyShuttle value="#{backingBeanScope.FunctionAuthorityBean.selectValue}"
                           label="#{bindings.DmsFunctionView.label}" id="sms1"
                           size="20" simple="true"
                           inlineStyle="margin-top:10px;margin-left:50px"
                           leadingHeader="#{viewBundle['dms.function.available_list']}"
-                          trailingHeader="#{viewBundle['dms.function.selected_list']}">
+                          trailingHeader="#{viewBundle['dms.function.selected_list']}"
+                          binding="#{backingBeanScope.FunctionAuthorityBean.selectShuttle}"
+                          valueChangeListener="#{backingBeanScope.FunctionAuthorityBean.selectListener}">
       <f:selectItems value="#{bindings.DmsFunctionView.items}" id="si2"/>
     </af:selectManyShuttle>
     </f:facet>

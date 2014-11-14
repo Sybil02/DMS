@@ -30,17 +30,13 @@ import org.apache.commons.lang.ObjectUtils;
 import org.apache.myfaces.trinidad.event.SelectionEvent;
 
 import team.epm.dms.view.DmsGroupRoleViewImpl;
+import team.epm.dms.view.DmsRoleViewImpl;
 import team.epm.dms.view.DmsUserGroupViewImpl;
+import team.epm.module.DmsModuleImpl;
 
 public class RoleGroupBean {
  
     private static ADFLogger logger=ADFLogger.createADFLogger(RoleGroupBean.class);
-    String allItemsIteratorName = "DmsGroupViewIterator";
-    String allItemsValueAttrName = "Id";
-    String allItemsDisplayAttrName = "Name";
-    String allItemsDescriptionAttrName = "Name";
-    String selectedValuesIteratorName = "GroupSelectedUserViewIterator";
-    String selectedValuesValueAttrName = "UserId";
     private Integer[] selectedList;
     private RichTable roleList;
     private RichSelectManyShuttle selectShuttle;
@@ -52,130 +48,53 @@ public class RoleGroupBean {
     
     public void selectListener(ValueChangeEvent valueChangeEvent) {
         // Add event code here...
-        BindingContainer bc=BindingContext.getCurrent().getCurrentBindingsEntry();
-        JUCtrlListBinding listBinding = (JUCtrlListBinding)bc.get("DmsGroupView");
-        listBinding.clearSelectedIndices();
-        RowSetIterator groupIter =
-            ADFUtils.findIterator("DmsGroupViewIterator").getRowSetIterator();
-        DCIteratorBinding groupRoleIter =
-            ADFUtils.findIterator("DmsGroupRoleViewIterator");
-        DmsGroupRoleViewImpl view = (DmsGroupRoleViewImpl)groupRoleIter.getViewObject();
-              
-            Integer[] newValue = (Integer[])valueChangeEvent.getNewValue();
-            Integer[] oldValue = (Integer[])valueChangeEvent.getOldValue();
-            if(newValue==null){
-                for(Integer i:oldValue){                   
-                        Row row= groupIter.getRowAtRangeIndex(i);
-                        view.deleteGroupRoleByGroupIdAndRoleId(this.getCurRoleId(),
-                                                               row.getAttribute("Id")+""
-                                                                );                 
-                }
-                view.getApplicationModule().getTransaction().commit();
-                return ;
-            }
-            if(oldValue==null){
-                for(Integer i:newValue){                   
-                        Row row= groupIter.getRowAtRangeIndex(i);
-                        Row groupRole= view.createRow();
-                        groupRole.setAttribute("RoleId", this.getCurRoleId());
-                        groupRole.setAttribute("GroupId", row.getAttribute("Id"));
-                        view.insertRow(groupRole);                              
-                }
-                view.getApplicationModule().getTransaction().commit();
-                return ;
-            }
-            List<Integer> newList=Arrays.asList(newValue);
-            List<Integer> oldList=Arrays.asList(oldValue);        
-            for(Integer i:newList){
-                if (!oldList.contains(i)){
-                    Row row= groupIter.getRowAtRangeIndex(i);
-                    Row groupRole= view.createRow();
-                    groupRole.setAttribute("RoleId", this.getCurRoleId());
-                    groupRole.setAttribute("GroupId", row.getAttribute("Id"));
-                    view.insertRow(groupRole);
-                }              
-            }
-            view.getApplicationModule().getTransaction().commit();
-            for(Integer i:oldValue){
-                if (!newList.contains(i)){
-                    Row row= groupIter.getRowAtRangeIndex(i);
-                    view.deleteGroupRoleByGroupIdAndRoleId(this.getCurRoleId(),
-                                                           row.getAttribute("Id")+""
-                                                            );
-                }
-            }
-            view.getApplicationModule().getTransaction().commit();
+        List<String> newValue = (List<String>)valueChangeEvent.getNewValue();
+        
+        String groupId = getCurGroupId();
+        DmsModuleImpl am =
+            (DmsModuleImpl)ADFUtils.getApplicationModuleForDataControl("DmsModuleDataControl");
+        am.updateGroupRole(groupId, newValue);
     }
 
-    public Integer[] getSelectedGroupList() {
+    public List<String> getSelectedRoleList() {
         
-        List<Integer> selectedGroup = new ArrayList<Integer>();
-        DCIteratorBinding groupIter =
-            ADFUtils.findIterator("DmsGroupViewIterator");
-        DCIteratorBinding groupedRoleIter =
-            ADFUtils.findIterator("DmsGroupsForRoleViewIterator");
-        ViewObject groupsForRoleview = groupedRoleIter.getViewObject();
-        groupsForRoleview.setNamedWhereClauseParam("roleId",
-                                                 this.getCurRoleId());
-        groupsForRoleview.executeQuery();
-        while (groupsForRoleview.hasNext()) {
-            Row row = groupsForRoleview.next();
-            //TODO
-            Key key=new Key(new Object[]{row.getAttribute("Id"),row.getAttribute("Locale")});
-            groupIter.setCurrentRowWithKey(key.toStringFormat(true));
-            Integer indx = groupIter.getCurrentRowIndexInRange();
-
-            selectedGroup.add(indx);
-        }
-        this.selectedList =
-                selectedGroup.toArray(new Integer[selectedGroup.size()]);
-        return this.selectedList;
+        DmsModuleImpl am =
+            (DmsModuleImpl)ADFUtils.getApplicationModuleForDataControl("DmsModuleDataControl");
+        List<String> selectedRole =
+            am.getRoleIdsByGroupId(getCurGroupId());
+        return selectedRole;
     }
     
-    public void setSelectedGroupList(Integer[] selectedList){
-        this.selectedList=selectedList;
-    }
     public List getAllItems() {
-        if (allItems == null) {
-            allItems =
-                    ADFUtils.selectItemsForIterator(allItemsIteratorName, allItemsValueAttrName,
-                                                    allItemsDisplayAttrName,
-                                                    allItemsDescriptionAttrName);
-        }
-
-
+        allItems=ADFUtils.selectItemsForIterator("DmsRoleViewIterator","Id","RoleName");
         return allItems;
     }
     
-    public void setSelectedUserList(Integer[] selectedList) {
-        this.selectedList = selectedList;
+    public void setSelectedRoleList(List<String> selectedList){
+       
     }
 
+    
 
-    public void roleSelectListener(SelectionEvent selectionEvent) {
-        //#{bindings.DmsGroupView.collectionModel.makeCurrent}
+
+    public void groupSelectListener(SelectionEvent selectionEvent) {
         DmsUtils.makeCurrent(selectionEvent);
         ADFContext aDFContext = ADFContext.getCurrent();
-        aDFContext.getViewScope().put("curRoleId", this.getCurRole().getAttribute("Id"));
+        aDFContext.getViewScope().put("curGroupId", this.getCurGroup().getAttribute("Id"));
         this.selectShuttle.resetValue();
         AdfFacesContext adfFacesContext = AdfFacesContext.getCurrentInstance();           
         adfFacesContext.addPartialTarget(this.selectShuttle);
-        /*
-        BindingContainer bc=BindingContext.getCurrent().getCurrentBindingsEntry();
-        JUCtrlListBinding listBinding = (JUCtrlListBinding)bc.get("DmsUserView");
-        listBinding.clearSelectedIndices();
-        listBinding.getSelectedIndices();
-        */
+      
     }
     
-    private Row getCurRole() {
-        return ADFUtils.findIterator("fetchEnabledRoleIter").getCurrentRow();
+    private Row getCurGroup() {
+        return ADFUtils.findIterator("fetchEnabledGroupIter").getCurrentRow();
     }
     
-    private String getCurRoleId(){
-        String curRoleId=ObjectUtils.toString(ADFContext.getCurrent().getViewScope().get("curRoleId"));
-        curRoleId=curRoleId.length()>0 ? curRoleId :  ObjectUtils.toString(this.getCurRole().getAttribute("Id"));
-        return curRoleId;
+    private String getCurGroupId(){
+        String curGroupId=ObjectUtils.toString(ADFContext.getCurrent().getViewScope().get("curGroupId"));
+        curGroupId=curGroupId.length()>0 ? curGroupId :  ObjectUtils.toString(this.getCurGroup()==null ? "":this.getCurGroup().getAttribute("Id"));
+        return curGroupId;
     }
     
     public void setSelectShuttle(RichSelectManyShuttle selectShuttle) {
@@ -193,4 +112,10 @@ public class RoleGroupBean {
     public RichTable getRoleList() {
         return roleList;
     }
+
+    public void setAllItems(List allItems) {
+        this.allItems = allItems;
+    }
+
+
 }

@@ -10,36 +10,35 @@
     <af:selectManyShuttle label="#{bindings.DmsGroupView.label}" id="sms1"
                           valueChangeListener="#{backingBeanScope.RoleGroupBean.selectListener}"
                           binding="#{backingBeanScope.RoleGroupBean.selectShuttle}"
-                          value="#{backingBeanScope.RoleGroupBean.selectedGroupList}" 
-                          leadingHeader="#{viewBundle['dms.user.available_group_list']}"
-                          trailingHeader="#{viewBundle['dms.user.selected_group_list']}"                                               
+                          value="#{backingBeanScope.RoleGroupBean.selectedRoleList}" 
+                          leadingHeader="#{viewBundle['dms.role.available_list']}"
+                          trailingHeader="#{viewBundle['dms.role.available_list']}"                                               
                           size="20"
                           simple="true"
                           autoSubmit="true"
                           clientComponent="true"
                           inlineStyle="margin-top:10px;margin-left:50px">
-      <f:selectItems value="#{bindings.DmsGroupView.items}" id="si1"/>
+      <f:selectItems value="#{backingBeanScope.RoleGroupBean.allItems}" id="si1"/>
     </af:selectManyShuttle>
     </f:facet>
     <f:facet name="start">
-    <af:table value="#{bindings.DmsRoleView.collectionModel}" var="row"
-              rows="#{bindings.DmsRoleView.rangeSize}"
-              emptyText="#{viewBundle['dms.common.nodata']}"
-              fetchSize="#{bindings.DmsRoleView.rangeSize}"
-              rowBandingInterval="0"
-              selectedRowKeys="#{bindings.DmsRoleView.collectionModel.selectedRow}"
-              selectionListener="#{backingBeanScope.RoleGroupBean.roleSelectListener}"
-              rowSelection="single" id="t1"
-              binding="#{backingBeanScope.RoleGroupBean.roleList}" width="180"
-              columnStretching="column:c1" autoHeightRows="20"
-              inlineStyle="margin-top:10px">
-      <af:column sortProperty="#{bindings.DmsRoleView.hints.RoleName.name}"
-                 sortable="false"
-                 headerText="#{viewBundle['dms.role.list']}"
-                 id="c1">
-        <af:outputText value="#{row.RoleName}" id="ot1"/>
-      </af:column>
-    </af:table>
+      <af:table value="#{bindings.DmsGroupView.collectionModel}" var="row"
+                rows="#{bindings.DmsGroupView.rangeSize}"
+                emptyText="#{viewBundle['dms.common.nodata']}"
+                fetchSize="#{bindings.DmsGroupView.rangeSize}"
+                rowBandingInterval="0"
+                selectedRowKeys="#{bindings.DmsGroupView.collectionModel.selectedRow}"
+                selectionListener="#{backingBeanScope.RoleGroupBean.groupSelectListener}"
+                rowSelection="single" id="t1" width="180" filterVisible="true"
+                columnStretching="column:c1" autoHeightRows="20"
+                binding="#{backingBeanScope.RoleGroupBean.roleList}"
+                inlineStyle="margin-top:10px">
+        <af:column sortProperty="#{bindings.DmsGroupView.hints.Name.name}"
+                   sortable="true" headerText="#{viewBundle['dms.group.list']}"
+                   id="c1" filterable="true">
+          <af:outputText value="#{row.Name}" id="ot1"/>
+        </af:column>
+      </af:table>
     </f:facet>
     <f:facet name="end"/>
     <f:facet name="top"/>
