@@ -63,7 +63,7 @@
     ColumnType="NUMBER"
     TableName="DCM_TEMPLATE_VALIDATION">
     <DesignTime>
-      <Attr Name="_DisplaySize" Value="39"/>
+      <Attr Name="_DisplaySize" Value="22"/>
     </DesignTime>
   </Attribute>
   <Attribute
@@ -123,9 +123,9 @@
     </AttrArray>
   </Key>
   <Key
-    Name="SysC007071">
+    Name="SysC007233">
     <DesignTime>
-      <Attr Name="_DBObjectName" Value="SYS_C007071"/>
+      <Attr Name="_DBObjectName" Value="SYS_C007233"/>
       <Attr Name="_checkCondition" Value='"ID" IS NOT NULL'/>
       <Attr Name="_isCheck" Value="true"/>
     </DesignTime>

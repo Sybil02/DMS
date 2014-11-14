@@ -110,7 +110,7 @@
     ColumnType="VARCHAR2"
     TableName="DCM_TEMPLATE">
     <DesignTime>
-      <Attr Name="_DisplaySize" Value="39"/>
+      <Attr Name="_DisplaySize" Value="10"/>
     </DesignTime>
   </Attribute>
   <Attribute
@@ -123,7 +123,7 @@
     ColumnType="NUMBER"
     TableName="DCM_TEMPLATE">
     <DesignTime>
-      <Attr Name="_DisplaySize" Value="39"/>
+      <Attr Name="_DisplaySize" Value="22"/>
     </DesignTime>
   </Attribute>
   <Attribute
@@ -234,6 +234,29 @@
       <Attr Name="_DisplaySize" Value="300"/>
     </DesignTime>
   </Attribute>
+  <Attribute
+    Name="DataStartLine"
+    ColumnName="DATA_START_LINE"
+    SQLType="NUMERIC"
+    Type="oracle.jbo.domain.Number"
+    ColumnType="NUMBER"
+    TableName="DCM_TEMPLATE">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="22"/>
+    </DesignTime>
+  </Attribute>
+  <Attribute
+    Name="CombinationId"
+    Precision="32"
+    ColumnName="COMBINATION_ID"
+    SQLType="VARCHAR"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    TableName="DCM_TEMPLATE">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="32"/>
+    </DesignTime>
+  </Attribute>
   <Key
     Name="PkDcmTemplate"
     PrimaryKey="true">
@@ -246,9 +269,9 @@
     </AttrArray>
   </Key>
   <Key
-    Name="SysC007061">
+    Name="SysC007217">
     <DesignTime>
-      <Attr Name="_DBObjectName" Value="SYS_C007061"/>
+      <Attr Name="_DBObjectName" Value="SYS_C007217"/>
       <Attr Name="_checkCondition" Value='"ID" IS NOT NULL'/>
       <Attr Name="_isCheck" Value="true"/>
     </DesignTime>
@@ -257,9 +280,9 @@
     </AttrArray>
   </Key>
   <Key
-    Name="SysC007062">
+    Name="SysC007218">
     <DesignTime>
-      <Attr Name="_DBObjectName" Value="SYS_C007062"/>
+      <Attr Name="_DBObjectName" Value="SYS_C007218"/>
       <Attr Name="_checkCondition" Value='"LOCALE" IS NOT NULL'/>
       <Attr Name="_isCheck" Value="true"/>
     </DesignTime>

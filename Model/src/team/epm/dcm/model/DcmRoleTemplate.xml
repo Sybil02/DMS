@@ -108,7 +108,7 @@
     ColumnType="VARCHAR2"
     TableName="DCM_ROLE_TEMPLATE">
     <DesignTime>
-      <Attr Name="_DisplaySize" Value="39"/>
+      <Attr Name="_DisplaySize" Value="10"/>
     </DesignTime>
   </Attribute>
   <Key
@@ -122,9 +122,9 @@
     </AttrArray>
   </Key>
   <Key
-    Name="SysC007059">
+    Name="SysC007215">
     <DesignTime>
-      <Attr Name="_DBObjectName" Value="SYS_C007059"/>
+      <Attr Name="_DBObjectName" Value="SYS_C007215"/>
       <Attr Name="_checkCondition" Value='"ID" IS NOT NULL'/>
       <Attr Name="_isCheck" Value="true"/>
     </DesignTime>

@@ -88,7 +88,7 @@
     ColumnType="VARCHAR2"
     TableName="DCM_VALIDATION">
     <DesignTime>
-      <Attr Name="_DisplaySize" Value="39"/>
+      <Attr Name="_DisplaySize" Value="10"/>
     </DesignTime>
   </Attribute>
   <Attribute
@@ -161,9 +161,9 @@
     </AttrArray>
   </Key>
   <Key
-    Name="SysC007073">
+    Name="SysC007235">
     <DesignTime>
-      <Attr Name="_DBObjectName" Value="SYS_C007073"/>
+      <Attr Name="_DBObjectName" Value="SYS_C007235"/>
       <Attr Name="_checkCondition" Value='"ID" IS NOT NULL'/>
       <Attr Name="_isCheck" Value="true"/>
     </DesignTime>
@@ -172,9 +172,9 @@
     </AttrArray>
   </Key>
   <Key
-    Name="SysC007074">
+    Name="SysC007236">
     <DesignTime>
-      <Attr Name="_DBObjectName" Value="SYS_C007074"/>
+      <Attr Name="_DBObjectName" Value="SYS_C007236"/>
       <Attr Name="_checkCondition" Value='"LOCALE" IS NOT NULL'/>
       <Attr Name="_isCheck" Value="true"/>
     </DesignTime>

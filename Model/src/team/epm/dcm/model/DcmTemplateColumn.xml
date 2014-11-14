@@ -134,7 +134,7 @@
     ColumnType="VARCHAR2"
     TableName="DCM_TEMPLATE_COLUMN">
     <DesignTime>
-      <Attr Name="_DisplaySize" Value="39"/>
+      <Attr Name="_DisplaySize" Value="10"/>
     </DesignTime>
   </Attribute>
   <Attribute
@@ -146,7 +146,7 @@
     ColumnType="VARCHAR2"
     TableName="DCM_TEMPLATE_COLUMN">
     <DesignTime>
-      <Attr Name="_DisplaySize" Value="39"/>
+      <Attr Name="_DisplaySize" Value="10"/>
     </DesignTime>
   </Attribute>
   <Attribute
@@ -170,7 +170,7 @@
     ColumnType="VARCHAR2"
     TableName="DCM_TEMPLATE_COLUMN">
     <DesignTime>
-      <Attr Name="_DisplaySize" Value="39"/>
+      <Attr Name="_DisplaySize" Value="10"/>
     </DesignTime>
   </Attribute>
   <Attribute
@@ -183,7 +183,7 @@
     ColumnType="NUMBER"
     TableName="DCM_TEMPLATE_COLUMN">
     <DesignTime>
-      <Attr Name="_DisplaySize" Value="39"/>
+      <Attr Name="_DisplaySize" Value="22"/>
     </DesignTime>
   </Attribute>
   <Attribute
@@ -210,9 +210,9 @@
     </AttrArray>
   </Key>
   <Key
-    Name="SysC007064">
+    Name="SysC007220">
     <DesignTime>
-      <Attr Name="_DBObjectName" Value="SYS_C007064"/>
+      <Attr Name="_DBObjectName" Value="SYS_C007220"/>
       <Attr Name="_checkCondition" Value='"ID" IS NOT NULL'/>
       <Attr Name="_isCheck" Value="true"/>
     </DesignTime>
@@ -221,9 +221,9 @@
     </AttrArray>
   </Key>
   <Key
-    Name="SysC007065">
+    Name="SysC007221">
     <DesignTime>
-      <Attr Name="_DBObjectName" Value="SYS_C007065"/>
+      <Attr Name="_DBObjectName" Value="SYS_C007221"/>
       <Attr Name="_checkCondition" Value='"LOCALE" IS NOT NULL'/>
       <Attr Name="_isCheck" Value="true"/>
     </DesignTime>

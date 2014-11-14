@@ -8,7 +8,7 @@
   InheritPersonalization="true"
   SelectList="DcmTemplateCombination.ID, 
        DcmTemplateCombination.TEMPLATE_ID, 
-       DcmTemplateCombination.COMBINATION_ID, 
+       DcmTemplateCombination.COMBINATION_RECORD_ID, 
        DcmTemplateCombination.STATUS, 
        DcmTemplateCombination.CREATED_AT, 
        DcmTemplateCombination.UPDATED_AT, 
@@ -39,11 +39,11 @@
     EntityUsage="DcmTemplateCombination"
     AliasName="TEMPLATE_ID"/>
   <ViewAttribute
-    Name="CombinationId"
+    Name="CombinationRecordId"
     PrecisionRule="true"
-    EntityAttrName="CombinationId"
+    EntityAttrName="CombinationRecordId"
     EntityUsage="DcmTemplateCombination"
-    AliasName="COMBINATION_ID"/>
+    AliasName="COMBINATION_RECORD_ID"/>
   <ViewAttribute
     Name="Status"
     PrecisionRule="true"
