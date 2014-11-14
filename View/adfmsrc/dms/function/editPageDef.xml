@@ -4,6 +4,28 @@
   <parameters/>
   <executables>
     <variableIterator id="variables"/>
+    <iterator Binds="DmsFunctionView" RangeSize="25"
+              DataControl="DmsModuleDataControl" id="DmsFunctionViewIterator"/>
+    <searchRegion Binds="DmsFunctionViewIterator" Criteria=""
+                  Customizer="oracle.jbo.uicli.binding.JUSearchBindingCustomizer"
+                  id="DmsFunctionViewQuery"/>
   </executables>
-  <bindings/>
+  <bindings>
+    <tree IterBinding="DmsFunctionViewIterator" id="DmsFunctionView">
+      <nodeDefinition DefName="team.epm.dms.view.DmsFunctionView"
+                      Name="DmsFunctionView0">
+        <AttrNames>
+          <Item Value="Name"/>
+          <Item Value="Seq"/>
+          <Item Value="PFunctionId"/>
+          <Item Value="Action"/>
+          <Item Value="Parameters"/>
+          <Item Value="Category"/>
+          <Item Value="Description"/>
+          <Item Value="UpdatedAt"/>
+          <Item Value="UpdatedBy"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+  </bindings>
 </pageDefinition>
