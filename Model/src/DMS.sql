@@ -6,6 +6,8 @@
 
 drop table DCM_COMBINATION cascade constraints;
 
+drop table DCM_COM_VS cascade constraints;
+
 drop table DCM_ERROR cascade constraints;
 
 drop table DCM_JOB cascade constraints;
@@ -17,8 +19,6 @@ drop table DCM_TEMPLATE cascade constraints;
 drop table DCM_TEMPLATE_COLUMN cascade constraints;
 
 drop table DCM_TEMPLATE_COMBINATION cascade constraints;
-
-drop table DCM_TEMPLATE_CTRL cascade constraints;
 
 drop table DCM_TEMPLATE_VALIDATION cascade constraints;
 
@@ -58,13 +58,14 @@ drop table DMS_VALUE_SET cascade constraints;
 create table DCM_COMBINATION 
 (
    ID                   VARCHAR2(32)         not null,
-   VALUE_SET_ID         VARCHAR2(32),
-   VALUE_ID             VARCHAR2(100),
+   NAME          VARCHAR2(100)        not null,
+   CODE              VARCHAR2(26)     not null,
+   LOCALE        VARCHAR2(10)         not null,
    CREATED_AT           DATE,
    UPDATED_AT           DATE,
    UPDATED_BY           VARCHAR2(32),
    CREATED_BY           VARCHAR2(32),
-   constraint PK_DCM_COMBINATION primary key (ID)
+   constraint PK_DCM_COMBINATION primary key (ID,LOCALE)
 );
 
 comment on table DCM_COMBINATION is
@@ -73,11 +74,14 @@ comment on table DCM_COMBINATION is
 comment on column DCM_COMBINATION.ID is
 '标识ID';
 
-comment on column DCM_COMBINATION.VALUE_SET_ID is
-'值集ID';
+comment on column DCM_COMBINATION.NAME is
+'组合名称';
 
-comment on column DCM_COMBINATION.VALUE_ID is
-'值ID';
+comment on column DCM_COMBINATION.CODE is
+'组合编码';
+
+comment on column DCM_COMBINATION.LOCALE is
+'语言编码';
 
 comment on column DCM_COMBINATION.CREATED_AT is
 '创建时间';
@@ -91,115 +95,51 @@ comment on column DCM_COMBINATION.UPDATED_BY is
 comment on column DCM_COMBINATION.CREATED_BY is
 '创建者';
 
+
 /*==============================================================*/
-/* Table: DCM_ERROR                                             */
+/* Table: DCM_COM_VS                                       */
 /*==============================================================*/
-create table DCM_ERROR 
+create table DCM_COM_VS 
 (
-   JOB_ID               VARCHAR2(32)         not null,
-   SHEET_NAME           VARCHAR2(300),
-   ROW_NUM              INTEGER              not null,
-   MSG                  VARCHAR2(3000),
-   "LEVEL"              VARCHAR2(10),
-   LOCALE               VARCHAR2(10)         not null,
-   SHEET_NO             INTEGER              not null,
-   VALIDATION_ID        VARCHAR2(32)         not null,
+   COMBINATION_ID       VARCHAR2(32)         not null,
+   VALUE_SET_ID         VARCHAR2(32)     NOT NULL,
+   SEQ          NUMBER,
+   IS_AUTHORITY         VARCHAR2(10),
    CREATED_AT           DATE,
    UPDATED_AT           DATE,
    UPDATED_BY           VARCHAR2(32),
    CREATED_BY           VARCHAR2(32),
-   constraint PK_DCM_ERROR primary key (JOB_ID, ROW_NUM, LOCALE, SHEET_NO, VALIDATION_ID)
+   constraint PK_DCM_COM_VS primary key (COMBINATION_ID,VALUE_SET_ID)
 );
 
-comment on table DCM_ERROR is
-'错误信息';
+comment on table DCM_COM_VS is
+'组合值集对应关系';
 
-comment on column DCM_ERROR.JOB_ID is
-'任务ID';
-
-comment on column DCM_ERROR.SHEET_NAME is
-'工作簿名称';
-
-comment on column DCM_ERROR.ROW_NUM is
-'行号';
-
-comment on column DCM_ERROR.MSG is
-'错误消息';
-
-comment on column DCM_ERROR."LEVEL" is
-'错误级别';
-
-comment on column DCM_ERROR.LOCALE is
-'语言';
-
-comment on column DCM_ERROR.SHEET_NO is
-'工作簿编号';
-
-comment on column DCM_ERROR.VALIDATION_ID is
-'校验程序ID';
-
-comment on column DCM_ERROR.CREATED_AT is
-'创建时间';
-
-comment on column DCM_ERROR.UPDATED_AT is
-'更新时间';
-
-comment on column DCM_ERROR.UPDATED_BY is
-'更新者';
-
-comment on column DCM_ERROR.CREATED_BY is
-'创建者';
-
-/*==============================================================*/
-/* Table: DCM_JOB                                               */
-/*==============================================================*/
-create table DCM_JOB 
-(
-   ID                   VARCHAR2(32)         not null,
-   TEMPLATE_ID          VARCHAR2(32),
-   COMBINATION_ID       VARCHAR2(32),
-   "MODE"               VARCHAR2(10),
-   FILE_PATH            VARCHAR2(300),
-   CREATED_AT           DATE,
-   UPDATED_AT           DATE,
-   UPDATED_BY           VARCHAR2(32),
-   CREATED_BY           VARCHAR2(32),
-   STATUS               VARCHAR2(10),
-   constraint PK_DCM_JOB primary key (ID)
-);
-
-comment on table DCM_JOB is
-'导入任务';
-
-comment on column DCM_JOB.ID is
-'标识ID';
-
-comment on column DCM_JOB.TEMPLATE_ID is
-'模版ID';
-
-comment on column DCM_JOB.COMBINATION_ID is
+comment on column DCM_COM_VS.COMBINATION_ID is
 '组合ID';
 
-comment on column DCM_JOB."MODE" is
-'导入模式';
+comment on column DCM_COM_VS.VALUE_SET_ID is
+'值集ID';
 
-comment on column DCM_JOB.FILE_PATH is
-'文件路径';
+comment on column DCM_COM_VS.SEQ is
+'序号';
 
-comment on column DCM_JOB.CREATED_AT is
+comment on column DCM_COM_VS.IS_AUTHORITY is
+'是否作权限控制';
+
+
+comment on column DCM_COM_VS.CREATED_AT is
 '创建时间';
 
-comment on column DCM_JOB.UPDATED_AT is
+comment on column DCM_COM_VS.UPDATED_AT is
 '更新时间';
 
-comment on column DCM_JOB.UPDATED_BY is
+comment on column DCM_COM_VS.UPDATED_BY is
 '更新者';
 
-comment on column DCM_JOB.CREATED_BY is
+comment on column DCM_COM_VS.CREATED_BY is
 '创建者';
 
-comment on column DCM_JOB.STATUS is
-'状态';
 
 /*==============================================================*/
 /* Table: DCM_ROLE_TEMPLATE                                     */
@@ -267,6 +207,8 @@ create table DCM_TEMPLATE
    AFTER_PROGRAM        VARCHAR2(200),
    HANDLE_MODE          VARCHAR2(10),
    TEMPLATE_FILE        VARCHAR2(300),
+   DATA_START_LINE    NUMBER,
+   COMBINATION_ID       VARCHAR2(32),
    constraint PK_DCM_TEMPLATE primary key (ID, LOCALE)
 );
 
@@ -326,6 +268,8 @@ comment on column DCM_TEMPLATE.HANDLE_MODE is
 
 comment on column DCM_TEMPLATE.TEMPLATE_FILE is
 '模版文件路径';
+
+
 
 /*==============================================================*/
 /* Table: DCM_TEMPLATE_COLUMN                                   */
@@ -405,7 +349,7 @@ create table DCM_TEMPLATE_COMBINATION
 (
    ID                   VARCHAR2(32)         not null,
    TEMPLATE_ID          VARCHAR2(32),
-   COMBINATION_ID       VARCHAR2(32),
+   COMBINATION_RECORD_ID       VARCHAR2(32),
    STATUS               VARCHAR2(10),
    CREATED_AT           DATE,
    UPDATED_AT           DATE,
@@ -423,8 +367,8 @@ comment on column DCM_TEMPLATE_COMBINATION.ID is
 comment on column DCM_TEMPLATE_COMBINATION.TEMPLATE_ID is
 '模版ID';
 
-comment on column DCM_TEMPLATE_COMBINATION.COMBINATION_ID is
-'组合ID';
+comment on column DCM_TEMPLATE_COMBINATION.COMBINATION_RECORD_ID is
+'组合记录ID';
 
 comment on column DCM_TEMPLATE_COMBINATION.STATUS is
 '状态';
@@ -442,43 +386,113 @@ comment on column DCM_TEMPLATE_COMBINATION.CREATED_BY is
 '创建者';
 
 /*==============================================================*/
-/* Table: DCM_TEMPLATE_CTRL                                     */
+/* Table: DCM_ERROR                                             */
 /*==============================================================*/
-create table DCM_TEMPLATE_CTRL 
+create table DCM_ERROR 
 (
-   ID                   VARCHAR2(32)         not null,
-   VALUE_SET_ID         VARCHAR2(32),
-   SEQ                  INTEGER,
+   JOB_ID               VARCHAR2(32)         not null,
+   SHEET_NAME           VARCHAR2(300),
+   ROW_NUM              INTEGER              not null,
+   MSG                  VARCHAR2(3000),
+   "LEVEL"              VARCHAR2(10),
+   LOCALE               VARCHAR2(10)         not null,
+   SHEET_NO             INTEGER              not null,
+   VALIDATION_ID        VARCHAR2(32)         not null,
    CREATED_AT           DATE,
    UPDATED_AT           DATE,
    UPDATED_BY           VARCHAR2(32),
    CREATED_BY           VARCHAR2(32),
-   constraint PK_DCM_TEMPLATE_CTRL primary key (ID)
+   constraint PK_DCM_ERROR primary key (JOB_ID, ROW_NUM, LOCALE, SHEET_NO, VALIDATION_ID)
 );
 
-comment on table DCM_TEMPLATE_CTRL is
-'模版控制维';
+comment on table DCM_ERROR is
+'错误信息';
 
-comment on column DCM_TEMPLATE_CTRL.ID is
-'标识ID';
+comment on column DCM_ERROR.JOB_ID is
+'任务ID';
 
-comment on column DCM_TEMPLATE_CTRL.VALUE_SET_ID is
-'值集ID';
+comment on column DCM_ERROR.SHEET_NAME is
+'工作簿名称';
 
-comment on column DCM_TEMPLATE_CTRL.SEQ is
-'序号';
+comment on column DCM_ERROR.ROW_NUM is
+'行号';
 
-comment on column DCM_TEMPLATE_CTRL.CREATED_AT is
+comment on column DCM_ERROR.MSG is
+'错误消息';
+
+comment on column DCM_ERROR."LEVEL" is
+'错误级别';
+
+comment on column DCM_ERROR.LOCALE is
+'语言';
+
+comment on column DCM_ERROR.SHEET_NO is
+'工作簿编号';
+
+comment on column DCM_ERROR.VALIDATION_ID is
+'校验程序ID';
+
+comment on column DCM_ERROR.CREATED_AT is
 '创建时间';
 
-comment on column DCM_TEMPLATE_CTRL.UPDATED_AT is
+comment on column DCM_ERROR.UPDATED_AT is
 '更新时间';
 
-comment on column DCM_TEMPLATE_CTRL.UPDATED_BY is
+comment on column DCM_ERROR.UPDATED_BY is
 '更新者';
 
-comment on column DCM_TEMPLATE_CTRL.CREATED_BY is
+comment on column DCM_ERROR.CREATED_BY is
 '创建者';
+
+/*==============================================================*/
+/* Table: DCM_JOB                                               */
+/*==============================================================*/
+create table DCM_JOB 
+(
+   ID                   VARCHAR2(32)         not null,
+   TEMPLATE_ID          VARCHAR2(32),
+   COMBINATION_ID       VARCHAR2(32),
+   "MODE"               VARCHAR2(10),
+   FILE_PATH            VARCHAR2(300),
+   CREATED_AT           DATE,
+   UPDATED_AT           DATE,
+   UPDATED_BY           VARCHAR2(32),
+   CREATED_BY           VARCHAR2(32),
+   STATUS               VARCHAR2(10),
+   constraint PK_DCM_JOB primary key (ID)
+);
+comment on table DCM_JOB is
+'导入任务';
+
+comment on column DCM_JOB.ID is
+'标识ID';
+
+comment on column DCM_JOB.TEMPLATE_ID is
+'模版ID';
+
+comment on column DCM_JOB.COMBINATION_ID is
+'组合ID';
+
+comment on column DCM_JOB."MODE" is
+'导入模式';
+
+comment on column DCM_JOB.FILE_PATH is
+'文件路径';
+
+comment on column DCM_JOB.CREATED_AT is
+'创建时间';
+
+comment on column DCM_JOB.UPDATED_AT is
+'更新时间';
+
+comment on column DCM_JOB.UPDATED_BY is
+'更新者';
+
+comment on column DCM_JOB.CREATED_BY is
+'创建者';
+
+comment on column DCM_JOB.STATUS is
+'状态';
 
 /*==============================================================*/
 /* Table: DCM_TEMPLATE_VALIDATION                               */

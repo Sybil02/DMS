@@ -1,2 +1,98 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.1"></jsp:root>
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.1"
+          xmlns:af="http://xmlns.oracle.com/adf/faces/rich"
+          xmlns:f="http://java.sun.com/jsf/core">
+  <af:panelStretchLayout id="psl1" startWidth="60%">
+    <f:facet name="bottom"/>
+    <f:facet name="center"/>
+    <f:facet name="start">
+      <af:panelCollection id="pc1">
+        <f:facet name="menus"/>
+        <f:facet name="toolbar"/>
+        <f:facet name="statusbar"/>
+        <af:table value="#{bindings.DmsFunctionView.collectionModel}" var="row"
+                  rows="#{bindings.DmsFunctionView.rangeSize}"
+                  emptyText="#{bindings.DmsFunctionView.viewable ? 'No data to display.' : 'Access Denied.'}"
+                  fetchSize="#{bindings.DmsFunctionView.rangeSize}"
+                  rowBandingInterval="0"
+                  filterModel="#{bindings.DmsFunctionViewQuery.queryDescriptor}"
+                  queryListener="#{bindings.DmsFunctionViewQuery.processQuery}"
+                  filterVisible="false" varStatus="vs"
+                  selectedRowKeys="#{bindings.DmsFunctionView.collectionModel.selectedRow}"
+                  selectionListener="#{bindings.DmsFunctionView.collectionModel.makeCurrent}"
+                  rowSelection="single" id="t1" columnStretching="column:c1">
+          <af:column sortProperty="#{bindings.DmsFunctionView.hints.Name.name}"
+                     filterable="true" sortable="true"
+                     headerText="#{bindings.DmsFunctionView.hints.Name.label}"
+                     id="c2">
+            <af:outputText value="#{row.Name}" id="ot4"/>
+          </af:column>
+          <af:column sortProperty="#{bindings.DmsFunctionView.hints.Seq.name}"
+                     filterable="false" sortable="true"
+                     headerText="#{bindings.DmsFunctionView.hints.Seq.label}"
+                     id="c3">
+            <af:outputText value="#{row.Seq}" id="ot2">
+              <af:convertNumber groupingUsed="false"
+                                pattern="#{bindings.DmsFunctionView.hints.Seq.format}"/>
+            </af:outputText>
+          </af:column>
+          <af:column sortProperty="#{bindings.DmsFunctionView.hints.PFunctionId.name}"
+                     filterable="false" sortable="true"
+                     headerText="#{bindings.DmsFunctionView.hints.PFunctionId.label}"
+                     id="c1">
+            <af:outputText value="#{row.PFunctionId}" id="ot9"/>
+          </af:column>
+          <af:column sortProperty="#{bindings.DmsFunctionView.hints.Action.name}"
+                     filterable="false" sortable="true"
+                     headerText="#{bindings.DmsFunctionView.hints.Action.label}"
+                     id="c4">
+            <af:outputText value="#{row.Action}" id="ot8"/>
+          </af:column>
+          <af:column sortProperty="#{bindings.DmsFunctionView.hints.Parameters.name}"
+                     filterable="false" sortable="true"
+                     headerText="#{bindings.DmsFunctionView.hints.Parameters.label}"
+                     id="c9">
+            <af:outputText value="#{row.Parameters}" id="ot5"/>
+          </af:column>
+          <af:column sortProperty="#{bindings.DmsFunctionView.hints.Category.name}"
+                     filterable="false" sortable="true"
+                     headerText="#{bindings.DmsFunctionView.hints.Category.label}"
+                     id="c6">
+            <af:outputText value="#{row.Category}" id="ot1"/>
+          </af:column>
+          <af:column sortProperty="#{bindings.DmsFunctionView.hints.Description.name}"
+                     filterable="false" sortable="true"
+                     headerText="#{bindings.DmsFunctionView.hints.Description.label}"
+                     id="c8">
+            <af:outputText value="#{row.Description}" id="ot6"/>
+          </af:column>
+          <af:column sortProperty="#{bindings.DmsFunctionView.hints.UpdatedAt.name}"
+                     filterable="false" sortable="true"
+                     headerText="#{bindings.DmsFunctionView.hints.UpdatedAt.label}"
+                     id="c5">
+            <f:facet name="filter">
+              <af:inputDate value="#{vs.filterCriteria.UpdatedAt}" id="id1"/>
+            </f:facet>
+            <af:outputText value="#{row.UpdatedAt}" id="ot3">
+              <af:convertDateTime pattern="#{bindings.DmsFunctionView.hints.UpdatedAt.format}"/>
+            </af:outputText>
+          </af:column>
+          <af:column sortProperty="#{bindings.DmsFunctionView.hints.UpdatedBy.name}"
+                     filterable="false" sortable="true"
+                     headerText="#{bindings.DmsFunctionView.hints.UpdatedBy.label}"
+                     id="c7">
+            <af:selectOneChoice value="#{row.bindings.UpdatedBy.inputValue}"
+                                label="#{row.bindings.UpdatedBy.label}"
+                                required="#{bindings.DmsFunctionView.hints.UpdatedBy.mandatory}"
+                                shortDesc="#{bindings.DmsFunctionView.hints.UpdatedBy.tooltip}"
+                                id="soc1" readOnly="true">
+              <f:selectItems value="#{row.bindings.UpdatedBy.items}" id="si1"/>
+            </af:selectOneChoice>
+          </af:column>
+        </af:table>
+      </af:panelCollection>
+    </f:facet>
+    <f:facet name="end"/>
+    <f:facet name="top"/>
+  </af:panelStretchLayout>
+</jsp:root>

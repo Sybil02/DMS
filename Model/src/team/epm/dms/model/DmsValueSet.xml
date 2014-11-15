@@ -111,6 +111,10 @@
       <SchemaBasedProperties>
         <LABEL
           ResId="createdAt"/>
+        <FMT_FORMATTER
+          ResId="team.epm.dms.model.DmsValueSet.CreatedAt_FMT_FORMATTER"/>
+        <FMT_FORMAT
+          ResId="team.epm.dms.model.DmsValueSet.CreatedAt_FMT_FORMAT"/>
       </SchemaBasedProperties>
     </Properties>
   </Attribute>
@@ -129,6 +133,10 @@
       <SchemaBasedProperties>
         <LABEL
           ResId="updatedAt"/>
+        <FMT_FORMATTER
+          ResId="team.epm.dms.model.DmsValueSet.UpdatedAt_FMT_FORMATTER"/>
+        <FMT_FORMAT
+          ResId="team.epm.dms.model.DmsValueSet.UpdatedAt_FMT_FORMAT"/>
       </SchemaBasedProperties>
     </Properties>
   </Attribute>

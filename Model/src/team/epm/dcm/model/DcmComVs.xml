@@ -3,12 +3,12 @@
 <!---->
 <Entity
   xmlns="http://xmlns.oracle.com/bc4j"
-  Name="DcmTemplateCtrl"
+  Name="DcmComVs"
   Version="11.1.1.64.93"
   InheritPersonalization="true"
   DBObjectType="table"
-  DBObjectName="DCM_TEMPLATE_CTRL"
-  AliasName="DcmTemplateCtrl"
+  DBObjectName="DCM_COM_VS"
+  AliasName="DcmComVs"
   BindingStyle="OracleName"
   UseGlueCode="false">
   <DesignTime>
@@ -16,14 +16,14 @@
     <AttrArray Name="_publishEvents"/>
   </DesignTime>
   <Attribute
-    Name="Id"
+    Name="CombinationId"
     IsNotNull="true"
     Precision="32"
-    ColumnName="ID"
+    ColumnName="COMBINATION_ID"
     SQLType="VARCHAR"
     Type="java.lang.String"
     ColumnType="VARCHAR2"
-    TableName="DCM_TEMPLATE_CTRL"
+    TableName="DCM_COM_VS"
     PrimaryKey="true">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="32"/>
@@ -31,27 +31,39 @@
   </Attribute>
   <Attribute
     Name="ValueSetId"
+    IsNotNull="true"
     Precision="32"
     ColumnName="VALUE_SET_ID"
     SQLType="VARCHAR"
     Type="java.lang.String"
     ColumnType="VARCHAR2"
-    TableName="DCM_TEMPLATE_CTRL">
+    TableName="DCM_COM_VS"
+    PrimaryKey="true">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="32"/>
     </DesignTime>
   </Attribute>
   <Attribute
     Name="Seq"
-    Precision="38"
-    Scale="0"
     ColumnName="SEQ"
     SQLType="NUMERIC"
     Type="oracle.jbo.domain.Number"
     ColumnType="NUMBER"
-    TableName="DCM_TEMPLATE_CTRL">
+    TableName="DCM_COM_VS">
     <DesignTime>
-      <Attr Name="_DisplaySize" Value="39"/>
+      <Attr Name="_DisplaySize" Value="22"/>
+    </DesignTime>
+  </Attribute>
+  <Attribute
+    Name="IsAuthority"
+    Precision="10"
+    ColumnName="IS_AUTHORITY"
+    SQLType="VARCHAR"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    TableName="DCM_COM_VS">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="10"/>
     </DesignTime>
   </Attribute>
   <Attribute
@@ -60,7 +72,7 @@
     SQLType="TIMESTAMP"
     Type="oracle.jbo.domain.Date"
     ColumnType="DATE"
-    TableName="DCM_TEMPLATE_CTRL">
+    TableName="DCM_COM_VS">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="7"/>
     </DesignTime>
@@ -71,7 +83,7 @@
     SQLType="TIMESTAMP"
     Type="oracle.jbo.domain.Date"
     ColumnType="DATE"
-    TableName="DCM_TEMPLATE_CTRL">
+    TableName="DCM_COM_VS">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="7"/>
     </DesignTime>
@@ -83,7 +95,7 @@
     SQLType="VARCHAR"
     Type="java.lang.String"
     ColumnType="VARCHAR2"
-    TableName="DCM_TEMPLATE_CTRL">
+    TableName="DCM_COM_VS">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="32"/>
     </DesignTime>
@@ -95,30 +107,42 @@
     SQLType="VARCHAR"
     Type="java.lang.String"
     ColumnType="VARCHAR2"
-    TableName="DCM_TEMPLATE_CTRL">
+    TableName="DCM_COM_VS">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="32"/>
     </DesignTime>
   </Attribute>
   <Key
-    Name="PkDcmTemplateCtrl"
+    Name="PkDcmComVs"
     PrimaryKey="true">
     <DesignTime>
-      <Attr Name="_DBObjectName" Value="PK_DCM_TEMPLATE_CTRL"/>
+      <Attr Name="_DBObjectName" Value="PK_DCM_COM_VS"/>
     </DesignTime>
     <AttrArray Name="Attributes">
-      <Item Value="team.epm.dcm.model.DcmTemplateCtrl.Id"/>
+      <Item Value="team.epm.dcm.model.DcmComVs.CombinationId"/>
+      <Item Value="team.epm.dcm.model.DcmComVs.ValueSetId"/>
     </AttrArray>
   </Key>
   <Key
-    Name="SysC007069">
+    Name="SysC007212">
     <DesignTime>
-      <Attr Name="_DBObjectName" Value="SYS_C007069"/>
-      <Attr Name="_checkCondition" Value='"ID" IS NOT NULL'/>
+      <Attr Name="_DBObjectName" Value="SYS_C007212"/>
+      <Attr Name="_checkCondition" Value='"COMBINATION_ID" IS NOT NULL'/>
       <Attr Name="_isCheck" Value="true"/>
     </DesignTime>
     <AttrArray Name="Attributes">
-      <Item Value="team.epm.dcm.model.DcmTemplateCtrl.Id"/>
+      <Item Value="team.epm.dcm.model.DcmComVs.CombinationId"/>
+    </AttrArray>
+  </Key>
+  <Key
+    Name="SysC007213">
+    <DesignTime>
+      <Attr Name="_DBObjectName" Value="SYS_C007213"/>
+      <Attr Name="_checkCondition" Value='"VALUE_SET_ID" IS NOT NULL'/>
+      <Attr Name="_isCheck" Value="true"/>
+    </DesignTime>
+    <AttrArray Name="Attributes">
+      <Item Value="team.epm.dcm.model.DcmComVs.ValueSetId"/>
     </AttrArray>
   </Key>
 </Entity>

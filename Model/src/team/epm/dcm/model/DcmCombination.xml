@@ -30,27 +30,43 @@
     </DesignTime>
   </Attribute>
   <Attribute
-    Name="ValueSetId"
-    Precision="32"
-    ColumnName="VALUE_SET_ID"
-    SQLType="VARCHAR"
-    Type="java.lang.String"
-    ColumnType="VARCHAR2"
-    TableName="DCM_COMBINATION">
-    <DesignTime>
-      <Attr Name="_DisplaySize" Value="32"/>
-    </DesignTime>
-  </Attribute>
-  <Attribute
-    Name="ValueId"
+    Name="Name"
+    IsNotNull="true"
     Precision="100"
-    ColumnName="VALUE_ID"
+    ColumnName="NAME"
     SQLType="VARCHAR"
     Type="java.lang.String"
     ColumnType="VARCHAR2"
     TableName="DCM_COMBINATION">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="100"/>
+    </DesignTime>
+  </Attribute>
+  <Attribute
+    Name="Code"
+    IsNotNull="true"
+    Precision="26"
+    ColumnName="CODE"
+    SQLType="VARCHAR"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    TableName="DCM_COMBINATION">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="26"/>
+    </DesignTime>
+  </Attribute>
+  <Attribute
+    Name="Locale"
+    IsNotNull="true"
+    Precision="10"
+    ColumnName="LOCALE"
+    SQLType="VARCHAR"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    TableName="DCM_COMBINATION"
+    PrimaryKey="true">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="10"/>
     </DesignTime>
   </Attribute>
   <Attribute
@@ -107,17 +123,51 @@
     </DesignTime>
     <AttrArray Name="Attributes">
       <Item Value="team.epm.dcm.model.DcmCombination.Id"/>
+      <Item Value="team.epm.dcm.model.DcmCombination.Locale"/>
     </AttrArray>
   </Key>
   <Key
-    Name="SysC007049">
+    Name="SysC007207">
     <DesignTime>
-      <Attr Name="_DBObjectName" Value="SYS_C007049"/>
+      <Attr Name="_DBObjectName" Value="SYS_C007207"/>
       <Attr Name="_checkCondition" Value='"ID" IS NOT NULL'/>
       <Attr Name="_isCheck" Value="true"/>
     </DesignTime>
     <AttrArray Name="Attributes">
       <Item Value="team.epm.dcm.model.DcmCombination.Id"/>
+    </AttrArray>
+  </Key>
+  <Key
+    Name="SysC007208">
+    <DesignTime>
+      <Attr Name="_DBObjectName" Value="SYS_C007208"/>
+      <Attr Name="_checkCondition" Value='"NAME" IS NOT NULL'/>
+      <Attr Name="_isCheck" Value="true"/>
+    </DesignTime>
+    <AttrArray Name="Attributes">
+      <Item Value="team.epm.dcm.model.DcmCombination.Name"/>
+    </AttrArray>
+  </Key>
+  <Key
+    Name="SysC007209">
+    <DesignTime>
+      <Attr Name="_DBObjectName" Value="SYS_C007209"/>
+      <Attr Name="_checkCondition" Value='"CODE" IS NOT NULL'/>
+      <Attr Name="_isCheck" Value="true"/>
+    </DesignTime>
+    <AttrArray Name="Attributes">
+      <Item Value="team.epm.dcm.model.DcmCombination.Code"/>
+    </AttrArray>
+  </Key>
+  <Key
+    Name="SysC007210">
+    <DesignTime>
+      <Attr Name="_DBObjectName" Value="SYS_C007210"/>
+      <Attr Name="_checkCondition" Value='"LOCALE" IS NOT NULL'/>
+      <Attr Name="_isCheck" Value="true"/>
+    </DesignTime>
+    <AttrArray Name="Attributes">
+      <Item Value="team.epm.dcm.model.DcmCombination.Locale"/>
     </AttrArray>
   </Key>
 </Entity>

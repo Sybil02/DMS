@@ -24,6 +24,14 @@
     <page path="/dms/function/authority.jsff" usageId="__authorityPageDef1"/>
     <page path="/dms/role/role_edit.jsff" usageId="__role_editPageDef"/>
     <page path="/dms/role/role_assign.jsff" usageId="__role_assignPageDef"/>
+    <page path="/dcm/template/template_edit.jsff"
+          usageId="__template_editPageDef"/>
+    <page path="/dcm/template/template_authority.jsff"
+          usageId="__template_authorityPageDef"/>
+    <page path="/dcm/combinantion/combination_edit.jsff"
+          usageId="__combination_editPageDef"/>
+    <page path="/dcm/validation/validation_edit.jsff"
+          usageId="__validation_editPageDef"/>
   </pageMap>
   <pageDefinitionUsages>
     <page id="__dynamicTabShellPageDef"
@@ -43,6 +51,13 @@
     <page id="__authorityPageDef1" path="dms.function.authorityPageDef"/>
     <page id="__role_editPageDef" path="dms.role.role_editPageDef"/>
     <page id="__role_assignPageDef" path="dms.role.role_assignPageDef"/>
+    <page id="__template_editPageDef" path="dcm.template.template_editPageDef"/>
+    <page id="__template_authorityPageDef"
+          path="dcm.template.template_authorityPageDef"/>
+    <page id="__combination_editPageDef"
+          path="dcm.combinantion.combination_editPageDef"/>
+    <page id="__validation_editPageDef"
+          path="dcm.validation.validation_editPageDef"/>
   </pageDefinitionUsages>
   <dataControlUsages>
     <BC4JDataControl id="DmsModuleDataControl" Package="team.epm.module"

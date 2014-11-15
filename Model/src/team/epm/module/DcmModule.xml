@@ -13,6 +13,9 @@
     <Attr Name="_isCodegen" Value="true"/>
   </DesignTime>
   <ViewUsage
+    Name="DcmComVsView"
+    ViewObjectName="team.epm.dcm.view.DcmComVsView"/>
+  <ViewUsage
     Name="DcmCombinationView"
     ViewObjectName="team.epm.dcm.view.DcmCombinationView"/>
   <ViewUsage
@@ -30,9 +33,6 @@
   <ViewUsage
     Name="DcmTemplateCombinationView"
     ViewObjectName="team.epm.dcm.view.DcmTemplateCombinationView"/>
-  <ViewUsage
-    Name="DcmTemplateCtrlView"
-    ViewObjectName="team.epm.dcm.view.DcmTemplateCtrlView"/>
   <ViewUsage
     Name="DcmTemplateValidationView"
     ViewObjectName="team.epm.dcm.view.DcmTemplateValidationView"/>

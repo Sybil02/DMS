@@ -7,8 +7,9 @@
   Version="11.1.1.64.93"
   InheritPersonalization="true"
   SelectList="DcmCombination.ID, 
-       DcmCombination.VALUE_SET_ID, 
-       DcmCombination.VALUE_ID, 
+       DcmCombination.NAME, 
+       DcmCombination.CODE, 
+       DcmCombination.LOCALE, 
        DcmCombination.CREATED_AT, 
        DcmCombination.UPDATED_AT, 
        DcmCombination.UPDATED_BY, 
@@ -32,17 +33,26 @@
     EntityUsage="DcmCombination"
     AliasName="ID"/>
   <ViewAttribute
-    Name="ValueSetId"
+    Name="Name"
+    IsNotNull="true"
     PrecisionRule="true"
-    EntityAttrName="ValueSetId"
+    EntityAttrName="Name"
     EntityUsage="DcmCombination"
-    AliasName="VALUE_SET_ID"/>
+    AliasName="NAME"/>
   <ViewAttribute
-    Name="ValueId"
+    Name="Code"
+    IsNotNull="true"
     PrecisionRule="true"
-    EntityAttrName="ValueId"
+    EntityAttrName="Code"
     EntityUsage="DcmCombination"
-    AliasName="VALUE_ID"/>
+    AliasName="CODE"/>
+  <ViewAttribute
+    Name="Locale"
+    IsNotNull="true"
+    PrecisionRule="true"
+    EntityAttrName="Locale"
+    EntityUsage="DcmCombination"
+    AliasName="LOCALE"/>
   <ViewAttribute
     Name="CreatedAt"
     PrecisionRule="true"

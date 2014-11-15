@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<adfc-config xmlns="http://xmlns.oracle.com/adf/controller" version="1.2">
+  <task-flow-definition id="template_authority_tsk">
+    <default-activity id="__3">template_authority</default-activity>
+    <transaction id="__1">
+      <new-transaction/>
+    </transaction>
+    <data-control-scope id="__2">
+      <isolated/>
+    </data-control-scope>
+    <view id="template_authority">
+      <page>/dcm/template/template_authority.jsff</page>
+    </view>
+    <use-page-fragments/>
+  </task-flow-definition>
+</adfc-config>

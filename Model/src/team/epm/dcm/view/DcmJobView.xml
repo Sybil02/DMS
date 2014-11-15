@@ -6,27 +6,24 @@
   Name="DcmJobView"
   Version="11.1.1.64.93"
   InheritPersonalization="true"
-  BindingStyle="OracleName"
-  CustomQuery="true"
-  PageIterMode="Full"
-  UseGlueCode="false">
-  <DesignTime>
-    <Attr Name="_codeGenFlag2" Value="Access|VarAccess"/>
-    <Attr Name="_isExpertMode" Value="true"/>
-  </DesignTime>
-  <SQLQuery>
-    <![CDATA[SELECT DcmJob.ID, 
+  SelectList="DcmJob.ID, 
        DcmJob.TEMPLATE_ID, 
        DcmJob.COMBINATION_ID, 
-       DcmJob."MODE", 
+       DcmJob.MODE, 
        DcmJob.FILE_PATH, 
        DcmJob.CREATED_AT, 
        DcmJob.UPDATED_AT, 
        DcmJob.UPDATED_BY, 
        DcmJob.CREATED_BY, 
-       DcmJob.STATUS
-FROM DCM_JOB DcmJob]]>
-  </SQLQuery>
+       DcmJob.STATUS"
+  FromList="DCM_JOB DcmJob"
+  BindingStyle="OracleName"
+  CustomQuery="false"
+  PageIterMode="Full"
+  UseGlueCode="false">
+  <DesignTime>
+    <Attr Name="_codeGenFlag2" Value="Access|VarAccess"/>
+  </DesignTime>
   <EntityUsage
     Name="DcmJob"
     Entity="team.epm.dcm.model.DcmJob"/>

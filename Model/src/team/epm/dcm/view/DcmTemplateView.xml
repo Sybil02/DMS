@@ -23,7 +23,9 @@
        DcmTemplate.HANDLE_PROGRAM, 
        DcmTemplate.AFTER_PROGRAM, 
        DcmTemplate.HANDLE_MODE, 
-       DcmTemplate.TEMPLATE_FILE"
+       DcmTemplate.TEMPLATE_FILE, 
+       DcmTemplate.DATA_START_LINE, 
+       DcmTemplate.COMBINATION_ID"
   FromList="DCM_TEMPLATE DcmTemplate"
   BindingStyle="OracleName"
   CustomQuery="false"
@@ -145,4 +147,16 @@
     EntityAttrName="TemplateFile"
     EntityUsage="DcmTemplate"
     AliasName="TEMPLATE_FILE"/>
+  <ViewAttribute
+    Name="DataStartLine"
+    PrecisionRule="true"
+    EntityAttrName="DataStartLine"
+    EntityUsage="DcmTemplate"
+    AliasName="DATA_START_LINE"/>
+  <ViewAttribute
+    Name="CombinationId"
+    PrecisionRule="true"
+    EntityAttrName="CombinationId"
+    EntityUsage="DcmTemplate"
+    AliasName="COMBINATION_ID"/>
 </ViewObject>
