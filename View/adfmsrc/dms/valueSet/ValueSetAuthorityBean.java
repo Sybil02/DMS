@@ -51,8 +51,11 @@ public class ValueSetAuthorityBean {
 
     public List getAllValue() {
         
-        
-        String tablename = (String)getCurValueSet().getAttribute("Source");
+        Row cur_valueSet=getCurValueSet();
+        if(cur_valueSet==null){
+            return allItems;
+        }                        
+        String tablename = (String)cur_valueSet.getAttribute("Source");
         String roleId=getCurRoleId();
         DmsModuleImpl am = (DmsModuleImpl)ADFUtils.getApplicationModuleForDataControl("DmsModuleDataControl");
         List<Row> valueList= am.getValuesFromValueSet(tablename,ADFContext.getCurrent().getLocale().toString());

@@ -1,5 +1,10 @@
 package team.epm.module;
 
+import java.sql.PreparedStatement;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -229,6 +234,7 @@ public class DmsModuleImpl extends ApplicationModuleImpl {
         view.defineNamedWhereClauseParam("ValueSet_Id", null, null);
         view.setNamedWhereClauseParam("Role_Id", roleId);
         view.setNamedWhereClauseParam("ValueSet_Id", valueSetId);
+        System.out.println(view.getQuery());
         view.executeQuery();
         RowSet rows = view.getRowSet();
         while (rows.hasNext()) {
@@ -269,30 +275,23 @@ public class DmsModuleImpl extends ApplicationModuleImpl {
     public List<String> getFunctionIdsByRoleId(String roleId, String locale) {
         List<String> functionList = new ArrayList<String>();
         String sql =
-            "select Dms_Function.id, Dms_Function.name " + " from Dms_Function , Dms_Role_Function where " +
-          "Dms_Function.id = Dms_Role_Function.function_id " + " and Dms_Role_Function.role_id ='"+roleId+    
-            "' and Dms_Function.locale ='"+locale+"'";
-        
-        ViewObject vo = this.findViewObject("FunctionsBySQL");
-        
-        if (vo != null) {
-            vo.remove();
-        }
-        ViewObject functionsVO =
-            this.createViewObjectFromQueryStmt("FunctionsBySQL", sql);
-//        functionsVO.setWhereClause("Dms_Function.id = Dms_Role_Function.function_id " + " and Dms_Role_Function.role_id ='"+roleId+
-//            "' and Dms_Function.locale ='"+locale+"'");
-//        functionsVO.setWhereClauseParam(1,roleId);
-//        functionsVO.setWhereClauseParam(2,locale);
-//        functionsVO.defineNamedWhereClauseParam("Role_Id", "12123", null);
-//        functionsVO.defineNamedWhereClauseParam("locale", null, null);
-//        functionsVO.setNamedWhereClauseParam("Role_Id", roleId);
-//        functionsVO.setNamedWhereClauseParam("locale", locale);
-        System.out.println(functionsVO.getQuery());
-        functionsVO.executeQuery();
-        RowSet rows = functionsVO.getRowSet();
-        while (rows.hasNext()) {
-            functionList.add((String)rows.next().getAttribute("FunctionId"));
+            "select t.id  from Dms_Function t, Dms_Role_Function t1 "+
+            "where "+
+          "t.id = t1.function_id " + " and t1.role_id =? "+    
+            " and t.locale =?";
+        PreparedStatement st=this.getDBTransaction().createPreparedStatement(sql, 0);
+        ResultSet rs = null;
+        try {
+            st.setString(1, roleId);
+            st.setString(2,locale);
+            rs=st.executeQuery();
+            while (rs.next()) {
+            functionList.add(rs.getString("ID"));
+            System.out.println(rs.getString("ID"));
+            }
+            st.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         return functionList;
     }
