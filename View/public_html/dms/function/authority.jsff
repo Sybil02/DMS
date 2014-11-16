@@ -14,8 +14,9 @@
                           leadingHeader="#{viewBundle['dms.function.available_list']}"
                           trailingHeader="#{viewBundle['dms.function.selected_list']}"
                           binding="#{backingBeanScope.FunctionAuthorityBean.selectShuttle}"
-                          valueChangeListener="#{backingBeanScope.FunctionAuthorityBean.selectListener}">
-      <f:selectItems value="#{bindings.DmsFunctionView.items}" id="si2"/>
+                          valueChangeListener="#{backingBeanScope.FunctionAuthorityBean.selectListener}"
+                          autoSubmit="true">
+      <f:selectItems value="#{backingBeanScope.FunctionAuthorityBean.allItems}" id="si2"/>
     </af:selectManyShuttle>
     </f:facet>
     <f:facet name="start">

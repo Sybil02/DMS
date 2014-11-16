@@ -37,8 +37,8 @@ public class FunctionAuthority {
         return functionList;
     }
 
-    public List getAllValue() {
-
+    public List getAllItems() {
+        allItems=ADFUtils.selectItemsForIterator("DmsFunctionViewIterator","Id","Name");
         return allItems;
     }
 
