@@ -61,10 +61,12 @@
     SQLType="TIMESTAMP"
     Type="oracle.jbo.domain.Date"
     ColumnType="DATE"
-    TableName="DMS_ROLE_FUNCTION">
+    TableName="DMS_ROLE_FUNCTION"
+    IsUpdateable="while_insert">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="7"/>
     </DesignTime>
+    <TransientExpression><![CDATA[adf.currentDateTime]]></TransientExpression>
     <Properties>
       <SchemaBasedProperties>
         <FMT_FORMATTER
@@ -84,6 +86,7 @@
     <DesignTime>
       <Attr Name="_DisplaySize" Value="7"/>
     </DesignTime>
+    <TransientExpression><![CDATA[adf.currentDateTime]]></TransientExpression>
     <Properties>
       <SchemaBasedProperties>
         <FMT_FORMATTER
@@ -104,6 +107,7 @@
     <DesignTime>
       <Attr Name="_DisplaySize" Value="32"/>
     </DesignTime>
+    <TransientExpression><![CDATA[adf.userSession.userData.userId]]></TransientExpression>
   </Attribute>
   <Attribute
     Name="CreatedBy"
@@ -112,10 +116,12 @@
     SQLType="VARCHAR"
     Type="java.lang.String"
     ColumnType="VARCHAR2"
-    TableName="DMS_ROLE_FUNCTION">
+    TableName="DMS_ROLE_FUNCTION"
+    IsUpdateable="while_insert">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="32"/>
     </DesignTime>
+    <TransientExpression><![CDATA[adf.userSession.userData.userId]]></TransientExpression>
   </Attribute>
   <Key
     Name="PkDmsRoleFunction"
