@@ -234,7 +234,6 @@ public class DmsModuleImpl extends ApplicationModuleImpl {
         view.defineNamedWhereClauseParam("ValueSet_Id", null, null);
         view.setNamedWhereClauseParam("Role_Id", roleId);
         view.setNamedWhereClauseParam("ValueSet_Id", valueSetId);
-        System.out.println(view.getQuery());
         view.executeQuery();
         RowSet rows = view.getRowSet();
         while (rows.hasNext()) {
@@ -287,7 +286,6 @@ public class DmsModuleImpl extends ApplicationModuleImpl {
             rs=st.executeQuery();
             while (rs.next()) {
             functionList.add(rs.getString("ID"));
-            System.out.println(rs.getString("ID"));
             }
             st.close();
         } catch (SQLException e) {
