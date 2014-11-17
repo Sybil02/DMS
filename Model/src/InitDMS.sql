@@ -52,7 +52,7 @@ truncate table dms_function;
 insert into dms_function(id,locale,name,created_at,updated_at,updated_by,created_by,action,category,seq,p_function_id)
 values('100000','zh_CN','主页',sysdate,sysdate,'10000','10000','index','通用',100000,null);
 insert into dms_function(id,locale,name,created_at,updated_at,updated_by,created_by,action,category,seq,p_function_id)
-values('100000','en','Home',sysdate,sysdate,'10000','10000','GoHome','index',100000,null);
+values('100000','en','Home',sysdate,sysdate,'10000','10000','index','General',100000,null);
 
 insert into dms_function(id,locale,name,created_at,updated_at,updated_by,created_by,action,category,seq,p_function_id)
 values('101000','zh_CN','设置',sysdate,sysdate,'10000','10000','settings','设置',101000,null);
@@ -129,6 +129,11 @@ insert into dms_function(id,locale,name,created_at,updated_at,updated_by,created
 values('101040','zh_CN','校验程序维护',sysdate,sysdate,'10000','10000','/WEB-INF/dcmValidation/validation_edit_tsk.xml#validation_edit_tsk','校验程序维护',101040,null);
 insert into dms_function(id,locale,name,created_at,updated_at,updated_by,created_by,action,category,seq,p_function_id)
 values('101040','en','Validator Maintain',sysdate,sysdate,'10000','10000','/WEB-INF/dcmValidation/validation_edit_tsk.xml#validation_edit_tsk','Validator Maintain',101040,null);
+
+insert into dms_function(id,locale,name,created_at,updated_at,updated_by,created_by,action,category,seq,p_function_id)
+values('102000','zh_CN','数据采集',sysdate,sysdate,'10000','10000','dcmIndex','通用',100000,null);
+insert into dms_function(id,locale,name,created_at,updated_at,updated_by,created_by,action,category,seq,p_function_id)
+values('102000','en','Data Collection',sysdate,sysdate,'10000','10000','dcmIndex','General',100000,null);
 /*==============================================================*/
 /* 初始化菜单                                                     */
 /*==============================================================*/
@@ -243,3 +248,8 @@ insert into dms_menu(id,locale,seq,label,enable_flag,p_id,function_id,created_at
 values('101065','zh_CN',101065,'校验程序管理','Y','101000','101040',sysdate,sysdate,'10000','10000');
 insert into dms_menu(id,locale,seq,label,enable_flag,p_id,function_id,created_at,updated_at,updated_by,created_by)
 values('101065','en',101065,'Validator Manage','Y','101000','101040',sysdate,sysdate,'10000','10000');
+
+insert into dms_menu(id,locale,seq,label,enable_flag,p_id,function_id,created_at,updated_at,updated_by,created_by)
+values('102000','zh_CN',100001,'数据采集','Y',null,'102000',sysdate,sysdate,'10000','10000');
+insert into dms_menu(id,locale,seq,label,enable_flag,p_id,function_id,created_at,updated_at,updated_by,created_by)
+values('102000','en',100001,'Data Collection','Y',null,'102000',sysdate,sysdate,'10000','10000');

@@ -104,4 +104,38 @@
       <property
          name="sdm:polyPoints">B50,552.0,171.84473,551.5,235.0459,T50</property>
    </ControlFlowCase>
+   <View
+      id="View14">
+      <property
+         name="activityId">dcmIndex</property>
+      <property
+         name="page">/dcm/index.jspx</property>
+      <property
+         name="description">&lt;html>&lt;p>&lt;b>dcmIndex&lt;/b>&lt;/p>&lt;p>Activity Type:  View&lt;/p></property>
+      <property
+         name="exceptionHandler">false</property>
+      <property
+         name="y">287.09766</property>
+      <property
+         name="x">730.5</property>
+   </View>
+   <WildcardControlFlowRule
+      id="WildcardControlFlowRule15">
+      <property
+         name="activityId">*</property>
+      <property
+         name="y">131.59766</property>
+      <property
+         name="x">730.0</property>
+   </WildcardControlFlowRule>
+   <ControlFlowCase
+      islink="true"
+      id="ControlFlowCase16"
+      from="WildcardControlFlowRule15"
+      to="View14">
+      <property
+         name="fromOutcome">GoDcmIndex</property>
+      <property
+         name="sdm:polyPoints">B50,730.0,174.24707,730.5,232.74707,T50</property>
+   </ControlFlowCase>
 </SDM>

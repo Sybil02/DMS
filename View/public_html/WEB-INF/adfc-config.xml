@@ -9,6 +9,9 @@
   <view id="settings">
     <page>/settings.jspx</page>
   </view>
+  <view id="dcmIndex">
+    <page>/dcm/index.jspx</page>
+  </view>
   <control-flow-rule id="__17">
     <from-activity-id id="__18">*</from-activity-id>
     <control-flow-case id="__20">
@@ -28,6 +31,13 @@
     <control-flow-case id="__16">
       <from-outcome id="__26">GoSetting</from-outcome>
       <to-activity-id id="__15">settings</to-activity-id>
+    </control-flow-case>
+  </control-flow-rule>
+  <control-flow-rule id="__36">
+    <from-activity-id id="__37">*</from-activity-id>
+    <control-flow-case id="__39">
+      <from-outcome id="__40">GoDcmIndex</from-outcome>
+      <to-activity-id id="__38">dcmIndex</to-activity-id>
     </control-flow-case>
   </control-flow-rule>
   <managed-bean id="__1">
