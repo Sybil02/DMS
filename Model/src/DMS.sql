@@ -14,6 +14,8 @@ drop table DCM_JOB cascade constraints;
 
 drop table DCM_ROLE_TEMPLATE cascade constraints;
 
+drop table DCM_TEMPLATE_CAT cascade constraints;
+
 drop table DCM_TEMPLATE cascade constraints;
 
 drop table DCM_TEMPLATE_COLUMN cascade constraints;
@@ -140,6 +142,48 @@ comment on column DCM_COM_VS.UPDATED_BY is
 comment on column DCM_COM_VS.CREATED_BY is
 '创建者';
 
+/*==============================================================*/
+/* Table: DCM_TEMPLATE_CAT                                       */
+/*==============================================================*/
+create table DCM_TEMPLATE_CAT
+(
+   ID                   VARCHAR2(32)         not null,
+   NAME                 VARCHAR2(100)        not null,
+   LOCALE               VARCHAR2(10)         not null,
+   P_ID                 VARCHAR2(32),
+   CREATED_AT           DATE,
+   UPDATED_AT           DATE,
+   UPDATED_BY           VARCHAR2(32),
+   CREATED_BY           VARCHAR2(32),
+   constraint PK_DCM_TEMPLATE_CAT primary key (ID,LOCALE)
+);
+
+comment on table DCM_TEMPLATE_CAT is
+'模版分类';
+
+comment on column DCM_TEMPLATE_CAT.ID is
+'标识ID';
+
+comment on column DCM_TEMPLATE_CAT.NAME is
+'分类名称';
+
+comment on column DCM_TEMPLATE_CAT.P_ID is
+'父标识ID';
+
+comment on column DCM_TEMPLATE_CAT.LOCALE is
+'语言编码';
+
+comment on column DCM_TEMPLATE_CAT.CREATED_AT is
+'创建时间';
+
+comment on column DCM_TEMPLATE_CAT.UPDATED_AT is
+'更新时间';
+
+comment on column DCM_TEMPLATE_CAT.UPDATED_BY is
+'更新者';
+
+comment on column DCM_TEMPLATE_CAT.CREATED_BY is
+'创建者';
 
 /*==============================================================*/
 /* Table: DCM_ROLE_TEMPLATE                                     */
@@ -209,6 +253,7 @@ create table DCM_TEMPLATE
    TEMPLATE_FILE        VARCHAR2(300),
    DATA_START_LINE    NUMBER,
    COMBINATION_ID       VARCHAR2(32),
+   CATEGORY_ID          VARCHAR2(32),
    constraint PK_DCM_TEMPLATE primary key (ID, LOCALE)
 );
 
@@ -269,7 +314,14 @@ comment on column DCM_TEMPLATE.HANDLE_MODE is
 comment on column DCM_TEMPLATE.TEMPLATE_FILE is
 '模版文件路径';
 
+comment on column DCM_TEMPLATE.DATA_START_LINE is
+'数据起始行';
 
+comment on column DCM_TEMPLATE.COMBINATION_ID is
+'组合ID';
+
+comment on column DCM_TEMPLATE.CATEGORY_ID is
+'模版分类ID';
 
 /*==============================================================*/
 /* Table: DCM_TEMPLATE_COLUMN                                   */
