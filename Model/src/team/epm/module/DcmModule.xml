@@ -42,4 +42,7 @@
   <ViewUsage
     Name="DcmValidationView"
     ViewObjectName="team.epm.dcm.view.DcmValidationView"/>
+  <ViewUsage
+    Name="DcmTemplateCatView"
+    ViewObjectName="team.epm.dcm.view.DcmTemplateCatView"/>
 </AppModule>

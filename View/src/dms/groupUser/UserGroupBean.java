@@ -65,7 +65,7 @@ public class UserGroupBean {
         if(newValue==null){
                 for(int i:oldValue){
                    Row row= userIter.getRowAtRangeIndex(i);
-                   view.deleteGroupUserByGroupIdAndUserId(row.getAttribute("Id")+"", 
+                   view.deleteGroupUserByGroupIdAndUserId(ObjectUtils.toString(row.getAttribute("Id")), 
                                                            this.getCurGroupId());
                 }
             view.getApplicationModule().getTransaction().commit();
@@ -97,7 +97,7 @@ public class UserGroupBean {
         for(Integer i:oldValue){
             if (!newList.contains(i)){
                 Row row= userIter.getRowAtRangeIndex(i);
-                view.deleteGroupUserByGroupIdAndUserId(row.getAttribute("Id")+"", 
+                view.deleteGroupUserByGroupIdAndUserId(ObjectUtils.toString(row.getAttribute("Id")), 
                                                         this.getCurGroupId());
             }
         }

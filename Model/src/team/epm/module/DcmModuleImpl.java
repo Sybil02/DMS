@@ -107,4 +107,12 @@ public class DcmModuleImpl extends ApplicationModuleImpl {
     public ViewObjectImpl getDcmValidationView() {
         return (ViewObjectImpl)findViewObject("DcmValidationView");
     }
+
+    /**
+     * Container's getter for DcmTemplateCatView.
+     * @return DcmTemplateCatView1
+     */
+    public ViewObjectImpl getDcmTemplateCatView() {
+        return (ViewObjectImpl)findViewObject("DcmTemplateCatView");
+    }
 }

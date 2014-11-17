@@ -25,15 +25,23 @@
        DcmTemplate.HANDLE_MODE, 
        DcmTemplate.TEMPLATE_FILE, 
        DcmTemplate.DATA_START_LINE, 
-       DcmTemplate.COMBINATION_ID"
+       DcmTemplate.COMBINATION_ID, 
+       DcmTemplate.CATEGORY_ID"
   FromList="DCM_TEMPLATE DcmTemplate"
   BindingStyle="OracleName"
   CustomQuery="false"
   PageIterMode="Full"
-  UseGlueCode="false">
+  UseGlueCode="false"
+  Where="DcmTemplate.LOCALE=:locale">
   <DesignTime>
     <Attr Name="_codeGenFlag2" Value="Access|VarAccess"/>
   </DesignTime>
+  <Variable
+    Name="locale"
+    Kind="where"
+    Type="java.lang.String">
+    <TransientExpression><![CDATA[adf.context.locale]]></TransientExpression>
+  </Variable>
   <EntityUsage
     Name="DcmTemplate"
     Entity="team.epm.dcm.model.DcmTemplate"/>
@@ -159,4 +167,10 @@
     EntityAttrName="CombinationId"
     EntityUsage="DcmTemplate"
     AliasName="COMBINATION_ID"/>
+  <ViewAttribute
+    Name="CategoryId"
+    PrecisionRule="true"
+    EntityAttrName="CategoryId"
+    EntityUsage="DcmTemplate"
+    AliasName="CATEGORY_ID"/>
 </ViewObject>

@@ -65,4 +65,9 @@
     <managed-bean-class id="__32">dms.Menu.MenuBean</managed-bean-class>
     <managed-bean-scope id="__35">view</managed-bean-scope>
   </managed-bean>
+  <managed-bean id="__44">
+    <managed-bean-name id="__41">DcmIndexBean</managed-bean-name>
+    <managed-bean-class id="__43">dcm.DcmIndexBean</managed-bean-class>
+    <managed-bean-scope id="__42">view</managed-bean-scope>
+  </managed-bean>
 </adfc-config>

@@ -1,8 +1,6 @@
-package dms.Menu;
+package dcm.template;
 
 import common.ADFUtils;
-
-import dms.login.Person;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,9 +8,11 @@ import java.util.List;
 import javax.faces.context.FacesContext;
 
 import oracle.adf.model.binding.DCIteratorBinding;
-
 import oracle.adf.share.ADFContext;
 
+import oracle.jbo.Row;
+import oracle.jbo.ViewCriteria;
+import oracle.jbo.ViewCriteriaRow;
 import oracle.jbo.ViewObject;
 
 import org.apache.commons.lang.ObjectUtils;
@@ -20,39 +20,59 @@ import org.apache.myfaces.trinidad.model.ChildPropertyTreeModel;
 import org.apache.myfaces.trinidad.model.CollectionModel;
 import org.apache.myfaces.trinidad.model.SortCriterion;
 
-import team.epm.dms.view.DmsMenuTreeViewRowImpl;
-
-public class MenuTreeModel extends ChildPropertyTreeModel {
-    private ViewObject vo;
-    private String locale;
-
-    public MenuTreeModel() {
+public class TemplateTreeModel  extends ChildPropertyTreeModel {
+    private ViewObject catVo;
+    private ViewObject templateVo;
+    public TemplateTreeModel() {
         super();
-        String pid =ObjectUtils.toString(
-            FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("menu_id"));
-        pid = pid.length() > 0 ? pid : "null";
-        DCIteratorBinding binding =
-            ADFUtils.findIterator("DmsMenuTreeViewIterator");
-        this.vo = binding.getViewObject();
-        this.locale =
-                ((Person)ADFContext.getCurrent().getSessionScope().get("cur_user")).getLocale();
+        DCIteratorBinding catBinding =
+            ADFUtils.findIterator("DcmTemplateCatViewIterator");
+        this.catVo = catBinding.getViewObject();
+        
+        DCIteratorBinding tempalteBinding =
+            ADFUtils.findIterator("DcmTemplateViewIterator");
+        this.templateVo = tempalteBinding.getViewObject();
 
-        List<MenuItem> root = this.getChildMenuItem(pid);
-        for (MenuItem itm : root) {
-            itm.setChildren(this.getChildMenuItem(itm.getId()));
+        List<TemplateTreeItem> root = this.getChildTreeItem(null);
+        for (TemplateTreeItem itm : root) {
+            if(TemplateTreeItem.TYPE_CATEGORY.equals(itm.getType())){
+                itm.setChildren(this.getChildTreeItem(itm.getId()));
+            }
         }
 
         this.setChildProperty("children");
         this.setWrappedData(root);
     }
 
-    private List<MenuItem> getChildMenuItem(String pid) {
-        this.vo.setNamedWhereClauseParam("locale", this.locale);
-        this.vo.setNamedWhereClauseParam("p_id", pid);
-        vo.executeQuery();
-        List<MenuItem> items = new ArrayList<MenuItem>();
-        while (vo.hasNext()) {
-            MenuItem item = new MenuItem((DmsMenuTreeViewRowImpl)vo.next());
+    private List<TemplateTreeItem> getChildTreeItem(String pid) {
+        pid=pid==null ? "is null" : pid;
+        List<TemplateTreeItem> items = new ArrayList<TemplateTreeItem>();
+        
+        ViewCriteria vc=this.catVo.createViewCriteria();
+        ViewCriteriaRow vcRow = vc.createViewCriteriaRow();
+        vcRow.setAttribute("PId", pid);
+        vc.addElement(vcRow);
+        this.catVo.applyViewCriteria(vc);
+        this.catVo.executeQuery();
+        while (this.catVo.hasNext()) {
+            Row row = this.catVo.next();
+            String id=ObjectUtils.toString(row.getAttribute("Id"));
+            String label=ObjectUtils.toString(row.getAttribute("Name"));
+            TemplateTreeItem item = new TemplateTreeItem(id,label,TemplateTreeItem.TYPE_CATEGORY);
+            items.add(item);
+        }
+        
+        vc=this.templateVo.createViewCriteria();
+        vcRow = vc.createViewCriteriaRow();
+        vcRow.setAttribute("CategoryId", pid);
+        vc.addElement(vcRow);
+        this.templateVo.applyViewCriteria(vc);
+        this.templateVo.executeQuery();
+        while (this.templateVo.hasNext()) {
+            Row row = this.templateVo.next();
+            String id=ObjectUtils.toString(row.getAttribute("Id"));
+            String label=ObjectUtils.toString(row.getAttribute("Name"));
+            TemplateTreeItem item = new TemplateTreeItem(id,label,TemplateTreeItem.TYPE_TEMPLATE);
             items.add(item);
         }
         return items;
@@ -90,9 +110,10 @@ public class MenuTreeModel extends ChildPropertyTreeModel {
 
     @Override
     public Object getRowData() {
-        MenuItem item = (MenuItem)super.getRowData();
-        if (item.getChildren() == null) {
-            item.setChildren(this.getChildMenuItem(item.getId()));
+        TemplateTreeItem item = (TemplateTreeItem)super.getRowData();
+        if (item.getChildren() == null
+            &&TemplateTreeItem.TYPE_CATEGORY.equals(item.getType())) {
+            item.setChildren(this.getChildTreeItem(item.getId()));
         }
         return super.getRowData();
     }
