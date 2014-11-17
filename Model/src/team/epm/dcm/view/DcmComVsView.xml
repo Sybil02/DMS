@@ -18,10 +18,66 @@
   BindingStyle="OracleName"
   CustomQuery="false"
   PageIterMode="Full"
-  UseGlueCode="false">
+  UseGlueCode="false"
+  ComponentClass="team.epm.dcm.view.DcmComVsViewImpl">
   <DesignTime>
-    <Attr Name="_codeGenFlag2" Value="Access|VarAccess"/>
+    <Attr Name="_codeGenFlag2" Value="Coll|VarAccess"/>
   </DesignTime>
+   <ViewAccessor
+    Name="LKP_YES_NO"
+    ViewObjectName="team.epm.dms.view.DmsLookupView">
+    <ViewCriteriaUsage
+      Name="DmsLookupViewCriteria"
+      FullName="team.epm.dms.view.DmsLookupView.DmsLookupViewCriteria"/>
+    <ParameterMap>
+      <PIMap Variable="locale">
+        <TransientExpression><![CDATA[adf.context.locale]]></TransientExpression>
+      </PIMap>
+      <PIMap Variable="lookupType">
+        <TransientExpression><![CDATA["YES_NO"]]></TransientExpression>
+      </PIMap>
+    </ParameterMap>
+  </ViewAccessor>
+  <ViewAccessor
+    Name="DmsValueSetView1"
+    ViewObjectName="team.epm.dms.view.DmsValueSetView"
+    RowLevelBinds="true"/>
+  <ListBinding
+    Name="LOV_IsAuthority"
+    ListVOName="LKP_YES_NO"
+    ListRangeSize="-1"
+    NullValueFlag="start"
+    NullValueId="${adfBundle['oracle.javatools.resourcebundle.SystemBundle']['NULL_VALUE_RESID']}"
+    MRUCount="0">
+    <AttrArray Name="AttrNames">
+      <Item Value="IsAuthority"/>
+    </AttrArray>
+    <AttrArray Name="ListAttrNames">
+      <Item Value="Code"/>
+    </AttrArray>
+    <AttrArray Name="ListDisplayAttrNames">
+      <Item Value="Meaning"/>
+    </AttrArray>
+    <DisplayCriteria/>
+  </ListBinding>
+  <ListBinding
+    Name="LOV_ValueSetId"
+    ListVOName="DmsValueSetView1"
+    ListRangeSize="-1"
+    NullValueFlag="start"
+    NullValueId="${adfBundle['oracle.javatools.resourcebundle.SystemBundle']['NULL_VALUE_RESID']}"
+    MRUCount="0">
+    <AttrArray Name="AttrNames">
+      <Item Value="ValueSetId"/>
+    </AttrArray>
+    <AttrArray Name="ListAttrNames">
+      <Item Value="Id"/>
+    </AttrArray>
+    <AttrArray Name="ListDisplayAttrNames">
+      <Item Value="Name"/>
+    </AttrArray>
+    <DisplayCriteria/>
+  </ListBinding>
   <EntityUsage
     Name="DcmComVs"
     Entity="team.epm.dcm.model.DcmComVs"/>
@@ -38,7 +94,15 @@
     PrecisionRule="true"
     EntityAttrName="ValueSetId"
     EntityUsage="DcmComVs"
-    AliasName="VALUE_SET_ID"/>
+    AliasName="VALUE_SET_ID"
+    LOVName="LOV_ValueSetId">
+    <Properties>
+      <SchemaBasedProperties>
+        <CONTROLTYPE
+          Value="choice"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewAttribute
     Name="Seq"
     PrecisionRule="true"
@@ -50,7 +114,15 @@
     PrecisionRule="true"
     EntityAttrName="IsAuthority"
     EntityUsage="DcmComVs"
-    AliasName="IS_AUTHORITY"/>
+    AliasName="IS_AUTHORITY"
+    LOVName="LOV_IsAuthority">
+    <Properties>
+      <SchemaBasedProperties>
+        <CONTROLTYPE
+          Value="choice"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewAttribute
     Name="CreatedAt"
     PrecisionRule="true"
@@ -75,4 +147,10 @@
     EntityAttrName="CreatedBy"
     EntityUsage="DcmComVs"
     AliasName="CREATED_BY"/>
+  <ViewLinkAccessor
+    Name="DcmCombinationView"
+    ViewLink="team.epm.dcm.view.viewlink.combinationsVS"
+    Type="oracle.jbo.Row"
+    Reversed="true"
+    IsUpdateable="false"/>
 </ViewObject>

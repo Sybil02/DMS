@@ -42,4 +42,16 @@
   <ViewUsage
     Name="DcmValidationView"
     ViewObjectName="team.epm.dcm.view.DcmValidationView"/>
+  <ViewUsage
+    Name="DcmCombinationView1"
+    ViewObjectName="team.epm.dcm.view.DcmCombinationView"/>
+  <ViewUsage
+    Name="DcmComVsView1"
+    ViewObjectName="team.epm.dcm.view.DcmComVsView"/>
+  <ViewLinkUsage
+    Name="combinationsVS"
+    ViewLinkObjectName="team.epm.dcm.view.viewlink.combinationsVS"
+    SrcViewUsageName="team.epm.module.DcmModule.DcmCombinationView1"
+    DstViewUsageName="team.epm.module.DcmModule.DcmComVsView1"
+    Reversed="false"/>
 </AppModule>

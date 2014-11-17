@@ -5,6 +5,64 @@
   <parameters/>
   <executables>
     <variableIterator id="variables"/>
+    <iterator Binds="DcmCombinationView1" RangeSize="25"
+              DataControl="DcmModuleDataControl"
+              id="DcmCombinationView1Iterator"/>
+    <iterator Binds="DcmComVsView1" RangeSize="25"
+              DataControl="DcmModuleDataControl" id="DcmComVsView1Iterator"/>
+    <searchRegion Binds="DcmCombinationView1Iterator" Criteria=""
+                  Customizer="oracle.jbo.uicli.binding.JUSearchBindingCustomizer"
+                  id="DcmCombinationView1Query"/>
   </executables>
-  <bindings/>
+  <bindings>
+    <action id="Commit" RequiresUpdateModel="true" Action="commitTransaction"
+            DataControl="DcmModuleDataControl"/>
+    <action IterBinding="DcmCombinationView1Iterator" id="CreateInsert"
+            RequiresUpdateModel="true" Action="createInsertRow"/>
+    <action IterBinding="DcmComVsView1Iterator" id="CreateInsert1"
+            RequiresUpdateModel="true" Action="createInsertRow"/>
+    <tree IterBinding="DcmCombinationView1Iterator" id="DcmCombinationView1">
+      <nodeDefinition DefName="team.epm.dcm.view.DcmCombinationView"
+                      Name="DcmCombinationView10">
+        <AttrNames>
+          <Item Value="Name"/>
+          <Item Value="Code"/>
+          <Item Value="UpdatedAt"/>
+          <Item Value="UpdatedBy"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <tree IterBinding="DcmComVsView1Iterator" id="DcmComVsView1">
+      <nodeDefinition DefName="team.epm.dcm.view.DcmComVsView"
+                      Name="DcmComVsView10">
+        <AttrNames>
+          <Item Value="ValueSetId"/>
+          <Item Value="Seq"/>
+          <Item Value="IsAuthority"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <attributeValues IterBinding="DcmCombinationView1Iterator" id="Name">
+      <AttrNames>
+        <Item Value="Name"/>
+      </AttrNames>
+    </attributeValues>
+    <attributeValues IterBinding="DcmCombinationView1Iterator" id="Code">
+      <AttrNames>
+        <Item Value="Code"/>
+      </AttrNames>
+    </attributeValues>
+    <tree IterBinding="DcmComVsView1Iterator" id="DcmComVsView11">
+      <nodeDefinition DefName="team.epm.dcm.view.DcmComVsView"
+                      Name="DcmComVsView110">
+        <AttrNames>
+          <Item Value="ValueSetId"/>
+          <Item Value="Seq"/>
+          <Item Value="IsAuthority"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <action IterBinding="DcmComVsView1Iterator" id="Delete"
+            RequiresUpdateModel="false" Action="removeCurrentRow"/>
+  </bindings>
 </pageDefinition>
