@@ -4,23 +4,35 @@
           xmlns:f="http://java.sun.com/jsf/core"
           xmlns:c="http://java.sun.com/jsp/jstl/core">
   <c:set var="viewBundle" value="#{adfBundle['dms_v']}"/>
-  <af:panelStretchLayout id="psl1" startWidth="162px" endWidth="0px"
-                         bottomHeight="32px">
+  <af:panelStretchLayout id="psl1" startWidth="180px">
     <f:facet name="bottom"/>
     <f:facet name="center">
-      <af:panelGroupLayout layout="horizontal"
-                           xmlns:af="http://xmlns.oracle.com/adf/faces/rich"
-                           id="pgl1" valign="top">
-        <af:spacer width="30" height="10" id="s1"/>
-        <af:table value="#{bindings.DmsValueSetView.collectionModel}" var="row"
+       <af:panelStretchLayout id="psl2" startWidth="235px">
+          <f:facet name="bottom"/>
+          <f:facet name="center">
+          <af:selectManyShuttle id="sms1"
+                              binding="#{backingBeanScope.ValueSetAuthorityBean.selectShuttle}"
+                              value="#{backingBeanScope.ValueSetAuthorityBean.selectValue}"
+                              valueChangeListener="#{backingBeanScope.ValueSetAuthorityBean.selectListener}"
+                              autoSubmit="true"
+                              leadingHeader="#{viewBundle['dms.vlaue.available_list']}"
+                              trailingHeader="#{viewBundle['dms.vlaue.select_list']}"
+                              inlineStyle="margin-top:10px;margin-left:50px"
+                              simple="true"
+                              size="20">
+          <f:selectItems value="#{backingBeanScope.ValueSetAuthorityBean.allValue}" id="si1"/>
+        </af:selectManyShuttle>
+          </f:facet>
+          <f:facet name="start">
+          <af:table value="#{bindings.DmsValueSetView.collectionModel}" var="row"
                   rows="#{bindings.DmsValueSetView.rangeSize}"
-                  emptyText="#{bindings.DmsValueSetView.viewable ? 'No data to display.' : 'Access Denied.'}"
+                  emptyText="#{viewBundle['dms.common.nodata']}"
                   fetchSize="#{bindings.DmsValueSetView.rangeSize}"
-                  rowBandingInterval="0" id="t2" width="140"
+                  rowBandingInterval="0" id="t2" width="180px"
                   rowSelection="single"
                   selectionListener="#{backingBeanScope.ValueSetAuthorityBean.roleSelectListener}"
-                  autoHeightRows="20"
-                  inlineStyle="margin-top:10px" columnStretching="column:c2">
+                  inlineStyle="margin-top:10px;margin-left:50px" 
+                  columnStretching="column:c2">
           <af:column sortProperty="#{bindings.DmsValueSetView.hints.Name.name}"
                      sortable="false"
                      headerText="#{bindings.DmsValueSetView.hints.Name.label}"
@@ -28,26 +40,15 @@
             <af:outputText value="#{row.Name}" id="ot2"/>
           </af:column>
         </af:table>
-        <af:spacer width="30" height="10" id="s2"/>
-        <af:selectManyShuttle label="" id="sms1"
-                              binding="#{backingBeanScope.ValueSetAuthorityBean.selectShuttle}"
-                              value="#{backingBeanScope.ValueSetAuthorityBean.selectValue}"
-                              valueChangeListener="#{backingBeanScope.ValueSetAuthorityBean.selectListener}"
-                              autoSubmit="true"
-                              leadingHeader="#{viewBundle['dms.vlaue.available_list']}"
-                              trailingHeader="#{viewBundle['dms.vlaue.select_list']}"
-                              inlineStyle="margin-top:10px;margin-left:50px">
-          <f:selectItems value="#{backingBeanScope.ValueSetAuthorityBean.allValue}" id="si1"/>
-        </af:selectManyShuttle>
-      </af:panelGroupLayout>
+          </f:facet>
+          <f:facet name="end"/>
+          <f:facet name="top"/>
+        </af:panelStretchLayout>
     </f:facet>
     <f:facet name="start">
-      <af:panelGroupLayout
-                           xmlns:af="http://xmlns.oracle.com/adf/faces/rich"
-                           id="pgl2">
         <af:table value="#{bindings.DmsRoleView.collectionModel}" var="row"
                   rows="#{bindings.DmsRoleView.rangeSize}"
-                  emptyText="#{bindings.DmsRoleView.viewable ? 'No data to display.' : 'Access Denied.'}"
+                  emptyText="#{viewBundle['dms.common.nodata']}"
                   fetchSize="#{bindings.DmsRoleView.rangeSize}"
                   rowBandingInterval="0"
                   selectedRowKeys="#{bindings.DmsRoleView.collectionModel.selectedRow}"
@@ -62,7 +63,6 @@
             <af:outputText value="#{row.RoleName}" id="ot1"/>
           </af:column>
         </af:table>
-      </af:panelGroupLayout>
     </f:facet>
     <f:facet name="end"/>
     <f:facet name="top"/>
