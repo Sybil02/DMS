@@ -8,7 +8,7 @@
     <f:facet name="bottom"/>
     <f:facet name="center">
     <af:selectManyShuttle value="#{backingBeanScope.FunctionAuthorityBean.selectValue}"
-                          label="#{bindings.DmsFunctionView.label}" id="sms1"
+                          label="" id="sms1"
                           size="20" simple="true"
                           inlineStyle="margin-top:10px;margin-left:50px"
                           leadingHeader="#{viewBundle['dms.function.available_list']}"
@@ -26,7 +26,7 @@
               fetchSize="#{bindings.DmsRoleView.rangeSize}"
               rowBandingInterval="0"
               selectedRowKeys="#{bindings.DmsRoleView.collectionModel.selectedRow}"
-              selectionListener="#{bindings.DmsRoleView.collectionModel.makeCurrent}"
+              selectionListener="#{backingBeanScope.FunctionAuthorityBean.roleSelectListener}"
               rowSelection="single" id="t1" columnStretching="column:c1"
               width="180px"
               inlineStyle="margin-top:10px">
