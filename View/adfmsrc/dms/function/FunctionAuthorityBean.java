@@ -20,11 +20,11 @@ import org.apache.myfaces.trinidad.event.SelectionEvent;
 
 import team.epm.module.DmsModuleImpl;
 
-public class FunctionAuthority {
+public class FunctionAuthorityBean{
     private RichSelectManyShuttle selectShuttle;
     private List<SelectItem> allItems = new ArrayList<SelectItem>();
 
-    public FunctionAuthority() {
+    public FunctionAuthorityBean() {
     }
 
     public List getSelectValue() {
@@ -54,6 +54,8 @@ public class FunctionAuthority {
 
     public void selectListener(ValueChangeEvent valueChangeEvent) {
         List<String> newValue = (List<String>)valueChangeEvent.getNewValue();
+        if(newValue==null)
+            newValue=new ArrayList<String>();
         String roleId = getCurRoleId();
         DmsModuleImpl am =
             (DmsModuleImpl)ADFUtils.getApplicationModuleForDataControl("DmsModuleDataControl");

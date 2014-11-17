@@ -49,7 +49,8 @@ public class RoleGroupBean {
     public void selectListener(ValueChangeEvent valueChangeEvent) {
         // Add event code here...
         List<String> newValue = (List<String>)valueChangeEvent.getNewValue();
-        
+        if(newValue==null)
+            newValue=new ArrayList<String>();
         String groupId = getCurGroupId();
         DmsModuleImpl am =
             (DmsModuleImpl)ADFUtils.getApplicationModuleForDataControl("DmsModuleDataControl");

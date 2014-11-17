@@ -216,7 +216,13 @@ public class DmsModuleImpl extends ApplicationModuleImpl {
         }
         ViewObject valuesVO =
             this.createViewObjectFromQueryStmt("ValuesFromValueSet", sql);
+        try{
         valuesVO.executeQuery();
+        }
+        catch(Exception e){
+            return valueList;
+        }
+        
         RowSet rows = valuesVO.getRowSet();
         while (rows.hasNext()) {
             valueList.add(rows.next());
@@ -259,7 +265,7 @@ public class DmsModuleImpl extends ApplicationModuleImpl {
                 valueIds.remove(value);
                 continue;
             } else
-                view.remove();
+                view.removeCurrentRow();
         }
         for (String e : valueIds) {
             Row row = view.createRow();
@@ -287,7 +293,7 @@ public class DmsModuleImpl extends ApplicationModuleImpl {
             while (rs.next()) {
             functionList.add(rs.getString("ID"));
             }
-            st.close();
+            
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -307,7 +313,7 @@ public class DmsModuleImpl extends ApplicationModuleImpl {
                 functionIds.remove(value);
                 continue;
             } else
-                view.remove();
+                view.removeCurrentRow();
         }
         for (String e : functionIds) {
             Row row = view.createRow();
@@ -345,7 +351,7 @@ public class DmsModuleImpl extends ApplicationModuleImpl {
                     roleIds.remove(value);
                     continue;
                 } else
-                    view.remove();
+                    view.removeCurrentRow();
             }
             for (String e : roleIds) {
                 Row row = view.createRow();

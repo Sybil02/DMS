@@ -87,6 +87,8 @@ public class ValueSetAuthorityBean {
 //        DmsGroupRoleViewImpl view = (DmsGroupRoleViewImpl)groupRoleIter.getViewObject();
         
         List<String> newValue = (List<String>)valueChangeEvent.getNewValue();
+        if(newValue==null)
+            newValue=new ArrayList<String>();
         String valueSetId = getCurValueSetId();
         String roleId=getCurRoleId();
         DmsModuleImpl am = (DmsModuleImpl)ADFUtils.getApplicationModuleForDataControl("DmsModuleDataControl");
