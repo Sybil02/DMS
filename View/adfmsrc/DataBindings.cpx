@@ -32,6 +32,7 @@
           usageId="__combination_editPageDef"/>
     <page path="/dcm/validation/validation_edit.jsff"
           usageId="__validation_editPageDef"/>
+    <page path="/dcm/index.jspx" usageId="__indexPageDef1"/>
   </pageMap>
   <pageDefinitionUsages>
     <page id="__dynamicTabShellPageDef"
@@ -58,6 +59,7 @@
           path="dcm.combinantion.combination_editPageDef"/>
     <page id="__validation_editPageDef"
           path="dcm.validation.validation_editPageDef"/>
+    <page id="__indexPageDef1" path="dcm.indexPageDef"/>
   </pageDefinitionUsages>
   <dataControlUsages>
     <BC4JDataControl id="DmsModuleDataControl" Package="team.epm.module"
