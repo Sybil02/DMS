@@ -15,29 +15,10 @@
       <property
          name="exceptionHandler">false</property>
       <property
-         name="y">214.34473</property>
+         name="y">210.64355</property>
       <property
-         name="x">243.36328</property>
-      <property
-         name="pageFragment">true</property>
-   </View>
-   <View
-      id="View3">
-      <property
-         name="activityId">test</property>
-      <property
-         name="page">/dcm/combinantion/test.jsff</property>
-      <property
-         name="start">false</property>
-      <property
-         name="description">&lt;html>&lt;p>&lt;b>test&lt;/b>&lt;/p>&lt;p>Activity Type:  View&lt;/p></property>
-      <property
-         name="exceptionHandler">false</property>
-      <property
-         name="y">218.1377</property>
+         name="x">209.36328</property>
       <property
          name="pageFragment">true</property>
-      <property
-         name="x">420.5</property>
    </View>
 </SDM>

@@ -16,9 +16,6 @@
     <view id="combination_edit">
       <page>/dcm/combinantion/combination_edit.jsff</page>
     </view>
-    <view id="test">
-      <page>/dcm/combinantion/test.jsff</page>
-    </view>
     <use-page-fragments/>
   </task-flow-definition>
 </adfc-config>
