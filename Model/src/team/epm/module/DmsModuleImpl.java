@@ -208,8 +208,8 @@ public class DmsModuleImpl extends ApplicationModuleImpl {
     public List<Row> getValuesFromValueSet(String source, String locale) {
         List<Row> valueList = new ArrayList<Row>();
         String sql =
-            "select ID,MEANING from " + source + " where locale='" + locale +
-            "' ";
+            "select CODE,MEANING from " + source + " where locale='" + locale +
+            "' order by seq";
         ViewObject vo = this.findViewObject("ValuesFromValueSet");
         if (vo != null) {
             vo.remove();
@@ -362,4 +362,5 @@ public class DmsModuleImpl extends ApplicationModuleImpl {
             getDBTransaction().commit();
         }
     }
+
 

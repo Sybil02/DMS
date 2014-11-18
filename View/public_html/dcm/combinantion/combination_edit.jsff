@@ -259,8 +259,6 @@
             </af:panelCollection>
           </af:panelWindow>
         </af:popup>
-        <af:commandButton text="commandButton 2" id="cb3" action="go"/>
-        <af:commandButton text="commandButton 3" id="cb9" action="go2"/>
       </af:panelGroupLayout>
     </f:facet>
   </af:panelStretchLayout>

@@ -268,9 +268,19 @@
                </list>
             </hash>
             <hash>
-               <url n="content-folder-url" path="adfmsrc/dcm/combinantion/"/>
+               <url n="content-folder-url" path="adfmsrc/dcm/template/"/>
                <list n="pattern-filters">
-                  <string v="+dcm/combinantion/CombinationBean.java"/>
+                  <string v="+dcm/template/TemplateTreeModel.java"/>
+                  <string v="+dcm/template/TemplateTreeItem.java"/>
+               </list>
+               <list n="url-path">
+                  <url path="adfmsrc/"/>
+               </list>
+            </hash>
+            <hash>
+               <url n="content-folder-url" path="adfmsrc/dcm/"/>
+               <list n="pattern-filters">
+                  <string v="+dcm/DcmIndexBean.java"/>
                </list>
                <list n="url-path">
                   <url path="adfmsrc/"/>
@@ -290,13 +300,13 @@
             <value n="JavaScriptRunConfigurationStopOnException" v="false"/>
             <value n="JavaScriptRunConfigurationTransferErrors" v="true"/>
             <value n="name" v="Default"/>
-            <hash n="oracle.adfdt.controller.adfc.source.runner.JsfJspRunnerLaunchSettings"/>
+
             <hash n="oracle.jdevimpl.runner.debug.DebugConfiguration">
                <value n="remoteParameter:jpda:jdi_attach_method:" v=""/>
                <value n="remoteParameter:jpdaListen:localAddress" v=""/>
             </hash>
             <value n="programArguments" v=""/>
-            <url n="targetURL" path="public_html/index.jspx"/>
+
             <value n="VMName" v=""/>
          </hash>
       </hash>

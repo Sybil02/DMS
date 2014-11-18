@@ -61,7 +61,7 @@ public class ValueSetAuthorityBean {
         List<Row> valueList= am.getValuesFromValueSet(tablename,ADFContext.getCurrent().getLocale().toString());
         for(Row row:valueList){
             
-            SelectItem item=new SelectItem(row.getAttribute("ID"),(String)row.getAttribute("MEANING"),(String)row.getAttribute("MEANING"));
+            SelectItem item=new SelectItem(row.getAttribute("CODE"),(String)row.getAttribute("MEANING"),(String)row.getAttribute("MEANING"));
             allItems.add(item);
         }
         return allItems;

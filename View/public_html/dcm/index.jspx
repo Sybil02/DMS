@@ -8,11 +8,18 @@
   <c:set var="viewBundle" value="#{adfBundle['dms_v']}"/>
   <f:view locale="#{sessionScope.cur_user.locale}"
           beforePhase="#{MainPageMBean.initMenuBar}">
-    <af:document id="d1">
+    <af:document id="d1" title="#{viewBundle['dcm.index.title']}">
       <af:form id="f1">
         <af:pageTemplate viewId="/dms/dynamicShell/dynamicTabShell.jspx"
                          value="#{bindings.pageTemplateBinding}" id="pt1">
-          <f:facet name="navigation"/>
+          <f:facet name="navigation">
+            <af:tree id="tr1" var="node" value="#{viewScope.DcmIndexBean.model}"
+                     rowSelection="single">
+              <f:facet name="nodeStamp">
+                <af:outputLabel value="#{node.label}"/>
+              </f:facet>
+            </af:tree>
+          </f:facet>
           <f:facet name="globalLinks"/>
           <f:facet name="status"/>
           <f:facet name="globalToolbar"/>

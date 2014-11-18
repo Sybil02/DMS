@@ -8,6 +8,10 @@
           id="pageTemplateBinding" Refresh="ifNeeded"/>
     <iterator id="DmsMenuTreeViewIterator" Binds="DmsMenuTreeView"
               DataControl="DmsModuleDataControl" RangeSize="25"/>
+    <iterator id="DcmTemplateCatViewIterator" Binds="DcmTemplateCatView"
+              DataControl="DcmModuleDataControl" RangeSize="25"/>
+    <iterator id="DcmTemplateViewIterator" Binds="DcmTemplateView"
+              DataControl="DcmModuleDataControl" RangeSize="25"/>
   </executables>
   <bindings/>
 </pageDefinition>

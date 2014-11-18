@@ -54,4 +54,7 @@
     SrcViewUsageName="team.epm.module.DcmModule.DcmCombinationView1"
     DstViewUsageName="team.epm.module.DcmModule.DcmComVsView1"
     Reversed="false"/>
+    <ViewUsage
+    Name="DcmTemplateCatView"
+    ViewObjectName="team.epm.dcm.view.DcmTemplateCatView"/>
 </AppModule>

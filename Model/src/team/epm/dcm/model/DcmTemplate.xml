@@ -257,6 +257,18 @@
       <Attr Name="_DisplaySize" Value="32"/>
     </DesignTime>
   </Attribute>
+  <Attribute
+    Name="CategoryId"
+    Precision="32"
+    ColumnName="CATEGORY_ID"
+    SQLType="VARCHAR"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    TableName="DCM_TEMPLATE">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="32"/>
+    </DesignTime>
+  </Attribute>
   <Key
     Name="PkDcmTemplate"
     PrimaryKey="true">

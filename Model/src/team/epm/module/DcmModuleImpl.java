@@ -133,3 +133,5 @@ public class DcmModuleImpl extends ApplicationModuleImpl {
         return (ViewLinkImpl)findViewLink("combinationsVS");
     }
 }
+
+
