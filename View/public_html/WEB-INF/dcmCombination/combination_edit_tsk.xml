@@ -8,8 +8,16 @@
     <data-control-scope id="__2">
       <isolated/>
     </data-control-scope>
+    <managed-bean id="__4">
+      <managed-bean-name id="__5">CombinationBean</managed-bean-name>
+      <managed-bean-class id="__7">dcm.combinantion.CombinationBean</managed-bean-class>
+      <managed-bean-scope id="__6">backingBean</managed-bean-scope>
+    </managed-bean>
     <view id="combination_edit">
       <page>/dcm/combinantion/combination_edit.jsff</page>
+    </view>
+    <view id="test">
+      <page>/dcm/combinantion/test.jsff</page>
     </view>
     <use-page-fragments/>
   </task-flow-definition>

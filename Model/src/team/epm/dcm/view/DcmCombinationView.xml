@@ -128,7 +128,8 @@
     PrecisionRule="true"
     EntityAttrName="Id"
     EntityUsage="DcmCombination"
-    AliasName="ID"/>
+    AliasName="ID"
+    IsUpdateable="while_insert"/>
   <ViewAttribute
     Name="Name"
     IsNotNull="true"
@@ -191,4 +192,8 @@
     ViewLink="team.epm.dcm.view.viewlink.combinationsVS"
     Type="oracle.jbo.RowIterator"
     IsUpdateable="false"/>
+  <ResourceBundle>
+    <PropertiesBundle
+      PropertiesFile="ModelBundle"/>
+  </ResourceBundle>
 </ViewObject>

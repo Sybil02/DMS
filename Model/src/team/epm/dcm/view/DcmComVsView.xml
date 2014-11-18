@@ -98,6 +98,8 @@
     LOVName="LOV_ValueSetId">
     <Properties>
       <SchemaBasedProperties>
+        <LABEL
+          ResId="team.epm.dcm.view.DcmComVsView.ValueSetId_LABEL"/>
         <CONTROLTYPE
           Value="choice"/>
       </SchemaBasedProperties>
@@ -108,7 +110,14 @@
     PrecisionRule="true"
     EntityAttrName="Seq"
     EntityUsage="DcmComVs"
-    AliasName="SEQ"/>
+    AliasName="SEQ">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="team.epm.dcm.view.DcmComVsView.Seq_LABEL"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewAttribute
     Name="IsAuthority"
     PrecisionRule="true"
@@ -118,6 +127,8 @@
     LOVName="LOV_IsAuthority">
     <Properties>
       <SchemaBasedProperties>
+        <LABEL
+          ResId="team.epm.dcm.view.DcmComVsView.IsAuthority_LABEL"/>
         <CONTROLTYPE
           Value="choice"/>
       </SchemaBasedProperties>
@@ -134,13 +145,27 @@
     PrecisionRule="true"
     EntityAttrName="UpdatedAt"
     EntityUsage="DcmComVs"
-    AliasName="UPDATED_AT"/>
+    AliasName="UPDATED_AT">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="team.epm.dcm.view.DcmComVsView.UpdatedAt_LABEL"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewAttribute
     Name="UpdatedBy"
     PrecisionRule="true"
     EntityAttrName="UpdatedBy"
     EntityUsage="DcmComVs"
-    AliasName="UPDATED_BY"/>
+    AliasName="UPDATED_BY">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="team.epm.dcm.view.DcmComVsView.UpdatedBy_LABEL"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewAttribute
     Name="CreatedBy"
     PrecisionRule="true"
@@ -153,4 +178,8 @@
     Type="oracle.jbo.Row"
     Reversed="true"
     IsUpdateable="false"/>
+  <ResourceBundle>
+    <PropertiesBundle
+      PropertiesFile="ModelBundle"/>
+  </ResourceBundle>
 </ViewObject>

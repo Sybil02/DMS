@@ -26,7 +26,8 @@
     Type="java.lang.String"
     ColumnType="VARCHAR2"
     TableName="DCM_COMBINATION"
-    PrimaryKey="true">
+    PrimaryKey="true"
+    IsUpdateable="while_insert">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="32"/>
     </DesignTime>

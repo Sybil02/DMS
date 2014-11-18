@@ -15,9 +15,7 @@
                   id="DcmCombinationView1Query"/>
   </executables>
   <bindings>
-    <action id="Commit" RequiresUpdateModel="true" Action="commitTransaction"
-            DataControl="DcmModuleDataControl"/>
-    <action IterBinding="DcmCombinationView1Iterator" id="CreateInsert"
+    <action IterBinding="DcmCombinationView1Iterator" id="CreateCombination"
             RequiresUpdateModel="true" Action="createInsertRow"/>
     <action IterBinding="DcmComVsView1Iterator" id="CreateInsert1"
             RequiresUpdateModel="true" Action="createInsertRow"/>
@@ -64,5 +62,9 @@
     </tree>
     <action IterBinding="DcmComVsView1Iterator" id="Delete"
             RequiresUpdateModel="false" Action="removeCurrentRow"/>
+    <action id="Rollback" DataControl="DcmModuleDataControl"
+            RequiresUpdateModel="false" Action="rollbackTransaction"/>
+    <action id="Commit" DataControl="DcmModuleDataControl"
+            RequiresUpdateModel="true" Action="commitTransaction"/>
   </bindings>
 </pageDefinition>

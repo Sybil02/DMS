@@ -127,6 +127,7 @@ public class DcmCombinationImpl extends DmsEntityImpl {
         }
     }
 
+
     public static final int ID = AttributesEnum.Id.index();
     public static final int NAME = AttributesEnum.Name.index();
     public static final int CODE = AttributesEnum.Code.index();
@@ -141,6 +142,7 @@ public class DcmCombinationImpl extends DmsEntityImpl {
      */
     public DcmCombinationImpl() {
     }
+
 
     /**
      * @return the definition object for this instance class.
