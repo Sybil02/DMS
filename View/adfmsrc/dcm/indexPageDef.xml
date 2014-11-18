@@ -17,33 +17,5 @@
                   id="DcmTemplateViewQuery"/>
   </executables>
   <bindings>
-    <tree IterBinding="DcmTemplateViewIterator" id="DcmTemplateView">
-      <nodeDefinition DefName="team.epm.dcm.view.DcmTemplateView"
-                      Name="DcmTemplateView0">
-        <AttrNames>
-          <Item Value="Id"/>
-          <Item Value="Locale"/>
-          <Item Value="Name"/>
-          <Item Value="CreatedAt"/>
-          <Item Value="UpdatedAt"/>
-          <Item Value="UpdatedBy"/>
-          <Item Value="CreatedBy"/>
-          <Item Value="Readonly"/>
-          <Item Value="Seq"/>
-          <Item Value="Description"/>
-          <Item Value="DbTable"/>
-          <Item Value="DbView"/>
-          <Item Value="TmpTable"/>
-          <Item Value="PreProgram"/>
-          <Item Value="HandleProgram"/>
-          <Item Value="AfterProgram"/>
-          <Item Value="HandleMode"/>
-          <Item Value="TemplateFile"/>
-          <Item Value="DataStartLine"/>
-          <Item Value="CombinationId"/>
-          <Item Value="CategoryId"/>
-        </AttrNames>
-      </nodeDefinition>
-    </tree>
   </bindings>
 </pageDefinition>
