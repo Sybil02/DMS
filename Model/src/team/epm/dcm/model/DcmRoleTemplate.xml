@@ -111,6 +111,13 @@
       <Attr Name="_DisplaySize" Value="10"/>
     </DesignTime>
   </Attribute>
+  <ViewLinkAccessor
+    Name="DcmTemplateColumnView"
+    ViewLink="team.epm.dcm.view.viewlink.templatecolumnsVL"
+    ViewLinkEnd="team.epm.dcm.view.viewlink.templatecolumnsVL.DcmTemplateColumnView"
+    ViewLinkOtherEnd="team.epm.dcm.view.viewlink.templatecolumnsVL.DcmRoleTemplateView"
+    Type="oracle.jbo.RowIterator"
+    IsUpdateable="false"/>
   <Key
     Name="PkDcmRoleTemplate"
     PrimaryKey="true">

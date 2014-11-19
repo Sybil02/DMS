@@ -198,6 +198,20 @@
       <Attr Name="_DisplaySize" Value="32"/>
     </DesignTime>
   </Attribute>
+  <ViewLinkAccessor
+    Name="DcmTemplateView"
+    ViewLink="templatecolumnsVL"
+    ViewLinkEnd="templatecolumnsVL.DcmRoleTemplateView"
+    ViewLinkOtherEnd="templatecolumnsVL.destEnd"
+    Type="oracle.jbo.server.ViewRowImpl"
+    IsUpdateable="false"/>
+  <ViewLinkAccessor
+    Name="DcmTemplateView1"
+    ViewLink="team.epm.dcm.view.viewlink.templatecolumnsVL"
+    ViewLinkEnd="team.epm.dcm.view.viewlink.templatecolumnsVL.DcmTemplateView1"
+    ViewLinkOtherEnd="team.epm.dcm.view.viewlink.templatecolumnsVL.DcmTemplateColumnView"
+    Type="oracle.jbo.server.ViewRowImpl"
+    IsUpdateable="false"/>
   <Key
     Name="PkDcmTemplateColumn"
     PrimaryKey="true">

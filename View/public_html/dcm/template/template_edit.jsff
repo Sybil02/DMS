@@ -1,2 +1,301 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.1"></jsp:root>
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.1"
+          xmlns:af="http://xmlns.oracle.com/adf/faces/rich"
+          xmlns:f="http://java.sun.com/jsf/core">
+  <af:panelTabbed id="pt1">
+    <af:showDetailItem text="showDetailItem 1" id="sdi1">
+      <af:panelFormLayout id="pfl1" rows="5">
+        <af:inputText value="#{bindings.Name.inputValue}"
+                      label="#{bindings.Name.hints.label}"
+                      required="#{bindings.Name.hints.mandatory}"
+                      columns="20"
+                      maximumLength="#{bindings.Name.hints.precision}"
+                      shortDesc="#{bindings.Name.hints.tooltip}" id="it6"
+                      inlineStyle="width:50.0px;">
+          <f:validator binding="#{bindings.Name.validator}"/>
+        </af:inputText>
+        <af:selectOneChoice value="#{bindings.Readonly.inputValue}"
+                            label="#{bindings.Readonly.label}"
+                            required="#{bindings.Readonly.hints.mandatory}"
+                            shortDesc="#{bindings.Readonly.hints.tooltip}"
+                            id="soc2">
+          <f:selectItems value="#{bindings.Readonly.items}" id="si1"/>
+        </af:selectOneChoice>
+        <af:inputText value="#{bindings.Seq.inputValue}"
+                      label="#{bindings.Seq.hints.label}"
+                      required="#{bindings.Seq.hints.mandatory}"
+                      columns="10"
+                      maximumLength="#{bindings.Seq.hints.precision}"
+                      shortDesc="#{bindings.Seq.hints.tooltip}" id="it8">
+          <f:validator binding="#{bindings.Seq.validator}"/>
+          <af:convertNumber groupingUsed="false"
+                            pattern="#{bindings.Seq.format}"/>
+        </af:inputText>
+        <af:inputText value="#{bindings.Description.inputValue}"
+                      label="#{bindings.Description.hints.label}"
+                      required="#{bindings.Description.hints.mandatory}"
+                      columns="30"
+                      maximumLength="#{bindings.Description.hints.precision}"
+                      shortDesc="#{bindings.Description.hints.tooltip}"
+                      id="it7">
+          <f:validator binding="#{bindings.Description.validator}"/>
+        </af:inputText>
+        <af:inputText value="#{bindings.DbTable.inputValue}"
+                      label="#{bindings.DbTable.hints.label}"
+                      required="#{bindings.DbTable.hints.mandatory}"
+                      columns="30"
+                      maximumLength="#{bindings.DbTable.hints.precision}"
+                      shortDesc="#{bindings.DbTable.hints.tooltip}" id="it4">
+          <f:validator binding="#{bindings.DbTable.validator}"/>
+        </af:inputText>
+        <af:inputText value="#{bindings.DbView.inputValue}"
+                      label="#{bindings.DbView.hints.label}"
+                      required="#{bindings.DbView.hints.mandatory}"
+                      columns="30"
+                      maximumLength="#{bindings.DbView.hints.precision}"
+                      shortDesc="#{bindings.DbView.hints.tooltip}" id="it11">
+          <f:validator binding="#{bindings.DbView.validator}"/>
+        </af:inputText>
+        <af:inputText value="#{bindings.TmpTable.inputValue}"
+                      label="#{bindings.TmpTable.hints.label}"
+                      required="#{bindings.TmpTable.hints.mandatory}"
+                      columns="30"
+                      maximumLength="#{bindings.TmpTable.hints.precision}"
+                      shortDesc="#{bindings.TmpTable.hints.tooltip}" id="it5">
+          <f:validator binding="#{bindings.TmpTable.validator}"/>
+        </af:inputText>
+        <af:inputText value="#{bindings.PreProgram.inputValue}"
+                      label="#{bindings.PreProgram.hints.label}"
+                      required="#{bindings.PreProgram.hints.mandatory}"
+                      columns="30"
+                      maximumLength="#{bindings.PreProgram.hints.precision}"
+                      shortDesc="#{bindings.PreProgram.hints.tooltip}"
+                      id="it12">
+          <f:validator binding="#{bindings.PreProgram.validator}"/>
+        </af:inputText>
+        <af:inputText value="#{bindings.HandleProgram.inputValue}"
+                      label="#{bindings.HandleProgram.hints.label}"
+                      required="#{bindings.HandleProgram.hints.mandatory}"
+                      columns="30"
+                      maximumLength="#{bindings.HandleProgram.hints.precision}"
+                      shortDesc="#{bindings.HandleProgram.hints.tooltip}"
+                      id="it3">
+          <f:validator binding="#{bindings.HandleProgram.validator}"/>
+        </af:inputText>
+        <af:inputText value="#{bindings.AfterProgram.inputValue}"
+                      label="#{bindings.AfterProgram.hints.label}"
+                      required="#{bindings.AfterProgram.hints.mandatory}"
+                      columns="30"
+                      maximumLength="#{bindings.AfterProgram.hints.precision}"
+                      shortDesc="#{bindings.AfterProgram.hints.tooltip}"
+                      id="it2">
+          <f:validator binding="#{bindings.AfterProgram.validator}"/>
+        </af:inputText>
+        <af:inputText value="#{bindings.HandleMode.inputValue}"
+                      label="#{bindings.HandleMode.hints.label}"
+                      required="#{bindings.HandleMode.hints.mandatory}"
+                      columns="#{bindings.HandleMode.hints.displayWidth}"
+                      maximumLength="#{bindings.HandleMode.hints.precision}"
+                      shortDesc="#{bindings.HandleMode.hints.tooltip}"
+                      id="it10">
+          <f:validator binding="#{bindings.HandleMode.validator}"/>
+        </af:inputText>
+        <af:inputText value="#{bindings.TemplateFile.inputValue}"
+                      label="#{bindings.TemplateFile.hints.label}"
+                      required="#{bindings.TemplateFile.hints.mandatory}"
+                      columns="#{bindings.TemplateFile.hints.displayWidth}"
+                      maximumLength="#{bindings.TemplateFile.hints.precision}"
+                      shortDesc="#{bindings.TemplateFile.hints.tooltip}"
+                      id="it13">
+          <f:validator binding="#{bindings.TemplateFile.validator}"/>
+        </af:inputText>
+        <af:inputText value="#{bindings.DataStartLine.inputValue}"
+                      label="#{bindings.DataStartLine.hints.label}"
+                      required="#{bindings.DataStartLine.hints.mandatory}"
+                      columns="#{bindings.DataStartLine.hints.displayWidth}"
+                      maximumLength="#{bindings.DataStartLine.hints.precision}"
+                      shortDesc="#{bindings.DataStartLine.hints.tooltip}"
+                      id="it1">
+          <f:validator binding="#{bindings.DataStartLine.validator}"/>
+          <af:convertNumber groupingUsed="false"
+                            pattern="#{bindings.DataStartLine.format}"/>
+        </af:inputText>
+        <af:selectOneChoice value="#{bindings.CombinationId.inputValue}"
+                            label="#{bindings.CombinationId.label}"
+                            required="#{bindings.CombinationId.hints.mandatory}"
+                            shortDesc="#{bindings.CombinationId.hints.tooltip}"
+                            id="soc6">
+          <f:selectItems value="#{bindings.CombinationId.items}" id="si6"/>
+        </af:selectOneChoice>
+        <af:selectOneChoice value="#{bindings.CategoryId.inputValue}"
+                            label="#{bindings.CategoryId.label}"
+                            required="#{bindings.CategoryId.hints.mandatory}"
+                            shortDesc="#{bindings.CategoryId.hints.tooltip}"
+                            id="soc1">
+          <f:selectItems value="#{bindings.CategoryId.items}" id="si2"/>
+        </af:selectOneChoice>
+        <f:facet name="footer">
+          <af:panelGroupLayout layout="vertical" id="pgl1">
+            <af:panelGroupLayout layout="horizontal" id="pgl2">
+              <af:commandButton actionListener="#{bindings.First.execute}"
+                                text="First"
+                                disabled="#{!bindings.First.enabled}"
+                                partialSubmit="true" id="cb4"/>
+              <af:commandButton actionListener="#{bindings.Previous.execute}"
+                                text="Previous"
+                                disabled="#{!bindings.Previous.enabled}"
+                                partialSubmit="true" id="cb1"/>
+              <af:commandButton actionListener="#{bindings.Next.execute}"
+                                text="Next" disabled="#{!bindings.Next.enabled}"
+                                partialSubmit="true" id="cb2"/>
+              <af:commandButton actionListener="#{bindings.Last.execute}"
+                                text="Last" disabled="#{!bindings.Last.enabled}"
+                                partialSubmit="true" id="cb5"/>
+              <af:commandButton actionListener="#{bindings.CreateInsert.execute}"
+                                text="CreateInsert"
+                                disabled="#{!bindings.CreateInsert.enabled}"
+                                id="cb6"/>
+            </af:panelGroupLayout>
+            <af:commandButton text="Submit" id="cb3"/>
+          </af:panelGroupLayout>
+        </f:facet>
+      </af:panelFormLayout>
+      <af:table value="#{bindings.DcmTemplateView1.collectionModel}" var="row"
+                rows="#{bindings.DcmTemplateView1.rangeSize}"
+                emptyText="#{bindings.DcmTemplateView1.viewable ? 'No data to display.' : 'Access Denied.'}"
+                fetchSize="#{bindings.DcmTemplateView1.rangeSize}"
+                rowBandingInterval="0" id="t1"
+                partialTriggers="::cb4 ::cb1 ::cb2 ::cb5 ::cb6 :::cb4 :::cb1 :::cb2 :::cb5 :::cb6">
+        <af:column sortProperty="#{bindings.DcmTemplateView1.hints.Name.name}"
+                   sortable="false"
+                   headerText="#{bindings.DcmTemplateView1.hints.Name.label}"
+                   id="c3">
+          <af:outputText value="#{row.Name}" id="ot9"/>
+        </af:column>
+        <af:column sortProperty="#{bindings.DcmTemplateView1.hints.UpdatedAt.name}"
+                   sortable="false"
+                   headerText="#{bindings.DcmTemplateView1.hints.UpdatedAt.label}"
+                   id="c11">
+          <af:outputText value="#{row.UpdatedAt}" id="ot13">
+            <af:convertDateTime pattern="#{bindings.DcmTemplateView1.hints.UpdatedAt.format}"/>
+          </af:outputText>
+        </af:column>
+        <af:column sortProperty="#{bindings.DcmTemplateView1.hints.UpdatedBy.name}"
+                   sortable="false"
+                   headerText="#{bindings.DcmTemplateView1.hints.UpdatedBy.label}"
+                   id="c8">
+          <af:selectOneChoice value="#{row.bindings.UpdatedBy.inputValue}"
+                              label="#{row.bindings.UpdatedBy.label}"
+                              required="#{bindings.DcmTemplateView1.hints.UpdatedBy.mandatory}"
+                              shortDesc="#{bindings.DcmTemplateView1.hints.UpdatedBy.tooltip}"
+                              id="soc3">
+            <f:selectItems value="#{row.bindings.UpdatedBy.items}" id="si4"/>
+          </af:selectOneChoice>
+        </af:column>
+        <af:column sortProperty="#{bindings.DcmTemplateView1.hints.Readonly.name}"
+                   sortable="false"
+                   headerText="#{bindings.DcmTemplateView1.hints.Readonly.label}"
+                   id="c2">
+          <af:selectOneChoice value="#{row.bindings.Readonly.inputValue}"
+                              label="#{row.bindings.Readonly.label}"
+                              required="#{bindings.DcmTemplateView1.hints.Readonly.mandatory}"
+                              shortDesc="#{bindings.DcmTemplateView1.hints.Readonly.tooltip}"
+                              id="soc4">
+            <f:selectItems value="#{row.bindings.Readonly.items}" id="si3"/>
+          </af:selectOneChoice>
+        </af:column>
+        <af:column sortProperty="#{bindings.DcmTemplateView1.hints.Seq.name}"
+                   sortable="false"
+                   headerText="#{bindings.DcmTemplateView1.hints.Seq.label}"
+                   id="c16">
+          <af:outputText value="#{row.Seq}" id="ot7">
+            <af:convertNumber groupingUsed="false"
+                              pattern="#{bindings.DcmTemplateView1.hints.Seq.format}"/>
+          </af:outputText>
+        </af:column>
+        <af:column sortProperty="#{bindings.DcmTemplateView1.hints.Description.name}"
+                   sortable="false"
+                   headerText="#{bindings.DcmTemplateView1.hints.Description.label}"
+                   id="c9">
+          <af:outputText value="#{row.Description}" id="ot2"/>
+        </af:column>
+        <af:column sortProperty="#{bindings.DcmTemplateView1.hints.DbTable.name}"
+                   sortable="false"
+                   headerText="#{bindings.DcmTemplateView1.hints.DbTable.label}"
+                   id="c13">
+          <af:outputText value="#{row.DbTable}" id="ot6"/>
+        </af:column>
+        <af:column sortProperty="#{bindings.DcmTemplateView1.hints.DbView.name}"
+                   sortable="false"
+                   headerText="#{bindings.DcmTemplateView1.hints.DbView.label}"
+                   id="c5">
+          <af:outputText value="#{row.DbView}" id="ot5"/>
+        </af:column>
+        <af:column sortProperty="#{bindings.DcmTemplateView1.hints.TmpTable.name}"
+                   sortable="false"
+                   headerText="#{bindings.DcmTemplateView1.hints.TmpTable.label}"
+                   id="c7">
+          <af:outputText value="#{row.TmpTable}" id="ot8"/>
+        </af:column>
+        <af:column sortProperty="#{bindings.DcmTemplateView1.hints.PreProgram.name}"
+                   sortable="false"
+                   headerText="#{bindings.DcmTemplateView1.hints.PreProgram.label}"
+                   id="c6">
+          <af:outputText value="#{row.PreProgram}" id="ot12"/>
+        </af:column>
+        <af:column sortProperty="#{bindings.DcmTemplateView1.hints.HandleProgram.name}"
+                   sortable="false"
+                   headerText="#{bindings.DcmTemplateView1.hints.HandleProgram.label}"
+                   id="c1">
+          <af:outputText value="#{row.HandleProgram}" id="ot10"/>
+        </af:column>
+        <af:column sortProperty="#{bindings.DcmTemplateView1.hints.AfterProgram.name}"
+                   sortable="false"
+                   headerText="#{bindings.DcmTemplateView1.hints.AfterProgram.label}"
+                   id="c12">
+          <af:outputText value="#{row.AfterProgram}" id="ot3"/>
+        </af:column>
+        <af:column sortProperty="#{bindings.DcmTemplateView1.hints.HandleMode.name}"
+                   sortable="false"
+                   headerText="#{bindings.DcmTemplateView1.hints.HandleMode.label}"
+                   id="c10">
+          <af:outputText value="#{row.HandleMode}" id="ot1"/>
+        </af:column>
+        <af:column sortProperty="#{bindings.DcmTemplateView1.hints.TemplateFile.name}"
+                   sortable="false"
+                   headerText="#{bindings.DcmTemplateView1.hints.TemplateFile.label}"
+                   id="c17">
+          <af:outputText value="#{row.TemplateFile}" id="ot14"/>
+        </af:column>
+        <af:column sortProperty="#{bindings.DcmTemplateView1.hints.DataStartLine.name}"
+                   sortable="false"
+                   headerText="#{bindings.DcmTemplateView1.hints.DataStartLine.label}"
+                   id="c4">
+          <af:outputText value="#{row.DataStartLine}" id="ot4">
+            <af:convertNumber groupingUsed="false"
+                              pattern="#{bindings.DcmTemplateView1.hints.DataStartLine.format}"/>
+          </af:outputText>
+        </af:column>
+        <af:column sortProperty="#{bindings.DcmTemplateView1.hints.CombinationId.name}"
+                   sortable="false"
+                   headerText="#{bindings.DcmTemplateView1.hints.CombinationId.label}"
+                   id="c15">
+          <af:outputText value="#{row.CombinationId}" id="ot11"/>
+        </af:column>
+        <af:column sortProperty="#{bindings.DcmTemplateView1.hints.CategoryId.name}"
+                   sortable="false"
+                   headerText="#{bindings.DcmTemplateView1.hints.CategoryId.label}"
+                   id="c14">
+          <af:selectOneChoice value="#{row.bindings.CategoryId.inputValue}"
+                              label="#{row.bindings.CategoryId.label}"
+                              required="#{bindings.DcmTemplateView1.hints.CategoryId.mandatory}"
+                              shortDesc="#{bindings.DcmTemplateView1.hints.CategoryId.tooltip}"
+                              id="soc5">
+            <f:selectItems value="#{row.bindings.CategoryId.items}" id="si5"/>
+          </af:selectOneChoice>
+        </af:column>
+      </af:table>
+    </af:showDetailItem>
+    <af:showDetailItem text="showDetailItem 2" id="sdi2"/>
+  </af:panelTabbed>
+</jsp:root>

@@ -124,4 +124,10 @@
     EntityAttrName="TemplateId"
     EntityUsage="DcmTemplateColumn"
     AliasName="TEMPLATE_ID"/>
+  <ViewLinkAccessor
+    Name="DcmTemplateView1"
+    ViewLink="team.epm.dcm.view.viewlink.templatecolumnsVL"
+    Type="oracle.jbo.Row"
+    Reversed="true"
+    IsUpdateable="false"/>
 </ViewObject>

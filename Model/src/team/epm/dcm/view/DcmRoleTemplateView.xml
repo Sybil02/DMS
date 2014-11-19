@@ -74,4 +74,9 @@
     EntityAttrName="ReadOnly"
     EntityUsage="DcmRoleTemplate"
     AliasName="READ_ONLY"/>
+  <ViewLinkAccessor
+    Name="DcmTemplateColumnView"
+    ViewLink="team.epm.dcm.view.viewlink.templatecolumnsVL"
+    Type="oracle.jbo.RowIterator"
+    IsUpdateable="false"/>
 </ViewObject>
