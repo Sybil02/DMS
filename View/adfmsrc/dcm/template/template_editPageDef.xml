@@ -11,6 +11,12 @@
     <iterator Binds="DcmCombinationView1" RangeSize="-1"
               DataControl="DcmModuleDataControl"
               id="DcmCombinationView1Iterator"/>
+    <iterator Binds="DcmTemplateColumnView1" RangeSize="25"
+              DataControl="DcmModuleDataControl"
+              id="DcmTemplateColumnView1Iterator" ChangeEventPolicy="ppr"/>
+    <searchRegion Binds="DcmTemplateColumnView1Iterator" Criteria=""
+                  Customizer="oracle.jbo.uicli.binding.JUSearchBindingCustomizer"
+                  id="DcmTemplateColumnView1Query"/>
   </executables>
   <bindings>
     <attributeValues IterBinding="DcmTemplateView1Iterator" id="Name">
@@ -113,5 +119,37 @@
           Uses="LOV_CategoryId" id="CategoryId" DTSupportsMRU="false"/>
     <list IterBinding="DcmTemplateView1Iterator" StaticList="false"
           Uses="LOV_CombinationId" id="CombinationId" DTSupportsMRU="false"/>
+    <action IterBinding="DcmTemplateView1Iterator" id="Delete"
+            RequiresUpdateModel="false" Action="removeCurrentRow"/>
+    <action id="Commit" RequiresUpdateModel="true" Action="commitTransaction"
+            DataControl="DcmModuleDataControl"/>
+    <attributeValues IterBinding="DcmTemplateColumnView1Iterator"
+                     id="UpdatedBy">
+      <AttrNames>
+        <Item Value="UpdatedBy"/>
+      </AttrNames>
+    </attributeValues>
+    <tree IterBinding="DcmTemplateColumnView1Iterator"
+          id="DcmTemplateColumnView1">
+      <nodeDefinition DefName="team.epm.dcm.view.DcmTemplateColumnView"
+                      Name="DcmTemplateColumnView10">
+        <AttrNames>
+          <Item Value="ColumnLabel"/>
+          <Item Value="DbTableCol"/>
+          <Item Value="DbViewCol"/>
+          <Item Value="IsPk"/>
+          <Item Value="Readonly"/>
+          <Item Value="DataType"/>
+          <Item Value="Visible"/>
+          <Item Value="Seq"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <action IterBinding="DcmTemplateColumnView1Iterator" id="CreateInsert1"
+            RequiresUpdateModel="true" Action="createInsertRow"/>
+    <action IterBinding="DcmTemplateColumnView1Iterator" id="Delete1"
+            RequiresUpdateModel="false" Action="removeCurrentRow"/>
+    <action id="Rollback" RequiresUpdateModel="false"
+            Action="rollbackTransaction" DataControl="DcmModuleDataControl"/>
   </bindings>
 </pageDefinition>

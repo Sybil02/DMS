@@ -59,6 +59,13 @@
     <DesignTime>
       <Attr Name="_DisplaySize" Value="300"/>
     </DesignTime>
+    <Properties>
+      <CustomProperties>
+        <Property
+          Name="isMultiLangAttr"
+          Value="true"/>
+      </CustomProperties>
+    </Properties>
   </Attribute>
   <Attribute
     Name="CreatedAt"
