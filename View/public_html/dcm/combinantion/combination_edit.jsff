@@ -80,10 +80,7 @@
                                     alignId="::pc1" align="startBefore"/>
             
             </af:commandButton>
-            <af:commandButton actionListener="#{bindings.CreateCombination.execute}"
-                              text="CreateCombination"
-                              disabled="#{!bindings.CreateCombination.enabled}"
-                              id="cb2"/>
+           
           </af:toolbar>
         </f:facet>
         <f:facet name="statusbar"/>
@@ -97,7 +94,7 @@
                   varStatus="vs"
                   selectedRowKeys="#{bindings.DcmCombinationView1.collectionModel.selectedRow}"
                   selectionListener="#{bindings.DcmCombinationView1.collectionModel.makeCurrent}"
-                  rowSelection="single" id="t1" partialTriggers="::cb1 ::cb2">
+                  rowSelection="single" id="t1" partialTriggers="::cb1">
           <af:column sortProperty="#{bindings.DcmCombinationView1.hints.Name.name}"
                      filterable="true" sortable="true"
                      headerText="#{bindings.DcmCombinationView1.hints.Name.label}"
