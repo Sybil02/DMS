@@ -136,14 +136,28 @@
     PrecisionRule="true"
     EntityAttrName="Name"
     EntityUsage="DcmCombination"
-    AliasName="NAME"/>
+    AliasName="NAME">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="team.epm.dcm.view.DcmCombinationView.Name_LABEL"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewAttribute
     Name="Code"
     IsNotNull="true"
     PrecisionRule="true"
     EntityAttrName="Code"
     EntityUsage="DcmCombination"
-    AliasName="CODE"/>
+    AliasName="CODE">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="team.epm.dcm.view.DcmCombinationView.Code_LABEL"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewAttribute
     Name="Locale"
     IsNotNull="true"
@@ -158,13 +172,27 @@
     EntityAttrName="CreatedAt"
     EntityUsage="DcmCombination"
     AliasName="CREATED_AT"
-    IsUpdateable="while_insert"/>
+    IsUpdateable="while_insert">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="team.epm.dcm.view.DcmCombinationView.CreatedAt_LABEL"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewAttribute
     Name="UpdatedAt"
     PrecisionRule="true"
     EntityAttrName="UpdatedAt"
     EntityUsage="DcmCombination"
-    AliasName="UPDATED_AT"/>
+    AliasName="UPDATED_AT">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="updatedAt"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewAttribute
     Name="UpdatedBy"
     PrecisionRule="true"
@@ -174,6 +202,8 @@
     LOVName="LOV_UpdatedBy">
     <Properties>
       <SchemaBasedProperties>
+        <LABEL
+          ResId="updatedBy"/>
         <CONTROLTYPE
           Value="choice"/>
       </SchemaBasedProperties>
@@ -186,7 +216,14 @@
     EntityUsage="DcmCombination"
     AliasName="CREATED_BY"
     IsUpdateable="while_insert"
-    LOVName="LOV_CreatedBy"/>
+    LOVName="LOV_CreatedBy">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="createdBy"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewLinkAccessor
     Name="DcmComVsView"
     ViewLink="team.epm.dcm.view.viewlink.combinationsVS"

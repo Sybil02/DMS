@@ -227,20 +227,41 @@
     PrecisionRule="true"
     EntityAttrName="Name"
     EntityUsage="DcmTemplate"
-    AliasName="NAME"/>
+    AliasName="NAME">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="dcm.template.name"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewAttribute
     Name="CreatedAt"
     PrecisionRule="true"
     EntityAttrName="CreatedAt"
     EntityUsage="DcmTemplate"
     AliasName="CREATED_AT"
-    IsUpdateable="while_insert"/>
+    IsUpdateable="while_insert">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="createdAt"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewAttribute
     Name="UpdatedAt"
     PrecisionRule="true"
     EntityAttrName="UpdatedAt"
     EntityUsage="DcmTemplate"
-    AliasName="UPDATED_AT"/>
+    AliasName="UPDATED_AT">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="updatedAt"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewAttribute
     Name="UpdatedBy"
     PrecisionRule="true"
@@ -250,6 +271,8 @@
     LOVName="LOV_UpdatedBy">
     <Properties>
       <SchemaBasedProperties>
+        <LABEL
+          ResId="updatedBy"/>
         <CONTROLTYPE
           Value="choice"/>
       </SchemaBasedProperties>
@@ -262,7 +285,14 @@
     EntityUsage="DcmTemplate"
     AliasName="CREATED_BY"
     IsUpdateable="while_insert"
-    LOVName="LOV_CreatedBy"/>
+    LOVName="LOV_CreatedBy">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="createdBy"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewAttribute
     Name="Readonly"
     PrecisionRule="true"
@@ -272,6 +302,8 @@
     LOVName="LOV_Readonly">
     <Properties>
       <SchemaBasedProperties>
+        <LABEL
+          ResId="dcm.readOnly"/>
         <CONTROLTYPE
           Value="choice"/>
       </SchemaBasedProperties>
@@ -282,67 +314,144 @@
     PrecisionRule="true"
     EntityAttrName="Seq"
     EntityUsage="DcmTemplate"
-    AliasName="SEQ"/>
+    AliasName="SEQ">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="dcm.seq"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewAttribute
     Name="Description"
     PrecisionRule="true"
     EntityAttrName="Description"
     EntityUsage="DcmTemplate"
-    AliasName="DESCRIPTION"/>
+    AliasName="DESCRIPTION">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="dcm.template.desc"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewAttribute
     Name="DbTable"
     PrecisionRule="true"
     EntityAttrName="DbTable"
     EntityUsage="DcmTemplate"
-    AliasName="DB_TABLE"/>
+    AliasName="DB_TABLE">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="dcm.table"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewAttribute
     Name="DbView"
     PrecisionRule="true"
     EntityAttrName="DbView"
     EntityUsage="DcmTemplate"
-    AliasName="DB_VIEW"/>
+    AliasName="DB_VIEW">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="dcm.view"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewAttribute
     Name="TmpTable"
     PrecisionRule="true"
     EntityAttrName="TmpTable"
     EntityUsage="DcmTemplate"
-    AliasName="TMP_TABLE"/>
+    AliasName="TMP_TABLE">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="dcm.temptable"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewAttribute
     Name="PreProgram"
     PrecisionRule="true"
     EntityAttrName="PreProgram"
     EntityUsage="DcmTemplate"
-    AliasName="PRE_PROGRAM"/>
+    AliasName="PRE_PROGRAM">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="dcm.handle_program"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewAttribute
     Name="HandleProgram"
     PrecisionRule="true"
     EntityAttrName="HandleProgram"
     EntityUsage="DcmTemplate"
-    AliasName="HANDLE_PROGRAM"/>
+    AliasName="HANDLE_PROGRAM">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="dcm.handle_program"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewAttribute
     Name="AfterProgram"
     PrecisionRule="true"
     EntityAttrName="AfterProgram"
     EntityUsage="DcmTemplate"
-    AliasName="AFTER_PROGRAM"/>
+    AliasName="AFTER_PROGRAM">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="dcm.after_program"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewAttribute
     Name="HandleMode"
     PrecisionRule="true"
     EntityAttrName="HandleMode"
     EntityUsage="DcmTemplate"
-    AliasName="HANDLE_MODE"/>
+    AliasName="HANDLE_MODE">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="dcm.handle_mode"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewAttribute
     Name="TemplateFile"
     PrecisionRule="true"
     EntityAttrName="TemplateFile"
     EntityUsage="DcmTemplate"
-    AliasName="TEMPLATE_FILE"/>
+    AliasName="TEMPLATE_FILE">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="dcm.TEMPLATE_FILE"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewAttribute
     Name="DataStartLine"
     PrecisionRule="true"
     EntityAttrName="DataStartLine"
     EntityUsage="DcmTemplate"
-    AliasName="DATA_START_LINE"/>
+    AliasName="DATA_START_LINE">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="dms.data_start_line"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewAttribute
     Name="CombinationId"
     PrecisionRule="true"
@@ -352,6 +461,8 @@
     LOVName="LOV_CombinationId">
     <Properties>
       <SchemaBasedProperties>
+        <LABEL
+          ResId="dcm.combination_id"/>
         <CONTROLTYPE
           Value="choice"/>
       </SchemaBasedProperties>
@@ -366,6 +477,8 @@
     LOVName="LOV_CategoryId">
     <Properties>
       <SchemaBasedProperties>
+        <LABEL
+          ResId="dcm.category_id"/>
         <CONTROLTYPE
           Value="choice"/>
       </SchemaBasedProperties>
@@ -376,4 +489,8 @@
     ViewLink="team.epm.dcm.view.viewlink.templatecolumnsVL"
     Type="oracle.jbo.RowIterator"
     IsUpdateable="false"/>
+  <ResourceBundle>
+    <PropertiesBundle
+      PropertiesFile="ModelBundle"/>
+  </ResourceBundle>
 </ViewObject>
