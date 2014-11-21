@@ -22,6 +22,33 @@
   <DesignTime>
     <Attr Name="_codeGenFlag2" Value="Access|VarAccess"/>
   </DesignTime>
+  <ViewAccessor
+    Name="LKP_Validation"
+    ViewObjectName="team.epm.dcm.view.DcmValidationView">
+    <ParameterMap>
+      <PIMap Variable="locale">
+        <TransientExpression><![CDATA[adf.context.locale]]></TransientExpression>
+      </PIMap>
+    </ParameterMap>
+  </ViewAccessor>
+  <ListBinding
+    Name="LOV_ValidationId"
+    ListVOName="LKP_Validation"
+    ListRangeSize="-1"
+    NullValueFlag="start"
+    NullValueId="${adfBundle['oracle.javatools.resourcebundle.SystemBundle']['NULL_VALUE_RESID']}"
+    MRUCount="0">
+    <AttrArray Name="AttrNames">
+      <Item Value="ValidationId"/>
+    </AttrArray>
+    <AttrArray Name="ListAttrNames">
+      <Item Value="Id"/>
+    </AttrArray>
+    <AttrArray Name="ListDisplayAttrNames">
+      <Item Value="Name"/>
+    </AttrArray>
+    <DisplayCriteria/>
+  </ListBinding>
   <EntityUsage
     Name="DcmTemplateValidation"
     Entity="team.epm.dcm.model.DcmTemplateValidation"/>
@@ -43,7 +70,15 @@
     PrecisionRule="true"
     EntityAttrName="ValidationId"
     EntityUsage="DcmTemplateValidation"
-    AliasName="VALIDATION_ID"/>
+    AliasName="VALIDATION_ID"
+    LOVName="LOV_ValidationId">
+    <Properties>
+      <SchemaBasedProperties>
+        <CONTROLTYPE
+          Value="choice"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewAttribute
     Name="Seq"
     PrecisionRule="true"
@@ -74,4 +109,10 @@
     EntityAttrName="CreatedBy"
     EntityUsage="DcmTemplateValidation"
     AliasName="CREATED_BY"/>
+  <ViewLinkAccessor
+    Name="DcmTemplateColumnView"
+    ViewLink="team.epm.dcm.view.viewlink.templateValidationVL"
+    Type="oracle.jbo.Row"
+    Reversed="true"
+    IsUpdateable="false"/>
 </ViewObject>

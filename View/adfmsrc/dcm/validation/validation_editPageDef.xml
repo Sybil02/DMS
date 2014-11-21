@@ -5,6 +5,57 @@
   <parameters/>
   <executables>
     <variableIterator id="variables"/>
+    <iterator Binds="DcmValidationView" RangeSize="25"
+              DataControl="DcmModuleDataControl"
+              id="DcmValidationViewIterator" ChangeEventPolicy="ppr"/>
+    <searchRegion Binds="DcmValidationViewIterator" Criteria=""
+                  Customizer="oracle.jbo.uicli.binding.JUSearchBindingCustomizer"
+                  id="DcmValidationViewQuery"/>
   </executables>
-  <bindings/>
+  <bindings>
+    <attributeValues IterBinding="DcmValidationViewIterator" id="Name">
+      <AttrNames>
+        <Item Value="Name"/>
+      </AttrNames>
+    </attributeValues>
+    <attributeValues IterBinding="DcmValidationViewIterator" id="Program">
+      <AttrNames>
+        <Item Value="Program"/>
+      </AttrNames>
+    </attributeValues>
+    <attributeValues IterBinding="DcmValidationViewIterator" id="Args">
+      <AttrNames>
+        <Item Value="Args"/>
+      </AttrNames>
+    </attributeValues>
+    <list IterBinding="DcmValidationViewIterator" StaticList="false"
+          Uses="LOV_Required" id="Required" DTSupportsMRU="false"/>
+    <attributeValues IterBinding="DcmValidationViewIterator" id="Description">
+      <AttrNames>
+        <Item Value="Description"/>
+      </AttrNames>
+    </attributeValues>
+    <tree IterBinding="DcmValidationViewIterator" id="DcmValidationView">
+      <nodeDefinition DefName="team.epm.dcm.view.DcmValidationView"
+                      Name="DcmValidationView0">
+        <AttrNames>
+          <Item Value="Name"/>
+          <Item Value="Program"/>
+          <Item Value="Args"/>
+          <Item Value="Required"/>
+          <Item Value="Description"/>
+          <Item Value="UpdatedAt"/>
+          <Item Value="UpdatedBy"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <action IterBinding="DcmValidationViewIterator" id="CreateInsert"
+            RequiresUpdateModel="true" Action="createInsertRow"/>
+    <action IterBinding="DcmValidationViewIterator" id="Delete"
+            RequiresUpdateModel="false" Action="removeCurrentRow"/>
+    <action id="Commit" RequiresUpdateModel="true" Action="commitTransaction"
+            DataControl="DcmModuleDataControl"/>
+    <action id="Rollback" RequiresUpdateModel="false"
+            Action="rollbackTransaction" DataControl="DcmModuleDataControl"/>
+  </bindings>
 </pageDefinition>

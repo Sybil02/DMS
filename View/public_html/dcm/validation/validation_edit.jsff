@@ -1,2 +1,196 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.1"></jsp:root>
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.1"
+          xmlns:af="http://xmlns.oracle.com/adf/faces/rich"
+          xmlns:f="http://java.sun.com/jsf/core">
+  <af:panelStretchLayout id="psl1" topHeight="146px">
+    <f:facet name="bottom"/>
+    <f:facet name="center">
+      <af:panelCollection id="pc1"
+                          featuresOff="formatMenu detach statusBar freeze viewMenu">
+        <f:facet name="menus"/>
+        <f:facet name="toolbar">
+          <af:toolbar id="t2">
+            <af:commandToolbarButton actionListener="#{bindings.CreateInsert.execute}"
+                                     text="CreateInsert"
+                                     disabled="#{!bindings.CreateInsert.enabled}"
+                                     id="ctb1"/>
+            <af:commandToolbarButton actionListener="#{bindings.Delete.execute}"
+                                     text="Delete"
+                                     disabled="#{!bindings.Delete.enabled}"
+                                     id="ctb2"/>
+            <af:commandToolbarButton actionListener="#{bindings.Commit.execute}"
+                                     text="Commit"
+                                     disabled="#{!bindings.Commit.enabled}"
+                                     id="ctb3"
+                                     partialTriggers="t1 ::it2 ::it4 ::it3 ::soc1 ::it1"/>
+            <af:commandToolbarButton actionListener="#{bindings.Rollback.execute}"
+                                     text="Rollback"
+                                     disabled="#{!bindings.Rollback.enabled}"
+                                     immediate="true" id="ctb4"
+                                     partialTriggers="t1 ::it2 ::it4 ::it3 ::soc1 ::it1">
+              <af:resetActionListener/>
+            </af:commandToolbarButton>
+          </af:toolbar>
+        </f:facet>
+        <f:facet name="statusbar"/>
+        <af:table value="#{bindings.DcmValidationView.collectionModel}"
+                  var="row" rows="#{bindings.DcmValidationView.rangeSize}"
+                  emptyText="#{bindings.DcmValidationView.viewable ? 'No data to display.' : 'Access Denied.'}"
+                  fetchSize="#{bindings.DcmValidationView.rangeSize}"
+                  rowBandingInterval="0"
+                  filterModel="#{bindings.DcmValidationViewQuery.queryDescriptor}"
+                  queryListener="#{bindings.DcmValidationViewQuery.processQuery}"
+                  filterVisible="true" varStatus="vs"
+                  selectedRowKeys="#{bindings.DcmValidationView.collectionModel.selectedRow}"
+                  selectionListener="#{bindings.DcmValidationView.collectionModel.makeCurrent}"
+                  rowSelection="single" id="t1" partialTriggers="::ctb1 ::ctb2">
+          <af:column sortProperty="#{bindings.DcmValidationView.hints.Name.name}"
+                     filterable="true" sortable="true"
+                     headerText="#{bindings.DcmValidationView.hints.Name.label}"
+                     id="c2">
+            <af:inputText value="#{row.bindings.Name.inputValue}"
+                          label="#{bindings.DcmValidationView.hints.Name.label}"
+                          required="#{bindings.DcmValidationView.hints.Name.mandatory}"
+                          columns="#{bindings.DcmValidationView.hints.Name.displayWidth}"
+                          maximumLength="#{bindings.DcmValidationView.hints.Name.precision}"
+                          shortDesc="#{bindings.DcmValidationView.hints.Name.tooltip}"
+                          id="it7">
+              <f:validator binding="#{row.bindings.Name.validator}"/>
+            </af:inputText>
+          </af:column>
+          <af:column sortProperty="#{bindings.DcmValidationView.hints.Program.name}"
+                     filterable="true" sortable="true"
+                     headerText="#{bindings.DcmValidationView.hints.Program.label}"
+                     id="c7">
+            <af:inputText value="#{row.bindings.Program.inputValue}"
+                          label="#{bindings.DcmValidationView.hints.Program.label}"
+                          required="#{bindings.DcmValidationView.hints.Program.mandatory}"
+                          columns="#{bindings.DcmValidationView.hints.Program.displayWidth}"
+                          maximumLength="#{bindings.DcmValidationView.hints.Program.precision}"
+                          shortDesc="#{bindings.DcmValidationView.hints.Program.tooltip}"
+                          id="it5">
+              <f:validator binding="#{row.bindings.Program.validator}"/>
+            </af:inputText>
+          </af:column>
+          <af:column sortProperty="#{bindings.DcmValidationView.hints.Args.name}"
+                     filterable="true" sortable="true"
+                     headerText="#{bindings.DcmValidationView.hints.Args.label}"
+                     id="c5">
+            <af:inputText value="#{row.bindings.Args.inputValue}"
+                          label="#{bindings.DcmValidationView.hints.Args.label}"
+                          required="#{bindings.DcmValidationView.hints.Args.mandatory}"
+                          columns="#{bindings.DcmValidationView.hints.Args.displayWidth}"
+                          maximumLength="#{bindings.DcmValidationView.hints.Args.precision}"
+                          shortDesc="#{bindings.DcmValidationView.hints.Args.tooltip}"
+                          id="it6">
+              <f:validator binding="#{row.bindings.Args.validator}"/>
+            </af:inputText>
+          </af:column>
+          <af:column sortProperty="#{bindings.DcmValidationView.hints.Required.name}"
+                     filterable="true" sortable="true"
+                     headerText="#{bindings.DcmValidationView.hints.Required.label}"
+                     id="c6">
+            <af:selectOneChoice value="#{row.bindings.Required.inputValue}"
+                                label="#{row.bindings.Required.label}"
+                                required="#{bindings.DcmValidationView.hints.Required.mandatory}"
+                                shortDesc="#{bindings.DcmValidationView.hints.Required.tooltip}"
+                                id="soc2">
+              <f:selectItems value="#{row.bindings.Required.items}" id="si3"/>
+            </af:selectOneChoice>
+          </af:column>
+          <af:column sortProperty="#{bindings.DcmValidationView.hints.Description.name}"
+                     filterable="true" sortable="true"
+                     headerText="#{bindings.DcmValidationView.hints.Description.label}"
+                     id="c4">
+            <af:inputText value="#{row.bindings.Description.inputValue}"
+                          label="#{bindings.DcmValidationView.hints.Description.label}"
+                          required="#{bindings.DcmValidationView.hints.Description.mandatory}"
+                          columns="#{bindings.DcmValidationView.hints.Description.displayWidth}"
+                          maximumLength="#{bindings.DcmValidationView.hints.Description.precision}"
+                          shortDesc="#{bindings.DcmValidationView.hints.Description.tooltip}"
+                          id="it8">
+              <f:validator binding="#{row.bindings.Description.validator}"/>
+            </af:inputText>
+          </af:column>
+          <af:column sortProperty="#{bindings.DcmValidationView.hints.UpdatedAt.name}"
+                     filterable="true" sortable="true"
+                     headerText="#{bindings.DcmValidationView.hints.UpdatedAt.label}"
+                     id="c3">
+            <f:facet name="filter">
+              <af:inputDate value="#{vs.filterCriteria.UpdatedAt}" id="id1"/>
+            </f:facet>
+            <af:inputDate value="#{row.bindings.UpdatedAt.inputValue}"
+                          label="#{bindings.DcmValidationView.hints.UpdatedAt.label}"
+                          required="#{bindings.DcmValidationView.hints.UpdatedAt.mandatory}"
+                          shortDesc="#{bindings.DcmValidationView.hints.UpdatedAt.tooltip}"
+                          id="id2">
+              <f:validator binding="#{row.bindings.UpdatedAt.validator}"/>
+              <af:convertDateTime pattern="#{bindings.DcmValidationView.hints.UpdatedAt.format}"/>
+            </af:inputDate>
+          </af:column>
+          <af:column sortProperty="#{bindings.DcmValidationView.hints.UpdatedBy.name}"
+                     filterable="true" sortable="true"
+                     headerText="#{bindings.DcmValidationView.hints.UpdatedBy.label}"
+                     id="c1">
+            <af:selectOneChoice value="#{row.bindings.UpdatedBy.inputValue}"
+                                label="#{row.bindings.UpdatedBy.label}"
+                                required="#{bindings.DcmValidationView.hints.UpdatedBy.mandatory}"
+                                shortDesc="#{bindings.DcmValidationView.hints.UpdatedBy.tooltip}"
+                                id="soc3">
+              <f:selectItems value="#{row.bindings.UpdatedBy.items}" id="si2"/>
+            </af:selectOneChoice>
+          </af:column>
+        </af:table>
+      </af:panelCollection>
+    </f:facet>
+    <f:facet name="start"/>
+    <f:facet name="end"/>
+    <f:facet name="top">
+      <af:panelFormLayout id="pfl1">
+        <af:inputText value="#{bindings.Name.inputValue}"
+                      label="#{bindings.Name.hints.label}"
+                      required="#{bindings.Name.hints.mandatory}"
+                      columns="#{bindings.Name.hints.displayWidth}"
+                      maximumLength="#{bindings.Name.hints.precision}"
+                      shortDesc="#{bindings.Name.hints.tooltip}" id="it2"
+                      autoSubmit="true">
+          <f:validator binding="#{bindings.Name.validator}"/>
+        </af:inputText>
+        <af:inputText value="#{bindings.Program.inputValue}"
+                      label="#{bindings.Program.hints.label}"
+                      required="#{bindings.Program.hints.mandatory}"
+                      columns="#{bindings.Program.hints.displayWidth}"
+                      maximumLength="#{bindings.Program.hints.precision}"
+                      shortDesc="#{bindings.Program.hints.tooltip}" id="it4"
+                      autoSubmit="true">
+          <f:validator binding="#{bindings.Program.validator}"/>
+        </af:inputText>
+        <af:inputText value="#{bindings.Args.inputValue}"
+                      label="#{bindings.Args.hints.label}"
+                      required="#{bindings.Args.hints.mandatory}"
+                      columns="#{bindings.Args.hints.displayWidth}"
+                      maximumLength="#{bindings.Args.hints.precision}"
+                      shortDesc="#{bindings.Args.hints.tooltip}" id="it3"
+                      autoSubmit="true">
+          <f:validator binding="#{bindings.Args.validator}"/>
+        </af:inputText>
+        <af:selectOneChoice value="#{bindings.Required.inputValue}"
+                            label="#{bindings.Required.label}"
+                            required="#{bindings.Required.hints.mandatory}"
+                            shortDesc="#{bindings.Required.hints.tooltip}"
+                            id="soc1" autoSubmit="true">
+          <f:selectItems value="#{bindings.Required.items}" id="si1"/>
+        </af:selectOneChoice>
+        <af:inputText value="#{bindings.Description.inputValue}"
+                      label="#{bindings.Description.hints.label}"
+                      required="#{bindings.Description.hints.mandatory}"
+                      columns="#{bindings.Description.hints.displayWidth}"
+                      maximumLength="#{bindings.Description.hints.precision}"
+                      shortDesc="#{bindings.Description.hints.tooltip}"
+                      id="it1" autoSubmit="true">
+          <f:validator binding="#{bindings.Description.validator}"/>
+        </af:inputText>
+      </af:panelFormLayout>
+    </f:facet>
+  </af:panelStretchLayout>
+</jsp:root>

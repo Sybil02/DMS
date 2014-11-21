@@ -224,7 +224,8 @@
     EntityAttrName="CreatedBy"
     EntityUsage="DcmTemplateColumn"
     AliasName="CREATED_BY"
-    IsUpdateable="while_insert"/>
+    IsUpdateable="while_insert"
+    LOVName="LOV_CreatedBy"/>
   <ViewAttribute
     Name="IsPk"
     PrecisionRule="true"
@@ -282,6 +283,11 @@
     ViewLink="team.epm.dcm.view.viewlink.templatecolumnsVL"
     Type="oracle.jbo.Row"
     Reversed="true"
+    IsUpdateable="false"/>
+  <ViewLinkAccessor
+    Name="DcmValidationView"
+    ViewLink="team.epm.dcm.view.viewlink.templateValidationVL"
+    Type="oracle.jbo.RowIterator"
     IsUpdateable="false"/>
   <ResourceBundle>
     <PropertiesBundle
