@@ -67,5 +67,7 @@
             RequiresUpdateModel="false" Action="rollbackTransaction"/>
     <action id="Commit" DataControl="DcmModuleDataControl"
             RequiresUpdateModel="true" Action="commitTransaction"/>
+    <action IterBinding="DcmCombinationView1Iterator" id="Delete1"
+            RequiresUpdateModel="false" Action="removeCurrentRow"/>
   </bindings>
 </pageDefinition>

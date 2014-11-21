@@ -98,7 +98,14 @@
     PrecisionRule="true"
     EntityAttrName="RoleId"
     EntityUsage="DcmRoleTemplate"
-    AliasName="ROLE_ID"/>
+    AliasName="ROLE_ID">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="dms.role_name"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewAttribute
     Name="TemplateId"
     PrecisionRule="true"
@@ -108,6 +115,8 @@
     LOVName="LOV_TemplateId">
     <Properties>
       <SchemaBasedProperties>
+        <LABEL
+          ResId="dcm.template.name"/>
         <CONTROLTYPE
           Value="choice"/>
       </SchemaBasedProperties>
@@ -148,6 +157,8 @@
     LOVName="LOV_ReadOnly">
     <Properties>
       <SchemaBasedProperties>
+        <LABEL
+          ResId="dcm.readOnly"/>
         <CONTROLTYPE
           Value="choice"/>
       </SchemaBasedProperties>
@@ -164,4 +175,8 @@
     Type="oracle.jbo.Row"
     Reversed="true"
     IsUpdateable="false"/>
+  <ResourceBundle>
+    <PropertiesBundle
+      PropertiesFile="ModelBundle"/>
+  </ResourceBundle>
 </ViewObject>

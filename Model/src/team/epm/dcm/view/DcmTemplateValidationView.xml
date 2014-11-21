@@ -58,13 +58,21 @@
     PrecisionRule="true"
     EntityAttrName="Id"
     EntityUsage="DcmTemplateValidation"
-    AliasName="ID"/>
+    AliasName="ID"
+    IsUpdateable="while_insert"/>
   <ViewAttribute
     Name="ColumnId"
     PrecisionRule="true"
     EntityAttrName="ColumnId"
     EntityUsage="DcmTemplateValidation"
-    AliasName="COLUMN_ID"/>
+    AliasName="COLUMN_ID">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="dcm.templateColumn_name"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewAttribute
     Name="ValidationId"
     PrecisionRule="true"
@@ -74,6 +82,8 @@
     LOVName="LOV_ValidationId">
     <Properties>
       <SchemaBasedProperties>
+        <LABEL
+          ResId="dcm.validation_name"/>
         <CONTROLTYPE
           Value="choice"/>
       </SchemaBasedProperties>
@@ -84,13 +94,21 @@
     PrecisionRule="true"
     EntityAttrName="Seq"
     EntityUsage="DcmTemplateValidation"
-    AliasName="SEQ"/>
+    AliasName="SEQ">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="dcm.seq"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewAttribute
     Name="CreatedAt"
     PrecisionRule="true"
     EntityAttrName="CreatedAt"
     EntityUsage="DcmTemplateValidation"
-    AliasName="CREATED_AT"/>
+    AliasName="CREATED_AT"
+    IsUpdateable="while_insert"/>
   <ViewAttribute
     Name="UpdatedAt"
     PrecisionRule="true"
@@ -108,11 +126,16 @@
     PrecisionRule="true"
     EntityAttrName="CreatedBy"
     EntityUsage="DcmTemplateValidation"
-    AliasName="CREATED_BY"/>
+    AliasName="CREATED_BY"
+    IsUpdateable="while_insert"/>
   <ViewLinkAccessor
     Name="DcmTemplateColumnView"
     ViewLink="team.epm.dcm.view.viewlink.templateValidationVL"
     Type="oracle.jbo.Row"
     Reversed="true"
     IsUpdateable="false"/>
+  <ResourceBundle>
+    <PropertiesBundle
+      PropertiesFile="ModelBundle"/>
+  </ResourceBundle>
 </ViewObject>

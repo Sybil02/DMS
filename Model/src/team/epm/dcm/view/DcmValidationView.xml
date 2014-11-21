@@ -155,25 +155,53 @@
     EntityAttrName="Locale"
     EntityUsage="DcmValidation"
     AliasName="LOCALE"
-    LOVName="LOV_Locale"/>
+    LOVName="LOV_Locale">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="dms.common.locale"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewAttribute
     Name="Name"
     PrecisionRule="true"
     EntityAttrName="Name"
     EntityUsage="DcmValidation"
-    AliasName="NAME"/>
+    AliasName="NAME">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="dcm.validation_name"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewAttribute
     Name="Program"
     PrecisionRule="true"
     EntityAttrName="Program"
     EntityUsage="DcmValidation"
-    AliasName="PROGRAM"/>
+    AliasName="PROGRAM">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="dcm.validation_program"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewAttribute
     Name="Args"
     PrecisionRule="true"
     EntityAttrName="Args"
     EntityUsage="DcmValidation"
-    AliasName="ARGS"/>
+    AliasName="ARGS">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="dcm.validation_parameter"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewAttribute
     Name="Required"
     PrecisionRule="true"
@@ -183,6 +211,8 @@
     LOVName="LOV_Required">
     <Properties>
       <SchemaBasedProperties>
+        <LABEL
+          ResId="dcm.validation_require"/>
         <CONTROLTYPE
           Value="choice"/>
       </SchemaBasedProperties>
@@ -193,20 +223,41 @@
     PrecisionRule="true"
     EntityAttrName="Description"
     EntityUsage="DcmValidation"
-    AliasName="DESCRIPTION"/>
+    AliasName="DESCRIPTION">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="dcm.validation_description"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewAttribute
     Name="CreatedAt"
     PrecisionRule="true"
     EntityAttrName="CreatedAt"
     EntityUsage="DcmValidation"
     AliasName="CREATED_AT"
-    IsUpdateable="while_insert"/>
+    IsUpdateable="while_insert">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="createdAt"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewAttribute
     Name="UpdatedAt"
     PrecisionRule="true"
     EntityAttrName="UpdatedAt"
     EntityUsage="DcmValidation"
-    AliasName="UPDATED_AT"/>
+    AliasName="UPDATED_AT">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="updatedAt"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewAttribute
     Name="UpdatedBy"
     PrecisionRule="true"
@@ -216,6 +267,8 @@
     LOVName="LOV_UpdatedBy">
     <Properties>
       <SchemaBasedProperties>
+        <LABEL
+          ResId="createdBy"/>
         <CONTROLTYPE
           Value="choice"/>
       </SchemaBasedProperties>
@@ -228,11 +281,22 @@
     EntityUsage="DcmValidation"
     AliasName="CREATED_BY"
     IsUpdateable="while_insert"
-    LOVName="LOV_CreatedBy"/>
+    LOVName="LOV_CreatedBy">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="createdBy"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewLinkAccessor
     Name="DcmTemplateColumnView"
     ViewLink="team.epm.dcm.view.viewlink.templateValidationVL"
     Type="oracle.jbo.Row"
     Reversed="true"
     IsUpdateable="false"/>
+  <ResourceBundle>
+    <PropertiesBundle
+      PropertiesFile="ModelBundle"/>
+  </ResourceBundle>
 </ViewObject>

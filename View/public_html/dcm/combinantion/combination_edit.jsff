@@ -74,13 +74,16 @@
         <f:facet name="menus"/>
         <f:facet name="toolbar">
           <af:toolbar id="t2">
-            <af:commandButton text="#{viewBundle['dcm.combination.new']}"
+            <af:commandToolbarButton text="#{viewBundle['dcm.combination.new']}"
                               id="cb1">
               <af:showPopupBehavior popupId="::p1" triggerType="action"
                                     alignId="::pc1" align="startBefore"/>
             
-            </af:commandButton>
-           
+            </af:commandToolbarButton>
+            <af:commandToolbarButton actionListener="#{bindings.Delete1.execute}"
+                                     text="#{viewBundle['dcm.combination.delete']}"
+                                     disabled="#{!bindings.Delete1.enabled}"
+                                     id="ctb1"/>
           </af:toolbar>
         </f:facet>
         <f:facet name="statusbar"/>
@@ -94,7 +97,7 @@
                   varStatus="vs"
                   selectedRowKeys="#{bindings.DcmCombinationView1.collectionModel.selectedRow}"
                   selectionListener="#{bindings.DcmCombinationView1.collectionModel.makeCurrent}"
-                  rowSelection="single" id="t1" partialTriggers="::cb1">
+                  rowSelection="single" id="t1" partialTriggers="::cb1 ::ctb1">
           <af:column sortProperty="#{bindings.DcmCombinationView1.hints.Name.name}"
                      filterable="true" sortable="true"
                      headerText="#{bindings.DcmCombinationView1.hints.Name.label}"
@@ -184,20 +187,23 @@
               <f:facet name="toolbar">
                 <af:toolbar id="t6">
                   <af:commandButton actionListener="#{bindings.CreateInsert1.execute}"
-                                    text="CreateInsert1"
+                                    text="#{viewBundle['dcm.valueset_add']}"
                                     disabled="#{!bindings.CreateInsert1.enabled}"
                                     id="cb5" partialSubmit="true"/>
                   <af:commandButton actionListener="#{bindings.Delete.execute}"
-                                    text="Delete"
+                                    text="#{viewBundle['dcm.valueset_delete']}"
                                     disabled="#{!bindings.Delete.enabled}"
                                     id="cb6" partialSubmit="true"/>
                   <af:commandButton actionListener="#{bindings.Commit.execute}"
-                                    text="Commit"
+                                    text="#{viewBundle['dms.common.save']}"
                                     disabled="#{!bindings.Commit.enabled}"
                                     id="cb8"/>
-                  <af:commandButton text="save" id="cb4"
-                                    actionListener="#{backingBeanScope.CombinationBean.commit}"/>
-                  <af:commandButton text="cancle" id="cb7"/>
+                  <af:commandButton text="#{viewBundle['dms.common.rollback']}" id="cb7"
+                                    actionListener="#{bindings.Rollback.execute}"
+                                    disabled="#{!bindings.Rollback.enabled}"
+                                    immediate="true">
+                    <af:resetActionListener/>
+                  </af:commandButton>
                 </af:toolbar>
               </f:facet>
               <f:facet name="statusbar"/>

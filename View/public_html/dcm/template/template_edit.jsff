@@ -1,331 +1,397 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.1"
           xmlns:af="http://xmlns.oracle.com/adf/faces/rich"
-          xmlns:f="http://java.sun.com/jsf/core">
+          xmlns:f="http://java.sun.com/jsf/core"
+          xmlns:c="http://java.sun.com/jsp/jstl/core">
+  <c:set var="viewBundle" value="#{adfBundle['dms_v']}"/>
   <af:panelTabbed id="pt1">
-    <af:showDetailItem text="showDetailItem 1" id="sdi1">
-      <af:panelFormLayout id="pfl1" rows="5">
-        <af:inputText value="#{bindings.Name.inputValue}"
-                      label="#{bindings.Name.hints.label}"
-                      required="#{bindings.Name.hints.mandatory}"
-                      columns="20"
-                      maximumLength="#{bindings.Name.hints.precision}"
-                      shortDesc="#{bindings.Name.hints.tooltip}" id="it6"
-                      inlineStyle="width:50.0px;">
-          <f:validator binding="#{bindings.Name.validator}"/>
-        </af:inputText>
-        <af:selectOneChoice value="#{bindings.Readonly.inputValue}"
-                            label="#{bindings.Readonly.label}"
-                            required="#{bindings.Readonly.hints.mandatory}"
-                            shortDesc="#{bindings.Readonly.hints.tooltip}"
-                            id="soc2">
-          <f:selectItems value="#{bindings.Readonly.items}" id="si1"/>
-        </af:selectOneChoice>
-        <af:inputText value="#{bindings.Seq.inputValue}"
-                      label="#{bindings.Seq.hints.label}"
-                      required="#{bindings.Seq.hints.mandatory}"
-                      columns="10"
-                      maximumLength="#{bindings.Seq.hints.precision}"
-                      shortDesc="#{bindings.Seq.hints.tooltip}" id="it8">
-          <f:validator binding="#{bindings.Seq.validator}"/>
-          <af:convertNumber groupingUsed="false"
-                            pattern="#{bindings.Seq.format}"/>
-        </af:inputText>
-        <af:inputText value="#{bindings.Description.inputValue}"
-                      label="#{bindings.Description.hints.label}"
-                      required="#{bindings.Description.hints.mandatory}"
-                      columns="30"
-                      maximumLength="#{bindings.Description.hints.precision}"
-                      shortDesc="#{bindings.Description.hints.tooltip}"
-                      id="it7">
-          <f:validator binding="#{bindings.Description.validator}"/>
-        </af:inputText>
-        <af:inputText value="#{bindings.DbTable.inputValue}"
-                      label="#{bindings.DbTable.hints.label}"
-                      required="#{bindings.DbTable.hints.mandatory}"
-                      columns="30"
-                      maximumLength="#{bindings.DbTable.hints.precision}"
-                      shortDesc="#{bindings.DbTable.hints.tooltip}" id="it4">
-          <f:validator binding="#{bindings.DbTable.validator}"/>
-        </af:inputText>
-        <af:inputText value="#{bindings.DbView.inputValue}"
-                      label="#{bindings.DbView.hints.label}"
-                      required="#{bindings.DbView.hints.mandatory}"
-                      columns="30"
-                      maximumLength="#{bindings.DbView.hints.precision}"
-                      shortDesc="#{bindings.DbView.hints.tooltip}" id="it11">
-          <f:validator binding="#{bindings.DbView.validator}"/>
-        </af:inputText>
-        <af:inputText value="#{bindings.TmpTable.inputValue}"
-                      label="#{bindings.TmpTable.hints.label}"
-                      required="#{bindings.TmpTable.hints.mandatory}"
-                      columns="30"
-                      maximumLength="#{bindings.TmpTable.hints.precision}"
-                      shortDesc="#{bindings.TmpTable.hints.tooltip}" id="it5">
-          <f:validator binding="#{bindings.TmpTable.validator}"/>
-        </af:inputText>
-        <af:inputText value="#{bindings.PreProgram.inputValue}"
-                      label="#{bindings.PreProgram.hints.label}"
-                      required="#{bindings.PreProgram.hints.mandatory}"
-                      columns="30"
-                      maximumLength="#{bindings.PreProgram.hints.precision}"
-                      shortDesc="#{bindings.PreProgram.hints.tooltip}"
-                      id="it12">
-          <f:validator binding="#{bindings.PreProgram.validator}"/>
-        </af:inputText>
-        <af:inputText value="#{bindings.HandleProgram.inputValue}"
-                      label="#{bindings.HandleProgram.hints.label}"
-                      required="#{bindings.HandleProgram.hints.mandatory}"
-                      columns="30"
-                      maximumLength="#{bindings.HandleProgram.hints.precision}"
-                      shortDesc="#{bindings.HandleProgram.hints.tooltip}"
-                      id="it3">
-          <f:validator binding="#{bindings.HandleProgram.validator}"/>
-        </af:inputText>
-        <af:inputText value="#{bindings.AfterProgram.inputValue}"
-                      label="#{bindings.AfterProgram.hints.label}"
-                      required="#{bindings.AfterProgram.hints.mandatory}"
-                      columns="30"
-                      maximumLength="#{bindings.AfterProgram.hints.precision}"
-                      shortDesc="#{bindings.AfterProgram.hints.tooltip}"
-                      id="it2">
-          <f:validator binding="#{bindings.AfterProgram.validator}"/>
-        </af:inputText>
-        <af:inputText value="#{bindings.HandleMode.inputValue}"
-                      label="#{bindings.HandleMode.hints.label}"
-                      required="#{bindings.HandleMode.hints.mandatory}"
-                      columns="#{bindings.HandleMode.hints.displayWidth}"
-                      maximumLength="#{bindings.HandleMode.hints.precision}"
-                      shortDesc="#{bindings.HandleMode.hints.tooltip}"
-                      id="it10">
-          <f:validator binding="#{bindings.HandleMode.validator}"/>
-        </af:inputText>
-        <af:inputText value="#{bindings.TemplateFile.inputValue}"
-                      label="#{bindings.TemplateFile.hints.label}"
-                      required="#{bindings.TemplateFile.hints.mandatory}"
-                      columns="#{bindings.TemplateFile.hints.displayWidth}"
-                      maximumLength="#{bindings.TemplateFile.hints.precision}"
-                      shortDesc="#{bindings.TemplateFile.hints.tooltip}"
-                      id="it13">
-          <f:validator binding="#{bindings.TemplateFile.validator}"/>
-        </af:inputText>
-        <af:inputText value="#{bindings.DataStartLine.inputValue}"
-                      label="#{bindings.DataStartLine.hints.label}"
-                      required="#{bindings.DataStartLine.hints.mandatory}"
-                      columns="#{bindings.DataStartLine.hints.displayWidth}"
-                      maximumLength="#{bindings.DataStartLine.hints.precision}"
-                      shortDesc="#{bindings.DataStartLine.hints.tooltip}"
-                      id="it1">
-          <f:validator binding="#{bindings.DataStartLine.validator}"/>
-          <af:convertNumber groupingUsed="false"
-                            pattern="#{bindings.DataStartLine.format}"/>
-        </af:inputText>
-        <af:selectOneChoice value="#{bindings.CombinationId.inputValue}"
-                            label="#{bindings.CombinationId.label}"
-                            required="#{bindings.CombinationId.hints.mandatory}"
-                            shortDesc="#{bindings.CombinationId.hints.tooltip}"
-                            id="soc6">
-          <f:selectItems value="#{bindings.CombinationId.items}" id="si6"/>
-        </af:selectOneChoice>
-        <af:selectOneChoice value="#{bindings.CategoryId.inputValue}"
-                            label="#{bindings.CategoryId.label}"
-                            required="#{bindings.CategoryId.hints.mandatory}"
-                            shortDesc="#{bindings.CategoryId.hints.tooltip}"
-                            id="soc1">
-          <f:selectItems value="#{bindings.CategoryId.items}" id="si2"/>
-        </af:selectOneChoice>
-        <f:facet name="footer">
-          <af:panelGroupLayout layout="vertical" id="pgl1">
-            <af:panelGroupLayout layout="horizontal" id="pgl2">
-              <af:commandButton actionListener="#{bindings.First.execute}"
-                                text="First"
-                                disabled="#{!bindings.First.enabled}"
-                                partialSubmit="true" id="cb4"/>
-              <af:commandButton actionListener="#{bindings.Previous.execute}"
-                                text="Previous"
-                                disabled="#{!bindings.Previous.enabled}"
-                                partialSubmit="true" id="cb1"/>
-              <af:commandButton actionListener="#{bindings.Next.execute}"
-                                text="Next" disabled="#{!bindings.Next.enabled}"
-                                partialSubmit="true" id="cb2"/>
-              <af:commandButton actionListener="#{bindings.Last.execute}"
-                                text="Last" disabled="#{!bindings.Last.enabled}"
-                                partialSubmit="true" id="cb5"/>
-              <af:commandButton actionListener="#{bindings.CreateInsert.execute}"
-                                text="CreateInsert"
-                                disabled="#{!bindings.CreateInsert.enabled}"
-                                id="cb6"/>
-              <af:commandButton actionListener="#{bindings.Delete.execute}"
-                                text="Delete"
-                                disabled="#{!bindings.Delete.enabled}"
-                                id="cb7"/>
-              <af:commandButton text="Submit" id="cb3"/>
-              <af:commandButton actionListener="#{bindings.Commit.execute}"
-                                text="Commit"
-                                disabled="#{!bindings.Commit.enabled}"
-                                id="cb8"/>
-            </af:panelGroupLayout>
-          </af:panelGroupLayout>
+    <af:showDetailItem text="#{viewBundle['dcm.template.manage']}" id="sdi1">
+      <af:spacer width="10" height="20" id="s1"/>
+      <af:panelCollection id="pc2"
+                          featuresOff="formatMenu detach statusBar freeze viewMenu"
+                          inlineStyle="width:798px;">
+        <f:facet name="menus"/>
+        <f:facet name="toolbar">
+          <af:toolbar id="t4">
+            <af:commandToolbarButton actionListener="#{bindings.CreateInsert.execute}"
+                                     text="#{viewBundle['dcm.template.add']}"
+                                     disabled="#{!bindings.CreateInsert.enabled}"
+                                     id="ctb1"/>
+            <af:commandToolbarButton actionListener="#{bindings.Delete.execute}"
+                                     text="#{viewBundle['dcm.template.delete']}"
+                                     disabled="#{!bindings.Delete.enabled}"
+                                     id="ctb2"/>
+            <af:commandToolbarButton actionListener="#{bindings.Commit.execute}"
+                                     text="#{viewBundle['dms.common.save']}"
+                                     disabled="#{!bindings.Commit.enabled}"
+                                     id="ctb3"/>
+            <af:commandToolbarButton actionListener="#{bindings.Rollback.execute}"
+                                     text="#{viewBundle['dms.common.rollback']}"
+                                     disabled="#{!bindings.Rollback.enabled}"
+                                     immediate="true" id="ctb4">
+              <af:resetActionListener/>
+            </af:commandToolbarButton>
+          </af:toolbar>
         </f:facet>
-      </af:panelFormLayout>
-      <af:table value="#{bindings.DcmTemplateView1.collectionModel}" var="row"
-                rows="#{bindings.DcmTemplateView1.rangeSize}"
-                emptyText="#{bindings.DcmTemplateView1.viewable ? 'No data to display.' : 'Access Denied.'}"
-                fetchSize="#{bindings.DcmTemplateView1.rangeSize}"
-                rowBandingInterval="0" id="t1"
-                partialTriggers="::cb4 ::cb1 ::cb2 ::cb5 ::cb6 :::cb4 :::cb1 :::cb2 :::cb5 :::cb6 ::cb7">
-        <af:column sortProperty="#{bindings.DcmTemplateView1.hints.Name.name}"
-                   sortable="false"
-                   headerText="#{bindings.DcmTemplateView1.hints.Name.label}"
-                   id="c3">
-          <af:outputText value="#{row.Name}" id="ot9"/>
-        </af:column>
-        <af:column sortProperty="#{bindings.DcmTemplateView1.hints.UpdatedAt.name}"
-                   sortable="false"
-                   headerText="#{bindings.DcmTemplateView1.hints.UpdatedAt.label}"
-                   id="c11">
-          <af:outputText value="#{row.UpdatedAt}" id="ot13">
-            <af:convertDateTime pattern="#{bindings.DcmTemplateView1.hints.UpdatedAt.format}"/>
-          </af:outputText>
-        </af:column>
-        <af:column sortProperty="#{bindings.DcmTemplateView1.hints.UpdatedBy.name}"
-                   sortable="false"
-                   headerText="#{bindings.DcmTemplateView1.hints.UpdatedBy.label}"
-                   id="c8">
-          <af:selectOneChoice value="#{row.bindings.UpdatedBy.inputValue}"
-                              label="#{row.bindings.UpdatedBy.label}"
-                              required="#{bindings.DcmTemplateView1.hints.UpdatedBy.mandatory}"
-                              shortDesc="#{bindings.DcmTemplateView1.hints.UpdatedBy.tooltip}"
-                              id="soc3">
-            <f:selectItems value="#{row.bindings.UpdatedBy.items}" id="si4"/>
-          </af:selectOneChoice>
-        </af:column>
-        <af:column sortProperty="#{bindings.DcmTemplateView1.hints.Readonly.name}"
-                   sortable="false"
-                   headerText="#{bindings.DcmTemplateView1.hints.Readonly.label}"
-                   id="c2">
-          <af:selectOneChoice value="#{row.bindings.Readonly.inputValue}"
-                              label="#{row.bindings.Readonly.label}"
-                              required="#{bindings.DcmTemplateView1.hints.Readonly.mandatory}"
-                              shortDesc="#{bindings.DcmTemplateView1.hints.Readonly.tooltip}"
-                              id="soc4">
-            <f:selectItems value="#{row.bindings.Readonly.items}" id="si3"/>
-          </af:selectOneChoice>
-        </af:column>
-        <af:column sortProperty="#{bindings.DcmTemplateView1.hints.Seq.name}"
-                   sortable="false"
-                   headerText="#{bindings.DcmTemplateView1.hints.Seq.label}"
-                   id="c16">
-          <af:outputText value="#{row.Seq}" id="ot7">
-            <af:convertNumber groupingUsed="false"
-                              pattern="#{bindings.DcmTemplateView1.hints.Seq.format}"/>
-          </af:outputText>
-        </af:column>
-        <af:column sortProperty="#{bindings.DcmTemplateView1.hints.Description.name}"
-                   sortable="false"
-                   headerText="#{bindings.DcmTemplateView1.hints.Description.label}"
-                   id="c9">
-          <af:outputText value="#{row.Description}" id="ot2"/>
-        </af:column>
-        <af:column sortProperty="#{bindings.DcmTemplateView1.hints.DbTable.name}"
-                   sortable="false"
-                   headerText="#{bindings.DcmTemplateView1.hints.DbTable.label}"
-                   id="c13">
-          <af:outputText value="#{row.DbTable}" id="ot6"/>
-        </af:column>
-        <af:column sortProperty="#{bindings.DcmTemplateView1.hints.DbView.name}"
-                   sortable="false"
-                   headerText="#{bindings.DcmTemplateView1.hints.DbView.label}"
-                   id="c5">
-          <af:outputText value="#{row.DbView}" id="ot5"/>
-        </af:column>
-        <af:column sortProperty="#{bindings.DcmTemplateView1.hints.TmpTable.name}"
-                   sortable="false"
-                   headerText="#{bindings.DcmTemplateView1.hints.TmpTable.label}"
-                   id="c7">
-          <af:outputText value="#{row.TmpTable}" id="ot8"/>
-        </af:column>
-        <af:column sortProperty="#{bindings.DcmTemplateView1.hints.PreProgram.name}"
-                   sortable="false"
-                   headerText="#{bindings.DcmTemplateView1.hints.PreProgram.label}"
-                   id="c6">
-          <af:outputText value="#{row.PreProgram}" id="ot12"/>
-        </af:column>
-        <af:column sortProperty="#{bindings.DcmTemplateView1.hints.HandleProgram.name}"
-                   sortable="false"
-                   headerText="#{bindings.DcmTemplateView1.hints.HandleProgram.label}"
-                   id="c1">
-          <af:outputText value="#{row.HandleProgram}" id="ot10"/>
-        </af:column>
-        <af:column sortProperty="#{bindings.DcmTemplateView1.hints.AfterProgram.name}"
-                   sortable="false"
-                   headerText="#{bindings.DcmTemplateView1.hints.AfterProgram.label}"
-                   id="c12">
-          <af:outputText value="#{row.AfterProgram}" id="ot3"/>
-        </af:column>
-        <af:column sortProperty="#{bindings.DcmTemplateView1.hints.HandleMode.name}"
-                   sortable="false"
-                   headerText="#{bindings.DcmTemplateView1.hints.HandleMode.label}"
-                   id="c10">
-          <af:outputText value="#{row.HandleMode}" id="ot1"/>
-        </af:column>
-        <af:column sortProperty="#{bindings.DcmTemplateView1.hints.TemplateFile.name}"
-                   sortable="false"
-                   headerText="#{bindings.DcmTemplateView1.hints.TemplateFile.label}"
-                   id="c17">
-          <af:outputText value="#{row.TemplateFile}" id="ot14"/>
-        </af:column>
-        <af:column sortProperty="#{bindings.DcmTemplateView1.hints.DataStartLine.name}"
-                   sortable="false"
-                   headerText="#{bindings.DcmTemplateView1.hints.DataStartLine.label}"
-                   id="c4">
-          <af:outputText value="#{row.DataStartLine}" id="ot4">
-            <af:convertNumber groupingUsed="false"
-                              pattern="#{bindings.DcmTemplateView1.hints.DataStartLine.format}"/>
-          </af:outputText>
-        </af:column>
-        <af:column sortProperty="#{bindings.DcmTemplateView1.hints.CombinationId.name}"
-                   sortable="false"
-                   headerText="#{bindings.DcmTemplateView1.hints.CombinationId.label}"
-                   id="c15">
-          <af:outputText value="#{row.CombinationId}" id="ot11"/>
-        </af:column>
-        <af:column sortProperty="#{bindings.DcmTemplateView1.hints.CategoryId.name}"
-                   sortable="false"
-                   headerText="#{bindings.DcmTemplateView1.hints.CategoryId.label}"
-                   id="c14">
-          <af:selectOneChoice value="#{row.bindings.CategoryId.inputValue}"
-                              label="#{row.bindings.CategoryId.label}"
-                              required="#{bindings.DcmTemplateView1.hints.CategoryId.mandatory}"
-                              shortDesc="#{bindings.DcmTemplateView1.hints.CategoryId.tooltip}"
-                              id="soc5">
-            <f:selectItems value="#{row.bindings.CategoryId.items}" id="si5"/>
-          </af:selectOneChoice>
-        </af:column>
-      </af:table>
+        <f:facet name="statusbar"/>
+        <af:table value="#{bindings.DcmTemplateView1.collectionModel}" var="row"
+                  rows="#{bindings.DcmTemplateView1.rangeSize}"
+                  emptyText="#{bindings.DcmTemplateView1.viewable ? 'No data to display.' : 'Access Denied.'}"
+                  fetchSize="#{bindings.DcmTemplateView1.rangeSize}"
+                  rowBandingInterval="0" id="t1"
+                  partialTriggers="::ctb1 ::ctb2" rowSelection="single"
+                  filterModel="#{bindings.DcmTemplateView12Query.queryDescriptor}"
+                  queryListener="#{bindings.DcmTemplateView12Query.processQuery}"
+                  filterVisible="true" varStatus="vs"
+                  selectedRowKeys="#{bindings.DcmTemplateView1.collectionModel.selectedRow}"
+                  selectionListener="#{bindings.DcmTemplateView1.collectionModel.makeCurrent}">
+          <af:column sortProperty="#{bindings.DcmTemplateView1.hints.Name.name}"
+                     filterable="true" sortable="true"
+                     headerText="#{bindings.DcmTemplateView1.hints.Name.label}"
+                     id="c12">
+            <af:inputText value="#{row.bindings.Name.inputValue}"
+                          label="#{bindings.DcmTemplateView1.hints.Name.label}"
+                          required="#{bindings.DcmTemplateView1.hints.Name.mandatory}"
+                          columns="#{bindings.DcmTemplateView1.hints.Name.displayWidth}"
+                          maximumLength="#{bindings.DcmTemplateView1.hints.Name.precision}"
+                          shortDesc="#{bindings.DcmTemplateView1.hints.Name.tooltip}"
+                          id="it7">
+              <f:validator binding="#{row.bindings.Name.validator}"/>
+            </af:inputText>
+          </af:column>
+          <af:column sortProperty="#{bindings.DcmTemplateView1.hints.Description.name}"
+                     filterable="true" sortable="true"
+                     headerText="#{bindings.DcmTemplateView1.hints.Description.label}"
+                     id="c4">
+            <af:inputText value="#{row.bindings.Description.inputValue}"
+                          label="#{bindings.DcmTemplateView1.hints.Description.label}"
+                          required="#{bindings.DcmTemplateView1.hints.Description.mandatory}"
+                          columns="#{bindings.DcmTemplateView1.hints.Description.displayWidth}"
+                          maximumLength="#{bindings.DcmTemplateView1.hints.Description.precision}"
+                          shortDesc="#{bindings.DcmTemplateView1.hints.Description.tooltip}"
+                          id="it6">
+              <f:validator binding="#{row.bindings.Description.validator}"/>
+            </af:inputText>
+          </af:column>
+          <af:column sortProperty="#{bindings.DcmTemplateView1.hints.DbTable.name}"
+                     filterable="true" sortable="true"
+                     headerText="#{bindings.DcmTemplateView1.hints.DbTable.label}"
+                     id="c17">
+            <af:inputText value="#{row.bindings.DbTable.inputValue}"
+                          label="#{bindings.DcmTemplateView1.hints.DbTable.label}"
+                          required="#{bindings.DcmTemplateView1.hints.DbTable.mandatory}"
+                          columns="#{bindings.DcmTemplateView1.hints.DbTable.displayWidth}"
+                          maximumLength="#{bindings.DcmTemplateView1.hints.DbTable.precision}"
+                          shortDesc="#{bindings.DcmTemplateView1.hints.DbTable.tooltip}"
+                          id="it10">
+              <f:validator binding="#{row.bindings.DbTable.validator}"/>
+            </af:inputText>
+          </af:column>
+          <af:column sortProperty="#{bindings.DcmTemplateView1.hints.DbView.name}"
+                     filterable="true" sortable="true"
+                     headerText="#{bindings.DcmTemplateView1.hints.DbView.label}"
+                     id="c15">
+            <af:inputText value="#{row.bindings.DbView.inputValue}"
+                          label="#{bindings.DcmTemplateView1.hints.DbView.label}"
+                          required="#{bindings.DcmTemplateView1.hints.DbView.mandatory}"
+                          columns="#{bindings.DcmTemplateView1.hints.DbView.displayWidth}"
+                          maximumLength="#{bindings.DcmTemplateView1.hints.DbView.precision}"
+                          shortDesc="#{bindings.DcmTemplateView1.hints.DbView.tooltip}"
+                          id="it11">
+              <f:validator binding="#{row.bindings.DbView.validator}"/>
+            </af:inputText>
+          </af:column>
+          <af:column sortProperty="#{bindings.DcmTemplateView1.hints.Seq.name}"
+                     filterable="true" sortable="true"
+                     headerText="#{bindings.DcmTemplateView1.hints.Seq.label}"
+                     id="c10">
+            <af:inputText value="#{row.bindings.Seq.inputValue}"
+                          label="#{bindings.DcmTemplateView1.hints.Seq.label}"
+                          required="#{bindings.DcmTemplateView1.hints.Seq.mandatory}"
+                          columns="#{bindings.DcmTemplateView1.hints.Seq.displayWidth}"
+                          maximumLength="#{bindings.DcmTemplateView1.hints.Seq.precision}"
+                          shortDesc="#{bindings.DcmTemplateView1.hints.Seq.tooltip}"
+                          id="it13">
+              <f:validator binding="#{row.bindings.Seq.validator}"/>
+              <af:convertNumber groupingUsed="false"
+                                pattern="#{bindings.DcmTemplateView1.hints.Seq.format}"/>
+            </af:inputText>
+          </af:column>
+          <af:column sortProperty="#{bindings.DcmTemplateView1.hints.Readonly.name}"
+                     filterable="true" sortable="true"
+                     headerText="#{bindings.DcmTemplateView1.hints.Readonly.label}"
+                     id="c5">
+            <af:selectOneChoice value="#{row.bindings.Readonly.inputValue}"
+                                label="#{row.bindings.Readonly.label}"
+                                required="#{bindings.DcmTemplateView1.hints.Readonly.mandatory}"
+                                shortDesc="#{bindings.DcmTemplateView1.hints.Readonly.tooltip}"
+                                id="soc2">
+              <f:selectItems value="#{row.bindings.Readonly.items}" id="si3"/>
+            </af:selectOneChoice>
+          </af:column>
+          <af:column sortProperty="#{bindings.DcmTemplateView1.hints.TmpTable.name}"
+                     filterable="true" sortable="true"
+                     headerText="#{bindings.DcmTemplateView1.hints.TmpTable.label}"
+                     id="c11">
+            <af:inputText value="#{row.bindings.TmpTable.inputValue}"
+                          label="#{bindings.DcmTemplateView1.hints.TmpTable.label}"
+                          required="#{bindings.DcmTemplateView1.hints.TmpTable.mandatory}"
+                          columns="#{bindings.DcmTemplateView1.hints.TmpTable.displayWidth}"
+                          maximumLength="#{bindings.DcmTemplateView1.hints.TmpTable.precision}"
+                          shortDesc="#{bindings.DcmTemplateView1.hints.TmpTable.tooltip}"
+                          id="it3">
+              <f:validator binding="#{row.bindings.TmpTable.validator}"/>
+            </af:inputText>
+          </af:column>
+          <af:column sortProperty="#{bindings.DcmTemplateView1.hints.PreProgram.name}"
+                     filterable="true" sortable="true"
+                     headerText="#{bindings.DcmTemplateView1.hints.PreProgram.label}"
+                     id="c7">
+            <af:inputText value="#{row.bindings.PreProgram.inputValue}"
+                          label="#{bindings.DcmTemplateView1.hints.PreProgram.label}"
+                          required="#{bindings.DcmTemplateView1.hints.PreProgram.mandatory}"
+                          columns="#{bindings.DcmTemplateView1.hints.PreProgram.displayWidth}"
+                          maximumLength="#{bindings.DcmTemplateView1.hints.PreProgram.precision}"
+                          shortDesc="#{bindings.DcmTemplateView1.hints.PreProgram.tooltip}"
+                          id="it2">
+              <f:validator binding="#{row.bindings.PreProgram.validator}"/>
+            </af:inputText>
+          </af:column>
+          <af:column sortProperty="#{bindings.DcmTemplateView1.hints.HandleProgram.name}"
+                     filterable="true" sortable="true"
+                     headerText="#{bindings.DcmTemplateView1.hints.HandleProgram.label}"
+                     id="c6">
+            <af:inputText value="#{row.bindings.HandleProgram.inputValue}"
+                          label="#{bindings.DcmTemplateView1.hints.HandleProgram.label}"
+                          required="#{bindings.DcmTemplateView1.hints.HandleProgram.mandatory}"
+                          columns="#{bindings.DcmTemplateView1.hints.HandleProgram.displayWidth}"
+                          maximumLength="#{bindings.DcmTemplateView1.hints.HandleProgram.precision}"
+                          shortDesc="#{bindings.DcmTemplateView1.hints.HandleProgram.tooltip}"
+                          id="it5">
+              <f:validator binding="#{row.bindings.HandleProgram.validator}"/>
+            </af:inputText>
+          </af:column>
+          <af:column sortProperty="#{bindings.DcmTemplateView1.hints.AfterProgram.name}"
+                     filterable="true" sortable="true"
+                     headerText="#{bindings.DcmTemplateView1.hints.AfterProgram.label}"
+                     id="c13">
+            <af:inputText value="#{row.bindings.AfterProgram.inputValue}"
+                          label="#{bindings.DcmTemplateView1.hints.AfterProgram.label}"
+                          required="#{bindings.DcmTemplateView1.hints.AfterProgram.mandatory}"
+                          columns="#{bindings.DcmTemplateView1.hints.AfterProgram.displayWidth}"
+                          maximumLength="#{bindings.DcmTemplateView1.hints.AfterProgram.precision}"
+                          shortDesc="#{bindings.DcmTemplateView1.hints.AfterProgram.tooltip}"
+                          id="it4">
+              <f:validator binding="#{row.bindings.AfterProgram.validator}"/>
+            </af:inputText>
+          </af:column>
+          <af:column sortProperty="#{bindings.DcmTemplateView1.hints.HandleMode.name}"
+                     filterable="true" sortable="true"
+                     headerText="#{bindings.DcmTemplateView1.hints.HandleMode.label}"
+                     id="c3">
+            <af:inputText value="#{row.bindings.HandleMode.inputValue}"
+                          label="#{bindings.DcmTemplateView1.hints.HandleMode.label}"
+                          required="#{bindings.DcmTemplateView1.hints.HandleMode.mandatory}"
+                          columns="#{bindings.DcmTemplateView1.hints.HandleMode.displayWidth}"
+                          maximumLength="#{bindings.DcmTemplateView1.hints.HandleMode.precision}"
+                          shortDesc="#{bindings.DcmTemplateView1.hints.HandleMode.tooltip}"
+                          id="it12">
+              <f:validator binding="#{row.bindings.HandleMode.validator}"/>
+            </af:inputText>
+          </af:column>
+          <af:column sortProperty="#{bindings.DcmTemplateView1.hints.TemplateFile.name}"
+                     filterable="true" sortable="true"
+                     headerText="#{bindings.DcmTemplateView1.hints.TemplateFile.label}"
+                     id="c9">
+            <af:inputText value="#{row.bindings.TemplateFile.inputValue}"
+                          label="#{bindings.DcmTemplateView1.hints.TemplateFile.label}"
+                          required="#{bindings.DcmTemplateView1.hints.TemplateFile.mandatory}"
+                          columns="#{bindings.DcmTemplateView1.hints.TemplateFile.displayWidth}"
+                          maximumLength="#{bindings.DcmTemplateView1.hints.TemplateFile.precision}"
+                          shortDesc="#{bindings.DcmTemplateView1.hints.TemplateFile.tooltip}"
+                          id="it8">
+              <f:validator binding="#{row.bindings.TemplateFile.validator}"/>
+            </af:inputText>
+          </af:column>
+          <af:column sortProperty="#{bindings.DcmTemplateView1.hints.DataStartLine.name}"
+                     filterable="true" sortable="true"
+                     headerText="#{bindings.DcmTemplateView1.hints.DataStartLine.label}"
+                     id="c2">
+            <af:inputText value="#{row.bindings.DataStartLine.inputValue}"
+                          label="#{bindings.DcmTemplateView1.hints.DataStartLine.label}"
+                          required="#{bindings.DcmTemplateView1.hints.DataStartLine.mandatory}"
+                          columns="#{bindings.DcmTemplateView1.hints.DataStartLine.displayWidth}"
+                          maximumLength="#{bindings.DcmTemplateView1.hints.DataStartLine.precision}"
+                          shortDesc="#{bindings.DcmTemplateView1.hints.DataStartLine.tooltip}"
+                          id="it1">
+              <f:validator binding="#{row.bindings.DataStartLine.validator}"/>
+              <af:convertNumber groupingUsed="false"
+                                pattern="#{bindings.DcmTemplateView1.hints.DataStartLine.format}"/>
+            </af:inputText>
+          </af:column>
+          <af:column sortProperty="#{bindings.DcmTemplateView1.hints.CombinationId.name}"
+                     filterable="true" sortable="true"
+                     headerText="#{bindings.DcmTemplateView1.hints.CombinationId.label}"
+                     id="c1">
+            <af:selectOneChoice value="#{row.bindings.CombinationId.inputValue}"
+                                label="#{row.bindings.CombinationId.label}"
+                                required="#{bindings.DcmTemplateView1.hints.CombinationId.mandatory}"
+                                shortDesc="#{bindings.DcmTemplateView1.hints.CombinationId.tooltip}"
+                                id="soc3">
+              <f:selectItems value="#{row.bindings.CombinationId.items}"
+                             id="si1"/>
+            </af:selectOneChoice>
+          </af:column>
+          <af:column sortProperty="#{bindings.DcmTemplateView1.hints.CategoryId.name}"
+                     filterable="true" sortable="true"
+                     headerText="#{bindings.DcmTemplateView1.hints.CategoryId.label}"
+                     id="c16">
+            <af:selectOneChoice value="#{row.bindings.CategoryId.inputValue}"
+                                label="#{row.bindings.CategoryId.label}"
+                                required="#{bindings.DcmTemplateView1.hints.CategoryId.mandatory}"
+                                shortDesc="#{bindings.DcmTemplateView1.hints.CategoryId.tooltip}"
+                                id="soc4">
+              <f:selectItems value="#{row.bindings.CategoryId.items}" id="si4"/>
+            </af:selectOneChoice>
+          </af:column>
+          <af:column sortProperty="#{bindings.DcmTemplateView1.hints.UpdatedAt.name}"
+                     filterable="true" sortable="true"
+                     headerText="#{bindings.DcmTemplateView1.hints.UpdatedAt.label}"
+                     id="c8">
+            <f:facet name="filter">
+              <af:inputDate value="#{vs.filterCriteria.UpdatedAt}" id="id1"/>
+            </f:facet>
+            <af:inputDate value="#{row.bindings.UpdatedAt.inputValue}"
+                          label="#{bindings.DcmTemplateView1.hints.UpdatedAt.label}"
+                          required="#{bindings.DcmTemplateView1.hints.UpdatedAt.mandatory}"
+                          shortDesc="#{bindings.DcmTemplateView1.hints.UpdatedAt.tooltip}"
+                          id="id2" readOnly="true">
+              <f:validator binding="#{row.bindings.UpdatedAt.validator}"/>
+              <af:convertDateTime pattern="#{bindings.DcmTemplateView1.hints.UpdatedAt.format}"/>
+            </af:inputDate>
+          </af:column>
+          <af:column sortProperty="#{bindings.DcmTemplateView1.hints.UpdatedBy.name}"
+                     filterable="true" sortable="true"
+                     headerText="#{bindings.DcmTemplateView1.hints.UpdatedBy.label}"
+                     id="c14">
+            <af:selectOneChoice value="#{row.bindings.UpdatedBy.inputValue}"
+                                label="#{row.bindings.UpdatedBy.label}"
+                                required="#{bindings.DcmTemplateView1.hints.UpdatedBy.mandatory}"
+                                shortDesc="#{bindings.DcmTemplateView1.hints.UpdatedBy.tooltip}"
+                                id="soc1" readOnly="true">
+              <f:selectItems value="#{row.bindings.UpdatedBy.items}" id="si2"/>
+            </af:selectOneChoice>
+          </af:column>
+        </af:table>
+      </af:panelCollection>
     </af:showDetailItem>
-    <af:showDetailItem text="showDetailItem 2" id="sdi2">
-      <af:panelCollection id="pc1">
+    <af:showDetailItem text="#{viewBundle['dcm.templateColumn.manage']}" id="sdi2">
+      <af:spacer width="10" height="20" id="s2"/>
+      <af:panelGroupLayout id="pgl1">
+        <af:selectOneChoice id="nl1" autoSubmit="true"
+                            value="#{bindings.DcmTemplateView11.inputValue}"
+                            label="#{bindings.DcmTemplateView11.label}">
+          <f:selectItems value="#{bindings.DcmTemplateView11.items}" id="si6"/>
+        </af:selectOneChoice>
+      </af:panelGroupLayout>
+      <af:spacer width="10" height="20" id="s3"/>
+      <af:popup id="p1">
+        <af:panelWindow id="pw1">
+          <af:panelCollection id="pc3"
+                              featuresOff="formatMenu detach statusBar freeze viewMenu">
+            <f:facet name="menus"/>
+            <f:facet name="toolbar">
+              <af:toolbar id="t7">
+                <af:commandToolbarButton actionListener="#{bindings.CreateInsert2.execute}"
+                                         text="#{viewBundle['dcm.validation.add']}"
+                                         disabled="#{!bindings.CreateInsert2.enabled}"
+                                         id="ctb6"/>
+                <af:commandToolbarButton text="#{viewBundle['dcm.common.delete']}"
+                                         disabled="#{!bindings.Delete2.enabled}"
+                                         id="ctb7"
+                                         actionListener="#{bindings.Delete2.execute}"/>
+                <af:commandToolbarButton actionListener="#{bindings.Commit.execute}"
+                                         text="#{viewBundle['dms.common.save']}"
+                                         disabled="#{!bindings.Commit.enabled}"
+                                         id="ctb8"/>
+                <af:commandToolbarButton actionListener="#{bindings.Rollback.execute}"
+                                         text="#{viewBundle['dms.common.rollback']}"
+                                         disabled="#{!bindings.Rollback.enabled}"
+                                         immediate="true" id="ctb9">
+                  <af:resetActionListener/>
+                </af:commandToolbarButton>
+              </af:toolbar>
+            </f:facet>
+            <f:facet name="statusbar"/>
+            <af:table value="#{bindings.DcmTemplateValidationView1.collectionModel}"
+                      var="row"
+                      rows="#{bindings.DcmTemplateValidationView1.rangeSize}"
+                      emptyText="#{bindings.DcmTemplateValidationView1.viewable ? 'No data to display.' : 'Access Denied.'}"
+                      fetchSize="#{bindings.DcmTemplateValidationView1.rangeSize}"
+                      rowBandingInterval="0"
+                      selectedRowKeys="#{bindings.DcmTemplateValidationView1.collectionModel.selectedRow}"
+                      selectionListener="#{bindings.DcmTemplateValidationView1.collectionModel.makeCurrent}"
+                      rowSelection="single" id="t6"
+                      partialTriggers="::ctb6 ::ctb7">
+              <af:column sortProperty="#{bindings.DcmTemplateValidationView1.hints.ValidationId.name}"
+                         sortable="false"
+                         headerText="#{bindings.DcmTemplateValidationView1.hints.ValidationId.label}"
+                         id="c27">
+                <af:selectOneChoice value="#{row.bindings.ValidationId.inputValue}"
+                                    label="#{row.bindings.ValidationId.label}"
+                                    required="#{bindings.DcmTemplateValidationView1.hints.ValidationId.mandatory}"
+                                    shortDesc="#{bindings.DcmTemplateValidationView1.hints.ValidationId.tooltip}"
+                                    id="soc5">
+                  <f:selectItems value="#{row.bindings.ValidationId.items}"
+                                 id="si5"/>
+                </af:selectOneChoice>
+              </af:column>
+              <af:column sortProperty="#{bindings.DcmTemplateValidationView1.hints.Seq.name}"
+                         sortable="false"
+                         headerText="#{bindings.DcmTemplateValidationView1.hints.Seq.label}"
+                         id="c26">
+                <af:inputText value="#{row.bindings.Seq.inputValue}"
+                              label="#{bindings.DcmTemplateValidationView1.hints.Seq.label}"
+                              required="#{bindings.DcmTemplateValidationView1.hints.Seq.mandatory}"
+                              columns="#{bindings.DcmTemplateValidationView1.hints.Seq.displayWidth}"
+                              maximumLength="#{bindings.DcmTemplateValidationView1.hints.Seq.precision}"
+                              shortDesc="#{bindings.DcmTemplateValidationView1.hints.Seq.tooltip}"
+                              id="it19">
+                  <f:validator binding="#{row.bindings.Seq.validator}"/>
+                  <af:convertNumber groupingUsed="false"
+                                    pattern="#{bindings.DcmTemplateValidationView1.hints.Seq.format}"/>
+                </af:inputText>
+              </af:column>
+            </af:table>
+          </af:panelCollection>
+        </af:panelWindow>
+      </af:popup>
+    
+      <af:panelCollection id="pc1"
+      inlineStyle="width:794px;">
         <f:facet name="menus"/>
         <f:facet name="toolbar">
           <af:toolbar id="t3">
             <af:commandButton actionListener="#{bindings.CreateInsert1.execute}"
-                              text="CreateInsert1"
+                              text="#{viewBundle['dcm.templateColumn.add']}"
                               disabled="#{!bindings.CreateInsert1.enabled}"
                               id="cb9"/>
             <af:commandButton actionListener="#{bindings.Delete1.execute}"
-                              text="Delete1"
+                              text="#{viewBundle['dcm.templateColumn.delete']}"
                               disabled="#{!bindings.Delete1.enabled}"
                               id="cb10"/>
             <af:commandButton actionListener="#{bindings.Commit.execute}"
-                              text="Commit"
+                              text="#{viewBundle['dms.common.save']}"
                               disabled="#{!bindings.Commit.enabled}" id="cb11"/>
             <af:commandButton actionListener="#{bindings.Rollback.execute}"
-                              text="Rollback"
+                              text="#{viewBundle['dms.common.rollback']}"
                               disabled="#{!bindings.Rollback.enabled}"
                               immediate="true" id="cb12">
               <af:resetActionListener/>
             </af:commandButton>
+            <af:commandToolbarButton text="#{viewBundle['dcm.validation.manage']}" id="ctb5">
+                <af:showPopupBehavior popupId="::p1"/>
+              </af:commandToolbarButton>
           </af:toolbar>
         </f:facet>
         <f:facet name="statusbar"/>

@@ -1,7 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.1"
           xmlns:af="http://xmlns.oracle.com/adf/faces/rich"
-          xmlns:f="http://java.sun.com/jsf/core">
+          xmlns:f="http://java.sun.com/jsf/core"
+          xmlns:c="http://java.sun.com/jsp/jstl/core">
+  <c:set var="viewBundle" value="#{adfBundle['dms_v']}"/>
   <af:panelTabbed id="pt1">
     <af:showDetailItem text="showDetailItem 1" id="sdi1">
       <af:panelGroupLayout id="pgl1" layout="horizontal"
@@ -128,7 +130,7 @@
         </af:panelCollection>
       </af:panelGroupLayout>
     </af:showDetailItem>
-    <af:showDetailItem text="showDetailItem 2" id="sdi2">
+    <af:showDetailItem text="#{viewBundle['dcm.Role_TemplateAuthority']}" id="sdi2">
       <af:panelGroupLayout id="pgl2" layout="horizontal">
         <af:table value="#{bindings.DmsRoleView1.collectionModel}" var="row"
                   rows="#{bindings.DmsRoleView1.rangeSize}"
@@ -140,7 +142,7 @@
                   filterVisible="true" varStatus="vs"
                   selectedRowKeys="#{bindings.DmsRoleView1.collectionModel.selectedRow}"
                   selectionListener="#{bindings.DmsRoleView1.collectionModel.makeCurrent}"
-                  rowSelection="single" id="t5">
+                  rowSelection="single" id="t5" width="171">
           <af:column sortProperty="#{bindings.DmsRoleView1.hints.RoleName.name}"
                      filterable="true" sortable="true"
                      headerText="#{bindings.DmsRoleView1.hints.RoleName.label}"
@@ -153,11 +155,11 @@
           <f:facet name="toolbar">
             <af:toolbar id="t7">
               <af:commandToolbarButton actionListener="#{bindings.CreateInsert1.execute}"
-                                       text="CreateInsert1"
+                                       text="#{viewBundle['dcm.template.new']}"
                                        disabled="#{!bindings.CreateInsert1.enabled}"
                                        id="ctb5"/>
               <af:commandToolbarButton actionListener="#{bindings.Delete1.execute}"
-                                       text="Delete1"
+                                       text="#{viewBundle['dcm.common.delete']}"
                                        disabled="#{!bindings.Delete1.enabled}"
                                        id="ctb6"/>
               <af:commandToolbarButton actionListener="#{bindings.Commit.execute}"

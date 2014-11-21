@@ -99,7 +99,7 @@
     <Properties>
       <SchemaBasedProperties>
         <LABEL
-          ResId="team.epm.dcm.view.DcmComVsView.ValueSetId_LABEL"/>
+          ResId="dms_value_set.name"/>
         <CONTROLTYPE
           Value="choice"/>
       </SchemaBasedProperties>
@@ -114,7 +114,7 @@
     <Properties>
       <SchemaBasedProperties>
         <LABEL
-          ResId="team.epm.dcm.view.DcmComVsView.Seq_LABEL"/>
+          ResId="dcm.seq"/>
       </SchemaBasedProperties>
     </Properties>
   </ViewAttribute>
@@ -128,7 +128,7 @@
     <Properties>
       <SchemaBasedProperties>
         <LABEL
-          ResId="team.epm.dcm.view.DcmComVsView.IsAuthority_LABEL"/>
+          ResId="dcm.valueSet.isAuthority"/>
         <CONTROLTYPE
           Value="choice"/>
       </SchemaBasedProperties>
@@ -139,7 +139,14 @@
     PrecisionRule="true"
     EntityAttrName="CreatedAt"
     EntityUsage="DcmComVs"
-    AliasName="CREATED_AT"/>
+    AliasName="CREATED_AT">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="createdAt"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewAttribute
     Name="UpdatedAt"
     PrecisionRule="true"
@@ -149,7 +156,7 @@
     <Properties>
       <SchemaBasedProperties>
         <LABEL
-          ResId="team.epm.dcm.view.DcmComVsView.UpdatedAt_LABEL"/>
+          ResId="updatedAt"/>
       </SchemaBasedProperties>
     </Properties>
   </ViewAttribute>
@@ -162,7 +169,7 @@
     <Properties>
       <SchemaBasedProperties>
         <LABEL
-          ResId="team.epm.dcm.view.DcmComVsView.UpdatedBy_LABEL"/>
+          ResId="updatedBy"/>
       </SchemaBasedProperties>
     </Properties>
   </ViewAttribute>
@@ -171,7 +178,14 @@
     PrecisionRule="true"
     EntityAttrName="CreatedBy"
     EntityUsage="DcmComVs"
-    AliasName="CREATED_BY"/>
+    AliasName="CREATED_BY">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="createdBy"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewLinkAccessor
     Name="DcmCombinationView"
     ViewLink="team.epm.dcm.view.viewlink.combinationsVS"
