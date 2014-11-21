@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<adfc-config xmlns="http://xmlns.oracle.com/adf/controller" version="1.2">
+  <task-flow-definition id="data_display_tsk">
+    <default-activity id="__1">data_display</default-activity>
+    <data-control-scope id="__2">
+      <shared/>
+    </data-control-scope>
+    <input-parameter-definition id="__5">
+      <name id="__4">curTemplateId</name>
+      <value>#{pageFlowScope.curTemplateId}</value>
+      <class>java.lang.String</class>
+    </input-parameter-definition>
+    <managed-bean id="__44">
+        <managed-bean-name id="__41">DcmDataDisplayBean</managed-bean-name>
+        <managed-bean-class id="__43">dcm.DcmDataDisplayBean</managed-bean-class>
+        <managed-bean-scope id="__42">view</managed-bean-scope>
+    </managed-bean>
+    <view id="data_display">
+      <page>/dcm/data_display.jsff</page>
+    </view>
+    <use-page-fragments/>
+  </task-flow-definition>
+</adfc-config>

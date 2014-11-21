@@ -1,0 +1,65 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.1"
+          xmlns:af="http://xmlns.oracle.com/adf/faces/rich"
+          xmlns:f="http://java.sun.com/jsf/core"
+          xmlns:c="http://java.sun.com/jsp/jstl/core">
+  <c:set var="viewBundle" value="#{adfBundle['dms_v']}"/>
+  <af:panelStretchLayout id="psl1">
+    <f:facet name="top">
+      <af:panelGroupLayout layout="scroll"
+                           xmlns:af="http://xmlns.oracle.com/adf/faces/rich"
+                           id="pgl1">
+        <af:outputLabel value="#{pageFlowScope.curTemplateId}" id="ol1"/>
+      </af:panelGroupLayout>
+    </f:facet>
+    <f:facet name="center">
+      <af:panelCollection id="pc1">
+        <f:facet name="menus"/>
+        <f:facet name="toolbar">
+          <af:toolbar id="t2">
+            <af:commandButton text="#{viewBundle['dcm.action.new']}" id="cb1"
+                              action="#{viewScope.DcmDataDisplayBean.operation_new}"/>
+            <af:commandButton text="#{viewBundle['dcm.action.delete']}"
+                              id="cb2"
+                              action="#{viewScope.DcmDataDisplayBean.operation_delete}"/>
+            <af:commandButton text="#{viewBundle['dcm.action.save']}" id="cb3"
+                              action="#{viewScope.DcmDataDisplayBean.operation_save}"/>
+            <af:commandButton text="#{viewBundle['dcm.action.reset']}"
+                              id="cb4"
+                              action="#{viewScope.DcmDataDisplayBean.operation_reset}"/>
+            <af:commandButton text="#{viewBundle['dcm.action.import']}"
+                              id="cb5"
+                              action="#{viewScope.DcmDataDisplayBean.operation_import}"/>
+            <af:commandButton text="#{viewBundle['dcm.action.export']}"
+                              id="cb6"
+                              action="#{viewScope.DcmDataDisplayBean.operation_export}"/>
+            <af:commandButton text="#{viewBundle['dcm.action.template_download']}"
+                              id="cb7"
+                              action="#{viewScope.DcmDataDisplayBean.operation_download}"/>
+          </af:toolbar>
+        </f:facet>
+        <f:facet name="statusbar"/>
+        <af:table var="row" rowBandingInterval="0" id="t1"
+                  value="#{viewScope.DcmDataDisplayBean.dataModel}"
+                  scrollPolicy="page"
+                  selectionListener="#{viewScope.DcmDataDisplayBean.rowSelectionListener}"
+                  selectedRowKeys="#{viewScope.DcmDataDisplayBean.dataModel.selectedRows}"
+                  rowSelection="multiple">
+          <af:forEach items="#{viewScope.DcmDataDisplayBean.dataModel.colsdef}"
+                      var="attr" varStatus="vs">
+            <af:column sortable="false" headerText="#{attr.label}"
+                       inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:#00FF00;' : ''}
+                                    #{'CREATE' eq row['OPERATION'] ? 'background-color:#FFFF00;' : ''}
+                                    #{'DELETE' eq row['OPERATION'] ? 'background-color:#FF0000;' : ''}">
+              <af:inputText value="#{row[attr.code]}"
+                            valueChangeListener="#{viewScope.DcmDataDisplayBean.valueChangeListener}"/>
+            </af:column>
+          </af:forEach>
+        </af:table>
+      </af:panelCollection>
+    </f:facet>
+    <f:facet name="bottom"/>
+    <f:facet name="start"/>
+    <f:facet name="end"/>
+  </af:panelStretchLayout>
+</jsp:root>

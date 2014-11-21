@@ -16,7 +16,8 @@
           <f:facet name="navigation">
             <af:tree id="tr1" var="node" value="#{viewScope.DcmIndexBean.model}"
                      rowSelection="single"
-                     selectionListener="#{viewScope.DcmIndexBean.selectListener}">
+                     selectionListener="#{viewScope.DcmIndexBean.selectListener}"
+                     partialTriggers="">
               <f:facet name="nodeStamp">
                 <af:outputLabel value="#{node.label}"/>
               </f:facet>
@@ -30,38 +31,7 @@
             <af:menuBar id="mb1" binding="#{MainPageMBean.menuBar}">
             </af:menuBar>
           </f:facet>
-          <f:facet name="welcome">
-            <af:panelStretchLayout id="psl1"
-                                   binding="#{viewScope.DcmIndexBean.panelStretchLayout}">
-              <f:facet name="top">
-                <af:panelGroupLayout layout="scroll"
-                                     xmlns:af="http://xmlns.oracle.com/adf/faces/rich"
-                                     id="pgl1">
-                  <af:outputLabel value="outputLabel1" id="ol1"/>
-                </af:panelGroupLayout>
-              </f:facet>
-              <f:facet name="center">
-                <af:panelCollection id="pc1">
-                  <f:facet name="menus"/>
-                  <f:facet name="toolbar">
-                    <af:toolbar id="t2">
-                      <af:commandButton text="#{viewBundle['dcm.action.new']}" id="cb1"/>
-                      <af:commandButton text="#{viewBundle['dcm.action.delete']}" id="cb2"/>
-                      <af:commandButton text="#{viewBundle['dcm.action.save']}" id="cb3"/>
-                      <af:commandButton text="#{viewBundle['dcm.action.reset']}" id="cb4"/>
-                      <af:commandButton text="#{viewBundle['dcm.action.import']}" id="cb5"/>
-                      <af:commandButton text="#{viewBundle['dcm.action.export']}" id="cb6"/>
-                      <af:commandButton text="#{viewBundle['dcm.action.template_download']}" id="cb7"/>
-                    </af:toolbar>
-                  </f:facet>
-                  <f:facet name="statusbar"/>
-                  
-                </af:panelCollection>
-              </f:facet>
-              <f:facet name="bottom"/>
-              <f:facet name="start"/>
-              <f:facet name="end"/>
-            </af:panelStretchLayout>
+          <f:facet name="welcome">            
           </f:facet>
           <f:facet name="innerToolbar"/>
           <f:attribute name="brandingTitle" value="#{viewBundle['dms.title']}"/>

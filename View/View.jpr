@@ -280,6 +280,10 @@
             <hash>
                <url n="content-folder-url" path="adfmsrc/dcm/"/>
                <list n="pattern-filters">
+                  <string v="+dcm/DcmDataDisplayBean.java"/>
+                  <string v="+dcm/ColumnDef.java"/>
+                  <string v="+dcm/DataEntity.java"/>
+                  <string v="+dcm/DcmDataTableModel.java"/>
                   <string v="+dcm/DcmIndexBean.java"/>
                </list>
                <list n="url-path">

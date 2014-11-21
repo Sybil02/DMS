@@ -33,6 +33,7 @@
     <page path="/dcm/validation/validation_edit.jsff"
           usageId="__validation_editPageDef"/>
     <page path="/dcm/index.jspx" usageId="__indexPageDef1"/>
+    <page path="/dcm/data_display.jsff" usageId="__data_displayPageDef"/>
   </pageMap>
   <pageDefinitionUsages>
     <page id="__dynamicTabShellPageDef"
@@ -60,6 +61,7 @@
     <page id="__validation_editPageDef"
           path="dcm.validation.validation_editPageDef"/>
     <page id="__indexPageDef1" path="dcm.indexPageDef"/>
+    <page id="__data_displayPageDef" path="dcm.data_displayPageDef"/>
   </pageDefinitionUsages>
   <dataControlUsages>
     <BC4JDataControl id="DmsModuleDataControl" Package="team.epm.module"
