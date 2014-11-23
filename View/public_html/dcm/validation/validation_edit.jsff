@@ -4,12 +4,13 @@
           xmlns:f="http://java.sun.com/jsf/core"
           xmlns:c="http://java.sun.com/jsp/jstl/core">
   <c:set var="viewBundle" value="#{adfBundle['dms_v']}"/>
-  <af:panelStretchLayout id="psl1" topHeight="95px" endWidth="38px">
+  <af:panelStretchLayout id="psl1" topHeight="27px" endWidth="38px">
     <f:facet name="bottom"/>
     <f:facet name="center">
       <af:panelGroupLayout layout="scroll"
                            xmlns:af="http://xmlns.oracle.com/adf/faces/rich"
                            id="pgl1">
+        <af:spacer width="10" height="20" id="s1"/>
         <af:panelCollection id="pc1"
                             featuresOff="formatMenu detach statusBar freeze"
                             inlineStyle="width:744px;">

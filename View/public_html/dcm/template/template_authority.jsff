@@ -6,6 +6,7 @@
   <c:set var="viewBundle" value="#{adfBundle['dms_v']}"/>
   <af:panelTabbed id="pt1">
     <af:showDetailItem text="#{viewBundle['dcm.Role_TemplateAuthority']}" id="sdi2">
+      <af:spacer width="10" height="10" id="s3"/>
       <af:panelGroupLayout id="pgl2" layout="horizontal">
         <af:table value="#{bindings.DmsRoleView1.collectionModel}" var="row"
                   rows="#{bindings.DmsRoleView1.rangeSize}"
@@ -26,8 +27,9 @@
           </af:column>
         </af:table>
         <af:spacer width="50" height="10" id="s1"/>
+        <af:spacer width="10" height="10" id="s2"/>
         <af:panelCollection id="pc2"
-                            inlineStyle="width:279px; text-align:center;"
+                            inlineStyle="width:289px; text-align:center;"
                             featuresOff="formatMenu detach statusBar freeze">
           <f:facet name="toolbar">
             <af:toolbar id="t7">
@@ -61,7 +63,8 @@
                     selectedRowKeys="#{bindings.DcmRoleTemplateView11.collectionModel.selectedRow}"
                     selectionListener="#{bindings.DcmRoleTemplateView11.collectionModel.makeCurrent}"
                     rowSelection="single" id="t6"
-                    partialTriggers="::ctb5 ::ctb6" width="222">
+                    partialTriggers="::ctb5 ::ctb6" width="288"
+                    columnStretching="column:c6">
             <af:column sortProperty="#{bindings.DcmRoleTemplateView11.hints.TemplateId.name}"
                        sortable="false"
                        headerText="#{bindings.DcmRoleTemplateView11.hints.TemplateId.label}"
