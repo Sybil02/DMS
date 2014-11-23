@@ -7,7 +7,7 @@
     <variableIterator id="variables"/>
     <iterator Binds="DcmCombinationView1" RangeSize="25"
               DataControl="DcmModuleDataControl"
-              id="DcmCombinationView1Iterator" ChangeEventPolicy="ppr"/>
+              id="DcmCombinationView1Iterator"/>
     <iterator Binds="DcmComVsView1" RangeSize="25"
               DataControl="DcmModuleDataControl" id="DcmComVsView1Iterator"
               ChangeEventPolicy="ppr"/>

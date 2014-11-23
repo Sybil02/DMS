@@ -141,6 +141,8 @@
       <SchemaBasedProperties>
         <LABEL
           ResId="team.epm.dcm.view.DcmCombinationView.Name_LABEL"/>
+        <DISPLAYWIDTH
+          Value="60"/>
       </SchemaBasedProperties>
     </Properties>
   </ViewAttribute>

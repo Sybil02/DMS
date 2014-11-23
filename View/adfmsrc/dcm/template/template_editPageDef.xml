@@ -7,13 +7,10 @@
     <variableIterator id="variables"/>
     <iterator Binds="DcmTemplateView1" RangeSize="25"
               DataControl="DcmModuleDataControl" id="DcmTemplateView1Iterator"
-              ChangeEventPolicy="ppr"/>
-    <iterator Binds="DcmCombinationView1" RangeSize="-1"
-              DataControl="DcmModuleDataControl"
-              id="DcmCombinationView1Iterator"/>
+              />
     <iterator Binds="DcmTemplateColumnView1" RangeSize="-1"
               DataControl="DcmModuleDataControl"
-              id="DcmTemplateColumnView1Iterator" ChangeEventPolicy="ppr"/>
+              id="DcmTemplateColumnView1Iterator"/>
     <searchRegion Binds="DcmTemplateColumnView1Iterator" Criteria=""
                   Customizer="oracle.jbo.uicli.binding.JUSearchBindingCustomizer"
                   id="DcmTemplateColumnView1Query"/>

@@ -5,21 +5,6 @@
   <parameters/>
   <executables>
     <variableIterator id="variables"/>
-    <iterator Binds="DcmTemplateView1" RangeSize="25"
-              DataControl="DcmModuleDataControl" id="DcmTemplateView1Iterator"
-              ChangeEventPolicy="ppr"/>
-    <iterator Binds="DcmTemplateColumnView1" RangeSize="25"
-              DataControl="DcmModuleDataControl"
-              id="DcmTemplateColumnView1Iterator" ChangeEventPolicy="ppr"/>
-    <iterator Binds="DcmTemplateValidationView1" RangeSize="25"
-              DataControl="DcmModuleDataControl"
-              id="DcmTemplateValidationView1Iterator" ChangeEventPolicy="ppr"/>
-    <searchRegion Binds="DcmTemplateView1Iterator" Criteria=""
-                  Customizer="oracle.jbo.uicli.binding.JUSearchBindingCustomizer"
-                  id="DcmTemplateView11Query"/>
-    <searchRegion Binds="DcmTemplateColumnView1Iterator" Criteria=""
-                  Customizer="oracle.jbo.uicli.binding.JUSearchBindingCustomizer"
-                  id="DcmTemplateColumnView1Query"/>
     <iterator Binds="DmsRoleView1" RangeSize="25"
               DataControl="DcmModuleDataControl" id="DmsRoleView1Iterator"/>
     <searchRegion Binds="DmsRoleView1Iterator" Criteria=""
@@ -30,37 +15,6 @@
               id="DcmRoleTemplateView1Iterator"/>
   </executables>
   <bindings>
-    <tree IterBinding="DcmTemplateView1Iterator" id="DcmTemplateView1">
-      <nodeDefinition DefName="team.epm.dcm.view.DcmTemplateView"
-                      Name="DcmTemplateView120">
-        <AttrNames>
-          <Item Value="Name"/>
-        </AttrNames>
-      </nodeDefinition>
-    </tree>
-    <tree IterBinding="DcmTemplateColumnView1Iterator"
-          id="DcmTemplateColumnView1">
-      <nodeDefinition DefName="team.epm.dcm.view.DcmTemplateColumnView"
-                      Name="DcmTemplateColumnView110">
-        <AttrNames>
-          <Item Value="ColumnLabel"/>
-        </AttrNames>
-      </nodeDefinition>
-    </tree>
-    <tree IterBinding="DcmTemplateValidationView1Iterator"
-          id="DcmTemplateValidationView1">
-      <nodeDefinition DefName="team.epm.dcm.view.DcmTemplateValidationView"
-                      Name="DcmTemplateValidationView110">
-        <AttrNames>
-          <Item Value="ValidationId"/>
-          <Item Value="Seq"/>
-        </AttrNames>
-      </nodeDefinition>
-    </tree>
-    <action IterBinding="DcmTemplateValidationView1Iterator" id="CreateInsert"
-            RequiresUpdateModel="true" Action="createInsertRow"/>
-    <action IterBinding="DcmTemplateValidationView1Iterator" id="Delete"
-            RequiresUpdateModel="false" Action="removeCurrentRow"/>
     <action id="Commit" RequiresUpdateModel="true" Action="commitTransaction"
             DataControl="DcmModuleDataControl"/>
     <action id="Rollback" RequiresUpdateModel="false"

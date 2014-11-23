@@ -1,8 +1,10 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.1"
           xmlns:af="http://xmlns.oracle.com/adf/faces/rich"
-          xmlns:f="http://java.sun.com/jsf/core">
-  <af:panelStretchLayout id="psl1" topHeight="146px">
+          xmlns:f="http://java.sun.com/jsf/core"
+          xmlns:c="http://java.sun.com/jsp/jstl/core">
+  <c:set var="viewBundle" value="#{adfBundle['dms_v']}"/>
+  <af:panelStretchLayout id="psl1" topHeight="95px">
     <f:facet name="bottom"/>
     <f:facet name="center">
       <af:panelCollection id="pc1"
@@ -11,23 +13,23 @@
         <f:facet name="toolbar">
           <af:toolbar id="t2">
             <af:commandToolbarButton actionListener="#{bindings.CreateInsert.execute}"
-                                     text="CreateInsert"
+                                     text="#{viewBundle['dcm.common.new']}"
                                      disabled="#{!bindings.CreateInsert.enabled}"
                                      id="ctb1"/>
             <af:commandToolbarButton actionListener="#{bindings.Delete.execute}"
-                                     text="Delete"
+                                     text="#{viewBundle['dcm.common.delete']}"
                                      disabled="#{!bindings.Delete.enabled}"
                                      id="ctb2"/>
             <af:commandToolbarButton actionListener="#{bindings.Commit.execute}"
-                                     text="Commit"
+                                     text="#{viewBundle['dms.common.save']}"
                                      disabled="#{!bindings.Commit.enabled}"
                                      id="ctb3"
-                                     partialTriggers="t1 ::it2 ::it4 ::it3 ::soc1 ::it1"/>
+                                     partialTriggers="t1"/>
             <af:commandToolbarButton actionListener="#{bindings.Rollback.execute}"
-                                     text="Rollback"
+                                     text="#{viewBundle['dms.common.rollback']}"
                                      disabled="#{!bindings.Rollback.enabled}"
                                      immediate="true" id="ctb4"
-                                     partialTriggers="t1 ::it2 ::it4 ::it3 ::soc1 ::it1">
+                                     partialTriggers="t1">
               <af:resetActionListener/>
             </af:commandToolbarButton>
           </af:toolbar>
@@ -35,7 +37,7 @@
         <f:facet name="statusbar"/>
         <af:table value="#{bindings.DcmValidationView.collectionModel}"
                   var="row" rows="#{bindings.DcmValidationView.rangeSize}"
-                  emptyText="#{bindings.DcmValidationView.viewable ? 'No data to display.' : 'Access Denied.'}"
+                  emptyText="#{viewBundle['dms.common.nodata']}"
                   fetchSize="#{bindings.DcmValidationView.rangeSize}"
                   rowBandingInterval="0"
                   filterModel="#{bindings.DcmValidationViewQuery.queryDescriptor}"
@@ -145,52 +147,6 @@
     </f:facet>
     <f:facet name="start"/>
     <f:facet name="end"/>
-    <f:facet name="top">
-      <af:panelFormLayout id="pfl1">
-        <af:inputText value="#{bindings.Name.inputValue}"
-                      label="#{bindings.Name.hints.label}"
-                      required="#{bindings.Name.hints.mandatory}"
-                      columns="#{bindings.Name.hints.displayWidth}"
-                      maximumLength="#{bindings.Name.hints.precision}"
-                      shortDesc="#{bindings.Name.hints.tooltip}" id="it2"
-                      autoSubmit="true">
-          <f:validator binding="#{bindings.Name.validator}"/>
-        </af:inputText>
-        <af:inputText value="#{bindings.Program.inputValue}"
-                      label="#{bindings.Program.hints.label}"
-                      required="#{bindings.Program.hints.mandatory}"
-                      columns="#{bindings.Program.hints.displayWidth}"
-                      maximumLength="#{bindings.Program.hints.precision}"
-                      shortDesc="#{bindings.Program.hints.tooltip}" id="it4"
-                      autoSubmit="true">
-          <f:validator binding="#{bindings.Program.validator}"/>
-        </af:inputText>
-        <af:inputText value="#{bindings.Args.inputValue}"
-                      label="#{bindings.Args.hints.label}"
-                      required="#{bindings.Args.hints.mandatory}"
-                      columns="#{bindings.Args.hints.displayWidth}"
-                      maximumLength="#{bindings.Args.hints.precision}"
-                      shortDesc="#{bindings.Args.hints.tooltip}" id="it3"
-                      autoSubmit="true">
-          <f:validator binding="#{bindings.Args.validator}"/>
-        </af:inputText>
-        <af:selectOneChoice value="#{bindings.Required.inputValue}"
-                            label="#{bindings.Required.label}"
-                            required="#{bindings.Required.hints.mandatory}"
-                            shortDesc="#{bindings.Required.hints.tooltip}"
-                            id="soc1" autoSubmit="true">
-          <f:selectItems value="#{bindings.Required.items}" id="si1"/>
-        </af:selectOneChoice>
-        <af:inputText value="#{bindings.Description.inputValue}"
-                      label="#{bindings.Description.hints.label}"
-                      required="#{bindings.Description.hints.mandatory}"
-                      columns="#{bindings.Description.hints.displayWidth}"
-                      maximumLength="#{bindings.Description.hints.precision}"
-                      shortDesc="#{bindings.Description.hints.tooltip}"
-                      id="it1" autoSubmit="true">
-          <f:validator binding="#{bindings.Description.validator}"/>
-        </af:inputText>
-      </af:panelFormLayout>
-    </f:facet>
+    <f:facet name="top"/>
   </af:panelStretchLayout>
 </jsp:root>
