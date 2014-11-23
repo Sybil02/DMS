@@ -14,7 +14,7 @@
                   rowBandingInterval="0"
                   filterModel="#{bindings.DmsRoleView1Query.queryDescriptor}"
                   queryListener="#{bindings.DmsRoleView1Query.processQuery}"
-                  filterVisible="true" varStatus="vs"
+                  filterVisible="false" varStatus="vs"
                   selectedRowKeys="#{bindings.DmsRoleView1.collectionModel.selectedRow}"
                   selectionListener="#{bindings.DmsRoleView1.collectionModel.makeCurrent}"
                   rowSelection="single" id="t5" width="114">
@@ -26,8 +26,9 @@
           </af:column>
         </af:table>
         <af:spacer width="50" height="10" id="s1"/>
-        <af:panelCollection id="pc2" inlineStyle="width:396.0px;">
-          <f:facet name="menus"/>
+        <af:panelCollection id="pc2"
+                            inlineStyle="width:279px; text-align:center;"
+                            featuresOff="formatMenu detach statusBar freeze">
           <f:facet name="toolbar">
             <af:toolbar id="t7">
               <af:commandToolbarButton actionListener="#{bindings.CreateInsert1.execute}"
@@ -52,16 +53,15 @@
               </af:commandToolbarButton>
             </af:toolbar>
           </f:facet>
-          <f:facet name="statusbar"/>
           <af:table value="#{bindings.DcmRoleTemplateView11.collectionModel}"
                     var="row" rows="#{bindings.DcmRoleTemplateView11.rangeSize}"
-                    emptyText="#{bindings.DcmRoleTemplateView11.viewable ? 'No data to display.' : 'Access Denied.'}"
+                    emptyText="#{viewBundle['dms.common.nodata']}"
                     fetchSize="#{bindings.DcmRoleTemplateView11.rangeSize}"
                     rowBandingInterval="0"
                     selectedRowKeys="#{bindings.DcmRoleTemplateView11.collectionModel.selectedRow}"
                     selectionListener="#{bindings.DcmRoleTemplateView11.collectionModel.makeCurrent}"
                     rowSelection="single" id="t6"
-                    partialTriggers="::ctb5 ::ctb6" width="396">
+                    partialTriggers="::ctb5 ::ctb6" width="222">
             <af:column sortProperty="#{bindings.DcmRoleTemplateView11.hints.TemplateId.name}"
                        sortable="false"
                        headerText="#{bindings.DcmRoleTemplateView11.hints.TemplateId.label}"

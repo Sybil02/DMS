@@ -417,7 +417,7 @@
                       rowBandingInterval="0"
                       filterModel="#{bindings.DcmTemplateColumnView1Query.queryDescriptor}"
                       queryListener="#{bindings.DcmTemplateColumnView1Query.processQuery}"
-                      filterVisible="true" varStatus="vs"
+                      filterVisible="false" varStatus="vs"
                       selectedRowKeys="#{bindings.DcmTemplateColumnView1.collectionModel.selectedRow}"
                       selectionListener="#{bindings.DcmTemplateColumnView1.collectionModel.makeCurrent}"
                       rowSelection="single" id="t2"

@@ -7,7 +7,7 @@
     <variableIterator id="variables"/>
     <iterator Binds="DcmValidationView" RangeSize="25"
               DataControl="DcmModuleDataControl"
-              id="DcmValidationViewIterator" ChangeEventPolicy="ppr"/>
+              id="DcmValidationViewIterator"/>
     <searchRegion Binds="DcmValidationViewIterator" Criteria=""
                   Customizer="oracle.jbo.uicli.binding.JUSearchBindingCustomizer"
                   id="DcmValidationViewQuery"/>

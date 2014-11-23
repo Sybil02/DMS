@@ -197,7 +197,8 @@
                       <af:commandButton actionListener="#{bindings.Commit.execute}"
                                         text="#{viewBundle['dms.common.save']}"
                                         disabled="#{!bindings.Commit.enabled}"
-                                        id="cb8"/>
+                                        id="cb8" partialSubmit="true"
+                                        partialTriggers="cb8 cb5 cb6 t5"/>
                       <af:commandButton text="#{viewBundle['dms.common.rollback']}"
                                         id="cb7"
                                         actionListener="#{bindings.Rollback.execute}"

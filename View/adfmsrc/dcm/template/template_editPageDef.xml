@@ -19,7 +19,7 @@
                   id="DcmTemplateView12Query"/>
     <iterator Binds="DcmTemplateValidationView1" RangeSize="25"
               DataControl="DcmModuleDataControl"
-              id="DcmTemplateValidationView1Iterator" ChangeEventPolicy="ppr"/>
+              id="DcmTemplateValidationView1Iterator"/>
   </executables>
   <bindings>
     <list IterBinding="DcmTemplateView1Iterator" StaticList="false"

@@ -10,7 +10,8 @@
   DBObjectName="DCM_ROLE_TEMPLATE"
   AliasName="DcmRoleTemplate"
   BindingStyle="OracleName"
-  UseGlueCode="false">
+  UseGlueCode="false"
+  xmlns:validation="http://xmlns.oracle.com/adfm/validation">
   <DesignTime>
     <Attr Name="_codeGenFlag2" Value="Access"/>
     <AttrArray Name="_publishEvents"/>
@@ -127,6 +128,18 @@
     Type="oracle.jbo.RowIterator"
     IsUpdateable="false"/>
   <Key
+    Name="AltKey"
+    AltKey="true">
+    <DesignTime>
+      <Attr Name="_isUnique" Value="true"/>
+      <Attr Name="_DBObjectName" Value="DCM_ROLE_TEMPLATE"/>
+    </DesignTime>
+    <AttrArray Name="Attributes">
+      <Item Value="team.epm.dcm.model.DcmRoleTemplate.RoleId"/>
+      <Item Value="team.epm.dcm.model.DcmRoleTemplate.TemplateId"/>
+    </AttrArray>
+  </Key>
+  <Key
     Name="PkDcmRoleTemplate"
     PrimaryKey="true">
     <DesignTime>
@@ -147,4 +160,19 @@
       <Item Value="team.epm.dcm.model.DcmRoleTemplate.Id"/>
     </AttrArray>
   </Key>
+  <validation:UniqueKeyValidationBean
+    Name="DcmRoleTemplate_Rule_0"
+    ResId="dcm.error.templateRepeat"
+    KeyName="AltKey">
+    <validation:OnAttributes>
+      <validation:Item
+        Value="RoleId"/>
+      <validation:Item
+        Value="TemplateId"/>
+    </validation:OnAttributes>
+  </validation:UniqueKeyValidationBean>
+  <ResourceBundle>
+    <PropertiesBundle
+      PropertiesFile="ModelBundle"/>
+  </ResourceBundle>
 </Entity>
