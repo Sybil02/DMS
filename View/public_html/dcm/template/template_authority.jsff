@@ -7,7 +7,9 @@
   <af:panelTabbed id="pt1">
     <af:showDetailItem text="#{viewBundle['dcm.Role_TemplateAuthority']}" id="sdi2">
       <af:spacer width="10" height="10" id="s3"/>
-      <af:panelGroupLayout id="pgl2" layout="horizontal">
+      <af:panelGroupLayout id="pgl2" layout="horizontal"
+                           >
+        <af:spacer width="10" height="10" id="s4"/>
         <af:table value="#{bindings.DmsRoleView1.collectionModel}" var="row"
                   rows="#{bindings.DmsRoleView1.rangeSize}"
                   emptyText="#{bindings.DmsRoleView1.viewable ? 'No data to display.' : 'Access Denied.'}"
@@ -18,7 +20,7 @@
                   filterVisible="false" varStatus="vs"
                   selectedRowKeys="#{bindings.DmsRoleView1.collectionModel.selectedRow}"
                   selectionListener="#{bindings.DmsRoleView1.collectionModel.makeCurrent}"
-                  rowSelection="single" id="t5" width="114">
+                  rowSelection="single" id="t5" width="105">
           <af:column sortProperty="#{bindings.DmsRoleView1.hints.RoleName.name}"
                      filterable="true" sortable="true"
                      headerText="#{bindings.DmsRoleView1.hints.RoleName.label}"
@@ -29,13 +31,13 @@
         <af:spacer width="50" height="10" id="s1"/>
         <af:spacer width="10" height="10" id="s2"/>
         <af:panelCollection id="pc2"
-                            inlineStyle="width:289px; text-align:center;"
+                            inlineStyle="width:295px; text-align:center;"
                             featuresOff="formatMenu detach statusBar freeze">
           <f:facet name="toolbar">
             <af:toolbar id="t7">
               <af:commandToolbarButton actionListener="#{bindings.CreateInsert1.execute}"
                                        text="#{viewBundle['dcm.template.new']}"
-                                       disabled="#{!bindings.CreateInsert1.enabled}"
+                                       disabled="#{bindings.DmsRoleView1.currentRow==null ? true : false}"
                                        id="ctb5"/>
               <af:commandToolbarButton actionListener="#{bindings.Delete1.execute}"
                                        text="#{viewBundle['dcm.common.delete']}"

@@ -6,12 +6,12 @@
   <c:set var="viewBundle" value="#{adfBundle['dms_v']}"/>
   <af:panelTabbed id="pt1">
     <af:showDetailItem text="#{viewBundle['dcm.template.manage']}" id="sdi1">
-      <af:spacer width="10" height="20" id="s1"/>
-      <af:panelStretchLayout id="psl1" inlineStyle="width:800px;">
+      <af:spacer width="10" height="30" id="s1"/>
+      <af:panelStretchLayout id="psl1" inlineStyle="width:auto;"
+                             startWidth="10px">
         <f:facet name="center">
           <af:panelCollection id="pc2"
-                              featuresOff="formatMenu detach statusBar freeze viewMenu"
-                              inlineStyle="width:798px;">
+                              featuresOff="formatMenu detach statusBar freeze">
             <f:facet name="menus"/>
             <f:facet name="toolbar">
               <af:toolbar id="t4">
@@ -293,6 +293,9 @@
             </af:table>
           </af:panelCollection>
         </f:facet>
+        <f:facet name="start">
+          <af:spacer width="10" height="10" id="s4"/>
+        </f:facet>
       </af:panelStretchLayout>
     </af:showDetailItem>
     <af:showDetailItem text="#{viewBundle['dcm.templateColumn.manage']}"
@@ -306,7 +309,7 @@
           <f:selectItems value="#{bindings.DcmTemplateView11.items}" id="si6"/>
         </af:selectOneChoice>
       </af:panelGroupLayout>
-      <af:spacer width="10" height="20" id="s3"/>
+      <af:spacer width="10" height="10" id="s3"/>
       <af:popup id="p1">
         <af:panelWindow id="pw1">
           <af:panelCollection id="pc3"
@@ -391,9 +394,10 @@
           </af:panelCollection>
         </af:panelWindow>
       </af:popup>
-      <af:panelStretchLayout id="psl2" inlineStyle="width:801px;">
+      <af:panelStretchLayout id="psl2"
+                             startWidth="10px" inlineStyle="width:auto;">
         <f:facet name="center">
-          <af:panelCollection id="pc1" inlineStyle="width:794px;">
+          <af:panelCollection id="pc1" inlineStyle="width:1040.0px;">
             <f:facet name="menus"/>
             <f:facet name="toolbar">
               <af:toolbar id="t3">
@@ -408,16 +412,19 @@
                 <af:commandButton actionListener="#{bindings.Commit.execute}"
                                   text="#{viewBundle['dms.common.save']}"
                                   disabled="#{!bindings.Commit.enabled}"
-                                  id="cb11"/>
+                                  id="cb11"
+                                  partialTriggers="cb9 cb10 t2"/>
                 <af:commandButton actionListener="#{bindings.Rollback.execute}"
                                   text="#{viewBundle['dms.common.rollback']}"
                                   disabled="#{!bindings.Rollback.enabled}"
-                                  immediate="true" id="cb12">
+                                  immediate="true" id="cb12"
+                                  partialTriggers="cb9 cb10 t2">
                   <af:resetActionListener/>
                 </af:commandButton>
                 <af:commandToolbarButton text="#{viewBundle['dcm.validation.manage']}"
-                                         id="ctb5"
-                                         binding="#{pageFlowScope.TemplateBackingBean.ctb}">
+                                         id="ctb5"                                       
+                                         partialTriggers="cb9 cb10 cb12 t2"
+                                         disabled="#{bindings.DcmTemplateColumnView1.currentRow.entities['0'].entityState == '0' ? true : false}">
                   <af:showPopupBehavior popupId="::p1"/>
                 </af:commandToolbarButton>
               </af:toolbar>
@@ -435,7 +442,8 @@
                       selectedRowKeys="#{bindings.DcmTemplateColumnView1.collectionModel.selectedRow}"
                       selectionListener="#{bindings.DcmTemplateColumnView1.collectionModel.makeCurrent}"
                       rowSelection="single" id="t2"
-                      partialTriggers="::cb9 ::cb10" editingMode="clickToEdit">
+                      partialTriggers="::cb9 ::cb10" editingMode="clickToEdit"
+                      inlineStyle="width:1040px;">
               <af:column sortProperty="#{bindings.DcmTemplateColumnView1.hints.ColumnLabel.name}"
                          filterable="true" sortable="true"
                          headerText="#{bindings.DcmTemplateColumnView1.hints.ColumnLabel.label}"
@@ -578,6 +586,9 @@
               </af:column>
             </af:table>
           </af:panelCollection>
+        </f:facet>
+        <f:facet name="start">
+          <af:spacer width="10" height="10" id="s5"/>
         </f:facet>
       </af:panelStretchLayout>
     </af:showDetailItem>
