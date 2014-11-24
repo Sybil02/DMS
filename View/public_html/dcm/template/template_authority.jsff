@@ -41,18 +41,18 @@
                                        text="#{viewBundle['dcm.common.delete']}"
                                        disabled="#{!bindings.Delete1.enabled}"
                                        id="ctb6"/>
-              <af:commandToolbarButton actionListener="#{bindings.Commit.execute}"
+              <af:commandButton actionListener="#{bindings.Commit.execute}"
                                        text="#{viewBundle['dms.common.save']}"
                                        disabled="#{!bindings.Commit.enabled}"
                                        id="ctb7"
-                                       partialTriggers="t6:c6 t6:c7 ctb5 ctb6 t6"/>
-              <af:commandToolbarButton actionListener="#{bindings.Rollback.execute}"
+                                       partialTriggers="ctb5 ctb6 t6"/>
+              <af:commandButton actionListener="#{bindings.Rollback.execute}"
                                        text="#{viewBundle['dms.common.rollback']}"
                                        disabled="#{!bindings.Rollback.enabled}"
                                        immediate="true" id="ctb8"
                                        partialTriggers="ctb5 ctb6 t6">
                 <af:resetActionListener/>
-              </af:commandToolbarButton>
+              </af:commandButton>
             </af:toolbar>
           </f:facet>
           <af:table value="#{bindings.DcmRoleTemplateView11.collectionModel}"
@@ -64,7 +64,7 @@
                     selectionListener="#{bindings.DcmRoleTemplateView11.collectionModel.makeCurrent}"
                     rowSelection="single" id="t6"
                     partialTriggers="::ctb5 ::ctb6" width="288"
-                    columnStretching="column:c6">
+                    columnStretching="column:c6" editingMode="clickToEdit">
             <af:column sortProperty="#{bindings.DcmRoleTemplateView11.hints.TemplateId.name}"
                        sortable="false"
                        headerText="#{bindings.DcmRoleTemplateView11.hints.TemplateId.label}"

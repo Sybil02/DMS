@@ -10,6 +10,7 @@
        DcmTemplateValidation.COLUMN_ID, 
        DcmTemplateValidation.VALIDATION_ID, 
        DcmTemplateValidation.SEQ, 
+       DcmTemplateValidation.ARGS, 
        DcmTemplateValidation.CREATED_AT, 
        DcmTemplateValidation.UPDATED_AT, 
        DcmTemplateValidation.UPDATED_BY, 
@@ -99,6 +100,19 @@
       <SchemaBasedProperties>
         <LABEL
           ResId="dcm.seq"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="Args"
+    PrecisionRule="true"
+    EntityAttrName="Args"
+    EntityUsage="DcmTemplateValidation"
+    AliasName="ARGS">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="dcm.validation_parameter"/>
       </SchemaBasedProperties>
     </Properties>
   </ViewAttribute>

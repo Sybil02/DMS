@@ -215,6 +215,13 @@
       <Attr Name="_DisplaySize" Value="32"/>
     </DesignTime>
   </Attribute>
+  <AccessorAttribute
+    Name="DcmTemplateValidation"
+    Association="team.epm.dcm.model.templateValidationAssociation"
+    AssociationEnd="team.epm.dcm.model.templateValidationAssociation.DcmTemplateValidation"
+    AssociationOtherEnd="team.epm.dcm.model.templateValidationAssociation.DcmTemplateColumn"
+    Type="oracle.jbo.RowIterator"
+    IsUpdateable="false"/>
   <ViewLinkAccessor
     Name="DcmTemplateView"
     ViewLink="templatecolumnsVL"

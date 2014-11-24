@@ -115,29 +115,22 @@
                        filterable="true" sortable="true"
                        headerText="#{bindings.DcmCombinationView1.hints.Name.label}"
                        id="c4">
-              <af:inputText value="#{row.bindings.Name.inputValue}"
-                            label="#{bindings.DcmCombinationView1.hints.Name.label}"
-                            required="#{bindings.DcmCombinationView1.hints.Name.mandatory}"
-                            columns="#{bindings.DcmCombinationView1.hints.Name.displayWidth}"
-                            maximumLength="#{bindings.DcmCombinationView1.hints.Name.precision}"
+              <af:outputText value="#{row.bindings.Name.inputValue}"
                             shortDesc="#{bindings.DcmCombinationView1.hints.Name.tooltip}"
                             id="it1">
-                <f:validator binding="#{row.bindings.Name.validator}"/>
-              </af:inputText>
+                
+              </af:outputText>
             </af:column>
             <af:column sortProperty="#{bindings.DcmCombinationView1.hints.Code.name}"
                        filterable="true" sortable="true"
                        headerText="#{bindings.DcmCombinationView1.hints.Code.label}"
                        id="c1">
-              <af:inputText value="#{row.bindings.Code.inputValue}"
-                            label="#{bindings.DcmCombinationView1.hints.Code.label}"
-                            required="#{bindings.DcmCombinationView1.hints.Code.mandatory}"
-                            columns="#{bindings.DcmCombinationView1.hints.Code.displayWidth}"
-                            maximumLength="#{bindings.DcmCombinationView1.hints.Code.precision}"
+              <af:outputText value="#{row.bindings.Code.inputValue}"
+                            
                             shortDesc="#{bindings.DcmCombinationView1.hints.Code.tooltip}"
                             id="it2">
-                <f:validator binding="#{row.bindings.Code.validator}"/>
-              </af:inputText>
+                
+              </af:outputText>
             </af:column>
             <af:column sortProperty="#{bindings.DcmCombinationView1.hints.UpdatedAt.name}"
                        filterable="true" sortable="true"

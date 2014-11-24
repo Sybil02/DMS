@@ -49,7 +49,7 @@
                     selectedRowKeys="#{bindings.DcmValidationView.collectionModel.selectedRow}"
                     selectionListener="#{bindings.DcmValidationView.collectionModel.makeCurrent}"
                     rowSelection="single" id="t1"
-                    partialTriggers="::ctb1 ::ctb2">
+                    partialTriggers="::ctb1 ::ctb2" editingMode="clickToEdit">
             <af:column sortProperty="#{bindings.DcmValidationView.hints.Name.name}"
                        filterable="true" sortable="true"
                        headerText="#{bindings.DcmValidationView.hints.Name.label}"

@@ -43,22 +43,6 @@
         <Item Value="UpdatedBy"/>
       </AttrNames>
     </attributeValues>
-    <tree IterBinding="DcmTemplateColumnView1Iterator"
-          id="DcmTemplateColumnView1">
-      <nodeDefinition DefName="team.epm.dcm.view.DcmTemplateColumnView"
-                      Name="DcmTemplateColumnView10">
-        <AttrNames>
-          <Item Value="ColumnLabel"/>
-          <Item Value="DbTableCol"/>
-          <Item Value="DbViewCol"/>
-          <Item Value="IsPk"/>
-          <Item Value="Readonly"/>
-          <Item Value="DataType"/>
-          <Item Value="Visible"/>
-          <Item Value="Seq"/>
-        </AttrNames>
-      </nodeDefinition>
-    </tree>
     <action IterBinding="DcmTemplateColumnView1Iterator" id="CreateInsert1"
             RequiresUpdateModel="true" Action="createInsertRow"/>
     <action IterBinding="DcmTemplateColumnView1Iterator" id="Delete1"
@@ -104,6 +88,7 @@
         <AttrNames>
           <Item Value="ValidationId"/>
           <Item Value="Seq"/>
+          <Item Value="Args"/>
         </AttrNames>
       </nodeDefinition>
     </tree>
@@ -111,5 +96,23 @@
             RequiresUpdateModel="true" Action="createInsertRow"/>
     <action IterBinding="DcmTemplateValidationView1Iterator" id="Delete2"
             RequiresUpdateModel="false" Action="removeCurrentRow"/>
+    <tree IterBinding="DcmTemplateColumnView1Iterator"
+          id="DcmTemplateColumnView1">
+      <nodeDefinition DefName="team.epm.dcm.view.DcmTemplateColumnView"
+                      Name="DcmTemplateColumnView110">
+        <AttrNames>
+          <Item Value="ColumnLabel"/>
+          <Item Value="DbTableCol"/>
+          <Item Value="DbViewCol"/>
+          <Item Value="IsPk"/>
+          <Item Value="Readonly"/>
+          <Item Value="DataType"/>
+          <Item Value="Visible"/>
+          <Item Value="Seq"/>
+          <Item Value="UpdatedAt"/>
+          <Item Value="UpdatedBy"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
   </bindings>
 </pageDefinition>

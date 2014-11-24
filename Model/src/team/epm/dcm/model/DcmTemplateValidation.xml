@@ -68,7 +68,19 @@
       <Attr Name="_DisplaySize" Value="22"/>
     </DesignTime>
   </Attribute>
- <Attribute
+  <Attribute
+    Name="Args"
+    Precision="1000"
+    ColumnName="ARGS"
+    SQLType="VARCHAR"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    TableName="DCM_TEMPLATE_VALIDATION">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="1000"/>
+    </DesignTime>
+  </Attribute>
+  <Attribute
     Name="CreatedAt"
     ColumnName="CREATED_AT"
     SQLType="TIMESTAMP"
@@ -120,6 +132,13 @@
     </DesignTime>
     <TransientExpression><![CDATA[adf.userSession.userData.userId]]></TransientExpression>
   </Attribute>
+  <AccessorAttribute
+    Name="DcmTemplateColumn"
+    Association="team.epm.dcm.model.templateValidationAssociation"
+    AssociationEnd="team.epm.dcm.model.templateValidationAssociation.DcmTemplateColumn"
+    AssociationOtherEnd="team.epm.dcm.model.templateValidationAssociation.DcmTemplateValidation"
+    Type="oracle.jbo.server.EntityImpl"
+    IsUpdateable="true"/>
   <Key
     Name="PkDcmTemplateValidation"
     PrimaryKey="true">
@@ -139,6 +158,17 @@
     </DesignTime>
     <AttrArray Name="Attributes">
       <Item Value="team.epm.dcm.model.DcmTemplateValidation.Id"/>
+    </AttrArray>
+  </Key>
+  <Key
+    Name="fk_DcmTemplateValidation">
+    <DesignTime>
+      <Attr Name="_referencedKey" Value="SYS_C007220"/>
+      <Attr Name="_isForeign" Value="true"/>
+      <Attr Name="_DBObjectName" Value="FK_DCM_TEMPLATE_VALIDATION"/>
+    </DesignTime>
+    <AttrArray Name="Attributes">
+      <Item Value="team.epm.dcm.model.DcmTemplateValidation.ColumnId"/>
     </AttrArray>
   </Key>
 </Entity>
