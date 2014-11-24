@@ -134,9 +134,9 @@
   </Attribute>
   <AccessorAttribute
     Name="DcmTemplateColumn"
-    Association="team.epm.dcm.model.templateValidationAssociation"
-    AssociationEnd="team.epm.dcm.model.templateValidationAssociation.DcmTemplateColumn"
-    AssociationOtherEnd="team.epm.dcm.model.templateValidationAssociation.DcmTemplateValidation"
+    Association="team.epm.dcm.model.association.templateValidationAssociation"
+    AssociationEnd="team.epm.dcm.model.association.templateValidationAssociation.DcmTemplateColumn"
+    AssociationOtherEnd="team.epm.dcm.model.association.templateValidationAssociation.DcmTemplateValidation"
     Type="oracle.jbo.server.EntityImpl"
     IsUpdateable="true"/>
   <Key

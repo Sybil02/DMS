@@ -230,6 +230,16 @@ public class DcmTemplateImpl extends EntityImpl {
             }
         }
         ,
+        DcmTemplateColumn {
+            public Object get(DcmTemplateImpl obj) {
+                return obj.getDcmTemplateColumn();
+            }
+
+            public void put(DcmTemplateImpl obj, Object value) {
+                obj.setAttributeInternal(index(), value);
+            }
+        }
+        ,
         DcmTemplateColumnView {
             public Object get(DcmTemplateImpl obj) {
                 return obj.getDcmTemplateColumnView();
@@ -266,6 +276,7 @@ public class DcmTemplateImpl extends EntityImpl {
             return vals;
         }
     }
+
     public static final int ID = AttributesEnum.Id.index();
     public static final int LOCALE = AttributesEnum.Locale.index();
     public static final int NAME = AttributesEnum.Name.index();
@@ -287,12 +298,23 @@ public class DcmTemplateImpl extends EntityImpl {
     public static final int DATASTARTLINE = AttributesEnum.DataStartLine.index();
     public static final int COMBINATIONID = AttributesEnum.CombinationId.index();
     public static final int CATEGORYID = AttributesEnum.CategoryId.index();
+    public static final int DCMTEMPLATECOLUMN = AttributesEnum.DcmTemplateColumn.index();
     public static final int DCMTEMPLATECOLUMNVIEW = AttributesEnum.DcmTemplateColumnView.index();
 
     /**
      * This is the default constructor (do not remove).
      */
     public DcmTemplateImpl() {
+    }
+
+    /**
+     * @return the definition object for this instance class.
+     */
+    public static synchronized EntityDefImpl getDefinitionObject() {
+        if (mDefinitionObject == null) {
+            mDefinitionObject = EntityDefImpl.findDefObject("team.epm.dcm.model.DcmTemplate");
+        }
+        return mDefinitionObject;
     }
 
     /**
@@ -665,6 +687,13 @@ public class DcmTemplateImpl extends EntityImpl {
     }
 
     /**
+     * @return the associated entity oracle.jbo.RowIterator.
+     */
+    public RowIterator getDcmTemplateColumn() {
+        return (RowIterator)getAttributeInternal(DCMTEMPLATECOLUMN);
+    }
+
+    /**
      * Uses the link templatecolumnsVL to return rows of DcmTemplateColumnView
      */
     public RowIterator getDcmTemplateColumnView() {
@@ -681,13 +710,5 @@ public class DcmTemplateImpl extends EntityImpl {
         return new Key(new Object[]{id, locale});
     }
 
-    /**
-     * @return the definition object for this instance class.
-     */
-    public static synchronized EntityDefImpl getDefinitionObject() {
-        if (mDefinitionObject == null) {
-            mDefinitionObject = EntityDefImpl.findDefObject("team.epm.dcm.model.DcmTemplate");
-        }
-        return mDefinitionObject;
-    }
+
 }

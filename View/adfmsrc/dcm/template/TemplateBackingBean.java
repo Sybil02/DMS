@@ -8,7 +8,11 @@ import oracle.adf.model.binding.DCIteratorBinding;
 import oracle.adf.view.rich.component.rich.nav.RichCommandButton;
 import oracle.adf.view.rich.component.rich.nav.RichCommandToolbarButton;
 
+import oracle.jbo.Row;
 import oracle.jbo.RowSetIterator;
+import oracle.jbo.ViewObject;
+import oracle.jbo.server.RowImpl;
+import oracle.jbo.server.ViewRowImpl;
 
 public class TemplateBackingBean {
     private RichCommandToolbarButton ctb;
@@ -16,25 +20,21 @@ public class TemplateBackingBean {
     
     public boolean is_Disabled(){
         DCIteratorBinding iter=ADFUtils.findIterator("DcmTemplateColumnView1Iterator");
-        RowSetIterator rowiter= iter.getRowSetIterator();
-        if(rowiter.hasNext()){
-            return false;
+        ViewObject vo= iter.getViewObject();
+        vo.getCurrentRow();
+        ViewRowImpl row = (ViewRowImpl)vo.getCurrentRow();
+        byte  b=row.getEntity(0).getEntityState();
+        if(b==0) {
+           
+            return true;
         }
-        else  return true;
+        else  return false;
     }
     public void setCtb(RichCommandToolbarButton ctb) {
         this.ctb = ctb;
     }
 
     public RichCommandToolbarButton getCtb() {
-          if (ctb==null)
-            return ctb;
-        DCIteratorBinding iter=ADFUtils.findIterator("DcmTemplateColumnView1Iterator");
-        RowSetIterator rowiter= iter.getRowSetIterator();
-        if(rowiter.hasNext()){
-            ctb.setDisabled(false);
-        }
-        else ctb.setDisabled(true);
        return ctb;
     }
 }

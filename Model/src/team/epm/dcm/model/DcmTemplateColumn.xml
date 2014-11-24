@@ -17,6 +17,7 @@
   </DesignTime>
   <Attribute
     Name="Id"
+    IsUpdateable="while_insert"
     IsNotNull="true"
     Precision="32"
     ColumnName="ID"
@@ -24,8 +25,7 @@
     Type="java.lang.String"
     ColumnType="VARCHAR2"
     TableName="DCM_TEMPLATE_COLUMN"
-    PrimaryKey="true"
-    IsUpdateable="while_insert">
+    PrimaryKey="true">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="32"/>
     </DesignTime>
@@ -33,6 +33,7 @@
   </Attribute>
   <Attribute
     Name="Locale"
+    IsUpdateable="while_insert"
     IsNotNull="true"
     Precision="10"
     ColumnName="LOCALE"
@@ -40,8 +41,7 @@
     Type="java.lang.String"
     ColumnType="VARCHAR2"
     TableName="DCM_TEMPLATE_COLUMN"
-    PrimaryKey="true"
-    IsUpdateable="while_insert">
+    PrimaryKey="true">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="10"/>
     </DesignTime>
@@ -92,12 +92,12 @@
   </Attribute>
   <Attribute
     Name="CreatedAt"
+    IsUpdateable="while_insert"
     ColumnName="CREATED_AT"
     SQLType="TIMESTAMP"
     Type="oracle.jbo.domain.Date"
     ColumnType="DATE"
-    TableName="DCM_COMBINATION"
-    IsUpdateable="while_insert">
+    TableName="DCM_COMBINATION">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="7"/>
     </DesignTime>
@@ -130,13 +130,13 @@
   </Attribute>
   <Attribute
     Name="CreatedBy"
+    IsUpdateable="while_insert"
     Precision="32"
     ColumnName="CREATED_BY"
     SQLType="VARCHAR"
     Type="java.lang.String"
     ColumnType="VARCHAR2"
-    TableName="DCM_COMBINATION"
-    IsUpdateable="while_insert">
+    TableName="DCM_COMBINATION">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="32"/>
     </DesignTime>
@@ -217,11 +217,18 @@
   </Attribute>
   <AccessorAttribute
     Name="DcmTemplateValidation"
-    Association="team.epm.dcm.model.templateValidationAssociation"
-    AssociationEnd="team.epm.dcm.model.templateValidationAssociation.DcmTemplateValidation"
-    AssociationOtherEnd="team.epm.dcm.model.templateValidationAssociation.DcmTemplateColumn"
+    Association="team.epm.dcm.model.association.templateValidationAssociation"
+    AssociationEnd="team.epm.dcm.model.association.templateValidationAssociation.DcmTemplateValidation"
+    AssociationOtherEnd="team.epm.dcm.model.association.templateValidationAssociation.DcmTemplateColumn"
     Type="oracle.jbo.RowIterator"
     IsUpdateable="false"/>
+  <AccessorAttribute
+    Name="DcmTemplate"
+    Association="team.epm.dcm.model.association.templateAndColumnAssociation"
+    AssociationEnd="team.epm.dcm.model.association.templateAndColumnAssociation.DcmTemplate"
+    AssociationOtherEnd="team.epm.dcm.model.association.templateAndColumnAssociation.DcmTemplateColumn"
+    Type="team.epm.dcm.model.DcmTemplateImpl"
+    IsUpdateable="true"/>
   <ViewLinkAccessor
     Name="DcmTemplateView"
     ViewLink="templatecolumnsVL"

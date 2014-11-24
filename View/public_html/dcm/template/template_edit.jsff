@@ -403,7 +403,7 @@
               <af:toolbar id="t3">
                 <af:commandButton actionListener="#{bindings.CreateInsert1.execute}"
                                   text="#{viewBundle['dcm.templateColumn.add']}"
-                                  disabled="#{!bindings.CreateInsert1.enabled}"
+                                  disabled="#{bindings.DcmTemplateView1.currentRow.entities['0'].entityState == '0' ? true : false}"
                                   id="cb9"/>
                 <af:commandButton actionListener="#{bindings.Delete1.execute}"
                                   text="#{viewBundle['dcm.templateColumn.delete']}"
