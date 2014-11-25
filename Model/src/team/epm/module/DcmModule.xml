@@ -36,7 +36,7 @@
    <ViewUsage
     Name="DcmComVsView1"
     ViewObjectName="team.epm.dcm.view.DcmComVsView"/>
-   <ViewUsage Name="DcmTemplateView1"/>
+   <ViewUsage Name="DcmTemplateView1"
               ViewObjectName="team.epm.dcm.view.DcmTemplateView"/>
    <ViewUsage Name="DcmTemplateColumnView1"
               ViewObjectName="team.epm.dcm.view.DcmTemplateColumnView"/>
