@@ -229,6 +229,14 @@ public class DcmModuleImpl extends ApplicationModuleImpl {
     public ViewObjectImpl getDcmComVsQueryView() {
         return (ViewObjectImpl)findViewObject("DcmComVsQueryView");
     }
+
+    /**
+     * Container's getter for DcmTemplateCatView.
+     * @return DcmTemplateCatView
+     */
+    public ViewObjectImpl getDcmTemplateCatView() {
+        return (ViewObjectImpl)findViewObject("DcmTemplateCatView");
+    }
 }
 
 

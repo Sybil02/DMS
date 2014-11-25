@@ -48,6 +48,9 @@
               ViewObjectName="team.epm.dms.view.DmsRoleView"/>
    <ViewUsage Name="DcmRoleTemplateView1"
               ViewObjectName="team.epm.dcm.view.DcmRoleTemplateView"/>
+   <ViewUsage
+      Name="DcmTemplateCatView"
+      ViewObjectName="team.epm.dcm.view.DcmTemplateCatView"/>
    <ViewLinkUsage Name="combinationsVS"
                   ViewLinkObjectName="team.epm.dcm.view.viewlink.combinationsVS"
                   SrcViewUsageName="team.epm.module.DcmModule.DcmCombinationView1"
