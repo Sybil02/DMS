@@ -2,81 +2,87 @@
 <Application xmlns="http://xmlns.oracle.com/adfm/application"
              version="11.1.1.64.93" id="DataBindings" SeparateXMLFiles="false"
              Package="." ClientType="Generic">
-  <definitionFactories>
-    <factory nameSpace="http://xmlns.oracle.com/adf/controller/binding"
-             className="oracle.adf.controller.internal.binding.TaskFlowBindingDefFactoryImpl"/>
-    <dtfactory className="oracle.adf.controller.internal.dtrt.binding.BindingDTObjectFactory"/>
-  </definitionFactories>
-  <pageMap>
-    <page path="/dms/dynamicShell/dynamicTabShell.jspx"
-          usageId="__dynamicTabShellPageDef"/>
-    <page path="/index.jspx" usageId="__indexPageDef"/>
-    <page path="/dms/login/login.jspx" usageId="__loginPageDef"/>
-    <page path="/test.jsp" usageId="__testPageDef1"/>
-    <page path="/settings.jspx" usageId="__settingsPageDef"/>
-    <page path="/dms/user/edit.jsff" usageId="__editPageDef"/>
-    <page path="/dms/user/user_info.jsff" usageId="__user_infoPageDef"/>
-    <page path="/dms/group/edit.jsff" usageId="__editPageDef2"/>
-    <page path="/dms/groupUser/edit.jsff" usageId="__editPageDef3"/>
-    <page path="/dms/valueSet/edit.jsff" usageId="__editPageDef4"/>
-    <page path="/dms/valueSet/authority.jsff" usageId="__authorityPageDef"/>
-    <page path="/dms/function/edit.jsff" usageId="__editPageDef5"/>
-    <page path="/dms/function/authority.jsff" usageId="__authorityPageDef1"/>
-    <page path="/dms/role/role_edit.jsff" usageId="__role_editPageDef"/>
-    <page path="/dms/role/role_assign.jsff" usageId="__role_assignPageDef"/>
-    <page path="/dcm/template/template_edit.jsff"
-          usageId="__template_editPageDef"/>
-    <page path="/dcm/template/template_authority.jsff"
-          usageId="__template_authorityPageDef"/>
-    <page path="/dcm/combinantion/combination_edit.jsff"
-          usageId="__combination_editPageDef"/>
-    <page path="/dcm/validation/validation_edit.jsff"
-          usageId="__validation_editPageDef"/>
-    <page path="/dcm/index.jspx" usageId="__indexPageDef1"/>
-    <page path="/dcm/data_display.jsff" usageId="__data_displayPageDef"/>
-  </pageMap>
-  <pageDefinitionUsages>
-    <page id="__dynamicTabShellPageDef"
-          path="dms.dynamicShell.dynamicTabShellPageDef"/>
-    <page id="__indexPageDef" path="view.pageDefs.indexPageDef"/>
-    <page id="__loginPageDef" path="dms.login.loginPageDef"/>
-    <page id="__testPageDef1" path="view.pageDefs.testPageDef"/>
-    <page id="__settingsPageDef" path="view.pageDefs.settingsPageDef"/>
-    <page id="__editPageDef" path="dms.user.editPageDef"/>
-    <page id="__user_infoPageDef" path="dms.user.user_infoPageDef"/>
-    <page id="__editPageDef1" path="dmsGroup.editPageDef"/>
-    <page id="__editPageDef2" path="dms.group.editPageDef"/>
-    <page id="__editPageDef3" path="dms.groupUser.editPageDef"/>
-    <page id="__editPageDef4" path="dms.valueSet.editPageDef"/>
-    <page id="__authorityPageDef" path="dms.valueSet.authorityPageDef"/>
-    <page id="__editPageDef5" path="dms.function.editPageDef"/>
-    <page id="__authorityPageDef1" path="dms.function.authorityPageDef"/>
-    <page id="__role_editPageDef" path="dms.role.role_editPageDef"/>
-    <page id="__role_assignPageDef" path="dms.role.role_assignPageDef"/>
-    <page id="__template_editPageDef" path="dcm.template.template_editPageDef"/>
-    <page id="__template_authorityPageDef"
-          path="dcm.template.template_authorityPageDef"/>
-    <page id="__combination_editPageDef"
-          path="dcm.combinantion.combination_editPageDef"/>
-    <page id="__validation_editPageDef"
-          path="dcm.validation.validation_editPageDef"/>
-    <page id="__indexPageDef1" path="dcm.indexPageDef"/>
-    <page id="__data_displayPageDef" path="dcm.data_displayPageDef"/>
-  </pageDefinitionUsages>
-  <dataControlUsages>
-    <BC4JDataControl id="DmsModuleDataControl" Package="team.epm.module"
-                     FactoryClass="oracle.adf.model.bc4j.DataControlFactoryImpl"
-                     SupportsTransactions="true" SupportsFindMode="true"
-                     SupportsRangesize="true" SupportsResetState="true"
-                     SupportsSortCollection="true"
-                     Configuration="DmsModuleLocal" syncMode="Immediate"
-                     xmlns="http://xmlns.oracle.com/adfm/datacontrol"/>
-    <BC4JDataControl id="DcmModuleDataControl" Package="team.epm.module"
-                     FactoryClass="oracle.adf.model.bc4j.DataControlFactoryImpl"
-                     SupportsTransactions="true" SupportsFindMode="true"
-                     SupportsRangesize="true" SupportsResetState="true"
-                     SupportsSortCollection="true"
-                     Configuration="DcmModuleLocal" syncMode="Immediate"
-                     xmlns="http://xmlns.oracle.com/adfm/datacontrol"/>
-  </dataControlUsages>
+   <definitionFactories>
+      <factory nameSpace="http://xmlns.oracle.com/adf/controller/binding"
+               className="oracle.adf.controller.internal.binding.TaskFlowBindingDefFactoryImpl"/>
+      <dtfactory className="oracle.adf.controller.internal.dtrt.binding.BindingDTObjectFactory"/>
+   </definitionFactories>
+   <pageMap>
+      <page path="/dms/dynamicShell/dynamicTabShell.jspx"
+            usageId="__dynamicTabShellPageDef"/>
+      <page path="/index.jspx" usageId="__indexPageDef"/>
+      <page path="/dms/login/login.jspx" usageId="__loginPageDef"/>
+      <page path="/test.jsp" usageId="__testPageDef1"/>
+      <page path="/settings.jspx" usageId="__settingsPageDef"/>
+      <page path="/dms/user/edit.jsff" usageId="__editPageDef"/>
+      <page path="/dms/user/user_info.jsff" usageId="__user_infoPageDef"/>
+      <page path="/dms/group/edit.jsff" usageId="__editPageDef2"/>
+      <page path="/dms/groupUser/edit.jsff" usageId="__editPageDef3"/>
+      <page path="/dms/valueSet/edit.jsff" usageId="__editPageDef4"/>
+      <page path="/dms/valueSet/authority.jsff" usageId="__authorityPageDef"/>
+      <page path="/dms/function/edit.jsff" usageId="__editPageDef5"/>
+      <page path="/dms/function/authority.jsff" usageId="__authorityPageDef1"/>
+      <page path="/dms/role/role_edit.jsff" usageId="__role_editPageDef"/>
+      <page path="/dms/role/role_assign.jsff" usageId="__role_assignPageDef"/>
+      <page path="/dcm/template/template_edit.jsff"
+            usageId="__template_editPageDef"/>
+      <page path="/dcm/template/template_authority.jsff"
+            usageId="__template_authorityPageDef"/>
+      <page path="/dcm/combinantion/combination_edit.jsff"
+            usageId="__combination_editPageDef"/>
+      <page path="/dcm/validation/validation_edit.jsff"
+            usageId="__validation_editPageDef"/>
+      <page path="/dcm/index.jspx" usageId="__indexPageDef1"/>
+      <page path="/dcm/combinantion/test.jsff" usageId="__testPageDef"/>
+      <page path="/dcm/combinantion/test1.jsff" usageId="__test1PageDef"/>
+      <page path="/dcm/data_display.jsff" usageId="__data_displayPageDef"/><page path="/dcm/combinantion/test1.jsff" usageId="__test1PageDef"/>
+   </pageMap>
+   <pageDefinitionUsages>
+      <page id="__dynamicTabShellPageDef"
+            path="dms.dynamicShell.dynamicTabShellPageDef"/>
+      <page id="__indexPageDef" path="view.pageDefs.indexPageDef"/>
+      <page id="__loginPageDef" path="dms.login.loginPageDef"/>
+      <page id="__testPageDef1" path="view.pageDefs.testPageDef"/>
+      <page id="__settingsPageDef" path="view.pageDefs.settingsPageDef"/>
+      <page id="__editPageDef" path="dms.user.editPageDef"/>
+      <page id="__user_infoPageDef" path="dms.user.user_infoPageDef"/>
+      <page id="__editPageDef1" path="dmsGroup.editPageDef"/>
+      <page id="__editPageDef2" path="dms.group.editPageDef"/>
+      <page id="__editPageDef3" path="dms.groupUser.editPageDef"/>
+      <page id="__editPageDef4" path="dms.valueSet.editPageDef"/>
+      <page id="__authorityPageDef" path="dms.valueSet.authorityPageDef"/>
+      <page id="__editPageDef5" path="dms.function.editPageDef"/>
+      <page id="__authorityPageDef1" path="dms.function.authorityPageDef"/>
+      <page id="__role_editPageDef" path="dms.role.role_editPageDef"/>
+      <page id="__role_assignPageDef" path="dms.role.role_assignPageDef"/>
+      <page id="__template_editPageDef"
+            path="dcm.template.template_editPageDef"/>
+      <page id="__template_authorityPageDef"
+            path="dcm.template.template_authorityPageDef"/>
+      <page id="__combination_editPageDef"
+            path="dcm.combinantion.combination_editPageDef"/>
+      <page id="__validation_editPageDef"
+            path="dcm.validation.validation_editPageDef"/>
+      <page id="__indexPageDef1" path="dcm.indexPageDef"/>
+      <page id="__testPageDef" path="dcm.combinantion.testPageDef"/>
+      <page id="__data_displayPageDef" path="dcm.data_displayPageDef"/>
+<page id="__test1PageDef" path="dcm.combinantion.test1PageDef"/>
+      <page id="__data_displayPageDef" path="dcm.data_displayPageDef"/>
+   </pageDefinitionUsages>
+   <dataControlUsages>
+      <BC4JDataControl id="DmsModuleDataControl" Package="team.epm.module"
+                       FactoryClass="oracle.adf.model.bc4j.DataControlFactoryImpl"
+                       SupportsTransactions="true" SupportsFindMode="true"
+                       SupportsRangesize="true" SupportsResetState="true"
+                       SupportsSortCollection="true"
+                       Configuration="DmsModuleLocal" syncMode="Immediate"
+                       xmlns="http://xmlns.oracle.com/adfm/datacontrol"/>
+      <BC4JDataControl id="DcmModuleDataControl" Package="team.epm.module"
+                       FactoryClass="oracle.adf.model.bc4j.DataControlFactoryImpl"
+                       SupportsTransactions="true" SupportsFindMode="true"
+                       SupportsRangesize="true" SupportsResetState="true"
+                       SupportsSortCollection="true"
+                       Configuration="DcmModuleLocal" syncMode="Immediate"
+                       xmlns="http://xmlns.oracle.com/adfm/datacontrol"/>
+   </dataControlUsages>
 </Application>

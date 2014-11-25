@@ -17,6 +17,7 @@
   </DesignTime>
   <Attribute
     Name="Id"
+    IsUpdateable="while_insert"
     IsNotNull="true"
     Precision="32"
     ColumnName="ID"
@@ -28,9 +29,11 @@
     <DesignTime>
       <Attr Name="_DisplaySize" Value="32"/>
     </DesignTime>
+    <TransientExpression><![CDATA[java.util.UUID.randomUUID().toString().replace("-", "")]]></TransientExpression>
   </Attribute>
   <Attribute
     Name="Locale"
+    IsUpdateable="while_insert"
     IsNotNull="true"
     Precision="10"
     ColumnName="LOCALE"
@@ -42,6 +45,7 @@
     <DesignTime>
       <Attr Name="_DisplaySize" Value="10"/>
     </DesignTime>
+    <TransientExpression><![CDATA[adf.context.locale]]></TransientExpression>
   </Attribute>
   <Attribute
     Name="ColumnLabel"
@@ -54,6 +58,13 @@
     <DesignTime>
       <Attr Name="_DisplaySize" Value="300"/>
     </DesignTime>
+    <Properties>
+      <CustomProperties>
+        <Property
+          Name="isMultiLangAttr"
+          Value="true"/>
+      </CustomProperties>
+    </Properties>
   </Attribute>
   <Attribute
     Name="DbTableCol"
@@ -81,14 +92,16 @@
   </Attribute>
   <Attribute
     Name="CreatedAt"
+    IsUpdateable="while_insert"
     ColumnName="CREATED_AT"
     SQLType="TIMESTAMP"
     Type="oracle.jbo.domain.Date"
     ColumnType="DATE"
-    TableName="DCM_TEMPLATE_COLUMN">
+    TableName="DCM_COMBINATION">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="7"/>
     </DesignTime>
+    <TransientExpression><![CDATA[adf.currentDateTime]]></TransientExpression>
   </Attribute>
   <Attribute
     Name="UpdatedAt"
@@ -96,10 +109,11 @@
     SQLType="TIMESTAMP"
     Type="oracle.jbo.domain.Date"
     ColumnType="DATE"
-    TableName="DCM_TEMPLATE_COLUMN">
+    TableName="DCM_COMBINATION">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="7"/>
     </DesignTime>
+    <TransientExpression><![CDATA[adf.currentDateTime]]></TransientExpression>
   </Attribute>
   <Attribute
     Name="UpdatedBy"
@@ -108,22 +122,25 @@
     SQLType="VARCHAR"
     Type="java.lang.String"
     ColumnType="VARCHAR2"
-    TableName="DCM_TEMPLATE_COLUMN">
+    TableName="DCM_COMBINATION">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="32"/>
     </DesignTime>
+    <TransientExpression><![CDATA[adf.userSession.userData.userId]]></TransientExpression>
   </Attribute>
   <Attribute
     Name="CreatedBy"
+    IsUpdateable="while_insert"
     Precision="32"
     ColumnName="CREATED_BY"
     SQLType="VARCHAR"
     Type="java.lang.String"
     ColumnType="VARCHAR2"
-    TableName="DCM_TEMPLATE_COLUMN">
+    TableName="DCM_COMBINATION">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="32"/>
     </DesignTime>
+    <TransientExpression><![CDATA[adf.userSession.userData.userId]]></TransientExpression>
   </Attribute>
   <Attribute
     Name="IsPk"
@@ -198,6 +215,34 @@
       <Attr Name="_DisplaySize" Value="32"/>
     </DesignTime>
   </Attribute>
+  <AccessorAttribute
+    Name="DcmTemplateValidation"
+    Association="team.epm.dcm.model.association.templateValidationAssociation"
+    AssociationEnd="team.epm.dcm.model.association.templateValidationAssociation.DcmTemplateValidation"
+    AssociationOtherEnd="team.epm.dcm.model.association.templateValidationAssociation.DcmTemplateColumn"
+    Type="oracle.jbo.RowIterator"
+    IsUpdateable="false"/>
+  <AccessorAttribute
+    Name="DcmTemplate"
+    Association="team.epm.dcm.model.association.templateAndColumnAssociation"
+    AssociationEnd="team.epm.dcm.model.association.templateAndColumnAssociation.DcmTemplate"
+    AssociationOtherEnd="team.epm.dcm.model.association.templateAndColumnAssociation.DcmTemplateColumn"
+    Type="team.epm.dcm.model.DcmTemplateImpl"
+    IsUpdateable="true"/>
+  <ViewLinkAccessor
+    Name="DcmTemplateView"
+    ViewLink="templatecolumnsVL"
+    ViewLinkEnd="templatecolumnsVL.DcmRoleTemplateView"
+    ViewLinkOtherEnd="templatecolumnsVL.destEnd"
+    Type="oracle.jbo.server.ViewRowImpl"
+    IsUpdateable="false"/>
+  <ViewLinkAccessor
+    Name="DcmTemplateView1"
+    ViewLink="team.epm.dcm.view.viewlink.templatecolumnsVL"
+    ViewLinkEnd="team.epm.dcm.view.viewlink.templatecolumnsVL.DcmTemplateView1"
+    ViewLinkOtherEnd="team.epm.dcm.view.viewlink.templatecolumnsVL.DcmTemplateColumnView"
+    Type="oracle.jbo.server.ViewRowImpl"
+    IsUpdateable="false"/>
   <Key
     Name="PkDcmTemplateColumn"
     PrimaryKey="true">

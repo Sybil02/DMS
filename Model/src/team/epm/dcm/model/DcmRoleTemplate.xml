@@ -10,7 +10,8 @@
   DBObjectName="DCM_ROLE_TEMPLATE"
   AliasName="DcmRoleTemplate"
   BindingStyle="OracleName"
-  UseGlueCode="false">
+  UseGlueCode="false"
+  xmlns:validation="http://xmlns.oracle.com/adfm/validation">
   <DesignTime>
     <Attr Name="_codeGenFlag2" Value="Access"/>
     <AttrArray Name="_publishEvents"/>
@@ -24,10 +25,12 @@
     Type="java.lang.String"
     ColumnType="VARCHAR2"
     TableName="DCM_ROLE_TEMPLATE"
-    PrimaryKey="true">
+    PrimaryKey="true"
+    IsUpdateable="while_insert">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="32"/>
     </DesignTime>
+    <TransientExpression><![CDATA[java.util.UUID.randomUUID().toString().replace("-", "")]]></TransientExpression>
   </Attribute>
   <Attribute
     Name="RoleId"
@@ -53,16 +56,18 @@
       <Attr Name="_DisplaySize" Value="32"/>
     </DesignTime>
   </Attribute>
-  <Attribute
+   <Attribute
     Name="CreatedAt"
     ColumnName="CREATED_AT"
     SQLType="TIMESTAMP"
     Type="oracle.jbo.domain.Date"
     ColumnType="DATE"
-    TableName="DCM_ROLE_TEMPLATE">
+    TableName="DCM_TEMPLATE"
+    IsUpdateable="while_insert">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="7"/>
     </DesignTime>
+    <TransientExpression><![CDATA[adf.currentDateTime]]></TransientExpression>
   </Attribute>
   <Attribute
     Name="UpdatedAt"
@@ -70,10 +75,11 @@
     SQLType="TIMESTAMP"
     Type="oracle.jbo.domain.Date"
     ColumnType="DATE"
-    TableName="DCM_ROLE_TEMPLATE">
+    TableName="DCM_TEMPLATE">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="7"/>
     </DesignTime>
+    <TransientExpression><![CDATA[adf.currentDateTime]]></TransientExpression>
   </Attribute>
   <Attribute
     Name="UpdatedBy"
@@ -82,10 +88,11 @@
     SQLType="VARCHAR"
     Type="java.lang.String"
     ColumnType="VARCHAR2"
-    TableName="DCM_ROLE_TEMPLATE">
+    TableName="DCM_TEMPLATE">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="32"/>
     </DesignTime>
+    <TransientExpression><![CDATA[adf.userSession.userData.userId]]></TransientExpression>
   </Attribute>
   <Attribute
     Name="CreatedBy"
@@ -94,10 +101,12 @@
     SQLType="VARCHAR"
     Type="java.lang.String"
     ColumnType="VARCHAR2"
-    TableName="DCM_ROLE_TEMPLATE">
+    TableName="DCM_TEMPLATE"
+    IsUpdateable="while_insert">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="32"/>
     </DesignTime>
+    <TransientExpression><![CDATA[adf.userSession.userData.userId]]></TransientExpression>
   </Attribute>
   <Attribute
     Name="ReadOnly"
@@ -111,6 +120,25 @@
       <Attr Name="_DisplaySize" Value="10"/>
     </DesignTime>
   </Attribute>
+  <ViewLinkAccessor
+    Name="DcmTemplateColumnView"
+    ViewLink="team.epm.dcm.view.viewlink.templatecolumnsVL"
+    ViewLinkEnd="team.epm.dcm.view.viewlink.templatecolumnsVL.DcmTemplateColumnView"
+    ViewLinkOtherEnd="team.epm.dcm.view.viewlink.templatecolumnsVL.DcmTemplateView1"
+    Type="oracle.jbo.RowIterator"
+    IsUpdateable="false"/>
+  <Key
+    Name="AltKey"
+    AltKey="true">
+    <DesignTime>
+      <Attr Name="_isUnique" Value="true"/>
+      <Attr Name="_DBObjectName" Value="DCM_ROLE_TEMPLATE"/>
+    </DesignTime>
+    <AttrArray Name="Attributes">
+      <Item Value="team.epm.dcm.model.DcmRoleTemplate.RoleId"/>
+      <Item Value="team.epm.dcm.model.DcmRoleTemplate.TemplateId"/>
+    </AttrArray>
+  </Key>
   <Key
     Name="PkDcmRoleTemplate"
     PrimaryKey="true">
@@ -132,4 +160,19 @@
       <Item Value="team.epm.dcm.model.DcmRoleTemplate.Id"/>
     </AttrArray>
   </Key>
+  <validation:UniqueKeyValidationBean
+    Name="DcmRoleTemplate_Rule_0"
+    ResId="dcm.error.templateRepeat"
+    KeyName="AltKey">
+    <validation:OnAttributes>
+      <validation:Item
+        Value="RoleId"/>
+      <validation:Item
+        Value="TemplateId"/>
+    </validation:OnAttributes>
+  </validation:UniqueKeyValidationBean>
+  <ResourceBundle>
+    <PropertiesBundle
+      PropertiesFile="ModelBundle"/>
+  </ResourceBundle>
 </Entity>

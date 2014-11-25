@@ -10,6 +10,7 @@
        DcmTemplateValidation.COLUMN_ID, 
        DcmTemplateValidation.VALIDATION_ID, 
        DcmTemplateValidation.SEQ, 
+       DcmTemplateValidation.ARGS, 
        DcmTemplateValidation.CREATED_AT, 
        DcmTemplateValidation.UPDATED_AT, 
        DcmTemplateValidation.UPDATED_BY, 
@@ -22,6 +23,33 @@
   <DesignTime>
     <Attr Name="_codeGenFlag2" Value="Access|VarAccess"/>
   </DesignTime>
+  <ViewAccessor
+    Name="LKP_Validation"
+    ViewObjectName="team.epm.dcm.view.DcmValidationView">
+    <ParameterMap>
+      <PIMap Variable="locale">
+        <TransientExpression><![CDATA[adf.context.locale]]></TransientExpression>
+      </PIMap>
+    </ParameterMap>
+  </ViewAccessor>
+  <ListBinding
+    Name="LOV_ValidationId"
+    ListVOName="LKP_Validation"
+    ListRangeSize="-1"
+    NullValueFlag="start"
+    NullValueId="${adfBundle['oracle.javatools.resourcebundle.SystemBundle']['NULL_VALUE_RESID']}"
+    MRUCount="0">
+    <AttrArray Name="AttrNames">
+      <Item Value="ValidationId"/>
+    </AttrArray>
+    <AttrArray Name="ListAttrNames">
+      <Item Value="Id"/>
+    </AttrArray>
+    <AttrArray Name="ListDisplayAttrNames">
+      <Item Value="Name"/>
+    </AttrArray>
+    <DisplayCriteria/>
+  </ListBinding>
   <EntityUsage
     Name="DcmTemplateValidation"
     Entity="team.epm.dcm.model.DcmTemplateValidation"/>
@@ -31,31 +59,70 @@
     PrecisionRule="true"
     EntityAttrName="Id"
     EntityUsage="DcmTemplateValidation"
-    AliasName="ID"/>
+    AliasName="ID"
+    IsUpdateable="while_insert"/>
   <ViewAttribute
     Name="ColumnId"
     PrecisionRule="true"
     EntityAttrName="ColumnId"
     EntityUsage="DcmTemplateValidation"
-    AliasName="COLUMN_ID"/>
+    AliasName="COLUMN_ID">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="dcm.templateColumn_name"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewAttribute
     Name="ValidationId"
     PrecisionRule="true"
     EntityAttrName="ValidationId"
     EntityUsage="DcmTemplateValidation"
-    AliasName="VALIDATION_ID"/>
+    AliasName="VALIDATION_ID"
+    LOVName="LOV_ValidationId">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="dcm.validation_name"/>
+        <CONTROLTYPE
+          Value="choice"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewAttribute
     Name="Seq"
     PrecisionRule="true"
     EntityAttrName="Seq"
     EntityUsage="DcmTemplateValidation"
-    AliasName="SEQ"/>
+    AliasName="SEQ">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="dcm.seq"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="Args"
+    PrecisionRule="true"
+    EntityAttrName="Args"
+    EntityUsage="DcmTemplateValidation"
+    AliasName="ARGS">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="dcm.validation_parameter"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewAttribute
     Name="CreatedAt"
     PrecisionRule="true"
     EntityAttrName="CreatedAt"
     EntityUsage="DcmTemplateValidation"
-    AliasName="CREATED_AT"/>
+    AliasName="CREATED_AT"
+    IsUpdateable="while_insert"/>
   <ViewAttribute
     Name="UpdatedAt"
     PrecisionRule="true"
@@ -73,5 +140,16 @@
     PrecisionRule="true"
     EntityAttrName="CreatedBy"
     EntityUsage="DcmTemplateValidation"
-    AliasName="CREATED_BY"/>
+    AliasName="CREATED_BY"
+    IsUpdateable="while_insert"/>
+  <ViewLinkAccessor
+    Name="DcmTemplateColumnView"
+    ViewLink="team.epm.dcm.view.viewlink.templateValidationVL"
+    Type="oracle.jbo.Row"
+    Reversed="true"
+    IsUpdateable="false"/>
+  <ResourceBundle>
+    <PropertiesBundle
+      PropertiesFile="ModelBundle"/>
+  </ResourceBundle>
 </ViewObject>

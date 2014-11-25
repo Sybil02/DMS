@@ -1,2 +1,100 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.1"></jsp:root>
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.1"
+          xmlns:af="http://xmlns.oracle.com/adf/faces/rich"
+          xmlns:f="http://java.sun.com/jsf/core"
+          xmlns:c="http://java.sun.com/jsp/jstl/core">
+  <c:set var="viewBundle" value="#{adfBundle['dms_v']}"/>
+  <af:panelTabbed id="pt1">
+    <af:showDetailItem text="#{viewBundle['dcm.Role_TemplateAuthority']}" id="sdi2">
+      <af:spacer width="10" height="10" id="s3"/>
+      <af:panelGroupLayout id="pgl2" layout="horizontal"
+                           >
+        <af:spacer width="10" height="10" id="s4"/>
+        <af:table value="#{bindings.DmsRoleView1.collectionModel}" var="row"
+                  rows="#{bindings.DmsRoleView1.rangeSize}"
+                  emptyText="#{bindings.DmsRoleView1.viewable ? 'No data to display.' : 'Access Denied.'}"
+                  fetchSize="#{bindings.DmsRoleView1.rangeSize}"
+                  rowBandingInterval="0"
+                  filterModel="#{bindings.DmsRoleView1Query.queryDescriptor}"
+                  queryListener="#{bindings.DmsRoleView1Query.processQuery}"
+                  filterVisible="false" varStatus="vs"
+                  selectedRowKeys="#{bindings.DmsRoleView1.collectionModel.selectedRow}"
+                  selectionListener="#{bindings.DmsRoleView1.collectionModel.makeCurrent}"
+                  rowSelection="single" id="t5" width="105">
+          <af:column sortProperty="#{bindings.DmsRoleView1.hints.RoleName.name}"
+                     filterable="true" sortable="true"
+                     headerText="#{bindings.DmsRoleView1.hints.RoleName.label}"
+                     id="c5">
+            <af:outputText value="#{row.RoleName}" id="ot1"/>
+          </af:column>
+        </af:table>
+        <af:spacer width="50" height="10" id="s1"/>
+        <af:spacer width="10" height="10" id="s2"/>
+        <af:panelCollection id="pc2"
+                            inlineStyle="width:295px; text-align:center;"
+                            featuresOff="formatMenu detach statusBar freeze">
+          <f:facet name="toolbar">
+            <af:toolbar id="t7">
+              <af:commandToolbarButton actionListener="#{bindings.CreateInsert1.execute}"
+                                       text="#{viewBundle['dcm.template.new']}"
+                                       disabled="#{bindings.DmsRoleView1.currentRow==null ? true : false}"
+                                       id="ctb5"/>
+              <af:commandToolbarButton actionListener="#{bindings.Delete1.execute}"
+                                       text="#{viewBundle['dcm.common.delete']}"
+                                       disabled="#{!bindings.Delete1.enabled}"
+                                       id="ctb6"/>
+              <af:commandButton actionListener="#{bindings.Commit.execute}"
+                                       text="#{viewBundle['dms.common.save']}"
+                                       disabled="#{!bindings.Commit.enabled}"
+                                       id="ctb7"
+                                       partialTriggers="ctb5 ctb6 t6"/>
+              <af:commandButton actionListener="#{bindings.Rollback.execute}"
+                                       text="#{viewBundle['dms.common.rollback']}"
+                                       disabled="#{!bindings.Rollback.enabled}"
+                                       immediate="true" id="ctb8"
+                                       partialTriggers="ctb5 ctb6 t6">
+                <af:resetActionListener/>
+              </af:commandButton>
+            </af:toolbar>
+          </f:facet>
+          <af:table value="#{bindings.DcmRoleTemplateView11.collectionModel}"
+                    var="row" rows="#{bindings.DcmRoleTemplateView11.rangeSize}"
+                    emptyText="#{viewBundle['dms.common.nodata']}"
+                    fetchSize="#{bindings.DcmRoleTemplateView11.rangeSize}"
+                    rowBandingInterval="0"
+                    selectedRowKeys="#{bindings.DcmRoleTemplateView11.collectionModel.selectedRow}"
+                    selectionListener="#{bindings.DcmRoleTemplateView11.collectionModel.makeCurrent}"
+                    rowSelection="single" id="t6"
+                    partialTriggers="::ctb5 ::ctb6" width="288"
+                    columnStretching="column:c6" editingMode="clickToEdit">
+            <af:column sortProperty="#{bindings.DcmRoleTemplateView11.hints.TemplateId.name}"
+                       sortable="false"
+                       headerText="#{bindings.DcmRoleTemplateView11.hints.TemplateId.label}"
+                       id="c6">
+              <af:selectOneChoice value="#{row.bindings.TemplateId.inputValue}"
+                                  label="#{row.bindings.TemplateId.label}"
+                                  required="#{bindings.DcmRoleTemplateView11.hints.TemplateId.mandatory}"
+                                  shortDesc="#{bindings.DcmRoleTemplateView11.hints.TemplateId.tooltip}"
+                                  id="soc3" autoSubmit="true">
+                <f:selectItems value="#{row.bindings.TemplateId.items}"
+                               id="si3"/>
+              </af:selectOneChoice>
+            </af:column>
+            <af:column sortProperty="#{bindings.DcmRoleTemplateView11.hints.ReadOnly.name}"
+                       sortable="false"
+                       headerText="#{bindings.DcmRoleTemplateView11.hints.ReadOnly.label}"
+                       id="c7">
+              <af:selectOneChoice value="#{row.bindings.ReadOnly.inputValue}"
+                                  label="#{row.bindings.ReadOnly.label}"
+                                  required="#{bindings.DcmRoleTemplateView11.hints.ReadOnly.mandatory}"
+                                  shortDesc="#{bindings.DcmRoleTemplateView11.hints.ReadOnly.tooltip}"
+                                  id="soc2" autoSubmit="true">
+                <f:selectItems value="#{row.bindings.ReadOnly.items}" id="si2"/>
+              </af:selectOneChoice>
+            </af:column>
+          </af:table>
+        </af:panelCollection>
+      </af:panelGroupLayout>
+    </af:showDetailItem>
+  </af:panelTabbed>
+</jsp:root>

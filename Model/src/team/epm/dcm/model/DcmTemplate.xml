@@ -10,10 +10,12 @@
   DBObjectName="DCM_TEMPLATE"
   AliasName="DcmTemplate"
   BindingStyle="OracleName"
-  UseGlueCode="false">
+  UseGlueCode="false"
+  RowClass="team.epm.dcm.model.DcmTemplateImpl">
   <DesignTime>
     <Attr Name="_codeGenFlag2" Value="Access"/>
     <AttrArray Name="_publishEvents"/>
+    <Attr Name="_isCodegen" Value="true"/>
   </DesignTime>
   <Attribute
     Name="Id"
@@ -28,9 +30,11 @@
     <DesignTime>
       <Attr Name="_DisplaySize" Value="32"/>
     </DesignTime>
+    <TransientExpression><![CDATA[java.util.UUID.randomUUID().toString().replace("-", "")]]></TransientExpression>
   </Attribute>
   <Attribute
     Name="Locale"
+    IsUpdateable="while_insert"
     IsNotNull="true"
     Precision="10"
     ColumnName="LOCALE"
@@ -42,6 +46,7 @@
     <DesignTime>
       <Attr Name="_DisplaySize" Value="10"/>
     </DesignTime>
+    <TransientExpression><![CDATA[adf.context.locale]]></TransientExpression>
   </Attribute>
   <Attribute
     Name="Name"
@@ -54,9 +59,17 @@
     <DesignTime>
       <Attr Name="_DisplaySize" Value="300"/>
     </DesignTime>
+    <Properties>
+      <CustomProperties>
+        <Property
+          Name="isMultiLangAttr"
+          Value="true"/>
+      </CustomProperties>
+    </Properties>
   </Attribute>
   <Attribute
     Name="CreatedAt"
+    IsUpdateable="while_insert"
     ColumnName="CREATED_AT"
     SQLType="TIMESTAMP"
     Type="oracle.jbo.domain.Date"
@@ -65,6 +78,7 @@
     <DesignTime>
       <Attr Name="_DisplaySize" Value="7"/>
     </DesignTime>
+    <TransientExpression><![CDATA[adf.currentDateTime]]></TransientExpression>
   </Attribute>
   <Attribute
     Name="UpdatedAt"
@@ -76,6 +90,7 @@
     <DesignTime>
       <Attr Name="_DisplaySize" Value="7"/>
     </DesignTime>
+    <TransientExpression><![CDATA[adf.currentDateTime]]></TransientExpression>
   </Attribute>
   <Attribute
     Name="UpdatedBy"
@@ -88,9 +103,11 @@
     <DesignTime>
       <Attr Name="_DisplaySize" Value="32"/>
     </DesignTime>
+    <TransientExpression><![CDATA[adf.userSession.userData.userId]]></TransientExpression>
   </Attribute>
   <Attribute
     Name="CreatedBy"
+    IsUpdateable="while_insert"
     Precision="32"
     ColumnName="CREATED_BY"
     SQLType="VARCHAR"
@@ -100,6 +117,7 @@
     <DesignTime>
       <Attr Name="_DisplaySize" Value="32"/>
     </DesignTime>
+    <TransientExpression><![CDATA[adf.userSession.userData.userId]]></TransientExpression>
   </Attribute>
   <Attribute
     Name="Readonly"
@@ -269,6 +287,20 @@
       <Attr Name="_DisplaySize" Value="32"/>
     </DesignTime>
   </Attribute>
+  <AccessorAttribute
+    Name="DcmTemplateColumn"
+    Association="team.epm.dcm.model.association.templateAndColumnAssociation"
+    AssociationEnd="team.epm.dcm.model.association.templateAndColumnAssociation.DcmTemplateColumn"
+    AssociationOtherEnd="team.epm.dcm.model.association.templateAndColumnAssociation.DcmTemplate"
+    Type="oracle.jbo.RowIterator"
+    IsUpdateable="false"/>
+  <ViewLinkAccessor
+    Name="DcmTemplateColumnView"
+    ViewLink="team.epm.dcm.view.viewlink.templatecolumnsVL"
+    ViewLinkEnd="team.epm.dcm.view.viewlink.templatecolumnsVL.DcmTemplateColumnView"
+    ViewLinkOtherEnd="team.epm.dcm.view.viewlink.templatecolumnsVL.DcmTemplateView1"
+    Type="oracle.jbo.RowIterator"
+    IsUpdateable="false"/>
   <Key
     Name="PkDcmTemplate"
     PrimaryKey="true">

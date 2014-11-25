@@ -29,6 +29,148 @@
   <DesignTime>
     <Attr Name="_codeGenFlag2" Value="Access|VarAccess"/>
   </DesignTime>
+   <ViewAccessor
+    Name="LKP_YES_NO"
+    ViewObjectName="team.epm.dms.view.DmsLookupView">
+    <ViewCriteriaUsage
+      Name="DmsLookupViewCriteria"
+      FullName="team.epm.dms.view.DmsLookupView.DmsLookupViewCriteria"/>
+    <ParameterMap>
+      <PIMap Variable="locale">
+        <TransientExpression><![CDATA[this.Locale]]></TransientExpression>
+      </PIMap>
+      <PIMap Variable="lookupType">
+        <TransientExpression><![CDATA["YES_NO"]]></TransientExpression>
+      </PIMap>
+    </ParameterMap>
+  </ViewAccessor>
+  <ViewAccessor
+    Name="LST_USER"
+    ViewObjectName="team.epm.dms.view.DmsUserView"
+    RowLevelBinds="true"/>
+  <ViewAccessor
+    Name="LKP_LANG"
+    ViewObjectName="team.epm.dms.view.DmsLookupView">
+    <ViewCriteriaUsage
+      Name="DmsLookupViewCriteria"
+      FullName="team.epm.dms.view.DmsLookupView.DmsLookupViewCriteria"/>
+    <ParameterMap>
+      <PIMap Variable="locale">
+        <TransientExpression><![CDATA[this.Locale]]></TransientExpression>
+      </PIMap>
+      <PIMap Variable="lookupType">
+        <TransientExpression><![CDATA["DMS_LANGUAGE"]]></TransientExpression>
+      </PIMap>
+    </ParameterMap>
+  </ViewAccessor>
+   <ListBinding
+    Name="LOV_Locale"
+    ListVOName="LKP_LANG"
+    ListRangeSize="-1"
+    NullValueFlag="none"
+    NullValueId="LOV_Locale_LOVUIHints_NullValueId"
+    MRUCount="0">
+    <AttrArray Name="AttrNames">
+      <Item Value="Locale"/>
+    </AttrArray>
+    <AttrArray Name="ListAttrNames">
+      <Item Value="Code"/>
+    </AttrArray>
+    <AttrArray Name="ListDisplayAttrNames">
+      <Item Value="Meaning"/>
+    </AttrArray>
+    <DisplayCriteria/>
+  </ListBinding>
+  <ListBinding
+    Name="LOV_UpdatedBy"
+    ListVOName="LST_USER"
+    ListRangeSize="-1"
+    NullValueFlag="start"
+    NullValueId="${adfBundle['oracle.javatools.resourcebundle.SystemBundle']['NULL_VALUE_RESID']}"
+    MRUCount="0">
+    <AttrArray Name="AttrNames">
+      <Item Value="UpdatedBy"/>
+    </AttrArray>
+    <AttrArray Name="ListAttrNames">
+      <Item Value="Id"/>
+    </AttrArray>
+    <AttrArray Name="ListDisplayAttrNames">
+      <Item Value="Name"/>
+    </AttrArray>
+    <DisplayCriteria/>
+  </ListBinding>
+  <ListBinding
+    Name="LOV_CreatedBy"
+    ListVOName="LST_USER"
+    ListRangeSize="-1"
+    NullValueFlag="start"
+    NullValueId="${adfBundle['oracle.javatools.resourcebundle.SystemBundle']['NULL_VALUE_RESID']}"
+    MRUCount="0">
+    <AttrArray Name="AttrNames">
+      <Item Value="CreatedBy"/>
+    </AttrArray>
+    <AttrArray Name="ListAttrNames">
+      <Item Value="Id"/>
+    </AttrArray>
+    <AttrArray Name="ListDisplayAttrNames">
+      <Item Value="Name"/>
+    </AttrArray>
+    <DisplayCriteria/>
+  </ListBinding>
+  <ListBinding
+    Name="LOV_Readonly"
+    ListVOName="LKP_YES_NO"
+    ListRangeSize="-1"
+    NullValueFlag="start"
+    NullValueId="${adfBundle['oracle.javatools.resourcebundle.SystemBundle']['NULL_VALUE_RESID']}"
+    MRUCount="0">
+    <AttrArray Name="AttrNames">
+      <Item Value="Readonly"/>
+    </AttrArray>
+    <AttrArray Name="ListAttrNames">
+      <Item Value="Code"/>
+    </AttrArray>
+    <AttrArray Name="ListDisplayAttrNames">
+      <Item Value="Meaning"/>
+    </AttrArray>
+    <DisplayCriteria/>
+  </ListBinding>
+  <ListBinding
+    Name="LOV_IsPk"
+    ListVOName="LKP_YES_NO"
+    ListRangeSize="-1"
+    NullValueFlag="start"
+    NullValueId="${adfBundle['oracle.javatools.resourcebundle.SystemBundle']['NULL_VALUE_RESID']}"
+    MRUCount="0">
+    <AttrArray Name="AttrNames">
+      <Item Value="IsPk"/>
+    </AttrArray>
+    <AttrArray Name="ListAttrNames">
+      <Item Value="Code"/>
+    </AttrArray>
+    <AttrArray Name="ListDisplayAttrNames">
+      <Item Value="Meaning"/>
+    </AttrArray>
+    <DisplayCriteria/>
+  </ListBinding>
+  <ListBinding
+    Name="LOV_Visible"
+    ListVOName="LKP_YES_NO"
+    ListRangeSize="-1"
+    NullValueFlag="start"
+    NullValueId="${adfBundle['oracle.javatools.resourcebundle.SystemBundle']['NULL_VALUE_RESID']}"
+    MRUCount="0">
+    <AttrArray Name="AttrNames">
+      <Item Value="Visible"/>
+    </AttrArray>
+    <AttrArray Name="ListAttrNames">
+      <Item Value="Code"/>
+    </AttrArray>
+    <AttrArray Name="ListDisplayAttrNames">
+      <Item Value="Meaning"/>
+    </AttrArray>
+    <DisplayCriteria/>
+  </ListBinding>
   <EntityUsage
     Name="DcmTemplateColumn"
     Entity="team.epm.dcm.model.DcmTemplateColumn"/>
@@ -38,90 +180,203 @@
     PrecisionRule="true"
     EntityAttrName="Id"
     EntityUsage="DcmTemplateColumn"
-    AliasName="ID"/>
+    AliasName="ID"
+    IsUpdateable="while_insert"/>
   <ViewAttribute
     Name="Locale"
     IsNotNull="true"
     PrecisionRule="true"
     EntityAttrName="Locale"
     EntityUsage="DcmTemplateColumn"
-    AliasName="LOCALE"/>
+    AliasName="LOCALE"
+    IsUpdateable="while_insert"
+    LOVName="LOV_Locale"/>
   <ViewAttribute
     Name="ColumnLabel"
     PrecisionRule="true"
     EntityAttrName="ColumnLabel"
     EntityUsage="DcmTemplateColumn"
-    AliasName="COLUMN_LABEL"/>
+    AliasName="COLUMN_LABEL">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="dcm.tempcolumn_name"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewAttribute
     Name="DbTableCol"
     PrecisionRule="true"
     EntityAttrName="DbTableCol"
     EntityUsage="DcmTemplateColumn"
-    AliasName="DB_TABLE_COL"/>
+    AliasName="DB_TABLE_COL">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="dcm.template_DbTableCol"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewAttribute
     Name="DbViewCol"
     PrecisionRule="true"
     EntityAttrName="DbViewCol"
     EntityUsage="DcmTemplateColumn"
-    AliasName="DB_VIEW_COL"/>
+    AliasName="DB_VIEW_COL">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="dcm.templateColumn_DbViewCol"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewAttribute
     Name="CreatedAt"
     PrecisionRule="true"
     EntityAttrName="CreatedAt"
     EntityUsage="DcmTemplateColumn"
-    AliasName="CREATED_AT"/>
+    AliasName="CREATED_AT"
+    IsUpdateable="while_insert"/>
   <ViewAttribute
     Name="UpdatedAt"
     PrecisionRule="true"
     EntityAttrName="UpdatedAt"
     EntityUsage="DcmTemplateColumn"
-    AliasName="UPDATED_AT"/>
+    AliasName="UPDATED_AT">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="updatedAt"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewAttribute
     Name="UpdatedBy"
     PrecisionRule="true"
     EntityAttrName="UpdatedBy"
     EntityUsage="DcmTemplateColumn"
-    AliasName="UPDATED_BY"/>
+    AliasName="UPDATED_BY"
+    LOVName="LOV_UpdatedBy">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="updatedBy"/>
+        <CONTROLTYPE
+          Value="choice"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewAttribute
     Name="CreatedBy"
     PrecisionRule="true"
     EntityAttrName="CreatedBy"
     EntityUsage="DcmTemplateColumn"
-    AliasName="CREATED_BY"/>
+    AliasName="CREATED_BY"
+    IsUpdateable="while_insert"
+    LOVName="LOV_CreatedBy"/>
   <ViewAttribute
     Name="IsPk"
     PrecisionRule="true"
     EntityAttrName="IsPk"
     EntityUsage="DcmTemplateColumn"
-    AliasName="IS_PK"/>
+    AliasName="IS_PK"
+    LOVName="LOV_IsPk"
+    DefaultValue="N">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="dcm.templateColumn_isPk"/>
+        <CONTROLTYPE
+          Value="choice"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewAttribute
     Name="Readonly"
     PrecisionRule="true"
     EntityAttrName="Readonly"
     EntityUsage="DcmTemplateColumn"
-    AliasName="READONLY"/>
+    AliasName="READONLY"
+    LOVName="LOV_Readonly"
+    DefaultValue="N">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="dcm.readOnly"/>
+        <CONTROLTYPE
+          Value="choice"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewAttribute
     Name="DataType"
     PrecisionRule="true"
     EntityAttrName="DataType"
     EntityUsage="DcmTemplateColumn"
-    AliasName="DATA_TYPE"/>
+    AliasName="DATA_TYPE">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="dcm.templateColumn_dataType"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewAttribute
     Name="Visible"
     PrecisionRule="true"
     EntityAttrName="Visible"
     EntityUsage="DcmTemplateColumn"
-    AliasName="VISIBLE"/>
+    AliasName="VISIBLE"
+    LOVName="LOV_Visible"
+    DefaultValue="Y">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="team.epm.dcm.view.DcmTemplateColumnView.Visible_LABEL"/>
+        <CONTROLTYPE
+          Value="choice"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewAttribute
     Name="Seq"
     PrecisionRule="true"
     EntityAttrName="Seq"
     EntityUsage="DcmTemplateColumn"
-    AliasName="SEQ"/>
+    AliasName="SEQ">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="dcm.seq"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewAttribute
     Name="TemplateId"
     PrecisionRule="true"
     EntityAttrName="TemplateId"
     EntityUsage="DcmTemplateColumn"
-    AliasName="TEMPLATE_ID"/>
+    AliasName="TEMPLATE_ID">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="dcm.template.name"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
+  <ViewLinkAccessor
+    Name="DcmTemplateView1"
+    ViewLink="team.epm.dcm.view.viewlink.templatecolumnsVL"
+    Type="oracle.jbo.Row"
+    Reversed="true"
+    IsUpdateable="false"/>
+  <ViewLinkAccessor
+    Name="DcmValidationView"
+    ViewLink="team.epm.dcm.view.viewlink.templateValidationVL"
+    Type="oracle.jbo.RowIterator"
+    IsUpdateable="false"/>
+  <ResourceBundle>
+    <PropertiesBundle
+      PropertiesFile="ModelBundle"/>
+  </ResourceBundle>
 </ViewObject>

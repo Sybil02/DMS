@@ -555,6 +555,7 @@ create table DCM_TEMPLATE_VALIDATION
    COLUMN_ID            VARCHAR2(32),
    VALIDATION_ID        VARCHAR2(32),
    SEQ                  INTEGER,
+   ARGS                 VARCHAR2(1000),
    CREATED_AT           DATE,
    UPDATED_AT           DATE,
    UPDATED_BY           VARCHAR2(32),
@@ -588,6 +589,9 @@ comment on column DCM_TEMPLATE_VALIDATION.UPDATED_BY is
 
 comment on column DCM_TEMPLATE_VALIDATION.CREATED_BY is
 '创建者';
+
+comment on column DCM_TEMPLATE_VALIDATION.ARGS is
+'参数';
 
 /*==============================================================*/
 /* Table: DCM_VALIDATION                                        */
