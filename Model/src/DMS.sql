@@ -1336,3 +1336,27 @@ comment on column DMS_LOOKUP.UPDATED_BY is
 
 comment on column DMS_LOOKUP.CREATED_BY is
 '创建者';
+/*==============================================================*/
+/* Table: DCM_TEMPTABLE10                                         */
+/*==============================================================*/
+CREATE TABLE DCM_TEMPTABLE10(
+  TEMPLATE_ID   VARCHAR2(32),
+  COM_RECORD_ID VARCHAR2(32),
+  SHEET_NAME    VARCHAR2(300),
+  ROW_NO        NUMBER,
+  COLUMN1       VARCHAR2(300),
+  COLUMN2       VARCHAR2(300),
+  COLUMN3       VARCHAR2(300),
+  COLUMN4       VARCHAR2(300),
+  COLUMN5       VARCHAR2(300),
+  COLUMN6       VARCHAR2(300),
+  COLUMN7       VARCHAR2(300),
+  COLUMN8       VARCHAR2(300),
+  COLUMN9       VARCHAR2(300),
+  COLUMN10      VARCHAR2(300),
+  ORIGIN_ROWID  VARCHAR2(32),
+  CREATED_BY    VARCHAR2(32),
+  UPDATED_BY    VARCHAR2(32),
+  CREATED_AT    DATE,
+  UPDATED_AT    DATE
+);

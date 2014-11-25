@@ -45,4 +45,7 @@
   <ViewUsage
     Name="DcmTemplateCatView"
     ViewObjectName="team.epm.dcm.view.DcmTemplateCatView"/>
+  <ViewUsage
+    Name="DcmComVsQueryView"
+    ViewObjectName="team.epm.dcm.view.DcmComVsQueryView"/>
 </AppModule>

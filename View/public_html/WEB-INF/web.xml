@@ -16,6 +16,10 @@
     <param-name>oracle.adf.view.rich.versionString.HIDDEN</param-name>
     <param-value>true</param-value>
   </context-param>
+  <context-param>
+    <param-name>org.apache.myfaces.trinidad.UPLOAD_MAX_DISK_SPACE</param-name>
+    <param-value>1073741824</param-value>
+  </context-param>
   <filter>
     <filter-name>JpsFilter</filter-name>
     <filter-class>oracle.security.jps.ee.http.JpsFilter</filter-class>

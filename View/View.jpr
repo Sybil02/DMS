@@ -280,6 +280,8 @@
             <hash>
                <url n="content-folder-url" path="adfmsrc/dcm/"/>
                <list n="pattern-filters">
+                  <string v="+dcm/RowReader.java"/>
+                  <string v="+dcm/ComHeaderDef.java"/>
                   <string v="+dcm/DcmDataDisplayBean.java"/>
                   <string v="+dcm/ColumnDef.java"/>
                   <string v="+dcm/DataEntity.java"/>
@@ -423,6 +425,58 @@
             <value n="isJDK" v="false"/>
          </hash>
          <hash>
+            <value n="id" v="ExcelHandler.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Commons-codec-1.5.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Commons-logging-1.1.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Dom4j-1.6.1.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Log4j-1.2.13.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Poi-3.9-20121203.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Poi-excelant-3.9-20121203.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Poi-ooxml-3.9-20121203.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Poi-ooxml-schemas-3.9-20121203.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Poi-scratchpad-3.9-20121203.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="XercesImpl-2.9.0.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Stax-api-1.0.1.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Xmlbeans-2.3.0.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
             <value n="id" v="Oracle XML Parser v2"/>
             <value n="isJDK" v="false"/>
          </hash>
@@ -455,6 +509,127 @@
             <value n="isJDK" v="false"/>
          </hash>
       </list>
+      <hash n="internalDefinitions">
+         <list n="libraryDefinitions">
+            <hash>
+               <list n="classPath">
+                  <url path="public_html/WEB-INF/lib/excelHandler.jar" jar-entry=""/>
+               </list>
+               <value n="deployedByDefault" v="true"/>
+               <value n="description" v="ExcelHandler.jar"/>
+               <value n="id" v="ExcelHandler.jar"/>
+               <value n="locked" v="true"/>
+            </hash>
+            <hash>
+               <list n="classPath">
+                  <url path="public_html/WEB-INF/lib/commons-codec-1.5.jar" jar-entry=""/>
+               </list>
+               <value n="deployedByDefault" v="true"/>
+               <value n="description" v="Commons-codec-1.5.jar"/>
+               <value n="id" v="Commons-codec-1.5.jar"/>
+               <value n="locked" v="true"/>
+            </hash>
+            <hash>
+               <list n="classPath">
+                  <url path="public_html/WEB-INF/lib/commons-logging-1.1.jar" jar-entry=""/>
+               </list>
+               <value n="deployedByDefault" v="true"/>
+               <value n="description" v="Commons-logging-1.1.jar"/>
+               <value n="id" v="Commons-logging-1.1.jar"/>
+               <value n="locked" v="true"/>
+            </hash>
+            <hash>
+               <list n="classPath">
+                  <url path="public_html/WEB-INF/lib/dom4j-1.6.1.jar" jar-entry=""/>
+               </list>
+               <value n="deployedByDefault" v="true"/>
+               <value n="description" v="Dom4j-1.6.1.jar"/>
+               <value n="id" v="Dom4j-1.6.1.jar"/>
+               <value n="locked" v="true"/>
+            </hash>
+            <hash>
+               <list n="classPath">
+                  <url path="public_html/WEB-INF/lib/log4j-1.2.13.jar" jar-entry=""/>
+               </list>
+               <value n="deployedByDefault" v="true"/>
+               <value n="description" v="Log4j-1.2.13.jar"/>
+               <value n="id" v="Log4j-1.2.13.jar"/>
+               <value n="locked" v="true"/>
+            </hash>
+            <hash>
+               <list n="classPath">
+                  <url path="public_html/WEB-INF/lib/poi-3.9-20121203.jar" jar-entry=""/>
+               </list>
+               <value n="deployedByDefault" v="true"/>
+               <value n="description" v="Poi-3.9-20121203.jar"/>
+               <value n="id" v="Poi-3.9-20121203.jar"/>
+               <value n="locked" v="true"/>
+            </hash>
+            <hash>
+               <list n="classPath">
+                  <url path="public_html/WEB-INF/lib/poi-excelant-3.9-20121203.jar" jar-entry=""/>
+               </list>
+               <value n="deployedByDefault" v="true"/>
+               <value n="description" v="Poi-excelant-3.9-20121203.jar"/>
+               <value n="id" v="Poi-excelant-3.9-20121203.jar"/>
+               <value n="locked" v="true"/>
+            </hash>
+            <hash>
+               <list n="classPath">
+                  <url path="public_html/WEB-INF/lib/poi-ooxml-3.9-20121203.jar" jar-entry=""/>
+               </list>
+               <value n="deployedByDefault" v="true"/>
+               <value n="description" v="Poi-ooxml-3.9-20121203.jar"/>
+               <value n="id" v="Poi-ooxml-3.9-20121203.jar"/>
+               <value n="locked" v="true"/>
+            </hash>
+            <hash>
+               <list n="classPath">
+                  <url path="public_html/WEB-INF/lib/poi-ooxml-schemas-3.9-20121203.jar" jar-entry=""/>
+               </list>
+               <value n="deployedByDefault" v="true"/>
+               <value n="description" v="Poi-ooxml-schemas-3.9-20121203.jar"/>
+               <value n="id" v="Poi-ooxml-schemas-3.9-20121203.jar"/>
+               <value n="locked" v="true"/>
+            </hash>
+            <hash>
+               <list n="classPath">
+                  <url path="public_html/WEB-INF/lib/poi-scratchpad-3.9-20121203.jar" jar-entry=""/>
+               </list>
+               <value n="deployedByDefault" v="true"/>
+               <value n="description" v="Poi-scratchpad-3.9-20121203.jar"/>
+               <value n="id" v="Poi-scratchpad-3.9-20121203.jar"/>
+               <value n="locked" v="true"/>
+            </hash>
+            <hash>
+               <list n="classPath">
+                  <url path="public_html/WEB-INF/lib/xercesImpl-2.9.0.jar" jar-entry=""/>
+               </list>
+               <value n="deployedByDefault" v="true"/>
+               <value n="description" v="XercesImpl-2.9.0.jar"/>
+               <value n="id" v="XercesImpl-2.9.0.jar"/>
+               <value n="locked" v="true"/>
+            </hash>
+            <hash>
+               <list n="classPath">
+                  <url path="public_html/WEB-INF/lib/stax-api-1.0.1.jar" jar-entry=""/>
+               </list>
+               <value n="deployedByDefault" v="true"/>
+               <value n="description" v="Stax-api-1.0.1.jar"/>
+               <value n="id" v="Stax-api-1.0.1.jar"/>
+               <value n="locked" v="true"/>
+            </hash>
+            <hash>
+               <list n="classPath">
+                  <url path="public_html/WEB-INF/lib/xmlbeans-2.3.0.jar" jar-entry=""/>
+               </list>
+               <value n="deployedByDefault" v="true"/>
+               <value n="description" v="Xmlbeans-2.3.0.jar"/>
+               <value n="id" v="Xmlbeans-2.3.0.jar"/>
+               <value n="locked" v="true"/>
+            </hash>
+         </list>
+      </hash>
       <list n="libraryReferences">
          <hash>
             <value n="id" v="JSP Runtime"/>
@@ -558,6 +733,58 @@
          </hash>
          <hash>
             <value n="id" v="JSTL 1.2 Tags"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="ExcelHandler.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Commons-codec-1.5.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Commons-logging-1.1.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Dom4j-1.6.1.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Log4j-1.2.13.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Poi-3.9-20121203.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Poi-excelant-3.9-20121203.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Poi-ooxml-3.9-20121203.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Poi-ooxml-schemas-3.9-20121203.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Poi-scratchpad-3.9-20121203.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="XercesImpl-2.9.0.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Stax-api-1.0.1.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Xmlbeans-2.3.0.jar"/>
             <value n="isJDK" v="false"/>
          </hash>
          <hash>

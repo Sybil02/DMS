@@ -4,12 +4,22 @@
           xmlns:f="http://java.sun.com/jsf/core"
           xmlns:c="http://java.sun.com/jsp/jstl/core">
   <c:set var="viewBundle" value="#{adfBundle['dms_v']}"/>
-  <af:panelStretchLayout id="psl1">
+  <af:panelStretchLayout id="psl1"
+                         topHeight="#{viewScope.DcmDataDisplayBean.combinationId==null ? '0px':'35px'}">
     <f:facet name="top">
-      <af:panelGroupLayout layout="scroll"
+      <af:panelGroupLayout layout="horizontal"
                            xmlns:af="http://xmlns.oracle.com/adf/faces/rich"
-                           id="pgl1">
-        <af:outputLabel value="#{pageFlowScope.curTemplateId}" id="ol1"/>
+                           id="pgl1" inlineStyle="padding-top:5px">
+        <af:forEach items="#{viewScope.DcmDataDisplayBean.templateHeader}"
+                    var="header">
+          <af:selectOneChoice label="#{header.name}"
+                              inlineStyle="margin-right:5px"
+                              value="#{header.values[0].value}"
+                              valueChangeListener="#{viewScope.DcmDataDisplayBean.headerSelectChangeListener}"
+                              binding="#{viewScope.DcmDataDisplayBean.headerComponents[header.code]}">
+            <f:selectItems value="#{header.values}"/>
+          </af:selectOneChoice>
+        </af:forEach>
       </af:panelGroupLayout>
     </f:facet>
     <f:facet name="center">
@@ -19,19 +29,17 @@
           <af:toolbar id="t2">
             <af:commandButton text="#{viewBundle['dcm.action.new']}" id="cb1"
                               action="#{viewScope.DcmDataDisplayBean.operation_new}"/>
-            <af:commandButton text="#{viewBundle['dcm.action.delete']}"
-                              id="cb2"
+            <af:commandButton text="#{viewBundle['dcm.action.delete']}" id="cb2"
                               action="#{viewScope.DcmDataDisplayBean.operation_delete}"/>
             <af:commandButton text="#{viewBundle['dcm.action.save']}" id="cb3"
                               action="#{viewScope.DcmDataDisplayBean.operation_save}"/>
-            <af:commandButton text="#{viewBundle['dcm.action.reset']}"
-                              id="cb4"
+            <af:commandButton text="#{viewBundle['dcm.action.reset']}" id="cb4"
                               action="#{viewScope.DcmDataDisplayBean.operation_reset}"/>
-            <af:commandButton text="#{viewBundle['dcm.action.import']}"
-                              id="cb5"
+            <af:inputFile label="" id="if1" simple="true"
+                          binding="#{viewScope.DcmDataDisplayBean.fileInput}"/>
+            <af:commandButton text="#{viewBundle['dcm.action.import']}" id="cb5"
                               action="#{viewScope.DcmDataDisplayBean.operation_import}"/>
-            <af:commandButton text="#{viewBundle['dcm.action.export']}"
-                              id="cb6"
+            <af:commandButton text="#{viewBundle['dcm.action.export']}" id="cb6"
                               action="#{viewScope.DcmDataDisplayBean.operation_export}"/>
             <af:commandButton text="#{viewBundle['dcm.action.template_download']}"
                               id="cb7"
@@ -44,7 +52,7 @@
                   scrollPolicy="page"
                   selectionListener="#{viewScope.DcmDataDisplayBean.rowSelectionListener}"
                   selectedRowKeys="#{viewScope.DcmDataDisplayBean.dataModel.selectedRows}"
-                  rowSelection="multiple">
+                  rowSelection="multiple" editingMode="clickToEdit">
           <af:forEach items="#{viewScope.DcmDataDisplayBean.dataModel.colsdef}"
                       var="attr" varStatus="vs">
             <af:column sortable="false" headerText="#{attr.label}"

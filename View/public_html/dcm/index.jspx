@@ -10,7 +10,7 @@
           beforePhase="#{MainPageMBean.initMenuBar}">
     <af:document id="d1" title="#{viewBundle['dcm.index.title']}">
       <af:messages id="m1"/>
-      <af:form id="f1">
+      <af:form id="f1" usesUpload="true">
         <af:pageTemplate viewId="/dms/dynamicShell/dynamicTabShell.jspx"
                          value="#{bindings.pageTemplateBinding}" id="pt1">
           <f:facet name="navigation">

@@ -4,6 +4,16 @@
   <parameters/>
   <executables>
     <variableIterator id="variables"/>
+    <iterator id="DcmTemplateViewIterator" Binds="DcmTemplateView"
+              DataControl="DcmModuleDataControl" RangeSize="25"/>
+    <iterator id="DcmComVsViewIterator" Binds="DcmComVsQueryView"
+              DataControl="DcmModuleDataControl" RangeSize="25"/>
+    <iterator id="DmsValueSetViewIterator" Binds="DmsValueSetView"
+              DataControl="DmsModuleDataControl" RangeSize="25"/>
+    <iterator id="DcmTemplateColumnViewIterator" Binds="DcmTemplateColumnView"
+              DataControl="DcmModuleDataControl" RangeSize="25"/>
+    <iterator id="DcmCombinationViewIterator" Binds="DcmCombinationView"
+              DataControl="DcmModuleDataControl" RangeSize="25"/>
   </executables>
   <bindings/>
 </pageDefinition>

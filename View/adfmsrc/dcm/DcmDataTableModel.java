@@ -18,34 +18,9 @@ public class DcmDataTableModel extends CollectionModel{
     public static final String OPERATE_CREATE="CREATE";
     public static final String OPERATE_UPDATE="UPDATE";
     public static final String OPERATE_DELETE="DELETE";
-    private RowKeySet selectedRows;
+    private RowKeySet selectedRows=new RowKeySetImpl();
         
     public DcmDataTableModel(){
-        ColumnDef cols01=new ColumnDef("ID","标识","String",false);
-        ColumnDef cols02=new ColumnDef("NAME","名称","String",false);
-        this.colsdef=new ArrayList<ColumnDef>();
-        this.colsdef.add(cols01);
-        this.colsdef.add(cols02);
-        
-        this.data=new ArrayList<Map>();
-        
-        Map row01=new HashMap();
-        row01.put("ID","01");
-        row01.put("NAME","百度");
-        this.data.add(row01);
-        
-        Map row02=new HashMap();
-        row02.put("ID","02");
-        row02.put("NAME","腾讯");
-        this.data.add(row02);
-        
-        Map row03=new HashMap();
-        row03.put("ID","03");
-        row03.put("NAME","阿里");
-        this.data.add(row03);
-        
-        this.selectedRows=new RowKeySetImpl();
-        this.selectedRows.add(1);
     }
     public Object getRowKey() {
         return this.curRow==-1? null:this.curRow;

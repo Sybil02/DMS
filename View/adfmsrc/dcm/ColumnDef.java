@@ -4,11 +4,13 @@ public class ColumnDef {
     private String code;
     private String label;
     private String type;
-    private boolean readonly;
+    private String readonly;
+    private String isPk;
+    private String visible;
     public ColumnDef(){
         
     }
-    public ColumnDef(String code,String label,String type,boolean readonly){
+    public ColumnDef(String code,String label,String type,String readonly){
         this.code=code;
         this.label=label;
         this.type=type;
@@ -38,11 +40,27 @@ public class ColumnDef {
         return type;
     }
 
-    public void setReadonly(boolean readonly) {
+    public void setReadonly(String readonly) {
         this.readonly = readonly;
     }
 
-    public boolean isReadonly() {
+    public String isReadonly() {
         return readonly;
+    }
+
+    public void setIsPk(String isPk) {
+        this.isPk = isPk;
+    }
+
+    public String getIsPk() {
+        return isPk;
+    }
+
+    public void setVisible(String visible) {
+        this.visible = visible;
+    }
+
+    public String getVisible() {
+        return visible;
     }
 }
