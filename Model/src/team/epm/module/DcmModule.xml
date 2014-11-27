@@ -36,42 +36,49 @@
    <ViewUsage
     Name="DcmComVsView1"
     ViewObjectName="team.epm.dcm.view.DcmComVsView"/>
-   <ViewUsage Name="DcmTemplateView1"
-              ViewObjectName="team.epm.dcm.view.DcmTemplateView"/>
-   <ViewUsage Name="DcmTemplateColumnView1"
-              ViewObjectName="team.epm.dcm.view.DcmTemplateColumnView"/>
-   <ViewUsage Name="DcmTemplateColumnView2"
-              ViewObjectName="team.epm.dcm.view.DcmTemplateColumnView"/>
-   <ViewUsage Name="DcmTemplateValidationView1"
-              ViewObjectName="team.epm.dcm.view.DcmTemplateValidationView"/>
-   <ViewUsage Name="DmsRoleView1"
-              ViewObjectName="team.epm.dms.view.DmsRoleView"/>
-   <ViewUsage Name="DcmRoleTemplateView1"
-              ViewObjectName="team.epm.dcm.view.DcmRoleTemplateView"/>
-   <ViewUsage
+  <ViewUsage
+    Name="DcmTemplateView1"
+    ViewObjectName="team.epm.dcm.view.DcmTemplateView"/>
+  <ViewUsage
+    Name="DcmTemplateColumnView1"
+    ViewObjectName="team.epm.dcm.view.DcmTemplateColumnView"/>
+  <ViewUsage
+    Name="DcmTemplateValidationView1"
+    ViewObjectName="team.epm.dcm.view.DcmTemplateValidationView"/>
+  <ViewUsage
+    Name="DmsRoleView1"
+    ViewObjectName="team.epm.dms.view.DmsRoleView"/>
+  <ViewUsage
+    Name="DcmRoleTemplateView1"
+    ViewObjectName="team.epm.dcm.view.DcmRoleTemplateView"/>
+  <ViewUsage
       Name="DcmTemplateCatView"
       ViewObjectName="team.epm.dcm.view.DcmTemplateCatView"/>
-   <ViewUsage
+  <ViewUsage
       Name="DcmValidationQueryView"
       ViewObjectName="team.epm.dcm.view.DcmValidationQueryView"/>
-   <ViewLinkUsage Name="combinationsVS"
-                  ViewLinkObjectName="team.epm.dcm.view.viewlink.combinationsVS"
-                  SrcViewUsageName="team.epm.module.DcmModule.DcmCombinationView1"
-                  DstViewUsageName="team.epm.module.DcmModule.DcmComVsView1"
-                  Reversed="false"/>
-   <ViewLinkUsage Name="templatecolumnsVL1"
-                  ViewLinkObjectName="team.epm.dcm.view.viewlink.templatecolumnsVL"
-                  SrcViewUsageName="team.epm.module.DcmModule.DcmTemplateView1"
-                  DstViewUsageName="team.epm.module.DcmModule.DcmTemplateColumnView1"
-                  Reversed="false"/>
-   <ViewLinkUsage Name="templateValidationVL1"
-                  ViewLinkObjectName="team.epm.dcm.view.viewlink.templateValidationVL"
-                  SrcViewUsageName="team.epm.module.DcmModule.DcmTemplateColumnView1"
-                  DstViewUsageName="team.epm.module.DcmModule.DcmTemplateValidationView1"
-                  Reversed="false"/>
-   <ViewLinkUsage Name="roleTemplateVL"
-                  ViewLinkObjectName="team.epm.dcm.view.viewlink.roleTemplateVL"
-                  SrcViewUsageName="team.epm.module.DcmModule.DmsRoleView1"
-                  DstViewUsageName="team.epm.module.DcmModule.DcmRoleTemplateView1"
-                  Reversed="false"/>
+  <ViewLinkUsage
+    Name="combinationsVS"
+    ViewLinkObjectName="team.epm.dcm.view.viewlink.combinationsVS"
+    SrcViewUsageName="team.epm.module.DcmModule.DcmCombinationView1"
+    DstViewUsageName="team.epm.module.DcmModule.DcmComVsView1"
+    Reversed="false"/>
+  <ViewLinkUsage
+    Name="templatecolumnsVL1"
+    ViewLinkObjectName="team.epm.dcm.view.viewlink.templatecolumnsVL"
+    SrcViewUsageName="team.epm.module.DcmModule.DcmTemplateView1"
+    DstViewUsageName="team.epm.module.DcmModule.DcmTemplateColumnView1"
+    Reversed="false"/>
+  <ViewLinkUsage
+    Name="templateValidationVL1"
+    ViewLinkObjectName="team.epm.dcm.view.viewlink.templateValidationVL"
+    SrcViewUsageName="team.epm.module.DcmModule.DcmTemplateColumnView1"
+    DstViewUsageName="team.epm.module.DcmModule.DcmTemplateValidationView1"
+    Reversed="false"/>
+  <ViewLinkUsage
+    Name="roleTemplateVL"
+    ViewLinkObjectName="team.epm.dcm.view.viewlink.roleTemplateVL"
+    SrcViewUsageName="team.epm.module.DcmModule.DmsRoleView1"
+    DstViewUsageName="team.epm.module.DcmModule.DcmRoleTemplateView1"
+    Reversed="false"/>
 </AppModule>

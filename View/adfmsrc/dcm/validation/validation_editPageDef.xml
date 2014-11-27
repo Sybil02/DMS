@@ -23,13 +23,6 @@
         <Item Value="Program"/>
       </AttrNames>
     </attributeValues>
-    <attributeValues IterBinding="DcmValidationViewIterator" id="Args">
-      <AttrNames>
-        <Item Value="Args"/>
-      </AttrNames>
-    </attributeValues>
-    <list IterBinding="DcmValidationViewIterator" StaticList="false"
-          Uses="LOV_Required" id="Required" DTSupportsMRU="false"/>
     <attributeValues IterBinding="DcmValidationViewIterator" id="Description">
       <AttrNames>
         <Item Value="Description"/>

@@ -10,8 +10,6 @@
        DcmValidation.LOCALE, 
        DcmValidation.NAME, 
        DcmValidation.PROGRAM, 
-       DcmValidation.ARGS, 
-       DcmValidation.REQUIRED, 
        DcmValidation.DESCRIPTION, 
        DcmValidation.CREATED_AT, 
        DcmValidation.UPDATED_AT, 
@@ -120,24 +118,6 @@
     </AttrArray>
     <DisplayCriteria/>
   </ListBinding>
-  <ListBinding
-    Name="LOV_Required"
-    ListVOName="LKP_YES_NO"
-    ListRangeSize="-1"
-    NullValueFlag="start"
-    NullValueId="${adfBundle['oracle.javatools.resourcebundle.SystemBundle']['NULL_VALUE_RESID']}"
-    MRUCount="0">
-    <AttrArray Name="AttrNames">
-      <Item Value="Required"/>
-    </AttrArray>
-    <AttrArray Name="ListAttrNames">
-      <Item Value="Code"/>
-    </AttrArray>
-    <AttrArray Name="ListDisplayAttrNames">
-      <Item Value="Meaning"/>
-    </AttrArray>
-    <DisplayCriteria/>
-  </ListBinding>
   <EntityUsage
     Name="DcmValidation"
     Entity="team.epm.dcm.model.DcmValidation"/>
@@ -186,35 +166,6 @@
       <SchemaBasedProperties>
         <LABEL
           ResId="dcm.validation_program"/>
-      </SchemaBasedProperties>
-    </Properties>
-  </ViewAttribute>
-  <ViewAttribute
-    Name="Args"
-    PrecisionRule="true"
-    EntityAttrName="Args"
-    EntityUsage="DcmValidation"
-    AliasName="ARGS">
-    <Properties>
-      <SchemaBasedProperties>
-        <LABEL
-          ResId="dcm.validation_parameter"/>
-      </SchemaBasedProperties>
-    </Properties>
-  </ViewAttribute>
-  <ViewAttribute
-    Name="Required"
-    PrecisionRule="true"
-    EntityAttrName="Required"
-    EntityUsage="DcmValidation"
-    AliasName="REQUIRED"
-    LOVName="LOV_Required">
-    <Properties>
-      <SchemaBasedProperties>
-        <LABEL
-          ResId="dcm.validation_require"/>
-        <CONTROLTYPE
-          Value="choice"/>
       </SchemaBasedProperties>
     </Properties>
   </ViewAttribute>
@@ -268,7 +219,7 @@
     <Properties>
       <SchemaBasedProperties>
         <LABEL
-          ResId="createdBy"/>
+          ResId="updatedBy"/>
         <CONTROLTYPE
           Value="choice"/>
       </SchemaBasedProperties>

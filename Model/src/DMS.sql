@@ -1246,8 +1246,8 @@ create table DMS_VALUE_SET
 (
    ID                   VARCHAR2(32)         not null,
    LOCALE               VARCHAR2(10)         not null,
-   CODE                 VARCHAR2(28)         not null,
    NAME                 VARCHAR2(100),
+   CODE                 VARCHAR2(100)        not null,
    SOURCE               VARCHAR2(100),
    CREATED_AT           DATE,
    UPDATED_AT           DATE,
@@ -1267,6 +1267,9 @@ comment on column DMS_VALUE_SET.LOCALE is
 
 comment on column DMS_VALUE_SET.NAME is
 '值集名';
+
+comment on column DMS_VALUE_SET.code is
+'值集编码';
 
 comment on column DMS_VALUE_SET.SOURCE is
 '值集源';

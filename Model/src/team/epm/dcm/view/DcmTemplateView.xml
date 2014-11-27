@@ -361,7 +361,7 @@
       </SchemaBasedProperties>
     </Properties>
   </ViewAttribute>
-  <ViewAttribute
+<ViewAttribute
     Name="TmpTable"
     PrecisionRule="true"
     EntityAttrName="TmpTable"

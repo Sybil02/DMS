@@ -180,7 +180,7 @@
       <Attr Name="_DisplaySize" Value="100"/>
     </DesignTime>
   </Attribute>
-  <Attribute
+<Attribute
     Name="TmpTable"
     Precision="100"
     ColumnName="TMP_TABLE"
@@ -301,7 +301,7 @@
     ViewLinkOtherEnd="team.epm.dcm.view.viewlink.templatecolumnsVL.DcmTemplateView1"
     Type="oracle.jbo.RowIterator"
     IsUpdateable="false"/>
-  <Key
+<Key
     Name="PkDcmTemplate"
     PrimaryKey="true">
     <DesignTime>

@@ -18,7 +18,9 @@
                                 inlineStyle="width:331.0px;"
                                 clientComponent="true">
               <f:facet name="menus"/>
-              <f:facet name="toolbar"/>
+              <f:facet name="toolbar">
+                <af:toolbar id="t4"/>
+              </f:facet>
               <f:facet name="statusbar"/>
               <af:table value="#{bindings.DcmComVsView1.collectionModel}"
                         var="row" rows="#{bindings.DcmComVsView1.rangeSize}"
@@ -28,7 +30,7 @@
                         selectedRowKeys="#{bindings.DcmComVsView1.collectionModel.selectedRow}"
                         selectionListener="#{bindings.DcmComVsView1.collectionModel.makeCurrent}"
                         rowSelection="single" id="t3"
-                        partialTriggers=":::pc3:cb5 :::pc3:cb6 :::pc3:cb8 :::pc3:cb7" width="332">
+                        partialTriggers=":::pc3:cb5 :::pc3:cb6 :::pc3:cb8 :::pc3:cb7 :::pc1:t1" width="332">
                 <af:column sortProperty="#{bindings.DcmComVsView1.hints.ValueSetId.name}"
                            sortable="false"
                            headerText="#{bindings.DcmComVsView1.hints.ValueSetId.label}"
@@ -52,7 +54,7 @@
                                 columns="#{bindings.DcmComVsView1.hints.Seq.displayWidth}"
                                 maximumLength="#{bindings.DcmComVsView1.hints.Seq.precision}"
                                 shortDesc="#{bindings.DcmComVsView1.hints.Seq.tooltip}"
-                                id="it3">
+                                id="it3" autoSubmit="true">
                     <f:validator binding="#{row.bindings.Seq.validator}"/>
                     <af:convertNumber groupingUsed="false"
                                       pattern="#{bindings.DcmComVsView1.hints.Seq.format}"/>
@@ -92,10 +94,23 @@
                 <af:showPopupBehavior popupId="::p1" triggerType="action"
                                       alignId="::pc2" align="startBefore"/>
               </af:commandToolbarButton>
-              <af:commandToolbarButton actionListener="#{bindings.Delete1.execute}"
+              <af:commandToolbarButton 
                                        text="#{viewBundle['dcm.combination.delete']}"
                                        disabled="#{!bindings.Delete1.enabled}"
-                                       id="ctb1"/>
+                                       id="ctb1">
+                <af:showPopupBehavior popupId="::p2"/>
+              </af:commandToolbarButton>
+              <af:commandButton actionListener="#{bindings.Commit.execute}"
+                                text="#{viewBundle['dms.common.save']}"
+                                disabled="#{!bindings.Commit.enabled}"
+                                id="commandButton1"
+                                partialTriggers="ctb1 ::pc2:t3"/>
+              <af:commandButton actionListener="#{bindings.Rollback.execute}"
+                                text="#{viewBundle['dms.common.rollback']}"
+                                disabled="#{!bindings.Rollback.enabled}"
+                                immediate="true" id="cb4">
+                <af:resetActionListener/>
+              </af:commandButton>
             </af:toolbar>
           </f:facet>
           <f:facet name="statusbar"/>
@@ -110,7 +125,7 @@
                     selectedRowKeys="#{bindings.DcmCombinationView1.collectionModel.selectedRow}"
                     selectionListener="#{bindings.DcmCombinationView1.collectionModel.makeCurrent}"
                     rowSelection="single" id="t1"
-                    partialTriggers="::cb1 ::ctb1" width="422">
+                    partialTriggers="::cb1 ::ctb1 :::cb2" width="422">
             <af:column sortProperty="#{bindings.DcmCombinationView1.hints.Name.name}"
                        filterable="true" sortable="true"
                        headerText="#{bindings.DcmCombinationView1.hints.Name.label}"
@@ -158,6 +173,26 @@
             </af:column>
           </af:table>
         </af:panelCollection>
+        <af:popup id="p2">
+          <af:panelWindow id="pw2">
+            <af:panelGroupLayout id="pgl5"
+                                 inlineStyle="width:274px; height:56px;"
+                                 layout="vertical" halign="center">
+              <af:outputLabel value="#{viewBundle['dcm.common.confirmdelete']}"
+                              id="ol1"/>
+              <af:spacer width="10" height="20" id="s3"/>
+              <af:panelGroupLayout id="pgl4" layout="horizontal"
+                                   inlineStyle="width:134px;">
+                <af:commandButton text="#{viewBundle['dcm.common.ok']}"
+                                  id="cb2"
+                                  actionListener="#{bindings.Delete1.execute}"
+                                  disabled="#{!bindings.Delete1.enabled}"/>
+                <af:commandButton text="#{viewBundle['dms.common.rollback']}"
+                                  id="cb3"/>
+              </af:panelGroupLayout>
+            </af:panelGroupLayout>
+          </af:panelWindow>
+        </af:popup>
         <af:spacer width="30" height="10" id="s2"/>
       </af:panelGroupLayout>
     </f:facet>
@@ -187,10 +222,10 @@
                                         text="#{viewBundle['dcm.valueset_delete']}"
                                         disabled="#{!bindings.Delete.enabled}"
                                         id="cb6" partialSubmit="true"/>
-                      <af:commandButton actionListener="#{bindings.Commit.execute}"
+                      <af:commandButton actionListener="#{backingBeanScope.CombinationBean.createTable}"
                                         text="#{viewBundle['dms.common.save']}"
                                         disabled="#{!bindings.Commit.enabled}"
-                                        id="cb8" partialSubmit="true"
+                                        id="cb8"
                                         partialTriggers="cb8 cb5 cb6 t5"/>
                       <af:commandButton text="#{viewBundle['dms.common.rollback']}"
                                         id="cb7"

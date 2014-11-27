@@ -13,7 +13,7 @@
         <af:spacer width="10" height="20" id="s1"/>
         <af:panelCollection id="pc1"
                             featuresOff="formatMenu detach statusBar freeze"
-                            inlineStyle="width:744px;">
+                            inlineStyle="width:528px;">
           <f:facet name="menus"/>
           <f:facet name="toolbar">
             <af:toolbar id="t2">
@@ -28,11 +28,13 @@
               <af:commandButton actionListener="#{bindings.Commit.execute}"
                                 text="#{viewBundle['dms.common.save']}"
                                 disabled="#{!bindings.Commit.enabled}"
-                                id="ctb3"/>
+                                id="ctb3"
+                                partialTriggers="ctb1 ctb2 t1 t1:it7 t1:it5 t1:it8"/>
               <af:commandButton actionListener="#{bindings.Rollback.execute}"
                                 text="#{viewBundle['dms.common.rollback']}"
                                 disabled="#{!bindings.Rollback.enabled}"
-                                immediate="true" id="ctb4">
+                                immediate="true" id="ctb4"
+                                partialTriggers="ctb1 ctb2 t1 t1:it7 t1:it5 t1:it8">
                 <af:resetActionListener/>
               </af:commandButton>
             </af:toolbar>
@@ -49,7 +51,8 @@
                     selectedRowKeys="#{bindings.DcmValidationView.collectionModel.selectedRow}"
                     selectionListener="#{bindings.DcmValidationView.collectionModel.makeCurrent}"
                     rowSelection="single" id="t1"
-                    partialTriggers="::ctb1 ::ctb2" editingMode="clickToEdit">
+                    partialTriggers="::ctb1 ::ctb2" editingMode="clickToEdit"
+                    width="723">
             <af:column sortProperty="#{bindings.DcmValidationView.hints.Name.name}"
                        filterable="true" sortable="true"
                        headerText="#{bindings.DcmValidationView.hints.Name.label}"
@@ -60,7 +63,7 @@
                             columns="#{bindings.DcmValidationView.hints.Name.displayWidth}"
                             maximumLength="#{bindings.DcmValidationView.hints.Name.precision}"
                             shortDesc="#{bindings.DcmValidationView.hints.Name.tooltip}"
-                            id="it7">
+                            id="it7" autoSubmit="true">
                 <f:validator binding="#{row.bindings.Name.validator}"/>
               </af:inputText>
             </af:column>
@@ -74,35 +77,9 @@
                             columns="#{bindings.DcmValidationView.hints.Program.displayWidth}"
                             maximumLength="#{bindings.DcmValidationView.hints.Program.precision}"
                             shortDesc="#{bindings.DcmValidationView.hints.Program.tooltip}"
-                            id="it5">
+                            id="it5" autoSubmit="true">
                 <f:validator binding="#{row.bindings.Program.validator}"/>
               </af:inputText>
-            </af:column>
-            <af:column sortProperty="#{bindings.DcmValidationView.hints.Args.name}"
-                       filterable="true" sortable="true"
-                       headerText="#{bindings.DcmValidationView.hints.Args.label}"
-                       id="c5">
-              <af:inputText value="#{row.bindings.Args.inputValue}"
-                            label="#{bindings.DcmValidationView.hints.Args.label}"
-                            required="#{bindings.DcmValidationView.hints.Args.mandatory}"
-                            columns="#{bindings.DcmValidationView.hints.Args.displayWidth}"
-                            maximumLength="#{bindings.DcmValidationView.hints.Args.precision}"
-                            shortDesc="#{bindings.DcmValidationView.hints.Args.tooltip}"
-                            id="it6">
-                <f:validator binding="#{row.bindings.Args.validator}"/>
-              </af:inputText>
-            </af:column>
-            <af:column sortProperty="#{bindings.DcmValidationView.hints.Required.name}"
-                       filterable="true" sortable="true"
-                       headerText="#{bindings.DcmValidationView.hints.Required.label}"
-                       id="c6">
-              <af:selectOneChoice value="#{row.bindings.Required.inputValue}"
-                                  label="#{row.bindings.Required.label}"
-                                  required="#{bindings.DcmValidationView.hints.Required.mandatory}"
-                                  shortDesc="#{bindings.DcmValidationView.hints.Required.tooltip}"
-                                  id="soc2">
-                <f:selectItems value="#{row.bindings.Required.items}" id="si3"/>
-              </af:selectOneChoice>
             </af:column>
             <af:column sortProperty="#{bindings.DcmValidationView.hints.Description.name}"
                        filterable="true" sortable="true"
@@ -114,7 +91,7 @@
                             columns="#{bindings.DcmValidationView.hints.Description.displayWidth}"
                             maximumLength="#{bindings.DcmValidationView.hints.Description.precision}"
                             shortDesc="#{bindings.DcmValidationView.hints.Description.tooltip}"
-                            id="it8">
+                            id="it8" autoSubmit="true">
                 <f:validator binding="#{row.bindings.Description.validator}"/>
               </af:inputText>
             </af:column>
@@ -129,7 +106,7 @@
                             label="#{bindings.DcmValidationView.hints.UpdatedAt.label}"
                             required="#{bindings.DcmValidationView.hints.UpdatedAt.mandatory}"
                             shortDesc="#{bindings.DcmValidationView.hints.UpdatedAt.tooltip}"
-                            id="id2">
+                            id="id2" readOnly="true">
                 <f:validator binding="#{row.bindings.UpdatedAt.validator}"/>
                 <af:convertDateTime pattern="#{bindings.DcmValidationView.hints.UpdatedAt.format}"/>
               </af:inputDate>
@@ -142,7 +119,7 @@
                                   label="#{row.bindings.UpdatedBy.label}"
                                   required="#{bindings.DcmValidationView.hints.UpdatedBy.mandatory}"
                                   shortDesc="#{bindings.DcmValidationView.hints.UpdatedBy.tooltip}"
-                                  id="soc3">
+                                  id="soc3" readOnly="true">
                 <f:selectItems value="#{row.bindings.UpdatedBy.items}"
                                id="si2"/>
               </af:selectOneChoice>

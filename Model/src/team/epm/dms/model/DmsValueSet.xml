@@ -79,6 +79,19 @@
     </Properties>
   </Attribute>
   <Attribute
+    Name="Code"
+    Precision="100"
+    ColumnName="CODE"
+    SQLType="VARCHAR"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    TableName="DMS_VALUE_SET"
+    IsNotNull="true">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="100"/>
+    </DesignTime>
+  </Attribute>
+  <Attribute
     Name="Source"
     Precision="100"
     ColumnName="SOURCE"
@@ -178,6 +191,18 @@
       </SchemaBasedProperties>
     </Properties>
   </Attribute>
+  <Key
+    Name="DmsValueSetCodeCheck">
+    <DesignTime>
+      <Attr Name="_isNotNull" Value="true"/>
+      <Attr Name="_DBObjectName" Value="DMS_VALUE_SET_CODE_CHECK"/>
+      <Attr Name="_checkCondition" Value='"CODE" IS NOT NULL'/>
+      <Attr Name="_isCheck" Value="true"/>
+    </DesignTime>
+    <AttrArray Name="Attributes">
+      <Item Value="team.epm.dms.model.DmsValueSet.Code"/>
+    </AttrArray>
+  </Key>
   <Key
     Name="PkDmsValueSet"
     PrimaryKey="true">

@@ -10,10 +10,12 @@
   DBObjectName="DCM_TEMPLATE_COLUMN"
   AliasName="DcmTemplateColumn"
   BindingStyle="OracleName"
-  UseGlueCode="false">
+  UseGlueCode="false"
+  RowClass="team.epm.dcm.model.DcmTemplateColumnImpl">
   <DesignTime>
-    <Attr Name="_codeGenFlag2" Value="Access"/>
     <AttrArray Name="_publishEvents"/>
+    <Attr Name="_codeGenFlag2" Value="Access"/>
+    <Attr Name="_isCodegen" Value="true"/>
   </DesignTime>
   <Attribute
     Name="Id"
@@ -234,13 +236,6 @@
     ViewLink="templatecolumnsVL"
     ViewLinkEnd="templatecolumnsVL.DcmRoleTemplateView"
     ViewLinkOtherEnd="templatecolumnsVL.destEnd"
-    Type="oracle.jbo.server.ViewRowImpl"
-    IsUpdateable="false"/>
-  <ViewLinkAccessor
-    Name="DcmTemplateView1"
-    ViewLink="team.epm.dcm.view.viewlink.templatecolumnsVL"
-    ViewLinkEnd="team.epm.dcm.view.viewlink.templatecolumnsVL.DcmTemplateView1"
-    ViewLinkOtherEnd="team.epm.dcm.view.viewlink.templatecolumnsVL.DcmTemplateColumnView"
     Type="oracle.jbo.server.ViewRowImpl"
     IsUpdateable="false"/>
   <Key

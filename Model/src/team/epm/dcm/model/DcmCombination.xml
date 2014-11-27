@@ -11,7 +11,8 @@
   AliasName="DcmCombination"
   BindingStyle="OracleName"
   UseGlueCode="false"
-  RowClass="team.epm.dcm.model.DcmCombinationImpl">
+  RowClass="team.epm.dcm.model.DcmCombinationImpl"
+  xmlns:validation="http://xmlns.oracle.com/adfm/validation">
   <DesignTime>
     <Attr Name="_codeGenFlag2" Value="Access"/>
     <AttrArray Name="_publishEvents"/>
@@ -61,7 +62,9 @@
     SQLType="VARCHAR"
     Type="java.lang.String"
     ColumnType="VARCHAR2"
-    TableName="DCM_COMBINATION">
+    TableName="DCM_COMBINATION"
+    IsUpdateable="while_insert"
+    IsUnique="true">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="26"/>
     </DesignTime>
@@ -134,6 +137,17 @@
     <TransientExpression><![CDATA[adf.userSession.userData.userId]]></TransientExpression>
   </Attribute>
   <Key
+    Name="AltKey"
+    AltKey="true">
+    <DesignTime>
+      <Attr Name="_isUnique" Value="true"/>
+      <Attr Name="_DBObjectName" Value="DCM_COMBINATION"/>
+    </DesignTime>
+    <AttrArray Name="Attributes">
+      <Item Value="team.epm.dcm.model.DcmCombination.Code"/>
+    </AttrArray>
+  </Key>
+  <Key
     Name="PkDcmCombination"
     PrimaryKey="true">
     <DesignTime>
@@ -188,4 +202,17 @@
       <Item Value="team.epm.dcm.model.DcmCombination.Locale"/>
     </AttrArray>
   </Key>
+  <validation:UniqueKeyValidationBean
+    Name="DcmCombination_Rule_0"
+    ResId="dcm.error.comninationCode_repeat"
+    KeyName="AltKey">
+    <validation:OnAttributes>
+      <validation:Item
+        Value="Code"/>
+    </validation:OnAttributes>
+  </validation:UniqueKeyValidationBean>
+  <ResourceBundle>
+    <PropertiesBundle
+      PropertiesFile="ModelBundle"/>
+  </ResourceBundle>
 </Entity>

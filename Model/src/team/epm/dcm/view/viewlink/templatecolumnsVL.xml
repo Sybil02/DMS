@@ -22,7 +22,6 @@
     Source="true">
     <DesignTime>
       <Attr Name="_accessor" Value="true"/>
-      <Attr Name="_entityAccessor" Value="true"/>
       <Attr Name="_finderName" Value="DcmTemplateView1"/>
       <Attr Name="_isUpdateable" Value="true"/>
     </DesignTime>
@@ -35,7 +34,6 @@
     Cardinality="-1"
     Owner="team.epm.dcm.view.DcmTemplateColumnView">
     <DesignTime>
-      <Attr Name="_entityAccessor" Value="true"/>
       <Attr Name="_finderName" Value="DcmTemplateColumnView"/>
       <Attr Name="_isUpdateable" Value="true"/>
     </DesignTime>

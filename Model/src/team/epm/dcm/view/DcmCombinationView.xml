@@ -20,9 +20,11 @@
   PageIterMode="Full"
   UseGlueCode="false"
   Where="DcmCombination.LOCALE=:locale"
-  ComponentClass="team.epm.dcm.view.DcmCombinationViewImpl">
+  ComponentClass="team.epm.dcm.view.DcmCombinationViewImpl"
+  RowClass="team.epm.dcm.view.DcmCombinationViewRowImpl">
   <DesignTime>
-    <Attr Name="_codeGenFlag2" Value="Coll|VarAccess"/>
+    <Attr Name="_codeGenFlag2" Value="Access|Coll|VarAccess"/>
+    <Attr Name="_isCodegen" Value="true"/>
   </DesignTime>
     <Variable
     Name="locale"

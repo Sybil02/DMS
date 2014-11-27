@@ -10,10 +10,12 @@
   DBObjectName="DCM_VALIDATION"
   AliasName="DcmValidation"
   BindingStyle="OracleName"
-  UseGlueCode="false">
+  UseGlueCode="false"
+  RowClass="team.epm.dcm.model.DcmValidationImpl">
   <DesignTime>
     <Attr Name="_codeGenFlag2" Value="Access"/>
     <AttrArray Name="_publishEvents"/>
+    <Attr Name="_isCodegen" Value="true"/>
   </DesignTime>
   <Attribute
     Name="Id"
@@ -74,30 +76,6 @@
     TableName="DCM_VALIDATION">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="300"/>
-    </DesignTime>
-  </Attribute>
-  <Attribute
-    Name="Args"
-    Precision="1000"
-    ColumnName="ARGS"
-    SQLType="VARCHAR"
-    Type="java.lang.String"
-    ColumnType="VARCHAR2"
-    TableName="DCM_VALIDATION">
-    <DesignTime>
-      <Attr Name="_DisplaySize" Value="1000"/>
-    </DesignTime>
-  </Attribute>
-  <Attribute
-    Name="Required"
-    Precision="10"
-    ColumnName="REQUIRED"
-    SQLType="VARCHAR"
-    Type="java.lang.String"
-    ColumnType="VARCHAR2"
-    TableName="DCM_VALIDATION">
-    <DesignTime>
-      <Attr Name="_DisplaySize" Value="10"/>
     </DesignTime>
   </Attribute>
   <Attribute

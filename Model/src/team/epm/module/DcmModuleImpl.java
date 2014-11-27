@@ -1,13 +1,18 @@
 package team.epm.module;
 
+import java.awt.event.ActionEvent;
+
 import java.util.Map;
 
+import oracle.adf.model.binding.DCIteratorBinding;
 import oracle.adf.share.ADFContext;
 
+import oracle.jbo.ApplicationModule;
+import oracle.jbo.Row;
 import oracle.jbo.Session;
+import oracle.jbo.ViewObject;
 import oracle.jbo.server.ApplicationModuleImpl;
 import oracle.jbo.server.ViewLinkImpl;
-
 
 import oracle.jbo.server.ViewObjectImpl;
 
@@ -182,14 +187,6 @@ public class DcmModuleImpl extends ApplicationModuleImpl {
         return (ViewLinkImpl)findViewLink("templatecolumnsVL1");
     }
 
-    /**
-     * Container's getter for DcmTemplateColumnView2.
-     * @return DcmTemplateColumnView2
-     */
-    public ViewObjectImpl getDcmTemplateColumnView2() {
-        return (ViewObjectImpl)findViewObject("DcmTemplateColumnView2");
-    }
-
 
     /**
      * Container's getter for DcmTemplateValidationView1.
@@ -237,7 +234,19 @@ public class DcmModuleImpl extends ApplicationModuleImpl {
     public ViewObjectImpl getDcmTemplateCatView() {
         return (ViewObjectImpl)findViewObject("DcmTemplateCatView");
     }
-
+    
+    public ViewObject getCombinationRecordView(String template_Id,String tablename){
+  
+        String sql="select * from Dcm_Template_Combination t,DFDF t1 where t.template_id=:1 " +
+            "and t1.id=t.combination_record_id";
+        ViewObjectImpl vo =
+            (ViewObjectImpl)this.createViewObjectFromQueryStmt("", sql);
+        
+        vo.setWhereClauseParam(0, template_Id);
+        vo.executeQuery();
+        vo.getRowSet();
+       return vo;
+    }
     /**
      * Container's getter for DcmValidationQueryView.
      * @return DcmValidationQueryView

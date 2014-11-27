@@ -20,6 +20,9 @@
     <iterator Binds="DcmTemplateValidationView1" RangeSize="25"
               DataControl="DcmModuleDataControl"
               id="DcmTemplateValidationView1Iterator"/>
+    <iterator Binds="DcmCombinationView1" RangeSize="25"
+              DataControl="DcmModuleDataControl"
+              id="DcmCombinationView1Iterator"/>
   </executables>
   <bindings>
     <list IterBinding="DcmTemplateView1Iterator" StaticList="false"
@@ -64,7 +67,6 @@
           <Item Value="Name"/>
           <Item Value="Description"/>
           <Item Value="DbTable"/>
-          <Item Value="DbView"/>
           <Item Value="Seq"/>
           <Item Value="Readonly"/>
           <Item Value="TmpTable"/>
@@ -114,5 +116,12 @@
         </AttrNames>
       </nodeDefinition>
     </tree>
+    <list IterBinding="DcmCombinationView1Iterator" ListOperMode="navigation"
+          ListIter="DcmCombinationView1Iterator" id="DcmCombinationView1"
+          DTSupportsMRU="false">
+      <AttrNames>
+        <Item Value="Name"/>
+      </AttrNames>
+    </list>
   </bindings>
 </pageDefinition>

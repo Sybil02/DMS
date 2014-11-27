@@ -9,6 +9,7 @@
   SelectList="DmsValueSet.ID, 
        DmsValueSet.LOCALE, 
        DmsValueSet.NAME, 
+       DmsValueSet.CODE, 
        DmsValueSet.SOURCE, 
        DmsValueSet.CREATED_AT, 
        DmsValueSet.UPDATED_AT, 
@@ -135,6 +136,13 @@
     EntityAttrName="Name"
     EntityUsage="DmsValueSet"
     AliasName="NAME"/>
+  <ViewAttribute
+    Name="Code"
+    IsNotNull="true"
+    PrecisionRule="true"
+    EntityAttrName="Code"
+    EntityUsage="DmsValueSet"
+    AliasName="CODE"/>
   <ViewAttribute
     Name="Source"
     PrecisionRule="true"
