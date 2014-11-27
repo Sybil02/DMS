@@ -3,6 +3,8 @@ package dms.valueSet;
 import common.ADFUtils;
 import common.DmsUtils;
 
+import common.JSFUtils;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -58,7 +60,12 @@ public class ValueSetAuthorityBean {
         String tablename = (String)cur_valueSet.getAttribute("Source");
         String roleId=getCurRoleId();
         DmsModuleImpl am = (DmsModuleImpl)ADFUtils.getApplicationModuleForDataControl("DmsModuleDataControl");
-        List<Row> valueList= am.getValuesFromValueSet(tablename,ADFContext.getCurrent().getLocale().toString());
+        List<Row> valueList=new ArrayList<Row>();
+        try {
+            valueList = am.getValuesFromValueSet(tablename,ADFContext.getCurrent().getLocale().toString());
+        } catch (Exception e) {
+            JSFUtils.addFacesErrorMessage(DmsUtils.getMsg("common.operation_failed_with_exception"));
+        }
         for(Row row:valueList){
             
             SelectItem item=new SelectItem(row.getAttribute("CODE"),(String)row.getAttribute("MEANING"),(String)row.getAttribute("MEANING"));
@@ -75,17 +82,7 @@ public class ValueSetAuthorityBean {
         AdfFacesContext adfFacesContext = AdfFacesContext.getCurrentInstance();           
         adfFacesContext.addPartialTarget(this.selectShuttle);
     }
-    public void selectListener(ValueChangeEvent valueChangeEvent) {
-        // Add event code here...
-//        BindingContainer bc=BindingContext.getCurrent().getCurrentBindingsEntry();
-//        JUCtrlListBinding listBinding = (JUCtrlListBinding)bc.get("DmsGroupView");
-//        listBinding.clearSelectedIndices();
-//        RowSetIterator groupIter =
-//            ADFUtils.findIterator("DmsGroupViewIterator").getRowSetIterator();
-//        DCIteratorBinding groupRoleIter =
-//            ADFUtils.findIterator("DmsGroupRoleViewIterator");
-//        DmsGroupRoleViewImpl view = (DmsGroupRoleViewImpl)groupRoleIter.getViewObject();
-        
+    public void selectListener(ValueChangeEvent valueChangeEvent) {        
         List<String> newValue = (List<String>)valueChangeEvent.getNewValue();
         if(newValue==null)
             newValue=new ArrayList<String>();

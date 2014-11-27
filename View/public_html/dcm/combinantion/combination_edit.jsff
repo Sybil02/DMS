@@ -309,7 +309,9 @@
                                 columns="#{bindings.Code.hints.displayWidth}"
                                 maximumLength="#{bindings.Code.hints.precision}"
                                 shortDesc="#{bindings.Code.hints.tooltip}"
-                                id="it5" autoSubmit="true">
+                                id="it5" autoSubmit="true"
+                                contentStyle="text-transform:uppercase"
+                                rows="1">
                     <f:validator binding="#{bindings.Code.validator}"/>
                   </af:inputText>
                   <af:spacer width="10" height="10" id="s1"/>

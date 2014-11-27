@@ -34,8 +34,6 @@
         <AttrNames>
           <Item Value="Name"/>
           <Item Value="Program"/>
-          <Item Value="Args"/>
-          <Item Value="Required"/>
           <Item Value="Description"/>
           <Item Value="UpdatedAt"/>
           <Item Value="UpdatedBy"/>

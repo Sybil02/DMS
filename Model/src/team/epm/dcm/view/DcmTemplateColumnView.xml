@@ -10,7 +10,6 @@
        DcmTemplateColumn.LOCALE, 
        DcmTemplateColumn.COLUMN_LABEL, 
        DcmTemplateColumn.DB_TABLE_COL, 
-       DcmTemplateColumn.DB_VIEW_COL, 
        DcmTemplateColumn.CREATED_AT, 
        DcmTemplateColumn.UPDATED_AT, 
        DcmTemplateColumn.UPDATED_BY, 
@@ -214,19 +213,6 @@
       <SchemaBasedProperties>
         <LABEL
           ResId="dcm.template_DbTableCol"/>
-      </SchemaBasedProperties>
-    </Properties>
-  </ViewAttribute>
-  <ViewAttribute
-    Name="DbViewCol"
-    PrecisionRule="true"
-    EntityAttrName="DbViewCol"
-    EntityUsage="DcmTemplateColumn"
-    AliasName="DB_VIEW_COL">
-    <Properties>
-      <SchemaBasedProperties>
-        <LABEL
-          ResId="dcm.templateColumn_DbViewCol"/>
       </SchemaBasedProperties>
     </Properties>
   </ViewAttribute>

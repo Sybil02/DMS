@@ -421,7 +421,7 @@
               <af:toolbar id="t3">
                 <af:commandButton actionListener="#{bindings.CreateInsert1.execute}"
                                   text="#{viewBundle['dcm.templateColumn.add']}"
-                                  disabled="#{bindings.DcmTemplateView1.currentRow.entities['0'].entityState == '0' ? true : false}"
+                                  disabled="#{(bindings.DcmTemplateView1.currentRow.entities['0'].entityState == '0' || bindings.DcmTemplateView1.currentRow ==null) ? true : false}"
                                   id="cb9"/>
                 <af:commandButton actionListener="#{bindings.Delete1.execute}"
                                   text="#{viewBundle['dcm.templateColumn.delete']}"
@@ -488,20 +488,6 @@
                               shortDesc="#{bindings.DcmTemplateColumnView1.hints.DbTableCol.tooltip}"
                               id="it9">
                   <f:validator binding="#{row.bindings.DbTableCol.validator}"/>
-                </af:inputText>
-              </af:column>
-              <af:column sortProperty="#{bindings.DcmTemplateColumnView1.hints.DbViewCol.name}"
-                         filterable="true" sortable="true"
-                         headerText="#{bindings.DcmTemplateColumnView1.hints.DbViewCol.label}"
-                         id="c22">
-                <af:inputText value="#{row.bindings.DbViewCol.inputValue}"
-                              label="#{bindings.DcmTemplateColumnView1.hints.DbViewCol.label}"
-                              required="#{bindings.DcmTemplateColumnView1.hints.DbViewCol.mandatory}"
-                              columns="#{bindings.DcmTemplateColumnView1.hints.DbViewCol.displayWidth}"
-                              maximumLength="#{bindings.DcmTemplateColumnView1.hints.DbViewCol.precision}"
-                              shortDesc="#{bindings.DcmTemplateColumnView1.hints.DbViewCol.tooltip}"
-                              id="it14">
-                  <f:validator binding="#{row.bindings.DbViewCol.validator}"/>
                 </af:inputText>
               </af:column>
               <af:column sortProperty="#{bindings.DcmTemplateColumnView1.hints.IsPk.name}"

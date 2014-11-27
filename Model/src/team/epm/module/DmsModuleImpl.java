@@ -205,11 +205,11 @@ public class DmsModuleImpl extends ApplicationModuleImpl {
         return (ViewObjectImpl)findViewObject("DmsGroupsForRoleView");
     }
 
-    public List<Row> getValuesFromValueSet(String source, String locale) {
+    public List<Row> getValuesFromValueSet(String source, String locale) throws Exception {
         List<Row> valueList = new ArrayList<Row>();
         String sql =
             "select CODE,MEANING from " + source + " where locale='" + locale +
-            "' order by seq";
+            "' order by IDX";
         ViewObject vo = this.findViewObject("ValuesFromValueSet");
         if (vo != null) {
             vo.remove();
@@ -219,8 +219,8 @@ public class DmsModuleImpl extends ApplicationModuleImpl {
         try{
         valuesVO.executeQuery();
         }
-        catch(Exception e){
-            return valueList;
+        catch(Exception e){            
+            throw e;
         }
         
         RowSet rows = valuesVO.getRowSet();

@@ -63,7 +63,8 @@
     SQLType="VARCHAR"
     Type="java.lang.String"
     ColumnType="VARCHAR2"
-    TableName="DCM_COM_VS">
+    TableName="DCM_COM_VS"
+    DefaultValue="Y">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="10"/>
     </DesignTime>

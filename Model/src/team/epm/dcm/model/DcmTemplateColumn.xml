@@ -81,18 +81,6 @@
     </DesignTime>
   </Attribute>
   <Attribute
-    Name="DbViewCol"
-    Precision="100"
-    ColumnName="DB_VIEW_COL"
-    SQLType="VARCHAR"
-    Type="java.lang.String"
-    ColumnType="VARCHAR2"
-    TableName="DCM_TEMPLATE_COLUMN">
-    <DesignTime>
-      <Attr Name="_DisplaySize" Value="100"/>
-    </DesignTime>
-  </Attribute>
-  <Attribute
     Name="CreatedAt"
     IsUpdateable="while_insert"
     ColumnName="CREATED_AT"

@@ -105,7 +105,6 @@
         <AttrNames>
           <Item Value="ColumnLabel"/>
           <Item Value="DbTableCol"/>
-          <Item Value="DbViewCol"/>
           <Item Value="IsPk"/>
           <Item Value="Readonly"/>
           <Item Value="DataType"/>
