@@ -4,6 +4,11 @@ package dcm.combinantion;
 import common.ADFUtils;
 
 
+import common.DmsUtils;
+import common.JSFUtils;
+
+import java.sql.SQLException;
+
 import java.util.ArrayList;
 
 import java.util.List;
@@ -36,24 +41,6 @@ public class CombinationBean {
     public CombinationBean() {
         super();
     }
-    public void createTable(){
-        List<String> columns=new ArrayList<String>();
-        DCIteratorBinding combinationIter=ADFUtils.findIterator("DcmCombinationView1Iterator");
-        DCIteratorBinding valueSetIter=ADFUtils.findIterator("DmsValueSetViewIterator");
-        
-        DcmCombinationViewRowImpl combinationRow = (DcmCombinationViewRowImpl)combinationIter.getCurrentRow();
-        RowIterator comVsRow=combinationRow.getDcmComVsView();
-        while(comVsRow.hasNext()){
-            Row relationrow=comVsRow.next();
-            String valueSetId = (String)relationrow.getAttribute("ValueSetId");
-            Row valuesetRow=valueSetIter.findRowByKeyString(valueSetId);
-            columns.add((String)valuesetRow.getAttribute("Code"));
-        }
-        DcmCombinationViewImpl vo = (DcmCombinationViewImpl)combinationIter.getViewObject();
-        vo.createTable(combinationRow.getCode(),columns);
-    }
-
-
 
     public void closePopup(PopupCanceledEvent popupCanceledEvent) {
         OperationBinding ob= ADFUtils.findOperation("Rollback");
@@ -92,17 +79,16 @@ public class CombinationBean {
             columns.add((String)valuesetRow[0].getAttribute("Code"));
         }
         DcmCombinationViewImpl vo = (DcmCombinationViewImpl)combinationIter.getViewObject();
-        vo.createTable(combinationRow.getCode(),columns);
+        try {
+            vo.createTable(combinationRow.getCode(),columns);
+        } catch (SQLException e) {
+            JSFUtils.addFacesErrorMessage(DmsUtils.getMsg("common.operation_failed_with_exception"));
+        }
     }
     
     public void createInsertListener(PopupFetchEvent popupFetchEvent) {
             OperationBinding ob= ADFUtils.findOperation("CreateCombination");
-    //        BindingContainer bindings = getBindings();
-    //        OperationBinding operationBinding = bindings.getOperationBinding("CreateCombination");
-    //        operationBinding.execute();
             ob.execute();
-            ob.getErrors();
-     //       ADFUtils.findIterator("DcmCombinationView1Iterator").getViewObject().createRow();
         }
 
 }
