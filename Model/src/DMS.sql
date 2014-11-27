@@ -54,6 +54,10 @@ drop table DMS_USER_KEY cascade constraints;
 
 drop table DMS_VALUE_SET cascade constraints;
 
+drop table DMS_LOOKUP cascade constraints;
+
+drop table DCM_TEMPTABLE10 cascade constraints;
+
 /*==============================================================*/
 /* Table: DCM_COMBINATION                                       */
 /*==============================================================*/
