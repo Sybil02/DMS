@@ -2,10 +2,9 @@
 <jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.1"
           xmlns:af="http://xmlns.oracle.com/adf/faces/rich"
           xmlns:f="http://java.sun.com/jsf/core">
-  <af:panelStretchLayout id="psl1" startWidth="60%">
+  <af:panelStretchLayout id="psl1">
     <f:facet name="bottom"/>
-    <f:facet name="center"/>
-    <f:facet name="start">
+    <f:facet name="center">
       <af:panelCollection id="pc1">
         <f:facet name="menus"/>
         <f:facet name="toolbar"/>
@@ -20,7 +19,7 @@
                   filterVisible="false" varStatus="vs"
                   selectedRowKeys="#{bindings.DmsFunctionView.collectionModel.selectedRow}"
                   selectionListener="#{bindings.DmsFunctionView.collectionModel.makeCurrent}"
-                  rowSelection="single" id="t1" columnStretching="column:c1">
+                  rowSelection="single" id="t1">
           <af:column sortProperty="#{bindings.DmsFunctionView.hints.Name.name}"
                      filterable="true" sortable="true"
                      headerText="#{bindings.DmsFunctionView.hints.Name.label}"
