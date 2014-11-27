@@ -383,7 +383,7 @@
     <Properties>
       <SchemaBasedProperties>
         <LABEL
-          ResId="dcm.handle_program"/>
+          ResId="dcm.pre_program"/>
       </SchemaBasedProperties>
     </Properties>
   </ViewAttribute>
