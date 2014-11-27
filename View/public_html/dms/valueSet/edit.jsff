@@ -28,6 +28,14 @@
                         autoSubmit="true">
             <f:validator binding="#{bindings.Source.validator}"/>
           </af:inputText>
+          <af:inputText value="#{bindings.Code.inputValue}"
+                        label="#{bindings.Code.hints.label}"
+                        required="#{bindings.Code.hints.mandatory}"
+                        maximumLength="#{bindings.Code.hints.precision}"
+                        shortDesc="#{bindings.Code.hints.tooltip}" id="it4"
+                        autoSubmit="true">
+            <f:validator binding="#{bindings.Code.validator}"/>
+          </af:inputText>
         </af:panelFormLayout>
       </af:panelGroupLayout>
     </f:facet>
@@ -45,15 +53,16 @@
                                 actionListener="#{bindings.CreateInsert.execute}"/>
               <af:commandButton
                                 text="#{viewBundle['dms.common.rollback']}"
-                                disabled="#{!bindings.Rollback.enabled}" id="cb2" partialTriggers="t1"
+                                disabled="#{!bindings.Rollback.enabled}" id="cb2"
                                 actionListener="#{bindings.Rollback.execute}"
-                                immediate="true">
+                                immediate="true"
+                                partialTriggers="t1">
                 <af:resetActionListener/>
               </af:commandButton>
               <af:commandButton
                                 text="#{viewBundle['dms.common.save']}"
                                 disabled="#{!bindings.Commit.enabled}"
-                                id="cb3" partialTriggers="t1"
+                                id="cb3" partialTriggers="t1 ::it4 ::it2 ::it1"
                                 actionListener="#{bindings.Commit.execute}"/>
             </af:toolbar>
           </f:facet>
@@ -84,7 +93,13 @@
                        id="c4" width="106">
               <af:outputText value="#{row.Source}" id="ot1"/>
             </af:column>
-            <af:column sortProperty="#{bindings.DmsValueSetView.hints.UpdatedAt.name}"
+          <af:column  headerText="#{bindings.DmsValueSetView.hints.Code.label}" id="c5">
+            <af:outputText value="#{row.bindings.Code.inputValue}"
+                           shortDesc="#{bindings.DmsValueSetView.hints.Code.tooltip}"
+                           id="it3">
+            </af:outputText>
+          </af:column>
+          <af:column sortProperty="#{bindings.DmsValueSetView.hints.UpdatedAt.name}"
                        filterable="false" sortable="true"
                        headerText="#{bindings.DmsValueSetView.hints.UpdatedAt.label}"
                        id="c2" width="104">

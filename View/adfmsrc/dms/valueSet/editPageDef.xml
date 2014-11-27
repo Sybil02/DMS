@@ -19,6 +19,7 @@
           <Item Value="Source"/>
           <Item Value="UpdatedAt"/>
           <Item Value="UpdatedBy"/>
+          <Item Value="Code"/>
         </AttrNames>
       </nodeDefinition>
     </tree>
@@ -38,5 +39,10 @@
             Action="rollbackTransaction" DataControl="DmsModuleDataControl"/>
     <action id="Commit" RequiresUpdateModel="true" Action="commitTransaction"
             DataControl="DmsModuleDataControl"/>
+    <attributeValues IterBinding="DmsValueSetViewIterator" id="Code">
+      <AttrNames>
+        <Item Value="Code"/>
+      </AttrNames>
+    </attributeValues>
   </bindings>
 </pageDefinition>

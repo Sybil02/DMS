@@ -42,13 +42,15 @@
               <af:commandButton actionListener="#{bindings.Rollback.execute}"
                                 text="#{viewBundle['dms.common.rollback']}"
                                 disabled="#{!bindings.Rollback.enabled}"
-                                immediate="true" id="cb3">
+                                immediate="true" id="cb3"
+                                partialTriggers="t1">
                 <af:resetActionListener/>
               </af:commandButton>
               <af:commandButton
                                 text="#{viewBundle['dms.common.save']}"
                                 disabled="#{!bindings.Commit.enabled}" id="cb2"
-                                actionListener="#{bindings.Commit.execute}"/>
+                                actionListener="#{bindings.Commit.execute}"
+                                partialTriggers="t1"/>
             </af:toolbar>
           </f:facet>
           <f:facet name="statusbar"/>
