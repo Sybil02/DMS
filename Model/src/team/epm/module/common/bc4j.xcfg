@@ -1,7 +1,9 @@
 <?xml version = '1.0' encoding = 'UTF-8'?>
 <BC4JConfig version="11.1" xmlns="http://xmlns.oracle.com/bc4j/configuration">
    <AppModuleConfigBag ApplicationName="team.epm.module.DmsModule">
-      <AppModuleConfig name="DmsModuleLocal" ApplicationName="team.epm.module.DmsModule" DeployPlatform="LOCAL" jbo.project="Model">
+      <AppModuleConfig DeployPlatform="LOCAL" jbo.project="Model" name="DmsModuleLocal" ApplicationName="team.epm.module.DmsModule">
+         <AM-Pooling jbo.dofailover="true"/>
+         <Database jbo.locking.mode="optimistic"/>
          <Security AppModuleJndiName="team.epm.module.DmsModule"/>
          <Custom JDBCDataSource="java:comp/env/jdbc/DMSConnDS"/>
       </AppModuleConfig>
@@ -12,7 +14,9 @@
       </AppModuleConfig>
    </AppModuleConfigBag>
    <AppModuleConfigBag ApplicationName="team.epm.module.DcmModule">
-      <AppModuleConfig name="DcmModuleLocal" ApplicationName="team.epm.module.DcmModule" DeployPlatform="LOCAL" jbo.project="Model">
+      <AppModuleConfig DeployPlatform="LOCAL" jbo.project="Model" name="DcmModuleLocal" ApplicationName="team.epm.module.DcmModule">
+         <AM-Pooling jbo.dofailover="true"/>
+         <Database jbo.locking.mode="optimistic"/>
          <Security AppModuleJndiName="team.epm.module.DcmModule"/>
          <Custom JDBCDataSource="java:comp/env/jdbc/DMSConnDS"/>
       </AppModuleConfig>

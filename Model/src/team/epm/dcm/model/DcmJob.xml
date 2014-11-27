@@ -42,18 +42,6 @@
     </DesignTime>
   </Attribute>
   <Attribute
-    Name="CombinationId"
-    Precision="32"
-    ColumnName="COMBINATION_ID"
-    SQLType="VARCHAR"
-    Type="java.lang.String"
-    ColumnType="VARCHAR2"
-    TableName="DCM_JOB">
-    <DesignTime>
-      <Attr Name="_DisplaySize" Value="32"/>
-    </DesignTime>
-  </Attribute>
-  <Attribute
     Name="Mode"
     Precision="10"
     ColumnName="MODE"
@@ -133,6 +121,18 @@
     TableName="DCM_JOB">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="10"/>
+    </DesignTime>
+  </Attribute>
+  <Attribute
+    Name="ComRecordId"
+    Precision="32"
+    ColumnName="COM_RECORD_ID"
+    SQLType="VARCHAR"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    TableName="DCM_JOB">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="32"/>
     </DesignTime>
   </Attribute>
   <Key

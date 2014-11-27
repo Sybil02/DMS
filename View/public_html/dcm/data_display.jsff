@@ -14,7 +14,8 @@
                     var="header">
           <af:selectOneChoice label="#{header.name}"
                               inlineStyle="margin-right:5px"
-                              value="#{header.values[0].value}"
+                              value="#{header.value}" autoSubmit="true"
+                              clientComponent="true"
                               valueChangeListener="#{viewScope.DcmDataDisplayBean.headerSelectChangeListener}"
                               binding="#{viewScope.DcmDataDisplayBean.headerComponents[header.code]}">
             <f:selectItems value="#{header.values}"/>
@@ -23,7 +24,8 @@
       </af:panelGroupLayout>
     </f:facet>
     <f:facet name="center">
-      <af:panelCollection id="pc1">
+      <af:panelCollection id="pc1" clientComponent="true"
+                          binding="#{viewScope.DcmDataDisplayBean.panelaCollection}">
         <f:facet name="menus"/>
         <f:facet name="toolbar">
           <af:toolbar id="t2">
@@ -35,15 +37,34 @@
                               action="#{viewScope.DcmDataDisplayBean.operation_save}"/>
             <af:commandButton text="#{viewBundle['dcm.action.reset']}" id="cb4"
                               action="#{viewScope.DcmDataDisplayBean.operation_reset}"/>
-            <af:inputFile label="" id="if1" simple="true"
-                          binding="#{viewScope.DcmDataDisplayBean.fileInput}"/>
+            <af:inputFile id="if1" simple="true" inlineStyle="width:50px"
+                          binding="#{viewScope.DcmDataDisplayBean.fileInput}"
+                          columns="5"/>
+            <af:selectBooleanRadio text="#{viewBundle['dcm.import.increment']}"
+                                   id="sbr3" group="handleMode" simple="true"
+                                   value="#{viewScope.DcmDataDisplayBean.isIncrement}"/>
+            <af:selectBooleanRadio text="#{viewBundle['dcm.import.repalce']}"
+                                   id="sbr4" group="handleMode" simple="true"/>
             <af:commandButton text="#{viewBundle['dcm.action.import']}" id="cb5"
                               action="#{viewScope.DcmDataDisplayBean.operation_import}"/>
-            <af:commandButton text="#{viewBundle['dcm.action.export']}" id="cb6"
-                              action="#{viewScope.DcmDataDisplayBean.operation_export}"/>
+            <af:selectBooleanRadio text="#{viewBundle['dcm.export.03format']}"
+                                   id="sbr1" group="excelFormat"/>
+            <af:selectBooleanRadio text="#{viewBundle['dcm.export.07format']}"
+                                   id="sbr2" group="excelFormat" simple="true"
+                                   autoSubmit="true"
+                                   value="#{viewScope.DcmDataDisplayBean.isXlsx}"/>
+            <af:commandButton text="#{viewBundle['dcm.action.export']}"
+                              id="cb6">
+              <af:fileDownloadActionListener contentType="application/vnd.ms-excel"
+                                             method="#{viewScope.DcmDataDisplayBean.operation_export}"
+                                             filename="#{viewScope.DcmDataDisplayBean.exportDataExcelName}"/>
+            </af:commandButton>
             <af:commandButton text="#{viewBundle['dcm.action.template_download']}"
-                              id="cb7"
-                              action="#{viewScope.DcmDataDisplayBean.operation_download}"/>
+                              id="cb7">
+              <af:fileDownloadActionListener contentType="application/vnd.ms-excel"
+                                             method="#{viewScope.DcmDataDisplayBean.operation_download}"
+                                             filename="#{viewScope.DcmDataDisplayBean.exportTemplateExcelName}"/>
+            </af:commandButton>
           </af:toolbar>
         </f:facet>
         <f:facet name="statusbar"/>
@@ -56,9 +77,9 @@
           <af:forEach items="#{viewScope.DcmDataDisplayBean.dataModel.colsdef}"
                       var="attr" varStatus="vs">
             <af:column sortable="false" headerText="#{attr.label}"
-                       inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:#00FF00;' : ''}
-                                    #{'CREATE' eq row['OPERATION'] ? 'background-color:#FFFF00;' : ''}
-                                    #{'DELETE' eq row['OPERATION'] ? 'background-color:#FF0000;' : ''}">
+                       inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
+                                    #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
+                                    #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}">
               <af:inputText value="#{row[attr.code]}"
                             valueChangeListener="#{viewScope.DcmDataDisplayBean.valueChangeListener}"/>
             </af:column>

@@ -16,20 +16,6 @@
     <AttrArray Name="_publishEvents"/>
   </DesignTime>
   <Attribute
-    Name="JobId"
-    IsNotNull="true"
-    Precision="32"
-    ColumnName="JOB_ID"
-    SQLType="VARCHAR"
-    Type="java.lang.String"
-    ColumnType="VARCHAR2"
-    TableName="DCM_ERROR"
-    PrimaryKey="true">
-    <DesignTime>
-      <Attr Name="_DisplaySize" Value="32"/>
-    </DesignTime>
-  </Attribute>
-  <Attribute
     Name="SheetName"
     Precision="300"
     ColumnName="SHEET_NAME"
@@ -169,6 +155,34 @@
       <Attr Name="_DisplaySize" Value="32"/>
     </DesignTime>
   </Attribute>
+  <Attribute
+    Name="TemplateId"
+    IsNotNull="true"
+    Precision="32"
+    ColumnName="TEMPLATE_ID"
+    SQLType="VARCHAR"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    TableName="DCM_ERROR"
+    PrimaryKey="true">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="32"/>
+    </DesignTime>
+  </Attribute>
+  <Attribute
+    Name="ComRecordId"
+    IsNotNull="true"
+    Precision="32"
+    ColumnName="COM_RECORD_ID"
+    SQLType="VARCHAR"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    TableName="DCM_ERROR"
+    PrimaryKey="true">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="32"/>
+    </DesignTime>
+  </Attribute>
   <Key
     Name="PkDcmError"
     PrimaryKey="true">
@@ -176,22 +190,10 @@
       <Attr Name="_DBObjectName" Value="PK_DCM_ERROR"/>
     </DesignTime>
     <AttrArray Name="Attributes">
-      <Item Value="team.epm.dcm.model.DcmError.JobId"/>
       <Item Value="team.epm.dcm.model.DcmError.RowNum"/>
       <Item Value="team.epm.dcm.model.DcmError.Locale"/>
       <Item Value="team.epm.dcm.model.DcmError.SheetNo"/>
       <Item Value="team.epm.dcm.model.DcmError.ValidationId"/>
-    </AttrArray>
-  </Key>
-  <Key
-    Name="SysC007225">
-    <DesignTime>
-      <Attr Name="_DBObjectName" Value="SYS_C007225"/>
-      <Attr Name="_checkCondition" Value='"JOB_ID" IS NOT NULL'/>
-      <Attr Name="_isCheck" Value="true"/>
-    </DesignTime>
-    <AttrArray Name="Attributes">
-      <Item Value="team.epm.dcm.model.DcmError.JobId"/>
     </AttrArray>
   </Key>
   <Key

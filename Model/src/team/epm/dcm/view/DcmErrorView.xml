@@ -6,8 +6,7 @@
   Name="DcmErrorView"
   Version="11.1.1.64.93"
   InheritPersonalization="true"
-  SelectList="DcmError.JOB_ID, 
-       DcmError.SHEET_NAME, 
+  SelectList="DcmError.SHEET_NAME, 
        DcmError.ROW_NUM, 
        DcmError.MSG, 
        DcmError.LEVEL, 
@@ -17,7 +16,9 @@
        DcmError.CREATED_AT, 
        DcmError.UPDATED_AT, 
        DcmError.UPDATED_BY, 
-       DcmError.CREATED_BY"
+       DcmError.CREATED_BY, 
+       DcmError.COM_RECORD_ID, 
+       DcmError.TEMPLATE_ID"
   FromList="DCM_ERROR DcmError"
   BindingStyle="OracleName"
   CustomQuery="false"
@@ -29,13 +30,6 @@
   <EntityUsage
     Name="DcmError"
     Entity="team.epm.dcm.model.DcmError"/>
-  <ViewAttribute
-    Name="JobId"
-    IsNotNull="true"
-    PrecisionRule="true"
-    EntityAttrName="JobId"
-    EntityUsage="DcmError"
-    AliasName="JOB_ID"/>
   <ViewAttribute
     Name="SheetName"
     PrecisionRule="true"
@@ -106,4 +100,18 @@
     EntityAttrName="CreatedBy"
     EntityUsage="DcmError"
     AliasName="CREATED_BY"/>
+  <ViewAttribute
+    Name="ComRecordId"
+    IsNotNull="true"
+    PrecisionRule="true"
+    EntityAttrName="ComRecordId"
+    EntityUsage="DcmError"
+    AliasName="COM_RECORD_ID"/>
+  <ViewAttribute
+    Name="TemplateId"
+    IsNotNull="true"
+    PrecisionRule="true"
+    EntityAttrName="TemplateId"
+    EntityUsage="DcmError"
+    AliasName="TEMPLATE_ID"/>
 </ViewObject>

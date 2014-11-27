@@ -14,6 +14,10 @@
     <Attr Name="_NamedConnection" Value="DMSConn"/>
   </DesignTime>
   <Containee
+    Name="association"
+    PackageName="team.epm.dcm.model.association"
+    ObjectType="JboPackage"/>
+  <Containee
     Name="model"
     PackageName="team.epm.dcm.model"
     ObjectType="JboPackage">

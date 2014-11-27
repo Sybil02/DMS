@@ -11,6 +11,7 @@ public class ComHeader {
     private String isAuthority;
     private String code;
     private List<SelectItem> values;
+    private String value;
 
     public void setValueSetId(String valueSetId) {
         this.valueSetId = valueSetId;
@@ -58,5 +59,13 @@ public class ComHeader {
 
     public String getCode() {
         return code;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
+
+    public String getValue() {
+        return value;
     }
 }

@@ -51,6 +51,9 @@
    <ViewUsage
       Name="DcmTemplateCatView"
       ViewObjectName="team.epm.dcm.view.DcmTemplateCatView"/>
+   <ViewUsage
+      Name="DcmValidationQueryView"
+      ViewObjectName="team.epm.dcm.view.DcmValidationQueryView"/>
    <ViewLinkUsage Name="combinationsVS"
                   ViewLinkObjectName="team.epm.dcm.view.viewlink.combinationsVS"
                   SrcViewUsageName="team.epm.module.DcmModule.DcmCombinationView1"

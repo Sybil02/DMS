@@ -14,6 +14,12 @@
               DataControl="DcmModuleDataControl" RangeSize="25"/>
     <iterator id="DcmCombinationViewIterator" Binds="DcmCombinationView"
               DataControl="DcmModuleDataControl" RangeSize="25"/>
+    <iterator id="DcmValidationQueryViewIterator" Binds="DcmValidationQueryView"
+              DataControl="DcmModuleDataControl" RangeSize="25"/>
+    <iterator id="DcmJobViewIterator" Binds="DcmJobView"
+              DataControl="DcmModuleDataControl" RangeSize="25"/>
+    <iterator id="DcmErrorViewIterator" Binds="DcmErrorView"
+              DataControl="DcmModuleDataControl" RangeSize="25"/>
   </executables>
   <bindings/>
 </pageDefinition>

@@ -8,14 +8,14 @@
   InheritPersonalization="true"
   SelectList="DcmJob.ID, 
        DcmJob.TEMPLATE_ID, 
-       DcmJob.COMBINATION_ID, 
        DcmJob.MODE, 
        DcmJob.FILE_PATH, 
        DcmJob.CREATED_AT, 
        DcmJob.UPDATED_AT, 
        DcmJob.UPDATED_BY, 
        DcmJob.CREATED_BY, 
-       DcmJob.STATUS"
+       DcmJob.STATUS, 
+       DcmJob.COM_RECORD_ID"
   FromList="DCM_JOB DcmJob"
   BindingStyle="OracleName"
   CustomQuery="false"
@@ -40,12 +40,6 @@
     EntityAttrName="TemplateId"
     EntityUsage="DcmJob"
     AliasName="TEMPLATE_ID"/>
-  <ViewAttribute
-    Name="CombinationId"
-    PrecisionRule="true"
-    EntityAttrName="CombinationId"
-    EntityUsage="DcmJob"
-    AliasName="COMBINATION_ID"/>
   <ViewAttribute
     Name="Mode"
     PrecisionRule="true"
@@ -88,4 +82,10 @@
     EntityAttrName="Status"
     EntityUsage="DcmJob"
     AliasName="STATUS"/>
+  <ViewAttribute
+    Name="ComRecordId"
+    PrecisionRule="true"
+    EntityAttrName="ComRecordId"
+    EntityUsage="DcmJob"
+    AliasName="COM_RECORD_ID"/>
 </ViewObject>

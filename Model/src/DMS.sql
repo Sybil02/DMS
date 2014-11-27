@@ -332,7 +332,6 @@ create table DCM_TEMPLATE_COLUMN
    LOCALE               VARCHAR2(10)         not null,
    COLUMN_LABEL         VARCHAR2(300),
    DB_TABLE_COL         VARCHAR2(100),
-   DB_VIEW_COL          VARCHAR2(100),
    CREATED_AT           DATE,
    UPDATED_AT           DATE,
    UPDATED_BY           VARCHAR2(32),
@@ -360,9 +359,6 @@ comment on column DCM_TEMPLATE_COLUMN.COLUMN_LABEL is
 
 comment on column DCM_TEMPLATE_COLUMN.DB_TABLE_COL is
 '数据库表列';
-
-comment on column DCM_TEMPLATE_COLUMN.DB_VIEW_COL is
-'数据库视图列';
 
 comment on column DCM_TEMPLATE_COLUMN.CREATED_AT is
 '创建时间';
@@ -442,7 +438,8 @@ comment on column DCM_TEMPLATE_COMBINATION.CREATED_BY is
 /*==============================================================*/
 create table DCM_ERROR 
 (
-   JOB_ID               VARCHAR2(32)         not null,
+   TEMPLATE_ID          VARCHAR2(32),
+   COM_RECORD_ID        VARCHAR2(32),
    SHEET_NAME           VARCHAR2(300),
    ROW_NUM              INTEGER              not null,
    MSG                  VARCHAR2(3000),
@@ -454,14 +451,17 @@ create table DCM_ERROR
    UPDATED_AT           DATE,
    UPDATED_BY           VARCHAR2(32),
    CREATED_BY           VARCHAR2(32),
-   constraint PK_DCM_ERROR primary key (JOB_ID, ROW_NUM, LOCALE, SHEET_NO, VALIDATION_ID)
+   constraint PK_DCM_ERROR primary key (TEMPLATE_ID,COM_RECORD_ID, ROW_NUM, LOCALE, SHEET_NO, VALIDATION_ID)
 );
 
 comment on table DCM_ERROR is
 '错误信息';
 
-comment on column DCM_ERROR.JOB_ID is
-'任务ID';
+comment on column DCM_ERROR.TEMPLATE_ID is
+'模版ID';
+
+comment on column DCM_ERROR.COM_RECORD_ID is
+'组合ID';
 
 comment on column DCM_ERROR.SHEET_NAME is
 '工作簿名称';
@@ -503,7 +503,7 @@ create table DCM_JOB
 (
    ID                   VARCHAR2(32)         not null,
    TEMPLATE_ID          VARCHAR2(32),
-   COMBINATION_ID       VARCHAR2(32),
+   COM_RECORD_ID        VARCHAR2(32),
    "MODE"               VARCHAR2(10),
    FILE_PATH            VARCHAR2(300),
    CREATED_AT           DATE,
@@ -522,7 +522,7 @@ comment on column DCM_JOB.ID is
 comment on column DCM_JOB.TEMPLATE_ID is
 '模版ID';
 
-comment on column DCM_JOB.COMBINATION_ID is
+comment on column DCM_JOB.COM_RECORD_ID is
 '组合ID';
 
 comment on column DCM_JOB."MODE" is
@@ -602,8 +602,6 @@ create table DCM_VALIDATION
    LOCALE               VARCHAR2(10)         not null,
    NAME                 VARCHAR2(100),
    PROGRAM              VARCHAR2(300),
-   ARGS                 VARCHAR2(1000),
-   REQUIRED             VARCHAR2(10),
    DESCRIPTION          VARCHAR2(1000),
    CREATED_AT           DATE,
    UPDATED_AT           DATE,
@@ -626,12 +624,6 @@ comment on column DCM_VALIDATION.NAME is
 
 comment on column DCM_VALIDATION.PROGRAM is
 '校验程序';
-
-comment on column DCM_VALIDATION.ARGS is
-'参数';
-
-comment on column DCM_VALIDATION.REQUIRED is
-'强制通过标识';
 
 comment on column DCM_VALIDATION.DESCRIPTION is
 '描述';
@@ -1254,6 +1246,7 @@ create table DMS_VALUE_SET
 (
    ID                   VARCHAR2(32)         not null,
    LOCALE               VARCHAR2(10)         not null,
+   CODE                 VARCHAR2(28)         not null,
    NAME                 VARCHAR2(100),
    SOURCE               VARCHAR2(100),
    CREATED_AT           DATE,
@@ -1348,6 +1341,8 @@ CREATE TABLE DCM_TEMPTABLE10(
   COM_RECORD_ID VARCHAR2(32),
   SHEET_NAME    VARCHAR2(300),
   ROW_NO        NUMBER,
+  EDIT_TYPE     VARCHAR2(10),
+  IDX           NUMBER,
   COLUMN1       VARCHAR2(300),
   COLUMN2       VARCHAR2(300),
   COLUMN3       VARCHAR2(300),
@@ -1364,3 +1359,334 @@ CREATE TABLE DCM_TEMPTABLE10(
   CREATED_AT    DATE,
   UPDATED_AT    DATE
 );
+
+CREATE OR REPLACE PACKAGE DCM_COMMON IS
+  /**************************************************
+  *数据预处理程序，用于在数据校验前进行数据加工
+  *P_TEMPLATE_ID 模版ID
+  *P_COM_RECORD_ID 组合ID
+  *P_USER_ID  用户ID
+  *P_HANDLE_MODE 处理模式，REPLACE表示替换，INCREMENT表示增量
+  *P_LOCALE 语言编码
+  ***************************************************/
+  PROCEDURE PRE_PROGRAM(
+       P_TEMPLATE_ID   IN VARCHAR2,
+       P_COM_RECORD_ID IN VARCHAR2,
+       P_USER_ID       IN VARCHAR2,
+       P_HANDLE_MODE   IN VARCHAR2,
+       P_LOCALE        IN VARCHAR2
+  );
+  /**************************************************
+  *数据处理程序，用于将数据从零时表传输到正式表
+  *P_TEMPLATE_ID 模版ID
+  *P_COM_RECORD_ID 组合ID
+  *P_USER_ID  用户ID
+  *P_HANDLE_MODE 处理模式，REPLACE表示替换，INCREMENT表示增量
+  *P_LOCALE 语言编码
+  ***************************************************/
+  PROCEDURE HANDLE_PROGRAM(
+       P_TEMPLATE_ID   IN VARCHAR2,
+       P_COM_RECORD_ID IN VARCHAR2,
+       P_USER_ID       IN VARCHAR2,
+       P_HANDLE_MODE   IN VARCHAR2,
+       P_LOCALE        IN VARCHAR2
+  );
+  /*****************************************************
+  *获取模版信息
+  *P_TEMPLATE_ID 模版ID
+  *P_TEMP_TALBE  临时表
+  *P_SRC_TABLE   原表
+  *P_LOCALE    语言编码
+  ******************************************************/
+  PROCEDURE FETCH_TEMPLATE_INFO(
+    P_TEMPLATE_ID     IN  VARCHAR2,
+    P_LOCALE          IN  VARCHAR2,
+    P_TEMP_TALBE      OUT VARCHAR2,
+    P_SRC_TABLE       OUT VARCHAR2
+  );
+  /*****************************************************
+  *空值校验
+  *P_VALIDATION_ID 校验程序ID
+  *P_TEMPLATE_ID 模版ID
+  *P_COM_RECORD_ID 组合ID
+  *P_TEMP_COL 校验程序对应临时表中的列
+  *P_SRC_COL  校验程序对应目标表中的列
+  *P_MODE     当前数据处理模式（REPLACE,INCREMENT,EDIT）
+  *P_LOCALE    语言编码
+  *P_ARGS      校验程序参数
+  *P_FLAG      校验结果标识(Y OR N)
+  ******************************************************/
+  PROCEDURE VALIDATE_NULL(
+    P_VALIDATION_ID   IN  VARCHAR,
+    P_TEMPLATE_ID     IN  VARCHAR2,
+    P_COM_RECORD_ID   IN  VARCHAR2,
+    P_TEMP_COL        IN  VARCHAR2,
+    P_SRC_COL         IN  VARCHAR2,
+    P_MODE            IN  VARCHAR2,
+    P_LOCALE          IN  VARCHAR2,
+    P_ARGS            IN  VARCHAR2,
+    P_FLAG            OUT VARCHAR2
+  );
+  /**************************************************
+  *善后处理程序，用于在数据导入到真实表后进行操作
+  *P_TEMPLATE_ID 模版ID
+  *P_COM_RECORD_ID 组合ID
+  *P_USER_ID  用户ID
+  *P_HANDLE_MODE 处理模式，REPLACE表示替换，INCREMENT表示增量
+  *P_LOCALE 语言编码
+  ***************************************************/
+  PROCEDURE AFTER_PROGRAM(
+       P_TEMPLATE_ID   IN VARCHAR2,
+       P_COM_RECORD_ID IN VARCHAR2,
+       P_USER_ID       IN VARCHAR2,
+       P_HANDLE_MODE   IN VARCHAR2,
+       P_LOCALE        IN VARCHAR2
+  );
+END DCM_COMMON;
+
+CREATE OR REPLACE PACKAGE BODY DCM_COMMON IS
+  CURSOR L_TEMPLATE_COL_CURSOR(
+       P_TEMPLATE_ID IN VARCHAR2,
+       P_LOCALE      IN VARCHAR2)
+  IS
+       SELECT T.DB_TABLE_COL,T.IS_PK,T.READONLY,T.DATA_TYPE
+       FROM DCM_TEMPLATE_COLUMN T
+       WHERE T.TEMPLATE_ID=P_TEMPLATE_ID
+             AND T.LOCALE=P_LOCALE
+       ORDER BY T.SEQ;
+  /**************************************************
+  *数据预处理程序，用于在数据校验前进行数据加工
+  *P_TEMPLATE_ID 模版ID
+  *P_COM_RECORD_ID 组合ID
+  *P_USER_ID  用户ID
+  *P_HANDLE_MODE 处理模式，REPLACE表示替换，INCREMENT表示增量
+  *P_LOCALE 语言编码
+  ***************************************************/
+  PROCEDURE PRE_PROGRAM(
+       P_TEMPLATE_ID   IN VARCHAR2,
+       P_COM_RECORD_ID IN VARCHAR2,
+       P_USER_ID       IN VARCHAR2,
+       P_HANDLE_MODE   IN VARCHAR2,
+       P_LOCALE        IN VARCHAR2
+  )IS
+  BEGIN
+    DBMS_OUTPUT.PUT_LINE('PLEASE FLOW THIS DEMO TO IMPLEMENT THE ACTRAL LOGIC');
+  END PRE_PROGRAM;
+  /**************************************************
+  *数据处理程序，用于将数据从零时表传输到正式表
+  *P_TEMPLATE_ID 模版ID
+  *P_COM_RECORD_ID 组合ID
+  *P_USER_ID  用户ID
+  *P_HANDLE_MODE 处理模式，REPLACE表示替换，INCREMENT表示增量,EDIT表示页面编辑
+  *P_LOCALE 语言编码
+  ***************************************************/
+  PROCEDURE HANDLE_PROGRAM(
+      P_TEMPLATE_ID   IN VARCHAR2,
+      P_COM_RECORD_ID IN VARCHAR2,
+      P_USER_ID       IN VARCHAR2,
+      P_HANDLE_MODE   IN VARCHAR2,
+      P_LOCALE        IN VARCHAR2
+  )
+  IS
+  L_TEMP_TALBE VARCHAR2(30);
+  L_TABLE      VARCHAR2(30);
+  --L_SQL_SEG1,L_SQL_SEG2用于拼接INSERT语句
+  L_SQL_SEG1 VARCHAR2(2000);
+  L_SQL_SEG2 VARCHAR2(2000);
+  --L_SQL_SEG3,L_SQL_SEG4用于拼接UPDATE语句
+  L_SQL_SEG3 VARCHAR2(2000);
+  L_SQL_SEG4 VARCHAR2(2000);
+  --L_SQL_SEG5用于拼接DELETE语句(仅用于编辑模式)
+  L_SQL_SEG5 VARCHAR2(2000);
+  L_PK_DATA  VARCHAR2(1000);
+  L_COLS_IDX NUMBER :=0;
+  BEGIN
+    DCM_COMMON.FETCH_TEMPLATE_INFO(P_TEMPLATE_ID,P_LOCALE,L_TEMP_TALBE,L_TABLE);
+    IF P_HANDLE_MODE='REPLACE' THEN
+      IF P_COM_RECORD_ID IS NULL THEN
+        EXECUTE IMMEDIATE 'DELETE FROM "'||L_TABLE||'"';
+      ELSE
+        EXECUTE IMMEDIATE 'DELETE FROM "'||L_TABLE||'" WHERE COM_RECORD_ID='''||P_COM_RECORD_ID||'''';
+      END IF;
+    END IF;
+    --INSERT
+    L_SQL_SEG1:='INSERT INTO "'||L_TABLE||'"(';
+    L_SQL_SEG1:=L_SQL_SEG1||'COM_RECORD_ID,CREATED_BY,UPDATED_BY,CREATED_AT,UPDATED_AT,IDX';
+    L_SQL_SEG2:=' SELECT '''||P_COM_RECORD_ID||''','''||P_USER_ID||''','''||P_USER_ID||'''';
+    L_SQL_SEG2:=L_SQL_SEG2||',SYSDATE,SYSDATE,T.IDX';
+    --UPDATE
+    L_SQL_SEG3:='UPDATE "'||L_TABLE||'" A SET(UPDATED_BY,UPDATED_AT,IDX';
+    L_SQL_SEG4:='(SELECT '''||P_USER_ID||''',SYSDATE,T.IDX';
+    --拼接字段列表
+    FOR T_COL IN L_TEMPLATE_COL_CURSOR(P_TEMPLATE_ID,P_LOCALE) LOOP
+      L_COLS_IDX:=L_COLS_IDX+1;
+      IF T_COL.READONLY='N' THEN
+        L_SQL_SEG1:=L_SQL_SEG1||',"'||T_COL.DB_TABLE_COL||'"';
+        L_SQL_SEG3:=L_SQL_SEG3||',"'||T_COL.DB_TABLE_COL||'"';
+        IF T_COL.DATA_TYPE='NUMBER' THEN
+           L_SQL_SEG2:=L_SQL_SEG2||',TO_NUMBER(T.COLUMN'||L_COLS_IDX||')';
+           L_SQL_SEG4:=L_SQL_SEG4||',TO_NUMBER(T.COLUMN'||L_COLS_IDX||')';
+        ELSIF T_COL.DATA_TYPE='DATE' THEN
+           L_SQL_SEG2:=L_SQL_SEG2||',TO_DATE(T.COLUMN'||L_COLS_IDX||',''YYYY-MM-DD-HH24:MI:SS'')';
+           L_SQL_SEG4:=L_SQL_SEG4||',TO_DATE(T.COLUMN'||L_COLS_IDX||',''YYYY-MM-DD-HH24:MI:SS'')';
+        ELSE
+           L_SQL_SEG2:=L_SQL_SEG2||',T.COLUMN'||L_COLS_IDX;
+           L_SQL_SEG4:=L_SQL_SEG4||',T.COLUMN'||L_COLS_IDX;
+        END IF;
+      END IF; 
+      IF T_COL.IS_PK='Y' THEN
+        L_PK_DATA:=L_PK_DATA||' AND A."'||T_COL.DB_TABLE_COL||'"=T.COLUMN'||L_COLS_IDX;
+      END IF;
+    END LOOP;
+    --INSERT
+    L_SQL_SEG1:=L_SQL_SEG1||')';
+    L_SQL_SEG2:=L_SQL_SEG2||' FROM "'||L_TEMP_TALBE||'" T';
+    L_SQL_SEG2:=L_SQL_SEG2||' WHERE T.TEMPLATE_ID='''||P_TEMPLATE_ID||''''; 
+    --UPDATE 
+    L_SQL_SEG3:=L_SQL_SEG3||')='; 
+    L_SQL_SEG4:=L_SQL_SEG4||' FROM "'||L_TEMP_TALBE||'" T';
+    L_SQL_SEG4:=L_SQL_SEG4||' WHERE T.TEMPLATE_ID='''||P_TEMPLATE_ID||''''; 
+    
+    IF P_COM_RECORD_ID IS NOT NULL THEN
+       L_SQL_SEG2:=L_SQL_SEG2||' AND T.COM_RECORD_ID='''||P_COM_RECORD_ID||'''';
+       L_SQL_SEG4:=L_SQL_SEG4||' AND T.COM_RECORD_ID='''||P_COM_RECORD_ID||'''';
+    ELSE
+       L_SQL_SEG2:=L_SQL_SEG2||' AND T.COM_RECORD_ID IS NULL';
+       L_SQL_SEG4:=L_SQL_SEG4||' AND T.COM_RECORD_ID IS NULL';
+    END IF;
+    --增量模式且存在主键
+    IF P_HANDLE_MODE='INCREMENT' AND L_PK_DATA IS NOT NULL THEN
+       --仅插入不存在的数据
+       L_SQL_SEG2:=L_SQL_SEG2||' AND NOT EXISTS (SELECT 1 FROM "'||L_TABLE||'" A WHERE 1=1';
+       L_SQL_SEG2:=L_SQL_SEG2||L_PK_DATA;
+       --根据主键更新已经存在的数据
+       L_SQL_SEG4:=L_SQL_SEG4||L_PK_DATA||')';
+       L_SQL_SEG4:=L_SQL_SEG4||' WHERE EXISTS(SELECT 1 FROM "'||L_TEMP_TALBE||'" T WHERE';
+       IF P_COM_RECORD_ID IS NOT NULL THEN
+          L_SQL_SEG2:=L_SQL_SEG2||' AND A.COM_RECORD_ID='''||P_COM_RECORD_ID||''')';
+          L_SQL_SEG4:=L_SQL_SEG4||' T.COM_RECORD_ID='''||P_COM_RECORD_ID||'''';
+          L_SQL_SEG4:=L_SQL_SEG4||' AND T.TEMPLATE_ID='''||P_TEMPLATE_ID||'''';
+          L_SQL_SEG4:=L_SQL_SEG4||L_PK_DATA;
+          L_SQL_SEG4:=L_SQL_SEG4||') AND A.COM_RECORD_ID='''||P_COM_RECORD_ID||'''';
+       ELSE
+          L_SQL_SEG2:=L_SQL_SEG2||'  AND A.COM_RECORD_ID IS NULL)';
+          L_SQL_SEG4:=L_SQL_SEG4||'  T.COM_RECORD_ID IS NULL';
+          L_SQL_SEG4:=L_SQL_SEG4||'  AND T.TEMPLATE_ID='''||P_TEMPLATE_ID||'''';
+          L_SQL_SEG4:=L_SQL_SEG4||L_PK_DATA;
+          L_SQL_SEG4:=L_SQL_SEG4||') AND A.COM_RECORD_ID IS NULL';       
+       END IF;
+    END IF;
+    --若为编辑模式则根据ROWID更新数据,仅更新标记为UPDATE的数据,插入时仅插入标记为NEW的数据
+    IF P_HANDLE_MODE='EDIT' THEN
+      --INSERT
+      L_SQL_SEG2:=L_SQL_SEG2||' AND T.EDIT_TYPE=''NEW''';
+      --UPDATE
+      L_SQL_SEG4:=L_SQL_SEG4||' AND T.ORIGIN_ROWID IS NOT NULL AND T.ORIGIN_ROWID=A.ROWID) WHERE ';
+      L_SQL_SEG4:=L_SQL_SEG4||' EXISTS (SELECT 1 FROM "'||L_TEMP_TALBE||'" T WHERE ';
+      L_SQL_SEG4:=L_SQL_SEG4||' T.TEMPLATE_ID='''||P_TEMPLATE_ID||'''';
+      --DELETE
+      L_SQL_SEG5:='DELETE FROM "'||L_TABLE||'" A WHERE';
+      IF P_COM_RECORD_ID IS NOT NULL THEN
+        L_SQL_SEG4:=L_SQL_SEG4||' AND T.COM_RECORD_ID='''||P_COM_RECORD_ID||'''';
+        L_SQL_SEG4:=L_SQL_SEG4||' AND T.ORIGIN_ROWID=A.ROWID AND T.EDIT_TYPE=''UPDATE'')';
+        L_SQL_SEG4:=L_SQL_SEG4||' AND A.COM_RECORD_ID='''||P_COM_RECORD_ID||'''';
+        --DELETE
+        L_SQL_SEG5:=L_SQL_SEG5||' A.COM_RECORD_ID='''||P_COM_RECORD_ID||''' AND EXISTS(';
+        L_SQL_SEG5:=L_SQL_SEG5||' SELECT 1 FROM "'||L_TEMP_TALBE||'" T WHERE T.TEMPLATE_ID='''||P_TEMPLATE_ID||'''';
+        L_SQL_SEG5:=L_SQL_SEG5||' AND T.COM_RECORD_ID='''||P_COM_RECORD_ID||'''';
+        L_SQL_SEG5:=L_SQL_SEG5||' AND T.ORIGIN_ROWID=A.ROWID AND T.EDIT_TYPE=''DELETE'')';
+      ELSE
+        L_SQL_SEG4:=L_SQL_SEG4||' AND T.COM_RECORD_ID IS NULL';
+        L_SQL_SEG4:=L_SQL_SEG4||' AND T.ORIGIN_ROWID=A.ROWID AND T.EDIT_TYPE=''UPDATE'')';
+        L_SQL_SEG4:=L_SQL_SEG4||' AND A.COM_RECORD_ID IS NULL';
+        --DELETE
+        L_SQL_SEG5:=L_SQL_SEG5||' A.COM_RECORD_ID IS NULL';
+        L_SQL_SEG5:=L_SQL_SEG5||' SELECT 1 FROM "'||L_TEMP_TALBE||'" T WHERE T.TEMPLATE_ID='''||P_TEMPLATE_ID||'''';
+        L_SQL_SEG5:=L_SQL_SEG5||' AND T.COM_RECORD_ID IS NULL';
+        L_SQL_SEG5:=L_SQL_SEG5||' AND T.ORIGIN_ROWID=A.ROWID AND T.EDIT_TYPE=''DELETE'')';
+      END IF;
+    END IF;
+    --若为编辑模式（编辑模式存在数据的删除操作，且删除应该在插入和更新前）
+    IF P_HANDLE_MODE='EDIT' THEN
+      EXECUTE IMMEDIATE (L_SQL_SEG5);
+    END IF;
+    --执行数据插入操作（三种模式均存在数据插入操作）
+    EXECUTE IMMEDIATE (L_SQL_SEG1||L_SQL_SEG2);
+    --若为增量模式且模版定义了主键或者为编辑模式则执行更新操作
+    IF (P_HANDLE_MODE='INCREMENT' AND L_PK_DATA IS NOT NULL) OR P_HANDLE_MODE='EDIT' THEN
+      EXECUTE IMMEDIATE (L_SQL_SEG3||L_SQL_SEG4);
+    END IF;
+  END HANDLE_PROGRAM;
+  /*****************************************************
+  *获取模版信息
+  *P_TEMPLATE_ID 模版ID
+  *P_TEMP_TALBE  临时表
+  *P_SRC_TABLE   原表
+  *P_LOCALE    语言编码
+  ******************************************************/
+  PROCEDURE FETCH_TEMPLATE_INFO(
+    P_TEMPLATE_ID     IN  VARCHAR2,
+    P_LOCALE          IN  VARCHAR2,
+    P_TEMP_TALBE      OUT VARCHAR2,
+    P_SRC_TABLE       OUT VARCHAR2
+  )
+  IS
+  BEGIN
+    SELECT T.TMP_TABLE,T.DB_TABLE INTO P_TEMP_TALBE,P_SRC_TABLE 
+    FROM DCM_TEMPLATE T 
+    WHERE T.ID=P_TEMPLATE_ID
+          AND T.LOCALE=P_LOCALE;
+  END FETCH_TEMPLATE_INFO;
+  /*****************************************************
+  *空值校验
+  *P_VALIDATION_ID 校验程序ID
+  *P_TEMPLATE_ID 模版ID
+  *P_COM_RECORD_ID 组合ID
+  *P_TEMP_COL 校验程序对应临时表中的列
+  *P_SRC_COL  校验程序对应目标表中的列
+  *P_MODE     当前数据处理模式（REPLACE,INCREMENT,EDIT）
+  *P_LOCALE    语言编码
+  *P_ARGS      校验程序参数
+  *P_FLAG      校验结果标识(Y,N)
+  ******************************************************/
+  PROCEDURE VALIDATE_NULL(
+    P_VALIDATION_ID   IN  VARCHAR,
+    P_TEMPLATE_ID     IN  VARCHAR2,
+    P_COM_RECORD_ID   IN  VARCHAR2,
+    P_TEMP_COL        IN  VARCHAR2,
+    P_SRC_COL         IN  VARCHAR2,
+    P_MODE            IN  VARCHAR2,
+    P_LOCALE          IN  VARCHAR2,
+    P_ARGS            IN  VARCHAR2,
+    P_FLAG            OUT VARCHAR2
+  )
+  IS
+  L_TABLE VARCHAR2(32);
+  L_TMP_TABLE VARCHAR2(32);
+  BEGIN
+    P_FLAG:='Y';
+    DCM_COMMON.FETCH_TEMPLATE_INFO(P_TEMPLATE_ID,P_LOCALE,L_TMP_TABLE,L_TABLE);
+  END VALIDATE_NULL;
+  
+  /**************************************************
+  *善后处理程序，用于在数据导入到真实表后进行操作
+  *P_TEMPLATE_ID 模版ID
+  *P_COM_RECORD_ID 组合ID
+  *P_USER_ID  用户ID
+  *P_HANDLE_MODE 处理模式，REPLACE表示替换，INCREMENT表示增量
+  *P_LOCALE 语言编码
+  ***************************************************/
+  PROCEDURE AFTER_PROGRAM(
+       P_TEMPLATE_ID   IN VARCHAR2,
+       P_COM_RECORD_ID IN VARCHAR2,
+       P_USER_ID       IN VARCHAR2,
+       P_HANDLE_MODE   IN VARCHAR2,
+       P_LOCALE        IN VARCHAR2
+  )IS
+  BEGIN
+    DBMS_OUTPUT.PUT_LINE('PLEASE FLOW THIS DEMO TO IMPLEMENT THE ACTRAL LOGIC');
+  END AFTER_PROGRAM;
+END DCM_COMMON;
+
+
+
