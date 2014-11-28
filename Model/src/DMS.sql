@@ -58,6 +58,17 @@ drop table DMS_LOOKUP cascade constraints;
 
 drop table DCM_TEMPTABLE10 cascade constraints;
 
+drop sequence DCM_SEQ;
+
+/*==============================================================*/
+/* Sequence: DCM_SEQ                                            */
+/*==============================================================*/
+create sequence DCM_SEQ
+minvalue 10000
+maxvalue 9999999999999999999999999999
+start with 10000
+increment by 1
+cache 20;
 /*==============================================================*/
 /* Table: DCM_COMBINATION                                       */
 /*==============================================================*/
