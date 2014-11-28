@@ -1377,7 +1377,7 @@ CREATE TABLE DCM_TEMPTABLE10(
   CREATED_AT    DATE,
   UPDATED_AT    DATE
 );
-
+/
 CREATE OR REPLACE PACKAGE DCM_COMMON IS
   /**************************************************
   *数据预处理程序，用于在数据校验前进行数据加工
