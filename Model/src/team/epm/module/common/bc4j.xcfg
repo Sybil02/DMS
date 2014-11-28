@@ -1,8 +1,8 @@
-<?xml version="1.0" encoding='UTF-8'?>
+<?xml version = '1.0' encoding = 'UTF-8'?>
 <BC4JConfig version="11.1" xmlns="http://xmlns.oracle.com/bc4j/configuration">
    <AppModuleConfigBag ApplicationName="team.epm.module.DmsModule">
       <AppModuleConfig DeployPlatform="LOCAL" jbo.project="Model" name="DmsModuleLocal" ApplicationName="team.epm.module.DmsModule">
-         <AM-Pooling jbo.dofailover="true"/>
+         <AM-Pooling jbo.doconnectionpooling="true" jbo.dofailover="true"/>
          <Database jbo.locking.mode="optimistic"/>
          <Security AppModuleJndiName="team.epm.module.DmsModule"/>
          <Custom JDBCDataSource="java:comp/env/jdbc/DMSConnDS"/>
@@ -12,10 +12,10 @@
          <Security AppModuleJndiName="team.epm.module.DmsModule"/>
          <Custom JDBCDataSource="java:comp/env/jdbc/DMSConnDS"/>
       </AppModuleConfig>
-</AppModuleConfigBag>
+   </AppModuleConfigBag>
    <AppModuleConfigBag ApplicationName="team.epm.module.DcmModule">
       <AppModuleConfig DeployPlatform="LOCAL" jbo.project="Model" name="DcmModuleLocal" ApplicationName="team.epm.module.DcmModule">
-         <AM-Pooling jbo.dofailover="true"/>
+         <AM-Pooling jbo.doconnectionpooling="true" jbo.dofailover="true"/>
          <Database jbo.locking.mode="optimistic"/>
          <Security AppModuleJndiName="team.epm.module.DcmModule"/>
          <Custom JDBCDataSource="java:comp/env/jdbc/DMSConnDS"/>

@@ -11,7 +11,8 @@
   AliasName="DcmTemplate"
   BindingStyle="OracleName"
   UseGlueCode="false"
-  RowClass="team.epm.dcm.model.DcmTemplateImpl">
+  RowClass="team.epm.dcm.model.DcmTemplateImpl"
+  xmlns:validation="http://xmlns.oracle.com/adfm/validation">
   <DesignTime>
     <Attr Name="_codeGenFlag2" Value="Access"/>
     <AttrArray Name="_publishEvents"/>
@@ -163,7 +164,8 @@
     SQLType="VARCHAR"
     Type="java.lang.String"
     ColumnType="VARCHAR2"
-    TableName="DCM_TEMPLATE">
+    TableName="DCM_TEMPLATE"
+    IsNotNull="true">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="100"/>
     </DesignTime>
@@ -187,7 +189,9 @@
     SQLType="VARCHAR"
     Type="java.lang.String"
     ColumnType="VARCHAR2"
-    TableName="DCM_TEMPLATE">
+    TableName="DCM_TEMPLATE"
+  DefaultValue="DCM_TMPTABLE10"
+  IsNotNull="true">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="100"/>
     </DesignTime>
@@ -211,7 +215,9 @@
     SQLType="VARCHAR"
     Type="java.lang.String"
     ColumnType="VARCHAR2"
-    TableName="DCM_TEMPLATE">
+    TableName="DCM_TEMPLATE"
+    DefaultValue="DCM_COMMON.HANDLE_PROGRAM"
+    IsNotNull="true">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="200"/>
     </DesignTime>
@@ -258,10 +264,20 @@
     SQLType="NUMERIC"
     Type="oracle.jbo.domain.Number"
     ColumnType="NUMBER"
-    TableName="DCM_TEMPLATE">
+    TableName="DCM_TEMPLATE"
+    DefaultValue="2"
+    IsNotNull="true">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="22"/>
     </DesignTime>
+    <validation:CompareValidationBean
+      Name="DataStartLine_Rule_0"
+      ResId="dcm.template_start_line_check"
+      OnAttribute="DataStartLine"
+      OperandType="LITERAL"
+      Inverse="false"
+      CompareType="GREATERTHANEQUALTO"
+      CompareValue="2"/>
   </Attribute>
   <Attribute
     Name="CombinationId"
@@ -292,13 +308,6 @@
     Association="team.epm.dcm.model.association.templateAndColumnAssociation"
     AssociationEnd="team.epm.dcm.model.association.templateAndColumnAssociation.DcmTemplateColumn"
     AssociationOtherEnd="team.epm.dcm.model.association.templateAndColumnAssociation.DcmTemplate"
-    Type="oracle.jbo.RowIterator"
-    IsUpdateable="false"/>
-  <ViewLinkAccessor
-    Name="DcmTemplateColumnView"
-    ViewLink="team.epm.dcm.view.viewlink.templatecolumnsVL"
-    ViewLinkEnd="team.epm.dcm.view.viewlink.templatecolumnsVL.DcmTemplateColumnView"
-    ViewLinkOtherEnd="team.epm.dcm.view.viewlink.templatecolumnsVL.DcmTemplateView1"
     Type="oracle.jbo.RowIterator"
     IsUpdateable="false"/>
 <Key
@@ -334,4 +343,8 @@
       <Item Value="team.epm.dcm.model.DcmTemplate.Locale"/>
     </AttrArray>
   </Key>
+  <ResourceBundle>
+    <PropertiesBundle
+      PropertiesFile="ModelBundle"/>
+  </ResourceBundle>
 </Entity>
