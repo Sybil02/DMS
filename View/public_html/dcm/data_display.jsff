@@ -29,42 +29,53 @@
         <f:facet name="menus"/>
         <f:facet name="toolbar">
           <af:toolbar id="t2">
-            <af:commandButton text="#{viewBundle['dcm.action.new']}" id="cb1"
-                              action="#{viewScope.DcmDataDisplayBean.operation_new}"/>
-            <af:commandButton text="#{viewBundle['dcm.action.delete']}" id="cb2"
-                              action="#{viewScope.DcmDataDisplayBean.operation_delete}"/>
-            <af:commandButton text="#{viewBundle['dcm.action.save']}" id="cb3"
-                              action="#{viewScope.DcmDataDisplayBean.operation_save}"/>
-            <af:commandButton text="#{viewBundle['dcm.action.reset']}" id="cb4"
-                              action="#{viewScope.DcmDataDisplayBean.operation_reset}"/>
-            <af:inputFile id="if1" simple="true" inlineStyle="width:50px"
-                          binding="#{viewScope.DcmDataDisplayBean.fileInput}"
-                          columns="5"/>
-            <af:selectBooleanRadio text="#{viewBundle['dcm.import.increment']}"
-                                   id="sbr3" group="handleMode" simple="true"
-                                   value="#{viewScope.DcmDataDisplayBean.isIncrement}"/>
-            <af:selectBooleanRadio text="#{viewBundle['dcm.import.repalce']}"
-                                   id="sbr4" group="handleMode" simple="true"/>
-            <af:commandButton text="#{viewBundle['dcm.action.import']}" id="cb5"
-                              action="#{viewScope.DcmDataDisplayBean.operation_import}"/>
-            <af:selectBooleanRadio text="#{viewBundle['dcm.export.03format']}"
-                                   id="sbr1" group="excelFormat"/>
-            <af:selectBooleanRadio text="#{viewBundle['dcm.export.07format']}"
-                                   id="sbr2" group="excelFormat" simple="true"
-                                   autoSubmit="true"
-                                   value="#{viewScope.DcmDataDisplayBean.isXlsx}"/>
-            <af:commandButton text="#{viewBundle['dcm.action.export']}"
-                              id="cb6">
-              <af:fileDownloadActionListener contentType="application/vnd.ms-excel"
-                                             method="#{viewScope.DcmDataDisplayBean.operation_export}"
-                                             filename="#{viewScope.DcmDataDisplayBean.exportDataExcelName}"/>
-            </af:commandButton>
-            <af:commandButton text="#{viewBundle['dcm.action.template_download']}"
-                              id="cb7">
-              <af:fileDownloadActionListener contentType="application/vnd.ms-excel"
-                                             method="#{viewScope.DcmDataDisplayBean.operation_download}"
-                                             filename="#{viewScope.DcmDataDisplayBean.exportTemplateExcelName}"/>
-            </af:commandButton>
+            <af:group id="grp1">
+              <af:commandButton text="#{viewBundle['dcm.action.new']}" id="cb1"
+                                action="#{viewScope.DcmDataDisplayBean.operation_new}"/>
+              <af:commandButton text="#{viewBundle['dcm.action.delete']}"
+                                id="cb2"
+                                action="#{viewScope.DcmDataDisplayBean.operation_delete}"/>
+              <af:commandButton text="#{viewBundle['dcm.action.save']}" id="cb3"
+                                action="#{viewScope.DcmDataDisplayBean.operation_save}"/>
+              <af:commandButton text="#{viewBundle['dcm.action.reset']}"
+                                id="cb4"
+                                action="#{viewScope.DcmDataDisplayBean.operation_reset}"/>
+            </af:group>
+            <af:group id="grp2">
+              <af:inputFile id="if1" simple="true" inlineStyle="width:50px"
+                            binding="#{viewScope.DcmDataDisplayBean.fileInput}"
+                            columns="5"/>
+              <af:selectBooleanRadio text="#{viewBundle['dcm.import.increment']}"
+                                     id="sbr3" group="handleMode" simple="true"
+                                     value="#{viewScope.DcmDataDisplayBean.isIncrement}"/>
+              <af:selectBooleanRadio text="#{viewBundle['dcm.import.repalce']}"
+                                     id="sbr4" group="handleMode"
+                                     simple="true"/>
+              <af:commandButton text="#{viewBundle['dcm.action.import']}"
+                                id="cb5"
+                                action="#{viewScope.DcmDataDisplayBean.operation_import}"/>
+            </af:group>
+            <af:group id="grp3">
+              <af:selectBooleanRadio text="#{viewBundle['dcm.export.03format']}"
+                                     id="sbr1" group="excelFormat"
+                                     simple="true"/>
+              <af:selectBooleanRadio text="#{viewBundle['dcm.export.07format']}"
+                                     id="sbr2" group="excelFormat" simple="true"
+                                     autoSubmit="true"
+                                     value="#{viewScope.DcmDataDisplayBean.isXlsx}"/>
+              <af:commandButton text="#{viewBundle['dcm.action.export']}"
+                                id="cb6">
+                <af:fileDownloadActionListener contentType="application/vnd.ms-excel"
+                                               method="#{viewScope.DcmDataDisplayBean.operation_export}"
+                                               filename="#{viewScope.DcmDataDisplayBean.exportDataExcelName}"/>
+              </af:commandButton>
+              <af:commandButton text="#{viewBundle['dcm.action.template_download']}"
+                                id="cb7">
+                <af:fileDownloadActionListener contentType="application/vnd.ms-excel"
+                                               method="#{viewScope.DcmDataDisplayBean.operation_download}"
+                                               filename="#{viewScope.DcmDataDisplayBean.exportTemplateExcelName}"/>
+              </af:commandButton>
+            </af:group>
           </af:toolbar>
         </f:facet>
         <f:facet name="statusbar"/>
