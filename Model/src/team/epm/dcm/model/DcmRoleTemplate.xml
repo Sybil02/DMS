@@ -68,6 +68,14 @@
       <Attr Name="_DisplaySize" Value="7"/>
     </DesignTime>
     <TransientExpression><![CDATA[adf.currentDateTime]]></TransientExpression>
+    <Properties>
+      <SchemaBasedProperties>
+        <FMT_FORMATTER
+          ResId="team.epm.dcm.model.DcmRoleTemplate.CreatedAt_FMT_FORMATTER"/>
+        <FMT_FORMAT
+          ResId="team.epm.dcm.model.DcmRoleTemplate.CreatedAt_FMT_FORMAT"/>
+      </SchemaBasedProperties>
+    </Properties>
   </Attribute>
   <Attribute
     Name="UpdatedAt"
@@ -80,6 +88,14 @@
       <Attr Name="_DisplaySize" Value="7"/>
     </DesignTime>
     <TransientExpression><![CDATA[adf.currentDateTime]]></TransientExpression>
+    <Properties>
+      <SchemaBasedProperties>
+        <FMT_FORMATTER
+          ResId="team.epm.dcm.model.DcmRoleTemplate.UpdatedAt_FMT_FORMATTER"/>
+        <FMT_FORMAT
+          ResId="team.epm.dcm.model.DcmRoleTemplate.UpdatedAt_FMT_FORMAT"/>
+      </SchemaBasedProperties>
+    </Properties>
   </Attribute>
   <Attribute
     Name="UpdatedBy"
@@ -120,13 +136,6 @@
       <Attr Name="_DisplaySize" Value="10"/>
     </DesignTime>
   </Attribute>
-  <ViewLinkAccessor
-    Name="DcmTemplateColumnView"
-    ViewLink="team.epm.dcm.view.viewlink.templatecolumnsVL"
-    ViewLinkEnd="team.epm.dcm.view.viewlink.templatecolumnsVL.DcmTemplateColumnView"
-    ViewLinkOtherEnd="team.epm.dcm.view.viewlink.templatecolumnsVL.DcmTemplateView1"
-    Type="oracle.jbo.RowIterator"
-    IsUpdateable="false"/>
   <Key
     Name="AltKey"
     AltKey="true">

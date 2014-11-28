@@ -8,12 +8,12 @@
   InheritPersonalization="true"
   SelectList="DcmComVs.COMBINATION_ID, 
        DcmComVs.VALUE_SET_ID, 
-       DcmComVs.SEQ, 
        DcmComVs.IS_AUTHORITY, 
        DcmComVs.CREATED_AT, 
        DcmComVs.UPDATED_AT, 
        DcmComVs.UPDATED_BY, 
-       DcmComVs.CREATED_BY"
+       DcmComVs.CREATED_BY, 
+       DcmComVs.SEQ"
   FromList="DCM_COM_VS DcmComVs"
   BindingStyle="OracleName"
   CustomQuery="false"
@@ -106,19 +106,6 @@
     </Properties>
   </ViewAttribute>
   <ViewAttribute
-    Name="Seq"
-    PrecisionRule="true"
-    EntityAttrName="Seq"
-    EntityUsage="DcmComVs"
-    AliasName="SEQ">
-    <Properties>
-      <SchemaBasedProperties>
-        <LABEL
-          ResId="dcm.seq"/>
-      </SchemaBasedProperties>
-    </Properties>
-  </ViewAttribute>
-  <ViewAttribute
     Name="IsAuthority"
     PrecisionRule="true"
     EntityAttrName="IsAuthority"
@@ -186,6 +173,12 @@
       </SchemaBasedProperties>
     </Properties>
   </ViewAttribute>
+  <ViewAttribute
+    Name="Seq"
+    PrecisionRule="true"
+    EntityAttrName="Seq"
+    EntityUsage="DcmComVs"
+    AliasName="SEQ"/>
   <ViewLinkAccessor
     Name="DcmCombinationView"
     ViewLink="team.epm.dcm.view.viewlink.combinationsVS"

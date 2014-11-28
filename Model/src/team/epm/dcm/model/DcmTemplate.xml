@@ -79,6 +79,14 @@
       <Attr Name="_DisplaySize" Value="7"/>
     </DesignTime>
     <TransientExpression><![CDATA[adf.currentDateTime]]></TransientExpression>
+    <Properties>
+      <SchemaBasedProperties>
+        <FMT_FORMATTER
+          ResId="team.epm.dcm.model.DcmTemplate.CreatedAt_FMT_FORMATTER"/>
+        <FMT_FORMAT
+          ResId="team.epm.dcm.model.DcmTemplate.CreatedAt_FMT_FORMAT"/>
+      </SchemaBasedProperties>
+    </Properties>
   </Attribute>
   <Attribute
     Name="UpdatedAt"
@@ -91,6 +99,14 @@
       <Attr Name="_DisplaySize" Value="7"/>
     </DesignTime>
     <TransientExpression><![CDATA[adf.currentDateTime]]></TransientExpression>
+    <Properties>
+      <SchemaBasedProperties>
+        <FMT_FORMATTER
+          ResId="team.epm.dcm.model.DcmTemplate.UpdatedAt_FMT_FORMATTER"/>
+        <FMT_FORMAT
+          ResId="team.epm.dcm.model.DcmTemplate.UpdatedAt_FMT_FORMAT"/>
+      </SchemaBasedProperties>
+    </Properties>
   </Attribute>
   <Attribute
     Name="UpdatedBy"
@@ -294,13 +310,6 @@
     AssociationOtherEnd="team.epm.dcm.model.association.templateAndColumnAssociation.DcmTemplate"
     Type="oracle.jbo.RowIterator"
     IsUpdateable="false"/>
-  <ViewLinkAccessor
-    Name="DcmTemplateColumnView"
-    ViewLink="team.epm.dcm.view.viewlink.templatecolumnsVL"
-    ViewLinkEnd="team.epm.dcm.view.viewlink.templatecolumnsVL.DcmTemplateColumnView"
-    ViewLinkOtherEnd="team.epm.dcm.view.viewlink.templatecolumnsVL.DcmTemplateView1"
-    Type="oracle.jbo.RowIterator"
-    IsUpdateable="false"/>
 <Key
     Name="PkDcmTemplate"
     PrimaryKey="true">
@@ -334,4 +343,8 @@
       <Item Value="team.epm.dcm.model.DcmTemplate.Locale"/>
     </AttrArray>
   </Key>
+  <ResourceBundle>
+    <PropertiesBundle
+      PropertiesFile="ModelBundle"/>
+  </ResourceBundle>
 </Entity>

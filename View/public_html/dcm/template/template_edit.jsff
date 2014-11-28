@@ -26,7 +26,6 @@
                 </af:commandToolbarButton>
                 <af:commandButton actionListener="#{bindings.Commit.execute}"
                                   text="#{viewBundle['dms.common.save']}"
-                                  disabled="#{!bindings.Commit.enabled}"
                                   id="ctb3"
                                   partialTriggers="t1 t1:it7 t1:it6 t1:it10  t1:it13 t1:soc2 t1:it3 t1:it2 t1:it5 t1:it4 t1:it12 t1:it8 t1:it1 t1:soc3 t1:soc4"/>
                 <af:commandButton actionListener="#{bindings.Rollback.execute}"
@@ -61,7 +60,7 @@
                               columns="#{bindings.DcmTemplateView1.hints.Name.displayWidth}"
                               maximumLength="#{bindings.DcmTemplateView1.hints.Name.precision}"
                               shortDesc="#{bindings.DcmTemplateView1.hints.Name.tooltip}"
-                              id="it7" autoSubmit="true">
+                              id="it7" autoSubmit="false">
                   <f:validator binding="#{row.bindings.Name.validator}"/>
                 </af:inputText>
               </af:column>
@@ -75,7 +74,7 @@
                               columns="#{bindings.DcmTemplateView1.hints.Description.displayWidth}"
                               maximumLength="#{bindings.DcmTemplateView1.hints.Description.precision}"
                               shortDesc="#{bindings.DcmTemplateView1.hints.Description.tooltip}"
-                              id="it6" autoSubmit="true">
+                              id="it6" autoSubmit="false">
                   <f:validator binding="#{row.bindings.Description.validator}"/>
                 </af:inputText>
               </af:column>
@@ -89,7 +88,7 @@
                               columns="#{bindings.DcmTemplateView1.hints.DbTable.displayWidth}"
                               maximumLength="#{bindings.DcmTemplateView1.hints.DbTable.precision}"
                               shortDesc="#{bindings.DcmTemplateView1.hints.DbTable.tooltip}"
-                              id="it10" autoSubmit="true">
+                              id="it10" autoSubmit="false">
                   <f:validator binding="#{row.bindings.DbTable.validator}"/>
                 </af:inputText>
               </af:column>
@@ -103,7 +102,7 @@
                               columns="#{bindings.DcmTemplateView1.hints.Seq.displayWidth}"
                               maximumLength="#{bindings.DcmTemplateView1.hints.Seq.precision}"
                               shortDesc="#{bindings.DcmTemplateView1.hints.Seq.tooltip}"
-                              id="it13" autoSubmit="true">
+                              id="it13" autoSubmit="false">
                   <f:validator binding="#{row.bindings.Seq.validator}"/>
                   <af:convertNumber groupingUsed="false"
                                     pattern="#{bindings.DcmTemplateView1.hints.Seq.format}"/>
@@ -117,7 +116,7 @@
                                     label="#{row.bindings.Readonly.label}"
                                     required="#{bindings.DcmTemplateView1.hints.Readonly.mandatory}"
                                     shortDesc="#{bindings.DcmTemplateView1.hints.Readonly.tooltip}"
-                                    id="soc2" autoSubmit="true">
+                                    id="soc2" autoSubmit="false">
                   <f:selectItems value="#{row.bindings.Readonly.items}"
                                  id="si3"/>
                 </af:selectOneChoice>
@@ -132,7 +131,7 @@
                               columns="#{bindings.DcmTemplateView1.hints.TmpTable.displayWidth}"
                               maximumLength="#{bindings.DcmTemplateView1.hints.TmpTable.precision}"
                               shortDesc="#{bindings.DcmTemplateView1.hints.TmpTable.tooltip}"
-                              id="it3" autoSubmit="true">
+                              id="it3" autoSubmit="false">
                   <f:validator binding="#{row.bindings.TmpTable.validator}"/>
                 </af:inputText>
               </af:column>
@@ -146,7 +145,7 @@
                               columns="#{bindings.DcmTemplateView1.hints.PreProgram.displayWidth}"
                               maximumLength="#{bindings.DcmTemplateView1.hints.PreProgram.precision}"
                               shortDesc="#{bindings.DcmTemplateView1.hints.PreProgram.tooltip}"
-                              id="it2" autoSubmit="true">
+                              id="it2" autoSubmit="false">
                   <f:validator binding="#{row.bindings.PreProgram.validator}"/>
                 </af:inputText>
               </af:column>
@@ -160,7 +159,7 @@
                               columns="#{bindings.DcmTemplateView1.hints.HandleProgram.displayWidth}"
                               maximumLength="#{bindings.DcmTemplateView1.hints.HandleProgram.precision}"
                               shortDesc="#{bindings.DcmTemplateView1.hints.HandleProgram.tooltip}"
-                              id="it5" autoSubmit="true">
+                              id="it5" autoSubmit="false">
                   <f:validator binding="#{row.bindings.HandleProgram.validator}"/>
                 </af:inputText>
               </af:column>
@@ -174,7 +173,7 @@
                               columns="#{bindings.DcmTemplateView1.hints.AfterProgram.displayWidth}"
                               maximumLength="#{bindings.DcmTemplateView1.hints.AfterProgram.precision}"
                               shortDesc="#{bindings.DcmTemplateView1.hints.AfterProgram.tooltip}"
-                              id="it4" autoSubmit="true">
+                              id="it4" autoSubmit="false">
                   <f:validator binding="#{row.bindings.AfterProgram.validator}"/>
                 </af:inputText>
               </af:column>
@@ -188,7 +187,7 @@
                               columns="#{bindings.DcmTemplateView1.hints.HandleMode.displayWidth}"
                               maximumLength="#{bindings.DcmTemplateView1.hints.HandleMode.precision}"
                               shortDesc="#{bindings.DcmTemplateView1.hints.HandleMode.tooltip}"
-                              id="it12" autoSubmit="true">
+                              id="it12" autoSubmit="false">
                   <f:validator binding="#{row.bindings.HandleMode.validator}"/>
                 </af:inputText>
               </af:column>
@@ -202,7 +201,7 @@
                               columns="#{bindings.DcmTemplateView1.hints.TemplateFile.displayWidth}"
                               maximumLength="#{bindings.DcmTemplateView1.hints.TemplateFile.precision}"
                               shortDesc="#{bindings.DcmTemplateView1.hints.TemplateFile.tooltip}"
-                              id="it8" autoSubmit="true">
+                              id="it8" autoSubmit="false">
                   <f:validator binding="#{row.bindings.TemplateFile.validator}"/>
                 </af:inputText>
               </af:column>
@@ -216,7 +215,7 @@
                               columns="#{bindings.DcmTemplateView1.hints.DataStartLine.displayWidth}"
                               maximumLength="#{bindings.DcmTemplateView1.hints.DataStartLine.precision}"
                               shortDesc="#{bindings.DcmTemplateView1.hints.DataStartLine.tooltip}"
-                              id="it1" autoSubmit="true">
+                              id="it1" autoSubmit="false">
                   <f:validator binding="#{row.bindings.DataStartLine.validator}"/>
                   <af:convertNumber groupingUsed="false"
                                     pattern="#{bindings.DcmTemplateView1.hints.DataStartLine.format}"/>
@@ -230,7 +229,7 @@
                                     label="#{row.bindings.CombinationId.label}"
                                     required="#{bindings.DcmTemplateView1.hints.CombinationId.mandatory}"
                                     shortDesc="#{bindings.DcmTemplateView1.hints.CombinationId.tooltip}"
-                                    id="soc3" autoSubmit="true">
+                                    id="soc3" autoSubmit="false">
                   <f:selectItems value="#{row.bindings.CombinationId.items}"
                                  id="si1"/>
                 </af:selectOneChoice>
@@ -243,7 +242,7 @@
                                     label="#{row.bindings.CategoryId.label}"
                                     required="#{bindings.DcmTemplateView1.hints.CategoryId.mandatory}"
                                     shortDesc="#{bindings.DcmTemplateView1.hints.CategoryId.tooltip}"
-                                    id="soc4" autoSubmit="true">
+                                    id="soc4" autoSubmit="false">
                   <f:selectItems value="#{row.bindings.CategoryId.items}"
                                  id="si4"/>
                 </af:selectOneChoice>
@@ -260,7 +259,7 @@
                               label="#{bindings.DcmTemplateView1.hints.UpdatedAt.label}"
                               required="#{bindings.DcmTemplateView1.hints.UpdatedAt.mandatory}"
                               shortDesc="#{bindings.DcmTemplateView1.hints.UpdatedAt.tooltip}"
-                              id="id2" readOnly="true">
+                              id="id2" readOnly="true" autoSubmit="false">
                   <f:validator binding="#{row.bindings.UpdatedAt.validator}"/>
                   <af:convertDateTime pattern="#{bindings.DcmTemplateView1.hints.UpdatedAt.format}"/>
                 </af:inputDate>
@@ -273,7 +272,8 @@
                                     label="#{row.bindings.UpdatedBy.label}"
                                     required="#{bindings.DcmTemplateView1.hints.UpdatedBy.mandatory}"
                                     shortDesc="#{bindings.DcmTemplateView1.hints.UpdatedBy.tooltip}"
-                                    id="soc1" readOnly="true">
+                                    id="soc1" readOnly="true"
+                                    autoSubmit="false">
                   <f:selectItems value="#{row.bindings.UpdatedBy.items}"
                                  id="si2"/>
                 </af:selectOneChoice>
@@ -301,7 +301,6 @@
                                   id="cb10"/>
                 <af:commandButton actionListener="#{bindings.Commit.execute}"
                                   text="#{viewBundle['dms.common.save']}"
-                                  disabled="#{!bindings.Commit.enabled}"
                                   id="cb11" partialTriggers="cb9 cb10 t2"/>
                 <af:commandButton actionListener="#{bindings.Rollback.execute}"
                                   text="#{viewBundle['dms.common.rollback']}"
@@ -343,7 +342,7 @@
                               columns="#{bindings.DcmTemplateColumnView1.hints.ColumnLabel.displayWidth}"
                               maximumLength="#{bindings.DcmTemplateColumnView1.hints.ColumnLabel.precision}"
                               shortDesc="#{bindings.DcmTemplateColumnView1.hints.ColumnLabel.tooltip}"
-                              id="it15" autoSubmit="true">
+                              id="it15" autoSubmit="false">
                   <f:validator binding="#{row.bindings.ColumnLabel.validator}"/>
                 </af:inputText>
               </af:column>
@@ -357,7 +356,7 @@
                               columns="#{bindings.DcmTemplateColumnView1.hints.DbTableCol.displayWidth}"
                               maximumLength="#{bindings.DcmTemplateColumnView1.hints.DbTableCol.precision}"
                               shortDesc="#{bindings.DcmTemplateColumnView1.hints.DbTableCol.tooltip}"
-                              id="it9">
+                              id="it9" autoSubmit="false">
                   <f:validator binding="#{row.bindings.DbTableCol.validator}"/>
                 </af:inputText>
               </af:column>
@@ -369,7 +368,7 @@
                                     label="#{row.bindings.IsPk.label}"
                                     required="#{bindings.DcmTemplateColumnView1.hints.IsPk.mandatory}"
                                     shortDesc="#{bindings.DcmTemplateColumnView1.hints.IsPk.tooltip}"
-                                    id="soc6" autoSubmit="true">
+                                    id="soc6" autoSubmit="false">
                   <f:selectItems value="#{row.bindings.IsPk.items}" id="si10"/>
                 </af:selectOneChoice>
               </af:column>
@@ -381,7 +380,7 @@
                                     label="#{row.bindings.Readonly.label}"
                                     required="#{bindings.DcmTemplateColumnView1.hints.Readonly.mandatory}"
                                     shortDesc="#{bindings.DcmTemplateColumnView1.hints.Readonly.tooltip}"
-                                    id="soc7">
+                                    id="soc7" autoSubmit="false">
                   <f:selectItems value="#{row.bindings.Readonly.items}"
                                  id="si9"/>
                 </af:selectOneChoice>
@@ -396,7 +395,7 @@
                               columns="#{bindings.DcmTemplateColumnView1.hints.DataType.displayWidth}"
                               maximumLength="#{bindings.DcmTemplateColumnView1.hints.DataType.precision}"
                               shortDesc="#{bindings.DcmTemplateColumnView1.hints.DataType.tooltip}"
-                              id="it16">
+                              id="it16" autoSubmit="false">
                   <f:validator binding="#{row.bindings.DataType.validator}"/>
                 </af:inputText>
               </af:column>
@@ -408,7 +407,7 @@
                                     label="#{row.bindings.Visible.label}"
                                     required="#{bindings.DcmTemplateColumnView1.hints.Visible.mandatory}"
                                     shortDesc="#{bindings.DcmTemplateColumnView1.hints.Visible.tooltip}"
-                                    id="soc9">
+                                    id="soc9" autoSubmit="false">
                   <f:selectItems value="#{row.bindings.Visible.items}"
                                  id="si7"/>
                 </af:selectOneChoice>
@@ -423,7 +422,7 @@
                               columns="#{bindings.DcmTemplateColumnView1.hints.Seq.displayWidth}"
                               maximumLength="#{bindings.DcmTemplateColumnView1.hints.Seq.precision}"
                               shortDesc="#{bindings.DcmTemplateColumnView1.hints.Seq.tooltip}"
-                              id="it17">
+                              id="it17" autoSubmit="false">
                   <f:validator binding="#{row.bindings.Seq.validator}"/>
                   <af:convertNumber groupingUsed="false"
                                     pattern="#{bindings.DcmTemplateColumnView1.hints.Seq.format}"/>
@@ -441,7 +440,7 @@
                               label="#{bindings.DcmTemplateColumnView1.hints.UpdatedAt.label}"
                               required="#{bindings.DcmTemplateColumnView1.hints.UpdatedAt.mandatory}"
                               shortDesc="#{bindings.DcmTemplateColumnView1.hints.UpdatedAt.tooltip}"
-                              id="id3" readOnly="true">
+                              id="id3" readOnly="true" autoSubmit="false">
                   <f:validator binding="#{row.bindings.UpdatedAt.validator}"/>
                   <af:convertDateTime pattern="#{bindings.DcmTemplateColumnView1.hints.UpdatedAt.format}"/>
                 </af:inputDate>
@@ -467,7 +466,23 @@
     <af:showDetailItem text="#{viewBundle['dms.template_combination_open_close']}" id="sdi3" stretchChildren="first">
       <af:panelStretchLayout id="psl3">
         <f:facet name="bottom"/>
-        <f:facet name="center"/>
+        <f:facet name="center">
+          <af:table rows="#{bindings.return.rangeSize}"
+                    fetchSize="#{bindings.return.rangeSize}"
+                    emptyText="#{bindings.return.viewable ? 'No data to display.' : 'Access Denied.'}"
+                    var="row" rowBandingInterval="0"
+                    value="#{bindings.return.collectionModel}"
+                    selectedRowKeys="#{bindings.return.collectionModel.selectedRow}"
+                    selectionListener="#{bindings.return.collectionModel.makeCurrent}"
+                    rowSelection="single" id="t5">
+            <af:forEach items="#{bindings.return.attributeDefs}" var="def">
+              <af:column headerText="#{bindings.return.labels[def.name]}"
+                         sortable="true" sortProperty="#{def.name}" id="c15">
+                <af:outputText value="#{row[def.name]}" id="ot1"/>
+              </af:column>
+            </af:forEach>
+          </af:table>
+        </f:facet>
         <f:facet name="start">
           <af:selectOneListbox value="#{bindings.DcmCombinationView1.inputValue}"
                                label="#{bindings.DcmCombinationView1.label}"
