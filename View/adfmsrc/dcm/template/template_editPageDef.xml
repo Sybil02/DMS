@@ -23,6 +23,9 @@
     <iterator Binds="DcmCombinationView1" RangeSize="25"
               DataControl="DcmModuleDataControl"
               id="DcmCombinationView1Iterator"/>
+    <methodIterator Binds="getCombinationRecordView.result"
+                    DataControl="DcmModuleDataControl" RangeSize="25"
+                    id="getCombinationRecordViewIterator"/>
   </executables>
   <bindings>
     <list IterBinding="DcmTemplateView1Iterator" StaticList="false"
@@ -122,5 +125,16 @@
         <Item Value="Name"/>
       </AttrNames>
     </list>
+    <methodAction id="getCombinationRecordView" RequiresUpdateModel="true"
+                  Action="invokeMethod" MethodName="getCombinationRecordView"
+                  IsViewObjectMethod="false" DataControl="DcmModuleDataControl"
+                  InstanceName="DcmModuleDataControl.dataProvider"
+                  ReturnName="data.DcmModuleDataControl.methodResults.getCombinationRecordView_DcmModuleDataControl_dataProvider_getCombinationRecordView_result">
+      <NamedData NDName="template_Id" NDType="java.lang.String"/>
+      <NamedData NDName="tablename" NDType="java.lang.String"/>
+    </methodAction>
+    <tree IterBinding="getCombinationRecordViewIterator" id="return">
+      <nodeDefinition Name="return0"/>
+    </tree>
   </bindings>
 </pageDefinition>

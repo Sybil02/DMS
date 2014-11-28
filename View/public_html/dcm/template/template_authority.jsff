@@ -5,33 +5,21 @@
           xmlns:c="http://java.sun.com/jsp/jstl/core">
   <c:set var="viewBundle" value="#{adfBundle['dms_v']}"/>
   <af:panelStretchLayout id="pgl2">
-    <f:facet name="top">
-      <af:table value="#{bindings.DmsRoleView1.collectionModel}" var="row"
-                rows="#{bindings.DmsRoleView1.rangeSize}"
-                emptyText="#{bindings.DmsRoleView1.viewable ? 'No data to display.' : 'Access Denied.'}"
-                fetchSize="#{bindings.DmsRoleView1.rangeSize}"
-                rowBandingInterval="0"
-                filterModel="#{bindings.DmsRoleView1Query.queryDescriptor}"
-                queryListener="#{bindings.DmsRoleView1Query.processQuery}"
-                filterVisible="false" varStatus="vs"
-                selectedRowKeys="#{bindings.DmsRoleView1.collectionModel.selectedRow}"
-                selectionListener="#{bindings.DmsRoleView1.collectionModel.makeCurrent}"
-                rowSelection="single" id="t5" width="105">
-        <af:column sortProperty="#{bindings.DmsRoleView1.hints.RoleName.name}"
-                   filterable="true" sortable="true"
-                   headerText="#{bindings.DmsRoleView1.hints.RoleName.label}"
-                   id="c5">
-          <af:outputText value="#{row.RoleName}" id="ot1"/>
-        </af:column>
-      </af:table>
-    </f:facet>
+    <f:facet name="top"/>
     <f:facet name="center">
       <af:panelCollection id="pc2">
         <f:facet name="toolbar">
           <af:toolbar id="t7">
+            <af:selectOneChoice value="#{bindings.DmsRoleView11.inputValue}"
+                                label="#{viewBundle['dcm.role_template_selectRole']}"
+                                required="#{bindings.DmsRoleView11.hints.mandatory}"
+                                shortDesc="#{bindings.DmsRoleView11.hints.tooltip}"
+                                id="soc1" autoSubmit="true">
+              <f:selectItems value="#{bindings.DmsRoleView11.items}" id="si1"/>
+            </af:selectOneChoice>
             <af:commandToolbarButton actionListener="#{bindings.CreateInsert1.execute}"
                                      text="#{viewBundle['dcm.template.new']}"
-                                     disabled="#{bindings.DmsRoleView1.currentRow==null ? true : false}"
+                                     disabled="#{bindings.DmsRoleView11.currentRow==null ? true : false}"
                                      id="ctb5"/>
             <af:commandToolbarButton actionListener="#{bindings.Delete1.execute}"
                                      text="#{viewBundle['dcm.common.delete']}"

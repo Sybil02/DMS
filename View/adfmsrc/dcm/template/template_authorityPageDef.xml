@@ -7,9 +7,6 @@
     <variableIterator id="variables"/>
     <iterator Binds="DmsRoleView1" RangeSize="25"
               DataControl="DcmModuleDataControl" id="DmsRoleView1Iterator"/>
-    <searchRegion Binds="DmsRoleView1Iterator" Criteria=""
-                  Customizer="oracle.jbo.uicli.binding.JUSearchBindingCustomizer"
-                  id="DmsRoleView1Query"/>
     <iterator Binds="DcmRoleTemplateView1" RangeSize="25"
               DataControl="DcmModuleDataControl"
               id="DcmRoleTemplateView1Iterator"/>
@@ -19,14 +16,6 @@
             DataControl="DcmModuleDataControl"/>
     <action id="Rollback" RequiresUpdateModel="false"
             Action="rollbackTransaction" DataControl="DcmModuleDataControl"/>
-    <tree IterBinding="DmsRoleView1Iterator" id="DmsRoleView1">
-      <nodeDefinition DefName="team.epm.dms.view.DmsRoleView"
-                      Name="DmsRoleView10">
-        <AttrNames>
-          <Item Value="RoleName"/>
-        </AttrNames>
-      </nodeDefinition>
-    </tree>
     <tree IterBinding="DcmRoleTemplateView1Iterator" id="DcmRoleTemplateView11"
           ChangeEventPolicy="ppr">
       <nodeDefinition DefName="team.epm.dcm.view.DcmRoleTemplateView"
@@ -41,5 +30,12 @@
             RequiresUpdateModel="true" Action="createInsertRow"/>
     <action IterBinding="DcmRoleTemplateView1Iterator" id="Delete1"
             RequiresUpdateModel="false" Action="removeCurrentRow"/>
+    <list IterBinding="DmsRoleView1Iterator" ListOperMode="navigation"
+          ListIter="DmsRoleView1Iterator" id="DmsRoleView11"
+          DTSupportsMRU="true">
+      <AttrNames>
+        <Item Value="RoleName"/>
+      </AttrNames>
+    </list>
   </bindings>
 </pageDefinition>
