@@ -93,6 +93,8 @@
                               immediate="true" id="cb4">
               <af:resetActionListener/>
             </af:commandButton>
+            <af:commandButton text="#{viewBundle['dcm.combination.refresh_record']}" id="cb9"
+                              actionListener="#{backingBeanScope.CombinationBean.refreshRecord}"/>
           </af:toolbar>
         </f:facet>
         <f:facet name="statusbar"/>
@@ -155,7 +157,7 @@
   </af:panelStretchLayout>
   <af:popup id="p2">
     <af:panelWindow id="pw2">
-      <af:panelGroupLayout id="pgl5" inlineStyle="width:400px; height:240px;"
+      <af:panelGroupLayout id="pgl5" inlineStyle="width:200px; height:60px;"
                            layout="vertical" halign="center">
         <af:outputLabel value="#{viewBundle['dcm.common.confirmdelete']}"
                         id="ol1"/>

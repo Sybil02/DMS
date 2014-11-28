@@ -63,6 +63,7 @@ public class CombinationBean {
 
     public void createTable(ActionEvent actionEvent) {
         List<String> columns=new ArrayList<String>();
+        List<String> srcTables=new ArrayList<String>();
         String locale=ADFContext.getCurrent().getLocale().toString();
         DCIteratorBinding combinationIter=ADFUtils.findIterator("DcmCombinationView1Iterator");
         DCIteratorBinding valueSetIter=ADFUtils.findIterator("DmsValueSetViewIterator");
@@ -77,13 +78,25 @@ public class CombinationBean {
               Key key = new Key(new Object[]{valueSetId,locale});        
             Row[] valuesetRow=valuelookup.findByKey(key,1);
             columns.add((String)valuesetRow[0].getAttribute("Code"));
+            srcTables.add((String)valuesetRow[0].getAttribute("Source"));
+        }
+        if(columns.size()<1){
+            JSFUtils.addFacesErrorMessage(DmsUtils.getMsg("dcm.combiantion.must_have_vs"));
+            return;
         }
         DcmCombinationViewImpl vo = (DcmCombinationViewImpl)combinationIter.getViewObject();
         try {
             vo.createTable(combinationRow.getCode(),columns);
+            this.refreshCombinationRecord((String)combinationIter.getCurrentRow().getAttribute("Code"), srcTables,columns);
         } catch (SQLException e) {
             JSFUtils.addFacesErrorMessage(DmsUtils.getMsg("common.operation_failed_with_exception"));
         }
+    }
+    
+    private void refreshCombinationRecord(String combiantonCode,List<String> srcTables,List<String> valueSetCodes) throws SQLException {
+        DCIteratorBinding combinationIter=ADFUtils.findIterator("DcmCombinationView1Iterator");
+        DcmCombinationViewImpl vo = (DcmCombinationViewImpl)combinationIter.getViewObject();
+        vo.refreshCombinationRecord(combiantonCode, srcTables,valueSetCodes);
     }
     
     public void createInsertListener(PopupFetchEvent popupFetchEvent) {
@@ -91,4 +104,33 @@ public class CombinationBean {
             ob.execute();
         }
 
+    public void refreshRecord(ActionEvent actionEvent) {
+        List<String> columns=new ArrayList<String>();
+        List<String> srcTables=new ArrayList<String>();
+        String locale=ADFContext.getCurrent().getLocale().toString();
+        DCIteratorBinding combinationIter=ADFUtils.findIterator("DcmCombinationView1Iterator");
+        DCIteratorBinding valueSetIter=ADFUtils.findIterator("DmsValueSetViewIterator");
+        ViewObject valuelookup=valueSetIter.getViewObject();
+        valuelookup.executeQuery();
+        RowSetIterator valuerowset =valueSetIter.getRowSetIterator();
+        DcmCombinationViewRowImpl combinationRow = (DcmCombinationViewRowImpl)combinationIter.getCurrentRow();
+        RowIterator comVsRow=combinationRow.getDcmComVsView();
+        while(comVsRow.hasNext()){
+            Row relationrow=comVsRow.next();
+            String valueSetId = (String)relationrow.getAttribute("ValueSetId");   
+              Key key = new Key(new Object[]{valueSetId,locale});        
+            Row[] valuesetRow=valuelookup.findByKey(key,1);
+            columns.add((String)valuesetRow[0].getAttribute("Code"));
+            srcTables.add((String)valuesetRow[0].getAttribute("Source"));
+        }
+        DcmCombinationViewImpl vo = (DcmCombinationViewImpl)combinationIter.getViewObject();
+        if(combinationIter.getCurrentRow()==null){
+            JSFUtils.addFacesErrorMessage(DmsUtils.getMsg("dcm.combination.refresh_record_warning"));
+        }
+        try {
+            this.refreshCombinationRecord((String)combinationIter.getCurrentRow().getAttribute("Code"), srcTables,columns);
+        } catch (SQLException e) {
+            JSFUtils.addFacesErrorMessage(DmsUtils.getMsg("common.operation_failed_with_exception"));
+        }
+    }
 }

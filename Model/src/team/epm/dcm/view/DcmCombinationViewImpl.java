@@ -64,4 +64,26 @@ public class DcmCombinationViewImpl extends ViewObjectImpl {
         }
         this.getDBTransaction().commit();
     }
+    public void refreshCombinationRecord(String combiantonCode,List<String> vsTables,List<String> valueSetCodes) throws SQLException {
+        StringBuffer sql=new StringBuffer();
+        StringBuffer sql_from=new StringBuffer();
+        StringBuffer sql_sub=new StringBuffer();
+        sql.append("INSERT INTO \"").append(combiantonCode).append("\"");
+        sql.append(" SELECT DCM_SEQ.NEXTVAL ");
+        sql_from.append(" FROM ");
+        sql_sub.append("SELECT 1 FROM \"").append(combiantonCode).append("\" T WHERE 1=1");
+        for(int i=0;i<valueSetCodes.size();i++){
+            sql.append(",T").append(i).append(".CODE");
+            sql_from.append("\"").append(vsTables.get(i)).append("\"").append(" T").append(i).append(",");
+            sql_sub.append(" AND T.\"").append(valueSetCodes.get(i)).append("\"");
+            sql_sub.append("=").append("T").append(i).append(".CODE");
+        }
+        int n=sql_from.lastIndexOf(",");
+        sql_from.deleteCharAt(n);
+        sql.append(sql_from);
+        sql.append(" WHERE NOT EXISTS(");
+        sql.append(sql_sub).append(")");
+        this.getDBTransaction().createStatement(0).execute(sql.toString());
+        this.getDBTransaction().commit();
+    }
 }
