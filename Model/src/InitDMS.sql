@@ -87,17 +87,40 @@ insert into dms_lookup (ID, LOCALE, LOOKUP_TYPE, CODE, MEANING, IDX, CREATED_AT,
 values ('10012', 'en', 'DCM_TMP_TABLE', '100', 'DCM_TEMPTABLE100', 100, sysdate, sysdate, '10000', '10000');
 
 insert into dms_lookup (ID, LOCALE, LOOKUP_TYPE, CODE, MEANING, IDX, CREATED_AT, UPDATED_AT, UPDATED_BY, CREATED_BY)
-values ('10013', 'zh_CN', 'DCM_IMPORT_MODE', 'R', '替换', 10, sysdate, sysdate, '10000', '10000');
+values ('10015', 'zh_CN', 'DCM_COL_TYPE', 'TEXT', '文本', 10, sysdate, sysdate, '10000', '10000');
 
 insert into dms_lookup (ID, LOCALE, LOOKUP_TYPE, CODE, MEANING, IDX, CREATED_AT, UPDATED_AT, UPDATED_BY, CREATED_BY)
-values ('10013', 'en', 'DCM_IMPORT_MODE', 'R', 'Replace', 10, sysdate, sysdate, '10000', '10000');
+values ('10015', 'en', 'DCM_COL_TYPE', 'TEXT', 'Text', 10, sysdate, sysdate, '10000', '10000');
 
 insert into dms_lookup (ID, LOCALE, LOOKUP_TYPE, CODE, MEANING, IDX, CREATED_AT, UPDATED_AT, UPDATED_BY, CREATED_BY)
-values ('10014', 'zh_CN', 'DCM_IMPORT_MODE', 'M', '合并', 20, sysdate, sysdate, '10000', '10000');
+values ('10016', 'zh_CN', 'DCM_COL_TYPE', 'DATE', '日期', 20, sysdate, sysdate, '10000', '10000');
 
 insert into dms_lookup (ID, LOCALE, LOOKUP_TYPE, CODE, MEANING, IDX, CREATED_AT, UPDATED_AT, UPDATED_BY, CREATED_BY)
-values ('10014', 'en', 'DCM_IMPORT_MODE', 'M', 'Merge', 20, sysdate, sysdate, '10000', '10000');
+values ('10016', 'en', 'DCM_COL_TYPE', 'DATE', 'Date', 20, sysdate, sysdate, '10000', '10000');
 
+insert into dms_lookup (ID, LOCALE, LOOKUP_TYPE, CODE, MEANING, IDX, CREATED_AT, UPDATED_AT, UPDATED_BY, CREATED_BY)
+values ('10017', 'zh_CN', 'DCM_COL_TYPE', 'NUMBER', '数字', 30, sysdate, sysdate, '10000', '10000');
+
+insert into dms_lookup (ID, LOCALE, LOOKUP_TYPE, CODE, MEANING, IDX, CREATED_AT, UPDATED_AT, UPDATED_BY, CREATED_BY)
+values ('10017', 'en', 'DCM_COL_TYPE', 'NUMBER', 'Number', 30, sysdate, sysdate, '10000', '10000');
+
+insert into dms_lookup (ID, LOCALE, LOOKUP_TYPE, CODE, MEANING, IDX, CREATED_AT, UPDATED_AT, UPDATED_BY, CREATED_BY)
+values ('10018', 'zh_CN', 'DCM_IMPORT_TYPE', 'R', '覆盖式', 10, sysdate, sysdate, '10000', '10000');
+
+insert into dms_lookup (ID, LOCALE, LOOKUP_TYPE, CODE, MEANING, IDX, CREATED_AT, UPDATED_AT, UPDATED_BY, CREATED_BY)
+values ('10018', 'en', 'DCM_IMPORT_TYPE', 'R', 'Replace', 10, sysdate, sysdate, '10000', '10000');
+
+insert into dms_lookup (ID, LOCALE, LOOKUP_TYPE, CODE, MEANING, IDX, CREATED_AT, UPDATED_AT, UPDATED_BY, CREATED_BY)
+values ('10019', 'zh_CN', 'DCM_IMPORT_TYPE', 'I', '增量式', 20, sysdate, sysdate, '10000', '10000');
+
+insert into dms_lookup (ID, LOCALE, LOOKUP_TYPE, CODE, MEANING, IDX, CREATED_AT, UPDATED_AT, UPDATED_BY, CREATED_BY)
+values ('10019', 'en', 'DCM_IMPORT_TYPE', 'I', 'Increment', 20, sysdate, sysdate, '10000', '10000');
+
+insert into dms_lookup (ID, LOCALE, LOOKUP_TYPE, CODE, MEANING, IDX, CREATED_AT, UPDATED_AT, UPDATED_BY, CREATED_BY)
+values ('10020', 'zh_CN', 'DCM_IMPORT_TYPE', 'R'||chr(38)||'I', '覆盖和增量', 30, sysdate, sysdate, '10000', '10000');
+
+insert into dms_lookup (ID, LOCALE, LOOKUP_TYPE, CODE, MEANING, IDX, CREATED_AT, UPDATED_AT, UPDATED_BY, CREATED_BY)
+values ('10020', 'en', 'DCM_IMPORT_TYPE', 'R'||chr(38)||'I', 'Replace'||chr(38)||'Increment', 30, sysdate, sysdate, '10000', '10000');
 /*==============================================================*/
 /* 初始化功能                                                     */
 /*==============================================================*/

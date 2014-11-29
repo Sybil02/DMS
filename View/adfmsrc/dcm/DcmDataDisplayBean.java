@@ -453,7 +453,7 @@ public class DcmDataDisplayBean extends AbstractExcel2007Writer {
         RowReader reader =
             new RowReader(trans, this.dataStartLine, this.curTemplateId,
                           combinationRecord, this.templateTmpTable,
-                          this.colsdef.size(), this.curUser.getId());
+                          this.colsdef.size(), this.curUser.getId(),this.templateName);
         try {
             ExcelReaderUtil.readExcel(reader, fileName, true);
             reader.close();
@@ -734,6 +734,8 @@ public class DcmDataDisplayBean extends AbstractExcel2007Writer {
         }
         if (this.combinationId != null) {
             sql_where.append(" WHERE COM_RECORD_ID='").append(this.getCurCombinationRecord()).append("'");
+        }else{
+            sql_where.append(" WHERE COM_RECORD_ID IS NULL");
         }
         sql_where.append(" ORDER BY IDX");
         return sql_select.toString() + sql_from.toString() +

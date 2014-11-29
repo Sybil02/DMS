@@ -72,7 +72,7 @@
           <Item Value="DbTable"/>
           <Item Value="Seq"/>
           <Item Value="Readonly"/>
-          <Item Value="TmpTable"/>
+          <Item Value="TmpTable" Binds="TmpTable"/>
           <Item Value="PreProgram"/>
           <Item Value="HandleProgram"/>
           <Item Value="AfterProgram"/>
@@ -136,5 +136,7 @@
     <tree IterBinding="getCombinationRecordViewIterator" id="return">
       <nodeDefinition Name="return0"/>
     </tree>
+    <list IterBinding="DcmTemplateView1Iterator" StaticList="false"
+          Uses="LOV_TmpTable" id="TmpTable" DTSupportsMRU="true"/>
   </bindings>
 </pageDefinition>

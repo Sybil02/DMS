@@ -6,6 +6,13 @@
   Name="DcmTemplateView"
   Version="11.1.1.64.93"
   InheritPersonalization="true"
+  FromList="DCM_TEMPLATE DcmTemplate"
+  BindingStyle="OracleName"
+  CustomQuery="false"
+  PageIterMode="Full"
+  UseGlueCode="false"
+  Where="DcmTemplate.LOCALE=:locale"
+  ComponentClass="team.epm.dcm.view.DcmTemplateViewImpl"
   SelectList="DcmTemplate.ID, 
        DcmTemplate.LOCALE, 
        DcmTemplate.NAME, 
@@ -27,13 +34,7 @@
        DcmTemplate.DATA_START_LINE, 
        DcmTemplate.COMBINATION_ID, 
        DcmTemplate.CATEGORY_ID"
-  FromList="DCM_TEMPLATE DcmTemplate"
-  BindingStyle="OracleName"
-  CustomQuery="false"
-  PageIterMode="Full"
-  UseGlueCode="false"
-  Where="DcmTemplate.LOCALE=:locale"
-  ComponentClass="team.epm.dcm.view.DcmTemplateViewImpl">
+  OrderBy="DcmTemplate.SEQ">
   <DesignTime>
     <Attr Name="_codeGenFlag2" Value="Coll|VarAccess"/>
   </DesignTime>
@@ -95,6 +96,36 @@
       </PIMap>
     </ParameterMap>
   </ViewAccessor>
+  <ViewAccessor
+    Name="LKP_IMPORT_MODE"
+    ViewObjectName="team.epm.dms.view.DmsLookupView">
+    <ViewCriteriaUsage
+      Name="DmsLookupViewCriteria"
+      FullName="team.epm.dms.view.DmsLookupView.DmsLookupViewCriteria"/>
+    <ParameterMap>
+      <PIMap Variable="locale">
+        <TransientExpression><![CDATA[this.Locale]]></TransientExpression>
+      </PIMap>
+      <PIMap Variable="lookupType">
+        <TransientExpression><![CDATA["DCM_IMPORT_TYPE"]]></TransientExpression>
+      </PIMap>
+    </ParameterMap>
+  </ViewAccessor>
+  <ViewAccessor
+    Name="LKP_TMP_TABLE"
+    ViewObjectName="team.epm.dms.view.DmsLookupView">
+    <ViewCriteriaUsage
+      Name="DmsLookupViewCriteria"
+      FullName="team.epm.dms.view.DmsLookupView.DmsLookupViewCriteria"/>
+    <ParameterMap>
+      <PIMap Variable="locale">
+        <TransientExpression><![CDATA[this.Locale]]></TransientExpression>
+      </PIMap>
+      <PIMap Variable="lookupType">
+        <TransientExpression><![CDATA["DCM_TMP_TABLE"]]></TransientExpression>
+      </PIMap>
+    </ParameterMap>
+  </ViewAccessor>
   <ListBinding
     Name="LOV_Locale"
     ListVOName="LKP_LANG"
@@ -153,8 +184,8 @@
     Name="LOV_Readonly"
     ListVOName="LKP_YES_NO"
     ListRangeSize="-1"
-    NullValueFlag="start"
-    NullValueId="${adfBundle['oracle.javatools.resourcebundle.SystemBundle']['NULL_VALUE_RESID']}"
+    NullValueFlag="none"
+    NullValueId="LOV_Readonly_LOVUIHints_NullValueId"
     MRUCount="0">
     <AttrArray Name="AttrNames">
       <Item Value="Readonly"/>
@@ -202,6 +233,43 @@
       <Item Value="Name"/>
     </AttrArray>
     <DisplayCriteria/>
+  </ListBinding>
+  <ListBinding
+    Name="LOV_HandleMode"
+    ListVOName="LKP_IMPORT_MODE"
+    ListRangeSize="-1"
+    NullValueFlag="none"
+    NullValueId="LOV_HandleMode_LOVUIHints_NullValueId"
+    MRUCount="0">
+    <AttrArray Name="AttrNames">
+      <Item Value="HandleMode"/>
+    </AttrArray>
+    <AttrArray Name="ListAttrNames">
+      <Item Value="Code"/>
+    </AttrArray>
+    <AttrArray Name="ListDisplayAttrNames">
+      <Item Value="Meaning"/>
+    </AttrArray>
+    <DisplayCriteria/>
+  </ListBinding>
+  <ListBinding
+    Name="LOV_TmpTable"
+    ListVOName="LKP_TMP_TABLE"
+    ListRangeSize="10"
+    NullValueFlag="none"
+    NullValueId="LOV_TmpTable_LOVUIHints_NullValueId"
+    MRUCount="0">
+    <AttrArray Name="AttrNames">
+      <Item Value="TmpTable"/>
+    </AttrArray>
+    <AttrArray Name="ListAttrNames">
+      <Item Value="Meaning"/>
+    </AttrArray>
+    <AttrArray Name="ListDisplayAttrNames">
+      <Item Value="Meaning"/>
+    </AttrArray>
+    <DisplayCriteria
+      Hint="hide"/>
   </ListBinding>
   <EntityUsage
     Name="DcmTemplate"
@@ -366,11 +434,14 @@
     PrecisionRule="true"
     EntityAttrName="TmpTable"
     EntityUsage="DcmTemplate"
-    AliasName="TMP_TABLE">
+    AliasName="TMP_TABLE"
+  LOVName="LOV_TmpTable">
     <Properties>
       <SchemaBasedProperties>
         <LABEL
           ResId="dcm.temptable"/>
+        <CONTROLTYPE
+          Value="input_text_lov"/>
       </SchemaBasedProperties>
     </Properties>
   </ViewAttribute>
@@ -418,11 +489,14 @@
     PrecisionRule="true"
     EntityAttrName="HandleMode"
     EntityUsage="DcmTemplate"
-    AliasName="HANDLE_MODE">
+    AliasName="HANDLE_MODE"
+    LOVName="LOV_HandleMode">
     <Properties>
       <SchemaBasedProperties>
         <LABEL
           ResId="dcm.handle_mode"/>
+        <CONTROLTYPE
+          Value="choice"/>
       </SchemaBasedProperties>
     </Properties>
   </ViewAttribute>

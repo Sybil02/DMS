@@ -23,10 +23,11 @@ public class RowReader implements IRowReader {
     private DBTransaction trans;
     private int n = 0;
     private static final int batchSize = 5000;
+    private String templateName;
     private static ADFLogger logger=ADFLogger.createADFLogger(RowReader.class);
     public RowReader(DBTransaction trans, int startLine, String templateId,
                      String combinationRecord, String temptable,
-                     int columnSize, String operator) {
+                     int columnSize, String operator,String templateName) {
         this.startLine = startLine;
         this.templateId = templateId;
         this.combinationRecord = combinationRecord;
@@ -34,6 +35,7 @@ public class RowReader implements IRowReader {
         this.columnSize = columnSize;
         this.operator = operator;
         this.trans = trans;
+        this.templateName=templateName;
         this.prepareSqlStatement();
     }
 
@@ -57,7 +59,7 @@ public class RowReader implements IRowReader {
 
     public void getRows(int sheetIndex, String sheetName, int curRow,
                         TreeMap<Integer, String> rowlist) {
-        if (curRow >= this.startLine - 1) {
+        if (curRow >= this.startLine - 1&&sheetName.startsWith(this.templateName)) {
             boolean isEpty = true;
             try {
                 this.stmt.setString(1, sheetName);

@@ -56,7 +56,8 @@
     SQLType="VARCHAR"
     Type="java.lang.String"
     ColumnType="VARCHAR2"
-    TableName="DCM_TEMPLATE_COLUMN">
+    TableName="DCM_TEMPLATE_COLUMN"
+    IsNotNull="true">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="300"/>
     </DesignTime>
@@ -75,7 +76,8 @@
     SQLType="VARCHAR"
     Type="java.lang.String"
     ColumnType="VARCHAR2"
-    TableName="DCM_TEMPLATE_COLUMN">
+    TableName="DCM_TEMPLATE_COLUMN"
+    IsNotNull="true">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="100"/>
     </DesignTime>
@@ -87,7 +89,8 @@
     SQLType="TIMESTAMP"
     Type="oracle.jbo.domain.Date"
     ColumnType="DATE"
-    TableName="DCM_COMBINATION">
+    TableName="DCM_COMBINATION"
+    IsNotNull="true">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="7"/>
     </DesignTime>
@@ -107,7 +110,8 @@
     SQLType="TIMESTAMP"
     Type="oracle.jbo.domain.Date"
     ColumnType="DATE"
-    TableName="DCM_COMBINATION">
+    TableName="DCM_COMBINATION"
+    IsNotNull="true">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="7"/>
     </DesignTime>
@@ -155,7 +159,8 @@
     SQLType="VARCHAR"
     Type="java.lang.String"
     ColumnType="VARCHAR2"
-    TableName="DCM_TEMPLATE_COLUMN">
+    TableName="DCM_TEMPLATE_COLUMN"
+    DefaultValue="N">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="10"/>
     </DesignTime>
@@ -167,7 +172,8 @@
     SQLType="VARCHAR"
     Type="java.lang.String"
     ColumnType="VARCHAR2"
-    TableName="DCM_TEMPLATE_COLUMN">
+    TableName="DCM_TEMPLATE_COLUMN"
+    DefaultValue="N">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="10"/>
     </DesignTime>
@@ -179,7 +185,8 @@
     SQLType="VARCHAR"
     Type="java.lang.String"
     ColumnType="VARCHAR2"
-    TableName="DCM_TEMPLATE_COLUMN">
+    TableName="DCM_TEMPLATE_COLUMN"
+    DefaultValue="TEXT">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="100"/>
     </DesignTime>
@@ -191,7 +198,8 @@
     SQLType="VARCHAR"
     Type="java.lang.String"
     ColumnType="VARCHAR2"
-    TableName="DCM_TEMPLATE_COLUMN">
+    TableName="DCM_TEMPLATE_COLUMN"
+    DefaultValue="Y">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="10"/>
     </DesignTime>
@@ -216,7 +224,8 @@
     SQLType="VARCHAR"
     Type="java.lang.String"
     ColumnType="VARCHAR2"
-    TableName="DCM_TEMPLATE_COLUMN">
+    TableName="DCM_TEMPLATE_COLUMN"
+    IsNotNull="true">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="32"/>
     </DesignTime>

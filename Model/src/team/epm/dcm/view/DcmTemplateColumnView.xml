@@ -24,11 +24,19 @@
   BindingStyle="OracleName"
   CustomQuery="false"
   PageIterMode="Full"
-  UseGlueCode="false">
+  UseGlueCode="false"
+  Where="DcmTemplateColumn.LOCALE=:locale"
+  OrderBy="DcmTemplateColumn.SEQ">
   <DesignTime>
     <Attr Name="_codeGenFlag2" Value="Access|VarAccess"/>
   </DesignTime>
-   <ViewAccessor
+  <Variable
+    Name="locale"
+    Kind="where"
+    Type="java.lang.String">
+    <TransientExpression><![CDATA[adf.context.locale]]></TransientExpression>
+  </Variable>
+  <ViewAccessor
     Name="LKP_YES_NO"
     ViewObjectName="team.epm.dms.view.DmsLookupView">
     <ViewCriteriaUsage
@@ -62,7 +70,22 @@
       </PIMap>
     </ParameterMap>
   </ViewAccessor>
-   <ListBinding
+  <ViewAccessor
+    Name="LKP_DATA_TYPE"
+    ViewObjectName="team.epm.dms.view.DmsLookupView">
+    <ViewCriteriaUsage
+      Name="DmsLookupViewCriteria"
+      FullName="team.epm.dms.view.DmsLookupView.DmsLookupViewCriteria"/>
+    <ParameterMap>
+      <PIMap Variable="locale">
+        <TransientExpression><![CDATA[this.Locale]]></TransientExpression>
+      </PIMap>
+      <PIMap Variable="lookupType">
+        <TransientExpression><![CDATA["DCM_COL_TYPE"]]></TransientExpression>
+      </PIMap>
+    </ParameterMap>
+  </ViewAccessor>
+  <ListBinding
     Name="LOV_Locale"
     ListVOName="LKP_LANG"
     ListRangeSize="-1"
@@ -120,8 +143,8 @@
     Name="LOV_Readonly"
     ListVOName="LKP_YES_NO"
     ListRangeSize="-1"
-    NullValueFlag="start"
-    NullValueId="${adfBundle['oracle.javatools.resourcebundle.SystemBundle']['NULL_VALUE_RESID']}"
+    NullValueFlag="none"
+    NullValueId="LOV_Readonly_LOVUIHints_NullValueId"
     MRUCount="0">
     <AttrArray Name="AttrNames">
       <Item Value="Readonly"/>
@@ -138,8 +161,8 @@
     Name="LOV_IsPk"
     ListVOName="LKP_YES_NO"
     ListRangeSize="-1"
-    NullValueFlag="start"
-    NullValueId="${adfBundle['oracle.javatools.resourcebundle.SystemBundle']['NULL_VALUE_RESID']}"
+    NullValueFlag="none"
+    NullValueId="LOV_IsPk_LOVUIHints_NullValueId"
     MRUCount="0">
     <AttrArray Name="AttrNames">
       <Item Value="IsPk"/>
@@ -156,11 +179,29 @@
     Name="LOV_Visible"
     ListVOName="LKP_YES_NO"
     ListRangeSize="-1"
-    NullValueFlag="start"
-    NullValueId="${adfBundle['oracle.javatools.resourcebundle.SystemBundle']['NULL_VALUE_RESID']}"
+    NullValueFlag="none"
+    NullValueId="LOV_Visible_LOVUIHints_NullValueId"
     MRUCount="0">
     <AttrArray Name="AttrNames">
       <Item Value="Visible"/>
+    </AttrArray>
+    <AttrArray Name="ListAttrNames">
+      <Item Value="Code"/>
+    </AttrArray>
+    <AttrArray Name="ListDisplayAttrNames">
+      <Item Value="Meaning"/>
+    </AttrArray>
+    <DisplayCriteria/>
+  </ListBinding>
+  <ListBinding
+    Name="LOV_DataType"
+    ListVOName="LKP_DATA_TYPE"
+    ListRangeSize="-1"
+    NullValueFlag="none"
+    NullValueId="LOV_DataType_LOVUIHints_NullValueId"
+    MRUCount="0">
+    <AttrArray Name="AttrNames">
+      <Item Value="DataType"/>
     </AttrArray>
     <AttrArray Name="ListAttrNames">
       <Item Value="Code"/>
@@ -299,11 +340,14 @@
     PrecisionRule="true"
     EntityAttrName="DataType"
     EntityUsage="DcmTemplateColumn"
-    AliasName="DATA_TYPE">
+    AliasName="DATA_TYPE"
+    LOVName="LOV_DataType">
     <Properties>
       <SchemaBasedProperties>
         <LABEL
           ResId="dcm.templateColumn_dataType"/>
+        <CONTROLTYPE
+          Value="choice"/>
       </SchemaBasedProperties>
     </Properties>
   </ViewAttribute>

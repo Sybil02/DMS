@@ -32,7 +32,8 @@
    </Attribute>
    <Attribute Name="Name" Precision="300" ColumnName="NAME" SQLType="VARCHAR"
               Type="java.lang.String" ColumnType="VARCHAR2"
-              TableName="DCM_TEMPLATE">
+              TableName="DCM_TEMPLATE"
+      IsNotNull="true">
       <DesignTime>
          <Attr Name="_DisplaySize" Value="300"/>
       </DesignTime>
@@ -45,7 +46,8 @@
    <Attribute Name="CreatedAt" IsUpdateable="while_insert"
               ColumnName="CREATED_AT" SQLType="TIMESTAMP"
               Type="oracle.jbo.domain.Date" ColumnType="DATE"
-              TableName="DCM_TEMPLATE">
+              TableName="DCM_TEMPLATE"
+      IsNotNull="true">
       <DesignTime>
          <Attr Name="_DisplaySize" Value="7"/>
       </DesignTime>
@@ -59,7 +61,8 @@
    </Attribute>
    <Attribute Name="UpdatedAt" ColumnName="UPDATED_AT" SQLType="TIMESTAMP"
               Type="oracle.jbo.domain.Date" ColumnType="DATE"
-              TableName="DCM_TEMPLATE">
+              TableName="DCM_TEMPLATE"
+      IsNotNull="true">
       <DesignTime>
          <Attr Name="_DisplaySize" Value="7"/>
       </DesignTime>
@@ -73,7 +76,8 @@
    </Attribute>
    <Attribute Name="UpdatedBy" Precision="32" ColumnName="UPDATED_BY"
               SQLType="VARCHAR" Type="java.lang.String" ColumnType="VARCHAR2"
-              TableName="DCM_TEMPLATE">
+              TableName="DCM_TEMPLATE"
+      IsNotNull="true">
       <DesignTime>
          <Attr Name="_DisplaySize" Value="32"/>
       </DesignTime>
@@ -81,7 +85,8 @@
    </Attribute>
    <Attribute Name="CreatedBy" IsUpdateable="while_insert" Precision="32"
               ColumnName="CREATED_BY" SQLType="VARCHAR" Type="java.lang.String"
-              ColumnType="VARCHAR2" TableName="DCM_TEMPLATE">
+              ColumnType="VARCHAR2" TableName="DCM_TEMPLATE"
+      IsNotNull="true">
       <DesignTime>
          <Attr Name="_DisplaySize" Value="32"/>
       </DesignTime>
@@ -89,7 +94,8 @@
    </Attribute>
    <Attribute Name="Readonly" Precision="10" ColumnName="READONLY"
               SQLType="VARCHAR" Type="java.lang.String" ColumnType="VARCHAR2"
-              TableName="DCM_TEMPLATE">
+              TableName="DCM_TEMPLATE"
+      DefaultValue="N">
       <DesignTime>
          <Attr Name="_DisplaySize" Value="10"/>
       </DesignTime>
@@ -124,7 +130,7 @@
    </Attribute>
    <Attribute Name="TmpTable" Precision="100" ColumnName="TMP_TABLE"
               SQLType="VARCHAR" Type="java.lang.String" ColumnType="VARCHAR2"
-              DefaultValue="DCM_TMPTABLE10" IsNotNull="true"
+      DefaultValue="DCM_TEMPTABLE10" IsNotNull="true"
               TableName="DCM_TEMPLATE">
       <DesignTime>
          <Attr Name="_DisplaySize" Value="100"/>
@@ -154,7 +160,8 @@
    </Attribute>
    <Attribute Name="HandleMode" Precision="10" ColumnName="HANDLE_MODE"
               SQLType="VARCHAR" Type="java.lang.String" ColumnType="VARCHAR2"
-              TableName="DCM_TEMPLATE">
+              TableName="DCM_TEMPLATE"
+      DefaultValue="R&amp;I">
       <DesignTime>
          <Attr Name="_DisplaySize" Value="10"/>
       </DesignTime>
