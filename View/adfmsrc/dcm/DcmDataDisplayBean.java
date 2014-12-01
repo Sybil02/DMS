@@ -719,9 +719,9 @@ public class DcmDataDisplayBean extends AbstractExcel2007Writer {
     //获取数据查询语句
 
     private String getQuerySql() {
-        StringBuffer sql_select = new StringBuffer(200);
-        StringBuffer sql_from = new StringBuffer(100);
-        StringBuffer sql_where = new StringBuffer(100);
+        StringBuffer sql_select = new StringBuffer();
+        StringBuffer sql_from = new StringBuffer();
+        StringBuffer sql_where = new StringBuffer();
         if (null != this.templateSrcView) {
             sql_select.append("SELECT ROW_ID");
             sql_from.append(" ").append("FROM ").append(this.templateSrcView);

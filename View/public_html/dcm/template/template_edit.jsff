@@ -6,7 +6,8 @@
           xmlns:h="http://java.sun.com/jsf/html">
   <c:set var="viewBundle" value="#{adfBundle['dms_v']}"/>
   <af:panelTabbed id="pt1">
-    <af:showDetailItem text="#{viewBundle['dcm.template.manage']}" id="sdi1" stretchChildren="first">
+    <af:showDetailItem text="#{viewBundle['dcm.template.manage']}" id="sdi1"
+                       stretchChildren="first">
       <af:panelStretchLayout id="psl1">
         <f:facet name="center">
           <af:panelCollection id="pc2">
@@ -15,22 +16,17 @@
               <af:toolbar id="t4">
                 <af:commandToolbarButton actionListener="#{bindings.CreateInsert.execute}"
                                          text="#{viewBundle['dcm.template.add']}"
-                                         disabled="#{!bindings.CreateInsert.enabled}"
-                                         id="ctb1" partialTriggers="t1 ctb3"/>
+                                         id="ctb1"/>
                 <af:commandToolbarButton text="#{viewBundle['dcm.template.delete']}"
-                                         disabled="#{!bindings.Delete.enabled}"
-                                         id="ctb2" partialTriggers="t1 ctb3">
+                                         id="ctb2">
                   <af:showPopupBehavior popupId="::p2"/>
                 </af:commandToolbarButton>
                 <af:commandButton actionListener="#{pageFlowScope.TemplateBackingBean.createTemplate}"
                                   text="#{viewBundle['dms.common.save']}"
-                                  id="ctb3"
-                                  partialTriggers="t1 t1:it7 t1:it6 t1:it10  t1:it13 t1:soc2 t1:it2 t1:it5 t1:it4  t1:it8 t1:it1 t1:soc3 t1:soc4"/>
+                                  id="ctb3"/>
                 <af:commandButton actionListener="#{bindings.Rollback.execute}"
                                   text="#{viewBundle['dms.common.rollback']}"
-                                  disabled="#{!bindings.Rollback.enabled}"
-                                  immediate="true" id="ctb4"
-                                  partialTriggers="t1 t1:it7 t1:it6 t1:it10  t1:it13 t1:soc2 t1:it2 t1:it5 t1:it4 t1:it8 t1:it1 t1:soc3 t1:soc4">
+                                  id="ctb4">
                   <af:resetActionListener/>
                 </af:commandButton>
               </af:toolbar>
@@ -40,8 +36,7 @@
                       var="row" rows="#{bindings.DcmTemplateView1.rangeSize}"
                       emptyText="#{viewBundle['dms.common.nodata']}"
                       fetchSize="#{bindings.DcmTemplateView1.rangeSize}"
-                      rowBandingInterval="0" id="t1"
-                      partialTriggers="::ctb1 ::ctb2 :::cb2" rowSelection="single"
+                      rowBandingInterval="0" id="t1" rowSelection="single"
                       filterModel="#{bindings.DcmTemplateView12Query.queryDescriptor}"
                       queryListener="#{bindings.DcmTemplateView12Query.processQuery}"
                       filterVisible="false" varStatus="vs"
@@ -63,7 +58,7 @@
                 </af:inputText>
               </af:column>
               <af:column sortProperty="#{bindings.DcmTemplateView1.hints.Description.name}"
-                         filterable="true" sortable="true"
+                         sortable="true"
                          headerText="#{bindings.DcmTemplateView1.hints.Description.label}"
                          id="c4">
                 <af:inputText value="#{row.bindings.Description.inputValue}"
@@ -91,7 +86,7 @@
                 </af:inputText>
               </af:column>
               <af:column sortProperty="#{bindings.DcmTemplateView1.hints.Seq.name}"
-                         filterable="true" sortable="true"
+                         sortable="true"
                          headerText="#{bindings.DcmTemplateView1.hints.Seq.label}"
                          id="c10">
                 <af:inputText value="#{row.bindings.Seq.inputValue}"
@@ -107,7 +102,7 @@
                 </af:inputText>
               </af:column>
               <af:column sortProperty="#{bindings.DcmTemplateView1.hints.Readonly.name}"
-                         filterable="true" sortable="true"
+                         sortable="true"
                          headerText="#{bindings.DcmTemplateView1.hints.Readonly.label}"
                          id="c5">
                 <af:selectOneChoice value="#{row.bindings.Readonly.inputValue}"
@@ -120,7 +115,7 @@
                 </af:selectOneChoice>
               </af:column>
               <af:column sortProperty="#{bindings.DcmTemplateView1.hints.TmpTable.name}"
-                         filterable="true" sortable="true"
+                         sortable="true"
                          headerText="#{bindings.DcmTemplateView1.hints.TmpTable.label}"
                          id="c11">
                 <af:selectOneChoice value="#{row.bindings.TmpTable.inputValue}"
@@ -133,7 +128,7 @@
                 </af:selectOneChoice>
               </af:column>
               <af:column sortProperty="#{bindings.DcmTemplateView1.hints.PreProgram.name}"
-                         filterable="true" sortable="true"
+                         sortable="true"
                          headerText="#{bindings.DcmTemplateView1.hints.PreProgram.label}"
                          id="c7">
                 <af:inputText value="#{row.bindings.PreProgram.inputValue}"
@@ -147,7 +142,7 @@
                 </af:inputText>
               </af:column>
               <af:column sortProperty="#{bindings.DcmTemplateView1.hints.HandleProgram.name}"
-                         filterable="true" sortable="true"
+                         sortable="true"
                          headerText="#{bindings.DcmTemplateView1.hints.HandleProgram.label}"
                          id="c6">
                 <af:inputText value="#{row.bindings.HandleProgram.inputValue}"
@@ -161,7 +156,7 @@
                 </af:inputText>
               </af:column>
               <af:column sortProperty="#{bindings.DcmTemplateView1.hints.AfterProgram.name}"
-                         filterable="true" sortable="true"
+                         sortable="true"
                          headerText="#{bindings.DcmTemplateView1.hints.AfterProgram.label}"
                          id="c13">
                 <af:inputText value="#{row.bindings.AfterProgram.inputValue}"
@@ -175,7 +170,7 @@
                 </af:inputText>
               </af:column>
               <af:column sortProperty="#{bindings.DcmTemplateView1.hints.HandleMode.name}"
-                         filterable="true" sortable="true"
+                         sortable="true"
                          headerText="#{bindings.DcmTemplateView1.hints.HandleMode.label}"
                          id="c3">
                 <af:selectOneChoice value="#{row.bindings.HandleMode.inputValue}"
@@ -188,7 +183,7 @@
                 </af:selectOneChoice>
               </af:column>
               <af:column sortProperty="#{bindings.DcmTemplateView1.hints.TemplateFile.name}"
-                         filterable="true" sortable="true"
+                         sortable="true"
                          headerText="#{bindings.DcmTemplateView1.hints.TemplateFile.label}"
                          id="c9">
                 <af:inputText value="#{row.bindings.TemplateFile.inputValue}"
@@ -202,7 +197,7 @@
                 </af:inputText>
               </af:column>
               <af:column sortProperty="#{bindings.DcmTemplateView1.hints.DataStartLine.name}"
-                         filterable="true" sortable="true"
+                         sortable="true"
                          headerText="#{bindings.DcmTemplateView1.hints.DataStartLine.label}"
                          id="c2">
                 <af:inputText value="#{row.bindings.DataStartLine.inputValue}"
@@ -218,7 +213,7 @@
                 </af:inputText>
               </af:column>
               <af:column sortProperty="#{bindings.DcmTemplateView1.hints.CombinationId.name}"
-                         filterable="true" sortable="true"
+                         sortable="true"
                          headerText="#{bindings.DcmTemplateView1.hints.CombinationId.label}"
                          id="c1">
                 <af:selectOneChoice value="#{row.bindings.CombinationId.inputValue}"
@@ -231,7 +226,7 @@
                 </af:selectOneChoice>
               </af:column>
               <af:column sortProperty="#{bindings.DcmTemplateView1.hints.CategoryId.name}"
-                         filterable="true" sortable="true"
+                         sortable="true"
                          headerText="#{bindings.DcmTemplateView1.hints.CategoryId.label}"
                          id="c16">
                 <af:selectOneChoice value="#{row.bindings.CategoryId.inputValue}"
@@ -244,24 +239,14 @@
                 </af:selectOneChoice>
               </af:column>
               <af:column sortProperty="#{bindings.DcmTemplateView1.hints.UpdatedAt.name}"
-                         filterable="true" sortable="true"
+                         sortable="true"
                          headerText="#{bindings.DcmTemplateView1.hints.UpdatedAt.label}"
                          id="c8">
-                <f:facet name="filter">
-                  <af:inputDate value="#{vs.filterCriteria.UpdatedAt}"
-                                id="id1"/>
-                </f:facet>
-                <af:inputDate value="#{row.bindings.UpdatedAt.inputValue}"
-                              label="#{bindings.DcmTemplateView1.hints.UpdatedAt.label}"
-                              required="#{bindings.DcmTemplateView1.hints.UpdatedAt.mandatory}"
-                              shortDesc="#{bindings.DcmTemplateView1.hints.UpdatedAt.tooltip}"
-                              id="id2" readOnly="true" autoSubmit="false">
-                  <f:validator binding="#{row.bindings.UpdatedAt.validator}"/>
-                  <af:convertDateTime pattern="#{bindings.DcmTemplateView1.hints.UpdatedAt.format}"/>
-                </af:inputDate>
+                <af:outputText id="outp10"
+                               value="#{row.bindings.UpdatedAt.inputValue}"/>
               </af:column>
               <af:column sortProperty="#{bindings.DcmTemplateView1.hints.UpdatedBy.name}"
-                         filterable="true" sortable="true"
+                         sortable="true"
                          headerText="#{bindings.DcmTemplateView1.hints.UpdatedBy.label}"
                          id="c14">
                 <af:selectOneChoice value="#{row.bindings.UpdatedBy.inputValue}"
@@ -289,26 +274,20 @@
               <af:toolbar id="t3">
                 <af:commandButton actionListener="#{bindings.CreateInsert1.execute}"
                                   text="#{viewBundle['dcm.templateColumn.add']}"
-                                  disabled="#{(bindings.DcmTemplateView1.currentRow.entities['0'].entityState == '0' || bindings.DcmTemplateView1.currentRow ==null) ? true : false}"
                                   id="cb9"/>
                 <af:commandButton actionListener="#{bindings.Delete1.execute}"
                                   text="#{viewBundle['dcm.templateColumn.delete']}"
-                                  disabled="#{!bindings.Delete1.enabled}"
                                   id="cb10"/>
                 <af:commandButton actionListener="#{bindings.Commit.execute}"
                                   text="#{viewBundle['dms.common.save']}"
-                                  id="cb11" partialTriggers="cb9 cb10 t2"/>
+                                  id="cb11"/>
                 <af:commandButton actionListener="#{bindings.Rollback.execute}"
                                   text="#{viewBundle['dms.common.rollback']}"
-                                  disabled="#{!bindings.Rollback.enabled}"
-                                  immediate="true" id="cb12"
-                                  partialTriggers="cb9 cb10 t2">
+                                  id="cb12">
                   <af:resetActionListener/>
                 </af:commandButton>
                 <af:commandToolbarButton text="#{viewBundle['dcm.validation.manage']}"
-                                         id="ctb5"
-                                         partialTriggers="cb9 cb10 cb12 t2"
-                                         disabled="#{bindings.DcmTemplateColumnView1.currentRow.entities['0'].entityState == '0' ? true : false}">
+                                         id="ctb5">
                   <af:showPopupBehavior popupId="::p1"/>
                 </af:commandToolbarButton>
               </af:toolbar>
@@ -325,11 +304,9 @@
                       filterVisible="false" varStatus="vs"
                       selectedRowKeys="#{bindings.DcmTemplateColumnView1.collectionModel.selectedRow}"
                       selectionListener="#{bindings.DcmTemplateColumnView1.collectionModel.makeCurrent}"
-                      rowSelection="single" id="t2"
-                      partialTriggers="::cb9 ::cb10 :::cb2"
-                      editingMode="clickToEdit">
+                      rowSelection="single" id="t2" editingMode="clickToEdit">
               <af:column sortProperty="#{bindings.DcmTemplateColumnView1.hints.ColumnLabel.name}"
-                         filterable="true" sortable="true"
+                         sortable="true"
                          headerText="#{bindings.DcmTemplateColumnView1.hints.ColumnLabel.label}"
                          id="c23">
                 <af:inputText value="#{row.bindings.ColumnLabel.inputValue}"
@@ -357,7 +334,7 @@
                 </af:inputText>
               </af:column>
               <af:column sortProperty="#{bindings.DcmTemplateColumnView1.hints.IsPk.name}"
-                         filterable="true" sortable="true"
+                         sortable="true"
                          headerText="#{bindings.DcmTemplateColumnView1.hints.IsPk.label}"
                          id="c29">
                 <af:selectOneChoice value="#{row.bindings.IsPk.inputValue}"
@@ -369,7 +346,7 @@
                 </af:selectOneChoice>
               </af:column>
               <af:column sortProperty="#{bindings.DcmTemplateColumnView1.hints.Readonly.name}"
-                         filterable="true" sortable="true"
+                         sortable="true"
                          headerText="#{bindings.DcmTemplateColumnView1.hints.Readonly.label}"
                          id="c20">
                 <af:selectOneChoice value="#{row.bindings.Readonly.inputValue}"
@@ -382,7 +359,7 @@
                 </af:selectOneChoice>
               </af:column>
               <af:column sortProperty="#{bindings.DcmTemplateColumnView1.hints.DataType.name}"
-                         filterable="true" sortable="true"
+                         sortable="true"
                          headerText="#{bindings.DcmTemplateColumnView1.hints.DataType.label}"
                          id="c25">
                 <af:selectOneChoice value="#{row.bindings.DataType.inputValue}"
@@ -395,7 +372,7 @@
                 </af:selectOneChoice>
               </af:column>
               <af:column sortProperty="#{bindings.DcmTemplateColumnView1.hints.Visible.name}"
-                         filterable="true" sortable="true"
+                         sortable="true"
                          headerText="#{bindings.DcmTemplateColumnView1.hints.Visible.label}"
                          id="c18">
                 <af:selectOneChoice value="#{row.bindings.Visible.inputValue}"
@@ -408,7 +385,7 @@
                 </af:selectOneChoice>
               </af:column>
               <af:column sortProperty="#{bindings.DcmTemplateColumnView1.hints.Seq.name}"
-                         filterable="true" sortable="true"
+                         sortable="true"
                          headerText="#{bindings.DcmTemplateColumnView1.hints.Seq.label}"
                          id="c30">
                 <af:inputText value="#{row.bindings.Seq.inputValue}"
@@ -424,24 +401,14 @@
                 </af:inputText>
               </af:column>
               <af:column sortProperty="#{bindings.DcmTemplateColumnView1.hints.UpdatedAt.name}"
-                         filterable="true" sortable="true"
+                         sortable="true"
                          headerText="#{bindings.DcmTemplateColumnView1.hints.UpdatedAt.label}"
                          id="c19">
-                <f:facet name="filter">
-                  <af:inputDate value="#{vs.filterCriteria.UpdatedAt}"
-                                id="id4"/>
-                </f:facet>
-                <af:inputDate value="#{row.bindings.UpdatedAt.inputValue}"
-                              label="#{bindings.DcmTemplateColumnView1.hints.UpdatedAt.label}"
-                              required="#{bindings.DcmTemplateColumnView1.hints.UpdatedAt.mandatory}"
-                              shortDesc="#{bindings.DcmTemplateColumnView1.hints.UpdatedAt.tooltip}"
-                              id="id3" readOnly="true" autoSubmit="false">
-                  <f:validator binding="#{row.bindings.UpdatedAt.validator}"/>
-                  <af:convertDateTime pattern="#{bindings.DcmTemplateColumnView1.hints.UpdatedAt.format}"/>
-                </af:inputDate>
+                <af:outputText id="ot101"
+                               value="#{row.bindings.UpdatedAt.inputValue}"/>
               </af:column>
               <af:column sortProperty="#{bindings.DcmTemplateColumnView1.hints.UpdatedBy.name}"
-                         filterable="true" sortable="true"
+                         sortable="true"
                          headerText="#{bindings.DcmTemplateColumnView1.hints.UpdatedBy.label}"
                          id="c24">
                 <af:selectOneChoice value="#{row.bindings.UpdatedBy.inputValue}"
@@ -458,42 +425,42 @@
         </f:facet>
       </af:panelStretchLayout>
     </af:showDetailItem>
-    <!--
-    <af:showDetailItem text="#{viewBundle['dms.template_combination_open_close']}" id="sdi3" stretchChildren="first">
+    <af:showDetailItem text="#{viewBundle['dms.template_combination_open_close']}"
+                       id="sdi3" stretchChildren="first">
       <af:panelStretchLayout id="psl3">
-        <f:facet name="bottom"/>
         <f:facet name="center">
-          <af:table rows="#{bindings.return.rangeSize}"
-                    fetchSize="#{bindings.return.rangeSize}"
-                    emptyText="#{bindings.return.viewable ? 'No data to display.' : 'Access Denied.'}"
-                    var="row" rowBandingInterval="0"
-                    value="#{bindings.return.collectionModel}"
-                    selectedRowKeys="#{bindings.return.collectionModel.selectedRow}"
-                    selectionListener="#{bindings.return.collectionModel.makeCurrent}"
-                    rowSelection="single" id="t5">
-            <af:forEach items="#{bindings.return.attributeDefs}" var="def">
-              <af:column headerText="#{bindings.return.labels[def.name]}"
-                         sortable="true" sortProperty="#{def.name}" id="c15">
-                <af:outputText value="#{row[def.name]}" id="ot1"/>
-              </af:column>
-            </af:forEach>
-          </af:table>
+          <af:panelCollection id="pc4"
+            featuresOff="wrap freeze formatMenu">
+            <f:facet name="menus"/>
+            <f:facet name="toolbar">
+              <af:toolbar id="t8">
+                <af:commandButton text="#{viewBundle['dcm.combination_record_open']}" id="cb1"
+                                  actionListener="#{pageFlowScope.TemplateBackingBean.openComRecord}"/>
+                <af:commandButton text="#{viewBundle['dcm.combination_record_close']}" id="cb4"
+                                  actionListener="#{pageFlowScope.TemplateBackingBean.closeComRecord}"/>
+              </af:toolbar>
+            </f:facet>
+            <f:facet name="statusbar"/>
+            <af:table rows="#{bindings.return.rangeSize}"
+                      fetchSize="#{bindings.return.rangeSize}"
+                      emptyText="#{viewBundle['dms.common.nodata']}" var="row"
+                      rowBandingInterval="0"
+                      value="#{bindings.return.collectionModel}"
+                      selectedRowKeys="#{pageFlowScope.TemplateBackingBean.selectedRows}"
+                      selectionListener="#{bindings.return.collectionModel.makeCurrent}"
+                      rowSelection="multiple" id="t5"
+                      binding="#{pageFlowScope.TemplateBackingBean.recordTable}">
+              <af:forEach items="#{pageFlowScope.TemplateBackingBean.comheaderInfo}" var="def">
+                <af:column headerText="#{def['label']}"
+                           sortable="true" sortProperty="#{def['code']}" id="c15">
+                  <af:outputText value="#{row[def['code']]}" id="ot1"/>
+                </af:column>
+              </af:forEach>
+            </af:table>
+          </af:panelCollection>
         </f:facet>
-        <f:facet name="start">
-          <af:selectOneListbox value="#{bindings.DcmCombinationView1.inputValue}"
-                               label="#{bindings.DcmCombinationView1.label}"
-                               required="#{bindings.DcmCombinationView1.hints.mandatory}"
-                               shortDesc="#{bindings.DcmCombinationView1.hints.tooltip}"
-                               id="sol1">
-            <f:selectItems value="#{bindings.DcmCombinationView1.items}"
-                           id="si11"/>
-          </af:selectOneListbox>
-        </f:facet>
-        <f:facet name="end"/>
-        <f:facet name="top"/>
       </af:panelStretchLayout>
     </af:showDetailItem>
-    -->
   </af:panelTabbed>
   <af:popup id="p2">
     <af:panelWindow id="pw2">

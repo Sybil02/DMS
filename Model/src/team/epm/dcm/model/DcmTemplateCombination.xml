@@ -25,6 +25,7 @@
     ColumnType="VARCHAR2"
     TableName="DCM_TEMPLATE_COMBINATION"
     PrimaryKey="true">
+    <TransientExpression><![CDATA[java.util.UUID.randomUUID().toString().replace("-", "")]]></TransientExpression>
     <DesignTime>
       <Attr Name="_DisplaySize" Value="32"/>
     </DesignTime>
@@ -42,9 +43,9 @@
     </DesignTime>
   </Attribute>
   <Attribute
-    Name="CombinationRecordId"
+    Name="ComRecordId"
     Precision="32"
-    ColumnName="COMBINATION_RECORD_ID"
+    ColumnName="COM_RECORD_ID"
     SQLType="VARCHAR"
     Type="java.lang.String"
     ColumnType="VARCHAR2"
@@ -71,7 +72,9 @@
     SQLType="TIMESTAMP"
     Type="oracle.jbo.domain.Date"
     ColumnType="DATE"
-    TableName="DCM_TEMPLATE_COMBINATION">
+    TableName="DCM_TEMPLATE_COMBINATION"
+    IsUpdateable="while_insert">
+    <TransientExpression><![CDATA[adf.currentDateTime]]></TransientExpression>
     <DesignTime>
       <Attr Name="_DisplaySize" Value="7"/>
     </DesignTime>
@@ -83,6 +86,7 @@
     Type="oracle.jbo.domain.Date"
     ColumnType="DATE"
     TableName="DCM_TEMPLATE_COMBINATION">
+    <TransientExpression><![CDATA[adf.currentDateTime]]></TransientExpression>
     <DesignTime>
       <Attr Name="_DisplaySize" Value="7"/>
     </DesignTime>
@@ -103,6 +107,7 @@
     Type="java.lang.String"
     ColumnType="VARCHAR2"
     TableName="DCM_TEMPLATE_COMBINATION">
+    <TransientExpression><![CDATA[adf.userSession.userData.userId]]></TransientExpression>
     <DesignTime>
       <Attr Name="_DisplaySize" Value="32"/>
     </DesignTime>
@@ -115,6 +120,7 @@
     Type="java.lang.String"
     ColumnType="VARCHAR2"
     TableName="DCM_TEMPLATE_COMBINATION">
+    <TransientExpression><![CDATA[adf.userSession.userData.userId]]></TransientExpression>
     <DesignTime>
       <Attr Name="_DisplaySize" Value="32"/>
     </DesignTime>

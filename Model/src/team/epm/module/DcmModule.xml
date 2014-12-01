@@ -4,7 +4,9 @@
 <AppModule xmlns="http://xmlns.oracle.com/bc4j" Name="DcmModule"
            Version="11.1.1.64.93" InheritPersonalization="true"
            ClearCacheOnRollback="true"
-           ComponentClass="team.epm.module.DcmModuleImpl">
+           ComponentClass="team.epm.module.DcmModuleImpl"
+   ComponentInterface="team.epm.module.common.DcmModule"
+   ClientProxyName="team.epm.module.client.DcmModuleClient">
    <DesignTime>
       <Attr Name="_deployType" Value="0"/>
       <Attr Name="_isCodegen" Value="true"/>
@@ -81,4 +83,17 @@
     SrcViewUsageName="team.epm.module.DcmModule.DmsRoleView1"
     DstViewUsageName="team.epm.module.DcmModule.DcmRoleTemplateView1"
     Reversed="false"/>
+   <ClientInterface>
+      <Method
+         Name="getCombinationRecordView">
+         <Return
+            Type="oracle.jbo.ViewObject"/>
+         <Parameter
+            Name="templateId"
+            Type="java.lang.String"/>
+         <Parameter
+            Name="combinationId"
+            Type="java.lang.String"/>
+      </Method>
+   </ClientInterface>
 </AppModule>

@@ -34,9 +34,11 @@
        DcmTemplate.DATA_START_LINE, 
        DcmTemplate.COMBINATION_ID, 
        DcmTemplate.CATEGORY_ID"
-  OrderBy="DcmTemplate.SEQ">
+  OrderBy="DcmTemplate.SEQ"
+  RowClass="team.epm.dcm.view.DcmTemplateViewRowImpl">
   <DesignTime>
-    <Attr Name="_codeGenFlag2" Value="Coll|VarAccess"/>
+    <Attr Name="_codeGenFlag2" Value="Access|Coll|VarAccess"/>
+    <Attr Name="_isCodegen" Value="true"/>
   </DesignTime>
   <Variable
     Name="locale"

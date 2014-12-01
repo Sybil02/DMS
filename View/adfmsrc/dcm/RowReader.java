@@ -40,7 +40,7 @@ public class RowReader implements IRowReader {
     }
 
     private void prepareSqlStatement() {
-        StringBuffer sql = new StringBuffer(1000);
+        StringBuffer sql = new StringBuffer();
         sql.append("INSERT INTO \"").append(this.temptable.toUpperCase()).append("\"(");
         sql.append("TEMPLATE_ID,COM_RECORD_ID,SHEET_NAME,ROW_NO,CREATED_BY,UPDATED_BY,UPDATED_AT,CREATED_AT");
         for (int i = 1; i <= this.columnSize; i++) {

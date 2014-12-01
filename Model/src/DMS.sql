@@ -412,7 +412,7 @@ create table DCM_TEMPLATE_COMBINATION
 (
    ID                   VARCHAR2(32)         not null,
    TEMPLATE_ID          VARCHAR2(32),
-   COMBINATION_RECORD_ID       VARCHAR2(32),
+   COM_RECORD_ID       VARCHAR2(32),
    STATUS               VARCHAR2(10),
    CREATED_AT           DATE,
    UPDATED_AT           DATE,
@@ -430,7 +430,7 @@ comment on column DCM_TEMPLATE_COMBINATION.ID is
 comment on column DCM_TEMPLATE_COMBINATION.TEMPLATE_ID is
 '模版ID';
 
-comment on column DCM_TEMPLATE_COMBINATION.COMBINATION_RECORD_ID is
+comment on column DCM_TEMPLATE_COMBINATION.COM_RECORD_ID is
 '组合记录ID';
 
 comment on column DCM_TEMPLATE_COMBINATION.STATUS is

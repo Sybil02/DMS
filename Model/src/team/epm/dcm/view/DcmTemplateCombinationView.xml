@@ -8,7 +8,7 @@
   InheritPersonalization="true"
   SelectList="DcmTemplateCombination.ID, 
        DcmTemplateCombination.TEMPLATE_ID, 
-       DcmTemplateCombination.COMBINATION_RECORD_ID, 
+       DcmTemplateCombination.COM_RECORD_ID, 
        DcmTemplateCombination.STATUS, 
        DcmTemplateCombination.CREATED_AT, 
        DcmTemplateCombination.UPDATED_AT, 
@@ -31,7 +31,9 @@
     PrecisionRule="true"
     EntityAttrName="Id"
     EntityUsage="DcmTemplateCombination"
-    AliasName="ID"/>
+    AliasName="ID">
+    <TransientExpression><![CDATA[java.util.UUID.randomUUID().toString().replace("-", "")]]></TransientExpression>
+  </ViewAttribute>
   <ViewAttribute
     Name="TemplateId"
     PrecisionRule="true"
@@ -39,11 +41,11 @@
     EntityUsage="DcmTemplateCombination"
     AliasName="TEMPLATE_ID"/>
   <ViewAttribute
-    Name="CombinationRecordId"
+    Name="ComRecordId"
     PrecisionRule="true"
-    EntityAttrName="CombinationRecordId"
+    EntityAttrName="ComRecordId"
     EntityUsage="DcmTemplateCombination"
-    AliasName="COMBINATION_RECORD_ID"/>
+    AliasName="COM_RECORD_ID"/>
   <ViewAttribute
     Name="Status"
     PrecisionRule="true"
@@ -55,23 +57,33 @@
     PrecisionRule="true"
     EntityAttrName="CreatedAt"
     EntityUsage="DcmTemplateCombination"
-    AliasName="CREATED_AT"/>
+    AliasName="CREATED_AT"
+    IsUpdateable="while_insert">
+    <TransientExpression><![CDATA[adf.currentDateTime]]></TransientExpression>
+  </ViewAttribute>
   <ViewAttribute
     Name="UpdatedAt"
     PrecisionRule="true"
     EntityAttrName="UpdatedAt"
     EntityUsage="DcmTemplateCombination"
-    AliasName="UPDATED_AT"/>
+    AliasName="UPDATED_AT">
+    <TransientExpression><![CDATA[adf.currentDateTime]]></TransientExpression>
+  </ViewAttribute>
   <ViewAttribute
     Name="UpdatedBy"
     PrecisionRule="true"
     EntityAttrName="UpdatedBy"
     EntityUsage="DcmTemplateCombination"
-    AliasName="UPDATED_BY"/>
+    AliasName="UPDATED_BY">
+    <TransientExpression><![CDATA[adf.userSession.userData.userId]]></TransientExpression>
+  </ViewAttribute>
   <ViewAttribute
     Name="CreatedBy"
     PrecisionRule="true"
     EntityAttrName="CreatedBy"
     EntityUsage="DcmTemplateCombination"
-    AliasName="CREATED_BY"/>
+    AliasName="CREATED_BY"
+    IsUpdateable="while_insert">
+    <TransientExpression><![CDATA[adf.userSession.userData.userId]]></TransientExpression>
+  </ViewAttribute>
 </ViewObject>
