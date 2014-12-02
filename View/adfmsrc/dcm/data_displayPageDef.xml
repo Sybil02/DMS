@@ -19,7 +19,22 @@
     <iterator id="DcmJobViewIterator" Binds="DcmJobView"
               DataControl="DcmModuleDataControl" RangeSize="25"/>
     <iterator id="DcmErrorViewIterator" Binds="DcmErrorView"
-              DataControl="DcmModuleDataControl" RangeSize="25"/>
+              DataControl="DcmModuleDataControl" RangeSize="25"
+              CacheResults="false"/>
   </executables>
-  <bindings/>
+  <bindings>
+    <tree IterBinding="DcmErrorViewIterator" id="DcmErrorView">
+      <nodeDefinition DefName="team.epm.dcm.view.DcmErrorView"
+                      Name="DcmErrorView0">
+        <AttrNames>
+          <Item Value="SheetName"/>
+          <Item Value="RowNum"/>
+          <Item Value="Msg"/>
+          <Item Value="Level"/>
+          <Item Value="CreatedBy"/>
+          <Item Value="CreatedAt"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+  </bindings>
 </pageDefinition>

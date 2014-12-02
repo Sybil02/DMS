@@ -36,12 +36,14 @@ import java.util.Map;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
 import javax.faces.event.ValueChangeEvent;
 
 import javax.faces.model.SelectItem;
 
 import oracle.adf.share.ADFContext;
 import oracle.adf.share.logging.ADFLogger;
+import oracle.adf.view.rich.component.rich.RichPopup;
 import oracle.adf.view.rich.component.rich.data.RichTable;
 import oracle.adf.view.rich.component.rich.input.RichInputFile;
 import oracle.adf.view.rich.component.rich.input.RichSelectOneChoice;
@@ -112,6 +114,7 @@ public class DcmDataDisplayBean extends AbstractExcel2007Writer {
     private Map headerComponents = new LinkedHashMap();
     private RichPanelCollection panelaCollection;
     private Person curUser;
+    private RichPopup errorWindow;
 
     public DcmDataDisplayBean() {
         this.curUser =
@@ -180,6 +183,7 @@ public class DcmDataDisplayBean extends AbstractExcel2007Writer {
     }
 
     public void operation_save() {
+        boolean flag=true;
         String curComRecordId = this.getCurCombinationRecord();
         List<Map> modelData = (List<Map>)this.dataModel.getWrappedData();
         StringBuffer sql_insert = new StringBuffer();
@@ -201,9 +205,20 @@ public class DcmDataDisplayBean extends AbstractExcel2007Writer {
         try {
             DBTransaction trans =
                 (DBTransaction)ADFUtils.findIterator("DcmTemplateViewIterator").getViewObject().getApplicationModule().getTransaction();
-            trans.createStatement(0).execute("DELETE FROM \""+this.templateTmpTable
-                                             +"\" WHERE TEMPLATE_ID='"+this.curTemplateId+"' AND COM_RECORD_ID"+
-                                             (this.combinationId==null ? "IS NULL" : ("='"+curComRecordId+"'")));
+            trans.createStatement(0).execute("DELETE FROM \"" +
+                                             this.templateTmpTable +
+                                             "\" WHERE TEMPLATE_ID='" +
+                                             this.curTemplateId +
+                                             "' AND COM_RECORD_ID" +
+                                             (this.combinationId == null ?
+                                              "IS NULL" :
+                                              ("='" + curComRecordId + "'")));
+            trans.createStatement(0).execute("DELETE FROM DCM_ERROR WHERE TEMPLATE_ID='" +
+                                             this.curTemplateId +
+                                             "' AND COM_RECORD_ID" +
+                                             (this.combinationId == null ?
+                                              "IS NULL" :
+                                              ("='" + curComRecordId + "'")));
             trans.commit();
             PreparedStatement stat =
                 trans.createPreparedStatement(sql_insert.toString() +
@@ -228,10 +243,15 @@ public class DcmDataDisplayBean extends AbstractExcel2007Writer {
             stat.executeBatch();
             trans.commit();
             stat.close();
-            this.handleData("EDIT", curComRecordId);
+            flag=this.handleData("EDIT", curComRecordId);
             this.initModelData();
         } catch (Exception e) {
+            flag=false;
+            this.writeErrorMsg(e.getMessage().substring(0,2048), curComRecordId);
             this._logger.severe(e);
+        }
+        if(!flag){
+            this.showErrorPop();
         }
     }
 
@@ -269,10 +289,9 @@ public class DcmDataDisplayBean extends AbstractExcel2007Writer {
             FacesMessage fm = new FacesMessage("", msg);
             FacesContext.getCurrentInstance().addMessage(null, fm);
         } else {
-            //TODO 如果导入过程发生错误则显示错误信息
+            this.showErrorPop();
         }
         this.initModelData();
-        return;
     }
     //执行数据校验和数据转移
 
@@ -324,7 +343,6 @@ public class DcmDataDisplayBean extends AbstractExcel2007Writer {
                 if ("N".equals(cs.getString(9))) {
                     successFlag = false;
                 }
-                ;
                 trans.commit();
                 cs.close();
             }
@@ -356,9 +374,20 @@ public class DcmDataDisplayBean extends AbstractExcel2007Writer {
                 afcs.close();
             }
         } catch (Exception e) {
+            successFlag=false;
+            this.writeErrorMsg(e.getMessage().substring(0, 2048), curComRecordId);
             this._logger.severe(e);
         }
         return successFlag;
+    }
+    private void writeErrorMsg(String msg,String curComRecordId){
+        ViewObject vo=ADFUtils.findIterator("DcmErrorViewIterator").getViewObject();
+        Row row=vo.createRow();
+        row.setAttribute("TemplateId", this.curTemplateId);
+        row.setAttribute("ComRecordId", curComRecordId);
+        row.setAttribute("Msg", msg);
+        vo.insertRow(row);
+        vo.getApplicationModule().getTransaction().commit();
     }
     //获取当前的组合
 
@@ -384,9 +413,9 @@ public class DcmDataDisplayBean extends AbstractExcel2007Writer {
                 StringBuffer sql = new StringBuffer();
                 sql.append("SELECT ID FROM ").append("\"").append(combinationCode.toUpperCase()).append("\"");
                 sql.append(" WHERE 1=1");
-                for (Object headerCode : headerComponents.keySet()) {
+                for (ComHeader h : this.templateHeader) {
                     sql.append(" AND ");
-                    sql.append("\"").append(headerCode.toString().toUpperCase()).append("\"='").append(((RichSelectOneChoice)headerComponents.get(headerCode)).getValue()).append("'");
+                    sql.append("\"").append(h.getCode()).append("\"='").append(h.getValue()).append("'");
                 }
                 DBTransaction trans =
                     (DBTransaction)ADFUtils.findIterator("DcmTemplateViewIterator").getViewObject().getApplicationModule().getTransaction();
@@ -443,6 +472,13 @@ public class DcmDataDisplayBean extends AbstractExcel2007Writer {
                                               "IS NULL" :
                                               ("='" + combinationRecord +
                                                "'")));
+            trans.createStatement(0).execute("DELETE FROM DCM_ERROR WHERE TEMPLATE_ID='" +
+                                             this.curTemplateId +
+                                             "' AND COM_RECORD_ID " +
+                                             (this.combinationId == null ?
+                                              "IS NULL" :
+                                              ("='" + combinationRecord +
+                                               "'")));
         } catch (SQLException e) {
             this._logger.severe(e);
             String msg = DmsUtils.getMsg("dcm.alter.clear_tmp_table_error");
@@ -453,7 +489,8 @@ public class DcmDataDisplayBean extends AbstractExcel2007Writer {
         RowReader reader =
             new RowReader(trans, this.dataStartLine, this.curTemplateId,
                           combinationRecord, this.templateTmpTable,
-                          this.colsdef.size(), this.curUser.getId(),this.templateName);
+                          this.colsdef.size(), this.curUser.getId(),
+                          this.templateName);
         try {
             ExcelReaderUtil.readExcel(reader, fileName, true);
             reader.close();
@@ -734,7 +771,7 @@ public class DcmDataDisplayBean extends AbstractExcel2007Writer {
         }
         if (this.combinationId != null) {
             sql_where.append(" WHERE COM_RECORD_ID='").append(this.getCurCombinationRecord()).append("'");
-        }else{
+        } else {
             sql_where.append(" WHERE COM_RECORD_ID IS NULL");
         }
         sql_where.append(" ORDER BY IDX");
@@ -818,6 +855,7 @@ public class DcmDataDisplayBean extends AbstractExcel2007Writer {
         RichSelectOneChoice header =
             (RichSelectOneChoice)valueChangeEvent.getSource();
         int flag = 0;
+        int i = 0;
         for (Object key : this.headerComponents.keySet()) {
             //刷新后续表头数据
             if (flag == 1) {
@@ -827,21 +865,26 @@ public class DcmDataDisplayBean extends AbstractExcel2007Writer {
                         headerData = h;
                     }
                 }
+                //设置新的值列表
                 headerData.setValues(this.fetchHeaderValueList(headerData));
                 RichSelectOneChoice rsoc =
                     (RichSelectOneChoice)this.headerComponents.get(key);
-                SelectItem item =
-                    headerData.getValues().size() > 0 ? headerData.getValues().get(0) :
-                    null;
                 //设置默认值
-                headerData.setValue((String)item.getValue());
+                if (headerData.getValues().size() < 1) {
+                    headerData.setValue(null);
+                } else {
+                    headerData.setValue((String)headerData.getValues().get(0).getValue());
+                }
                 AdfFacesContext adfFacesContext =
                     AdfFacesContext.getCurrentInstance();
                 adfFacesContext.addPartialTarget(rsoc);
             }
+            //找到当前表头
             if (header.equals(this.headerComponents.get(key))) {
                 flag = 1;
+                this.templateHeader.get(i).setValue((String)valueChangeEvent.getNewValue());
             }
+            i++;
         }
         this.initModelData();
         AdfFacesContext adfFacesContext = AdfFacesContext.getCurrentInstance();
@@ -915,15 +958,16 @@ public class DcmDataDisplayBean extends AbstractExcel2007Writer {
     public boolean isIsXlsx() {
         return isXlsx;
     }
+    //获取导出数据时的文件名
 
     public String getExportDataExcelName() {
         if (this.isXlsx) {
-            return this.templateName + this.getCurCombinationRecord() +
-                ".xlsx";
+            return this.templateName + this.getCurComRecordText() + ".xlsx";
         } else {
-            return this.templateName + this.getCurCombinationRecord() + ".xls";
+            return this.templateName + this.getCurComRecordText() + ".xls";
         }
     }
+    //获取模板文件名
 
     public String getExportTemplateExcelName() {
         if (this.isXlsx) {
@@ -931,5 +975,33 @@ public class DcmDataDisplayBean extends AbstractExcel2007Writer {
         } else {
             return this.templateName + ".xls";
         }
+    }
+
+    public void showErrors(ActionEvent actionEvent) {
+        this.showErrorPop();
+    }
+    private void showErrorPop(){
+        ViewObject vo =ADFUtils.findIterator("DcmErrorViewIterator").getViewObject();
+        ViewCriteria viewCriteria = vo.createViewCriteria();
+        ViewCriteriaRow vr=viewCriteria.createViewCriteriaRow();
+        if(this.combinationId==null){
+            vr.setAttribute("ComRecordId"," IS NULL");
+        }else{
+            vr.setAttribute("ComRecordId","='"+this.getCurCombinationRecord()+"'");
+        }
+        vr.setAttribute("TemplateId", "='"+this.curTemplateId+"'");
+        viewCriteria.addRow(vr);
+        vo.applyViewCriteria(viewCriteria);
+        vo.executeQuery();
+        RichPopup.PopupHints ph = new RichPopup.PopupHints();
+        this.errorWindow.show(ph);
+    }
+
+    public void setErrorWindow(RichPopup errorWindow) {
+        this.errorWindow = errorWindow;
+    }
+
+    public RichPopup getErrorWindow() {
+        return errorWindow;
     }
 }

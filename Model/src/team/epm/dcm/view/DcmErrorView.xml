@@ -6,27 +6,58 @@
   Name="DcmErrorView"
   Version="11.1.1.64.93"
   InheritPersonalization="true"
-  SelectList="DcmError.SHEET_NAME, 
+  BindingStyle="OracleName"
+  CustomQuery="true"
+  PageIterMode="Full"
+  UseGlueCode="false"
+  OrderBy='SHEET_NAME,ROW_NUM,"LEVEL",VALIDATION_ID'>
+  <DesignTime>
+    <Attr Name="_codeGenFlag2" Value="Access|VarAccess"/>
+    <Attr Name="_isExpertMode" Value="true"/>
+  </DesignTime>
+  <Variable
+    Name="locale"
+    Kind="where"
+    Type="java.lang.String">
+    <TransientExpression><![CDATA[adf.context.locale]]></TransientExpression>
+  </Variable>
+  <ViewAccessor
+    Name="LST_USER"
+    ViewObjectName="team.epm.dms.view.DmsUserView"/>
+  <ListBinding
+    Name="LOV_CreatedBy"
+    ListVOName="LST_USER"
+    ListRangeSize="-1"
+    NullValueFlag="none"
+    NullValueId="LOV_CreatedBy_LOVUIHints_NullValueId"
+    MRUCount="0">
+    <AttrArray Name="AttrNames">
+      <Item Value="CreatedBy"/>
+    </AttrArray>
+    <AttrArray Name="ListAttrNames">
+      <Item Value="Id"/>
+    </AttrArray>
+    <AttrArray Name="ListDisplayAttrNames">
+      <Item Value="Name"/>
+    </AttrArray>
+    <DisplayCriteria/>
+  </ListBinding>
+  <SQLQuery>
+    <![CDATA[SELECT DcmError.SHEET_NAME, 
        DcmError.ROW_NUM, 
        DcmError.MSG, 
-       DcmError.LEVEL, 
+       DcmError."LEVEL", 
        DcmError.LOCALE, 
-       DcmError.SHEET_NO, 
        DcmError.VALIDATION_ID, 
        DcmError.CREATED_AT, 
        DcmError.UPDATED_AT, 
        DcmError.UPDATED_BY, 
        DcmError.CREATED_BY, 
        DcmError.COM_RECORD_ID, 
-       DcmError.TEMPLATE_ID"
-  FromList="DCM_ERROR DcmError"
-  BindingStyle="OracleName"
-  CustomQuery="false"
-  PageIterMode="Full"
-  UseGlueCode="false">
-  <DesignTime>
-    <Attr Name="_codeGenFlag2" Value="Access|VarAccess"/>
-  </DesignTime>
+       DcmError.TEMPLATE_ID
+FROM DCM_ERROR DcmError
+WHERE  DcmError.LOCALE=:locale]]>
+  </SQLQuery>
   <EntityUsage
     Name="DcmError"
     Entity="team.epm.dcm.model.DcmError"/>
@@ -63,13 +94,6 @@
     EntityUsage="DcmError"
     AliasName="LOCALE"/>
   <ViewAttribute
-    Name="SheetNo"
-    IsNotNull="true"
-    PrecisionRule="true"
-    EntityAttrName="SheetNo"
-    EntityUsage="DcmError"
-    AliasName="SHEET_NO"/>
-  <ViewAttribute
     Name="ValidationId"
     IsNotNull="true"
     PrecisionRule="true"
@@ -99,7 +123,15 @@
     PrecisionRule="true"
     EntityAttrName="CreatedBy"
     EntityUsage="DcmError"
-    AliasName="CREATED_BY"/>
+    AliasName="CREATED_BY"
+    LOVName="LOV_CreatedBy">
+    <Properties>
+      <SchemaBasedProperties>
+        <CONTROLTYPE
+          Value="choice"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewAttribute
     Name="ComRecordId"
     IsNotNull="true"

@@ -10,10 +10,12 @@
   DBObjectName="DCM_ERROR"
   AliasName="DcmError"
   BindingStyle="OracleName"
-  UseGlueCode="false">
+  UseGlueCode="false"
+  RowClass="team.epm.dcm.model.DcmErrorImpl">
   <DesignTime>
     <Attr Name="_codeGenFlag2" Value="Access"/>
     <AttrArray Name="_publishEvents"/>
+    <Attr Name="_isCodegen" Value="true"/>
   </DesignTime>
   <Attribute
     Name="SheetName"
@@ -22,10 +24,18 @@
     SQLType="VARCHAR"
     Type="java.lang.String"
     ColumnType="VARCHAR2"
-    TableName="DCM_ERROR">
+    TableName="DCM_ERROR"
+    IsNotNull="true"
+    PrimaryKey="true">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="300"/>
     </DesignTime>
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="dcm.error.sheetName"/>
+      </SchemaBasedProperties>
+    </Properties>
   </Attribute>
   <Attribute
     Name="RowNum"
@@ -41,6 +51,12 @@
     <DesignTime>
       <Attr Name="_DisplaySize" Value="22"/>
     </DesignTime>
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="dcm.error.rownum"/>
+      </SchemaBasedProperties>
+    </Properties>
   </Attribute>
   <Attribute
     Name="Msg"
@@ -53,6 +69,12 @@
     <DesignTime>
       <Attr Name="_DisplaySize" Value="3000"/>
     </DesignTime>
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="dcm.error.message"/>
+      </SchemaBasedProperties>
+    </Properties>
   </Attribute>
   <Attribute
     Name="Level"
@@ -65,6 +87,12 @@
     <DesignTime>
       <Attr Name="_DisplaySize" Value="10"/>
     </DesignTime>
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="dcm.error.level"/>
+      </SchemaBasedProperties>
+    </Properties>
   </Attribute>
   <Attribute
     Name="Locale"
@@ -79,21 +107,7 @@
     <DesignTime>
       <Attr Name="_DisplaySize" Value="10"/>
     </DesignTime>
-  </Attribute>
-  <Attribute
-    Name="SheetNo"
-    IsNotNull="true"
-    Precision="38"
-    Scale="0"
-    ColumnName="SHEET_NO"
-    SQLType="NUMERIC"
-    Type="oracle.jbo.domain.Number"
-    ColumnType="NUMBER"
-    TableName="DCM_ERROR"
-    PrimaryKey="true">
-    <DesignTime>
-      <Attr Name="_DisplaySize" Value="22"/>
-    </DesignTime>
+    <TransientExpression><![CDATA[adf.context.locale]]></TransientExpression>
   </Attribute>
   <Attribute
     Name="ValidationId"
@@ -119,6 +133,17 @@
     <DesignTime>
       <Attr Name="_DisplaySize" Value="7"/>
     </DesignTime>
+    <TransientExpression><![CDATA[adf.currentDateTime]]></TransientExpression>
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="createdAt"/>
+        <FMT_FORMAT
+          ResId="team.epm.dcm.model.DcmError.CreatedAt_FMT_FORMAT"/>
+        <FMT_FORMATTER
+          ResId="team.epm.dcm.model.DcmError.CreatedAt_FMT_FORMATTER"/>
+      </SchemaBasedProperties>
+    </Properties>
   </Attribute>
   <Attribute
     Name="UpdatedAt"
@@ -130,6 +155,7 @@
     <DesignTime>
       <Attr Name="_DisplaySize" Value="7"/>
     </DesignTime>
+    <TransientExpression><![CDATA[adf.currentDateTime]]></TransientExpression>
   </Attribute>
   <Attribute
     Name="UpdatedBy"
@@ -142,6 +168,7 @@
     <DesignTime>
       <Attr Name="_DisplaySize" Value="32"/>
     </DesignTime>
+    <TransientExpression><![CDATA[adf.userSession.userData.userId]]></TransientExpression>
   </Attribute>
   <Attribute
     Name="CreatedBy"
@@ -154,6 +181,13 @@
     <DesignTime>
       <Attr Name="_DisplaySize" Value="32"/>
     </DesignTime>
+    <TransientExpression><![CDATA[adf.userSession.userData.userId]]></TransientExpression>
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="createdBy"/>
+      </SchemaBasedProperties>
+    </Properties>
   </Attribute>
   <Attribute
     Name="TemplateId"
@@ -192,14 +226,16 @@
     <AttrArray Name="Attributes">
       <Item Value="team.epm.dcm.model.DcmError.RowNum"/>
       <Item Value="team.epm.dcm.model.DcmError.Locale"/>
-      <Item Value="team.epm.dcm.model.DcmError.SheetNo"/>
       <Item Value="team.epm.dcm.model.DcmError.ValidationId"/>
+      <Item Value="team.epm.dcm.model.DcmError.TemplateId"/>
+      <Item Value="team.epm.dcm.model.DcmError.ComRecordId"/>
+      <Item Value="team.epm.dcm.model.DcmError.SheetName"/>
     </AttrArray>
   </Key>
   <Key
-    Name="SysC007226">
+    Name="SysC007434">
     <DesignTime>
-      <Attr Name="_DBObjectName" Value="SYS_C007226"/>
+      <Attr Name="_DBObjectName" Value="SYS_C007434"/>
       <Attr Name="_checkCondition" Value='"ROW_NUM" IS NOT NULL'/>
       <Attr Name="_isCheck" Value="true"/>
     </DesignTime>
@@ -208,9 +244,9 @@
     </AttrArray>
   </Key>
   <Key
-    Name="SysC007227">
+    Name="SysC007435">
     <DesignTime>
-      <Attr Name="_DBObjectName" Value="SYS_C007227"/>
+      <Attr Name="_DBObjectName" Value="SYS_C007435"/>
       <Attr Name="_checkCondition" Value='"LOCALE" IS NOT NULL'/>
       <Attr Name="_isCheck" Value="true"/>
     </DesignTime>
@@ -219,20 +255,9 @@
     </AttrArray>
   </Key>
   <Key
-    Name="SysC007228">
+    Name="SysC007437">
     <DesignTime>
-      <Attr Name="_DBObjectName" Value="SYS_C007228"/>
-      <Attr Name="_checkCondition" Value='"SHEET_NO" IS NOT NULL'/>
-      <Attr Name="_isCheck" Value="true"/>
-    </DesignTime>
-    <AttrArray Name="Attributes">
-      <Item Value="team.epm.dcm.model.DcmError.SheetNo"/>
-    </AttrArray>
-  </Key>
-  <Key
-    Name="SysC007229">
-    <DesignTime>
-      <Attr Name="_DBObjectName" Value="SYS_C007229"/>
+      <Attr Name="_DBObjectName" Value="SYS_C007437"/>
       <Attr Name="_checkCondition" Value='"VALIDATION_ID" IS NOT NULL'/>
       <Attr Name="_isCheck" Value="true"/>
     </DesignTime>
@@ -240,4 +265,8 @@
       <Item Value="team.epm.dcm.model.DcmError.ValidationId"/>
     </AttrArray>
   </Key>
+  <ResourceBundle>
+    <PropertiesBundle
+      PropertiesFile="ModelBundle"/>
+  </ResourceBundle>
 </Entity>
