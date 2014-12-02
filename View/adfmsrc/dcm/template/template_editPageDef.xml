@@ -24,8 +24,9 @@
               DataControl="DcmModuleDataControl"
               id="DcmCombinationView1Iterator"/>
     <methodIterator Binds="getCombinationRecordView.result"
-                    DataControl="DcmModuleDataControl" RangeSize="25"
-                    id="getCombinationRecordViewIterator"/>
+                    DataControl="DcmModuleDataControl" RangeSize="-1"
+                    id="getCombinationRecordViewIterator" CacheResults="true"
+                    Refresh="default"/>
     <iterator id="DcmComVsQueryViewIterator" Binds="DcmComVsQueryView"
               DataControl="DcmModuleDataControl" RangeSize="25"/>
     <iterator id="DcmTemplateCombinationViewIterator"

@@ -276,7 +276,7 @@ public class DcmModuleImpl extends ApplicationModuleImpl implements DcmModule {
             StringBuffer sql_from = new StringBuffer();
             StringBuffer sql_where = new StringBuffer();
             StringBuffer sql_order = new StringBuffer();
-            sql_select.append("SELECT T1.ID,T2.ID \"TID\",NVL(T2.STATUS, 'COLSE') \"STATUS\"");
+            sql_select.append("SELECT T1.ID,T2.ID \"TID\",NVL(T2.STATUS, 'CLOSE') \"STATUS\"");
             sql_from.append(" FROM \"").append(combinationCode).append("\" T1" +
                                                                        " LEFT JOIN DCM_TEMPLATE_COMBINATION T2" +
                                                                        " ON T1.ID = T2.COM_RECORD_ID" +
@@ -299,6 +299,8 @@ public class DcmModuleImpl extends ApplicationModuleImpl implements DcmModule {
             StringBuffer sql = new StringBuffer();
             sql.append(sql_select).append(sql_from).append(sql_where).append(sql_order);
             vo = this.createViewObjectFromQueryStmt(voName, sql.toString());
+            //vo.setAccessMode(ViewObject.RANGE_PAGING);
+            //vo.setRangeSize(100);
         } else {
             //组合不存在
         }

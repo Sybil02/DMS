@@ -435,9 +435,11 @@
             <f:facet name="toolbar">
               <af:toolbar id="t8">
                 <af:commandButton text="#{viewBundle['dcm.combination_record_open']}" id="cb1"
-                                  actionListener="#{pageFlowScope.TemplateBackingBean.openComRecord}"/>
+                                  actionListener="#{pageFlowScope.TemplateBackingBean.openComRecord}"
+                                  partialSubmit="true"/>
                 <af:commandButton text="#{viewBundle['dcm.combination_record_close']}" id="cb4"
-                                  actionListener="#{pageFlowScope.TemplateBackingBean.closeComRecord}"/>
+                                  actionListener="#{pageFlowScope.TemplateBackingBean.closeComRecord}"
+                                  partialSubmit="true"/>
               </af:toolbar>
             </f:facet>
             <f:facet name="statusbar"/>
