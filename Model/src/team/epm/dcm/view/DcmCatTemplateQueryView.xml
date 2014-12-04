@@ -26,7 +26,9 @@
   <Variable
     Name="locale"
     Kind="where"
-    Type="java.lang.String"/>
+    Type="java.lang.String">
+    <TransientExpression><![CDATA[adf.context.locale]]></TransientExpression>
+  </Variable>
   <SQLQuery>
     <![CDATA[SELECT T1.ID   "CATEGORY_ID",
        T1.NAME "CATEGORY_NAME",

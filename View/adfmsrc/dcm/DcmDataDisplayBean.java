@@ -103,6 +103,7 @@ public class DcmDataDisplayBean extends AbstractExcel2007Writer {
     private int dataStartLine;
     //模版对应组合ID
     private String combinationId;
+    private String combinationCode;
     //模版列定义
     private List<ColumnDef> colsdef = new ArrayList<ColumnDef>();
     private boolean isIncrement = true;
@@ -183,7 +184,7 @@ public class DcmDataDisplayBean extends AbstractExcel2007Writer {
     }
 
     public void operation_save() {
-        boolean flag=true;
+        boolean flag = true;
         String curComRecordId = this.getCurCombinationRecord();
         List<Map> modelData = (List<Map>)this.dataModel.getWrappedData();
         StringBuffer sql_insert = new StringBuffer();
@@ -243,14 +244,15 @@ public class DcmDataDisplayBean extends AbstractExcel2007Writer {
             stat.executeBatch();
             trans.commit();
             stat.close();
-            flag=this.handleData("EDIT", curComRecordId);
+            flag = this.handleData("EDIT", curComRecordId);
             this.initModelData();
         } catch (Exception e) {
-            flag=false;
-            this.writeErrorMsg(e.getMessage().substring(0,2048), curComRecordId);
+            flag = false;
+            this.writeErrorMsg(e.getMessage().substring(0, 2048),
+                               curComRecordId);
             this._logger.severe(e);
         }
-        if(!flag){
+        if (!flag) {
             this.showErrorPop();
         }
     }
@@ -374,15 +376,18 @@ public class DcmDataDisplayBean extends AbstractExcel2007Writer {
                 afcs.close();
             }
         } catch (Exception e) {
-            successFlag=false;
-            this.writeErrorMsg(e.getMessage().substring(0, 2048), curComRecordId);
+            successFlag = false;
+            this.writeErrorMsg(e.getMessage().substring(0, 2048),
+                               curComRecordId);
             this._logger.severe(e);
         }
         return successFlag;
     }
-    private void writeErrorMsg(String msg,String curComRecordId){
-        ViewObject vo=ADFUtils.findIterator("DcmErrorViewIterator").getViewObject();
-        Row row=vo.createRow();
+
+    private void writeErrorMsg(String msg, String curComRecordId) {
+        ViewObject vo =
+            ADFUtils.findIterator("DcmErrorViewIterator").getViewObject();
+        Row row = vo.createRow();
         row.setAttribute("TemplateId", this.curTemplateId);
         row.setAttribute("ComRecordId", curComRecordId);
         row.setAttribute("Msg", msg);
@@ -782,6 +787,19 @@ public class DcmDataDisplayBean extends AbstractExcel2007Writer {
 
     private void initCombination() {
         if (null != this.combinationId) {
+            //初始化组合基本信息
+            ViewObject cVo =
+                ADFUtils.findIterator("DcmCombinationViewIterator").getViewObject();
+            ViewCriteria vc = cVo.createViewCriteria();
+            ViewCriteriaRow vrow = vc.createViewCriteriaRow();
+            vrow.setAttribute("Id", "='" + this.combinationId + "'");
+            vc.addRow(vrow);
+            cVo.applyViewCriteria(vc);
+            cVo.executeQuery();
+            if (cVo.hasNext()) {
+                this.combinationCode = (String)cVo.next().getAttribute("Code");
+            }
+            //初始化组合头信息
             ViewObject vo =
                 ADFUtils.findIterator("DcmComVsViewIterator").getViewObject();
             vo.setNamedWhereClauseParam("combinationId", this.combinationId);
@@ -793,11 +811,11 @@ public class DcmDataDisplayBean extends AbstractExcel2007Writer {
                 header.setIsAuthority((String)row.getAttribute("IsAuthority"));
                 header.setSrcTable((String)row.getAttribute("Source"));
                 header.setValueSetId((String)row.getAttribute("ValueSetId"));
+                header.setCode((String)row.getAttribute("Code"));
                 header.setValues(this.fetchHeaderValueList(header));
                 header.setValue(header.getValues().size() > 0 ?
                                 (String)header.getValues().get(0).getValue() :
                                 null);
-                header.setCode((String)row.getAttribute("Code"));
                 this.templateHeader.add(header);
             }
         }
@@ -809,14 +827,46 @@ public class DcmDataDisplayBean extends AbstractExcel2007Writer {
         DBTransaction dbTransaction =
             (DBTransaction)ADFUtils.findIterator("DcmTemplateViewIterator").getViewObject().getApplicationModule().getTransaction();
         StringBuffer sql = new StringBuffer();
-        sql.append("SELECT CODE,MEANING FROM ");
-        sql.append(header.getSrcTable());
-        sql.append(" WHERE LOCALE=? ORDER BY IDX");
+        sql.append("SELECT V.CODE,V.MEANING FROM \"");
+        sql.append(header.getSrcTable()).append("\" V");
+        sql.append(" WHERE V.LOCALE='").append(this.curUser.getLocale()).append("'");
+        sql.append(" AND EXISTS(SELECT 1 FROM \"").append(this.combinationCode).append("\" T,DCM_TEMPLATE_COMBINATION A ");
+        sql.append(" WHERE T.\"").append(header.getCode()).append("\"=V.CODE");
+        sql.append(" AND T.ID=A.COM_RECORD_ID"); 
+        sql.append(" AND A.TEMPLATE_ID='").append(this.curTemplateId).append("'"); 
+        sql.append(" AND A.STATUS='OPEN'");
+        for(ComHeader h:this.templateHeader){
+            if(!h.equals(header)){
+                sql.append("AND T.\"").append(h.getCode()).append("\"='");
+                sql.append(h.getValue()).append("'");
+            }
+        }
+        sql.append(")");
+        if ("Y".equals(header.getIsAuthority())) {
+            sql.append(" AND EXISTS(SELECT 1 FROM ");
+            sql.append("DMS_USER       T1,");
+            sql.append("DMS_USER_GROUP T2,");
+            sql.append("DMS_GROUP_ROLE T3,");
+            sql.append("DMS_ROLE_VALUE T4,");
+            sql.append("DMS_GROUP      T5,");
+            sql.append("DMS_ROLE       T6");
+            sql.append(" WHERE T1.ID = '").append(this.curUser.getId()).append("'");
+            sql.append(" AND T2.USER_ID = T1.ID");
+            sql.append(" AND T3.GROUP_ID = T2.GROUP_ID");
+            sql.append(" AND T2.GROUP_ID = T5.ID");
+            sql.append(" AND T5.ENABLE_FLAG = 'Y'");
+            sql.append(" AND T5.LOCALE = '").append(this.curUser.getLocale()).append("'");
+            sql.append(" AND T4.ROLE_ID = T3.ROLE_ID");
+            sql.append(" AND T3.ROLE_ID = T6.ID");
+            sql.append(" AND T6.ENABLE_FLAG = 'Y'");
+            sql.append(" AND T6.LOCALE = T5.LOCALE");
+            sql.append(" AND T4.VALUE_SET_ID = '").append(header.getValueSetId()).append("'");
+            sql.append(" AND T4.VALUE_ID=V.CODE)");
+        }
+        sql.append(" ORDER BY V.IDX");
         PreparedStatement stat =
             dbTransaction.createPreparedStatement(sql.toString(), -1);
         try {
-            stat.setString(1,
-                           (String)((Person)ADFContext.getCurrent().getSessionScope().get("cur_user")).getLocale());
             ResultSet rs = stat.executeQuery();
             while (rs.next()) {
                 SelectItem item = new SelectItem();
@@ -980,16 +1030,19 @@ public class DcmDataDisplayBean extends AbstractExcel2007Writer {
     public void showErrors(ActionEvent actionEvent) {
         this.showErrorPop();
     }
-    private void showErrorPop(){
-        ViewObject vo =ADFUtils.findIterator("DcmErrorViewIterator").getViewObject();
+
+    private void showErrorPop() {
+        ViewObject vo =
+            ADFUtils.findIterator("DcmErrorViewIterator").getViewObject();
         ViewCriteria viewCriteria = vo.createViewCriteria();
-        ViewCriteriaRow vr=viewCriteria.createViewCriteriaRow();
-        if(this.combinationId==null){
-            vr.setAttribute("ComRecordId"," IS NULL");
-        }else{
-            vr.setAttribute("ComRecordId","='"+this.getCurCombinationRecord()+"'");
+        ViewCriteriaRow vr = viewCriteria.createViewCriteriaRow();
+        if (this.combinationId == null) {
+            vr.setAttribute("ComRecordId", " IS NULL");
+        } else {
+            vr.setAttribute("ComRecordId",
+                            "='" + this.getCurCombinationRecord() + "'");
         }
-        vr.setAttribute("TemplateId", "='"+this.curTemplateId+"'");
+        vr.setAttribute("TemplateId", "='" + this.curTemplateId + "'");
         viewCriteria.addRow(vr);
         vo.applyViewCriteria(viewCriteria);
         vo.executeQuery();

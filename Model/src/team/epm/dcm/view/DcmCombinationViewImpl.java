@@ -26,21 +26,6 @@ public class DcmCombinationViewImpl extends ViewObjectImpl {
     public DcmCombinationViewImpl() {
     }
 
-    /**
-     * Returns the bind variable value for locale.
-     * @return bind variable value for locale
-     */
-    public String getlocale() {
-        return (String)getNamedWhereClauseParam("locale");
-    }
-
-    /**
-     * Sets <code>value</code> for bind variable locale.
-     * @param value value to bind as locale
-     */
-    public void setlocale(String value) {
-        setNamedWhereClauseParam("locale", value);
-    }
 
     public void createTable(String code,List<String> columns) throws SQLException {
         StringBuffer sqlbuf=new StringBuffer();
@@ -85,5 +70,21 @@ public class DcmCombinationViewImpl extends ViewObjectImpl {
         sql.append(sql_sub).append(")");
         this.getDBTransaction().createStatement(0).execute(sql.toString());
         this.getDBTransaction().commit();
+    }
+
+    /**
+     * Returns the bind variable value for locale.
+     * @return bind variable value for locale
+     */
+    public String getlocale() {
+        return (String)getNamedWhereClauseParam("locale");
+    }
+
+    /**
+     * Sets <code>value</code> for bind variable locale.
+     * @param value value to bind as locale
+     */
+    public void setlocale(String value) {
+        setNamedWhereClauseParam("locale", value);
     }
 }

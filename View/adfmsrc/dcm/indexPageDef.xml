@@ -20,6 +20,8 @@
     <iterator id="DcmCatTemplateQueryViewIterator"
               Binds="DcmCatTemplateQueryView" DataControl="DcmModuleDataControl"
               RangeSize="25"/>
+    <iterator id="DcmCombinationViewIterator" Binds="DcmCombinationView"
+              DataControl="DcmModuleDataControl" RangeSize="25"/>
   </executables>
   <bindings>
   </bindings>

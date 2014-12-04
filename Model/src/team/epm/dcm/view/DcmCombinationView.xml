@@ -154,7 +154,8 @@
     PrecisionRule="true"
     EntityAttrName="Code"
     EntityUsage="DcmCombination"
-    AliasName="CODE">
+    AliasName="CODE"
+    IsUpdateable="while_insert">
     <Properties>
       <SchemaBasedProperties>
         <LABEL

@@ -96,9 +96,6 @@ public class TemplateTreeModel  extends ChildPropertyTreeModel {
     
     private boolean menuVisible(TemplateTreeItem item){
         Person curUser = (Person)ADFContext.getCurrent().getSessionScope().get("cur_user");
-        if("admin".equals(curUser.getAcc())){
-            return true;
-        }
         if(TemplateTreeItem.TYPE_TEMPLATE.equals(item.getType())){
             if(this.authoriedTemplate.get(item.getId())==null){
                 return false;
