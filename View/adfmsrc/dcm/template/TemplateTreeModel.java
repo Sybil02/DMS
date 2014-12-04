@@ -2,8 +2,13 @@ package dcm.template;
 
 import common.ADFUtils;
 
+import dms.login.Person;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+
+import java.util.Map;
 
 import javax.faces.context.FacesContext;
 
@@ -23,6 +28,7 @@ import org.apache.myfaces.trinidad.model.SortCriterion;
 public class TemplateTreeModel  extends ChildPropertyTreeModel {
     private ViewObject catVo;
     private ViewObject templateVo;
+    private Map authoriedTemplate=new HashMap();
     public TemplateTreeModel() {
         super();
         DCIteratorBinding catBinding =
@@ -32,7 +38,13 @@ public class TemplateTreeModel  extends ChildPropertyTreeModel {
         DCIteratorBinding tempalteBinding =
             ADFUtils.findIterator("DcmTemplateViewIterator");
         this.templateVo = tempalteBinding.getViewObject();
-
+        ViewObject vo=ADFUtils.findIterator("DcmUserTemplateViewIterator").getViewObject();
+        vo.executeQuery();
+        while(vo.hasNext()){
+            Row row=vo.next();
+            this.authoriedTemplate.put(row.getAttribute("TemplateId"), "TemplateName");
+        }
+        
         List<TemplateTreeItem> root = this.getChildTreeItem(null);
         for (TemplateTreeItem itm : root) {
             if(TemplateTreeItem.TYPE_CATEGORY.equals(itm.getType())){
@@ -59,7 +71,9 @@ public class TemplateTreeModel  extends ChildPropertyTreeModel {
             String id=ObjectUtils.toString(row.getAttribute("Id"));
             String label=ObjectUtils.toString(row.getAttribute("Name"));
             TemplateTreeItem item = new TemplateTreeItem(id,label,TemplateTreeItem.TYPE_CATEGORY);
-            items.add(item);
+            if(this.menuVisible(item)){
+                items.add(item);
+            }
         }
         
         vc=this.templateVo.createViewCriteria();
@@ -73,9 +87,36 @@ public class TemplateTreeModel  extends ChildPropertyTreeModel {
             String id=ObjectUtils.toString(row.getAttribute("Id"));
             String label=ObjectUtils.toString(row.getAttribute("Name"));
             TemplateTreeItem item = new TemplateTreeItem(id,label,TemplateTreeItem.TYPE_TEMPLATE);
-            items.add(item);
+            if(this.menuVisible(item)){
+                items.add(item);
+            }
         }
         return items;
+    }
+    
+    private boolean menuVisible(TemplateTreeItem item){
+        Person curUser = (Person)ADFContext.getCurrent().getSessionScope().get("cur_user");
+        if("admin".equals(curUser.getAcc())){
+            return true;
+        }
+        if(TemplateTreeItem.TYPE_TEMPLATE.equals(item.getType())){
+            if(this.authoriedTemplate.get(item.getId())==null){
+                return false;
+            }else{
+                return true;
+            }
+        }else{
+            ViewObject vo=ADFUtils.findIterator("DcmCatTemplateQueryViewIterator").getViewObject();
+            vo.setNamedWhereClauseParam("categoryId", item.getId());
+            vo.executeQuery();
+            while(vo.hasNext()){
+                Row row=vo.next();
+                if(this.authoriedTemplate.get(row.getAttribute("TemplateId"))!=null){
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     @Override

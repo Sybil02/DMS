@@ -3,49 +3,46 @@
 <!---->
 <ViewObject
   xmlns="http://xmlns.oracle.com/bc4j"
-  Name="DmsMenuTreeView"
+  Name="DcmCatTemplateQueryView"
   Version="11.1.1.64.93"
   InheritPersonalization="true"
   BindingStyle="OracleName"
   CustomQuery="true"
   PageIterMode="Full"
-  UseGlueCode="false"
-  RowClass="team.epm.dms.view.DmsMenuTreeViewRowImpl"
-  ComponentClass="team.epm.dms.view.DmsMenuTreeViewImpl">
+  UseGlueCode="false">
   <DesignTime>
     <Attr Name="_isExpertMode" Value="true"/>
-    <Attr Name="_codeGenFlag2" Value="Access|Coll|VarAccess"/>
-    <Attr Name="_isCodegen" Value="true"/>
   </DesignTime>
   <Properties>
     <SchemaBasedProperties>
       <LABEL
-        ResId="team.epm.dms.view.DmsMenuTreeView_LABEL"/>
+        ResId="team.epm.dcm.view.DcmCatTemplateQueryView_LABEL"/>
     </SchemaBasedProperties>
   </Properties>
   <Variable
-    Name="locale"
+    Name="categoryId"
     Kind="where"
-    Type="java.lang.String">
-    <TransientExpression><![CDATA[adf.context.locale]]></TransientExpression>
-  </Variable>
+    Type="java.lang.String"/>
   <Variable
-    Name="p_id"
+    Name="locale"
     Kind="where"
     Type="java.lang.String"/>
   <SQLQuery>
-    <![CDATA[select t1.id, t1.label,t1.p_id,t2.id function_id, t2.action
-  from dms_menu t1 left join dms_function t2
-   on t1.locale = t2.locale
-   and t1.function_id = t2.id
-  where 
-   t1.locale = :locale
-   and t1.enable_flag = 'Y'
-   and nvl(t1.p_id,' ')=nvl(:p_id,' ')
-order by t1.seq]]>
+    <![CDATA[SELECT T1.ID   "CATEGORY_ID",
+       T1.NAME "CATEGORY_NAME",
+       T2.ID   "TEMPLATE_ID",
+       T2.NAME "TEMPLATE_NAME"
+  FROM (SELECT T.ID, T.NAME,t.Locale
+          FROM DCM_TEMPLATE_CAT T
+         START WITH T.ID = :categoryId
+        CONNECT BY PRIOR T.ID = T.P_ID AND PRIOR T.LOCALE=T.LOCALE) T1,
+       DCM_TEMPLATE T2
+ WHERE T2.LOCALE = :locale
+   AND T1.LOCALE=T2.LOCALE
+   AND T2.CATEGORY_ID = T1.ID]]>
   </SQLQuery>
   <ViewAttribute
-    Name="Id"
+    Name="CategoryId"
     IsUpdateable="false"
     IsPersistent="false"
     IsNotNull="true"
@@ -53,45 +50,31 @@ order by t1.seq]]>
     Precision="255"
     Type="java.lang.String"
     ColumnType="VARCHAR2"
-    AliasName="ID"
-    Expression="ID"
+    AliasName="CATEGORY_ID"
+    Expression="CATEGORY_ID"
     SQLType="VARCHAR">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="32"/>
     </DesignTime>
   </ViewAttribute>
   <ViewAttribute
-    Name="Label"
+    Name="CategoryName"
     IsUpdateable="false"
     IsPersistent="false"
+    IsNotNull="true"
     PrecisionRule="true"
-    Precision="150"
+    Precision="100"
     Type="java.lang.String"
     ColumnType="VARCHAR2"
-    AliasName="LABEL"
-    Expression="LABEL"
+    AliasName="CATEGORY_NAME"
+    Expression="CATEGORY_NAME"
     SQLType="VARCHAR">
     <DesignTime>
-      <Attr Name="_DisplaySize" Value="150"/>
+      <Attr Name="_DisplaySize" Value="100"/>
     </DesignTime>
   </ViewAttribute>
   <ViewAttribute
-    Name="PId"
-    IsUpdateable="false"
-    IsPersistent="false"
-    PrecisionRule="true"
-    Precision="32"
-    Type="java.lang.String"
-    ColumnType="VARCHAR2"
-    AliasName="P_ID"
-    Expression="P_ID"
-    SQLType="VARCHAR">
-    <DesignTime>
-      <Attr Name="_DisplaySize" Value="32"/>
-    </DesignTime>
-  </ViewAttribute>
-  <ViewAttribute
-    Name="FunctionId"
+    Name="TemplateId"
     IsUpdateable="false"
     IsPersistent="false"
     IsNotNull="true"
@@ -99,26 +82,26 @@ order by t1.seq]]>
     Precision="32"
     Type="java.lang.String"
     ColumnType="VARCHAR2"
-    AliasName="FUNCTION_ID"
-    Expression="FUNCTION_ID"
+    AliasName="TEMPLATE_ID"
+    Expression="TEMPLATE_ID"
     SQLType="VARCHAR">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="32"/>
     </DesignTime>
   </ViewAttribute>
   <ViewAttribute
-    Name="Action"
+    Name="TemplateName"
     IsUpdateable="false"
     IsPersistent="false"
     PrecisionRule="true"
-    Precision="100"
+    Precision="300"
     Type="java.lang.String"
     ColumnType="VARCHAR2"
-    AliasName="ACTION"
-    Expression="ACTION"
+    AliasName="TEMPLATE_NAME"
+    Expression="TEMPLATE_NAME"
     SQLType="VARCHAR">
     <DesignTime>
-      <Attr Name="_DisplaySize" Value="100"/>
+      <Attr Name="_DisplaySize" Value="300"/>
     </DesignTime>
   </ViewAttribute>
   <ResourceBundle>

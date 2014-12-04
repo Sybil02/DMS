@@ -69,7 +69,7 @@ public class LoginBean implements Serializable {
         DCIteratorBinding binding =
             ADFUtils.findIterator("DmsUserViewIterator");
         DmsUserViewImpl dmsUserView = (DmsUserViewImpl)binding.getViewObject();
-        dmsUserView.setWhereClause("DmsUser.Acc=:acc");
+        dmsUserView.setWhereClause("DmsUser.Acc=:acc AND DmsUser.Enable_Flag='Y'");
         dmsUserView.defineNamedWhereClauseParam("acc", null, null);
         dmsUserView.setNamedWhereClauseParam("acc",
                                              (this.account + "").trim());
@@ -132,7 +132,17 @@ public class LoginBean implements Serializable {
         ApplicationModule applicationModule = user.getApplicationModule();
         applicationModule.getSession().getUserData().put("userId",
                                                          user.getId());
-        ADFContext.getCurrent().getSessionScope().put("userId", user.getId());
+        ADFContext.getCurrent().getSessionScope().put("userId", user.getId());       
+        ViewObject vo=ADFUtils.findIterator("DmsUserFunctionViewIterator").getViewObject();
+        vo.setNamedWhereClauseParam("locale", user.getLocale());
+        vo.executeQuery();
+        Map authoriedFunction=new HashMap();
+        while(vo.hasNext()){
+            Row row=vo.next();
+            authoriedFunction.put(row.getAttribute("FunctionId"), row.getAttribute("FunctionName"));
+        }
+        ADFContext.getCurrent().getSessionScope().put("authoriedFunction",
+                                                      authoriedFunction);       
     }
 
     public void logout() {

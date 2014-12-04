@@ -7,12 +7,15 @@ import dms.login.Person;
 import java.util.ArrayList;
 import java.util.List;
 
+import java.util.Map;
+
 import javax.faces.context.FacesContext;
 
 import oracle.adf.model.binding.DCIteratorBinding;
 
 import oracle.adf.share.ADFContext;
 
+import oracle.jbo.Row;
 import oracle.jbo.ViewObject;
 
 import org.apache.commons.lang.ObjectUtils;
@@ -34,28 +37,53 @@ public class MenuTreeModel extends ChildPropertyTreeModel {
         DCIteratorBinding binding =
             ADFUtils.findIterator("DmsMenuTreeViewIterator");
         this.vo = binding.getViewObject();
-        this.locale =
-                ((Person)ADFContext.getCurrent().getSessionScope().get("cur_user")).getLocale();
-
         List<MenuItem> root = this.getChildMenuItem(pid);
         for (MenuItem itm : root) {
             itm.setChildren(this.getChildMenuItem(itm.getId()));
         }
-
         this.setChildProperty("children");
         this.setWrappedData(root);
     }
 
     private List<MenuItem> getChildMenuItem(String pid) {
-        this.vo.setNamedWhereClauseParam("locale", this.locale);
+        Person curUser = (Person)ADFContext.getCurrent().getSessionScope().get("cur_user");
+        this.vo.setNamedWhereClauseParam("locale", curUser.getLocale());
         this.vo.setNamedWhereClauseParam("p_id", pid);
         vo.executeQuery();
-        List<MenuItem> items = new ArrayList<MenuItem>();
+        List<MenuItem> items = new ArrayList<MenuItem>();                   
         while (vo.hasNext()) {
             MenuItem item = new MenuItem((DmsMenuTreeViewRowImpl)vo.next());
-            items.add(item);
+            if(this.isMenuVisible(item)){
+                items.add(item);
+            }
         }
         return items;
+    }
+    private boolean isMenuVisible(MenuItem menu){
+        Person curUser = (Person)ADFContext.getCurrent().getSessionScope().get("cur_user");
+        Map authoriedFunction = (Map)ADFContext.getCurrent().getSessionScope().get("authoriedFunction");
+        if("admin".equals(curUser.getAcc())){
+            return true;
+        }
+        if(menu.getFunctionId()!=null){
+            if(authoriedFunction.get(menu.getFunctionId())==null){
+                return false;
+            }else{
+                return true;
+            }
+        }else{
+            ViewObject vo=ADFUtils.findIterator("DmsSubMenuQueryViewIterator").getViewObject();
+            vo.setNamedWhereClauseParam("locale", curUser.getLocale());
+            vo.setNamedWhereClauseParam("id",menu.getId());
+            vo.executeQuery();
+            while(vo.hasNext()){
+               Row row= vo.next();
+                if(row.getAttribute("FunctionId")!=null&&authoriedFunction.get(row.getAttribute("FunctionId"))!=null){
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     @Override

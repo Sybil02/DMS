@@ -19,20 +19,15 @@
             </af:selectOneChoice>
             <af:commandToolbarButton actionListener="#{bindings.CreateInsert1.execute}"
                                      text="#{viewBundle['dcm.template.new']}"
-                                     disabled="#{bindings.DmsRoleView11.currentRow==null ? true : false}"
                                      id="ctb5"/>
             <af:commandToolbarButton actionListener="#{bindings.Delete1.execute}"
                                      text="#{viewBundle['dcm.common.delete']}"
-                                     disabled="#{!bindings.Delete1.enabled}"
                                      id="ctb6"/>
             <af:commandButton actionListener="#{bindings.Commit.execute}"
                               text="#{viewBundle['dms.common.save']}"
-                              disabled="#{!bindings.Commit.enabled}" id="ctb7"
                               partialTriggers="ctb5 ctb6 t6"/>
             <af:commandButton actionListener="#{bindings.Rollback.execute}"
                               text="#{viewBundle['dms.common.rollback']}"
-                              disabled="#{!bindings.Rollback.enabled}"
-                              immediate="true" id="ctb8"
                               partialTriggers="ctb5 ctb6 t6">
               <af:resetActionListener/>
             </af:commandButton>
@@ -55,7 +50,7 @@
                                 label="#{row.bindings.TemplateId.label}"
                                 required="#{bindings.DcmRoleTemplateView11.hints.TemplateId.mandatory}"
                                 shortDesc="#{bindings.DcmRoleTemplateView11.hints.TemplateId.tooltip}"
-                                id="soc3" autoSubmit="true">
+                                id="soc3">
               <f:selectItems value="#{row.bindings.TemplateId.items}" id="si3"/>
             </af:selectOneChoice>
           </af:column>
@@ -67,7 +62,7 @@
                                 label="#{row.bindings.ReadOnly.label}"
                                 required="#{bindings.DcmRoleTemplateView11.hints.ReadOnly.mandatory}"
                                 shortDesc="#{bindings.DcmRoleTemplateView11.hints.ReadOnly.tooltip}"
-                                id="soc2" autoSubmit="true">
+                                id="soc2">
               <f:selectItems value="#{row.bindings.ReadOnly.items}" id="si2"/>
             </af:selectOneChoice>
           </af:column>

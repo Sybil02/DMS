@@ -18,7 +18,12 @@ import oracle.jbo.ViewObject;
 import oracle.jbo.server.ApplicationModuleImpl;
 import oracle.jbo.server.ViewObjectImpl;
 
+import team.epm.dms.view.DmsFunctionViewImpl;
+import team.epm.dms.view.DmsGroupRoleViewImpl;
+import team.epm.dms.view.DmsGroupViewImpl;
 import team.epm.dms.view.DmsMenuTreeViewImpl;
+import team.epm.dms.view.DmsRoleViewImpl;
+import team.epm.dms.view.DmsUserGroupViewImpl;
 import team.epm.dms.view.DmsUserViewImpl;
 
 
@@ -361,6 +366,22 @@ public class DmsModuleImpl extends ApplicationModuleImpl {
             }
             getDBTransaction().commit();
         }
+
+    /**
+     * Container's getter for DmsUserFunctionView.
+     * @return DmsUserFunctionView
+     */
+    public ViewObjectImpl getDmsUserFunctionView() {
+        return (ViewObjectImpl)findViewObject("DmsUserFunctionView");
     }
+
+    /**
+     * Container's getter for DmsSubMenuQueryView.
+     * @return DmsSubMenuQueryView
+     */
+    public ViewObjectImpl getDmsSubMenuQueryView() {
+        return (ViewObjectImpl)findViewObject("DmsSubMenuQueryView");
+    }
+}
 
 

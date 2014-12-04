@@ -3,46 +3,37 @@
 <!---->
 <ViewObject
   xmlns="http://xmlns.oracle.com/bc4j"
-  Name="DmsMenuTreeView"
+  Name="DmsSubMenuQueryView"
   Version="11.1.1.64.93"
   InheritPersonalization="true"
   BindingStyle="OracleName"
   CustomQuery="true"
   PageIterMode="Full"
-  UseGlueCode="false"
-  RowClass="team.epm.dms.view.DmsMenuTreeViewRowImpl"
-  ComponentClass="team.epm.dms.view.DmsMenuTreeViewImpl">
+  UseGlueCode="false">
   <DesignTime>
     <Attr Name="_isExpertMode" Value="true"/>
-    <Attr Name="_codeGenFlag2" Value="Access|Coll|VarAccess"/>
-    <Attr Name="_isCodegen" Value="true"/>
   </DesignTime>
   <Properties>
     <SchemaBasedProperties>
       <LABEL
-        ResId="team.epm.dms.view.DmsMenuTreeView_LABEL"/>
+        ResId="team.epm.dms.view.DmsSubMenuQueryView_LABEL"/>
     </SchemaBasedProperties>
   </Properties>
+  <Variable
+    Name="id"
+    Kind="where"
+    Type="java.lang.String"/>
   <Variable
     Name="locale"
     Kind="where"
     Type="java.lang.String">
     <TransientExpression><![CDATA[adf.context.locale]]></TransientExpression>
   </Variable>
-  <Variable
-    Name="p_id"
-    Kind="where"
-    Type="java.lang.String"/>
   <SQLQuery>
-    <![CDATA[select t1.id, t1.label,t1.p_id,t2.id function_id, t2.action
-  from dms_menu t1 left join dms_function t2
-   on t1.locale = t2.locale
-   and t1.function_id = t2.id
-  where 
-   t1.locale = :locale
-   and t1.enable_flag = 'Y'
-   and nvl(t1.p_id,' ')=nvl(:p_id,' ')
-order by t1.seq]]>
+    <![CDATA[SELECT T.Id,T.Label,t.function_id
+  FROM (SELECT * FROM DMS_MENU WHERE LOCALE = :locale AND ENABLE_FLAG='Y') T
+ START WITH T.P_ID = :id
+CONNECT BY PRIOR T.ID = T.P_ID]]>
   </SQLQuery>
   <ViewAttribute
     Name="Id"
@@ -76,25 +67,9 @@ order by t1.seq]]>
     </DesignTime>
   </ViewAttribute>
   <ViewAttribute
-    Name="PId"
-    IsUpdateable="false"
-    IsPersistent="false"
-    PrecisionRule="true"
-    Precision="32"
-    Type="java.lang.String"
-    ColumnType="VARCHAR2"
-    AliasName="P_ID"
-    Expression="P_ID"
-    SQLType="VARCHAR">
-    <DesignTime>
-      <Attr Name="_DisplaySize" Value="32"/>
-    </DesignTime>
-  </ViewAttribute>
-  <ViewAttribute
     Name="FunctionId"
     IsUpdateable="false"
     IsPersistent="false"
-    IsNotNull="true"
     PrecisionRule="true"
     Precision="32"
     Type="java.lang.String"
@@ -104,21 +79,6 @@ order by t1.seq]]>
     SQLType="VARCHAR">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="32"/>
-    </DesignTime>
-  </ViewAttribute>
-  <ViewAttribute
-    Name="Action"
-    IsUpdateable="false"
-    IsPersistent="false"
-    PrecisionRule="true"
-    Precision="100"
-    Type="java.lang.String"
-    ColumnType="VARCHAR2"
-    AliasName="ACTION"
-    Expression="ACTION"
-    SQLType="VARCHAR">
-    <DesignTime>
-      <Attr Name="_DisplaySize" Value="100"/>
     </DesignTime>
   </ViewAttribute>
   <ResourceBundle>

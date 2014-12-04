@@ -66,6 +66,12 @@
   <ViewUsage
     Name="DmsGroupsForRoleView"
     ViewObjectName="team.epm.dms.view.DmsGroupsForRoleView"/>
+  <ViewUsage
+    Name="DmsUserFunctionView"
+    ViewObjectName="team.epm.dms.view.DmsUserFunctionView"/>
+  <ViewUsage
+    Name="DmsSubMenuQueryView"
+    ViewObjectName="team.epm.dms.view.DmsSubMenuQueryView"/>
   <ResourceBundle>
     <PropertiesBundle
       PropertiesFile="ModelBundle"/>

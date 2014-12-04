@@ -314,6 +314,22 @@ public class DcmModuleImpl extends ApplicationModuleImpl implements DcmModule {
     public ViewObjectImpl getDcmValidationQueryView() {
         return (ViewObjectImpl)findViewObject("DcmValidationQueryView");
     }
+
+    /**
+     * Container's getter for DcmUserTemplateView.
+     * @return DcmUserTemplateView
+     */
+    public ViewObjectImpl getDcmUserTemplateView() {
+        return (ViewObjectImpl)findViewObject("DcmUserTemplateView");
+    }
+
+    /**
+     * Container's getter for DcmCatTemplateQueryView.
+     * @return DcmCatTemplateQueryView
+     */
+    public ViewObjectImpl getDcmCatTemplateQueryView() {
+        return (ViewObjectImpl)findViewObject("DcmCatTemplateQueryView");
+    }
 }
 
 

@@ -9,6 +9,8 @@
           id="pageTemplateBinding" Refresh="ifNeeded"/>
     <iterator id="DmsMenuTreeViewIterator" Binds="DmsMenuTreeView"
               DataControl="DmsModuleDataControl" RangeSize="25"/>
+    <iterator id="DmsSubMenuQueryViewIterator" Binds="DmsSubMenuQueryView"
+              DataControl="DmsModuleDataControl" RangeSize="25"/>
   </executables>
   <bindings/>
 </pageDefinition>
