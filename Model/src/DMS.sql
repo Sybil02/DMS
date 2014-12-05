@@ -453,20 +453,19 @@ comment on column DCM_TEMPLATE_COMBINATION.CREATED_BY is
 /*==============================================================*/
 create table DCM_ERROR 
 (
-   TEMPLATE_ID          VARCHAR2(32),
-   COM_RECORD_ID        VARCHAR2(32),
-   SHEET_NAME           VARCHAR2(300),
+   TEMPLATE_ID          VARCHAR2(32)         not null,
+   COM_RECORD_ID        VARCHAR2(32)         ,
+   SHEET_NAME           VARCHAR2(300)        not null,     
    ROW_NUM              INTEGER              not null,
    MSG                  VARCHAR2(3000),
    "LEVEL"              VARCHAR2(10),
    LOCALE               VARCHAR2(10)         not null,
-   SHEET_NO             INTEGER              not null,
    VALIDATION_ID        VARCHAR2(32)         not null,
    CREATED_AT           DATE,
    UPDATED_AT           DATE,
    UPDATED_BY           VARCHAR2(32),
    CREATED_BY           VARCHAR2(32),
-   constraint PK_DCM_ERROR primary key (TEMPLATE_ID,COM_RECORD_ID, ROW_NUM, LOCALE, SHEET_NO, VALIDATION_ID)
+   constraint PK_DCM_ERROR primary key (TEMPLATE_ID,COM_RECORD_ID, ROW_NUM, LOCALE, SHEET_NAME, VALIDATION_ID)
 );
 
 comment on table DCM_ERROR is
@@ -492,9 +491,6 @@ comment on column DCM_ERROR."LEVEL" is
 
 comment on column DCM_ERROR.LOCALE is
 '语言';
-
-comment on column DCM_ERROR.SHEET_NO is
-'工作簿编号';
 
 comment on column DCM_ERROR.VALIDATION_ID is
 '校验程序ID';
