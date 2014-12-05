@@ -39,8 +39,8 @@
                   </hash>
                </list>
             </hash>
-            <url n="earURL" path="deploy/DMS_application1.ear"/>
-            <value n="enterpriseAppName" v="DMS_application1"/>
+            <url n="earURL" path="deploy/HDMS.ear"/>
+            <value n="enterpriseAppName" v="HDMS"/>
             <hash n="fileGroups">
                <list n="groups">
                   <hash>
@@ -81,5 +81,7 @@
       <list n="profileList">
          <string v="DMS_application1"/>
       </list>
+      <value n="Security-Deployment-Overwrite-Credentials-Key" v="true"/>
+      <value n="Weblogic-JDBC-Auto-Sync-Key" v="false"/>
    </hash>
 </jws:workspace>

@@ -1679,9 +1679,9 @@ CREATE TABLE DCM_TEMPTABLE80(
   UPDATED_AT    DATE
 );
 /*==============================================================*/
-/* Table: DCM_TEMPTABLE80                                         */
+/* Table: DCM_TEMPTABLE100                                         */
 /*==============================================================*/
-CREATE TABLE DCM_TEMPTABLE80(
+CREATE TABLE DCM_TEMPTABLE100(
   TEMPLATE_ID   VARCHAR2(32),
   COM_RECORD_ID VARCHAR2(32),
   SHEET_NAME    VARCHAR2(300),
