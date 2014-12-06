@@ -12,16 +12,20 @@
         <af:panelStretchLayout id="psl1" startWidth="50%" endWidth="0px"
                                topHeight="30%"
                                inlineStyle="
-                               background-image:url(./btn.png); 
                                -moz-background-size: 100% 100%; 
                                -o-background-size: 100% 100%; 
                                -webkit-background-size: 100% 100%; 
                                background-size: 100% 100%; 
                                -moz-border-image: url(../images/login-bg.png) 0; 
-                               background-repeat:no-repeat\9; 
-                               background-image:none\9; 
-                               filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../images/login-bg.png', sizingMethod='scale')\9; 
-                               background:url(../images/login-bg.png);background-repeat:repeat-x; min-height:400px;-webkit-background-size: contain;-moz-background-size: contain;-o-background-size: contain;background-size: contain;">
+                               background-repeat:no-repeat; 
+                               background-image:none; 
+                               filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../images/login-bg.png', sizingMethod='scale'); 
+                               background:url(../images/login-bg.png);
+                               background-repeat:repeat-x; min-height:400px;
+                               -webkit-background-size: contain;
+                               -moz-background-size: contain;
+                               -o-background-size: contain;
+                               background-size: contain;">
           <f:facet name="bottom"/>
           <f:facet name="center">
             <af:panelFormLayout id="pfl1">
@@ -37,12 +41,9 @@
                   <af:goLink text="#{viewBundle['login.forget_password']}"
                              id="login_forget_pwd"
                              inlineStyle="margin-left:2px"/>
-                  <af:goLink inlineStyle="margin-left:20px"
-                             text="#{viewBundle['login.reset_password']}"
-                             id="login_reset_pwd"/>
                   <af:commandButton text="#{viewBundle['login.login_action']}"
                                     id="login_action"
-                                    inlineStyle="margin-left:35px;width:50px"
+                                    inlineStyle="margin-left:108px;width:50px"
                                     action="#{LoginBean.login}"/>
                 </af:panelGroupLayout>
               </f:facet>
