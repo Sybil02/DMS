@@ -289,6 +289,7 @@ public class DcmModuleImpl extends ApplicationModuleImpl implements DcmModule {
                 sql_select.append(",T").append(i).append(".MEANING").append(" \"").append(row.getAttribute("Code")).append("\"");
                 sql_from.append(",\"").append(row.getAttribute("Source")).append("\" ").append("T").append(i);
                 sql_where.append(" AND T1.\"").append(row.getAttribute("Code")).append("\"=T").append(i).append(".CODE");
+                sql_where.append(" AND T").append(i).append(".LOCALE='").append(ADFContext.getCurrent().getLocale()).append("'");
                 if (i == 3) {
                     sql_order.append(" T").append(i).append(".IDX");
                 } else {

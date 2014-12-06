@@ -16,17 +16,17 @@
               <af:toolbar id="t4">
                 <af:commandToolbarButton actionListener="#{bindings.CreateInsert.execute}"
                                          text="#{viewBundle['dcm.template.add']}"
-                                         id="ctb1"/>
+                                         id="ctb1" partialTriggers="t1"/>
                 <af:commandToolbarButton text="#{viewBundle['dcm.template.delete']}"
-                                         id="ctb2">
+                                         id="ctb2" partialTriggers="t1">
                   <af:showPopupBehavior popupId="::p2"/>
                 </af:commandToolbarButton>
                 <af:commandButton actionListener="#{pageFlowScope.TemplateBackingBean.createTemplate}"
                                   text="#{viewBundle['dms.common.save']}"
-                                  id="ctb3"/>
+                                  id="ctb3" partialTriggers="t1"/>
                 <af:commandButton actionListener="#{bindings.Rollback.execute}"
                                   text="#{viewBundle['dms.common.rollback']}"
-                                  id="ctb4">
+                                  id="ctb4" partialTriggers="t1">
                   <af:resetActionListener/>
                 </af:commandButton>
               </af:toolbar>
@@ -42,7 +42,7 @@
                       filterVisible="false" varStatus="vs"
                       selectedRowKeys="#{bindings.DcmTemplateView1.collectionModel.selectedRow}"
                       selectionListener="#{bindings.DcmTemplateView1.collectionModel.makeCurrent}"
-                      editingMode="clickToEdit">
+                      editingMode="clickToEdit" partialTriggers="::ctb1">
               <af:column sortProperty="#{bindings.DcmTemplateView1.hints.Name.name}"
                          filterable="true" sortable="true"
                          headerText="#{bindings.DcmTemplateView1.hints.Name.label}"

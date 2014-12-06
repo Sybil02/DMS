@@ -62,7 +62,6 @@ public class TemplateBackingBean {
         dcmRemainAttr.add("UPDATED_AT");
         dcmRemainAttr.add("CREATED_BY");
         dcmRemainAttr.add("UPDATED_BY");
-        dcmRemainAttr.add("ID");
     }
 
     public void createTemplate(ActionEvent actionEvent) throws SQLException {

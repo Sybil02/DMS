@@ -12,7 +12,7 @@
                           binding="#{backingBeanScope.RoleGroupBean.selectShuttle}"
                           value="#{backingBeanScope.RoleGroupBean.selectedRoleList}" 
                           leadingHeader="#{viewBundle['dms.role.available_list']}"
-                          trailingHeader="#{viewBundle['dms.role.available_list']}"                                               
+                          trailingHeader="#{viewBundle['dms.role.selected_list']}"                                               
                           size="20"
                           simple="true"
                           autoSubmit="true"

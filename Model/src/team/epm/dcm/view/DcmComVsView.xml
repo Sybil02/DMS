@@ -19,7 +19,8 @@
   CustomQuery="false"
   PageIterMode="Full"
   UseGlueCode="false"
-  ComponentClass="team.epm.dcm.view.DcmComVsViewImpl">
+  ComponentClass="team.epm.dcm.view.DcmComVsViewImpl"
+  OrderBy="DcmComVs.SEQ">
   <DesignTime>
     <Attr Name="_codeGenFlag2" Value="Coll|VarAccess"/>
   </DesignTime>
@@ -126,7 +127,8 @@
     PrecisionRule="true"
     EntityAttrName="CreatedAt"
     EntityUsage="DcmComVs"
-    AliasName="CREATED_AT">
+    AliasName="CREATED_AT"
+    IsUpdateable="while_insert">
     <Properties>
       <SchemaBasedProperties>
         <LABEL
@@ -165,7 +167,8 @@
     PrecisionRule="true"
     EntityAttrName="CreatedBy"
     EntityUsage="DcmComVs"
-    AliasName="CREATED_BY">
+    AliasName="CREATED_BY"
+    IsUpdateable="while_insert">
     <Properties>
       <SchemaBasedProperties>
         <LABEL

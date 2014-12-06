@@ -177,7 +177,7 @@
             popupFetchListener="#{backingBeanScope.CombinationBean.createInsertListener}"
             popupCanceledListener="#{backingBeanScope.CombinationBean.closePopup}">
     <af:panelWindow id="pw1" modal="true" inlineStyle="width:360.0px;"
-                    title="#{viewBundle['dcm.valueset_add']}">
+                    title="#{viewBundle['dcm.combination.new']}">
       <af:panelStretchLayout id="psl3" inlineStyle="width:350px;">
         <f:facet name="center">
           <af:panelCollection id="pc3"

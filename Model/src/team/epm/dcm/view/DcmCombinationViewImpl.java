@@ -7,6 +7,8 @@ import java.sql.SQLException;
 
 import java.util.List;
 
+import oracle.adf.share.ADFContext;
+
 import oracle.jbo.RowIterator;
 import oracle.jbo.server.ViewObjectImpl;
 import oracle.jbo.server.ViewRowImpl;
@@ -51,23 +53,30 @@ public class DcmCombinationViewImpl extends ViewObjectImpl {
     }
     public void refreshCombinationRecord(String combiantonCode,List<String> vsTables,List<String> valueSetCodes) throws SQLException {
         StringBuffer sql=new StringBuffer();
+        StringBuffer sql_select=new StringBuffer();
         StringBuffer sql_from=new StringBuffer();
+        StringBuffer sql_where=new StringBuffer();
         StringBuffer sql_sub=new StringBuffer();
-        sql.append("INSERT INTO \"").append(combiantonCode).append("\"");
-        sql.append(" SELECT DCM_SEQ.NEXTVAL ");
+        sql.append("INSERT INTO \"").append(combiantonCode).append("\"(ID");
+        sql_select.append(" SELECT DCM_SEQ.NEXTVAL ");
         sql_from.append(" FROM ");
         sql_sub.append("SELECT 1 FROM \"").append(combiantonCode).append("\" T WHERE 1=1");
         for(int i=0;i<valueSetCodes.size();i++){
-            sql.append(",T").append(i).append(".CODE");
+            sql.append(",\"").append(valueSetCodes.get(i)).append("\"");
+            sql_select.append(",T").append(i).append(".CODE");
             sql_from.append("\"").append(vsTables.get(i)).append("\"").append(" T").append(i).append(",");
+            sql_where.append(" AND T").append(i).append(".LOCALE='").append(ADFContext.getCurrent().getLocale()).append("'");
             sql_sub.append(" AND T.\"").append(valueSetCodes.get(i)).append("\"");
             sql_sub.append("=").append("T").append(i).append(".CODE");
         }
         int n=sql_from.lastIndexOf(",");
         sql_from.deleteCharAt(n);
+        sql.append(")");
+        sql.append(sql_select);
         sql.append(sql_from);
         sql.append(" WHERE NOT EXISTS(");
         sql.append(sql_sub).append(")");
+        sql.append(sql_where);
         this.getDBTransaction().createStatement(0).execute(sql.toString());
         this.getDBTransaction().commit();
     }

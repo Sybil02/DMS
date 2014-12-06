@@ -177,14 +177,14 @@ insert into dms_function(id,locale,name,created_at,updated_at,updated_by,created
 values('101019','en','Function Authority',sysdate,sysdate,'10000','10000','/WEB-INF/dmsFunction/function_authority_tsk.xml#function_authority_tsk','Function Authority',101019,null);
 
 insert into dms_function(id,locale,name,created_at,updated_at,updated_by,created_by,action,category,seq,p_function_id)
-values('101020','zh_CN','值集管理',sysdate,sysdate,'10000','10000','/WEB-INF/dmsValueSet/valueset_edit_tsk.xml#valueset_edit_tsk','值集管理',101020,null);
+values('101020','zh_CN','值集管理',sysdate,sysdate,'10000','10000','/WEB-INF/dmsValueset/valueset_edit_tsk.xml#valueset_edit_tsk','值集管理',101020,null);
 insert into dms_function(id,locale,name,created_at,updated_at,updated_by,created_by,action,category,seq,p_function_id)
-values('101020','en','Value Set Manage',sysdate,sysdate,'10000','10000','/WEB-INF/dmsValueSet/valueset_edit_tsk.xml#valueset_edit_tsk','Value Set Manage',101020,null);
+values('101020','en','Value Set Manage',sysdate,sysdate,'10000','10000','/WEB-INF/dmsValueset/valueset_edit_tsk.xml#valueset_edit_tsk','Value Set Manage',101020,null);
 
 insert into dms_function(id,locale,name,created_at,updated_at,updated_by,created_by,action,category,seq,p_function_id)
-values('101021','zh_CN','值集权限',sysdate,sysdate,'10000','10000','/WEB-INF/dmsValueSet/valueset_authority_tsk.xml#valueset_authority_tsk','值集权限',101021,null);
+values('101021','zh_CN','值集权限',sysdate,sysdate,'10000','10000','/WEB-INF/dmsValueset/valueset_authority_tsk.xml#valueset_authority_tsk','值集权限',101021,null);
 insert into dms_function(id,locale,name,created_at,updated_at,updated_by,created_by,action,category,seq,p_function_id)
-values('101021','en','Value Set Authority',sysdate,sysdate,'10000','10000','/WEB-INF/dmsValueSet/valueset_authority_tsk.xml#valueset_authority_tsk','Value Set Authority',101021,null);
+values('101021','en','Value Set Authority',sysdate,sysdate,'10000','10000','/WEB-INF/dmsValueset/valueset_authority_tsk.xml#valueset_authority_tsk','Value Set Authority',101021,null);
 
 insert into dms_function(id,locale,name,created_at,updated_at,updated_by,created_by,action,category,seq,p_function_id)
 values('101030','zh_CN','组合管理',sysdate,sysdate,'10000','10000','/WEB-INF/dcmCombination/combination_edit_tsk.xml#combination_edit_tsk','组合管理',101030,null);
