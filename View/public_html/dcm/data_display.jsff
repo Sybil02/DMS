@@ -109,7 +109,7 @@
   <af:popup id="p1" binding="#{viewScope.DcmDataDisplayBean.errorWindow}">
     <af:panelWindow id="pw1" 
                     title="#{viewBundle['dcm.import_error']}">
-      <af:panelStretchLayout id="psl2" inlineStyle="width:800px;height:400px">
+      <af:panelStretchLayout id="psl2" inlineStyle="width:1000px;height:400px">
         <f:facet name="center">
         <af:table value="#{bindings.DcmErrorView.collectionModel}" var="row"
                 rows="#{bindings.DcmErrorView.rangeSize}"
@@ -139,7 +139,11 @@
                    filterable="true" sortable="true"
                    headerText="#{bindings.DcmErrorView.hints.Msg.label}"
                    id="c1">
-          <af:outputText value="#{row.Msg}" id="ot4"/>
+              <af:inputText value="#{row.bindings.Msg.inputValue}" simple="true"
+                            maximumLength="#{bindings.DcmErrorView.hints.Msg.precision}"
+                            shortDesc="#{bindings.DcmErrorView.hints.Msg.tooltip}"
+                            id="it1" rows="1">
+              </af:inputText>
         </af:column>
         <af:column sortProperty="#{bindings.DcmErrorView.hints.Level.name}"
                    filterable="true" sortable="true"

@@ -89,6 +89,7 @@
           <Item Value="CategoryId"/>
           <Item Value="UpdatedAt"/>
           <Item Value="UpdatedBy"/>
+          <Item Value="DbView"/>
         </AttrNames>
       </nodeDefinition>
     </tree>

@@ -10,7 +10,7 @@
   CustomQuery="true"
   PageIterMode="Full"
   UseGlueCode="false"
-  OrderBy='SHEET_NAME,ROW_NUM,"LEVEL",VALIDATION_ID'>
+  OrderBy='SHEET_NAME,ROW_NUM,ELEVEL,VALIDATION_ID'>
   <DesignTime>
     <Attr Name="_codeGenFlag2" Value="Access|VarAccess"/>
     <Attr Name="_isExpertMode" Value="true"/>
@@ -46,7 +46,7 @@
     <![CDATA[SELECT DcmError.SHEET_NAME, 
        DcmError.ROW_NUM, 
        DcmError.MSG, 
-       DcmError."LEVEL", 
+       DcmError.ELEVEL, 
        DcmError.LOCALE, 
        DcmError.VALIDATION_ID, 
        DcmError.CREATED_AT, 
@@ -85,7 +85,7 @@ WHERE  DcmError.LOCALE=:locale]]>
     PrecisionRule="true"
     EntityAttrName="Level"
     EntityUsage="DcmError"
-    AliasName="LEVEL"/>
+    AliasName="ELEVEL"/>
   <ViewAttribute
     Name="Locale"
     IsNotNull="true"

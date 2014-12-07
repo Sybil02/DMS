@@ -78,18 +78,15 @@
                                     alignId="::pc2" align="startBefore"/>
             </af:commandToolbarButton>
             <af:commandToolbarButton text="#{viewBundle['dcm.combination.delete']}"
-                                     disabled="#{!bindings.Delete1.enabled}"
                                      id="ctb1">
               <af:showPopupBehavior popupId="::p2"/>
             </af:commandToolbarButton>
             <af:commandButton actionListener="#{bindings.Commit.execute}"
                               text="#{viewBundle['dms.common.save']}"
-                              disabled="#{!bindings.Commit.enabled}"
                               id="commandButton1"
                               partialTriggers="ctb1 ::pc2:t3"/>
             <af:commandButton actionListener="#{bindings.Rollback.execute}"
                               text="#{viewBundle['dms.common.rollback']}"
-                              disabled="#{!bindings.Rollback.enabled}"
                               immediate="true" id="cb4">
               <af:resetActionListener/>
             </af:commandButton>

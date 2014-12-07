@@ -458,7 +458,7 @@ create table DCM_ERROR
    SHEET_NAME           VARCHAR2(300)        not null,     
    ROW_NUM              INTEGER              not null,
    MSG                  VARCHAR2(3000),
-   "LEVEL"              VARCHAR2(10),
+   ELEVEL               VARCHAR2(10),
    LOCALE               VARCHAR2(10)         not null,
    VALIDATION_ID        VARCHAR2(32)         not null,
    CREATED_AT           DATE,
@@ -486,7 +486,7 @@ comment on column DCM_ERROR.ROW_NUM is
 comment on column DCM_ERROR.MSG is
 '错误消息';
 
-comment on column DCM_ERROR."LEVEL" is
+comment on column DCM_ERROR.ELEVEL is
 '错误级别';
 
 comment on column DCM_ERROR.LOCALE is
@@ -2083,23 +2083,84 @@ CREATE OR REPLACE PACKAGE BODY DCM_COMMON IS
   *P_ARGS      校验程序参数
   *P_FLAG      校验结果标识(Y,N)
   ******************************************************/
-  PROCEDURE VALIDATE_NULL(
-    P_VALIDATION_ID   IN  VARCHAR,
-    P_TEMPLATE_ID     IN  VARCHAR2,
-    P_COM_RECORD_ID   IN  VARCHAR2,
-    P_TEMP_COL        IN  VARCHAR2,
-    P_SRC_COL         IN  VARCHAR2,
-    P_MODE            IN  VARCHAR2,
-    P_LOCALE          IN  VARCHAR2,
-    P_ARGS            IN  VARCHAR2,
-    P_FLAG            OUT VARCHAR2
-  )
-  IS
-  L_TABLE VARCHAR2(32);
-  L_TMP_TABLE VARCHAR2(32);
+  PROCEDURE VALIDATE_NULL(P_VALIDATION_ID IN VARCHAR,
+                          P_TEMPLATE_ID   IN VARCHAR2,
+                          P_COM_RECORD_ID IN VARCHAR2,
+                          P_TEMP_COL      IN VARCHAR2,
+                          P_SRC_COL       IN VARCHAR2,
+                          P_MODE          IN VARCHAR2,
+                          P_LOCALE        IN VARCHAR2,
+                          P_ARGS          IN VARCHAR2,
+                          P_FLAG          OUT VARCHAR2) IS
+    L_TABLE        VARCHAR2(32);
+    L_TMP_TABLE    VARCHAR2(32);
+    L_SQL_EN       VARCHAR2(2000);
+    L_SQL_ZHS      VARCHAR2(2000);
+    L_COL_ZHS_TEXT VARCHAR2(100);
+    L_COL_EN_TEXT  VARCHAR2(100);
   BEGIN
-    P_FLAG:='Y';
-    DCM_COMMON.FETCH_TEMPLATE_INFO(P_TEMPLATE_ID,P_LOCALE,L_TMP_TABLE,L_TABLE);
+    P_FLAG := 'Y';
+    DCM_COMMON.FETCH_TEMPLATE_INFO(P_TEMPLATE_ID,
+                                   P_LOCALE,
+                                   L_TMP_TABLE,
+                                   L_TABLE);
+    SELECT T.COLUMN_LABEL
+      INTO L_COL_ZHS_TEXT
+      FROM DCM_TEMPLATE_COLUMN T
+     WHERE T.TEMPLATE_ID = P_TEMPLATE_ID
+       AND T.LOCALE = 'zh_CN'
+       AND T.DB_TABLE_COL = P_SRC_COL;
+    SELECT T.COLUMN_LABEL
+      INTO L_COL_EN_TEXT
+      FROM DCM_TEMPLATE_COLUMN T
+     WHERE T.TEMPLATE_ID = P_TEMPLATE_ID
+       AND T.LOCALE = 'en'
+       AND T.DB_TABLE_COL = P_SRC_COL;
+    --中文
+    L_SQL_ZHS := 'INSERT INTO DCM_ERROR(TEMPLATE_ID,COM_RECORD_ID,SHEET_NAME';
+    L_SQL_ZHS := L_SQL_ZHS ||
+                 ',ROW_NUM,MSG,ELEVEL,LOCALE,VALIDATION_ID,CREATED_AT,UPDATED_AT,CREATED_BY,UPDATED_BY)';
+    L_SQL_ZHS := L_SQL_ZHS ||
+                 ' SELECT T.TEMPLATE_ID,T.COM_RECORD_ID,T.SHEET_NAME';
+    L_SQL_ZHS := L_SQL_ZHS || ',T.ROW_NO';
+    L_SQL_ZHS := L_SQL_ZHS || ',''' || L_COL_ZHS_TEXT || '不能为空''' ||
+                 ',''错误'',''zh_CN''';
+    L_SQL_ZHS := L_SQL_ZHS || ',''' || P_VALIDATION_ID || '''';
+    L_SQL_ZHS := L_SQL_ZHS || ',SYSDATE,SYSDATE,T.CREATED_BY,T.UPDATED_BY';
+    L_SQL_ZHS := L_SQL_ZHS || ' FROM ' || L_TMP_TABLE ||
+                 ' T WHERE T.TEMPLATE_ID=''' || P_TEMPLATE_ID || '''';
+    IF P_COM_RECORD_ID IS NOT NULL THEN
+      L_SQL_ZHS := L_SQL_ZHS || ' AND T.COM_RECORD_ID=''' ||
+                   P_COM_RECORD_ID || '''';
+    ELSE
+      L_SQL_ZHS := L_SQL_ZHS || ' AND T.COM_RECORD_ID IS NULL';
+    END IF;
+    L_SQL_ZHS := L_SQL_ZHS || ' AND T.' || P_TEMP_COL || ' IS NULL';
+    --英文
+    L_SQL_EN := 'INSERT INTO DCM_ERROR(TEMPLATE_ID,COM_RECORD_ID,SHEET_NAME';
+    L_SQL_EN := L_SQL_EN ||
+                ',ROW_NUM,MSG,ELEVEL,LOCALE,VALIDATION_ID,CREATED_AT,UPDATED_AT,CREATED_BY,UPDATED_BY)';
+    L_SQL_EN := L_SQL_EN ||
+                ' SELECT T.TEMPLATE_ID,T.COM_RECORD_ID,T.SHEET_NAME';
+    L_SQL_EN := L_SQL_EN || ',T.ROW_NO';
+    L_SQL_EN := L_SQL_EN || ',''' || L_COL_EN_TEXT || ' can not be blank''' ||
+                ',''Error'',''en''';
+    L_SQL_EN := L_SQL_EN || ',''' || P_VALIDATION_ID || '''';
+    L_SQL_EN := L_SQL_EN || ',SYSDATE,SYSDATE,T.CREATED_BY,T.UPDATED_BY';
+    L_SQL_EN := L_SQL_EN || ' FROM ' || L_TMP_TABLE ||
+                ' T WHERE T.TEMPLATE_ID=''' || P_TEMPLATE_ID || '''';
+    IF P_COM_RECORD_ID IS NOT NULL THEN
+      L_SQL_EN := L_SQL_EN || ' AND T.COM_RECORD_ID=''' || P_COM_RECORD_ID || '''';
+    ELSE
+      L_SQL_EN := L_SQL_EN || ' AND T.COM_RECORD_ID IS NULL';
+    END IF;
+    L_SQL_EN := L_SQL_EN || ' AND T.' || P_TEMP_COL || ' IS NULL';
+   
+    EXECUTE IMMEDIATE L_SQL_ZHS;
+    IF SQL%FOUND THEN
+      P_FLAG := 'N';
+      EXECUTE IMMEDIATE L_SQL_EN;
+    END IF;
   END VALIDATE_NULL;
   
   /**************************************************

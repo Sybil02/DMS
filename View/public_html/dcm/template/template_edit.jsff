@@ -85,6 +85,18 @@
                   <f:validator binding="#{row.bindings.DbTable.validator}"/>
                 </af:inputText>
               </af:column>
+              <af:column headerText="#{bindings.DcmTemplateView1.hints.DbView.label}"
+                         id="c22">
+                <af:inputText value="#{row.bindings.DbView.inputValue}"
+                              label="#{bindings.DcmTemplateView1.hints.DbView.label}"
+                              required="#{bindings.DcmTemplateView1.hints.DbView.mandatory}"
+                              columns="#{bindings.DcmTemplateView1.hints.DbView.displayWidth}"
+                              maximumLength="#{bindings.DcmTemplateView1.hints.DbView.precision}"
+                              shortDesc="#{bindings.DcmTemplateView1.hints.DbView.tooltip}"
+                              id="it3">
+                  <f:validator binding="#{row.bindings.DbView.validator}"/>
+                </af:inputText>
+              </af:column>
               <af:column sortProperty="#{bindings.DcmTemplateView1.hints.Seq.name}"
                          sortable="true"
                          headerText="#{bindings.DcmTemplateView1.hints.Seq.label}"

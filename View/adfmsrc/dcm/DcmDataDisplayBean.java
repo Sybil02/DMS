@@ -34,6 +34,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import java.util.UUID;
+
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
@@ -305,9 +307,9 @@ public class DcmDataDisplayBean extends AbstractExcel2007Writer {
             //执行前置程序
             if (this.templatePreProgram != null) {
                 CallableStatement prcs =
-                    trans.createCallableStatement("CALl " +
+                    trans.createCallableStatement("{CALl " +
                                                   this.templatePreProgram +
-                                                  "(?,?,?,?,?)", 0);
+                                                  "(?,?,?,?,?)}", 0);
                 prcs.setString(1, this.curTemplateId);
                 prcs.setString(2, curComRecordId);
                 prcs.setString(3, this.curUser.getId());
@@ -325,8 +327,8 @@ public class DcmDataDisplayBean extends AbstractExcel2007Writer {
             while (vo.hasNext()) {
                 Row row = vo.next();
                 CallableStatement cs =
-                    trans.createCallableStatement("CALl " + row.getAttribute("Program") +
-                                                  "(?,?,?,?,?,?,?,?,?)", 0);
+                    trans.createCallableStatement("{CALL " + row.getAttribute("Program") +
+                                                  "(?,?,?,?,?,?,?,?,?)}", 0);
                 cs.setString(1, (String)row.getAttribute("ValidationId"));
                 cs.setString(2, this.curTemplateId);
                 cs.setString(3, curComRecordId);
@@ -334,6 +336,7 @@ public class DcmDataDisplayBean extends AbstractExcel2007Writer {
                     if (this.colsdef.get(i -
                                          1).getCode().equals((String)row.getAttribute("DbTableCol"))) {
                         cs.setString(4, "COLUMN" + i);
+                        break;
                     }
                 }
                 cs.setString(5, (String)row.getAttribute("DbTableCol"));
@@ -350,8 +353,8 @@ public class DcmDataDisplayBean extends AbstractExcel2007Writer {
             }
             //执行数据导入
             CallableStatement cs =
-                trans.createCallableStatement("CALl " + this.templateProgram +
-                                              "(?,?,?,?,?)", 0);
+                trans.createCallableStatement("{CALl " + this.templateProgram +
+                                              "(?,?,?,?,?)}", 0);
             cs.setString(1, this.curTemplateId);
             cs.setString(2, curComRecordId);
             cs.setString(3, this.curUser.getId());
@@ -363,9 +366,9 @@ public class DcmDataDisplayBean extends AbstractExcel2007Writer {
             //执行善后程序
             if (this.templateAfterProgram != null) {
                 CallableStatement afcs =
-                    trans.createCallableStatement("CALl " +
+                    trans.createCallableStatement("{CALl " +
                                                   this.templateAfterProgram +
-                                                  "(?,?,?,?,?)", 0);
+                                                  "(?,?,?,?,?)}", 0);
                 afcs.setString(1, this.curTemplateId);
                 afcs.setString(2, curComRecordId);
                 afcs.setString(3, this.curUser.getId());
@@ -377,7 +380,11 @@ public class DcmDataDisplayBean extends AbstractExcel2007Writer {
             }
         } catch (Exception e) {
             successFlag = false;
-            this.writeErrorMsg(e.getMessage().substring(0, 2048),
+            String msg=e.getMessage();
+            if(msg.length()>2048){
+                msg=msg.substring(0,2048);
+            }
+            this.writeErrorMsg(msg,
                                curComRecordId);
             this._logger.severe(e);
         }
@@ -391,6 +398,10 @@ public class DcmDataDisplayBean extends AbstractExcel2007Writer {
         row.setAttribute("TemplateId", this.curTemplateId);
         row.setAttribute("ComRecordId", curComRecordId);
         row.setAttribute("Msg", msg);
+        row.setAttribute("SheetName", "NA");
+        row.setAttribute("ValidationId", UUID.randomUUID().toString().replace("-", ""));
+        row.setAttribute("Level", "Error");
+        row.setAttribute("RowNum", -1);
         vo.insertRow(row);
         vo.getApplicationModule().getTransaction().commit();
     }

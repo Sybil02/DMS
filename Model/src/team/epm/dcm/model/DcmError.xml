@@ -79,7 +79,7 @@
   <Attribute
     Name="Level"
     Precision="10"
-    ColumnName="LEVEL"
+    ColumnName="ELEVEL"
     SQLType="VARCHAR"
     Type="java.lang.String"
     ColumnType="VARCHAR2"
