@@ -21,14 +21,29 @@ public class DmsUserViewImpl extends ViewObjectImpl implements DmsUserView {
      */
     public DmsUserViewImpl() {
     }
-    public RowSetIterator queryCurUser(){
-        String userId=this.getApplicationModule().getSession().getUserData().get("userId")+"";
+    //根据用户帐号查询用户信息
+    public void queryUserByAcc(String acc){
         ViewCriteria vc= this.createViewCriteria();
-        ViewCriteriaRow vcRow = vc.createViewCriteriaRow();
-        vcRow.setAttribute("Id", userId);
+        ViewCriteriaRow vcRow = vc.createViewCriteriaRow();    
+        vcRow.setAttribute("Acc", "='"+acc+"'");
+        vc.addElement(vcRow);
+        vcRow.setAttribute("EnableFlag", "='Y'");
+        vcRow.setConjunction(vcRow.VC_CONJ_AND);
         vc.addElement(vcRow);
         this.applyViewCriteria(vc);
         this.executeQuery();
-        return   this.getRowSetIterator();
+        this.setApplyViewCriteriaNames(null);
+    }
+    //获取当前用户
+    public DmsUserViewImpl queryCurUser(){
+        String userId=this.getApplicationModule().getSession().getUserData().get("userId")+"";
+        ViewCriteria vc= this.createViewCriteria();
+        ViewCriteriaRow vcRow = vc.createViewCriteriaRow();
+        vcRow.setAttribute("Id", "='"+userId+"'");
+        vc.addElement(vcRow);
+        this.applyViewCriteria(vc);
+        this.executeQuery();
+        this.setApplyViewCriteriaNames(null);
+        return this;
     }
 }

@@ -15,6 +15,9 @@ import oracle.jbo.uicli.binding.JUCtrlHierNodeBinding;
 import org.apache.myfaces.trinidad.event.SelectionEvent;
 import org.apache.myfaces.trinidad.model.CollectionModel;
 
+import team.epm.module.DcmModuleImpl;
+import team.epm.module.DmsModuleImpl;
+
 public class DmsUtils {
     public DmsUtils() {
         super();
@@ -55,5 +58,10 @@ public class DmsUtils {
         Key _rwKey = _nodeBinding.getRowKey();
         _tableIteratorBinding.setCurrentRowWithKey(_rwKey.toStringFormat(true));
     }
-
+    public static DmsModuleImpl getDmsApplicationModule(){
+        return (DmsModuleImpl)ADFUtils.getApplicationModuleForDataControl("DmsModuleDataControl");
+    }
+    public static DcmModuleImpl getDcmApplicationModule(){
+        return (DcmModuleImpl)ADFUtils.getApplicationModuleForDataControl("DcmModuleDataControl");
+    }
 }
