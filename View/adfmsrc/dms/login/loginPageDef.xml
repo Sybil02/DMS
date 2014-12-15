@@ -4,12 +4,6 @@
   <parameters/>
   <executables>
     <variableIterator id="variables"/>
-    <iterator id="DmsUserViewIterator" Binds="DmsUserView"
-              DataControl="DmsModuleDataControl" RangeSize="25"/>
-    <iterator id="DmsLookupViewIterator" Binds="DmsLookupView"
-              DataControl="DmsModuleDataControl" RangeSize="25"/>
-    <iterator id="DmsUserFunctionViewIterator" Binds="DmsUserFunctionView"
-              DataControl="DmsModuleDataControl" RangeSize="25"/>
   </executables>
   <bindings/>
 </pageDefinition>

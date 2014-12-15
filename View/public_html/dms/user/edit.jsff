@@ -32,19 +32,21 @@
                   emptyText="#{viewBundle['dms.common.nodata']}"
                   fetchSize="#{bindings.DmsUserView.rangeSize}"
                   rowBandingInterval="0"
+                  filterModel="#{bindings.DmsUserViewQuery.queryDescriptor}"
+                  queryListener="#{bindings.DmsUserViewQuery.processQuery}"
                   selectedRowKeys="#{bindings.DmsUserView.collectionModel.selectedRow}"
                   selectionListener="#{bindings.DmsUserView.collectionModel.makeCurrent}"
                   rowSelection="single" id="t1"
                   partialTriggers="::cb1 ::cb2 ::cb3 :::it2 :::it13 :::soc4 :::soc3 :::soc1 :::soc2 :::it4 :::it5 :::it6"
                   binding="#{backingBeanScope.EditUserMBean.userTree}">
           <af:column sortProperty="#{bindings.DmsUserView.hints.Acc.name}"
-                     sortable="true"
+                     sortable="true" filterable="true"
                      headerText="#{bindings.DmsUserView.hints.Acc.label}"
-                     id="c10">
+                     id="c10" filterFeatures="caseInsensitive">
             <af:outputText value="#{row.Acc}" id="ot4"/>
           </af:column>
           <af:column sortProperty="#{bindings.DmsUserView.hints.Name.name}"
-                     sortable="true"
+                     sortable="true" filterable="true" filterFeatures="caseInsensitive"
                      headerText="#{bindings.DmsUserView.hints.Name.label}"
                      id="c3">
             <af:outputText value="#{row.Name}" id="ot6"/>

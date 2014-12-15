@@ -6,6 +6,9 @@
     <variableIterator id="variables"/>
     <iterator Binds="DmsUserView" RangeSize="25"
               DataControl="DmsModuleDataControl" id="DmsUserViewIterator"/>
+    <searchRegion Binds="DmsUserViewIterator" Criteria=""
+                  Customizer="oracle.jbo.uicli.binding.JUSearchBindingCustomizer"
+                  id="DmsUserViewQuery"/>
   </executables>
   <bindings>
     <tree IterBinding="DmsUserViewIterator" id="DmsUserView">
