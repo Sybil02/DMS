@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<skins xmlns="http://myfaces.apache.org/trinidad/skin">
+    <skin>
+        <id>dms-skin.desktop</id>
+        <family>dms-skin</family>
+        <extends>fusionFx-v1.2.desktop</extends>
+        <render-kit-id>org.apache.myfaces.trinidad.desktop</render-kit-id>
+        <style-sheet-name>assets/skin.css</style-sheet-name>
+        <bundle-name>ApplicationBundle</bundle-name>
+    </skin>
+</skins>
