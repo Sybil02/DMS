@@ -2,6 +2,8 @@ package team.epm.dms.model;
 
 import java.sql.Timestamp;
 
+import java.util.regex.Pattern;
+
 import oracle.jbo.Key;
 import oracle.jbo.domain.Date;
 import oracle.jbo.domain.Number;
@@ -571,5 +573,24 @@ public class DmsUserImpl extends EntityImpl {
             mDefinitionObject = EntityDefImpl.findDefObject("team.epm.dms.model.DmsUser");
         }
         return mDefinitionObject;
+    }
+    public static boolean isPasswordValide(String pwd){
+        boolean flag=true;
+        String lowerCharPattern="[a-z]+";
+        String upperCharPattern="[A-Z]+";
+        String numberPattern="[0-9]+";
+        if(pwd.length()<8){
+            flag=false;
+        }
+        if(!Pattern.compile(lowerCharPattern).matcher(pwd).find()){
+            flag=false;
+        }
+        if(!Pattern.compile(upperCharPattern).matcher(pwd).find()){
+            flag=false;
+        }
+        if(!Pattern.compile(numberPattern).matcher(pwd).find()){
+            flag=false;
+        }
+        return flag;
     }
 }

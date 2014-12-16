@@ -4,15 +4,43 @@
           xmlns:f="http://java.sun.com/jsf/core"
           xmlns:c="http://java.sun.com/jsp/jstl/core">
   <c:set var="viewBundle" value="#{adfBundle['dms_v']}"/>
-  <af:panelStretchLayout id="psl1" topHeight="45%">
+  <af:panelStretchLayout id="psl1">
     <f:facet name="center">
       <af:panelGroupLayout layout="scroll"
                            xmlns:af="http://xmlns.oracle.com/adf/faces/rich"
                            id="pgl1">
+        <af:popup id="p1" autoCancel="disabled"
+                  binding="#{backingBeanScope.EditUserMBean.popup}">
+          <af:panelWindow id="pw1" title="#{viewBundle['dms.user.changpwd']}">
+            <af:panelFormLayout id="pfl1">
+              <af:inputText secret="true"
+                            label="#{viewBundle['login.password']}" id="it5"
+                            binding="#{backingBeanScope.EditUserMBean.pwd}"/>
+              <af:inputText secret="true"
+                            label="#{viewBundle['dms_user.comfirm_password']}"
+                            id="it6"
+                            binding="#{backingBeanScope.EditUserMBean.newPwd}"/>
+              <af:outputLabel id="ol1" inlineStyle="color:red"
+                              binding="#{backingBeanScope.EditUserMBean.msg}"/>
+              <f:facet name="footer">
+                <af:panelGroupLayout id="pgl01" layout="horizontal"
+                                     halign="center">
+                  <af:commandButton text="#{viewBundle['dms.common.affirm']}"
+                                    id="cb4"
+                                    actionListener="#{backingBeanScope.EditUserMBean.changePwd}"/>
+                  <af:spacer width="20" id="spc01"/>
+                  <af:commandButton text="#{viewBundle['dms.common.cancel']}"
+                                    id="cb5"
+                                    actionListener="#{backingBeanScope.EditUserMBean.hidePopup}"/>
+                </af:panelGroupLayout>
+              </f:facet>
+            </af:panelFormLayout>
+          </af:panelWindow>
+        </af:popup>
         <af:panelGridLayout id="pgl2">
           <af:gridRow marginTop="5px" height="auto" id="gr1">
             <af:gridCell marginStart="5px" width="auto" id="gc10">
-              <af:panelFormLayout id="pfl1" labelWidth="60px"
+              <af:panelFormLayout id="pf01" labelWidth="60px"
                                   labelAlignment="start">
                 <af:inputText value="#{bindings.Acc.inputValue}"
                               label="#{bindings.Acc.hints.label}"
@@ -23,6 +51,9 @@
                               id="it1">
                   <f:validator binding="#{bindings.Acc.validator}"/>
                 </af:inputText>
+                <af:commandLink text="#{viewBundle['dms.user.changpwd']}"
+                                id="cl1"
+                                actionListener="#{backingBeanScope.EditUserMBean.showPopup}"/>
               </af:panelFormLayout>
             </af:gridCell>
             <af:gridCell marginStart="25px" marginEnd="5px" width="auto"
@@ -33,39 +64,8 @@
                               required="#{bindings.Name.hints.mandatory}"
                               maximumLength="#{bindings.Name.hints.precision}"
                               shortDesc="#{bindings.Name.hints.tooltip}"
-                              id="it2"
-                              autoSubmit="true">
+                              id="it2">
                   <f:validator binding="#{bindings.Name.validator}"/>
-                </af:inputText>
-              </af:panelFormLayout>
-            </af:gridCell>
-          </af:gridRow>
-          <af:gridRow marginTop="5px" height="auto" id="gr6">
-            <af:gridCell marginStart="5px" width="auto" id="gc8">
-              <af:panelFormLayout id="pfl3" labelWidth="60px">
-                <af:inputText value=""
-                              label="#{bindings.Pwd.hints.label}"
-                              required="#{bindings.Pwd.hints.mandatory}"
-                              maximumLength="#{bindings.Pwd.hints.precision}"
-                              shortDesc="#{bindings.Pwd.hints.tooltip}" id="it3"
-                              secret="true"
-                              autoSubmit="true"
-                              binding="#{backingBeanScope.EditUserMBean.pwd}">
-                  <f:validator binding="#{bindings.Pwd.validator}"/>
-                </af:inputText>
-              </af:panelFormLayout>
-            </af:gridCell>
-            <af:gridCell marginStart="5px" marginEnd="5px" width="auto"
-                         id="gc2">
-              <af:panelFormLayout id="pfl4" labelWidth="60px">
-                <af:inputText value=""
-                              label="#{viewBundle['dms_user.comfirm_password']}"
-                              maximumLength="#{bindings.Pwd.hints.precision}"
-                              shortDesc="#{bindings.Pwd.hints.tooltip}"
-                              id="it13" secret="true"
-                              binding="#{backingBeanScope.EditUserMBean.newPwd}"
-                              autoSubmit="true"
-                              validator="#{backingBeanScope.EditUserMBean.validatePassword}">
                 </af:inputText>
               </af:panelFormLayout>
             </af:gridCell>
@@ -81,20 +81,17 @@
                                           label="#{bindings.Sex.label}"
                                           required="#{bindings.Sex.hints.mandatory}"
                                           shortDesc="#{bindings.Sex.hints.tooltip}"
-                                          id="soc4"
-                                          autoSubmit="true">
+                                          id="soc4">
                         <f:selectItems value="#{bindings.Sex.items}" id="si4"/>
                       </af:selectOneChoice>
                     </af:panelFormLayout>
                   </af:gridCell>
-                  <af:gridCell marginStart="15px"  width="auto" id="gc13">
+                  <af:gridCell marginStart="15px" width="auto" id="gc13">
                     <af:selectOneChoice value="#{bindings.EnableFlag.inputValue}"
                                         label="#{bindings.EnableFlag.label}"
                                         required="#{bindings.EnableFlag.hints.mandatory}"
                                         shortDesc="#{bindings.EnableFlag.hints.tooltip}"
-                                        id="soc3"
-                                        autoSubmit="true"
-                                        readOnly="true"
+                                        id="soc3" readOnly="true"
                                         inlineStyle="margin-top:5px">
                       <f:selectItems value="#{bindings.EnableFlag.items}"
                                      id="si3"/>
@@ -105,9 +102,7 @@
                                         label="#{bindings.LockFlag.label}"
                                         required="#{bindings.LockFlag.hints.mandatory}"
                                         shortDesc="#{bindings.LockFlag.hints.tooltip}"
-                                        id="soc1"
-                                        autoSubmit="true"
-                                        readOnly="true"
+                                        id="soc1" readOnly="true"
                                         inlineStyle="margin-top:5px">
                       <f:selectItems value="#{bindings.LockFlag.items}"
                                      id="si1"/>
@@ -119,8 +114,7 @@
                                         label="#{bindings.Locale.label}"
                                         required="#{bindings.Locale.hints.mandatory}"
                                         shortDesc="#{bindings.Locale.hints.tooltip}"
-                                        id="soc2"
-                                        autoSubmit="true">
+                                        id="soc2">
                       <f:selectItems value="#{bindings.Locale.items}" id="si2"/>
                     </af:selectOneChoice>
                   </af:gridCell>
@@ -130,14 +124,13 @@
           </af:gridRow>
           <af:gridRow marginTop="5px" height="auto" id="gr5">
             <af:gridCell marginStart="5px" width="auto" id="gc6">
-              <af:panelFormLayout id="pfl6"  labelWidth="60px">
+              <af:panelFormLayout id="pfl6" labelWidth="60px">
                 <af:inputText value="#{bindings.Mail.inputValue}"
                               label="#{bindings.Mail.hints.label}"
                               required="#{bindings.Mail.hints.mandatory}"
                               maximumLength="#{bindings.Mail.hints.precision}"
                               shortDesc="#{bindings.Mail.hints.tooltip}"
-                              id="it4"
-                              autoSubmit="true">
+                              id="it4">
                   <f:validator binding="#{bindings.Mail.validator}"/>
                 </af:inputText>
               </af:panelFormLayout>
@@ -150,8 +143,7 @@
                               required="#{bindings.Phone.hints.mandatory}"
                               maximumLength="#{bindings.Phone.hints.precision}"
                               shortDesc="#{bindings.Phone.hints.tooltip}"
-                              id="it5"
-                              autoSubmit="true">
+                              id="it05">
                   <f:validator binding="#{bindings.Phone.validator}"/>
                 </af:inputText>
               </af:panelFormLayout>
@@ -163,12 +155,10 @@
                 <af:inputText value="#{bindings.OtherInfo.inputValue}"
                               label="#{bindings.OtherInfo.hints.label}"
                               required="#{bindings.OtherInfo.hints.mandatory}"
-                              columns="60"
-                              rows="4"
+                              columns="60" rows="4"
                               maximumLength="#{bindings.OtherInfo.hints.precision}"
                               shortDesc="#{bindings.OtherInfo.hints.tooltip}"
-                              id="it6"
-                              autoSubmit="true">
+                              id="it06">
                   <f:validator binding="#{bindings.OtherInfo.validator}"/>
                 </af:inputText>
               </af:panelFormLayout>
@@ -178,16 +168,12 @@
             <af:gridCell id="gc4" columnSpan="2" halign="center">
               <af:commandButton actionListener="#{bindings.Commit.execute}"
                                 text="#{viewBundle['dms.common.save']}"
-                                disabled="#{!bindings.Commit.enabled}"
-                                id="cb1"
-                                partialTriggers="it2 it13 soc4 soc2 it4 it5 it6"/>
+                                id="cb1"/>
               <af:commandButton actionListener="#{bindings.Rollback.execute}"
-                              text="#{viewBundle['dms.common.rollback']}"
-                              disabled="#{!bindings.Rollback.enabled}"
-                              immediate="true" id="cb2"
-                              partialTriggers="it2 it13 soc4 soc2 it4 it5 it6">
-              <af:resetActionListener/>
-            </af:commandButton>
+                                text="#{viewBundle['dms.common.rollback']}"
+                                id="cb2">
+                <af:resetActionListener/>
+              </af:commandButton>
             </af:gridCell>
           </af:gridRow>
         </af:panelGridLayout>

@@ -25,6 +25,7 @@
           <Item Value="LockTime"/>
           <Item Value="EnableFlag"/>
           <Item Value="OtherInfo"/>
+          <Item Value="Pwd"/>
         </AttrNames>
       </nodeDefinition>
     </tree>

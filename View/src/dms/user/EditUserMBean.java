@@ -2,62 +2,31 @@ package dms.user;
 
 import com.bea.security.utils.DigestUtils;
 
-import common.ADFUtils;
-
 import common.DmsUtils;
 
-import java.io.UnsupportedEncodingException;
+import javax.faces.event.ActionEvent;
 
-import java.security.NoSuchAlgorithmException;
-
-import javax.faces.application.FacesMessage;
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
-
-import javax.faces.validator.ValidatorException;
-
-import oracle.adf.model.binding.DCDataControl;
-import oracle.adf.model.binding.DCIteratorBinding;
 import oracle.adf.share.logging.ADFLogger;
-import oracle.adf.view.rich.component.rich.data.RichTable;
+import oracle.adf.view.rich.component.rich.RichPopup;
 import oracle.adf.view.rich.component.rich.input.RichInputText;
 
-import oracle.adfinternal.view.faces.model.binding.FacesCtrlActionBinding;
+import oracle.adf.view.rich.component.rich.output.RichOutputLabel;
 
-import oracle.jbo.Row;
+import oracle.jbo.ViewObject;
+
+import org.apache.commons.lang.ObjectUtils;
+
+import team.epm.dms.model.DmsUserImpl;
 
 public class EditUserMBean {
     private RichInputText newPwd;
     private RichInputText pwd;
-    private RichTable userTree;
-    private static ADFLogger logger=ADFLogger.createADFLogger(EditUserMBean.class);
+    private static ADFLogger logger =
+        ADFLogger.createADFLogger(EditUserMBean.class);
+    private RichOutputLabel msg;
+    private RichPopup popup;
 
     public EditUserMBean() {
-    }
-
-    public void validatePassword(FacesContext facesContext,
-                                 UIComponent uIComponent, Object object) throws ValidatorException {
-        String n_pwd=(object+"").trim();
-        String o_pwd=(this.pwd.getValue()+"").trim();
-        if(n_pwd.equals(o_pwd)){
-            DCIteratorBinding binding = ADFUtils.findIterator("DmsUserViewIterator");
-            Row row=binding.getViewObject().getCurrentRow();
-            String encyptPwd;
-            try {
-                encyptPwd =
-                        DigestUtils.digestSHA1((row.getAttribute("Acc") + "").trim() +n_pwd + "");
-                row.setAttribute("Pwd", encyptPwd);
-                binding.getDataControl().setTransactionModified();
-            } catch (Exception e) {
-                logger.severe(e);
-            }
-        }else{
-            //String msgTitle=DmsUtils.getMsg("dms.common.error");
-            String msg=DmsUtils.getMsg("dms_user.password_inconsitent");
-            FacesMessage fm =new FacesMessage("",msg);
-            throw new ValidatorException(fm);
-        }
-        
     }
 
     public void setNewPwd(RichInputText newPwd) {
@@ -76,11 +45,55 @@ public class EditUserMBean {
         return pwd;
     }
 
-    public void setUserTree(RichTable userTree) {
-        this.userTree = userTree;
+    public void setMsg(RichOutputLabel msg) {
+        this.msg = msg;
     }
 
-    public RichTable getUserTree() {
-        return userTree;
+    public RichOutputLabel getMsg() {
+        return msg;
+    }
+
+    public void changePwd(ActionEvent actionEvent) {
+        String pwd = ObjectUtils.toString(this.pwd.getValue()).trim();
+        String newPwd = ObjectUtils.toString(this.newPwd.getValue()).trim();
+        if (pwd.equals(newPwd)) {
+            if(DmsUserImpl.isPasswordValide(newPwd)){
+            ViewObject usrVo =
+                DmsUtils.getDmsApplicationModule().getDmsUserView();
+            String usrAcc = (String)usrVo.getCurrentRow().getAttribute("Acc");
+            String encyptPwd;
+            try {
+                encyptPwd = DigestUtils.digestSHA1(usrAcc + pwd);
+                usrVo.getCurrentRow().setAttribute("Pwd", encyptPwd);
+                this.popup.cancel();
+            } catch (Exception e) {
+                this.logger.severe(e);
+            }
+            }else{
+                this.msg.setValue(DmsUtils.getMsg("dms.user.password_limit"));
+            }
+        } else {
+            this.msg.setValue(DmsUtils.getMsg("dms_user.password_inconsitent"));
+        }
+    }
+
+    public void setPopup(RichPopup popup) {
+        this.popup = popup;
+    }
+
+    public RichPopup getPopup() {
+        return popup;
+    }
+
+    public void hidePopup(ActionEvent actionEvent) {
+        this.popup.cancel();
+    }
+
+    public void showPopup(ActionEvent actionEvent) {
+        this.pwd.setValue("");
+        this.newPwd.setValue("");
+        this.msg.setValue("");
+        RichPopup.PopupHints hints = new RichPopup.PopupHints();
+        this.popup.show(hints);
     }
 }
