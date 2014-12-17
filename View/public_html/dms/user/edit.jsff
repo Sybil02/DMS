@@ -67,7 +67,13 @@
                      sortable="true" filterable="true"
                      headerText="#{bindings.DmsUserView.hints.Acc.label}"
                      id="c10" filterFeatures="caseInsensitive">
-            <af:outputText value="#{row.Acc}" id="ot4"/>
+            <af:inputText value="#{row.bindings.Acc.inputValue}" simple="true"
+                          required="#{bindings.DmsUserView.hints.Acc.mandatory}"
+                          maximumLength="#{bindings.DmsUserView.hints.Acc.precision}"
+                          shortDesc="#{bindings.DmsUserView.hints.Acc.tooltip}"
+                          id="it7">
+              <f:validator binding="#{row.bindings.Acc.validator}"/>
+            </af:inputText>
           </af:column>
           <af:column sortProperty="#{bindings.DmsUserView.hints.Name.name}"
                      sortable="true" filterable="true"

@@ -19,15 +19,11 @@
   CustomQuery="false"
   PageIterMode="Full"
   UseGlueCode="false"
-  RowClass="team.epm.dms.view.DmsGroupViewRowImpl"
   ComponentClass="team.epm.dms.view.DmsGroupViewImpl"
   Where="DmsGroup.LOCALE=:locale"
-  OrderBy="DmsGroup.NAME"
-  ComponentInterface="team.epm.dms.view.common.DmsGroupView"
-  ClientProxyName="team.epm.dms.view.client.DmsGroupViewClient">
+  OrderBy="DmsGroup.NAME">
   <DesignTime>
-    <Attr Name="_codeGenFlag2" Value="Access|Coll|VarAccess"/>
-    <Attr Name="_isCodegen" Value="true"/>
+    <Attr Name="_codeGenFlag2" Value="Coll|VarAccess"/>
   </DesignTime>
   <Variable
     Name="locale"
@@ -37,7 +33,8 @@
   </Variable>
   <ViewAccessor
     Name="LKUP_YES_NO"
-    ViewObjectName="team.epm.dms.view.DmsLookupView">
+    ViewObjectName="team.epm.dms.view.DmsLookupView"
+    RowLevelBinds="false">
     <ViewCriteriaUsage
       Name="DmsLookupViewCriteria"
       FullName="team.epm.dms.view.DmsLookupView.DmsLookupViewCriteria"/>
@@ -52,7 +49,8 @@
   </ViewAccessor>
   <ViewAccessor
     Name="LKUP_LANGUAGE"
-    ViewObjectName="team.epm.dms.view.DmsLookupView">
+    ViewObjectName="team.epm.dms.view.DmsLookupView"
+    RowLevelBinds="false">
     <ViewCriteriaUsage
       Name="DmsLookupViewCriteria"
       FullName="team.epm.dms.view.DmsLookupView.DmsLookupViewCriteria"/>
@@ -67,8 +65,7 @@
   </ViewAccessor>
   <ViewAccessor
     Name="LST_USER"
-    ViewObjectName="team.epm.dms.view.DmsUserView"
-    RowLevelBinds="true"/>
+    ViewObjectName="team.epm.dms.view.DmsUserView"/>
   <ListBinding
     Name="LOV_EnableFlag"
     ListVOName="LKUP_YES_NO"
@@ -259,11 +256,4 @@
     <PropertiesBundle
       PropertiesFile="ModelBundle"/>
   </ResourceBundle>
-  <ClientInterface>
-    <Method
-      Name="fetchEnabledGroup">
-      <Return
-        Type="oracle.jbo.RowSet"/>
-    </Method>
-  </ClientInterface>
 </ViewObject>

@@ -181,6 +181,7 @@ public class DmsGroupImpl extends DmsEntityImpl {
     public DmsGroupImpl() {
     }
 
+
     /**
      * @return the definition object for this instance class.
      */

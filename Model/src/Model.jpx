@@ -16,7 +16,8 @@
   <Containee
     Name="association"
     PackageName="team.epm.dcm.model.association"
-    ObjectType="JboPackage"/>
+    ObjectType="JboPackage">
+  </Containee>
   <Containee
     Name="model"
     PackageName="team.epm.dcm.model"
@@ -36,6 +37,14 @@
   <Containee
     Name="viewlink"
     PackageName="team.epm.dcm.view.viewlink"
+    ObjectType="JboPackage">
+    <DesignTime>
+      <Attr Name="_VL" Value="true"/>
+    </DesignTime>
+  </Containee>
+  <Containee
+    Name="dms"
+    PackageName="team.epm.dms"
     ObjectType="JboPackage">
     <DesignTime>
       <Attr Name="_VL" Value="true"/>

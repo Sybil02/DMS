@@ -1,0 +1,392 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE ViewObject SYSTEM "jbo_03_01.dtd">
+<!---->
+<ViewObject
+  xmlns="http://xmlns.oracle.com/bc4j"
+  Name="DmsUnGroupedUserView"
+  Version="11.1.1.64.93"
+  InheritPersonalization="true"
+  OrderBy='"NAME"'
+  BindingStyle="OracleName"
+  CustomQuery="true"
+  ComponentClass="team.epm.dms.view.DmsUnGroupedUserViewImpl"
+  PageIterMode="Full"
+  UseGlueCode="false">
+  <DesignTime>
+    <Attr Name="_codeGenFlag2" Value="Coll|VarAccess"/>
+    <Attr Name="_isExpertMode" Value="true"/>
+  </DesignTime>
+  <Properties>
+    <SchemaBasedProperties>
+      <LABEL
+        ResId="team.epm.dms.view.DmsUnGroupedUserView_LABEL"/>
+    </SchemaBasedProperties>
+  </Properties>
+  <Variable
+    Name="groupId"
+    Kind="where"
+    Type="java.lang.String"/>
+  <ViewAccessor
+    Name="LST_USER"
+    ViewObjectName="team.epm.dms.view.DmsUserView"/>
+  <ViewAccessor
+    Name="LKP_SEX"
+    ViewObjectName="team.epm.dms.view.DmsLookupView"
+    RowLevelBinds="false">
+    <ViewCriteriaUsage
+      Name="DmsLookupViewCriteria"
+      FullName="team.epm.dms.view.DmsLookupView.DmsLookupViewCriteria"/>
+    <ParameterMap>
+      <PIMap Variable="locale">
+        <TransientExpression><![CDATA[adf.context.locale]]></TransientExpression>
+      </PIMap>
+      <PIMap Variable="lookupType">
+        <TransientExpression><![CDATA["DMS_SEX"]]></TransientExpression>
+      </PIMap>
+    </ParameterMap>
+  </ViewAccessor>
+  <ListBinding
+    Name="LOV_Sex"
+    ListVOName="LKP_SEX"
+    ListRangeSize="-1"
+    NullValueFlag="start"
+    NullValueId="${adfBundle['oracle.javatools.resourcebundle.SystemBundle']['NULL_VALUE_RESID']}"
+    MRUCount="0">
+    <AttrArray Name="AttrNames">
+      <Item Value="Sex"/>
+    </AttrArray>
+    <AttrArray Name="ListAttrNames">
+      <Item Value="Code"/>
+    </AttrArray>
+    <AttrArray Name="ListDisplayAttrNames">
+      <Item Value="Meaning"/>
+    </AttrArray>
+    <DisplayCriteria/>
+  </ListBinding>
+  <ListBinding
+    Name="LOV_UpdatedBy"
+    ListVOName="LST_USER"
+    ListRangeSize="-1"
+    NullValueFlag="start"
+    NullValueId="${adfBundle['oracle.javatools.resourcebundle.SystemBundle']['NULL_VALUE_RESID']}"
+    MRUCount="0">
+    <AttrArray Name="AttrNames">
+      <Item Value="UpdatedBy"/>
+    </AttrArray>
+    <AttrArray Name="ListAttrNames">
+      <Item Value="Id"/>
+    </AttrArray>
+    <AttrArray Name="ListDisplayAttrNames">
+      <Item Value="Name"/>
+    </AttrArray>
+    <DisplayCriteria/>
+  </ListBinding>
+  <SQLQuery>
+    <![CDATA[SELECT T.*
+  FROM DMS_USER T
+ WHERE T.ENABLE_FLAG = 'Y'
+   AND NOT EXISTS
+ (SELECT 1
+          FROM DMS_USER_GROUP USRG
+         WHERE USRG.USER_ID = T.ID
+           AND USRG.GROUP_ID = :groupId)]]>
+  </SQLQuery>
+  <ViewAttribute
+    Name="Id"
+    IsUpdateable="false"
+    IsPersistent="false"
+    IsNotNull="true"
+    PrecisionRule="true"
+    Precision="255"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="ID"
+    Expression="ID"
+    SQLType="VARCHAR">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="32"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="Acc"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="100"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="ACC"
+    Expression="ACC"
+    SQLType="VARCHAR">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="100"/>
+    </DesignTime>
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="dms_user.acc"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="Pwd"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="100"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="PWD"
+    Expression="PWD"
+    SQLType="VARCHAR">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="100"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="LockFlag"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="10"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="LOCK_FLAG"
+    Expression="LOCK_FLAG"
+    SQLType="VARCHAR">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="10"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="EnableFlag"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="10"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="ENABLE_FLAG"
+    Expression="ENABLE_FLAG"
+    SQLType="VARCHAR">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="10"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="RetryCount"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="38"
+    Scale="0"
+    Type="oracle.jbo.domain.Number"
+    ColumnType="NUMBER"
+    AliasName="RETRY_COUNT"
+    Expression="RETRY_COUNT"
+    SQLType="NUMERIC">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="22"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="LockTime"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Type="oracle.jbo.domain.Date"
+    ColumnType="DATE"
+    AliasName="LOCK_TIME"
+    Expression="LOCK_TIME"
+    SQLType="DATE">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="7"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="UpdatedAt"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Type="oracle.jbo.domain.Date"
+    ColumnType="DATE"
+    AliasName="UPDATED_AT"
+    Expression="UPDATED_AT"
+    SQLType="DATE">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="7"/>
+    </DesignTime>
+    <Properties>
+      <SchemaBasedProperties>
+        <FMT_FORMATTER
+          ResId="team.epm.dms.view.DmsUnGroupedUserView.UpdatedAt_FMT_FORMATTER"/>
+        <FMT_FORMAT
+          ResId="team.epm.dms.view.DmsUnGroupedUserView.UpdatedAt_FMT_FORMAT"/>
+        <LABEL
+          ResId="updatedAt"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="CreatedAt"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Type="oracle.jbo.domain.Date"
+    ColumnType="DATE"
+    AliasName="CREATED_AT"
+    Expression="CREATED_AT"
+    SQLType="DATE">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="7"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="CreatedBy"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="32"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="CREATED_BY"
+    Expression="CREATED_BY"
+    SQLType="VARCHAR">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="32"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="UpdatedBy"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="32"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="UPDATED_BY"
+    Expression="UPDATED_BY"
+    SQLType="VARCHAR"
+    LOVName="LOV_UpdatedBy">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="32"/>
+    </DesignTime>
+    <Properties>
+      <SchemaBasedProperties>
+        <CONTROLTYPE
+          Value="choice"/>
+        <LABEL
+          ResId="updatedBy"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="Name"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="100"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="NAME"
+    Expression="NAME"
+    SQLType="VARCHAR">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="100"/>
+    </DesignTime>
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="dms_user.name"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="Sex"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="10"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="SEX"
+    Expression="SEX"
+    SQLType="VARCHAR"
+    LOVName="LOV_Sex">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="10"/>
+    </DesignTime>
+    <Properties>
+      <SchemaBasedProperties>
+        <CONTROLTYPE
+          Value="choice"/>
+        <LABEL
+          ResId="dms_user.sex"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="Mail"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="100"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="MAIL"
+    Expression="MAIL"
+    SQLType="VARCHAR">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="100"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="Locale"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="32"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="LOCALE"
+    Expression="LOCALE"
+    SQLType="VARCHAR">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="32"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="Phone"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="100"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="PHONE"
+    Expression="PHONE"
+    SQLType="VARCHAR">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="100"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="OtherInfo"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="1000"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="OTHER_INFO"
+    Expression="OTHER_INFO"
+    SQLType="VARCHAR">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="1000"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ResourceBundle>
+    <PropertiesBundle
+      PropertiesFile="ModelBundle"/>
+  </ResourceBundle>
+</ViewObject>

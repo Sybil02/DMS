@@ -4,43 +4,147 @@
           xmlns:f="http://java.sun.com/jsf/core"
           xmlns:c="http://java.sun.com/jsp/jstl/core">
   <c:set var="viewBundle" value="#{adfBundle['dms_v']}"/>
-  <af:panelStretchLayout id="psl1" startWidth="180px">
-    <f:facet name="bottom"/>
+  <af:panelStretchLayout id="psl1" topHeight="0">
+    <f:facet name="top">
+      <af:popup id="p1" autoCancel="disabled"
+                binding="#{backingBeanScope.UserGroupBean.popup}">
+        <af:panelWindow id="pw1" title="#{viewBundle['dms.group.add_user']}"
+                        modal="true">
+          <af:panelCollection id="pc2" inlineStyle="width:600px">
+            <f:facet name="menus"/>
+            <f:facet name="toolbar">
+              <af:toolbar id="t4">
+                <af:commandButton  text="#{viewBundle['dms.common.add']}" id="cb3"
+                                  actionListener="#{backingBeanScope.UserGroupBean.addUserToGroup}"/>
+              </af:toolbar>
+            </f:facet>
+            <f:facet name="statusbar"/>
+            <af:table value="#{bindings.DmsUnGroupedUserView.collectionModel}"
+                      var="row"
+                      rows="#{bindings.DmsUnGroupedUserView.rangeSize}"
+                      emptyText="#{viewBundle['dms.common.nodata']}"
+                      fetchSize="#{bindings.DmsUnGroupedUserView.rangeSize}"
+                      rowBandingInterval="0"
+                      filterModel="#{bindings.DmsUnGroupedUserViewQuery.queryDescriptor}"
+                      queryListener="#{bindings.DmsUnGroupedUserViewQuery.processQuery}"
+                      filterVisible="false" varStatus="vs"
+                      selectionListener="#{bindings.DmsUnGroupedUserView.collectionModel.makeCurrent}"
+                      rowSelection="multiple" id="t3"
+                      binding="#{backingBeanScope.UserGroupBean.ungroupedUserTable}">
+              <af:column sortProperty="#{bindings.DmsUnGroupedUserView.hints.Name.name}"
+                         filterable="true" sortable="true"
+                         headerText="#{bindings.DmsUnGroupedUserView.hints.Name.label}"
+                         id="c7">
+                <af:outputText value="#{row.Name}" id="ot4"/>
+              </af:column>
+              <af:column sortProperty="#{bindings.DmsUnGroupedUserView.hints.Acc.name}"
+                         filterable="true" sortable="true"
+                         headerText="#{bindings.DmsUnGroupedUserView.hints.Acc.label}"
+                         id="c4">
+                <af:outputText value="#{row.Acc}" id="ot6"/>
+              </af:column>
+              <af:column sortProperty="#{bindings.DmsUnGroupedUserView.hints.Sex.name}"
+                         sortable="true"
+                         headerText="#{bindings.DmsUnGroupedUserView.hints.Sex.label}"
+                         id="c6">
+                <af:selectOneChoice value="#{row.bindings.Sex.inputValue}"
+                                    label="#{row.bindings.Sex.label}"
+                                    required="#{bindings.DmsUnGroupedUserView.hints.Sex.mandatory}"
+                                    shortDesc="#{bindings.DmsUnGroupedUserView.hints.Sex.tooltip}"
+                                    id="soc4" readOnly="true">
+                  <f:selectItems value="#{row.bindings.Sex.items}" id="si4"/>
+                </af:selectOneChoice>
+              </af:column>
+              <af:column sortProperty="#{bindings.DmsUnGroupedUserView.hints.UpdatedAt.name}"
+                         sortable="true"
+                         headerText="#{bindings.DmsUnGroupedUserView.hints.UpdatedAt.label}"
+                         id="c8">
+                <af:outputText value="#{row.UpdatedAt}" id="ot5">
+                  <af:convertDateTime pattern="#{bindings.DmsUnGroupedUserView.hints.UpdatedAt.format}"/>
+                </af:outputText>
+              </af:column>
+              <af:column sortProperty="#{bindings.DmsUnGroupedUserView.hints.UpdatedBy.name}"
+                         sortable="true"
+                         headerText="#{bindings.DmsUnGroupedUserView.hints.UpdatedBy.label}"
+                         id="c5">
+                <af:selectOneChoice value="#{row.bindings.UpdatedBy.inputValue}"
+                                    label="#{row.bindings.UpdatedBy.label}"
+                                    required="#{bindings.DmsUnGroupedUserView.hints.UpdatedBy.mandatory}"
+                                    shortDesc="#{bindings.DmsUnGroupedUserView.hints.UpdatedBy.tooltip}"
+                                    id="soc3" readOnly="true">
+                  <f:selectItems value="#{row.bindings.UpdatedBy.items}"
+                                 id="si3"/>
+                </af:selectOneChoice>
+              </af:column>
+            </af:table>
+          </af:panelCollection>
+        </af:panelWindow>
+      </af:popup>
+    </f:facet>
     <f:facet name="center">
-    <af:selectManyShuttle value="#{backingBeanScope.UserGroupBean.selectedUserList}"
-                          label="#{bindings.DmsUserView.label}" id="sms1"
-                          simple="true"
-                          leadingHeader="#{viewBundle['dms.user.available_user_list']}"
-                          trailingHeader="#{viewBundle['dms.user.selected_user_list']}"
-                          size="20"
-                          valueChangeListener="#{backingBeanScope.UserGroupBean.userGroupListener}"
-                          autoSubmit="true"
-                          binding="#{backingBeanScope.UserGroupBean.selectShuttle}"
-                          clientComponent="true"
-                          inlineStyle="margin-top:10px;margin-left:50px">
-      <f:selectItems value="#{bindings.DmsUserView.items}" id="si1"/>
-    </af:selectManyShuttle>
+      <af:panelCollection id="pc1">
+        <f:facet name="menus"/>
+        <f:facet name="toolbar">
+          <af:toolbar id="t1">
+            <af:group id="g1">
+              <af:selectOneChoice value="#{bindings.Name.inputValue}"
+                                  label="#{bindings.Name.label}"
+                                  required="#{bindings.Name.hints.mandatory}"
+                                  shortDesc="#{bindings.Name.hints.tooltip}"
+                                  id="soc1" autoSubmit="true"
+                                  valueChangeListener="#{backingBeanScope.UserGroupBean.groupChangeListener}">
+                <f:selectItems value="#{bindings.Name.items}" id="si1"/>
+              </af:selectOneChoice>
+            </af:group>
+            <af:group id="g2">
+              <af:commandButton text="#{viewBundle['dms.common.add']}" id="cb1"
+                                actionListener="#{backingBeanScope.UserGroupBean.showAddUserPopup}"/>
+              <af:commandButton text="#{viewBundle['dcm.common.delete']}"
+                                id="cb2"
+                                actionListener="#{backingBeanScope.UserGroupBean.removeUserFromGroup}"/>
+            </af:group>
+          </af:toolbar>
+        </f:facet>
+        <f:facet name="statusbar"/>
+        <af:table value="#{bindings.DmsGroupedUserView.collectionModel}"
+                  var="row" rows="#{bindings.DmsGroupedUserView.rangeSize}"
+                  emptyText="#{viewBundle['dms.common.nodata']}"
+                  fetchSize="#{bindings.DmsGroupedUserView.rangeSize}"
+                  rowBandingInterval="0"
+                  filterModel="#{bindings.DmsGroupedUserViewQuery.queryDescriptor}"
+                  queryListener="#{bindings.DmsGroupedUserViewQuery.processQuery}"
+                  filterVisible="false" varStatus="vs"
+                  selectionListener="#{bindings.DmsGroupedUserView.collectionModel.makeCurrent}"
+                  rowSelection="multiple" id="t2"
+                  binding="#{backingBeanScope.UserGroupBean.groupedUserTable}">
+          <af:column sortProperty="#{bindings.DmsGroupedUserView.hints.UserName.name}"
+                     filterable="true" sortable="true"
+                     headerText="#{bindings.DmsGroupedUserView.hints.UserName.label}"
+                     id="c3">
+            <af:outputText value="#{row.UserName}" id="ot2"/>
+          </af:column>
+          <af:column sortProperty="#{bindings.DmsGroupedUserView.hints.UpdatedAt.name}"
+                     sortable="true"
+                     headerText="#{bindings.DmsGroupedUserView.hints.UpdatedAt.label}"
+                     id="c1">
+            <af:outputText value="#{row.UpdatedAt}" id="ot1">
+              <af:convertDateTime pattern="#{bindings.DmsGroupedUserView.hints.UpdatedAt.format}"/>
+            </af:outputText>
+          </af:column>
+          <af:column sortProperty="#{bindings.DmsGroupedUserView.hints.UpdatedBy.name}"
+                     sortable="true"
+                     headerText="#{bindings.DmsGroupedUserView.hints.UpdatedBy.label}"
+                     id="c2">
+            <af:selectOneChoice value="#{row.bindings.UpdatedBy.inputValue}"
+                                label="#{row.bindings.UpdatedBy.label}"
+                                required="#{bindings.DmsGroupedUserView.hints.UpdatedBy.mandatory}"
+                                shortDesc="#{bindings.DmsGroupedUserView.hints.UpdatedBy.tooltip}"
+                                id="soc2" readOnly="true">
+              <f:selectItems value="#{row.bindings.UpdatedBy.items}" id="si2"/>
+            </af:selectOneChoice>
+          </af:column>
+        </af:table>
+      </af:panelCollection>
     </f:facet>
-    <f:facet name="start">
-    <af:table value="#{bindings.DmsGroupView.collectionModel}" var="row"
-              rows="#{bindings.DmsGroupView.rangeSize}"
-              emptyText="#{viewBundle['dms.common.nodata']}"
-              fetchSize="#{bindings.DmsGroupView.rangeSize}"
-              rowBandingInterval="0"
-              selectedRowKeys="#{bindings.DmsGroupView.collectionModel.selectedRow}"
-              selectionListener="#{backingBeanScope.UserGroupBean.groupSelectListener}"
-              rowSelection="single" id="t1" width="180" filterVisible="true"
-              columnStretching="column:c1" autoHeightRows="20"
-              binding="#{backingBeanScope.UserGroupBean.groupList}"
-              inlineStyle="margin-top:10px">
-        <af:column sortProperty="#{bindings.DmsGroupView.hints.Name.name}"
-                 sortable="true" headerText="#{viewBundle['dms.group.list']}"
-                 id="c1" filterable="true">
-        <af:outputText value="#{row.Name}" id="ot1"/>
-      </af:column>
-    </af:table>
-    </f:facet>
-    <f:facet name="end"/>
-    <f:facet name="top"/>
   </af:panelStretchLayout>
 </jsp:root>

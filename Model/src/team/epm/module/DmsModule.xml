@@ -61,9 +61,6 @@
     Name="DmsLookupView"
     ViewObjectName="team.epm.dms.view.DmsLookupView"/>
   <ViewUsage
-    Name="DmsUserGroupedView"
-    ViewObjectName="team.epm.dms.view.DmsUserGroupedView"/>
-  <ViewUsage
     Name="DmsGroupsForRoleView"
     ViewObjectName="team.epm.dms.view.DmsGroupsForRoleView"/>
   <ViewUsage
@@ -72,6 +69,21 @@
   <ViewUsage
     Name="DmsSubMenuQueryView"
     ViewObjectName="team.epm.dms.view.DmsSubMenuQueryView"/>
+  <ViewUsage
+    Name="DmsGroupedUserView"
+    ViewObjectName="team.epm.dms.view.DmsGroupedUserView"/>
+  <ViewUsage
+    Name="DmsUnGroupedUserView"
+    ViewObjectName="team.epm.dms.view.DmsUnGroupedUserView"/>
+  <ViewUsage
+    Name="DmsEnabledGroupView"
+    ViewObjectName="team.epm.dms.view.DmsEnabledGroupView"/>
+  <ViewLinkUsage
+    Name="DmsGroupedUserLnk"
+    ViewLinkObjectName="team.epm.dms.DmsGroupedUserLnk"
+    SrcViewUsageName="team.epm.module.DmsModule.DmsEnabledGroupView"
+    DstViewUsageName="team.epm.module.DmsModule.DmsGroupedUserView"
+    Reversed="false"/>
   <ResourceBundle>
     <PropertiesBundle
       PropertiesFile="ModelBundle"/>

@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE ViewObject SYSTEM "jbo_03_01.dtd">
+<!---->
+<ViewObject
+  xmlns="http://xmlns.oracle.com/bc4j"
+  Name="DmsGroupedUserView"
+  Version="11.1.1.64.93"
+  InheritPersonalization="true"
+  OrderBy='"USER_NAME"'
+  BindingStyle="OracleName"
+  CustomQuery="true"
+  ComponentClass="team.epm.dms.view.DmsGroupedUserViewImpl"
+  PageIterMode="Full"
+  UseGlueCode="false">
+  <DesignTime>
+    <Attr Name="_codeGenFlag2" Value="Coll|VarAccess"/>
+    <Attr Name="_isExpertMode" Value="true"/>
+  </DesignTime>
+  <Properties>
+    <SchemaBasedProperties>
+      <LABEL
+        ResId="team.epm.dms.view.DmsGroupedUserView_LABEL"/>
+    </SchemaBasedProperties>
+  </Properties>
+  <Variable
+    Name="locale"
+    Kind="where"
+    Type="java.lang.String">
+    <TransientExpression><![CDATA[adf.context.locale]]></TransientExpression>
+  </Variable>
+  <ViewAccessor
+    Name="LST_USER"
+    ViewObjectName="team.epm.dms.view.DmsUserView"
+    RowLevelBinds="true"/>
+  <ListBinding
+    Name="LOV_UpdatedBy"
+    ListVOName="LST_USER"
+    ListRangeSize="-1"
+    NullValueFlag="start"
+    NullValueId="${adfBundle['oracle.javatools.resourcebundle.SystemBundle']['NULL_VALUE_RESID']}"
+    MRUCount="0">
+    <AttrArray Name="AttrNames">
+      <Item Value="UpdatedBy"/>
+    </AttrArray>
+    <AttrArray Name="ListAttrNames">
+      <Item Value="Id"/>
+    </AttrArray>
+    <AttrArray Name="ListDisplayAttrNames">
+      <Item Value="Name"/>
+    </AttrArray>
+    <DisplayCriteria/>
+  </ListBinding>
+  <ListBinding
+    Name="LOV_CreatedBy"
+    ListVOName="LST_USER"
+    ListRangeSize="-1"
+    NullValueFlag="start"
+    NullValueId="${adfBundle['oracle.javatools.resourcebundle.SystemBundle']['NULL_VALUE_RESID']}"
+    MRUCount="0">
+    <AttrArray Name="AttrNames">
+      <Item Value="CreatedBy"/>
+    </AttrArray>
+    <AttrArray Name="ListAttrNames">
+      <Item Value="Id"/>
+    </AttrArray>
+    <AttrArray Name="ListDisplayAttrNames">
+      <Item Value="Name"/>
+    </AttrArray>
+    <DisplayCriteria/>
+  </ListBinding>
+  <SQLQuery>
+    <![CDATA[SELECT T1.*, T2.NAME || '(' || T2.ACC || ')' USER_NAME
+  FROM DMS_USER_GROUP T1, DMS_USER T2
+ WHERE T1.USER_ID = T2.ID
+   AND T2.ENABLE_FLAG = 'Y'
+   AND T2.LOCALE = :locale]]>
+  </SQLQuery>
+  <ViewAttribute
+    Name="Id"
+    IsUpdateable="false"
+    IsPersistent="false"
+    IsNotNull="true"
+    PrecisionRule="true"
+    Precision="255"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="ID"
+    Expression="ID"
+    SQLType="VARCHAR">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="32"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="UserId"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="32"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="USER_ID"
+    Expression="USER_ID"
+    SQLType="VARCHAR">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="32"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="GroupId"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="32"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="GROUP_ID"
+    Expression="GROUP_ID"
+    SQLType="VARCHAR">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="32"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="CreatedAt"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Type="oracle.jbo.domain.Date"
+    ColumnType="DATE"
+    AliasName="CREATED_AT"
+    Expression="CREATED_AT"
+    SQLType="DATE">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="7"/>
+    </DesignTime>
+    <Properties>
+      <SchemaBasedProperties>
+        <FMT_FORMATTER
+          ResId="team.epm.dms.view.DmsGroupedUserView.CreatedAt_FMT_FORMATTER"/>
+        <FMT_FORMAT
+          ResId="team.epm.dms.view.DmsGroupedUserView.CreatedAt_FMT_FORMAT"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="UpdatedAt"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Type="oracle.jbo.domain.Date"
+    ColumnType="DATE"
+    AliasName="UPDATED_AT"
+    Expression="UPDATED_AT"
+    SQLType="DATE">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="7"/>
+    </DesignTime>
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="updatedAt"/>
+        <FMT_FORMATTER
+          ResId="team.epm.dms.view.DmsGroupedUserView.UpdatedAt_FMT_FORMATTER"/>
+        <FMT_FORMAT
+          ResId="team.epm.dms.view.DmsGroupedUserView.UpdatedAt_FMT_FORMAT"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="UpdatedBy"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="32"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="UPDATED_BY"
+    Expression="UPDATED_BY"
+    SQLType="VARCHAR"
+    LOVName="LOV_UpdatedBy">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="32"/>
+    </DesignTime>
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="updatedBy"/>
+        <CONTROLTYPE
+          Value="choice"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="CreatedBy"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="32"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="CREATED_BY"
+    Expression="CREATED_BY"
+    SQLType="VARCHAR"
+    LOVName="LOV_CreatedBy">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="32"/>
+    </DesignTime>
+    <Properties>
+      <SchemaBasedProperties>
+        <CONTROLTYPE
+          Value="choice"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="UserName"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="202"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="USER_NAME"
+    Expression="USER_NAME"
+    SQLType="VARCHAR">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="202"/>
+    </DesignTime>
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="dms.user.username"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
+  <ResourceBundle>
+    <PropertiesBundle
+      PropertiesFile="ModelBundle"/>
+  </ResourceBundle>
+</ViewObject>
