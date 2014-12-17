@@ -64,6 +64,10 @@
           Name="isMultiLangAttr"
           Value="true"/>
       </CustomProperties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="dms.role_name"/>
+      </SchemaBasedProperties>
     </Properties>
   </Attribute>
   <Attribute
@@ -78,6 +82,12 @@
     <DesignTime>
       <Attr Name="_DisplaySize" Value="39"/>
     </DesignTime>
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="dms.role.enabled_flag"/>
+      </SchemaBasedProperties>
+    </Properties>
   </Attribute>
   <Attribute
     Name="CreatedAt"
@@ -97,6 +107,8 @@
           ResId="team.epm.dms.model.DmsRole.CreatedAt_FMT_FORMATTER"/>
         <FMT_FORMAT
           ResId="team.epm.dms.model.DmsRole.CreatedAt_FMT_FORMAT"/>
+        <LABEL
+          ResId="createdAt"/>
       </SchemaBasedProperties>
     </Properties>
   </Attribute>
@@ -117,6 +129,8 @@
           ResId="team.epm.dms.model.DmsRole.UpdatedAt_FMT_FORMATTER"/>
         <FMT_FORMAT
           ResId="team.epm.dms.model.DmsRole.UpdatedAt_FMT_FORMAT"/>
+        <LABEL
+          ResId="updatedAt"/>
       </SchemaBasedProperties>
     </Properties>
   </Attribute>
@@ -132,6 +146,12 @@
       <Attr Name="_DisplaySize" Value="32"/>
     </DesignTime>
     <TransientExpression><![CDATA[adf.userSession.userData.userId]]></TransientExpression>
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="updatedBy"/>
+      </SchemaBasedProperties>
+    </Properties>
   </Attribute>
   <Attribute
     Name="CreatedBy"
@@ -146,6 +166,12 @@
       <Attr Name="_DisplaySize" Value="32"/>
     </DesignTime>
     <TransientExpression><![CDATA[adf.userSession.userData.userId]]></TransientExpression>
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="createdBy"/>
+      </SchemaBasedProperties>
+    </Properties>
   </Attribute>
   <Key
     Name="PkDmsRole"

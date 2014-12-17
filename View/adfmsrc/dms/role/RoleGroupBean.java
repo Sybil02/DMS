@@ -6,14 +6,17 @@ import common.DmsUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
+import javax.faces.event.ActionEvent;
 import javax.faces.event.ValueChangeEvent;
 
 import oracle.adf.model.BindingContext;
 import oracle.adf.model.binding.DCIteratorBinding;
 import oracle.adf.share.ADFContext;
 import oracle.adf.share.logging.ADFLogger;
+import oracle.adf.view.rich.component.rich.RichPopup;
 import oracle.adf.view.rich.component.rich.data.RichTable;
 import oracle.adf.view.rich.component.rich.input.RichSelectManyShuttle;
 import oracle.adf.view.rich.context.AdfFacesContext;
@@ -37,86 +40,97 @@ import team.epm.module.DmsModuleImpl;
 public class RoleGroupBean {
  
     private static ADFLogger logger=ADFLogger.createADFLogger(RoleGroupBean.class);
-    private Integer[] selectedList;
-    private RichTable roleList;
-    private RichSelectManyShuttle selectShuttle;
-    List allItems;
-    
-    public RoleGroupBean() {
-
-    }
-    
-    public void selectListener(ValueChangeEvent valueChangeEvent) {
-        // Add event code here...
-        List<String> newValue = (List<String>)valueChangeEvent.getNewValue();
-        if(newValue==null)
-            newValue=new ArrayList<String>();
-        String groupId = getCurGroupId();
-        DmsModuleImpl am =
-            (DmsModuleImpl)ADFUtils.getApplicationModuleForDataControl("DmsModuleDataControl");
-        am.updateGroupRole(groupId, newValue);
-    }
-
-    public List<String> getSelectedRoleList() {
-        
-        DmsModuleImpl am =
-            (DmsModuleImpl)ADFUtils.getApplicationModuleForDataControl("DmsModuleDataControl");
-        List<String> selectedRole =
-            am.getRoleIdsByGroupId(getCurGroupId());
-        return selectedRole;
-    }
-    
-    public List getAllItems() {
-        allItems=ADFUtils.selectItemsForIterator("DmsRoleViewIterator","Id","RoleName");
-        return allItems;
-    }
-    
-    public void setSelectedRoleList(List<String> selectedList){
-       
-    }
-
-    
 
 
-    public void groupSelectListener(SelectionEvent selectionEvent) {
-        DmsUtils.makeCurrent(selectionEvent);
-        ADFContext aDFContext = ADFContext.getCurrent();
-        aDFContext.getViewScope().put("curGroupId", this.getCurGroup().getAttribute("Id"));
-        this.selectShuttle.resetValue();
-        AdfFacesContext adfFacesContext = AdfFacesContext.getCurrentInstance();           
-        adfFacesContext.addPartialTarget(this.selectShuttle);
-      
-    }
-    
-    private Row getCurGroup() {
-        return ADFUtils.findIterator("fetchEnabledGroupIter").getCurrentRow();
-    }
-    
-    private String getCurGroupId(){
-        String curGroupId=ObjectUtils.toString(ADFContext.getCurrent().getViewScope().get("curGroupId"));
-        curGroupId=curGroupId.length()>0 ? curGroupId :  ObjectUtils.toString(this.getCurGroup()==null ? "":this.getCurGroup().getAttribute("Id"));
-        return curGroupId;
-    }
-    
-    public void setSelectShuttle(RichSelectManyShuttle selectShuttle) {
-        this.selectShuttle = selectShuttle;
+    private RichTable selectedRoleTable;
+    private RichPopup popup;
+    private RichTable unSelectedRoleTable;
+
+    public void setSelectedRoleTable(RichTable selectedRoleTable) {
+        this.selectedRoleTable = selectedRoleTable;
     }
 
-    public RichSelectManyShuttle getSelectShuttle() {
-        return selectShuttle;
+    public RichTable getSelectedRoleTable() {
+        return selectedRoleTable;
     }
 
-    public void setRoleList(RichTable roleList) {
-        this.roleList = roleList;
+    public void groupChangeListener(ValueChangeEvent valueChangeEvent) {
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.selectedRoleTable);
     }
 
-    public RichTable getRoleList() {
-        return roleList;
+    public void setPopup(RichPopup popup) {
+        this.popup = popup;
     }
 
-    public void setAllItems(List allItems) {
-        this.allItems = allItems;
+    public RichPopup getPopup() {
+        return popup;
     }
 
+    public void showPopup(ActionEvent actionEvent) {
+        Row curGroup=ADFUtils.findIterator("DmsEnabledGroupViewIterator").getCurrentRow();
+        if(curGroup!=null){
+            ViewObject vo=ADFUtils.findIterator("DmsUnGroupedRoleViewIterator").getViewObject();
+            vo.setNamedWhereClauseParam("groupId", curGroup.getAttribute("Id"));
+            vo.executeQuery();
+            RichPopup.PopupHints hint=new RichPopup.PopupHints();
+            this.popup.show(hint);
+        }
+    }
 
+    public void removeRole(ActionEvent actionEvent) {
+        if (this.selectedRoleTable.getSelectedRowKeys() != null) {
+            ViewObject vo =
+                DmsUtils.getDmsApplicationModule().getDmsGroupRoleView();
+            Iterator itr =
+                this.selectedRoleTable.getSelectedRowKeys().iterator();
+            RowSetIterator rowSetIterator =
+                ADFUtils.findIterator("DmsGroupedRoleViewIterator").getRowSetIterator();
+            while(itr.hasNext()){
+                List key = (List)itr.next();
+                Row roleRow = rowSetIterator.getRow((Key)key.get(0));
+                Key k=new Key(new Object[]{roleRow.getAttribute("Id")});
+                Row[] rows=vo.findByKey(k, 1);
+                if(rows!=null&&rows.length>0){
+                    rows[0].remove();
+                }
+            }
+            vo.getApplicationModule().getTransaction().commit();
+            ADFUtils.findIterator("DmsGroupedRoleViewIterator").getViewObject().executeQuery();
+            AdfFacesContext.getCurrentInstance().addPartialTarget(this.selectedRoleTable);
+        }
+    }
+
+    public void addRoleToGroup(ActionEvent actionEvent) {
+        if (this.unSelectedRoleTable.getSelectedRowKeys() != null) {
+            ViewObject vo =
+                DmsUtils.getDmsApplicationModule().getDmsGroupRoleView();
+            String groupId =
+                (String)ADFUtils.findIterator("DmsEnabledGroupViewIterator").getViewObject().getCurrentRow().getAttribute("Id");
+            Iterator itr =
+                this.unSelectedRoleTable.getSelectedRowKeys().iterator();
+            RowSetIterator rowSetIterator =
+                ADFUtils.findIterator("DmsUnGroupedRoleViewIterator").getRowSetIterator();
+            while (itr.hasNext()) {
+                List key = (List)itr.next();
+                Row roleRow = rowSetIterator.getRow((Key)key.get(0));
+                Row row = vo.createRow();
+                row.setAttribute("GroupId", groupId);
+                row.setAttribute("RoleId", roleRow.getAttribute("Id"));
+                vo.insertRow(row);
+            }
+            vo.getApplicationModule().getTransaction().commit();
+            ADFUtils.findIterator("DmsUnGroupedRoleViewIterator").getViewObject().executeQuery();
+            ADFUtils.findIterator("DmsGroupedRoleViewIterator").getViewObject().executeQuery();
+            AdfFacesContext.getCurrentInstance().addPartialTarget(this.selectedRoleTable);
+            AdfFacesContext.getCurrentInstance().addPartialTarget(this.unSelectedRoleTable);
+        }
+    }
+
+    public void setUnSelectedRoleTable(RichTable unSelectedRoleTable) {
+        this.unSelectedRoleTable = unSelectedRoleTable;
+    }
+
+    public RichTable getUnSelectedRoleTable() {
+        return unSelectedRoleTable;
+    }
 }

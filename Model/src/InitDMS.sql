@@ -255,36 +255,34 @@ insert into dms_menu(id,locale,seq,label,enable_flag,p_id,function_id,created_at
 values('101022','en',101022,'User Group Assign','Y','101020','101014',sysdate,sysdate,'10000','10000');
 
 insert into dms_menu(id,locale,seq,label,enable_flag,p_id,function_id,created_at,updated_at,updated_by,created_by)
-values('101030','zh_CN',101030,'值集管理','Y','101000',null,sysdate,sysdate,'10000','10000');
+values('101030','zh_CN',101030,'角色管理','Y','101000',null,sysdate,sysdate,'10000','10000');
 insert into dms_menu(id,locale,seq,label,enable_flag,p_id,function_id,created_at,updated_at,updated_by,created_by)
-values('101030','en',101030,'Value Set Manage','Y','101000',null,sysdate,sysdate,'10000','10000');
+values('101030','en',101030,'Role Management','Y','101000',null,sysdate,sysdate,'10000','10000');
 
 insert into dms_menu(id,locale,seq,label,enable_flag,p_id,function_id,created_at,updated_at,updated_by,created_by)
-values('101031','zh_CN',101031,'值集维护','Y','101030','101020',sysdate,sysdate,'10000','10000');
+values('101031','zh_CN',101031,'角色维护','Y','101030','101015',sysdate,sysdate,'10000','10000');
 insert into dms_menu(id,locale,seq,label,enable_flag,p_id,function_id,created_at,updated_at,updated_by,created_by)
-values('101031','en',101031,'Value Set Maintain','Y','101030','101020',sysdate,sysdate,'10000','10000');
+values('101031','en',101031,'Role Maintain','Y','101030','101015',sysdate,sysdate,'10000','10000');
 
 insert into dms_menu(id,locale,seq,label,enable_flag,p_id,function_id,created_at,updated_at,updated_by,created_by)
-values('101032','zh_CN',101032,'值集权限','Y','101030','101021',sysdate,sysdate,'10000','10000');
+values('101032','zh_CN',101032,'角色分配','Y','101030','101016',sysdate,sysdate,'10000','10000');
 insert into dms_menu(id,locale,seq,label,enable_flag,p_id,function_id,created_at,updated_at,updated_by,created_by)
-values('101032','en',101032,'Value Set Authority','Y','101030','101021',sysdate,sysdate,'10000','10000');
+values('101032','en',101032,'Role Assign','Y','101030','101016',sysdate,sysdate,'10000','10000');
 
 insert into dms_menu(id,locale,seq,label,enable_flag,p_id,function_id,created_at,updated_at,updated_by,created_by)
-values('101040','zh_CN',101040,'角色管理','Y','101000',null,sysdate,sysdate,'10000','10000');
+values('101040','zh_CN',101040,'值集管理','Y','101000',null,sysdate,sysdate,'10000','10000');
 insert into dms_menu(id,locale,seq,label,enable_flag,p_id,function_id,created_at,updated_at,updated_by,created_by)
-values('101040','en',101040,'Role Management','Y','101000',null,sysdate,sysdate,'10000','10000');
+values('101040','en',101040,'Value Set Manage','Y','101000',null,sysdate,sysdate,'10000','10000');
 
 insert into dms_menu(id,locale,seq,label,enable_flag,p_id,function_id,created_at,updated_at,updated_by,created_by)
-values('101041','zh_CN',101041,'角色维护','Y','101040','101015',sysdate,sysdate,'10000','10000');
+values('101041','zh_CN',101041,'值集维护','Y','101040','101020',sysdate,sysdate,'10000','10000');
 insert into dms_menu(id,locale,seq,label,enable_flag,p_id,function_id,created_at,updated_at,updated_by,created_by)
-values('101041','en',101041,'Role Maintain','Y','101040','101015',sysdate,sysdate,'10000','10000');
+values('101041','en',101041,'Value Set Maintain','Y','101040','101020',sysdate,sysdate,'10000','10000');
 
 insert into dms_menu(id,locale,seq,label,enable_flag,p_id,function_id,created_at,updated_at,updated_by,created_by)
-values('101042','zh_CN',101042,'角色分配','Y','101040','101016',sysdate,sysdate,'10000','10000');
+values('101042','zh_CN',101042,'值集权限','Y','101040','101021',sysdate,sysdate,'10000','10000');
 insert into dms_menu(id,locale,seq,label,enable_flag,p_id,function_id,created_at,updated_at,updated_by,created_by)
-values('101042','en',101042,'Role Assign','Y','101040','101016',sysdate,sysdate,'10000','10000');
-
-
+values('101042','en',101042,'Value Set Authority','Y','101040','101021',sysdate,sysdate,'10000','10000');
 
 insert into dms_menu(id,locale,seq,label,enable_flag,p_id,function_id,created_at,updated_at,updated_by,created_by)
 values('101050','zh_CN',101050,'功能管理','Y','101000',null,sysdate,sysdate,'10000','10000');

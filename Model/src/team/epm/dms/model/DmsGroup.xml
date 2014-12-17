@@ -12,8 +12,8 @@
   BindingStyle="OracleName"
   UseGlueCode="false"
   RowClass="team.epm.dms.model.DmsGroupImpl"
-  CollClass="team.epm.dms.model.DmsGroupCollImpl"
-  DefClass="team.epm.dms.model.DmsGroupDefImpl">
+  DefClass="team.epm.dms.model.DmsGroupDefImpl"
+  CollClass="team.epm.dms.model.DmsGroupCollImpl">
   <DesignTime>
     <Attr Name="_codeGenFlag2" Value="Init|Delete|Access|DML|Def|Coll"/>
     <AttrArray Name="_publishEvents"/>

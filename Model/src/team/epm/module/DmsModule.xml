@@ -6,8 +6,8 @@
   Name="DmsModule"
   Version="11.1.1.64.93"
   InheritPersonalization="true"
-  ClearCacheOnRollback="true"
-  ComponentClass="team.epm.module.DmsModuleImpl">
+  ComponentClass="team.epm.module.DmsModuleImpl"
+  ClearCacheOnRollback="true">
   <DesignTime>
     <Attr Name="_deployType" Value="0"/>
     <Attr Name="_isCodegen" Value="true"/>
@@ -70,16 +70,31 @@
     Name="DmsSubMenuQueryView"
     ViewObjectName="team.epm.dms.view.DmsSubMenuQueryView"/>
   <ViewUsage
-    Name="DmsGroupedUserView"
-    ViewObjectName="team.epm.dms.view.DmsGroupedUserView"/>
-  <ViewUsage
     Name="DmsUnGroupedUserView"
     ViewObjectName="team.epm.dms.view.DmsUnGroupedUserView"/>
   <ViewUsage
     Name="DmsEnabledGroupView"
     ViewObjectName="team.epm.dms.view.DmsEnabledGroupView"/>
+  <ViewUsage
+    Name="DmsEnabledRole"
+    ViewObjectName="team.epm.dms.view.DmsEnabledRole"/>
+  <ViewUsage
+    Name="DmsGroupedRoleView"
+    ViewObjectName="team.epm.dms.view.DmsGroupedRoleView"/>
+  <ViewUsage
+    Name="DmsGroupedUserView"
+    ViewObjectName="team.epm.dms.view.DmsGroupedUserView"/>
+  <ViewUsage
+    Name="DmsUnGroupedRoleView"
+    ViewObjectName="team.epm.dms.view.DmsUnGroupedRoleView"/>
   <ViewLinkUsage
-    Name="DmsGroupedUserLnk"
+    Name="DmsGroupedRoleLnk"
+    ViewLinkObjectName="team.epm.dms.DmsGroupedRoleLnk"
+    SrcViewUsageName="team.epm.module.DmsModule.DmsEnabledGroupView"
+    DstViewUsageName="team.epm.module.DmsModule.DmsGroupedRoleView"
+    Reversed="false"/>
+  <ViewLinkUsage
+    Name="DmsGroupedUserLnk1"
     ViewLinkObjectName="team.epm.dms.DmsGroupedUserLnk"
     SrcViewUsageName="team.epm.module.DmsModule.DmsEnabledGroupView"
     DstViewUsageName="team.epm.module.DmsModule.DmsGroupedUserView"

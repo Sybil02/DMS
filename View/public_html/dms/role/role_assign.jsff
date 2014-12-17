@@ -4,45 +4,130 @@
           xmlns:f="http://java.sun.com/jsf/core"
           xmlns:c="http://java.sun.com/jsp/jstl/core">
   <c:set var="viewBundle" value="#{adfBundle['dms_v']}"/>
-  <af:panelStretchLayout id="psl1" startWidth="180px">
-    <f:facet name="bottom"/>
+  <af:panelStretchLayout id="psl1" topHeight="0">
+    <f:facet name="top">
+      <af:popup id="p1" autoCancel="disabled"
+                binding="#{backingBeanScope.RoleGroupBean.popup}">
+        <af:panelWindow title="#{viewBundle['dms.group.add_role']}" id="pw1"
+                        modal="true">
+          <af:panelCollection id="pc2">
+            <f:facet name="menus"/>
+            <f:facet name="toolbar">
+              <af:toolbar id="t3">
+                <af:commandButton text="#{viewBundle['dms.common.add']}" id="cb3"
+                                  actionListener="#{backingBeanScope.RoleGroupBean.addRoleToGroup}"/>
+              </af:toolbar>
+            </f:facet>
+            <f:facet name="statusbar"/>
+            <af:table value="#{bindings.DmsUnGroupedRoleView.collectionModel}"
+                      var="row"
+                      rows="#{bindings.DmsUnGroupedRoleView.rangeSize}"
+                      emptyText="#{viewBundle['dms.common.nodata']}"
+                      fetchSize="#{bindings.DmsUnGroupedRoleView.rangeSize}"
+                      rowBandingInterval="0"
+                      filterModel="#{bindings.DmsUnGroupedRoleViewQuery.queryDescriptor}"
+                      queryListener="#{bindings.DmsUnGroupedRoleViewQuery.processQuery}"
+                      filterVisible="false" varStatus="vs"
+                      selectionListener="#{bindings.DmsUnGroupedRoleView.collectionModel.makeCurrent}"
+                      rowSelection="multiple" id="t4"
+                      binding="#{backingBeanScope.RoleGroupBean.unSelectedRoleTable}">
+              <af:column sortProperty="#{bindings.DmsUnGroupedRoleView.hints.RoleName.name}"
+                         sortable="true" filterable="true"
+                         headerText="#{bindings.DmsUnGroupedRoleView.hints.RoleName.label}"
+                         id="c6">
+                <af:outputText value="#{row.RoleName}" id="ot5"/>
+              </af:column>
+              <af:column sortProperty="#{bindings.DmsUnGroupedRoleView.hints.UpdatedAt.name}"
+                         sortable="true"
+                         headerText="#{bindings.DmsUnGroupedRoleView.hints.UpdatedAt.label}"
+                         id="c5">
+                <af:outputText value="#{row.UpdatedAt}" id="ot4">
+                  <af:convertDateTime pattern="#{bindings.DmsUnGroupedRoleView.hints.UpdatedAt.format}"/>
+                </af:outputText>
+              </af:column>
+              <af:column sortProperty="#{bindings.DmsUnGroupedRoleView.hints.UpdatedBy.name}"
+                         sortable="true"
+                         headerText="#{bindings.DmsUnGroupedRoleView.hints.UpdatedBy.label}"
+                         id="c4">
+                <af:selectOneChoice value="#{row.bindings.UpdatedBy.inputValue}"
+                                    label="#{row.bindings.UpdatedBy.label}"
+                                    required="#{bindings.DmsUnGroupedRoleView.hints.UpdatedBy.mandatory}"
+                                    shortDesc="#{bindings.DmsUnGroupedRoleView.hints.UpdatedBy.tooltip}"
+                                    id="soc3" readOnly="true">
+                  <f:selectItems value="#{row.bindings.UpdatedBy.items}"
+                                 id="si3"/>
+                </af:selectOneChoice>
+              </af:column>
+            </af:table>
+          </af:panelCollection>
+        </af:panelWindow>
+      </af:popup>
+    </f:facet>
     <f:facet name="center">
-    <af:selectManyShuttle label="#{bindings.DmsGroupView.label}" id="sms1"
-                          valueChangeListener="#{backingBeanScope.RoleGroupBean.selectListener}"
-                          binding="#{backingBeanScope.RoleGroupBean.selectShuttle}"
-                          value="#{backingBeanScope.RoleGroupBean.selectedRoleList}" 
-                          leadingHeader="#{viewBundle['dms.role.available_list']}"
-                          trailingHeader="#{viewBundle['dms.role.selected_list']}"                                               
-                          size="20"
-                          simple="true"
-                          autoSubmit="true"
-                          clientComponent="true"
-                          inlineStyle="margin-top:10px;margin-left:50px">
-      <f:selectItems value="#{backingBeanScope.RoleGroupBean.allItems}" id="si1"/>
-    </af:selectManyShuttle>
+      <af:panelCollection id="pc1">
+        <f:facet name="menus"/>
+        <f:facet name="toolbar">
+          <af:toolbar id="t1">
+            <af:group id="g1">
+              <af:selectOneChoice value="#{bindings.Name.inputValue}"
+                                  label="#{bindings.Name.label}"
+                                  required="#{bindings.Name.hints.mandatory}"
+                                  shortDesc="#{bindings.Name.hints.tooltip}"
+                                  id="soc1" autoSubmit="true"
+                                  valueChangeListener="#{backingBeanScope.RoleGroupBean.groupChangeListener}">
+                <f:selectItems value="#{bindings.Name.items}" id="si1"/>
+              </af:selectOneChoice>
+            </af:group>
+            <af:group id="g2">
+              <af:commandButton text="#{viewBundle['dms.common.add']}"
+                                id="cb1"
+                                actionListener="#{backingBeanScope.RoleGroupBean.showPopup}"/>
+              <af:commandButton text="#{viewBundle['dcm.common.delete']}"
+                                id="cb2"
+                                actionListener="#{backingBeanScope.RoleGroupBean.removeRole}"/>
+            </af:group>
+          </af:toolbar>
+        </f:facet>
+        <f:facet name="statusbar"/>
+        <af:table value="#{bindings.DmsGroupedRoleView.collectionModel}"
+                  var="row" rows="#{bindings.DmsGroupedRoleView.rangeSize}"
+                  emptyText="#{viewBundle['dms.common.nodata']}"
+                  fetchSize="#{bindings.DmsGroupedRoleView.rangeSize}"
+                  rowBandingInterval="0"
+                  filterModel="#{bindings.DmsGroupedRoleViewQuery.queryDescriptor}"
+                  queryListener="#{bindings.DmsGroupedRoleViewQuery.processQuery}"
+                  filterVisible="false" varStatus="vs"
+                  selectionListener="#{bindings.DmsGroupedRoleView.collectionModel.makeCurrent}"
+                  rowSelection="multiple" id="t2"
+                  binding="#{backingBeanScope.RoleGroupBean.selectedRoleTable}">
+          <af:column sortProperty="#{bindings.DmsGroupedRoleView.hints.RoleName.name}"
+                     filterable="true" sortable="true"
+                     headerText="#{bindings.DmsGroupedRoleView.hints.RoleName.label}"
+                     id="c1">
+            <af:outputText value="#{row.RoleName}" id="ot1"/>
+          </af:column>
+          <af:column sortProperty="#{bindings.DmsGroupedRoleView.hints.UpdatedAt.name}"
+                     sortable="true"
+                     headerText="#{bindings.DmsGroupedRoleView.hints.UpdatedAt.label}"
+                     id="c3">
+            <af:outputText value="#{row.UpdatedAt}" id="ot3">
+              <af:convertDateTime pattern="#{bindings.DmsGroupedRoleView.hints.UpdatedAt.format}"/>
+            </af:outputText>
+          </af:column>
+          <af:column sortProperty="#{bindings.DmsGroupedRoleView.hints.UpdatedBy.name}"
+                     sortable="true"
+                     headerText="#{bindings.DmsGroupedRoleView.hints.UpdatedBy.label}"
+                     id="c2">
+            <af:selectOneChoice value="#{row.bindings.UpdatedBy.inputValue}"
+                                label="#{row.bindings.UpdatedBy.label}"
+                                required="#{bindings.DmsGroupedRoleView.hints.UpdatedBy.mandatory}"
+                                shortDesc="#{bindings.DmsGroupedRoleView.hints.UpdatedBy.tooltip}"
+                                id="soc2">
+              <f:selectItems value="#{row.bindings.UpdatedBy.items}" id="si2"/>
+            </af:selectOneChoice>
+          </af:column>
+        </af:table>
+      </af:panelCollection>
     </f:facet>
-    <f:facet name="start">
-      <af:table value="#{bindings.DmsGroupView.collectionModel}" var="row"
-                rows="#{bindings.DmsGroupView.rangeSize}"
-                emptyText="#{viewBundle['dms.common.nodata']}"
-                fetchSize="#{bindings.DmsGroupView.rangeSize}"
-                rowBandingInterval="0"
-                selectedRowKeys="#{bindings.DmsGroupView.collectionModel.selectedRow}"
-                selectionListener="#{backingBeanScope.RoleGroupBean.groupSelectListener}"
-                rowSelection="single" id="t1" width="180" filterVisible="true"
-                columnStretching="column:c1" autoHeightRows="20"
-                binding="#{backingBeanScope.RoleGroupBean.roleList}"
-                inlineStyle="margin-top:10px">
-        <af:column sortProperty="#{bindings.DmsGroupView.hints.Name.name}"
-                   sortable="true" headerText="#{viewBundle['dms.group.list']}"
-                   id="c1" filterable="true">
-          <af:outputText value="#{row.Name}" id="ot1"/>
-        </af:column>
-      </af:table>
-    </f:facet>
-    <f:facet name="end"/>
-    <f:facet name="top"/>
   </af:panelStretchLayout>
 </jsp:root>
-
- <!--  -->

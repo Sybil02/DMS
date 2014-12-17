@@ -19,13 +19,16 @@ import oracle.jbo.server.ApplicationModuleImpl;
 import oracle.jbo.server.ViewLinkImpl;
 import oracle.jbo.server.ViewObjectImpl;
 
+import team.epm.dms.view.DmsEnabledRoleImpl;
 import team.epm.dms.view.DmsEnabledGroupViewImpl;
 import team.epm.dms.view.DmsFunctionViewImpl;
 import team.epm.dms.view.DmsGroupRoleViewImpl;
 import team.epm.dms.view.DmsGroupViewImpl;
+import team.epm.dms.view.DmsGroupedRoleViewImpl;
 import team.epm.dms.view.DmsGroupedUserViewImpl;
 import team.epm.dms.view.DmsMenuTreeViewImpl;
 import team.epm.dms.view.DmsRoleViewImpl;
+import team.epm.dms.view.DmsUnGroupedRoleViewImpl;
 import team.epm.dms.view.DmsUnGroupedUserViewImpl;
 import team.epm.dms.view.DmsUserGroupViewImpl;
 import team.epm.dms.view.DmsUserViewImpl;
@@ -183,14 +186,6 @@ public class DmsModuleImpl extends ApplicationModuleImpl {
     }
 
     /**
-     * Container's getter for DmsUserUngroupedView1.
-     * @return DmsUserUngroupedView1
-     */
-    public ViewObjectImpl getDmsUserUngroupedView1() {
-        return (ViewObjectImpl)findViewObject("DmsUserUngroupedView1");
-    }
-
-    /**
      * Container's getter for DmsUserUngroupedView.
      * @return DmsUserUngroupedView
      */
@@ -207,8 +202,8 @@ public class DmsModuleImpl extends ApplicationModuleImpl {
     }
 
     /**
-     * Container's getter for DmsGroupsForRoleView1.
-     * @return DmsGroupsForRoleView1
+     * Container's getter for DmsGroupsForRoleView.
+     * @return DmsGroupsForRoleView
      */
     public ViewObjectImpl getDmsGroupsForRoleView() {
         return (ViewObjectImpl)findViewObject("DmsGroupsForRoleView");
@@ -387,13 +382,6 @@ public class DmsModuleImpl extends ApplicationModuleImpl {
         return (ViewObjectImpl)findViewObject("DmsSubMenuQueryView");
     }
 
-    /**
-     * Container's getter for DmsGroupedUserView.
-     * @return DmsGroupedUserView
-     */
-    public DmsGroupedUserViewImpl getDmsGroupedUserView() {
-        return (DmsGroupedUserViewImpl)findViewObject("DmsGroupedUserView");
-    }
 
     /**
      * Container's getter for DmsUnGroupedUserView.
@@ -411,12 +399,30 @@ public class DmsModuleImpl extends ApplicationModuleImpl {
         return (DmsEnabledGroupViewImpl)findViewObject("DmsEnabledGroupView");
     }
 
+
     /**
-     * Container's getter for DmsEnabledGroupView1.
-     * @return DmsEnabledGroupView1
+     * Container's getter for DmsEnabledRole.
+     * @return DmsEnabledRole
      */
-    public DmsEnabledGroupViewImpl getDmsEnabledGroupView1() {
-        return (DmsEnabledGroupViewImpl)findViewObject("DmsEnabledGroupView1");
+    public DmsEnabledRoleImpl getDmsEnabledRole() {
+        return (DmsEnabledRoleImpl)findViewObject("DmsEnabledRole");
+    }
+
+
+    /**
+     * Container's getter for DmsGroupedRoleView1.
+     * @return DmsGroupedRoleView1
+     */
+    public DmsGroupedRoleViewImpl getDmsGroupedRoleView1() {
+        return (DmsGroupedRoleViewImpl)findViewObject("DmsGroupedRoleView1");
+    }
+
+    /**
+     * Container's getter for DmsGroupedRoleLnk1.
+     * @return DmsGroupedRoleLnk1
+     */
+    public ViewLinkImpl getDmsGroupedRoleLnk1() {
+        return (ViewLinkImpl)findViewLink("DmsGroupedRoleLnk1");
     }
 
     /**
@@ -428,11 +434,43 @@ public class DmsModuleImpl extends ApplicationModuleImpl {
     }
 
     /**
-     * Container's getter for DmsGroupedUserLnk.
-     * @return DmsGroupedUserLnk
+     * Container's getter for DmsGroupedUserLnk1.
+     * @return DmsGroupedUserLnk1
      */
-    public ViewLinkImpl getDmsGroupedUserLnk() {
-        return (ViewLinkImpl)findViewLink("DmsGroupedUserLnk");
+    public ViewLinkImpl getDmsGroupedUserLnk1() {
+        return (ViewLinkImpl)findViewLink("DmsGroupedUserLnk1");
+    }
+
+    /**
+     * Container's getter for DmsGroupedRoleView.
+     * @return DmsGroupedRoleView
+     */
+    public DmsGroupedRoleViewImpl getDmsGroupedRoleView() {
+        return (DmsGroupedRoleViewImpl)findViewObject("DmsGroupedRoleView");
+    }
+
+    /**
+     * Container's getter for DmsGroupedUserView.
+     * @return DmsGroupedUserView
+     */
+    public DmsGroupedUserViewImpl getDmsGroupedUserView() {
+        return (DmsGroupedUserViewImpl)findViewObject("DmsGroupedUserView");
+    }
+
+    /**
+     * Container's getter for DmsUnGroupedRoleView.
+     * @return DmsUnGroupedRoleView
+     */
+    public DmsUnGroupedRoleViewImpl getDmsUnGroupedRoleView() {
+        return (DmsUnGroupedRoleViewImpl)findViewObject("DmsUnGroupedRoleView");
+    }
+
+    /**
+     * Container's getter for DmsGroupedRoleLnk.
+     * @return DmsGroupedRoleLnk
+     */
+    public ViewLinkImpl getDmsGroupedRoleLnk() {
+        return (ViewLinkImpl)findViewLink("DmsGroupedRoleLnk");
     }
 }
 

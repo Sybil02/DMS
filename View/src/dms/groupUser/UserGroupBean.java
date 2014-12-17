@@ -4,30 +4,17 @@ import common.ADFUtils;
 
 import common.DmsUtils;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ValueChangeEvent;
 
-import oracle.adf.model.BindingContext;
-import oracle.adf.model.binding.DCIteratorBinding;
-import oracle.adf.share.ADFContext;
 import oracle.adf.share.logging.ADFLogger;
 import oracle.adf.view.rich.component.rich.RichPopup;
 import oracle.adf.view.rich.component.rich.data.RichTable;
 
-import oracle.adf.view.rich.component.rich.input.RichInputText;
-import oracle.adf.view.rich.component.rich.input.RichSelectManyShuttle;
-
-import oracle.adf.view.rich.component.rich.input.RichSelectOneChoice;
-import oracle.adf.view.rich.component.rich.output.RichOutputText;
 import oracle.adf.view.rich.context.AdfFacesContext;
-
-import oracle.binding.BindingContainer;
 
 import oracle.jbo.Key;
 import oracle.jbo.Row;
@@ -35,28 +22,12 @@ import oracle.jbo.Row;
 import oracle.jbo.RowSetIterator;
 import oracle.jbo.ViewObject;
 
-import oracle.jbo.uicli.binding.JUCtrlHierBinding;
-import oracle.jbo.uicli.binding.JUCtrlListBinding;
-
-import org.apache.commons.lang.ObjectUtils;
-import org.apache.commons.lang.StringUtils;
-import org.apache.myfaces.trinidad.component.core.input.CoreSelectManyShuttle;
-import org.apache.myfaces.trinidad.event.SelectionEvent;
-
-import org.apache.myfaces.trinidad.model.CollectionModel;
-import org.apache.myfaces.trinidad.model.RowKeySet;
-
-import org.apache.myfaces.trinidad.model.RowKeySetImpl;
-
-import team.epm.dms.view.DmsUserGroupViewImpl;
-
 public class UserGroupBean {
     private static ADFLogger logger =
         ADFLogger.createADFLogger(UserGroupBean.class);
     private RichTable groupedUserTable;
     private RichPopup popup;
     private RichTable ungroupedUserTable;
-    private RichSelectOneChoice groupList;
 
     public UserGroupBean() {
     }
@@ -151,13 +122,5 @@ public class UserGroupBean {
 
     public RichTable getUngroupedUserTable() {
         return ungroupedUserTable;
-    }
-
-    public void setGroupList(RichSelectOneChoice groupList) {
-        this.groupList = groupList;
-    }
-
-    public RichSelectOneChoice getGroupList() {
-        return groupList;
     }
 }

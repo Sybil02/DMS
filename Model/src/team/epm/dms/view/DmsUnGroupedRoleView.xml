@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE ViewObject SYSTEM "jbo_03_01.dtd">
+<!---->
+<ViewObject
+  xmlns="http://xmlns.oracle.com/bc4j"
+  Name="DmsUnGroupedRoleView"
+  Version="11.1.1.64.93"
+  InheritPersonalization="true"
+  OrderBy="ROLE_NAME"
+  BindingStyle="OracleName"
+  CustomQuery="true"
+  ComponentClass="team.epm.dms.view.DmsUnGroupedRoleViewImpl"
+  PageIterMode="Full"
+  UseGlueCode="false">
+  <DesignTime>
+    <Attr Name="_codeGenFlag2" Value="Coll|VarAccess"/>
+    <Attr Name="_isExpertMode" Value="true"/>
+  </DesignTime>
+  <Properties>
+    <SchemaBasedProperties>
+      <LABEL
+        ResId="team.epm.dms.view.DmsUnGroupedRoleView_LABEL"/>
+    </SchemaBasedProperties>
+  </Properties>
+  <Variable
+    Name="locale"
+    Kind="where"
+    Type="java.lang.String">
+    <TransientExpression><![CDATA[adf.context.locale]]></TransientExpression>
+  </Variable>
+  <Variable
+    Name="groupId"
+    Kind="where"
+    Type="java.lang.String"/>
+  <ViewAccessor
+    Name="LST_USER"
+    ViewObjectName="team.epm.dms.view.DmsUserView"/>
+  <ListBinding
+    Name="LOV_UpdatedBy"
+    ListVOName="LST_USER"
+    ListRangeSize="-1"
+    NullValueFlag="start"
+    NullValueId="${adfBundle['oracle.javatools.resourcebundle.SystemBundle']['NULL_VALUE_RESID']}"
+    MRUCount="0">
+    <AttrArray Name="AttrNames">
+      <Item Value="UpdatedBy"/>
+    </AttrArray>
+    <AttrArray Name="ListAttrNames">
+      <Item Value="Id"/>
+    </AttrArray>
+    <AttrArray Name="ListDisplayAttrNames">
+      <Item Value="Name"/>
+    </AttrArray>
+    <DisplayCriteria/>
+  </ListBinding>
+  <SQLQuery>
+    <![CDATA[SELECT T.*
+  FROM DMS_ROLE T
+ WHERE T.ENABLE_FLAG = 'Y'
+   AND T.LOCALE = :locale
+   AND NOT EXISTS
+ (SELECT 1
+          FROM DMS_GROUP_ROLE GR
+         WHERE GR.ROLE_ID = T.ID
+           AND GR.GROUP_ID = :groupId)]]>
+  </SQLQuery>
+  <EntityUsage
+    Name="DmsRole"
+    Entity="team.epm.dms.model.DmsRole"/>
+  <ViewAttribute
+    Name="Id"
+    IsNotNull="true"
+    PrecisionRule="true"
+    EntityAttrName="Id"
+    EntityUsage="DmsRole"
+    AliasName="ID"/>
+  <ViewAttribute
+    Name="Locale"
+    IsNotNull="true"
+    PrecisionRule="true"
+    EntityAttrName="Locale"
+    EntityUsage="DmsRole"
+    AliasName="LOCALE"/>
+  <ViewAttribute
+    Name="RoleName"
+    PrecisionRule="true"
+    EntityAttrName="RoleName"
+    EntityUsage="DmsRole"
+    AliasName="ROLE_NAME"/>
+  <ViewAttribute
+    Name="EnableFlag"
+    PrecisionRule="true"
+    EntityAttrName="EnableFlag"
+    EntityUsage="DmsRole"
+    AliasName="ENABLE_FLAG"/>
+  <ViewAttribute
+    Name="CreatedAt"
+    IsUpdateable="while_insert"
+    PrecisionRule="true"
+    EntityAttrName="CreatedAt"
+    EntityUsage="DmsRole"
+    AliasName="CREATED_AT"/>
+  <ViewAttribute
+    Name="UpdatedAt"
+    PrecisionRule="true"
+    EntityAttrName="UpdatedAt"
+    EntityUsage="DmsRole"
+    AliasName="UPDATED_AT"/>
+  <ViewAttribute
+    Name="UpdatedBy"
+    PrecisionRule="true"
+    EntityAttrName="UpdatedBy"
+    EntityUsage="DmsRole"
+    AliasName="UPDATED_BY"
+    LOVName="LOV_UpdatedBy">
+    <Properties>
+      <SchemaBasedProperties>
+        <CONTROLTYPE
+          Value="choice"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="CreatedBy"
+    IsUpdateable="while_insert"
+    PrecisionRule="true"
+    EntityAttrName="CreatedBy"
+    EntityUsage="DmsRole"
+    AliasName="CREATED_BY"/>
+  <ResourceBundle>
+    <PropertiesBundle
+      PropertiesFile="ModelBundle"/>
+  </ResourceBundle>
+</ViewObject>

@@ -3,13 +3,12 @@
 <!---->
 <ViewObject
   xmlns="http://xmlns.oracle.com/bc4j"
-  Name="DmsEnabledGroupView"
+  Name="DmsEnabledRole"
   Version="11.1.1.64.93"
   InheritPersonalization="true"
-  OrderBy="NAME"
   BindingStyle="OracleName"
   CustomQuery="true"
-  ComponentClass="team.epm.dms.view.DmsEnabledGroupViewImpl"
+  ComponentClass="team.epm.dms.view.DmsEnabledRoleImpl"
   PageIterMode="Full"
   UseGlueCode="false">
   <DesignTime>
@@ -19,7 +18,7 @@
   <Properties>
     <SchemaBasedProperties>
       <LABEL
-        ResId="team.epm.dms.view.DmsEnabledGroupView_LABEL"/>
+        ResId="team.epm.dms.view.DmsEnabledRole_LABEL"/>
     </SchemaBasedProperties>
   </Properties>
   <Variable
@@ -29,84 +28,73 @@
     <TransientExpression><![CDATA[adf.context.locale]]></TransientExpression>
   </Variable>
   <SQLQuery>
-    <![CDATA[SELECT DmsGroup.CREATED_AT, 
-       DmsGroup.CREATED_BY, 
-       DmsGroup.ENABLE_FLAG, 
-       DmsGroup.ID, 
-       DmsGroup.LOCALE, 
-       DmsGroup.NAME, 
-       DmsGroup.UPDATED_AT, 
-       DmsGroup.UPDATED_BY
-FROM DMS_GROUP DmsGroup
-WHERE DmsGroup.ENABLE_FLAG='Y'
-      AND DmsGroup.LOCALE=:locale]]>
+    <![CDATA[SELECT DmsRole.CREATED_AT, 
+       DmsRole.CREATED_BY, 
+       DmsRole.ENABLE_FLAG, 
+       DmsRole.ID, 
+       DmsRole.LOCALE, 
+       DmsRole.ROLE_NAME, 
+       DmsRole.UPDATED_AT, 
+       DmsRole.UPDATED_BY
+FROM DMS_ROLE DmsRole
+WHERE  DmsRole.LOCALE=:locale
+       AND DmsRole.ENABLE_FLAG='Y']]>
   </SQLQuery>
   <EntityUsage
-    Name="DmsGroup"
-    Entity="team.epm.dms.model.DmsGroup"
-    ReadOnly="true"
-    DeleteParticipant="false"/>
+    Name="DmsRole"
+    Entity="team.epm.dms.model.DmsRole"/>
   <ViewAttribute
     Name="CreatedAt"
-    IsUpdateable="false"
+    IsUpdateable="while_insert"
     PrecisionRule="true"
     EntityAttrName="CreatedAt"
-    EntityUsage="DmsGroup"
+    EntityUsage="DmsRole"
     AliasName="CREATED_AT"/>
   <ViewAttribute
     Name="CreatedBy"
+    IsUpdateable="while_insert"
     PrecisionRule="true"
     EntityAttrName="CreatedBy"
-    EntityUsage="DmsGroup"
+    EntityUsage="DmsRole"
     AliasName="CREATED_BY"/>
   <ViewAttribute
     Name="EnableFlag"
     PrecisionRule="true"
     EntityAttrName="EnableFlag"
-    EntityUsage="DmsGroup"
+    EntityUsage="DmsRole"
     AliasName="ENABLE_FLAG"/>
   <ViewAttribute
     Name="Id"
     IsNotNull="true"
     PrecisionRule="true"
     EntityAttrName="Id"
-    EntityUsage="DmsGroup"
+    EntityUsage="DmsRole"
     AliasName="ID"/>
   <ViewAttribute
     Name="Locale"
     IsNotNull="true"
     PrecisionRule="true"
     EntityAttrName="Locale"
-    EntityUsage="DmsGroup"
+    EntityUsage="DmsRole"
     AliasName="LOCALE"/>
   <ViewAttribute
-    Name="Name"
+    Name="RoleName"
     PrecisionRule="true"
-    EntityAttrName="Name"
-    EntityUsage="DmsGroup"
-    AliasName="NAME"/>
+    EntityAttrName="RoleName"
+    EntityUsage="DmsRole"
+    AliasName="ROLE_NAME"/>
   <ViewAttribute
     Name="UpdatedAt"
     PrecisionRule="true"
     EntityAttrName="UpdatedAt"
-    EntityUsage="DmsGroup"
+    EntityUsage="DmsRole"
     AliasName="UPDATED_AT"/>
   <ViewAttribute
     Name="UpdatedBy"
     PrecisionRule="true"
     EntityAttrName="UpdatedBy"
-    EntityUsage="DmsGroup"
+    EntityUsage="DmsRole"
     AliasName="UPDATED_BY"/>
-  <ViewLinkAccessor
-    Name="DmsGroupedUserView"
-    ViewLink="team.epm.dms.DmsGroupedUserLnk"
-    Type="oracle.jbo.RowIterator"
-    IsUpdateable="false"/>
-  <ViewLinkAccessor
-    Name="DmsGroupedRoleView"
-    ViewLink="team.epm.dms.DmsGroupedRoleLnk"
-    Type="oracle.jbo.RowIterator"
-    IsUpdateable="false"/>
   <ResourceBundle>
     <PropertiesBundle
       PropertiesFile="ModelBundle"/>

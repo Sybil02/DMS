@@ -4,24 +4,45 @@
   <parameters/>
   <executables>
     <variableIterator id="variables"/>
-        <methodIterator id="fetchEnabledGroupIter" Binds="fetchEnabledGroup.result"
-                    DataControl="DmsModuleDataControl" RangeSize="-1"/>
-    <iterator id="DmsGroupRoleViewIterator" Binds="DmsGroupRoleView"
+    <iterator id="DmsEnabledGroupViewIterator" Binds="DmsEnabledGroupView"
               DataControl="DmsModuleDataControl" RangeSize="25"/>
-    <iterator id="DmsRoleViewIterator" Binds="DmsRoleView"
-              DataControl="DmsModuleDataControl" RangeSize="25"/>
+    <iterator Binds="DmsGroupedRoleView" RangeSize="25"
+              DataControl="DmsModuleDataControl"
+              id="DmsGroupedRoleViewIterator"/>
+    <searchRegion Binds="DmsGroupedRoleViewIterator" Criteria=""
+                  Customizer="oracle.jbo.uicli.binding.JUSearchBindingCustomizer"
+                  id="DmsGroupedRoleViewQuery"/>
+    <iterator Binds="DmsUnGroupedRoleView" RangeSize="25"
+              DataControl="DmsModuleDataControl"
+              id="DmsUnGroupedRoleViewIterator"/>
+    <searchRegion Binds="DmsUnGroupedRoleViewIterator" Criteria=""
+                  Customizer="oracle.jbo.uicli.binding.JUSearchBindingCustomizer"
+                  id="DmsUnGroupedRoleViewQuery"/>
   </executables>
   <bindings>
-    <methodAction id="fetchEnabledGroup" RequiresUpdateModel="true"
-                  Action="invokeMethod" MethodName="fetchEnabledGroup"
-                  IsViewObjectMethod="true" DataControl="DmsModuleDataControl"
-                  InstanceName="DmsModuleDataControl.DmsGroupView"
-                  ReturnName="data.DmsModuleDataControl.methodResults.fetchEnabledGroup_DmsModuleDataControl_DmsGroupView_fetchEnabledGroup_result"/>
-        <tree IterBinding="fetchEnabledGroupIter" id="DmsGroupView">
-      <nodeDefinition DefName="team.epm.dms.view.DmsGroupView"
-                      Name="DmsGroupView10">
+    <list ListOperMode="navigation" IterBinding="DmsEnabledGroupViewIterator"
+          ListIter="DmsEnabledGroupViewIterator" id="Name" DTSupportsMRU="true">
+      <AttrNames>
+        <Item Value="Name"/>
+      </AttrNames>
+    </list>
+    <tree IterBinding="DmsGroupedRoleViewIterator" id="DmsGroupedRoleView">
+      <nodeDefinition DefName="team.epm.dms.view.DmsGroupedRoleView"
+                      Name="DmsGroupedRoleView0">
         <AttrNames>
-          <Item Value="Name"/>
+          <Item Value="RoleName"/>
+          <Item Value="UpdatedAt"/>
+          <Item Value="UpdatedBy"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <tree IterBinding="DmsUnGroupedRoleViewIterator" id="DmsUnGroupedRoleView">
+      <nodeDefinition DefName="team.epm.dms.view.DmsUnGroupedRoleView"
+                      Name="DmsUnGroupedRoleView0">
+        <AttrNames>
+          <Item Value="RoleName"/>
+          <Item Value="UpdatedAt"/>
+          <Item Value="UpdatedBy"/>
         </AttrNames>
       </nodeDefinition>
     </tree>
