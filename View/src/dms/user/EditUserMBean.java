@@ -2,6 +2,7 @@ package dms.user;
 
 import com.bea.security.utils.DigestUtils;
 
+import common.ADFUtils;
 import common.DmsUtils;
 
 import javax.faces.event.ActionEvent;
@@ -59,7 +60,7 @@ public class EditUserMBean {
         if (pwd.equals(newPwd)) {
             if(DmsUserImpl.isPasswordValide(newPwd)){
             ViewObject usrVo =
-                DmsUtils.getDmsApplicationModule().getDmsUserView();
+                ADFUtils.findIterator("DmsUserViewIterator").getViewObject();
             String usrAcc = (String)usrVo.getCurrentRow().getAttribute("Acc");
             String encyptPwd;
             try {

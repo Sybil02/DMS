@@ -193,12 +193,12 @@ public class DcmDataDisplayBean extends AbstractExcel2007Writer {
         StringBuffer sql_value = new StringBuffer();
         sql_insert.append("INSERT INTO \"").append(this.templateTmpTable).append("\"(");
         sql_insert.append("TEMPLATE_ID,COM_RECORD_ID,ORIGIN_ROWID");
-        sql_insert.append(",CREATED_BY,UPDATED_BY,CREATED_AT,UPDATED_AT,EDIT_TYPE");
+        sql_insert.append(",CREATED_BY,UPDATED_BY,CREATED_AT,UPDATED_AT,SHEET_NAME,ROW_NUM,EDIT_TYPE");
         sql_value.append(" VALUES('").append(this.curTemplateId).append("'");
         sql_value.append(",'").append(ObjectUtils.toString(curComRecordId)).append("'");
         sql_value.append(",?,'").append(this.curUser.getId()).append("'");
         sql_value.append(",'").append(this.curUser.getId()).append("'");
-        sql_value.append(",SYSDATE,SYSDATE,?");
+        sql_value.append(",SYSDATE,SYSDATE,'NA',-1,?");
         for (int i = 0; i < this.colsdef.size(); i++) {
             sql_insert.append(",COLUMN").append(i + 1);
             sql_value.append(",?");

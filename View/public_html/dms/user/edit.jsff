@@ -8,7 +8,8 @@
     <f:facet name="top">
       <af:popup id="p1" autoCancel="disabled"
                 binding="#{backingBeanScope.EditUserMBean.popup}">
-        <af:panelWindow id="pw1" title="#{viewBundle['dms.user.changpwd']}">
+        <af:panelWindow id="pw1" title="#{viewBundle['dms.user.changpwd']}"
+                        modal="true">
           <af:panelFormLayout id="pfl1">
             <af:inputText secret="true" label="#{viewBundle['login.password']}"
                           id="it5"
