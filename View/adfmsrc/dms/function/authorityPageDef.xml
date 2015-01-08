@@ -5,26 +5,40 @@
   <parameters/>
   <executables>
     <variableIterator id="variables"/>
-    <iterator Binds="DmsFunctionView" RangeSize="25"
-              DataControl="DmsModuleDataControl" id="DmsFunctionViewIterator"/>
-    <iterator Binds="DmsRoleView" RangeSize="25"
-              DataControl="DmsModuleDataControl" id="DmsRoleViewIterator"/>
+    <iterator id="DmsEnabledRoleIterator" Binds="DmsEnabledRole"
+              DataControl="DmsModuleDataControl" RangeSize="25"/>
+    <iterator Binds="DmsRoleFunctionView" RangeSize="25"
+              DataControl="DmsModuleDataControl"
+              id="DmsRoleFunctionViewIterator"/>
+    <iterator Binds="DmsUnassignedFunctionView" RangeSize="25"
+              DataControl="DmsModuleDataControl"
+              id="DmsUnassignedFunctionViewIterator"/>
   </executables>
   <bindings>
-    <list IterBinding="DmsFunctionViewIterator" ListOperMode="multiSelect"
-          ListIter="DmsFunctionViewIterator" id="DmsFunctionView">
-      <AttrNames>
-        <Item Value="Id"/>
-      </AttrNames>
-      <ListDisplayAttrNames>
-        <Item Value="Name"/>
-      </ListDisplayAttrNames>
-    </list>
-    <tree IterBinding="DmsRoleViewIterator" id="DmsRoleView">
-      <nodeDefinition DefName="team.epm.dms.view.DmsRoleView"
-                      Name="DmsRoleView0">
+    <tree IterBinding="DmsRoleFunctionViewIterator" id="DmsRoleFunctionView">
+      <nodeDefinition DefName="team.epm.dms.view.DmsRoleFunctionView"
+                      Name="DmsRoleFunctionView0">
         <AttrNames>
-          <Item Value="RoleName"/>
+          <Item Value="FunctionId"/>
+          <Item Value="UpdatedBy"/>
+          <Item Value="UpdatedAt"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <list ListOperMode="navigation" IterBinding="DmsEnabledRoleIterator"
+          ListIter="DmsEnabledRoleIterator" id="RoleName" DTSupportsMRU="true">
+      <AttrNames>
+        <Item Value="RoleName"/>
+      </AttrNames>
+    </list>
+    <tree IterBinding="DmsUnassignedFunctionViewIterator"
+          id="DmsUnassignedFunctionView">
+      <nodeDefinition DefName="team.epm.dms.view.DmsUnassignedFunctionView"
+                      Name="DmsUnassignedFunctionView0">
+        <AttrNames>
+          <Item Value="Name"/>
+          <Item Value="UpdatedBy"/>
+          <Item Value="UpdatedAt"/>
         </AttrNames>
       </nodeDefinition>
     </tree>

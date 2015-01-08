@@ -4,41 +4,123 @@
           xmlns:f="http://java.sun.com/jsf/core"
           xmlns:c="http://java.sun.com/jsp/jstl/core">
   <c:set var="viewBundle" value="#{adfBundle['dms_v']}"/>
-  <af:panelStretchLayout id="psl1" startWidth="180px">
-    <f:facet name="bottom"/>
+  <af:panelStretchLayout id="psl1" topHeight="0px">
+    <f:facet name="top">
+      <af:popup id="p1" autoCancel="disabled"
+                binding="#{backingBeanScope.FunctionAuthorityBean.popup}">
+        <af:panelWindow id="pw1" modal="true"
+                        title="#{viewBundle['dms.add_function']}">
+          <af:panelCollection id="pc2">
+            <f:facet name="menus"/>
+            <f:facet name="toolbar">
+              <af:toolbar id="t3">
+                <af:commandButton text="#{viewBundle['dms.common.add']}" id="cb3"
+                                  actionListener="#{backingBeanScope.FunctionAuthorityBean.add_function}"/>
+              </af:toolbar>
+            </f:facet>
+            <f:facet name="statusbar"/>
+            <af:table value="#{bindings.DmsUnassignedFunctionView.collectionModel}"
+                      var="row"
+                      rows="#{bindings.DmsUnassignedFunctionView.rangeSize}"
+                      emptyText="#{viewBundle['dms.common.nodata']}"
+                      fetchSize="#{bindings.DmsUnassignedFunctionView.rangeSize}"
+                      rowBandingInterval="0"
+                      selectionListener="#{bindings.DmsUnassignedFunctionView.collectionModel.makeCurrent}"
+                      rowSelection="multiple" id="t4"
+                      binding="#{backingBeanScope.FunctionAuthorityBean.unassignedFunctionTable}">
+              <af:column sortProperty="#{bindings.DmsUnassignedFunctionView.hints.Name.name}"
+                         sortable="false"
+                         headerText="#{bindings.DmsUnassignedFunctionView.hints.Name.label}"
+                         id="c4">
+                <af:outputText value="#{row.Name}" id="ot1"/>
+              </af:column>
+              <af:column sortProperty="#{bindings.DmsUnassignedFunctionView.hints.UpdatedBy.name}"
+                         sortable="false"
+                         headerText="#{bindings.DmsUnassignedFunctionView.hints.UpdatedBy.label}"
+                         id="c5">
+                <af:selectOneChoice value="#{row.bindings.UpdatedBy.inputValue}"
+                                    label="#{row.bindings.UpdatedBy.label}"
+                                    required="#{bindings.DmsUnassignedFunctionView.hints.UpdatedBy.mandatory}"
+                                    shortDesc="#{bindings.DmsUnassignedFunctionView.hints.UpdatedBy.tooltip}"
+                                    id="soc4" readOnly="true">
+                  <f:selectItems value="#{row.bindings.UpdatedBy.items}"
+                                 id="si4"/>
+                </af:selectOneChoice>
+              </af:column>
+              <af:column sortProperty="#{bindings.DmsUnassignedFunctionView.hints.UpdatedAt.name}"
+                         sortable="false"
+                         headerText="#{bindings.DmsUnassignedFunctionView.hints.UpdatedAt.label}"
+                         id="c6">
+                <af:outputText value="#{row.UpdatedAt}" id="ot3">
+                  <af:convertDateTime pattern="#{bindings.DmsUnassignedFunctionView.hints.UpdatedAt.format}"/>
+                </af:outputText>
+              </af:column>
+            </af:table>
+          </af:panelCollection>
+        </af:panelWindow>
+      </af:popup>
+    </f:facet>
     <f:facet name="center">
-    <af:selectManyShuttle value="#{backingBeanScope.FunctionAuthorityBean.selectValue}"
-                          label="" id="sms1"
-                          size="20" simple="true"
-                          inlineStyle="margin-top:10px;margin-left:50px"
-                          leadingHeader="#{viewBundle['dms.function.available_list']}"
-                          trailingHeader="#{viewBundle['dms.function.selected_list']}"
-                          binding="#{backingBeanScope.FunctionAuthorityBean.selectShuttle}"
-                          valueChangeListener="#{backingBeanScope.FunctionAuthorityBean.selectListener}"
-                          autoSubmit="true">
-      <f:selectItems value="#{backingBeanScope.FunctionAuthorityBean.allItems}" id="si2"/>
-    </af:selectManyShuttle>
+      <af:panelCollection id="pc1">
+        <f:facet name="menus"/>
+        <f:facet name="toolbar">
+          <af:toolbar id="t2">
+            <af:selectOneChoice value="#{bindings.RoleName.inputValue}"
+                                label="#{bindings.RoleName.label}"
+                                required="#{bindings.RoleName.hints.mandatory}"
+                                shortDesc="#{bindings.RoleName.hints.tooltip}"
+                                id="soc1" autoSubmit="true"
+                                valueChangeListener="#{backingBeanScope.FunctionAuthorityBean.roleChangeListener}">
+              <f:selectItems value="#{bindings.RoleName.items}" id="si1"/>
+            </af:selectOneChoice>
+            <af:commandButton text="#{viewBundle['dms.common.add']}" id="cb1"
+                              actionListener="#{backingBeanScope.FunctionAuthorityBean.showPopup}"/>
+            <af:commandButton text="#{viewBundle['dcm.common.delete']}" id="cb2"
+                              actionListener="#{backingBeanScope.FunctionAuthorityBean.removeFunction}"/>
+          </af:toolbar>
+        </f:facet>
+        <f:facet name="statusbar"/>
+        <af:table value="#{bindings.DmsRoleFunctionView.collectionModel}"
+                  var="row" rows="#{bindings.DmsRoleFunctionView.rangeSize}"
+                  emptyText="#{viewBundle['dms.common.nodata']}"
+                  fetchSize="#{bindings.DmsRoleFunctionView.rangeSize}"
+                  rowBandingInterval="0" id="t1" rowSelection="multiple"
+                  selectedRowKeys="#{bindings.DmsRoleFunctionView.collectionModel.selectedRow}"
+                  binding="#{backingBeanScope.FunctionAuthorityBean.assignedFunctionTable}">
+          <af:column sortProperty="#{bindings.DmsRoleFunctionView.hints.FunctionId.name}"
+                     sortable="false"
+                     headerText="#{viewBundle['dms.function']}"
+                     id="c2">
+            <af:selectOneChoice value="#{row.bindings.FunctionId.inputValue}"
+                                label="#{row.bindings.FunctionId.label}"
+                                required="#{bindings.DmsRoleFunctionView.hints.FunctionId.mandatory}"
+                                shortDesc="#{bindings.DmsRoleFunctionView.hints.FunctionId.tooltip}"
+                                id="soc3" readOnly="true">
+              <f:selectItems value="#{row.bindings.FunctionId.items}" id="si3"/>
+            </af:selectOneChoice>
+          </af:column>
+          <af:column sortProperty="#{bindings.DmsRoleFunctionView.hints.UpdatedBy.name}"
+                     sortable="false"
+                     headerText="#{bindings.DmsRoleFunctionView.hints.UpdatedBy.label}"
+                     id="c1">
+            <af:selectOneChoice value="#{row.bindings.UpdatedBy.inputValue}"
+                                label="#{row.bindings.UpdatedBy.label}"
+                                required="#{bindings.DmsRoleFunctionView.hints.UpdatedBy.mandatory}"
+                                shortDesc="#{bindings.DmsRoleFunctionView.hints.UpdatedBy.tooltip}"
+                                id="soc2" readOnly="true">
+              <f:selectItems value="#{row.bindings.UpdatedBy.items}" id="si2"/>
+            </af:selectOneChoice>
+          </af:column>
+          <af:column sortProperty="#{bindings.DmsRoleFunctionView.hints.UpdatedAt.name}"
+                     sortable="false"
+                     headerText="#{bindings.DmsRoleFunctionView.hints.UpdatedAt.label}"
+                     id="c3">
+            <af:outputText value="#{row.UpdatedAt}" id="ot2">
+              <af:convertDateTime pattern="#{bindings.DmsRoleFunctionView.hints.UpdatedAt.format}"/>
+            </af:outputText>
+          </af:column>
+        </af:table>
+      </af:panelCollection>
     </f:facet>
-    <f:facet name="start">
-    <af:table value="#{bindings.DmsRoleView.collectionModel}" var="row"
-              rows="#{bindings.DmsRoleView.rangeSize}"
-              emptyText="#{viewBundle['dms.common.nodata']}"
-              fetchSize="#{bindings.DmsRoleView.rangeSize}"
-              rowBandingInterval="0"
-              selectedRowKeys="#{bindings.DmsRoleView.collectionModel.selectedRow}"
-              selectionListener="#{backingBeanScope.FunctionAuthorityBean.roleSelectListener}"
-              rowSelection="single" id="t1" columnStretching="column:c1"
-              width="180px"
-              inlineStyle="margin-top:10px">
-      <af:column sortProperty="#{bindings.DmsRoleView.hints.RoleName.name}"
-                 sortable="false"
-                 headerText="#{bindings.DmsRoleView.hints.RoleName.label}"
-                 id="c1">
-        <af:outputText value="#{row.RoleName}" id="ot1"/>
-      </af:column>
-    </af:table>
-    </f:facet>
-    <f:facet name="end"/>
-    <f:facet name="top"/>
   </af:panelStretchLayout>
 </jsp:root>

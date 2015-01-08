@@ -10,10 +10,12 @@
   CustomQuery="true"
   ComponentClass="team.epm.dms.view.DmsEnabledRoleImpl"
   PageIterMode="Full"
-  UseGlueCode="false">
+  UseGlueCode="false"
+  RowClass="team.epm.dms.view.DmsEnabledRoleRowImpl">
   <DesignTime>
-    <Attr Name="_codeGenFlag2" Value="Coll|VarAccess"/>
+    <Attr Name="_codeGenFlag2" Value="Access|Coll|VarAccess"/>
     <Attr Name="_isExpertMode" Value="true"/>
+    <Attr Name="_isCodegen" Value="true"/>
   </DesignTime>
   <Properties>
     <SchemaBasedProperties>
@@ -95,6 +97,16 @@ WHERE  DmsRole.LOCALE=:locale
     EntityAttrName="UpdatedBy"
     EntityUsage="DmsRole"
     AliasName="UPDATED_BY"/>
+  <ViewLinkAccessor
+    Name="DmsRoleValueView"
+    ViewLink="team.epm.dms.DmsRoleValueLnk"
+    Type="oracle.jbo.RowIterator"
+    IsUpdateable="false"/>
+  <ViewLinkAccessor
+    Name="DmsRoleFunctionView"
+    ViewLink="team.epm.dms.DmsRoleFunctionLnk"
+    Type="oracle.jbo.RowIterator"
+    IsUpdateable="false"/>
   <ResourceBundle>
     <PropertiesBundle
       PropertiesFile="ModelBundle"/>

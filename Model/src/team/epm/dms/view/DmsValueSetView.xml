@@ -20,9 +20,12 @@
   CustomQuery="false"
   PageIterMode="Full"
   UseGlueCode="false"
-  Where="DmsValueSet.LOCALE=:locale">
+  Where="DmsValueSet.LOCALE=:locale"
+  ComponentClass="team.epm.dms.view.DmsValueSetViewImpl"
+  RowClass="team.epm.dms.view.DmsValueSetViewRowImpl">
   <DesignTime>
-    <Attr Name="_codeGenFlag2" Value="Access|VarAccess"/>
+    <Attr Name="_codeGenFlag2" Value="Access|Coll|VarAccess"/>
+    <Attr Name="_isCodegen" Value="true"/>
   </DesignTime>
   <Variable
     Name="locale"
@@ -189,6 +192,18 @@
       </SchemaBasedProperties>
     </Properties>
   </ViewAttribute>
+  <ViewAttribute
+    Name="ValueSetId"
+    IsUpdateable="false"
+    IsSelected="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="VIEW_ATTR"
+    SQLType="VARCHAR">
+    <TransientExpression><![CDATA[Id]]></TransientExpression>
+  </ViewAttribute>
   <ViewCriteria
     Name="DmsValueSetViewCriteria"
     ViewObjectName="team.epm.dms.view.DmsValueSetView"
@@ -213,4 +228,9 @@
       </CustomProperties>
     </Properties>
   </ViewCriteria>
+  <ViewLinkAccessor
+    Name="DmsRoleValueView"
+    ViewLink="team.epm.dms.DmsValusetValueLnk"
+    Type="oracle.jbo.RowIterator"
+    IsUpdateable="false"/>
 </ViewObject>

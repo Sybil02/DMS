@@ -16,21 +16,6 @@
     <AttrArray Name="_publishEvents"/>
   </DesignTime>
   <Attribute
-    Name="RoleFunctionId"
-    IsNotNull="true"
-    Precision="32"
-    ColumnName="ROLE_FUNCTION_ID"
-    SQLType="VARCHAR"
-    Type="java.lang.String"
-    ColumnType="VARCHAR2"
-    TableName="DMS_ROLE_FUNCTION"
-    PrimaryKey="true">
-    <DesignTime>
-      <Attr Name="_DisplaySize" Value="32"/>
-    </DesignTime>
-    <TransientExpression><![CDATA[java.util.UUID.randomUUID().toString().replace("-", "")]]></TransientExpression>
-  </Attribute>
-  <Attribute
     Name="RoleId"
     Precision="32"
     ColumnName="ROLE_ID"
@@ -44,7 +29,6 @@
   </Attribute>
   <Attribute
     Name="FunctionId"
-    IsNotNull="true"
     Precision="32"
     ColumnName="FUNCTION_ID"
     SQLType="VARCHAR"
@@ -73,6 +57,8 @@
           ResId="team.epm.dms.model.DmsRoleFunction.CreatedAt_FMT_FORMATTER"/>
         <FMT_FORMAT
           ResId="team.epm.dms.model.DmsRoleFunction.CreatedAt_FMT_FORMAT"/>
+        <LABEL
+          ResId="createdAt"/>
       </SchemaBasedProperties>
     </Properties>
   </Attribute>
@@ -93,6 +79,8 @@
           ResId="team.epm.dms.model.DmsRoleFunction.UpdatedAt_FMT_FORMATTER"/>
         <FMT_FORMAT
           ResId="team.epm.dms.model.DmsRoleFunction.UpdatedAt_FMT_FORMAT"/>
+        <LABEL
+          ResId="updatedAt"/>
       </SchemaBasedProperties>
     </Properties>
   </Attribute>
@@ -108,6 +96,12 @@
       <Attr Name="_DisplaySize" Value="32"/>
     </DesignTime>
     <TransientExpression><![CDATA[adf.userSession.userData.userId]]></TransientExpression>
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="updatedBy"/>
+      </SchemaBasedProperties>
+    </Properties>
   </Attribute>
   <Attribute
     Name="CreatedBy"
@@ -122,26 +116,38 @@
       <Attr Name="_DisplaySize" Value="32"/>
     </DesignTime>
     <TransientExpression><![CDATA[adf.userSession.userData.userId]]></TransientExpression>
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="createdBy"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </Attribute>
+  <Attribute
+    Name="Id"
+    IsNotNull="true"
+    Precision="32"
+    ColumnName="ID"
+    SQLType="VARCHAR"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    TableName="DMS_ROLE_FUNCTION"
+    PrimaryKey="true"
+    IsUpdateable="while_insert">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="32"/>
+    </DesignTime>
+    <TransientExpression><![CDATA[java.util.UUID.randomUUID().toString().replace("-", "")]]></TransientExpression>
   </Attribute>
   <Key
-    Name="PkDmsRoleFunction"
-    PrimaryKey="true">
+    Name="SysC007465">
     <DesignTime>
-      <Attr Name="_DBObjectName" Value="PK_DMS_ROLE_FUNCTION"/>
-    </DesignTime>
-    <AttrArray Name="Attributes">
-      <Item Value="team.epm.dms.model.DmsRoleFunction.RoleFunctionId"/>
-    </AttrArray>
-  </Key>
-  <Key
-    Name="SysC007095">
-    <DesignTime>
-      <Attr Name="_DBObjectName" Value="SYS_C007095"/>
-      <Attr Name="_checkCondition" Value='"ROLE_FUNCTION_ID" IS NOT NULL'/>
+      <Attr Name="_DBObjectName" Value="SYS_C007465"/>
+      <Attr Name="_checkCondition" Value='"ID" IS NOT NULL'/>
       <Attr Name="_isCheck" Value="true"/>
     </DesignTime>
     <AttrArray Name="Attributes">
-      <Item Value="team.epm.dms.model.DmsRoleFunction.RoleFunctionId"/>
+      <Item Value="team.epm.dms.model.DmsRoleFunction.Id"/>
     </AttrArray>
   </Key>
   <ResourceBundle>

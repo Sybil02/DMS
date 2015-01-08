@@ -5,120 +5,189 @@ import common.DmsUtils;
 
 import common.JSFUtils;
 
+import dms.login.Person;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 
+import java.util.Map;
+
+import javax.faces.event.ActionEvent;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 
 import oracle.adf.model.BindingContext;
 import oracle.adf.model.binding.DCIteratorBinding;
 import oracle.adf.share.ADFContext;
+import oracle.adf.share.logging.ADFLogger;
+import oracle.adf.view.rich.component.rich.RichPopup;
+import oracle.adf.view.rich.component.rich.data.RichTable;
 import oracle.adf.view.rich.component.rich.input.RichSelectManyShuttle;
 import oracle.adf.view.rich.context.AdfFacesContext;
 
 import oracle.binding.BindingContainer;
 
 import oracle.jbo.ApplicationModule;
+import oracle.jbo.Key;
 import oracle.jbo.Row;
 
 import oracle.jbo.RowSetIterator;
+import oracle.jbo.ViewObject;
+import oracle.jbo.server.DBTransaction;
 import oracle.jbo.uicli.binding.JUCtrlListBinding;
 
 import org.apache.commons.lang.ObjectUtils;
 import org.apache.myfaces.trinidad.event.SelectionEvent;
 
+import org.apache.myfaces.trinidad.model.RowKeySet;
+import org.apache.myfaces.trinidad.model.RowKeySetImpl;
+
 import team.epm.dms.view.DmsGroupRoleViewImpl;
 import team.epm.module.DmsModuleImpl;
 
 public class ValueSetAuthorityBean {
+    private RowKeySet selectedRows=new RowKeySetImpl(); 
+    private Map valueMap;
+    private static ADFLogger logger=ADFLogger.createADFLogger(ValueSetAuthorityBean.class);
+    private Person person = (Person)ADFContext.getCurrent().getSessionScope().get("cur_user");
+    private RichTable assignedValueTable;
+    private RichPopup popup;
+    private RichTable unassignedValueTable;
 
-    private RichSelectManyShuttle selectShuttle;
-    private List<SelectItem> allItems=new ArrayList<SelectItem>();
-    
-    public ValueSetAuthorityBean() {
-        super();
+    public void setAssignedValueTable(RichTable assignedValueTable) {
+        this.assignedValueTable = assignedValueTable;
     }
 
-    public List getSelectValue() {
-        String valueSetId = getCurValueSetId();
-        String roleId=getCurRoleId();
-        DmsModuleImpl am = (DmsModuleImpl)ADFUtils.getApplicationModuleForDataControl("DmsModuleDataControl");
-        List values=am.getValuesByRoleAndValueSetName(roleId, valueSetId);
-        
-        return values;
+    public RichTable getAssignedValueTable() {
+        return assignedValueTable;
     }
 
-    public List getAllValue() {
-        
-        Row cur_valueSet=getCurValueSet();
-        if(cur_valueSet==null){
-            return allItems;
-        }                        
-        String tablename = (String)cur_valueSet.getAttribute("Source");
-        String roleId=getCurRoleId();
-        DmsModuleImpl am = (DmsModuleImpl)ADFUtils.getApplicationModuleForDataControl("DmsModuleDataControl");
-        List<Row> valueList=new ArrayList<Row>();
-        try {
-            valueList = am.getValuesFromValueSet(tablename,ADFContext.getCurrent().getLocale().toString());
-        } catch (Exception e) {
-            JSFUtils.addFacesErrorMessage(DmsUtils.getMsg("common.operation_failed_with_exception"));
+    public void roleChangeListener(ValueChangeEvent valueChangeEvent) {
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.assignedValueTable);
+    }
+
+    public void valuesetChangeListener(ValueChangeEvent valueChangeEvent) {
+        Row row=ADFUtils.findIterator("DmsValueSetViewIterator").getRowSetIterator().getRowAtRangeIndex((Integer)valueChangeEvent.getNewValue());
+        this.refreshValueMap(row);
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.assignedValueTable);
+    }
+
+    public void setValueMap(Map valueMap) {
+        this.valueMap = valueMap;
+    }
+
+    public Map getValueMap() {
+        if(this.valueMap==null){
+            this.refreshValueMap(null);
         }
-        for(Row row:valueList){
-            
-            SelectItem item=new SelectItem(row.getAttribute("CODE"),(String)row.getAttribute("MEANING"),(String)row.getAttribute("MEANING"));
-            allItems.add(item);
+        return valueMap;
+    }
+    private void refreshValueMap(Row row){
+        this.valueMap=new HashMap();
+        ViewObject valueSetVo=ADFUtils.findIterator("DmsValueSetViewIterator").getViewObject();
+        if(row==null){
+            row=valueSetVo.getCurrentRow();
         }
-        return allItems;
-    }
-    public void roleSelectListener(SelectionEvent selectionEvent) {
-        DmsUtils.makeCurrent(selectionEvent);
-        ADFContext aDFContext = ADFContext.getCurrent();
-        aDFContext.getViewScope().put("curRoleId", this.getCurRole().getAttribute("Id"));
-        aDFContext.getViewScope().put("curValueSetId", this.getCurValueSet().getAttribute("Id"));
-        this.selectShuttle.resetValue();
-        AdfFacesContext adfFacesContext = AdfFacesContext.getCurrentInstance();           
-        adfFacesContext.addPartialTarget(this.selectShuttle);
-    }
-    public void selectListener(ValueChangeEvent valueChangeEvent) {        
-        List<String> newValue = (List<String>)valueChangeEvent.getNewValue();
-        if(newValue==null)
-            newValue=new ArrayList<String>();
-        String valueSetId = getCurValueSetId();
-        String roleId=getCurRoleId();
-        DmsModuleImpl am = (DmsModuleImpl)ADFUtils.getApplicationModuleForDataControl("DmsModuleDataControl");
-        am.updateRoleValue(roleId, newValue, valueSetId);
-    }
-
-    private Row getCurRole() {
-        return ADFUtils.findIterator("fetchEnabledRoleIter").getCurrentRow();
-    }
-    private Row getCurValueSet(){
-        return ADFUtils.findIterator("DmsValueSetViewIterator").getCurrentRow();
-    }
-    private String getCurValueSetId(){
-        String curValueSetId=ObjectUtils.toString(ADFContext.getCurrent().getViewScope().get("curValueSetId"));
-        curValueSetId=curValueSetId.length()>0 ? curValueSetId :  ObjectUtils.toString(this.getCurValueSet()==null ? "":this.getCurValueSet().getAttribute("Id"));
-        return curValueSetId;
-    }
-    private String getCurRoleId(){
-        String curRoleId=ObjectUtils.toString(ADFContext.getCurrent().getViewScope().get("curRoleId"));
-        curRoleId=curRoleId.length()>0 ? curRoleId :  ObjectUtils.toString(this.getCurRole()==null ? "":this.getCurRole().getAttribute("Id"));
-        return curRoleId;
-    }
-    
-   
-    public void setSelectShuttle(RichSelectManyShuttle selectShuttle) {
-        this.selectShuttle = selectShuttle;
+        if(row!=null){
+            String valueSetSrc=row.getAttribute("Source").toString().toUpperCase();
+            String sql="select t.code,t.meaning from \""+valueSetSrc+"\" t where t.locale='"+person.getLocale()+"'";
+            DBTransaction trans = (DBTransaction)valueSetVo.getApplicationModule().getTransaction();
+            Statement stmt=trans.createStatement(DBTransaction.DEFAULT);
+            try {
+                ResultSet rs=stmt.executeQuery(sql);
+                while(rs.next()){
+                    String code=rs.getString("code");
+                    String meaning=rs.getString("meaning");
+                    this.valueMap.put(code,meaning);
+                }
+                rs.close();
+                stmt.close();
+            } catch (SQLException e) {
+                this.logger.severe(e);
+            }
+        }
     }
 
-    public RichSelectManyShuttle getSelectShuttle() {
-        return selectShuttle;
-    }
-    public void setSelectValue(List selectValue){
-    
+    public void setPopup(RichPopup popup) {
+        this.popup = popup;
     }
 
+    public RichPopup getPopup() {
+        return popup;
+    }
+
+    public void add_value(ActionEvent actionEvent) {
+        ADFUtils.findIterator("getDmsValueViewIterator").getViewObject().remove();
+        RichPopup.PopupHints hint=new RichPopup.PopupHints();
+        this.popup.show(hint);
+    }
+
+    public void remove_value(ActionEvent actionEvent) {
+        if (this.assignedValueTable.getSelectedRowKeys() != null) {
+            Iterator itr = this.assignedValueTable.getSelectedRowKeys().iterator();
+            RowSetIterator rowSetIterator =ADFUtils.findIterator("DmsRoleValueViewIterator").getRowSetIterator();
+            while(itr.hasNext()){
+                List key = (List)itr.next();
+                Row row = rowSetIterator.getRow((Key)key.get(0));
+                if(row!=null){
+                    row.remove();
+                }
+            }
+            ADFUtils.findIterator("getDmsValueViewIterator").getViewObject()
+                .getApplicationModule().getTransaction().commit();
+            ADFUtils.findIterator("getDmsValueViewIterator").getViewObject().executeQuery();
+            ADFUtils.findIterator("DmsRoleValueViewIterator").getViewObject().executeQuery();
+            AdfFacesContext.getCurrentInstance().addPartialTarget(this.assignedValueTable);
+        }
+    }
+
+    public void add_value_authority(ActionEvent actionEvent) {
+        if (this.unassignedValueTable.getSelectedRowKeys() != null) {
+            ViewObject roleValueVo =ADFUtils.findIterator("DmsRoleValueViewIterator").getViewObject();
+            String roleId =(String)ADFUtils.findIterator("DmsEnabledRoleIterator").getViewObject().getCurrentRow().getAttribute("Id");
+            String valueSetId=(String)ADFUtils.findIterator("DmsValueSetViewIterator").getViewObject().getCurrentRow().getAttribute("Id");            
+            Iterator itr =
+                this.unassignedValueTable.getSelectedRowKeys().iterator();
+            RowSetIterator rowSetIterator =
+                ADFUtils.findIterator("getDmsValueViewIterator").getRowSetIterator();
+            while (itr.hasNext()) {
+                List key = (List)itr.next();
+                Row valueRow = rowSetIterator.getRow((Key)key.get(0));
+                Row row = roleValueVo.createRow();
+                row.setAttribute("RoleId", roleId);
+                row.setAttribute("ValueSetId", valueSetId);
+                row.setAttribute("ValueId", valueRow.getAttribute("CODE"));
+                roleValueVo.insertRow(row);
+            }
+            roleValueVo.getApplicationModule().getTransaction().commit();
+            ADFUtils.findIterator("getDmsValueViewIterator").getViewObject().executeQuery();
+            ADFUtils.findIterator("DmsRoleValueViewIterator").getViewObject().executeQuery();
+            AdfFacesContext.getCurrentInstance().addPartialTarget(this.assignedValueTable);
+            AdfFacesContext.getCurrentInstance().addPartialTarget(this.unassignedValueTable);
+        }
+    }
+
+    public void setUnassignedValueTable(RichTable unassignedValueTable) {
+        this.unassignedValueTable = unassignedValueTable;
+    }
+
+    public RichTable getUnassignedValueTable() {
+        return unassignedValueTable;
+    }
+
+    public void setSelectedRows(RowKeySet selectedRows) {
+        this.selectedRows = selectedRows;
+    }
+
+    public RowKeySet getSelectedRows() {
+        return selectedRows;
+    }
 }

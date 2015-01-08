@@ -6,31 +6,67 @@
   Name="DmsRoleFunctionView"
   Version="11.1.1.64.93"
   InheritPersonalization="true"
-  SelectList="DmsRoleFunction.ROLE_FUNCTION_ID, 
-       DmsRoleFunction.ROLE_ID, 
+  SelectList="DmsRoleFunction.ROLE_ID, 
        DmsRoleFunction.FUNCTION_ID, 
        DmsRoleFunction.CREATED_AT, 
        DmsRoleFunction.UPDATED_AT, 
        DmsRoleFunction.UPDATED_BY, 
-       DmsRoleFunction.CREATED_BY"
+       DmsRoleFunction.CREATED_BY, 
+       DmsRoleFunction.ID"
   FromList="DMS_ROLE_FUNCTION DmsRoleFunction"
   BindingStyle="OracleName"
   CustomQuery="false"
   PageIterMode="Full"
-  UseGlueCode="false">
+  UseGlueCode="false"
+  OrderBy="DmsRoleFunction.FUNCTION_ID">
   <DesignTime>
     <Attr Name="_codeGenFlag2" Value="Access|VarAccess"/>
   </DesignTime>
+  <ViewAccessor
+    Name="LST_USER"
+    ViewObjectName="team.epm.dms.view.DmsUserView"/>
+  <ViewAccessor
+    Name="LST_FUNCTION"
+    ViewObjectName="team.epm.dms.view.DmsFunctionView"/>
+  <ListBinding
+    Name="LOV_FunctionId"
+    ListVOName="LST_FUNCTION"
+    ListRangeSize="-1"
+    NullValueFlag="start"
+    NullValueId="${adfBundle['oracle.javatools.resourcebundle.SystemBundle']['NULL_VALUE_RESID']}"
+    MRUCount="0">
+    <AttrArray Name="AttrNames">
+      <Item Value="FunctionId"/>
+    </AttrArray>
+    <AttrArray Name="ListAttrNames">
+      <Item Value="Id"/>
+    </AttrArray>
+    <AttrArray Name="ListDisplayAttrNames">
+      <Item Value="Name"/>
+    </AttrArray>
+    <DisplayCriteria/>
+  </ListBinding>
+  <ListBinding
+    Name="LOV_UpdatedBy"
+    ListVOName="LST_USER"
+    ListRangeSize="-1"
+    NullValueFlag="start"
+    NullValueId="${adfBundle['oracle.javatools.resourcebundle.SystemBundle']['NULL_VALUE_RESID']}"
+    MRUCount="0">
+    <AttrArray Name="AttrNames">
+      <Item Value="UpdatedBy"/>
+    </AttrArray>
+    <AttrArray Name="ListAttrNames">
+      <Item Value="Id"/>
+    </AttrArray>
+    <AttrArray Name="ListDisplayAttrNames">
+      <Item Value="Name"/>
+    </AttrArray>
+    <DisplayCriteria/>
+  </ListBinding>
   <EntityUsage
     Name="DmsRoleFunction"
     Entity="team.epm.dms.model.DmsRoleFunction"/>
-  <ViewAttribute
-    Name="RoleFunctionId"
-    IsNotNull="true"
-    PrecisionRule="true"
-    EntityAttrName="RoleFunctionId"
-    EntityUsage="DmsRoleFunction"
-    AliasName="ROLE_FUNCTION_ID"/>
   <ViewAttribute
     Name="RoleId"
     PrecisionRule="true"
@@ -43,13 +79,22 @@
     PrecisionRule="true"
     EntityAttrName="FunctionId"
     EntityUsage="DmsRoleFunction"
-    AliasName="FUNCTION_ID"/>
+    AliasName="FUNCTION_ID"
+    LOVName="LOV_FunctionId">
+    <Properties>
+      <SchemaBasedProperties>
+        <CONTROLTYPE
+          Value="choice"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewAttribute
     Name="CreatedAt"
     PrecisionRule="true"
     EntityAttrName="CreatedAt"
     EntityUsage="DmsRoleFunction"
-    AliasName="CREATED_AT"/>
+    AliasName="CREATED_AT"
+    IsUpdateable="while_insert"/>
   <ViewAttribute
     Name="UpdatedAt"
     PrecisionRule="true"
@@ -61,11 +106,28 @@
     PrecisionRule="true"
     EntityAttrName="UpdatedBy"
     EntityUsage="DmsRoleFunction"
-    AliasName="UPDATED_BY"/>
+    AliasName="UPDATED_BY"
+    LOVName="LOV_UpdatedBy">
+    <Properties>
+      <SchemaBasedProperties>
+        <CONTROLTYPE
+          Value="choice"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewAttribute
     Name="CreatedBy"
     PrecisionRule="true"
     EntityAttrName="CreatedBy"
     EntityUsage="DmsRoleFunction"
-    AliasName="CREATED_BY"/>
+    AliasName="CREATED_BY"
+    IsUpdateable="while_insert"/>
+  <ViewAttribute
+    Name="Id"
+    IsUpdateable="while_insert"
+    IsNotNull="true"
+    PrecisionRule="true"
+    EntityAttrName="Id"
+    EntityUsage="DmsRoleFunction"
+    AliasName="ID"/>
 </ViewObject>

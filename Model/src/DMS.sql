@@ -989,20 +989,20 @@ comment on column DMS_ROLE.CREATED_BY is
 /*==============================================================*/
 create table DMS_ROLE_FUNCTION 
 (
-   ROLE_FUNCTION_ID     VARCHAR2(32)         not null,
+   ID     VARCHAR2(32)         not null,
    ROLE_ID              VARCHAR2(32),
    FUNCTION_ID          VARCHAR2(32),
    CREATED_AT           DATE,
    UPDATED_AT           DATE,
    UPDATED_BY           VARCHAR2(32),
    CREATED_BY           VARCHAR2(32),
-   constraint PK_DMS_ROLE_FUNCTION primary key (ROLE_FUNCTION_ID)
+   constraint PK_DMS_ROLE_FUNCTION primary key (ID)
 );
 
 comment on table DMS_ROLE_FUNCTION is
 '角色功能对应表';
 
-comment on column DMS_ROLE_FUNCTION.ROLE_FUNCTION_ID is
+comment on column DMS_ROLE_FUNCTION.ID is
 'ID';
 
 comment on column DMS_ROLE_FUNCTION.ROLE_ID is
