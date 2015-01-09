@@ -33,11 +33,6 @@
    <ViewUsage
     Name="DcmComVsQueryView"
     ViewObjectName="team.epm.dcm.view.DcmComVsQueryView"/>
-   <ViewUsage Name="DcmCombinationView1"
-              ViewObjectName="team.epm.dcm.view.DcmCombinationView"/>
-   <ViewUsage
-    Name="DcmComVsView1"
-    ViewObjectName="team.epm.dcm.view.DcmComVsView"/>
   <ViewUsage
     Name="DcmTemplateView1"
     ViewObjectName="team.epm.dcm.view.DcmTemplateView"/>
@@ -65,12 +60,6 @@
    <ViewUsage
       Name="DcmCatTemplateQueryView"
       ViewObjectName="team.epm.dcm.view.DcmCatTemplateQueryView"/>
-   <ViewLinkUsage
-    Name="combinationsVS"
-    ViewLinkObjectName="team.epm.dcm.view.viewlink.combinationsVS"
-    SrcViewUsageName="team.epm.module.DcmModule.DcmCombinationView1"
-    DstViewUsageName="team.epm.module.DcmModule.DcmComVsView1"
-    Reversed="false"/>
   <ViewLinkUsage
     Name="templatecolumnsVL1"
     ViewLinkObjectName="team.epm.dcm.view.viewlink.templatecolumnsVL"
@@ -83,12 +72,31 @@
     SrcViewUsageName="team.epm.module.DcmModule.DcmTemplateColumnView1"
     DstViewUsageName="team.epm.module.DcmModule.DcmTemplateValidationView1"
     Reversed="false"/>
-  <ViewLinkUsage
+   <ViewLinkUsage
+      Name="DcmCombinationVsLnk"
+      ViewLinkObjectName="team.epm.dcm.view.viewlink.DcmCombinationVsLnk"
+      SrcViewUsageName="team.epm.module.DcmModule.DcmCombinationView"
+      DstViewUsageName="team.epm.module.DcmModule.DcmComVsView"
+      Reversed="false"/>
+   <ViewLinkUsage
     Name="roleTemplateVL"
     ViewLinkObjectName="team.epm.dcm.view.viewlink.roleTemplateVL"
     SrcViewUsageName="team.epm.module.DcmModule.DmsRoleView1"
     DstViewUsageName="team.epm.module.DcmModule.DcmRoleTemplateView1"
     Reversed="false"/>
+   <ClientInterface>
+      <Method
+         Name="getCombinationRecordView">
+         <Return
+            Type="oracle.jbo.ViewObject"/>
+         <Parameter
+            Name="templateId"
+            Type="java.lang.String"/>
+         <Parameter
+            Name="combinationId"
+            Type="java.lang.String"/>
+      </Method>
+   </ClientInterface>
    <ClientInterface>
       <Method
          Name="getCombinationRecordView">

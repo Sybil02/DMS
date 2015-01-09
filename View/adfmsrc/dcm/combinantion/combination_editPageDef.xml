@@ -5,71 +5,51 @@
   <parameters/>
   <executables>
     <variableIterator id="variables"/>
-    <iterator Binds="DcmCombinationView1" RangeSize="25"
+    <iterator Binds="DcmCombinationView" RangeSize="25"
               DataControl="DcmModuleDataControl"
-              id="DcmCombinationView1Iterator"/>
-    <iterator Binds="DcmComVsView1" RangeSize="25"
-              DataControl="DcmModuleDataControl" id="DcmComVsView1Iterator"
-              />
-    <searchRegion Binds="DcmCombinationView1Iterator" Criteria=""
-                  Customizer="oracle.jbo.uicli.binding.JUSearchBindingCustomizer"
-                  id="DcmCombinationView1Query"/>
-    <iterator id="DmsValueSetViewIterator" Binds="DmsValueSetView"
-              DataControl="DmsModuleDataControl" RangeSize="25"/>
+              id="DcmCombinationViewIterator"/>
+    <iterator Binds="DcmComVsView" RangeSize="25"
+              DataControl="DcmModuleDataControl" id="DcmComVsViewIterator"/>
+    <iterator Binds="DmsValueSetView" RangeSize="25"
+              DataControl="DmsModuleDataControl" id="DmsValueSetViewIterator"/>
   </executables>
   <bindings>
-    <action IterBinding="DcmCombinationView1Iterator" id="CreateCombination"
-            RequiresUpdateModel="true" Action="createInsertRow"/>
-    <action IterBinding="DcmComVsView1Iterator" id="CreateInsert1"
-            RequiresUpdateModel="true" Action="createInsertRow"/>
-    <tree IterBinding="DcmCombinationView1Iterator" id="DcmCombinationView1">
+    <tree IterBinding="DcmCombinationViewIterator" id="DcmCombinationView">
       <nodeDefinition DefName="team.epm.dcm.view.DcmCombinationView"
-                      Name="DcmCombinationView10">
+                      Name="DcmCombinationView0">
         <AttrNames>
           <Item Value="Name"/>
           <Item Value="Code"/>
-          <Item Value="UpdatedAt"/>
           <Item Value="UpdatedBy"/>
+          <Item Value="UpdatedAt"/>
         </AttrNames>
       </nodeDefinition>
     </tree>
-    <tree IterBinding="DcmComVsView1Iterator" id="DcmComVsView1">
+    <tree IterBinding="DcmComVsViewIterator" id="DcmComVsView">
       <nodeDefinition DefName="team.epm.dcm.view.DcmComVsView"
-                      Name="DcmComVsView10">
+                      Name="DcmComVsView0">
         <AttrNames>
           <Item Value="ValueSetId"/>
-          <Item Value="Seq"/>
           <Item Value="IsAuthority"/>
+          <Item Value="Seq"/>
+          <Item Value="UpdatedBy"/>
+          <Item Value="UpdatedAt"/>
         </AttrNames>
       </nodeDefinition>
     </tree>
-    <attributeValues IterBinding="DcmCombinationView1Iterator" id="Name">
-      <AttrNames>
-        <Item Value="Name"/>
-      </AttrNames>
-    </attributeValues>
-    <attributeValues IterBinding="DcmCombinationView1Iterator" id="Code">
-      <AttrNames>
-        <Item Value="Code"/>
-      </AttrNames>
-    </attributeValues>
-    <tree IterBinding="DcmComVsView1Iterator" id="DcmComVsView11">
-      <nodeDefinition DefName="team.epm.dcm.view.DcmComVsView"
-                      Name="DcmComVsView110">
+    <action id="Commit" RequiresUpdateModel="true" Action="commitTransaction"
+            DataControl="DcmModuleDataControl"/>
+    <action id="Rollback" RequiresUpdateModel="false"
+            Action="rollbackTransaction" DataControl="DcmModuleDataControl"/>
+    <tree IterBinding="DmsValueSetViewIterator" id="DmsValueSetView">
+      <nodeDefinition DefName="team.epm.dms.view.DmsValueSetView"
+                      Name="DmsValueSetView0">
         <AttrNames>
-          <Item Value="ValueSetId"/>
-          <Item Value="Seq"/>
-          <Item Value="IsAuthority"/>
+          <Item Value="Name"/>
+          <Item Value="UpdatedBy"/>
+          <Item Value="UpdatedAt"/>
         </AttrNames>
       </nodeDefinition>
     </tree>
-    <action IterBinding="DcmComVsView1Iterator" id="Delete"
-            RequiresUpdateModel="false" Action="removeCurrentRow"/>
-    <action id="Rollback" DataControl="DcmModuleDataControl"
-            RequiresUpdateModel="false" Action="rollbackTransaction"/>
-    <action id="Commit" DataControl="DcmModuleDataControl"
-            RequiresUpdateModel="true" Action="commitTransaction"/>
-    <action IterBinding="DcmCombinationView1Iterator" id="Delete1"
-            RequiresUpdateModel="false" Action="removeCurrentRow"/>
   </bindings>
 </pageDefinition>

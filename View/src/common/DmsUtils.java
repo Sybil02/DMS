@@ -2,6 +2,7 @@ package common;
 
 import java.util.ResourceBundle;
 
+import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 
 import oracle.adf.model.binding.DCIteratorBinding;

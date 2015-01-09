@@ -27,30 +27,12 @@ public class DcmCombinationViewImpl extends ViewObjectImpl {
      */
     public DcmCombinationViewImpl() {
     }
-
-
-    public void createTable(String code,List<String> columns) throws SQLException {
-        StringBuffer sqlbuf=new StringBuffer();
-        sqlbuf.append("CREATE TABLE ");
-        sqlbuf.append(code);
-        sqlbuf.append("(ID VARCHAR2(32) , ");
-        int i;
-        for(i=0;i<columns.size();i++){
-            String c=columns.get(i);
-            sqlbuf.append(c);
-            sqlbuf.append(" VARCHAR2(100),");
-        }
-        sqlbuf.append(" CONSTRAINT PK_"+code+" PRIMARY KEY(ID))");
-        String sqlstr=sqlbuf.toString();
-        PreparedStatement pst =this.getDBTransaction().createPreparedStatement(sqlstr, 0);
-        try {
-            pst.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw e;
-        }
-        this.getDBTransaction().commit();
-    }
+    /**
+     * @param combiantonCode 组合编码
+     * @param vsTables       构成组合的值集的表或视图
+     * @param valueSetCodes  值集的编码
+     * @throws SQLException
+     */
     public void refreshCombinationRecord(String combiantonCode,List<String> vsTables,List<String> valueSetCodes) throws SQLException {
         StringBuffer sql=new StringBuffer();
         StringBuffer sql_select=new StringBuffer();

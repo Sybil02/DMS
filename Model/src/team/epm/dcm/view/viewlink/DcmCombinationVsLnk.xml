@@ -3,7 +3,7 @@
 <!---->
 <ViewLink
   xmlns="http://xmlns.oracle.com/bc4j"
-  Name="combinationsVS"
+  Name="DcmCombinationVsLnk"
   Version="11.1.1.64.93"
   InheritPersonalization="true">
   <DesignTime>
@@ -12,7 +12,7 @@
   <Properties>
     <SchemaBasedProperties>
       <LABEL
-        ResId="team.epm.dcm.view.viewlink.combinationsVS_LABEL"/>
+        ResId="team.epm.dcm.view.viewlink.DcmCombinationVsLnk_LABEL"/>
     </SchemaBasedProperties>
   </Properties>
   <ViewLinkDefEnd
@@ -21,10 +21,8 @@
     Owner="team.epm.dcm.view.DcmCombinationView"
     Source="true">
     <DesignTime>
-      <Attr Name="_accessor" Value="true"/>
       <Attr Name="_finderName" Value="DcmCombinationView"/>
       <Attr Name="_isUpdateable" Value="true"/>
-      <Attr Name="_minCardinality" Value="1"/>
     </DesignTime>
     <AttrArray Name="Attributes">
       <Item Value="team.epm.dcm.view.DcmCombinationView.Id"/>

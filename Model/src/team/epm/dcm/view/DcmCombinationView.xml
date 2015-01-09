@@ -231,7 +231,7 @@
   </ViewAttribute>
   <ViewLinkAccessor
     Name="DcmComVsView"
-    ViewLink="team.epm.dcm.view.viewlink.combinationsVS"
+    ViewLink="team.epm.dcm.view.viewlink.DcmCombinationVsLnk"
     Type="oracle.jbo.RowIterator"
     IsUpdateable="false"/>
   <ResourceBundle>

@@ -11,11 +11,11 @@
   AliasName="DcmCombination"
   BindingStyle="OracleName"
   UseGlueCode="false"
-  RowClass="team.epm.dcm.model.DcmCombinationImpl"
-  xmlns:validation="http://xmlns.oracle.com/adfm/validation">
+  xmlns:validation="http://xmlns.oracle.com/adfm/validation"
+  RowClass="team.epm.dcm.model.DcmCombinationImpl">
   <DesignTime>
-    <Attr Name="_codeGenFlag2" Value="Access"/>
     <AttrArray Name="_publishEvents"/>
+    <Attr Name="_codeGenFlag2" Value="Access"/>
     <Attr Name="_isCodegen" Value="true"/>
   </DesignTime>
   <Attribute

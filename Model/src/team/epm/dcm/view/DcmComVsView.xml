@@ -26,7 +26,8 @@
   </DesignTime>
    <ViewAccessor
     Name="LKP_YES_NO"
-    ViewObjectName="team.epm.dms.view.DmsLookupView">
+    ViewObjectName="team.epm.dms.view.DmsLookupView"
+     RowLevelBinds="false">
     <ViewCriteriaUsage
       Name="DmsLookupViewCriteria"
       FullName="team.epm.dms.view.DmsLookupView.DmsLookupViewCriteria"/>
@@ -40,15 +41,14 @@
     </ParameterMap>
   </ViewAccessor>
   <ViewAccessor
-    Name="DmsValueSetView1"
-    ViewObjectName="team.epm.dms.view.DmsValueSetView"
-    RowLevelBinds="true"/>
+    Name="LST_VALUE_SET"
+    ViewObjectName="team.epm.dms.view.DmsValueSetView"/>
   <ListBinding
     Name="LOV_IsAuthority"
     ListVOName="LKP_YES_NO"
     ListRangeSize="-1"
-    NullValueFlag="start"
-    NullValueId="${adfBundle['oracle.javatools.resourcebundle.SystemBundle']['NULL_VALUE_RESID']}"
+    NullValueFlag="none"
+    NullValueId="LOV_IsAuthority_LOVUIHints_NullValueId"
     MRUCount="0">
     <AttrArray Name="AttrNames">
       <Item Value="IsAuthority"/>
@@ -63,7 +63,7 @@
   </ListBinding>
   <ListBinding
     Name="LOV_ValueSetId"
-    ListVOName="DmsValueSetView1"
+    ListVOName="LST_VALUE_SET"
     ListRangeSize="-1"
     NullValueFlag="start"
     NullValueId="${adfBundle['oracle.javatools.resourcebundle.SystemBundle']['NULL_VALUE_RESID']}"
@@ -182,12 +182,6 @@
     EntityAttrName="Seq"
     EntityUsage="DcmComVs"
     AliasName="SEQ"/>
-  <ViewLinkAccessor
-    Name="DcmCombinationView"
-    ViewLink="team.epm.dcm.view.viewlink.combinationsVS"
-    Type="oracle.jbo.Row"
-    Reversed="true"
-    IsUpdateable="false"/>
   <ResourceBundle>
     <PropertiesBundle
       PropertiesFile="ModelBundle"/>
