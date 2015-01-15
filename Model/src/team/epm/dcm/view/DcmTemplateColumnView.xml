@@ -26,9 +26,12 @@
   PageIterMode="Full"
   UseGlueCode="false"
   Where="DcmTemplateColumn.LOCALE=:locale"
-  OrderBy="DcmTemplateColumn.SEQ">
+  OrderBy="DcmTemplateColumn.SEQ"
+  RowClass="team.epm.dcm.view.DcmTemplateColumnViewRowImpl"
+  ComponentClass="team.epm.dcm.view.DcmTemplateColumnViewImpl">
   <DesignTime>
-    <Attr Name="_codeGenFlag2" Value="Access|VarAccess"/>
+    <Attr Name="_codeGenFlag2" Value="Access|Coll|VarAccess"/>
+    <Attr Name="_isCodegen" Value="true"/>
   </DesignTime>
   <Variable
     Name="locale"
@@ -394,17 +397,6 @@
       </SchemaBasedProperties>
     </Properties>
   </ViewAttribute>
-  <ViewLinkAccessor
-    Name="DcmTemplateView1"
-    ViewLink="team.epm.dcm.view.viewlink.templatecolumnsVL"
-    Type="oracle.jbo.Row"
-    Reversed="true"
-    IsUpdateable="false"/>
-  <ViewLinkAccessor
-    Name="DcmValidationView"
-    ViewLink="team.epm.dcm.view.viewlink.templateValidationVL"
-    Type="oracle.jbo.RowIterator"
-    IsUpdateable="false"/>
   <ResourceBundle>
     <PropertiesBundle
       PropertiesFile="ModelBundle"/>

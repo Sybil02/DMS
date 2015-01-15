@@ -464,6 +464,15 @@
                   <url path="public_html/"/>
                </list>
             </hash>
+            <hash>
+               <url n="content-folder-url" path="public_html/dcm/template/"/>
+               <list n="pattern-filters">
+                  <string v="+dcm/template/TemplateAuthorityBean.java"/>
+               </list>
+               <list n="url-path">
+                  <url path="public_html/"/>
+               </list>
+            </hash>
          </list>
          <list n="url-path"/>
       </hash>

@@ -192,12 +192,12 @@ insert into dms_function(id,locale,name,created_at,updated_at,updated_by,created
 values('101030','en','Combination Manage',sysdate,sysdate,'10000','10000','/WEB-INF/dcmCombination/combination_edit_tsk.xml#combination_edit_tsk','Combination Manage',101030,null);
 
 insert into dms_function(id,locale,name,created_at,updated_at,updated_by,created_by,action,category,seq,p_function_id)
-values('101035','zh_CN','模版维护',sysdate,sysdate,'10000','10000','/WEB-INF/dcmTemplate/template_edit_tsk.xml#template_edit_tsk','模版维护',101035,null);
+values('101035','zh_CN','模板维护',sysdate,sysdate,'10000','10000','/WEB-INF/dcmTemplate/template_edit_tsk.xml#template_edit_tsk','模板维护',101035,null);
 insert into dms_function(id,locale,name,created_at,updated_at,updated_by,created_by,action,category,seq,p_function_id)
 values('101035','en','Template Maintain',sysdate,sysdate,'10000','10000','/WEB-INF/dcmTemplate/template_edit_tsk.xml#template_edit_tsk','Template Mantain',101035,null);
 
 insert into dms_function(id,locale,name,created_at,updated_at,updated_by,created_by,action,category,seq,p_function_id)
-values('101036','zh_CN','模版权限',sysdate,sysdate,'10000','10000','/WEB-INF/dcmTemplate/template_authority_tsk.xml#template_authority_tsk','模版权限',101036,null);
+values('101036','zh_CN','模板权限',sysdate,sysdate,'10000','10000','/WEB-INF/dcmTemplate/template_authority_tsk.xml#template_authority_tsk','模板权限',101036,null);
 insert into dms_function(id,locale,name,created_at,updated_at,updated_by,created_by,action,category,seq,p_function_id)
 values('101036','en','Template Authority',sysdate,sysdate,'10000','10000','/WEB-INF/dcmTemplate/template_authority_tsk.xml#template_authority_tsk','Template Authority',101036,null);
 
@@ -304,17 +304,17 @@ insert into dms_menu(id,locale,seq,label,enable_flag,p_id,function_id,created_at
 values('101055','en',101055,'Combination Manage','Y','101000','101030',sysdate,sysdate,'10000','10000');
 
 insert into dms_menu(id,locale,seq,label,enable_flag,p_id,function_id,created_at,updated_at,updated_by,created_by)
-values('101060','zh_CN',101060,'模版管理','Y','101000',null,sysdate,sysdate,'10000','10000');
+values('101060','zh_CN',101060,'模板管理','Y','101000',null,sysdate,sysdate,'10000','10000');
 insert into dms_menu(id,locale,seq,label,enable_flag,p_id,function_id,created_at,updated_at,updated_by,created_by)
 values('101060','en',101060,'Template Manage','Y','101000',null,sysdate,sysdate,'10000','10000');
 
 insert into dms_menu(id,locale,seq,label,enable_flag,p_id,function_id,created_at,updated_at,updated_by,created_by)
-values('101061','zh_CN',101061,'模版维护','Y','101060','101035',sysdate,sysdate,'10000','10000');
+values('101061','zh_CN',101061,'模板维护','Y','101060','101035',sysdate,sysdate,'10000','10000');
 insert into dms_menu(id,locale,seq,label,enable_flag,p_id,function_id,created_at,updated_at,updated_by,created_by)
 values('101061','en',101061,'Template Maintain','Y','101060','101035',sysdate,sysdate,'10000','10000');
 
 insert into dms_menu(id,locale,seq,label,enable_flag,p_id,function_id,created_at,updated_at,updated_by,created_by)
-values('101062','zh_CN',101062,'模版权限','Y','101060','101036',sysdate,sysdate,'10000','10000');
+values('101062','zh_CN',101062,'模板权限','Y','101060','101036',sysdate,sysdate,'10000','10000');
 insert into dms_menu(id,locale,seq,label,enable_flag,p_id,function_id,created_at,updated_at,updated_by,created_by)
 values('101062','en',101062,'Template Authority','Y','101060','101036',sysdate,sysdate,'10000','10000');
 

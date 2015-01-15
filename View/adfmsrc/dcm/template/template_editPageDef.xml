@@ -5,149 +5,103 @@
   <parameters/>
   <executables>
     <variableIterator id="variables"/>
-    <iterator Binds="DcmTemplateView1" RangeSize="25"
-              DataControl="DcmModuleDataControl" id="DcmTemplateView1Iterator"
-              />
-    <iterator Binds="DcmTemplateColumnView1" RangeSize="-1"
+    <iterator Binds="DcmTemplateView" RangeSize="25"
+              DataControl="DcmModuleDataControl" id="DcmTemplateViewIterator"/>
+    <iterator Binds="DcmTemplateColumnView" RangeSize="25"
               DataControl="DcmModuleDataControl"
-              id="DcmTemplateColumnView1Iterator"/>
-    <searchRegion Binds="DcmTemplateColumnView1Iterator" Criteria=""
-                  Customizer="oracle.jbo.uicli.binding.JUSearchBindingCustomizer"
-                  id="DcmTemplateColumnView1Query"/>
-    <searchRegion Binds="DcmTemplateView1Iterator" Criteria=""
-                  Customizer="oracle.jbo.uicli.binding.JUSearchBindingCustomizer"
-                  id="DcmTemplateView12Query"/>
-    <iterator Binds="DcmTemplateValidationView1" RangeSize="25"
-              DataControl="DcmModuleDataControl"
-              id="DcmTemplateValidationView1Iterator"/>
-    <iterator Binds="DcmCombinationView1" RangeSize="25"
-              DataControl="DcmModuleDataControl"
-              id="DcmCombinationView1Iterator"/>
+              id="DcmTemplateColumnViewIterator"
+              RefreshCondition="#{bindings.DcmTemplateView.currentRow ne null}"/>
     <methodIterator Binds="getCombinationRecordView.result"
-                    DataControl="DcmModuleDataControl" RangeSize="-1"
-                    id="getCombinationRecordViewIterator" CacheResults="true"
-                    Refresh="default"/>
-    <iterator id="DcmComVsQueryViewIterator" Binds="DcmComVsQueryView"
-              DataControl="DcmModuleDataControl" RangeSize="25"/>
-    <iterator id="DcmTemplateCombinationViewIterator"
-              Binds="DcmTemplateCombinationView"
-              DataControl="DcmModuleDataControl" RangeSize="25"/>
+                    DataControl="DcmModuleDataControl" RangeSize="25"
+                    id="getCombinationRecordViewIterator"/>
+    <iterator Binds="DcmTemplateValidationView" RangeSize="25"
+              DataControl="DcmModuleDataControl"
+              id="DcmTemplateValidationViewIterator"/>
   </executables>
   <bindings>
-    <list IterBinding="DcmTemplateView1Iterator" StaticList="false"
-          Uses="LOV_Readonly" id="Readonly" DTSupportsMRU="false"/>
-    <attributeValues IterBinding="DcmTemplateView1Iterator" id="Seq">
-      <AttrNames>
-        <Item Value="Seq"/>
-      </AttrNames>
-    </attributeValues>
-    <action IterBinding="DcmTemplateView1Iterator" id="CreateInsert"
+    <action IterBinding="DcmTemplateViewIterator" id="CreateInsert"
             RequiresUpdateModel="true" Action="createInsertRow"/>
-    <list IterBinding="DcmTemplateView1Iterator" StaticList="false"
-          Uses="LOV_CategoryId" id="CategoryId" DTSupportsMRU="false"/>
-    <action IterBinding="DcmTemplateView1Iterator" id="Delete"
-            RequiresUpdateModel="false" Action="removeCurrentRow"/>
     <action id="Commit" RequiresUpdateModel="true" Action="commitTransaction"
             DataControl="DcmModuleDataControl"/>
-    <attributeValues IterBinding="DcmTemplateColumnView1Iterator"
-                     id="UpdatedBy">
-      <AttrNames>
-        <Item Value="UpdatedBy"/>
-      </AttrNames>
-    </attributeValues>
-    <action IterBinding="DcmTemplateColumnView1Iterator" id="CreateInsert1"
-            RequiresUpdateModel="true" Action="createInsertRow"/>
-    <action IterBinding="DcmTemplateColumnView1Iterator" id="Delete1"
-            RequiresUpdateModel="false" Action="removeCurrentRow"/>
     <action id="Rollback" RequiresUpdateModel="false"
             Action="rollbackTransaction" DataControl="DcmModuleDataControl"/>
-    <navigationlist IterBinding="DcmTemplateView1Iterator"
-                    ListOperMode="navigation"
-                    ListIter="DcmTemplateView1Iterator" id="DcmTemplateView11"
-                    DTSupportsMRU="false">
-      <AttrNames>
-        <Item Value="Name"/>
-      </AttrNames>
-    </navigationlist>
-    <tree IterBinding="DcmTemplateView1Iterator" id="DcmTemplateView1">
+    <tree IterBinding="DcmTemplateViewIterator" id="DcmTemplateView">
       <nodeDefinition DefName="team.epm.dcm.view.DcmTemplateView"
-                      Name="DcmTemplateView120">
+                      Name="DcmTemplateView0">
         <AttrNames>
           <Item Value="Name"/>
-          <Item Value="Description"/>
-          <Item Value="DbTable"/>
-          <Item Value="Seq"/>
+          <Item Value="CombinationId"/>
+          <Item Value="CategoryId"/>
           <Item Value="Readonly"/>
-          <Item Value="TmpTable" Binds="TmpTable"/>
+          <Item Value="DbTable"/>
+          <Item Value="DbView"/>
+          <Item Value="TmpTable"/>
           <Item Value="PreProgram"/>
           <Item Value="HandleProgram"/>
           <Item Value="AfterProgram"/>
           <Item Value="HandleMode"/>
           <Item Value="TemplateFile"/>
           <Item Value="DataStartLine"/>
-          <Item Value="CombinationId"/>
-          <Item Value="CategoryId"/>
-          <Item Value="UpdatedAt"/>
-          <Item Value="UpdatedBy"/>
-          <Item Value="DbView"/>
-        </AttrNames>
-      </nodeDefinition>
-    </tree>
-    <tree IterBinding="DcmTemplateValidationView1Iterator"
-          id="DcmTemplateValidationView1">
-      <nodeDefinition DefName="team.epm.dcm.view.DcmTemplateValidationView"
-                      Name="DcmTemplateValidationView10">
-        <AttrNames>
-          <Item Value="ValidationId"/>
           <Item Value="Seq"/>
-          <Item Value="Args"/>
+          <Item Value="Description"/>
         </AttrNames>
       </nodeDefinition>
     </tree>
-    <action IterBinding="DcmTemplateValidationView1Iterator" id="CreateInsert2"
-            RequiresUpdateModel="true" Action="createInsertRow"/>
-    <action IterBinding="DcmTemplateValidationView1Iterator" id="Delete2"
-            RequiresUpdateModel="false" Action="removeCurrentRow"/>
-    <tree IterBinding="DcmTemplateColumnView1Iterator"
-          id="DcmTemplateColumnView1">
+    <tree IterBinding="DcmTemplateColumnViewIterator"
+          id="DcmTemplateColumnView">
       <nodeDefinition DefName="team.epm.dcm.view.DcmTemplateColumnView"
-                      Name="DcmTemplateColumnView110">
+                      Name="DcmTemplateColumnView0">
         <AttrNames>
           <Item Value="ColumnLabel"/>
+          <Item Value="DataType"/>
           <Item Value="DbTableCol"/>
+          <Item Value="Seq"/>
           <Item Value="IsPk"/>
           <Item Value="Readonly"/>
-          <Item Value="DataType"/>
           <Item Value="Visible"/>
-          <Item Value="Seq"/>
-          <Item Value="UpdatedAt"/>
-          <Item Value="UpdatedBy"/>
         </AttrNames>
       </nodeDefinition>
     </tree>
-    <list IterBinding="DcmCombinationView1Iterator" ListOperMode="navigation"
-          ListIter="DcmCombinationView1Iterator" id="DcmCombinationView1"
-          DTSupportsMRU="false">
-      <AttrNames>
-        <Item Value="Name"/>
-      </AttrNames>
-    </list>
-    <list IterBinding="DcmTemplateView1Iterator" StaticList="false"
-          Uses="LOV_TmpTable" id="TmpTable" DTSupportsMRU="true"/>
+    <action IterBinding="DcmTemplateColumnViewIterator" id="DeleteColumn"
+            InstanceName="DcmModuleDataControl.DcmTemplateColumnView"
+            DataControl="DcmModuleDataControl" RequiresUpdateModel="false"
+            Action="removeCurrentRow"/>
     <methodAction id="getCombinationRecordView" RequiresUpdateModel="true"
                   Action="invokeMethod" MethodName="getCombinationRecordView"
                   IsViewObjectMethod="false" DataControl="DcmModuleDataControl"
                   InstanceName="DcmModuleDataControl.dataProvider"
                   ReturnName="data.DcmModuleDataControl.methodResults.getCombinationRecordView_DcmModuleDataControl_dataProvider_getCombinationRecordView_result">
       <NamedData NDName="templateId"
-                 NDValue="#{bindings.DcmTemplateView1.currentRow.id}"
+                 NDValue="#{bindings.DcmTemplateView.currentRow.id}"
                  NDType="java.lang.String"/>
       <NamedData NDName="combinationId"
-                 NDValue="#{bindings.DcmTemplateView1.currentRow.combinationId}"
+                 NDValue="#{bindings.DcmTemplateView.currentRow.combinationId}"
                  NDType="java.lang.String"/>
     </methodAction>
     <tree IterBinding="getCombinationRecordViewIterator" id="return">
       <nodeDefinition Name="return0"/>
     </tree>
+    <action IterBinding="DcmTemplateValidationViewIterator" id="CreateInsertValidation"
+            RequiresUpdateModel="true" Action="createInsertRow"/>
+    <action IterBinding="DcmTemplateValidationViewIterator" id="DeleteValidation"
+            RequiresUpdateModel="false" Action="removeCurrentRow"/>
+    <tree IterBinding="DcmTemplateValidationViewIterator"
+          id="DcmTemplateValidationView">
+      <nodeDefinition DefName="team.epm.dcm.view.DcmTemplateValidationView"
+                      Name="DcmTemplateValidationView10">
+        <AttrNames>
+          <Item Value="ColumnId"/>
+          <Item Value="ValidationId"/>
+          <Item Value="Seq"/>
+          <Item Value="Args"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <list ListOperMode="navigation" IterBinding="DcmTemplateColumnViewIterator"
+          ListIter="DcmTemplateColumnViewIterator" id="ColumnLabel">
+      <AttrNames>
+        <Item Value="ColumnLabel"/>
+      </AttrNames>
+    </list>
   </bindings>
 </pageDefinition>

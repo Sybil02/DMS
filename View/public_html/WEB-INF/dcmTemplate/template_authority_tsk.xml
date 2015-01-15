@@ -8,6 +8,11 @@
     <data-control-scope id="__2">
       <isolated/>
     </data-control-scope>
+    <managed-bean id="__7">
+      <managed-bean-name id="__5">TemplateAuthorityBean</managed-bean-name>
+      <managed-bean-class id="__6">dcm.template.TemplateAuthorityBean</managed-bean-class>
+      <managed-bean-scope id="__4">request</managed-bean-scope>
+    </managed-bean>
     <view id="template_authority">
       <page>/dcm/template/template_authority.jsff</page>
     </view>

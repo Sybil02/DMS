@@ -116,6 +116,16 @@ public class DmsEnabledRoleRowImpl extends ViewRowImpl {
                 obj.setAttributeInternal(index(), value);
             }
         }
+        ,
+        DcmRoleTemplateView {
+            public Object get(DmsEnabledRoleRowImpl obj) {
+                return obj.getDcmRoleTemplateView();
+            }
+
+            public void put(DmsEnabledRoleRowImpl obj, Object value) {
+                obj.setAttributeInternal(index(), value);
+            }
+        }
         ;
         private static AttributesEnum[] vals = null;
         private static final int firstIndex = 0;
@@ -144,6 +154,7 @@ public class DmsEnabledRoleRowImpl extends ViewRowImpl {
         }
     }
 
+
     public static final int CREATEDAT = AttributesEnum.CreatedAt.index();
     public static final int CREATEDBY = AttributesEnum.CreatedBy.index();
     public static final int ENABLEFLAG = AttributesEnum.EnableFlag.index();
@@ -154,6 +165,7 @@ public class DmsEnabledRoleRowImpl extends ViewRowImpl {
     public static final int UPDATEDBY = AttributesEnum.UpdatedBy.index();
     public static final int DMSROLEVALUEVIEW = AttributesEnum.DmsRoleValueView.index();
     public static final int DMSROLEFUNCTIONVIEW = AttributesEnum.DmsRoleFunctionView.index();
+    public static final int DCMROLETEMPLATEVIEW = AttributesEnum.DcmRoleTemplateView.index();
 
     /**
      * This is the default constructor (do not remove).
@@ -309,6 +321,13 @@ public class DmsEnabledRoleRowImpl extends ViewRowImpl {
      */
     public RowIterator getDmsRoleFunctionView() {
         return (RowIterator)getAttributeInternal(DMSROLEFUNCTIONVIEW);
+    }
+
+    /**
+     * Gets the associated <code>RowIterator</code> using master-detail link DcmRoleTemplateView.
+     */
+    public RowIterator getDcmRoleTemplateView() {
+        return (RowIterator)getAttributeInternal(DCMROLETEMPLATEVIEW);
     }
 
     /**

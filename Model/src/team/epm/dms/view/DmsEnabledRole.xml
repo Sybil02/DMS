@@ -107,6 +107,11 @@ WHERE  DmsRole.LOCALE=:locale
     ViewLink="team.epm.dms.DmsRoleFunctionLnk"
     Type="oracle.jbo.RowIterator"
     IsUpdateable="false"/>
+  <ViewLinkAccessor
+    Name="DcmRoleTemplateView"
+    ViewLink="team.epm.dcm.view.viewlink.DcmRoleTemplateLnk"
+    Type="oracle.jbo.RowIterator"
+    IsUpdateable="false"/>
   <ResourceBundle>
     <PropertiesBundle
       PropertiesFile="ModelBundle"/>

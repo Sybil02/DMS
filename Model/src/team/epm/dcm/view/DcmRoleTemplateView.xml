@@ -46,12 +46,15 @@
       </PIMap>
     </ParameterMap>
   </ViewAccessor>
+  <ViewAccessor
+    Name="LST_USER"
+    ViewObjectName="team.epm.dms.view.DmsUserView"/>
   <ListBinding
     Name="LOV_TemplateId"
     ListVOName="LKP_Template"
     ListRangeSize="-1"
-    NullValueFlag="start"
-    NullValueId="${adfBundle['oracle.javatools.resourcebundle.SystemBundle']['NULL_VALUE_RESID']}"
+    NullValueFlag="none"
+    NullValueId="LOV_TemplateId_LOVUIHints_NullValueId"
     MRUCount="0">
     <AttrArray Name="AttrNames">
       <Item Value="TemplateId"/>
@@ -68,8 +71,8 @@
     Name="LOV_ReadOnly"
     ListVOName="LKP_YES_NO"
     ListRangeSize="-1"
-    NullValueFlag="start"
-    NullValueId="${adfBundle['oracle.javatools.resourcebundle.SystemBundle']['NULL_VALUE_RESID']}"
+    NullValueFlag="none"
+    NullValueId="LOV_ReadOnly_LOVUIHints_NullValueId"
     MRUCount="0">
     <AttrArray Name="AttrNames">
       <Item Value="ReadOnly"/>
@@ -79,6 +82,24 @@
     </AttrArray>
     <AttrArray Name="ListDisplayAttrNames">
       <Item Value="Meaning"/>
+    </AttrArray>
+    <DisplayCriteria/>
+  </ListBinding>
+  <ListBinding
+    Name="LOV_UpdatedBy"
+    ListVOName="LST_USER"
+    ListRangeSize="-1"
+    NullValueFlag="start"
+    NullValueId="${adfBundle['oracle.javatools.resourcebundle.SystemBundle']['NULL_VALUE_RESID']}"
+    MRUCount="0">
+    <AttrArray Name="AttrNames">
+      <Item Value="UpdatedBy"/>
+    </AttrArray>
+    <AttrArray Name="ListAttrNames">
+      <Item Value="Id"/>
+    </AttrArray>
+    <AttrArray Name="ListDisplayAttrNames">
+      <Item Value="Name"/>
     </AttrArray>
     <DisplayCriteria/>
   </ListBinding>
@@ -140,7 +161,15 @@
     PrecisionRule="true"
     EntityAttrName="UpdatedBy"
     EntityUsage="DcmRoleTemplate"
-    AliasName="UPDATED_BY"/>
+    AliasName="UPDATED_BY"
+    LOVName="LOV_UpdatedBy">
+    <Properties>
+      <SchemaBasedProperties>
+        <CONTROLTYPE
+          Value="choice"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewAttribute
     Name="CreatedBy"
     PrecisionRule="true"
@@ -164,17 +193,6 @@
       </SchemaBasedProperties>
     </Properties>
   </ViewAttribute>
-  <ViewLinkAccessor
-    Name="DcmTemplateColumnView"
-    ViewLink="team.epm.dcm.view.viewlink.templatecolumnsVL"
-    Type="oracle.jbo.RowIterator"
-    IsUpdateable="false"/>
-  <ViewLinkAccessor
-    Name="DmsRoleView"
-    ViewLink="team.epm.dcm.view.viewlink.roleTemplateVL"
-    Type="oracle.jbo.Row"
-    Reversed="true"
-    IsUpdateable="false"/>
   <ResourceBundle>
     <PropertiesBundle
       PropertiesFile="ModelBundle"/>

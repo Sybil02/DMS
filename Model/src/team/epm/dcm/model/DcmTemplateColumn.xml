@@ -230,27 +230,6 @@
       <Attr Name="_DisplaySize" Value="32"/>
     </DesignTime>
   </Attribute>
-  <AccessorAttribute
-    Name="DcmTemplateValidation"
-    Association="team.epm.dcm.model.association.templateValidationAssociation"
-    AssociationEnd="team.epm.dcm.model.association.templateValidationAssociation.DcmTemplateValidation"
-    AssociationOtherEnd="team.epm.dcm.model.association.templateValidationAssociation.DcmTemplateColumn"
-    Type="oracle.jbo.RowIterator"
-    IsUpdateable="false"/>
-  <AccessorAttribute
-    Name="DcmTemplate"
-    Association="team.epm.dcm.model.association.templateAndColumnAssociation"
-    AssociationEnd="team.epm.dcm.model.association.templateAndColumnAssociation.DcmTemplate"
-    AssociationOtherEnd="team.epm.dcm.model.association.templateAndColumnAssociation.DcmTemplateColumn"
-    Type="team.epm.dcm.model.DcmTemplateImpl"
-    IsUpdateable="true"/>
-  <ViewLinkAccessor
-    Name="DcmTemplateView"
-    ViewLink="templatecolumnsVL"
-    ViewLinkEnd="templatecolumnsVL.DcmRoleTemplateView"
-    ViewLinkOtherEnd="templatecolumnsVL.destEnd"
-    Type="oracle.jbo.server.ViewRowImpl"
-    IsUpdateable="false"/>
   <Key
     Name="PkDcmTemplateColumn"
     PrimaryKey="true">

@@ -6,24 +6,21 @@
   Name="DcmTemplateValidationView"
   Version="11.1.1.64.93"
   InheritPersonalization="true"
-  SelectList="DcmTemplateValidation.ID, 
-       DcmTemplateValidation.COLUMN_ID, 
-       DcmTemplateValidation.VALIDATION_ID, 
-       DcmTemplateValidation.SEQ, 
-       DcmTemplateValidation.ARGS, 
-       DcmTemplateValidation.CREATED_AT, 
-       DcmTemplateValidation.UPDATED_AT, 
-       DcmTemplateValidation.UPDATED_BY, 
-       DcmTemplateValidation.CREATED_BY"
-  FromList="DCM_TEMPLATE_VALIDATION DcmTemplateValidation"
   BindingStyle="OracleName"
-  CustomQuery="false"
+  CustomQuery="true"
   PageIterMode="Full"
   UseGlueCode="false"
-  OrderBy="DcmTemplateValidation.SEQ">
+  OrderBy="SEQ">
   <DesignTime>
     <Attr Name="_codeGenFlag2" Value="Access|VarAccess"/>
+    <Attr Name="_isExpertMode" Value="true"/>
   </DesignTime>
+  <Variable
+    Name="locale"
+    Kind="where"
+    Type="java.lang.String">
+    <TransientExpression><![CDATA[adf.context.locale]]></TransientExpression>
+  </Variable>
   <ViewAccessor
     Name="LKP_Validation"
     ViewObjectName="team.epm.dcm.view.DcmValidationView">
@@ -33,12 +30,16 @@
       </PIMap>
     </ParameterMap>
   </ViewAccessor>
+  <ViewAccessor
+    Name="LST_COLUMN"
+    ViewObjectName="team.epm.dcm.view.DcmTemplateColumnView"
+    RowLevelBinds="true"/>
   <ListBinding
     Name="LOV_ValidationId"
     ListVOName="LKP_Validation"
     ListRangeSize="-1"
-    NullValueFlag="start"
-    NullValueId="${adfBundle['oracle.javatools.resourcebundle.SystemBundle']['NULL_VALUE_RESID']}"
+    NullValueFlag="none"
+    NullValueId="LOV_ValidationId_LOVUIHints_NullValueId"
     MRUCount="0">
     <AttrArray Name="AttrNames">
       <Item Value="ValidationId"/>
@@ -51,6 +52,39 @@
     </AttrArray>
     <DisplayCriteria/>
   </ListBinding>
+  <ListBinding
+    Name="LOV_ColumnId"
+    ListVOName="LST_COLUMN"
+    ListRangeSize="-1"
+    NullValueFlag="none"
+    NullValueId="LOV_ColumnId_LOVUIHints_NullValueId"
+    MRUCount="0">
+    <AttrArray Name="AttrNames">
+      <Item Value="ColumnId"/>
+    </AttrArray>
+    <AttrArray Name="ListAttrNames">
+      <Item Value="Id"/>
+    </AttrArray>
+    <AttrArray Name="ListDisplayAttrNames">
+      <Item Value="ColumnLabel"/>
+    </AttrArray>
+    <DisplayCriteria/>
+  </ListBinding>
+  <SQLQuery>
+    <![CDATA[SELECT DcmTemplateValidation.ID,
+       DcmTemplateColumn.TEMPLATE_ID, 
+       DcmTemplateValidation.COLUMN_ID, 
+       DcmTemplateValidation.VALIDATION_ID, 
+       DcmTemplateValidation.SEQ, 
+       DcmTemplateValidation.ARGS, 
+       DcmTemplateValidation.CREATED_AT, 
+       DcmTemplateValidation.UPDATED_AT, 
+       DcmTemplateValidation.UPDATED_BY, 
+       DcmTemplateValidation.CREATED_BY
+FROM DCM_TEMPLATE_VALIDATION DcmTemplateValidation,DCM_TEMPLATE_COLUMN DcmTemplateColumn
+WHERE DcmTemplateValidation.COLUMN_ID=DcmTemplateColumn.ID
+       AND DcmTemplateColumn.LOCALE=:locale]]>
+  </SQLQuery>
   <EntityUsage
     Name="DcmTemplateValidation"
     Entity="team.epm.dcm.model.DcmTemplateValidation"/>
@@ -63,15 +97,33 @@
     AliasName="ID"
     IsUpdateable="while_insert"/>
   <ViewAttribute
+    Name="TemplateId"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="32"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="TEMPLATE_ID"
+    Expression="TEMPLATE_ID"
+    SQLType="VARCHAR">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="32"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
     Name="ColumnId"
     PrecisionRule="true"
     EntityAttrName="ColumnId"
     EntityUsage="DcmTemplateValidation"
-    AliasName="COLUMN_ID">
+    AliasName="COLUMN_ID"
+    LOVName="LOV_ColumnId">
     <Properties>
       <SchemaBasedProperties>
         <LABEL
           ResId="dcm.templateColumn_name"/>
+        <CONTROLTYPE
+          Value="choice"/>
       </SchemaBasedProperties>
     </Properties>
   </ViewAttribute>
@@ -143,12 +195,6 @@
     EntityUsage="DcmTemplateValidation"
     AliasName="CREATED_BY"
     IsUpdateable="while_insert"/>
-  <ViewLinkAccessor
-    Name="DcmTemplateColumnView"
-    ViewLink="team.epm.dcm.view.viewlink.templateValidationVL"
-    Type="oracle.jbo.Row"
-    Reversed="true"
-    IsUpdateable="false"/>
   <ResourceBundle>
     <PropertiesBundle
       PropertiesFile="ModelBundle"/>

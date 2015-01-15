@@ -5,37 +5,47 @@
   <parameters/>
   <executables>
     <variableIterator id="variables"/>
-    <iterator Binds="DmsRoleView1" RangeSize="25"
-              DataControl="DcmModuleDataControl" id="DmsRoleView1Iterator"/>
-    <iterator Binds="DcmRoleTemplateView1" RangeSize="25"
+    <iterator id="DmsEnabledRoleIterator" Binds="DmsEnabledRole"
+              DataControl="DcmModuleDataControl" RangeSize="25"/>
+    <iterator Binds="DcmRoleTemplateView" RangeSize="25"
               DataControl="DcmModuleDataControl"
-              id="DcmRoleTemplateView1Iterator"/>
+              id="DcmRoleTemplateViewIterator"/>
+    <iterator Binds="DcmUnAssignedTemplate" RangeSize="25"
+              DataControl="DcmModuleDataControl"
+              id="DcmUnAssignedTemplateIterator"/>
   </executables>
   <bindings>
-    <action id="Commit" RequiresUpdateModel="true" Action="commitTransaction"
-            DataControl="DcmModuleDataControl"/>
-    <action id="Rollback" RequiresUpdateModel="false"
-            Action="rollbackTransaction" DataControl="DcmModuleDataControl"/>
-    <tree IterBinding="DcmRoleTemplateView1Iterator" id="DcmRoleTemplateView11"
-          ChangeEventPolicy="ppr">
-      <nodeDefinition DefName="team.epm.dcm.view.DcmRoleTemplateView"
-                      Name="DcmRoleTemplateView110">
-        <AttrNames>
-          <Item Value="TemplateId"/>
-          <Item Value="ReadOnly"/>
-        </AttrNames>
-      </nodeDefinition>
-    </tree>
-    <action IterBinding="DcmRoleTemplateView1Iterator" id="CreateInsert1"
-            RequiresUpdateModel="true" Action="createInsertRow"/>
-    <action IterBinding="DcmRoleTemplateView1Iterator" id="Delete1"
-            RequiresUpdateModel="false" Action="removeCurrentRow"/>
-    <list IterBinding="DmsRoleView1Iterator" ListOperMode="navigation"
-          ListIter="DmsRoleView1Iterator" id="DmsRoleView11"
-          DTSupportsMRU="true">
+    <list ListOperMode="navigation" IterBinding="DmsEnabledRoleIterator"
+          ListIter="DmsEnabledRoleIterator" id="RoleName" DTSupportsMRU="true">
       <AttrNames>
         <Item Value="RoleName"/>
       </AttrNames>
     </list>
+    <tree IterBinding="DcmRoleTemplateViewIterator" id="DcmRoleTemplateView">
+      <nodeDefinition DefName="team.epm.dcm.view.DcmRoleTemplateView"
+                      Name="DcmRoleTemplateView0">
+        <AttrNames>
+          <Item Value="TemplateId"/>
+          <Item Value="UpdatedAt"/>
+          <Item Value="UpdatedBy"/>
+          <Item Value="ReadOnly"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <action id="Commit" RequiresUpdateModel="true" Action="commitTransaction"
+            DataControl="DcmModuleDataControl"/>
+    <action id="Rollback" RequiresUpdateModel="false"
+            Action="rollbackTransaction" DataControl="DcmModuleDataControl"/>
+    <tree IterBinding="DcmUnAssignedTemplateIterator"
+          id="DcmUnAssignedTemplate">
+      <nodeDefinition DefName="team.epm.dcm.view.DcmUnAssignedTemplate"
+                      Name="DcmUnAssignedTemplate0">
+        <AttrNames>
+          <Item Value="Name"/>
+          <Item Value="UpdatedAt"/>
+          <Item Value="UpdatedBy"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
   </bindings>
 </pageDefinition>

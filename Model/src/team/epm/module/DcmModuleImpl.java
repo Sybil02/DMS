@@ -17,11 +17,14 @@ import oracle.jbo.ViewObject;
 import oracle.jbo.server.ApplicationModuleImpl;
 import oracle.jbo.server.ViewLinkImpl;
 
+
 import oracle.jbo.server.ViewObjectImpl;
 
 import team.epm.dcm.view.DcmComVsViewImpl;
 import team.epm.dcm.view.DcmCombinationViewImpl;
+import team.epm.dcm.view.DcmTemplateColumnViewImpl;
 import team.epm.dcm.view.DcmTemplateViewImpl;
+import team.epm.dms.view.DmsEnabledRoleImpl;
 import team.epm.dms.view.DmsRoleViewImpl;
 import team.epm.module.common.DcmModule;
 // ---------------------------------------------------------------------
@@ -104,14 +107,6 @@ public class DcmModuleImpl extends ApplicationModuleImpl implements DcmModule {
     }
 
     /**
-     * Container's getter for DcmTemplateValidationView.
-     * @return DcmTemplateValidationView
-     */
-    public ViewObjectImpl getDcmTemplateValidationView() {
-        return (ViewObjectImpl)findViewObject("DcmTemplateValidationView");
-    }
-
-    /**
      * Container's getter for DcmTemplateView.
      * @return DcmTemplateView
      */
@@ -128,101 +123,11 @@ public class DcmModuleImpl extends ApplicationModuleImpl implements DcmModule {
     }
 
     /**
-     * Container's getter for DcmCombinationView1.
-     * @return DcmCombinationView1
-     */
-    public ViewObjectImpl getDcmCombinationView1() {
-        return (ViewObjectImpl)findViewObject("DcmCombinationView1");
-    }
-
-    /**
-     * Container's getter for DcmComVsView1.
-     * @return DcmComVsView1
-     */
-    public ViewObjectImpl getDcmComVsView1() {
-        return (ViewObjectImpl)findViewObject("DcmComVsView1");
-    }
-
-    /**
      * Container's getter for combinationsVS.
      * @return combinationsVS
      */
     public ViewLinkImpl getcombinationsVS() {
         return (ViewLinkImpl)findViewLink("combinationsVS");
-    }
-
-    /**
-     * Container's getter for DcmRoleTemplateView1.
-     * @return DcmRoleTemplateView1
-     */
-    public ViewObjectImpl getDcmRoleTemplateView1() {
-        return (ViewObjectImpl)findViewObject("DcmRoleTemplateView1");
-    }
-
-
-    /**
-     * Container's getter for templatecolumnsVL.
-     * @return templatecolumnsVL
-     */
-    public ViewLinkImpl gettemplatecolumnsVL() {
-        return (ViewLinkImpl)findViewLink("templatecolumnsVL");
-    }
-
-    /**
-     * Container's getter for DcmTemplateView1.
-     * @return DcmTemplateView1
-     */
-    public ViewObjectImpl getDcmTemplateView1() {
-        return (ViewObjectImpl)findViewObject("DcmTemplateView1");
-    }
-
-    /**
-     * Container's getter for DcmTemplateColumnView2.
-     * @return DcmTemplateColumnView2
-     */
-    public ViewObjectImpl getDcmTemplateColumnView1() {
-        return (ViewObjectImpl)findViewObject("DcmTemplateColumnView1");
-    }
-
-    /**
-     * Container's getter for templatecolumnsVL1.
-     * @return templatecolumnsVL1
-     */
-    public ViewLinkImpl gettemplatecolumnsVL1() {
-        return (ViewLinkImpl)findViewLink("templatecolumnsVL1");
-    }
-
-
-    /**
-     * Container's getter for DcmTemplateValidationView1.
-     * @return DcmTemplateValidationView1
-     */
-    public ViewObjectImpl getDcmTemplateValidationView1() {
-        return (ViewObjectImpl)findViewObject("DcmTemplateValidationView1");
-    }
-
-    /**
-     * Container's getter for templateValidationVL1.
-     * @return templateValidationVL1
-     */
-    public ViewLinkImpl gettemplateValidationVL1() {
-        return (ViewLinkImpl)findViewLink("templateValidationVL1");
-    }
-
-    /**
-     * Container's getter for DmsRoleView1.
-     * @return DmsRoleView1
-     */
-    public DmsRoleViewImpl getDmsRoleView1() {
-        return (DmsRoleViewImpl)findViewObject("DmsRoleView1");
-    }
-
-    /**
-     * Container's getter for roleTemplateVL.
-     * @return roleTemplateVL
-     */
-    public ViewLinkImpl getroleTemplateVL() {
-        return (ViewLinkImpl)findViewLink("roleTemplateVL");
     }
 
     /**
@@ -240,7 +145,12 @@ public class DcmModuleImpl extends ApplicationModuleImpl implements DcmModule {
     public ViewObjectImpl getDcmTemplateCatView() {
         return (ViewObjectImpl)findViewObject("DcmTemplateCatView");
     }
-
+    /**
+     *获取组合记录VO
+     * @param templateId
+     * @param combinationId
+     * @return
+     */
     public ViewObject getCombinationRecordView(String templateId,
                                                String combinationId) {
         ViewObject vo = null;
@@ -257,6 +167,8 @@ public class DcmModuleImpl extends ApplicationModuleImpl implements DcmModule {
         vc.addRow(vcr);
         combiantionView.applyViewCriteria(vc);
         combiantionView.executeQuery();
+        combiantionView.getViewCriteriaManager().setApplyViewCriteriaNames(null);
+        
         if (combiantionView.hasNext()) {
             Row combinationRow = combiantionView.next();
             String combinationCode =
@@ -300,10 +212,6 @@ public class DcmModuleImpl extends ApplicationModuleImpl implements DcmModule {
             StringBuffer sql = new StringBuffer();
             sql.append(sql_select).append(sql_from).append(sql_where).append(sql_order);
             vo = this.createViewObjectFromQueryStmt(voName, sql.toString());
-            //vo.setAccessMode(ViewObject.RANGE_PAGING);
-            //vo.setRangeSize(100);
-        } else {
-            //组合不存在
         }
         return vo;
     }
@@ -338,6 +246,54 @@ public class DcmModuleImpl extends ApplicationModuleImpl implements DcmModule {
      */
     public ViewLinkImpl getDcmCombinationVsLnk() {
         return (ViewLinkImpl)findViewLink("DcmCombinationVsLnk");
+    }
+
+    /**
+     * Container's getter for DcmTemplateColumnLnk.
+     * @return DcmTemplateColumnLnk
+     */
+    public ViewLinkImpl getDcmTemplateColumnLnk() {
+        return (ViewLinkImpl)findViewLink("DcmTemplateColumnLnk");
+    }
+
+    /**
+     * Container's getter for DmsEnabledRole.
+     * @return DmsEnabledRole
+     */
+    public DmsEnabledRoleImpl getDmsEnabledRole() {
+        return (DmsEnabledRoleImpl)findViewObject("DmsEnabledRole");
+    }
+
+    /**
+     * Container's getter for DcmRoleTemplateLnk.
+     * @return DcmRoleTemplateLnk
+     */
+    public ViewLinkImpl getDcmRoleTemplateLnk() {
+        return (ViewLinkImpl)findViewLink("DcmRoleTemplateLnk");
+    }
+
+    /**
+     * Container's getter for DcmTemplateValidationView.
+     * @return DcmTemplateValidationView
+     */
+    public ViewObjectImpl getDcmTemplateValidationView() {
+        return (ViewObjectImpl)findViewObject("DcmTemplateValidationView");
+    }
+
+    /**
+     * Container's getter for DcmTemplateValidationLnk.
+     * @return DcmTemplateValidationLnk
+     */
+    public ViewLinkImpl getDcmTemplateValidationLnk() {
+        return (ViewLinkImpl)findViewLink("DcmTemplateValidationLnk");
+    }
+
+    /**
+     * Container's getter for DcmUnAssignedTemplate.
+     * @return DcmUnAssignedTemplate
+     */
+    public ViewObjectImpl getDcmUnAssignedTemplate() {
+        return (ViewObjectImpl)findViewObject("DcmUnAssignedTemplate");
     }
 }
 

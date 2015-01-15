@@ -52,6 +52,7 @@ public class DmsEntityImpl extends EntityImpl {
         }
     }
     //获取所有语言列表
+
     private List<String> getLangList() {
         List<String> lang = new ArrayList<String>();
         DBTransaction trans = getDBTransaction();
@@ -98,7 +99,7 @@ public class DmsEntityImpl extends EntityImpl {
                                    AttributeDefImpl[] attributeDefImpl3,
                                    HashMap hashMap,
                                    boolean b) throws SQLException {
-        if (operation == DML_UPDATE) {
+        if (operation == DML_UPDATE || operation == DML_DELETE) {
             StringBuffer sqlBuf =
                 super.buildDMLStatement(operation, trimMultiLangAttr(attributeDefImpl),
                                         trimMultiLangAttr(attributeDefImpl2),
@@ -127,26 +128,29 @@ public class DmsEntityImpl extends EntityImpl {
             for (String lang : this.getLangList()) {
                 if (lang.equals(curLang))
                     continue;
-                this.setAttribute("Locale", lang);
+                this.setAttributeInternal("Locale", lang);
                 super.bindDMLStatement(operation, stat, attributeDefImpl,
                                        attributeDefImpl2, attributeDefImpl3,
                                        hashMap, b);
                 stat.execute();
             }
             stat.close();
-            this.setAttribute("Locale", curLang);
+            this.setAttributeInternal("Locale", curLang);
         }
         return super.bindDMLStatement(operation, preparedStatement,
                                       attributeDefImpl, attributeDefImpl2,
                                       attributeDefImpl3, hashMap, b);
     }
     //filter the multi language attributes
+
     private AttributeDefImpl[] trimMultiLangAttr(AttributeDefImpl[] attributes) {
         List<AttributeDefImpl> attrs = new ArrayList<AttributeDefImpl>();
-        for (AttributeDefImpl attr : attributes) {
-            if (!"Locale".equals(attr.getName())) {
-                if (!"true".equals(attr.getProperty("isMultiLangAttr"))) {
-                    attrs.add(attr);
+        if (attributes != null) {
+            for (AttributeDefImpl attr : attributes) {
+                if (!"Locale".equals(attr.getName())) {
+                    if (!"true".equals(attr.getProperty("isMultiLangAttr"))) {
+                        attrs.add(attr);
+                    }
                 }
             }
         }

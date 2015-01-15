@@ -94,6 +94,8 @@
           ResId="team.epm.dcm.model.DcmRoleTemplate.UpdatedAt_FMT_FORMATTER"/>
         <FMT_FORMAT
           ResId="team.epm.dcm.model.DcmRoleTemplate.UpdatedAt_FMT_FORMAT"/>
+        <LABEL
+          ResId="updatedAt"/>
       </SchemaBasedProperties>
     </Properties>
   </Attribute>
@@ -109,6 +111,12 @@
       <Attr Name="_DisplaySize" Value="32"/>
     </DesignTime>
     <TransientExpression><![CDATA[adf.userSession.userData.userId]]></TransientExpression>
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="updatedBy"/>
+      </SchemaBasedProperties>
+    </Properties>
   </Attribute>
   <Attribute
     Name="CreatedBy"
@@ -131,7 +139,9 @@
     SQLType="VARCHAR"
     Type="java.lang.String"
     ColumnType="VARCHAR2"
-    TableName="DCM_ROLE_TEMPLATE">
+    TableName="DCM_ROLE_TEMPLATE"
+    DefaultValue="N"
+    IsNotNull="true">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="10"/>
     </DesignTime>

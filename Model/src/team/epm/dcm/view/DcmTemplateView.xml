@@ -562,7 +562,12 @@
   </ViewAttribute>
   <ViewLinkAccessor
     Name="DcmTemplateColumnView"
-    ViewLink="team.epm.dcm.view.viewlink.templatecolumnsVL"
+    ViewLink="team.epm.dcm.view.viewlink.DcmTemplateColumnLnk"
+    Type="oracle.jbo.RowIterator"
+    IsUpdateable="false"/>
+  <ViewLinkAccessor
+    Name="DcmTemplateValidationView"
+    ViewLink="team.epm.dcm.view.viewlink.DcmTemplateValidationLnk"
     Type="oracle.jbo.RowIterator"
     IsUpdateable="false"/>
   <ResourceBundle>

@@ -243,11 +243,6 @@
       </SchemaBasedProperties>
     </Properties>
   </ViewAttribute>
-  <ViewLinkAccessor
-    Name="DcmRoleTemplateView"
-    ViewLink="team.epm.dcm.view.viewlink.roleTemplateVL"
-    Type="oracle.jbo.RowIterator"
-    IsUpdateable="false"/>
   <ClientInterface>
     <Method
       Name="fetchEnabledRole">
@@ -259,6 +254,13 @@
     <PropertiesBundle
       PropertiesFile="ModelBundle"/>
   </ResourceBundle>
+  <ClientInterface>
+    <Method
+      Name="fetchEnabledRole">
+      <Return
+        Type="oracle.jbo.RowSet"/>
+    </Method>
+  </ClientInterface>
   <ClientInterface>
     <Method
       Name="fetchEnabledRole">

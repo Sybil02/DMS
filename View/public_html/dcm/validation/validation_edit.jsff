@@ -21,11 +21,10 @@
                                      id="ctb2"/>
             <af:commandButton actionListener="#{bindings.Commit.execute}"
                               text="#{viewBundle['dms.common.save']}"
-                              disabled="#{!bindings.Commit.enabled}" id="ctb3"
+                              id="ctb3"
                               partialTriggers="ctb1 ctb2 t1 t1:it7 t1:it5 t1:it8"/>
             <af:commandButton actionListener="#{bindings.Rollback.execute}"
                               text="#{viewBundle['dms.common.rollback']}"
-                              disabled="#{!bindings.Rollback.enabled}"
                               immediate="true" id="ctb4"
                               partialTriggers="ctb1 ctb2 t1 t1:it7 t1:it5 t1:it8">
               <af:resetActionListener/>

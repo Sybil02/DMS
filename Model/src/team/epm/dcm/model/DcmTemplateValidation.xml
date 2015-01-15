@@ -38,7 +38,8 @@
     SQLType="VARCHAR"
     Type="java.lang.String"
     ColumnType="VARCHAR2"
-    TableName="DCM_TEMPLATE_VALIDATION">
+    TableName="DCM_TEMPLATE_VALIDATION"
+    IsNotNull="true">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="32"/>
     </DesignTime>
@@ -50,7 +51,8 @@
     SQLType="VARCHAR"
     Type="java.lang.String"
     ColumnType="VARCHAR2"
-    TableName="DCM_TEMPLATE_VALIDATION">
+    TableName="DCM_TEMPLATE_VALIDATION"
+    IsNotNull="true">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="32"/>
     </DesignTime>
@@ -148,13 +150,6 @@
     </DesignTime>
     <TransientExpression><![CDATA[adf.userSession.userData.userId]]></TransientExpression>
   </Attribute>
-  <AccessorAttribute
-    Name="DcmTemplateColumn"
-    Association="team.epm.dcm.model.association.templateValidationAssociation"
-    AssociationEnd="team.epm.dcm.model.association.templateValidationAssociation.DcmTemplateColumn"
-    AssociationOtherEnd="team.epm.dcm.model.association.templateValidationAssociation.DcmTemplateValidation"
-    Type="oracle.jbo.server.EntityImpl"
-    IsUpdateable="true"/>
   <Key
     Name="PkDcmTemplateValidation"
     PrimaryKey="true">
