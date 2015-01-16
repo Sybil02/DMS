@@ -2,6 +2,8 @@ package dcm.template;
 
 import common.ADFUtils;
 
+import common.DmsUtils;
+
 import dms.login.Person;
 
 import java.util.ArrayList;
@@ -31,20 +33,14 @@ public class TemplateTreeModel  extends ChildPropertyTreeModel {
     private Map authoriedTemplate=new HashMap();
     public TemplateTreeModel() {
         super();
-        DCIteratorBinding catBinding =
-            ADFUtils.findIterator("DcmTemplateCatViewIterator");
-        this.catVo = catBinding.getViewObject();
-        
-        DCIteratorBinding tempalteBinding =
-            ADFUtils.findIterator("DcmTemplateViewIterator");
-        this.templateVo = tempalteBinding.getViewObject();
-        ViewObject vo=ADFUtils.findIterator("DcmUserTemplateViewIterator").getViewObject();
+        this.catVo = DmsUtils.getDcmApplicationModule().getDcmTemplateCatView();
+        this.templateVo =DmsUtils.getDcmApplicationModule().getDcmTemplateView();
+        ViewObject vo=DmsUtils.getDcmApplicationModule().getDcmUserTemplateView();
         vo.executeQuery();
         while(vo.hasNext()){
             Row row=vo.next();
             this.authoriedTemplate.put(row.getAttribute("TemplateId"), "TemplateName");
         }
-        
         List<TemplateTreeItem> root = this.getChildTreeItem(null);
         for (TemplateTreeItem itm : root) {
             if(TemplateTreeItem.TYPE_CATEGORY.equals(itm.getType())){
@@ -75,13 +71,13 @@ public class TemplateTreeModel  extends ChildPropertyTreeModel {
                 items.add(item);
             }
         }
-        
         vc=this.templateVo.createViewCriteria();
         vcRow = vc.createViewCriteriaRow();
         vcRow.setAttribute("CategoryId", pid);
         vc.addElement(vcRow);
         this.templateVo.applyViewCriteria(vc);
         this.templateVo.executeQuery();
+        this.templateVo.getViewCriteriaManager().setApplyViewCriteriaNames(null);
         while (this.templateVo.hasNext()) {
             Row row = this.templateVo.next();
             String id=ObjectUtils.toString(row.getAttribute("Id"));
@@ -95,7 +91,6 @@ public class TemplateTreeModel  extends ChildPropertyTreeModel {
     }
     
     private boolean menuVisible(TemplateTreeItem item){
-        Person curUser = (Person)ADFContext.getCurrent().getSessionScope().get("cur_user");
         if(TemplateTreeItem.TYPE_TEMPLATE.equals(item.getType())){
             if(this.authoriedTemplate.get(item.getId())==null){
                 return false;
@@ -103,7 +98,7 @@ public class TemplateTreeModel  extends ChildPropertyTreeModel {
                 return true;
             }
         }else{
-            ViewObject vo=ADFUtils.findIterator("DcmCatTemplateQueryViewIterator").getViewObject();
+            ViewObject vo=DmsUtils.getDcmApplicationModule().getDcmCatTemplateQueryView();
             vo.setNamedWhereClauseParam("categoryId", item.getId());
             vo.executeQuery();
             while(vo.hasNext()){
