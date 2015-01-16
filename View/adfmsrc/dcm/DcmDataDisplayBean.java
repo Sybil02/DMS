@@ -203,7 +203,7 @@ public class DcmDataDisplayBean extends AbstractExcel2007Writer {
         sql_value.append(",'").append(ObjectUtils.toString(curComRecordId)).append("'");
         sql_value.append(",?,'").append(this.curUser.getId()).append("'");
         sql_value.append(",'").append(this.curUser.getId()).append("'");
-        sql_value.append(",SYSDATE,SYSDATE,'NA',-1,?");
+        sql_value.append(",SYSDATE,SYSDATE,'NA',?,?");
         for (int i = 0; i < this.colsdef.size(); i++) {
             sql_insert.append(",COLUMN").append(i + 1);
             sql_value.append(",?");
@@ -218,17 +218,20 @@ public class DcmDataDisplayBean extends AbstractExcel2007Writer {
                                               "IS NULL" :("='" + curComRecordId + "'")));
             trans.commit();
             PreparedStatement stat =trans.createPreparedStatement(sql_insert.toString() +sql_value.toString(), 0);
+            int rowNo=1;
             for (Map rowData : modelData) {
+                stat.setInt(2, rowNo);
+                rowNo++;
                 if (DcmDataTableModel.OPERATE_CREATE.equals(rowData.get("OPERATION"))) {
-                    stat.setString(2, "NEW");
+                    stat.setString(3, "NEW");
                 } else if (DcmDataTableModel.OPERATE_DELETE.equals(rowData.get("OPERATION"))) {
-                    stat.setString(2, "DELETE");
+                    stat.setString(3, "DELETE");
                 } else if (DcmDataTableModel.OPERATE_UPDATE.equals(rowData.get("OPERATION"))) {
-                    stat.setString(2, "UPDATE");
+                    stat.setString(3, "UPDATE");
                 }
                 if (null != rowData.get("OPERATION")) {
                     for (int i = 0; i < this.colsdef.size(); i++) {
-                        stat.setString(3 + i,(String)rowData.get(this.colsdef.get(i).getCode()));
+                        stat.setString(4 + i,(String)rowData.get(this.colsdef.get(i).getCode()));
                     }
                     stat.setString(1, (String)rowData.get("ROW_ID"));
                     stat.addBatch();
@@ -341,27 +344,29 @@ public class DcmDataDisplayBean extends AbstractExcel2007Writer {
                 trans.commit();
                 cs.close();
             }
-            //执行数据导入
-            CallableStatement cs =trans.createCallableStatement("{CALl " + this.templateProgram + "(?,?,?,?,?)}", 0);
-            cs.setString(1, this.curTemplateId);
-            cs.setString(2, curComRecordId);
-            cs.setString(3, this.curUser.getId());
-            cs.setString(4, mode);
-            cs.setString(5, this.curUser.getLocale());
-            cs.execute();
-            trans.commit();
-            cs.close();
-            //执行善后程序
-            if (this.templateAfterProgram != null) {
-                CallableStatement afcs = trans.createCallableStatement("{CALl " + this.templateAfterProgram +"(?,?,?,?,?)}", 0);
-                afcs.setString(1, this.curTemplateId);
-                afcs.setString(2, curComRecordId);
-                afcs.setString(3, this.curUser.getId());
-                afcs.setString(4, mode);
-                afcs.setString(5, this.curUser.getLocale());
-                afcs.execute();
+            if(successFlag){
+                //若校验通过则执行数据导入
+                CallableStatement cs =trans.createCallableStatement("{CALl " + this.templateProgram + "(?,?,?,?,?)}", 0);
+                cs.setString(1, this.curTemplateId);
+                cs.setString(2, curComRecordId);
+                cs.setString(3, this.curUser.getId());
+                cs.setString(4, mode);
+                cs.setString(5, this.curUser.getLocale());
+                cs.execute();
                 trans.commit();
-                afcs.close();
+                cs.close();
+                //执行善后程序
+                if (this.templateAfterProgram != null) {
+                    CallableStatement afcs = trans.createCallableStatement("{CALl " + this.templateAfterProgram +"(?,?,?,?,?)}", 0);
+                    afcs.setString(1, this.curTemplateId);
+                    afcs.setString(2, curComRecordId);
+                    afcs.setString(3, this.curUser.getId());
+                    afcs.setString(4, mode);
+                    afcs.setString(5, this.curUser.getLocale());
+                    afcs.execute();
+                    trans.commit();
+                    afcs.close();
+                }
             }
         } catch (Exception e) {
             successFlag = false;
