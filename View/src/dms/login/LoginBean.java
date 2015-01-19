@@ -63,7 +63,7 @@ public class LoginBean {
                     this.msg =DmsUtils.getMsg("login.username_password_error");
                 }
             } catch (Exception e) {
-                this.msg = DmsUtils.getMsg("operation_failed_with_exception");
+                this.msg = DmsUtils.getMsg("common.operation_failed_with_exception");
                 this._logger.severe(e);
             }
         }

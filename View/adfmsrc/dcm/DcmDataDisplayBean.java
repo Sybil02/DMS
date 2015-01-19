@@ -213,9 +213,9 @@ public class DcmDataDisplayBean extends AbstractExcel2007Writer {
         try {
             DBTransaction trans =(DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
             trans.createStatement(0).execute("DELETE FROM \"" +this.templateTmpTable +"\" WHERE TEMPLATE_ID='" +
-                                             this.curTemplateId +"' AND COM_RECORD_ID" +(this.combinationId == null ?"IS NULL" :("='" + curComRecordId + "'")));
+                                             this.curTemplateId +"' AND COM_RECORD_ID " +(this.combinationId == null ?"IS NULL" :("='" + curComRecordId + "'")));
             trans.createStatement(0).execute("DELETE FROM DCM_ERROR WHERE TEMPLATE_ID='" +this.curTemplateId +"' AND COM_RECORD_ID" +(this.combinationId == null ?
-                                              "IS NULL" :("='" + curComRecordId + "'")));
+                                              "='[NONE]'" :("='" + curComRecordId + "'")));
             trans.commit();
             PreparedStatement stat =trans.createPreparedStatement(sql_insert.toString() +sql_value.toString(), 0);
             int rowNo=1;
@@ -384,7 +384,7 @@ public class DcmDataDisplayBean extends AbstractExcel2007Writer {
         ViewObject vo = ADFUtils.findIterator("DcmErrorViewIterator").getViewObject();
         Row row = vo.createRow();
         row.setAttribute("TemplateId", this.curTemplateId);
-        row.setAttribute("ComRecordId", curComRecordId);
+        row.setAttribute("ComRecordId", curComRecordId==null ? "[NONE]" : curComRecordId);
         row.setAttribute("Msg", msg);
         row.setAttribute("SheetName", "NA");
         row.setAttribute("ValidationId",UUID.randomUUID().toString().replace("-", ""));
@@ -469,7 +469,7 @@ public class DcmDataDisplayBean extends AbstractExcel2007Writer {
                                              this.curTemplateId +"' AND COM_RECORD_ID " +(this.combinationId == null ?
                                               "IS NULL" :("='" + combinationRecord +"'")));
             trans.createStatement(0).execute("DELETE FROM DCM_ERROR WHERE TEMPLATE_ID='" +this.curTemplateId +"' AND COM_RECORD_ID " +
-                                             (this.combinationId == null ?"IS NULL" :("='" + combinationRecord +"'")));
+                                             (this.combinationId == null ?"='[NONE]'" :("='" + combinationRecord +"'")));
         } catch (SQLException e) {
             this._logger.severe(e);
             String msg = DmsUtils.getMsg("dcm.alter.clear_tmp_table_error");
@@ -993,7 +993,7 @@ public class DcmDataDisplayBean extends AbstractExcel2007Writer {
         ViewCriteria viewCriteria = vo.createViewCriteria();
         ViewCriteriaRow vr = viewCriteria.createViewCriteriaRow();
         if (this.combinationId == null) {
-            vr.setAttribute("ComRecordId", " IS NULL");
+            vr.setAttribute("ComRecordId", "='[NONE]'");
         } else {
             vr.setAttribute("ComRecordId", "='" + this.getCurCombinationRecord() + "'");
         }
