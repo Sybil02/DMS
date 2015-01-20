@@ -97,11 +97,5 @@
         </AttrNames>
       </nodeDefinition>
     </tree>
-    <list ListOperMode="navigation" IterBinding="DcmTemplateColumnViewIterator"
-          ListIter="DcmTemplateColumnViewIterator" id="ColumnLabel">
-      <AttrNames>
-        <Item Value="ColumnLabel"/>
-      </AttrNames>
-    </list>
   </bindings>
 </pageDefinition>

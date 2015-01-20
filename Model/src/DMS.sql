@@ -2098,8 +2098,12 @@ CREATE OR REPLACE PACKAGE BODY DCM_COMMON IS
     L_SQL_ZHS      VARCHAR2(2000);
     L_COL_ZHS_TEXT VARCHAR2(100);
     L_COL_EN_TEXT  VARCHAR2(100);
+    L_RECORD_ID    VARCHAR2(32) :=P_COM_RECORD_ID;
   BEGIN
     P_FLAG := 'Y';
+    IF P_COM_RECORD_ID IS NULL THEN
+        L_RECORD_ID:='[NONE]';
+    END IF;
     DCM_COMMON.FETCH_TEMPLATE_INFO(P_TEMPLATE_ID,
                                    P_LOCALE,
                                    L_TMP_TABLE,
@@ -2121,7 +2125,7 @@ CREATE OR REPLACE PACKAGE BODY DCM_COMMON IS
     L_SQL_ZHS := L_SQL_ZHS ||
                  ',ROW_NUM,MSG,ELEVEL,LOCALE,VALIDATION_ID,CREATED_AT,UPDATED_AT,CREATED_BY,UPDATED_BY)';
     L_SQL_ZHS := L_SQL_ZHS ||
-                 ' SELECT T.TEMPLATE_ID,T.COM_RECORD_ID,T.SHEET_NAME';
+                 ' SELECT T.TEMPLATE_ID,'''||L_RECORD_ID||''',T.SHEET_NAME';
     L_SQL_ZHS := L_SQL_ZHS || ',T.ROW_NO';
     L_SQL_ZHS := L_SQL_ZHS || ',''' || L_COL_ZHS_TEXT || '不能为空''' ||
                  ',''错误'',''zh_CN''';
@@ -2141,7 +2145,7 @@ CREATE OR REPLACE PACKAGE BODY DCM_COMMON IS
     L_SQL_EN := L_SQL_EN ||
                 ',ROW_NUM,MSG,ELEVEL,LOCALE,VALIDATION_ID,CREATED_AT,UPDATED_AT,CREATED_BY,UPDATED_BY)';
     L_SQL_EN := L_SQL_EN ||
-                ' SELECT T.TEMPLATE_ID,T.COM_RECORD_ID,T.SHEET_NAME';
+                ' SELECT T.TEMPLATE_ID,'''||L_RECORD_ID||''',T.SHEET_NAME';
     L_SQL_EN := L_SQL_EN || ',T.ROW_NO';
     L_SQL_EN := L_SQL_EN || ',''' || L_COL_EN_TEXT || ' can not be blank''' ||
                 ',''Error'',''en''';

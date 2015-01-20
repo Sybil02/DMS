@@ -29,4 +29,20 @@ public class DcmTemplateColumnViewImpl extends ViewObjectImpl {
     public void setlocale(String value) {
         setNamedWhereClauseParam("locale", value);
     }
+
+    /**
+     * Returns the variable value for templateId.
+     * @return variable value for templateId
+     */
+    public String gettemplateId() {
+        return (String)ensureVariableManager().getVariableValue("templateId");
+    }
+
+    /**
+     * Sets <code>value</code> for variable templateId.
+     * @param value value to bind as templateId
+     */
+    public void settemplateId(String value) {
+        ensureVariableManager().setVariableValue("templateId", value);
+    }
 }

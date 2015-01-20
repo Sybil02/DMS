@@ -62,7 +62,7 @@
         <!-- 校验程序管理 -->
         <af:popup id="p2" autoCancel="disabled"
                   binding="#{pageFlowScope.TemplateBackingBean.validationPopup}">
-          <af:panelWindow id="pw2"
+          <af:panelWindow id="pw2" modal="true"
                           title="#{viewBundle['dcm.validation.manage']}">
             <af:panelStretchLayout id="psl2"
                                    inlineStyle="width:800px;height:450px">
@@ -89,12 +89,12 @@
                   <af:table value="#{bindings.DcmTemplateValidationView.collectionModel}"
                             var="row"
                             rows="#{bindings.DcmTemplateValidationView.rangeSize}"
-                            emptyText="#{bindings.DcmTemplateValidationView.viewable ? 'No data to display.' : 'Access Denied.'}"
+                            emptyText="#{viewBundle['dms.common.nodata']}"
                             fetchSize="#{bindings.DcmTemplateValidationView.rangeSize}"
                             rowBandingInterval="0"
                             selectedRowKeys="#{bindings.DcmTemplateValidationView.collectionModel.selectedRow}"
                             selectionListener="#{bindings.DcmTemplateValidationView.collectionModel.makeCurrent}"
-                            rowSelection="single" id="t6"
+                            rowSelection="single" id="t6" editingMode="clickToEdit"
                             partialTriggers="::cb14 ::cb15">
                     <af:column sortProperty="#{bindings.DcmTemplateValidationView.hints.ColumnId.name}"
                                sortable="false"
@@ -105,7 +105,7 @@
                                           required="#{bindings.DcmTemplateValidationView.hints.ColumnId.mandatory}"
                                           shortDesc="#{bindings.DcmTemplateValidationView.hints.ColumnId.tooltip}"
                                           id="soc10">
-                        <f:selectItems value="#{bindings.ColumnLabel.items}"
+                        <f:selectItems value="#{row.bindings.ColumnId.items}"
                                        id="si10"/>
                       </af:selectOneChoice>
                     </af:column>

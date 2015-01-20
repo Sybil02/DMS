@@ -32,8 +32,19 @@
   </ViewAccessor>
   <ViewAccessor
     Name="LST_COLUMN"
-    ViewObjectName="team.epm.dcm.view.DcmTemplateColumnView"
-    RowLevelBinds="true"/>
+    ViewObjectName="team.epm.dcm.view.DcmTemplateColumnView">
+    <ViewCriteriaUsage
+      Name="DcmTemplateColumnViewCriteria"
+      FullName="team.epm.dcm.view.DcmTemplateColumnView.DcmTemplateColumnViewCriteria"/>
+    <ParameterMap>
+      <PIMap Variable="locale">
+        <TransientExpression><![CDATA[adf.context.locale]]></TransientExpression>
+      </PIMap>
+      <PIMap Variable="templateId">
+        <TransientExpression><![CDATA[this.TemplateId]]></TransientExpression>
+      </PIMap>
+    </ParameterMap>
+  </ViewAccessor>
   <ListBinding
     Name="LOV_ValidationId"
     ListVOName="LKP_Validation"

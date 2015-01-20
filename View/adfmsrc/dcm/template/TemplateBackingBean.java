@@ -123,7 +123,7 @@ public class TemplateBackingBean {
         ViewObject templateVo =
             ADFUtils.findIterator("DcmTemplateViewIterator").getViewObject();
         ViewObject templateHeaderVo =DmsUtils.getDcmApplicationModule().getDcmComVsQueryView();
-        if (this.curTemplate != null &&
+        if (this.curTemplate != null &&templateVo.getCurrentRow()!=null&&
             this.curTemplate.equals(templateVo.getCurrentRow().getAttribute("Id"))) {
             this.curTemplate =
                     (String)templateVo.getCurrentRow().getAttribute("Id");
