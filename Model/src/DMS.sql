@@ -58,6 +58,18 @@ drop table DMS_LOOKUP cascade constraints;
 
 drop table DCM_TEMPTABLE10 cascade constraints;
 
+drop table DCM_TEMPTABLE20 cascade constraints;
+
+drop table DCM_TEMPTABLE30 cascade constraints;
+
+drop table DCM_TEMPTABLE40 cascade constraints;
+
+drop table DCM_TEMPTABLE50 cascade constraints;
+
+drop table DCM_TEMPTABLE80 cascade constraints;
+
+drop table DCM_TEMPTABLE100 cascade constraints;
+
 drop sequence DCM_SEQ;
 
 /*==============================================================*/
@@ -2186,6 +2198,320 @@ CREATE OR REPLACE PACKAGE BODY DCM_COMMON IS
     DBMS_OUTPUT.PUT_LINE('PLEASE FLOW THIS DEMO TO IMPLEMENT THE ACTRAL LOGIC');
   END AFTER_PROGRAM;
 END DCM_COMMON;
+/
+drop table ODI11_AGENT cascade constraints;
+
+drop table ODI11_SCENE cascade constraints;
+
+drop table ODI11_PARAMETER cascade constraints;
+
+drop table ODI11_SCENE_PARAM cascade constraints;
+
+drop table ODI11_SCENE_EXEC cascade constraints;
+
+drop table ODI11_SCENE_CAT cascade constraints;
+
+/*==============================================================*/
+/* Table: ODI11_AGENT                                           */
+/*==============================================================*/
+create table ODI11_AGENT 
+(
+   ID                   VARCHAR2(32)         not null,
+   AGENT_ALIAS          VARCHAR2(100)        not null,
+   AGENT_NAME           VARCHAR2(100)        not null,
+   AGENT_HOST           VARCHAR2(100)        not null,
+   AGENT_CONTEXT        VARCHAR2(100)        not null,
+   AGENT_PORT           VARCHAR2(10)         not null,
+   PROTOCOL             VARCHAR2(10)         not null,
+   LOCALE               VARCHAR2(10)         not null,
+   CREATED_AT           DATE,
+   UPDATED_AT           DATE,
+   UPDATED_BY           VARCHAR2(32),
+   CREATED_BY           VARCHAR2(32),
+   constraint PK_ODI11_AGENT primary key (ID,LOCALE)
+);
+
+comment on table ODI11_AGENT is
+'ODI11G代理';
+
+comment on column ODI11_AGENT.ID is
+'标识ID';
+
+comment on column ODI11_AGENT.AGENT_ALIAS is
+'代理别名';
+
+comment on column ODI11_AGENT.AGENT_NAME is
+'代理名称';
+
+comment on column ODI11_AGENT.AGENT_HOST is
+'代理主机';
+
+comment on column ODI11_AGENT.AGENT_CONTEXT is
+'代理上下文';
+
+comment on column ODI11_AGENT.AGENT_PORT is
+'代理端口';
+
+comment on column ODI11_AGENT.PROTOCOL is
+'代理协议';
+
+comment on column ODI11_AGENT.LOCALE is
+'多语言标识';
+
+comment on column ODI11_AGENT.CREATED_AT is
+'创建时间';
+
+comment on column ODI11_AGENT.UPDATED_AT is
+'更新时间';
+
+comment on column ODI11_AGENT.UPDATED_BY is
+'更新者';
+
+comment on column ODI11_AGENT.CREATED_BY is
+'创建者';
+
+/*==============================================================*/
+/* Table: ODI11_SCENE                                           */
+/*==============================================================*/
+create table ODI11_SCENE
+(
+   ID                   VARCHAR2(32)         not null,
+   SCENE_ALIAS          VARCHAR2(100)        not null,
+   SCENE_NAME           VARCHAR2(100)        not null,
+   SCENE_VERSION        VARCHAR2(100)        not null,
+   AGENT_ID             VARCHAR2(32)         not null,
+   SCENE_CONTEXT        VARCHAR2(100)        not null,
+   CAT_ID               VARCHAR2(32)         not null,
+   LOCALE               VARCHAR2(10)         not null,
+   CREATED_AT           DATE,
+   UPDATED_AT           DATE,
+   UPDATED_BY           VARCHAR2(32),
+   CREATED_BY           VARCHAR2(32),
+   constraint PK_ODI11_SCENE primary key (ID,LOCALE)
+);
+
+comment on table ODI11_SCENE is
+'ODI11G场景';
+
+comment on column ODI11_SCENE.ID is
+'ID标识';
+
+comment on column ODI11_SCENE.SCENE_ALIAS is
+'场景别名';
+
+comment on column ODI11_SCENE.SCENE_NAME is
+'场景名称';
+
+comment on column ODI11_SCENE.AGENT_ID is
+'代理ID';
+
+comment on column ODI11_SCENE.SCENE_VERSION is
+'场景版本';
+
+comment on column ODI11_SCENE.SCENE_CONTEXT is
+'执行上下文';
+
+comment on column ODI11_SCENE.CAT_ID is
+'分类ID';
+
+comment on column ODI11_SCENE.LOCALE is
+'语言标识';
+
+comment on column ODI11_SCENE.CREATED_AT is
+'创建时间';
+
+comment on column ODI11_SCENE.UPDATED_AT is
+'更新时间';
+
+comment on column ODI11_SCENE.UPDATED_BY is
+'更新者';
+
+comment on column ODI11_SCENE.CREATED_BY is
+'创建者';
+
+/*==============================================================*/
+/* Table: ODI11_PARAMETER                                       */
+/*==============================================================*/
+create table ODI11_PARAMETER
+(
+   ID                   VARCHAR2(32)         not null,
+   P_ALIAS              VARCHAR2(100)        not null,
+   P_NAME               VARCHAR2(100)        not null,
+   VALUE_SET_ID         VARCHAR2(32)                 ,
+   LOCALE               VARCHAR2(10)         not null,
+   CREATED_AT           DATE,
+   UPDATED_AT           DATE,
+   UPDATED_BY           VARCHAR2(32),
+   CREATED_BY           VARCHAR2(32),
+   constraint PK_ODI11_PARAMETER primary key (ID,LOCALE)
+);
+
+comment on table ODI11_PARAMETER is
+'ODI11G参数';
+
+comment on column ODI11_PARAMETER.ID is
+'ID标识';
+
+comment on column ODI11_PARAMETER.P_ALIAS is
+'参数别名';
+
+comment on column ODI11_PARAMETER.P_NAME is
+'参数名称';
+
+comment on column ODI11_PARAMETER.VALUE_SET_ID is
+'值集编码';
+
+comment on column ODI11_PARAMETER.LOCALE is
+'多语言标识';
+
+comment on column ODI11_PARAMETER.CREATED_AT is
+'创建时间';
+
+comment on column ODI11_PARAMETER.UPDATED_AT is
+'更新时间';
+
+comment on column ODI11_PARAMETER.UPDATED_BY is
+'更新者';
+
+comment on column ODI11_PARAMETER.CREATED_BY is
+'创建者';
+
+/*==============================================================*/
+/* Table: ODI11_SCENE_PARAM                                     */
+/*==============================================================*/
+create table ODI11_SCENE_PARAM
+(
+   ID                   VARCHAR2(32)         not null,
+   SCENE_ID             VARCHAR2(32)         not null,
+   PARAMETER_ID         VARCHAR2(32)         not null,
+   IDX                  NUMBER,
+   CREATED_AT           DATE,
+   UPDATED_AT           DATE,
+   UPDATED_BY           VARCHAR2(32),
+   CREATED_BY           VARCHAR2(32),
+   constraint PK_ODI11_SCENE_PARAM primary key (ID)
+);
+
+comment on table ODI11_SCENE_PARAM is
+'ODI11G场景参数';
+
+comment on column ODI11_SCENE_PARAM.ID is
+'ID标识';
+
+comment on column ODI11_SCENE_PARAM.SCENE_ID is
+'场景ID';
+
+comment on column ODI11_SCENE_PARAM.PARAMETER_ID is
+'参数ID';
+
+comment on column ODI11_SCENE_PARAM.IDX is
+'序号';
+
+comment on column ODI11_SCENE_PARAM.CREATED_AT is
+'创建时间';
+
+comment on column ODI11_SCENE_PARAM.UPDATED_AT is
+'更新时间';
+
+comment on column ODI11_SCENE_PARAM.UPDATED_BY is
+'更新者';
+
+comment on column ODI11_SCENE_PARAM.CREATED_BY is
+'创建者';
+/*==============================================================*/
+/* Table: ODI11_SCENE_CAT                                       */
+/*==============================================================*/
+create table ODI11_SCENE_CAT
+(
+   ID                   VARCHAR2(32)         not null,
+   P_ID                 VARCHAR2(32),
+   CAT_NAME             VARCHAR2(150)        not null,
+   LOCALE               VARCHAR2(10)         not null,
+   IDX                  NUMBER,
+   CREATED_AT           DATE,
+   UPDATED_AT           DATE,
+   UPDATED_BY           VARCHAR2(32),
+   CREATED_BY           VARCHAR2(32),
+   constraint PK_ODI11_SCENE_CAT primary key (ID,LOCALE)
+);
+
+comment on table ODI11_SCENE_CAT is
+'ODI11G场景分类';
+
+comment on column ODI11_SCENE_CAT.ID is
+'ID标识';
+
+comment on column ODI11_SCENE_CAT.CAT_NAME is
+'分类名称';
+
+comment on column ODI11_SCENE_CAT.LOCALE is
+'多语言标识';
+
+comment on column ODI11_SCENE_CAT.IDX is
+'序号';
+
+comment on column ODI11_SCENE_CAT.CREATED_AT is
+'创建时间';
+
+comment on column ODI11_SCENE_CAT.UPDATED_AT is
+'更新时间';
+
+comment on column ODI11_SCENE_CAT.UPDATED_BY is
+'更新者';
+
+comment on column ODI11_SCENE_CAT.CREATED_BY is
+'创建者';
+
+/*==============================================================*/
+/* Table: ODI11_SCENE_CAT                                       */
+/*==============================================================*/
+create table ODI11_SCENE_EXEC
+(
+   ID                   VARCHAR2(32)         not null,
+   SCENE_ID             VARCHAR2(32)         not null,
+   PARAMS               VARCHAR2(1000)       not null,
+   EXEC_STATUS          VARCHAR2(100),
+   SESSION_NUM          VARCHAR2(100), 
+   LOG_TEXT             VARCHAR2(1000),      
+   CREATED_AT           DATE,
+   UPDATED_AT           DATE,
+   UPDATED_BY           VARCHAR2(32),
+   CREATED_BY           VARCHAR2(32),
+   constraint PK_ODI11_SCENE_EXEC primary key (ID)
+);
+
+comment on table ODI11_SCENE_EXEC is
+'ODI11场景执行';
+
+comment on column ODI11_SCENE_EXEC.ID is
+'ID标识';
+
+comment on column ODI11_SCENE_EXEC.SCENE_ID is
+'场景ID';
+
+comment on column ODI11_SCENE_EXEC.PARAMS is
+'参数';
+
+comment on column ODI11_SCENE_EXEC.EXEC_STATUS is
+'执行状态';
+
+comment on column ODI11_SCENE_EXEC.SESSION_NUM is
+'会话ID';
+
+comment on column ODI11_SCENE_EXEC.LOG_TEXT is
+'执行日志';
+
+comment on column ODI11_SCENE_EXEC.CREATED_AT is
+'创建时间';
+
+comment on column ODI11_SCENE_EXEC.UPDATED_AT is
+'更新时间';
+
+comment on column ODI11_SCENE_EXEC.UPDATED_BY is
+'更新者';
+
+comment on column ODI11_SCENE_EXEC.CREATED_BY is
+'创建者';
 
 
 
