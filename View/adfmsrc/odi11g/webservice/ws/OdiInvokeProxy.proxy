@@ -1,0 +1,330 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<jdevws:WebServiceProxy xmlns:jdevws="http://xmlns.oracle.com/jdeveloper/10130/webserviceproxy">
+   <list n="CHILD_NODES">
+      <url path="../../../../adfmsrc/odi11g/webservice/ws/OdiInvoke.xml"/>
+      <url path="../../../../adfmsrc/odi11g/webservice/type/StopLoadPlanRequestType.java"/>
+      <url path="../../../../adfmsrc/odi11g/webservice/type/OdiGetSessionsStatusResponse.java"/>
+      <url path="../../../../adfmsrc/odi11g/webservice/type/OdiGetLoadPlanStatusResponse.java"/>
+      <url path="../../../../adfmsrc/odi11g/webservice/type/OdiStartLoadPlanRequest.java"/>
+      <url path="../../../../adfmsrc/odi11g/webservice/ws/OdiInvokeRequestSOAP11Port0Client.java"/>
+      <url path="../../../../adfmsrc/odi11g/webservice/type/SessionRequestType.java"/>
+      <url path="../../../../adfmsrc/odi11g/webservice/type/OdiStopLoadPlanResponse.java"/>
+      <url path="../../../../adfmsrc/odi11g/webservice/type/OdiGetLoadPlanStatusRequest.java"/>
+      <url path="../../../../adfmsrc/odi11g/webservice/type/SessionStatusType.java"/>
+      <url path="../../../../adfmsrc/odi11g/webservice/type/ObjectFactory.java"/>
+      <url path="../../../../adfmsrc/odi11g/webservice/type/OdiRestartLoadPlanResponse.java"/>
+      <url path="../../../../adfmsrc/odi11g/webservice/type/OdiCredentialType.java"/>
+      <url path="../../../../adfmsrc/odi11g/webservice/type/OdiStartType.java"/>
+      <url path="../../../../adfmsrc/odi11g/webservice/type/OdiStopLoadPlanRequest.java"/>
+      <url path="../../../../adfmsrc/odi11g/webservice/type/VariableType.java"/>
+      <url path="../../../../adfmsrc/odi11g/webservice/type/OdiStartScenRequest.java"/>
+      <url path="../../../../adfmsrc/odi11g/webservice/type/OdiRestartLoadPlanRequest.java"/>
+      <url path="../../../../adfmsrc/odi11g/webservice/type/OdiStartLoadPlanResponse.java"/>
+      <url path="../../../../adfmsrc/odi11g/webservice/type/package-info.java"/>
+      <url path="../../../../adfmsrc/odi11g/webservice/type/LoadPlanStatusRequestType.java"/>
+      <url path="../../../../adfmsrc/odi11g/webservice/type/LoadPlanStatusType.java"/>
+      <url path="../../../../adfmsrc/odi11g/webservice/type/OdiGetSessionsStatusRequest.java"/>
+      <url path="../../../../adfmsrc/odi11g/webservice/type/OdiStopLoadPlanType.java"/>
+      <url path="../../../../adfmsrc/odi11g/webservice/type/RestartLoadPlanRequestType.java"/>
+      <url path="../../../../adfmsrc/odi11g/webservice/type/GetWebServiceVersionRequest.java"/>
+      <url path="../../../../adfmsrc/odi11g/webservice/type/OdiStartScenWithCallbackRequest.java"/>
+      <url path="../../../../adfmsrc/odi11g/webservice/type/OdiLoadPlanInstanceRunInformationType.java"/>
+      <url path="../../../../adfmsrc/odi11g/webservice/ws/RequestPortType.java"/>
+      <url path="../../../../adfmsrc/odi11g/webservice/type/OdiStartLoadPlanType.java"/>
+      <url path="../../../../adfmsrc/odi11g/webservice/type/ScenarioRequestType.java"/>
+      <url path="../../../../adfmsrc/odi11g/webservice/type/GetWebServiceVersionResponse.java"/>
+      <url path="../../../../adfmsrc/odi11g/webservice/type/OdiRestartSessWithCallbackRequest.java"/>
+      <url path="../../../../adfmsrc/odi11g/webservice/type/StartLoadPlanRequestType.java"/>
+      <url path="../../../../adfmsrc/odi11g/webservice/type/OdiRestartLoadPlanType.java"/>
+      <url path="../../../../adfmsrc/odi11g/webservice/type/OdiRestartSessRequest.java"/>
+      <url path="../../../../adfmsrc/odi11g/webservice/ws/OdiInvoke.java"/>
+   </list>
+   <hash n="DATA_MODEL">
+      <value n="ATTACHMENT_ENCODING" v="MTOM"/>
+      <value n="MODEL_CLASS" v="oracle.jdeveloper.webservices.model.proxy.WebServiceProxy"/>
+      <url n="ORACLE_WEBSERVICES_XML" path="../../../../adfmsrc/odi11g/webservice/ws/OdiInvoke.xml"/>
+      <hash n="PROPERTY_GROUPS">
+         <hash n="WSDL_TO_JAVA_PROPERTIES">
+            <value n="MODEL_CLASS" v="oracle.jdeveloper.webservices.model.java.WSDLToJavaProperties"/>
+            <value n="WSDL2JAVA_DEFAULT_PACKAGE" v="odi11g.webservice.ws"/>
+            <value n="WSDL2JAVA_ROOT_VALUE_PACKAGE" v="odi11g.webservice.type"/>
+            <value n="WSDL2JAVA_UNWRAP_PARAMETERS" v="false"/>
+         </hash>
+      </hash>
+      <value n="PROXY_ASYNC_METHODS" v="FOR_ENABLED"/>
+      <list n="PROXY_CLIENTS">
+         <url path="../../../../adfmsrc/odi11g/webservice/ws/OdiInvokeRequestSOAP11Port0Client.java"/>
+      </list>
+      <value n="PROXY_MAPPING_URL"/>
+      <hash n="PROXY_PORTS">
+         <hash n="OdiInvokeRequestSOAP11port0">
+            <value n="ACCESSES_DOC_WRAPPPED" v="false"/>
+            <value n="ACCESSES_RPC_ENCODED" v="false"/>
+            <value n="CLASS_NAME" v="odi11g.webservice.ws.RequestPortType"/>
+            <value n="MODEL_CLASS" v="oracle.jdeveloper.webservices.model.proxy.ProxyPort"/>
+            <value n="NAME" v="OdiInvokeRequestSOAP11port0"/>
+            <hash n="OPERATIONS">
+               <hash n="getLoadPlanStatus">
+                  <value n="MODEL_CLASS" v="oracle.jdeveloper.webservices.model.proxy.ProxyOperation"/>
+                  <hash n="PROPERTY_GROUPS"/>
+               </hash>
+               <hash n="getSessionStatus">
+                  <value n="MODEL_CLASS" v="oracle.jdeveloper.webservices.model.proxy.ProxyOperation"/>
+                  <hash n="PROPERTY_GROUPS"/>
+               </hash>
+               <hash n="getVersion">
+                  <value n="MODEL_CLASS" v="oracle.jdeveloper.webservices.model.proxy.ProxyOperation"/>
+                  <hash n="PROPERTY_GROUPS"/>
+               </hash>
+               <hash n="invokeRestartLoadPlan">
+                  <value n="MODEL_CLASS" v="oracle.jdeveloper.webservices.model.proxy.ProxyOperation"/>
+                  <hash n="PROPERTY_GROUPS"/>
+               </hash>
+               <hash n="invokeRestartSess">
+                  <value n="MODEL_CLASS" v="oracle.jdeveloper.webservices.model.proxy.ProxyOperation"/>
+                  <hash n="PROPERTY_GROUPS"/>
+               </hash>
+               <hash n="invokeRestartSessWithCallback">
+                  <value n="MODEL_CLASS" v="oracle.jdeveloper.webservices.model.proxy.ProxyOperation"/>
+                  <hash n="PROPERTY_GROUPS"/>
+               </hash>
+               <hash n="invokeStartLoadPlan">
+                  <value n="MODEL_CLASS" v="oracle.jdeveloper.webservices.model.proxy.ProxyOperation"/>
+                  <hash n="PROPERTY_GROUPS"/>
+               </hash>
+               <hash n="invokeStartScen">
+                  <value n="MODEL_CLASS" v="oracle.jdeveloper.webservices.model.proxy.ProxyOperation"/>
+                  <hash n="PROPERTY_GROUPS"/>
+               </hash>
+               <hash n="invokeStartScenWithCallback">
+                  <value n="MODEL_CLASS" v="oracle.jdeveloper.webservices.model.proxy.ProxyOperation"/>
+                  <hash n="PROPERTY_GROUPS"/>
+               </hash>
+               <hash n="invokeStopLoadPlan">
+                  <value n="MODEL_CLASS" v="oracle.jdeveloper.webservices.model.proxy.ProxyOperation"/>
+                  <hash n="PROPERTY_GROUPS"/>
+               </hash>
+            </hash>
+            <hash n="PROPERTY_GROUPS">
+               <hash n="WS_CLIENT_POLICY">
+                  <value n="addressing"/>
+                  <list n="management"/>
+                  <value n="MODEL_CLASS" v="oracle.jdeveloper.webservices.model.policy.PolicyClientModel"/>
+                  <value n="mtom"/>
+                  <hash n="POLICY_OVERRIDE_PROPERTIES"/>
+                  <list n="security"/>
+                  <value n="wsrm"/>
+               </hash>
+            </hash>
+            <url n="PROXY_ORIGINAL_PORT_ENDPOINT" protocol="http" host="10.2.1.43" port="30000" path="/oraclediagent/OdiInvoke"/>
+         </hash>
+      </hash>
+      <value n="PROXY_SERVICE_NAME" v="OdiInvoke"/>
+      <value n="PROXY_SERVICE_NAMESPACE" v="xmlns.oracle.com/odi/OdiInvoke/"/>
+      <url n="PROXY_TARGET_PROJECT" path="../../../../View.jpr"/>
+      <url n="PROXY_WSDL_URL" protocol="http" host="10.2.1.43" port="30000" path="/oraclediagent/OdiInvoke" query="wsdl"/>
+      <hash n="REFERENCED_WEBSERVICE">
+         <list n="BD_">
+            <hash>
+               <value n="BD_DEFAULT_DOCUMENT_WRAPPED" v="false"/>
+               <value n="BOUND_PORT_TYPE" v="{xmlns.oracle.com/odi/OdiInvoke/}requestPortType"/>
+               <value n="DEFAULT_NAME" v="false"/>
+               <value n="MODEL_CLASS" v="oracle.jdeveloper.webservices.model.SOAPBinding"/>
+               <value n="NAME" v="{xmlns.oracle.com/odi/OdiInvoke/}InvokeRequestSOAP11Binding"/>
+               <list n="OP_BINDINGS">
+                  <hash>
+                     <value n="BD_SOAP_ACTION" v="xmlns.oracle.com/odi/OdiInvoke/invokeStartScen"/>
+                     <value n="BD_SOAP_INPUT_USE" v="1"/>
+                     <value n="BD_SOAP_OUTPUT_USE" v="1"/>
+                     <value n="BD_SOAP_STYLE" v="1"/>
+                     <value n="BOUND_OPERATION" v="odi11g.webservice.type.OdiStartType.invokeStartScen.odi11g.webservice.type.OdiStartScenRequest"/>
+                     <value n="MODEL_CLASS" v="oracle.jdeveloper.webservices.model.SOAPOperationBinding"/>
+                     <hash n="PROPERTY_GROUPS"/>
+                  </hash>
+                  <hash>
+                     <value n="BD_SOAP_ACTION" v="xmlns.oracle.com/odi/OdiInvoke/invokeStartScenWithCallback"/>
+                     <value n="BD_SOAP_INPUT_USE" v="1"/>
+                     <value n="BD_SOAP_STYLE" v="1"/>
+                     <value n="BOUND_OPERATION" v="void.invokeStartScenWithCallback.odi11g.webservice.type.OdiStartScenWithCallbackRequest"/>
+                     <value n="MODEL_CLASS" v="oracle.jdeveloper.webservices.model.SOAPOperationBinding"/>
+                     <hash n="PROPERTY_GROUPS"/>
+                  </hash>
+                  <hash>
+                     <value n="BD_SOAP_ACTION" v="xmlns.oracle.com/odi/OdiInvoke/getVersion"/>
+                     <value n="BD_SOAP_INPUT_USE" v="1"/>
+                     <value n="BD_SOAP_OUTPUT_USE" v="1"/>
+                     <value n="BD_SOAP_STYLE" v="1"/>
+                     <value n="BOUND_OPERATION" v="odi11g.webservice.type.GetWebServiceVersionResponse.getVersion.odi11g.webservice.type.GetWebServiceVersionRequest"/>
+                     <value n="MODEL_CLASS" v="oracle.jdeveloper.webservices.model.SOAPOperationBinding"/>
+                     <hash n="PROPERTY_GROUPS"/>
+                  </hash>
+                  <hash>
+                     <value n="BD_SOAP_ACTION" v="xmlns.oracle.com/odi/OdiInvoke/invokeRestartSess"/>
+                     <value n="BD_SOAP_INPUT_USE" v="1"/>
+                     <value n="BD_SOAP_OUTPUT_USE" v="1"/>
+                     <value n="BD_SOAP_STYLE" v="1"/>
+                     <value n="BOUND_OPERATION" v="odi11g.webservice.type.OdiStartType.invokeRestartSess.odi11g.webservice.type.OdiRestartSessRequest"/>
+                     <value n="MODEL_CLASS" v="oracle.jdeveloper.webservices.model.SOAPOperationBinding"/>
+                     <hash n="PROPERTY_GROUPS"/>
+                  </hash>
+                  <hash>
+                     <value n="BD_SOAP_ACTION" v="xmlns.oracle.com/odi/OdiInvoke/invokeRestartSessWithCallback"/>
+                     <value n="BD_SOAP_INPUT_USE" v="1"/>
+                     <value n="BD_SOAP_STYLE" v="1"/>
+                     <value n="BOUND_OPERATION" v="void.invokeRestartSessWithCallback.odi11g.webservice.type.OdiRestartSessWithCallbackRequest"/>
+                     <value n="MODEL_CLASS" v="oracle.jdeveloper.webservices.model.SOAPOperationBinding"/>
+                     <hash n="PROPERTY_GROUPS"/>
+                  </hash>
+                  <hash>
+                     <value n="BD_SOAP_ACTION" v="xmlns.oracle.com/odi/OdiInvoke/getSessionStatus"/>
+                     <value n="BD_SOAP_INPUT_USE" v="1"/>
+                     <value n="BD_SOAP_OUTPUT_USE" v="1"/>
+                     <value n="BD_SOAP_STYLE" v="1"/>
+                     <value n="BOUND_OPERATION" v="odi11g.webservice.type.OdiGetSessionsStatusResponse.getSessionStatus.odi11g.webservice.type.OdiGetSessionsStatusRequest"/>
+                     <value n="MODEL_CLASS" v="oracle.jdeveloper.webservices.model.SOAPOperationBinding"/>
+                     <hash n="PROPERTY_GROUPS"/>
+                  </hash>
+                  <hash>
+                     <value n="BD_SOAP_ACTION" v="xmlns.oracle.com/odi/OdiInvoke/invokeStartLoadPlan"/>
+                     <value n="BD_SOAP_INPUT_USE" v="1"/>
+                     <value n="BD_SOAP_OUTPUT_USE" v="1"/>
+                     <value n="BD_SOAP_STYLE" v="1"/>
+                     <value n="BOUND_OPERATION" v="odi11g.webservice.type.OdiStartLoadPlanResponse.invokeStartLoadPlan.odi11g.webservice.type.OdiStartLoadPlanRequest"/>
+                     <value n="MODEL_CLASS" v="oracle.jdeveloper.webservices.model.SOAPOperationBinding"/>
+                     <hash n="PROPERTY_GROUPS"/>
+                  </hash>
+                  <hash>
+                     <value n="BD_SOAP_ACTION" v="xmlns.oracle.com/odi/OdiInvoke/invokeStopLoadPlan"/>
+                     <value n="BD_SOAP_INPUT_USE" v="1"/>
+                     <value n="BD_SOAP_OUTPUT_USE" v="1"/>
+                     <value n="BD_SOAP_STYLE" v="1"/>
+                     <value n="BOUND_OPERATION" v="odi11g.webservice.type.OdiStopLoadPlanResponse.invokeStopLoadPlan.odi11g.webservice.type.OdiStopLoadPlanRequest"/>
+                     <value n="MODEL_CLASS" v="oracle.jdeveloper.webservices.model.SOAPOperationBinding"/>
+                     <hash n="PROPERTY_GROUPS"/>
+                  </hash>
+                  <hash>
+                     <value n="BD_SOAP_ACTION" v="xmlns.oracle.com/odi/OdiInvoke/invokeRestartLoadPlan"/>
+                     <value n="BD_SOAP_INPUT_USE" v="1"/>
+                     <value n="BD_SOAP_OUTPUT_USE" v="1"/>
+                     <value n="BD_SOAP_STYLE" v="1"/>
+                     <value n="BOUND_OPERATION" v="odi11g.webservice.type.OdiRestartLoadPlanResponse.invokeRestartLoadPlan.odi11g.webservice.type.OdiRestartLoadPlanRequest"/>
+                     <value n="MODEL_CLASS" v="oracle.jdeveloper.webservices.model.SOAPOperationBinding"/>
+                     <hash n="PROPERTY_GROUPS"/>
+                  </hash>
+                  <hash>
+                     <value n="BD_SOAP_ACTION" v="xmlns.oracle.com/odi/OdiInvoke/getLoadPlanStatus"/>
+                     <value n="BD_SOAP_INPUT_USE" v="1"/>
+                     <value n="BD_SOAP_OUTPUT_USE" v="1"/>
+                     <value n="BD_SOAP_STYLE" v="1"/>
+                     <value n="BOUND_OPERATION" v="odi11g.webservice.type.OdiGetLoadPlanStatusResponse.getLoadPlanStatus.odi11g.webservice.type.OdiGetLoadPlanStatusRequest"/>
+                     <value n="MODEL_CLASS" v="oracle.jdeveloper.webservices.model.SOAPOperationBinding"/>
+                     <hash n="PROPERTY_GROUPS"/>
+                  </hash>
+               </list>
+               <hash n="PROPERTY_GROUPS"/>
+            </hash>
+         </list>
+         <list n="BINDING_FILES"/>
+         <value n="GUID" v="10eb8748-014b-1000-800e-ac1080af76a1"/>
+         <value n="MODEL_CLASS" v="oracle.jdeveloper.webservices.model.proxy.WebServiceProxy$ProxyJavaWebService"/>
+         <list n="PO_">
+            <hash>
+               <value n="DEFAULT_NAME" v="false"/>
+               <value n="MODEL_CLASS" v="oracle.jdeveloper.webservices.model.SOAPPort"/>
+               <value n="NAME" v="OdiInvokeRequestSOAP11port0"/>
+               <value n="PORT_BINDING_NAME" v="{xmlns.oracle.com/odi/OdiInvoke/}InvokeRequestSOAP11Binding"/>
+               <list n="PORT_OPS">
+                  <hash>
+                     <value n="EXPOSED_BD_OPERATION" v="odi11g.webservice.type.OdiStartType.invokeStartScen.odi11g.webservice.type.OdiStartScenRequest"/>
+                     <value n="MODEL_CLASS" v="oracle.jdeveloper.webservices.model.PortOperation"/>
+                     <hash n="PROPERTY_GROUPS"/>
+                  </hash>
+                  <hash>
+                     <value n="EXPOSED_BD_OPERATION" v="void.invokeStartScenWithCallback.odi11g.webservice.type.OdiStartScenWithCallbackRequest"/>
+                     <value n="MODEL_CLASS" v="oracle.jdeveloper.webservices.model.PortOperation"/>
+                     <hash n="PROPERTY_GROUPS"/>
+                  </hash>
+                  <hash>
+                     <value n="EXPOSED_BD_OPERATION" v="odi11g.webservice.type.GetWebServiceVersionResponse.getVersion.odi11g.webservice.type.GetWebServiceVersionRequest"/>
+                     <value n="MODEL_CLASS" v="oracle.jdeveloper.webservices.model.PortOperation"/>
+                     <hash n="PROPERTY_GROUPS"/>
+                  </hash>
+                  <hash>
+                     <value n="EXPOSED_BD_OPERATION" v="odi11g.webservice.type.OdiStartType.invokeRestartSess.odi11g.webservice.type.OdiRestartSessRequest"/>
+                     <value n="MODEL_CLASS" v="oracle.jdeveloper.webservices.model.PortOperation"/>
+                     <hash n="PROPERTY_GROUPS"/>
+                  </hash>
+                  <hash>
+                     <value n="EXPOSED_BD_OPERATION" v="void.invokeRestartSessWithCallback.odi11g.webservice.type.OdiRestartSessWithCallbackRequest"/>
+                     <value n="MODEL_CLASS" v="oracle.jdeveloper.webservices.model.PortOperation"/>
+                     <hash n="PROPERTY_GROUPS"/>
+                  </hash>
+                  <hash>
+                     <value n="EXPOSED_BD_OPERATION" v="odi11g.webservice.type.OdiGetSessionsStatusResponse.getSessionStatus.odi11g.webservice.type.OdiGetSessionsStatusRequest"/>
+                     <value n="MODEL_CLASS" v="oracle.jdeveloper.webservices.model.PortOperation"/>
+                     <hash n="PROPERTY_GROUPS"/>
+                  </hash>
+                  <hash>
+                     <value n="EXPOSED_BD_OPERATION" v="odi11g.webservice.type.OdiStartLoadPlanResponse.invokeStartLoadPlan.odi11g.webservice.type.OdiStartLoadPlanRequest"/>
+                     <value n="MODEL_CLASS" v="oracle.jdeveloper.webservices.model.PortOperation"/>
+                     <hash n="PROPERTY_GROUPS"/>
+                  </hash>
+                  <hash>
+                     <value n="EXPOSED_BD_OPERATION" v="odi11g.webservice.type.OdiStopLoadPlanResponse.invokeStopLoadPlan.odi11g.webservice.type.OdiStopLoadPlanRequest"/>
+                     <value n="MODEL_CLASS" v="oracle.jdeveloper.webservices.model.PortOperation"/>
+                     <hash n="PROPERTY_GROUPS"/>
+                  </hash>
+                  <hash>
+                     <value n="EXPOSED_BD_OPERATION" v="odi11g.webservice.type.OdiRestartLoadPlanResponse.invokeRestartLoadPlan.odi11g.webservice.type.OdiRestartLoadPlanRequest"/>
+                     <value n="MODEL_CLASS" v="oracle.jdeveloper.webservices.model.PortOperation"/>
+                     <hash n="PROPERTY_GROUPS"/>
+                  </hash>
+                  <hash>
+                     <value n="EXPOSED_BD_OPERATION" v="odi11g.webservice.type.OdiGetLoadPlanStatusResponse.getLoadPlanStatus.odi11g.webservice.type.OdiGetLoadPlanStatusRequest"/>
+                     <value n="MODEL_CLASS" v="oracle.jdeveloper.webservices.model.PortOperation"/>
+                     <hash n="PROPERTY_GROUPS"/>
+                  </hash>
+               </list>
+               <hash n="PROPERTY_GROUPS"/>
+               <url n="URL" protocol="http" host="10.2.1.43" port="30000" path="/oraclediagent/OdiInvoke"/>
+            </hash>
+         </list>
+         <hash n="PROPERTY_GROUPS">
+            <hash n="WSDL_TO_JAVA_PROPERTIES">
+               <value n="MODEL_CLASS" v="oracle.jdeveloper.webservices.model.java.WSDLToJavaProperties"/>
+               <value n="WSDL2JAVA_DEFAULT_PACKAGE" v="odi11g.webservice.ws"/>
+               <value n="WSDL2JAVA_ROOT_VALUE_PACKAGE" v="odi11g.webservice.type"/>
+               <value n="WSDL2JAVA_UNWRAP_PARAMETERS" v="false"/>
+            </hash>
+         </hash>
+         <list n="PT_">
+            <hash>
+               <value n="AUTO_SERVICE_INTERFACE"/>
+               <value n="DEFAULT_NAME" v="false"/>
+               <value n="MODEL_CLASS" v="oracle.jdeveloper.webservices.model.java.JavaPortType"/>
+               <value n="NAME" v="{xmlns.oracle.com/odi/OdiInvoke/}requestPortType"/>
+               <hash n="PROPERTY_GROUPS"/>
+               <value n="PT_CLASS" v="odi11g.webservice.ws.RequestPortTypeImpl"/>
+               <value n="PT_SERVICE_INTERFACE" v="odi11g.webservice.ws.RequestPortType"/>
+            </hash>
+            <hash>
+               <value n="AUTO_SERVICE_INTERFACE"/>
+               <value n="DEFAULT_NAME" v="false"/>
+               <value n="MODEL_CLASS" v="oracle.jdeveloper.webservices.model.java.JavaPortType"/>
+               <value n="NAME" v="{xmlns.oracle.com/odi/OdiInvoke/}requestPortTypeCallback"/>
+               <hash n="PROPERTY_GROUPS"/>
+               <value n="PT_CLASS" v="odi11g.webservice.ws.RequestPortTypeCallbackImpl"/>
+               <value n="PT_SERVICE_INTERFACE" v="odi11g.webservice.ws.RequestPortTypeCallback"/>
+            </hash>
+         </list>
+         <url n="TARGET_PROJECT" path="../../../../View.jpr"/>
+         <value n="WS_CREATE_ONEWAY_OPERATIONS" v="true"/>
+         <value n="WS_ORIG_GEN_DIRECTION" v="TOP_DOWN"/>
+         <value n="WS_TARGET_NAMESPACE" v="xmlns.oracle.com/odi/OdiInvoke/"/>
+         <value n="WS_URI" v="OdiInvoke"/>
+         <url n="WS_WSDL_FILE" protocol="http" host="10.2.1.43" port="30000" path="/oraclediagent/OdiInvoke" query="wsdl"/>
+      </hash>
+      <value n="SERVICE_ASYNC" v="false"/>
+      <value n="WSDL_IS_LOCAL_COPY" v="false"/>
+   </hash>
+</jdevws:WebServiceProxy>
