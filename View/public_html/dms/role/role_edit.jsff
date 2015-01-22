@@ -31,7 +31,7 @@
           <f:facet name="statusbar"/>
           <af:table value="#{bindings.DmsRoleView.collectionModel}" var="row"
                     rows="#{bindings.DmsRoleView.rangeSize}"
-                    emptyText="#{bindings.DmsRoleView.viewable ? 'No data to display.' : 'Access Denied.'}"
+                    emptyText="#{viewBundle['dms.common.nodata']}"
                     fetchSize="#{bindings.DmsRoleView.rangeSize}"
                     rowBandingInterval="0"
                     filterModel="#{bindings.DmsRoleViewQuery.queryDescriptor}"
@@ -39,7 +39,8 @@
                     filterVisible="false" varStatus="vs"
                     selectedRowKeys="#{bindings.DmsRoleView.collectionModel.selectedRow}"
                     selectionListener="#{bindings.DmsRoleView.collectionModel.makeCurrent}"
-                    rowSelection="single" id="t1" editingMode="clickToEdit">
+                    rowSelection="single" id="t1" editingMode="clickToEdit"
+                    partialTriggers="::cb1">
             <af:column sortProperty="#{bindings.DmsRoleView.hints.RoleName.name}"
                        filterable="true" sortable="true"
                        headerText="#{bindings.DmsRoleView.hints.RoleName.label}"

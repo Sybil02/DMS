@@ -26,4 +26,15 @@
          <Custom JDBCDataSource="java:comp/env/jdbc/DMSConnDS"/>
       </AppModuleConfig>
    </AppModuleConfigBag>
+   <AppModuleConfigBag ApplicationName="team.epm.module.Odi11gModule">
+      <AppModuleConfig name="Odi11gModuleLocal" DeployPlatform="LOCAL" jbo.project=".Model" java.naming.factory.initial="oracle.jbo.common.JboInitialContextFactory" ApplicationName="team.epm.module.Odi11gModule">
+         <Security AppModuleJndiName="team.epm.module.Odi11gModule"/>
+         <Custom JDBCDataSource="java:comp/env/jdbc/DMSConnDS"/>
+      </AppModuleConfig>
+      <AppModuleConfig name="Odi11gModuleShared" DeployPlatform="LOCAL" jbo.project=".Model" java.naming.factory.initial="oracle.jbo.common.JboInitialContextFactory" ApplicationName="team.epm.module.Odi11gModule">
+         <AM-Pooling jbo.ampool.isuseexclusive="false" jbo.ampool.maxpoolsize="1"/>
+         <Security AppModuleJndiName="team.epm.module.Odi11gModule"/>
+         <Custom JDBCDataSource="java:comp/env/jdbc/DMSConnDS"/>
+      </AppModuleConfig>
+   </AppModuleConfigBag>
 </BC4JConfig>

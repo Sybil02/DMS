@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE ViewObject SYSTEM "jbo_03_01.dtd">
+<!---->
+<ViewObject
+  xmlns="http://xmlns.oracle.com/bc4j"
+  Name="Odi11ParameterView"
+  Version="11.1.1.64.93"
+  InheritPersonalization="true"
+  SelectList="Odi11Parameter.ID, 
+       Odi11Parameter.P_ALIAS, 
+       Odi11Parameter.P_NAME, 
+       Odi11Parameter.VALUE_SET_ID, 
+       Odi11Parameter.LOCALE, 
+       Odi11Parameter.CREATED_AT, 
+       Odi11Parameter.UPDATED_AT, 
+       Odi11Parameter.UPDATED_BY, 
+       Odi11Parameter.CREATED_BY"
+  FromList="ODI11_PARAMETER Odi11Parameter"
+  BindingStyle="OracleName"
+  CustomQuery="false"
+  PageIterMode="Full"
+  UseGlueCode="false">
+  <DesignTime>
+    <Attr Name="_codeGenFlag2" Value="Access|VarAccess"/>
+  </DesignTime>
+  <EntityUsage
+    Name="Odi11Parameter"
+    Entity="team.epm.odi11g.model.Odi11Parameter"/>
+  <ViewAttribute
+    Name="Id"
+    IsNotNull="true"
+    PrecisionRule="true"
+    EntityAttrName="Id"
+    EntityUsage="Odi11Parameter"
+    AliasName="ID"/>
+  <ViewAttribute
+    Name="PAlias"
+    IsNotNull="true"
+    PrecisionRule="true"
+    EntityAttrName="PAlias"
+    EntityUsage="Odi11Parameter"
+    AliasName="P_ALIAS"/>
+  <ViewAttribute
+    Name="PName"
+    IsNotNull="true"
+    PrecisionRule="true"
+    EntityAttrName="PName"
+    EntityUsage="Odi11Parameter"
+    AliasName="P_NAME"/>
+  <ViewAttribute
+    Name="ValueSetId"
+    PrecisionRule="true"
+    EntityAttrName="ValueSetId"
+    EntityUsage="Odi11Parameter"
+    AliasName="VALUE_SET_ID"/>
+  <ViewAttribute
+    Name="Locale"
+    IsNotNull="true"
+    PrecisionRule="true"
+    EntityAttrName="Locale"
+    EntityUsage="Odi11Parameter"
+    AliasName="LOCALE"/>
+  <ViewAttribute
+    Name="CreatedAt"
+    PrecisionRule="true"
+    EntityAttrName="CreatedAt"
+    EntityUsage="Odi11Parameter"
+    AliasName="CREATED_AT"/>
+  <ViewAttribute
+    Name="UpdatedAt"
+    PrecisionRule="true"
+    EntityAttrName="UpdatedAt"
+    EntityUsage="Odi11Parameter"
+    AliasName="UPDATED_AT"/>
+  <ViewAttribute
+    Name="UpdatedBy"
+    PrecisionRule="true"
+    EntityAttrName="UpdatedBy"
+    EntityUsage="Odi11Parameter"
+    AliasName="UPDATED_BY"/>
+  <ViewAttribute
+    Name="CreatedBy"
+    PrecisionRule="true"
+    EntityAttrName="CreatedBy"
+    EntityUsage="Odi11Parameter"
+    AliasName="CREATED_BY"/>
+</ViewObject>

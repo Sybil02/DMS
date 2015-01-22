@@ -1,72 +1,90 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE JboProject SYSTEM "jbo_03_01.dtd">
 <!---->
+
 <JboProject
    xmlns="http://xmlns.oracle.com/bc4j"
    Name="Model"
    Version="11.1.1.64.93"
    SeparateXMLFiles="true"
-   PackageName="" >
+   PackageName="">
    <DesignTime>
-      <Attr Name="_jprName" Value="../Model.jpr" />
-      <Attr Name="_appModuleNames1" Value="team.epm.module.DcmModule" />
-      <Attr Name="_appModuleNames0" Value="team.epm.module.DmsModule" />
-      <Attr Name="_NamedConnection" Value="DMSConn" />
+      <Attr Name="_appModuleNames2" Value="team.epm.module.Odi11gModule"/>
+      <Attr Name="_jprName" Value="../Model.jpr"/>
+      <Attr Name="_appModuleNames1" Value="team.epm.module.DcmModule"/>
+      <Attr Name="_appModuleNames0" Value="team.epm.module.DmsModule"/>
+      <Attr Name="_NamedConnection" Value="DMSConn"/>
    </DesignTime>
    <Containee
       Name="model"
-      ObjectType="JboPackage"
-      PackageName="team.epm.dcm.model" >
+      PackageName="team.epm.dcm.model"
+      ObjectType="JboPackage">
       <DesignTime>
-         <Attr Name="_EO" Value="true" />
+         <Attr Name="_EO" Value="true"/>
       </DesignTime>
    </Containee>
    <Containee
       Name="view"
-      ObjectType="JboPackage"
-      PackageName="team.epm.dcm.view" >
+      PackageName="team.epm.dcm.view"
+      ObjectType="JboPackage">
       <DesignTime>
-         <Attr Name="_VO" Value="true" />
+         <Attr Name="_VO" Value="true"/>
       </DesignTime>
    </Containee>
    <Containee
       Name="viewlink"
-      ObjectType="JboPackage"
-      PackageName="team.epm.dcm.view.viewlink" >
+      PackageName="team.epm.dcm.view.viewlink"
+      ObjectType="JboPackage">
       <DesignTime>
-         <Attr Name="_VL" Value="true" />
+         <Attr Name="_VL" Value="true"/>
       </DesignTime>
    </Containee>
    <Containee
       Name="dms"
-      ObjectType="JboPackage"
-      PackageName="team.epm.dms" >
+      PackageName="team.epm.dms"
+      ObjectType="JboPackage">
       <DesignTime>
-         <Attr Name="_VL" Value="true" />
+         <Attr Name="_VL" Value="true"/>
       </DesignTime>
    </Containee>
    <Containee
       Name="model"
-      ObjectType="JboPackage"
-      PackageName="team.epm.dms.model" >
+      PackageName="team.epm.dms.model"
+      ObjectType="JboPackage">
       <DesignTime>
-         <Attr Name="_EO" Value="true" />
+         <Attr Name="_EO" Value="true"/>
       </DesignTime>
    </Containee>
    <Containee
       Name="view"
-      ObjectType="JboPackage"
-      PackageName="team.epm.dms.view" >
+      PackageName="team.epm.dms.view"
+      ObjectType="JboPackage">
       <DesignTime>
-         <Attr Name="_VO" Value="true" />
+         <Attr Name="_VO" Value="true"/>
       </DesignTime>
    </Containee>
    <Containee
       Name="module"
-      ObjectType="JboPackage"
-      PackageName="team.epm.module" >
+      PackageName="team.epm.module"
+      ObjectType="JboPackage">
       <DesignTime>
-         <Attr Name="_AM" Value="true" />
+         <Attr Name="_AM" Value="true"/>
+      </DesignTime>
+   </Containee>
+   <Containee
+      Name="model"
+      PackageName="team.epm.odi11g.model"
+      ObjectType="JboPackage">
+      <DesignTime>
+         <Attr Name="_EO" Value="true"/>
+      </DesignTime>
+   </Containee>
+   <Containee
+      Name="view"
+      PackageName="team.epm.odi11g.view"
+      ObjectType="JboPackage">
+      <DesignTime>
+         <Attr Name="_VO" Value="true"/>
       </DesignTime>
    </Containee>
 </JboProject>

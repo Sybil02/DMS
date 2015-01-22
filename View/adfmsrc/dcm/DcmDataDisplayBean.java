@@ -242,7 +242,7 @@ public class DcmDataDisplayBean extends AbstractExcel2007Writer {
             trans.commit();
             stat.close();
             flag = this.handleData("EDIT", curComRecordId);
-            this.initModelData();
+            if(flag){ this.initModelData();}
         } catch (Exception e) {
             flag = false;
             if (e.getMessage().length() > 2048) {
