@@ -10,10 +10,12 @@
   DBObjectName="ODI11_SCENE"
   AliasName="Odi11Scene"
   BindingStyle="OracleName"
-  UseGlueCode="false">
+  UseGlueCode="false"
+  RowClass="team.epm.odi11g.model.Odi11SceneImpl">
   <DesignTime>
     <Attr Name="_codeGenFlag2" Value="Access"/>
     <AttrArray Name="_publishEvents"/>
+    <Attr Name="_isCodegen" Value="true"/>
   </DesignTime>
   <Attribute
     Name="Id"
@@ -28,6 +30,7 @@
     <DesignTime>
       <Attr Name="_DisplaySize" Value="32"/>
     </DesignTime>
+    <TransientExpression><![CDATA[java.util.UUID.randomUUID().toString().replace("-", "")]]></TransientExpression>
   </Attribute>
   <Attribute
     Name="SceneAlias"
@@ -41,6 +44,17 @@
     <DesignTime>
       <Attr Name="_DisplaySize" Value="100"/>
     </DesignTime>
+    <Properties>
+      <CustomProperties>
+        <Property
+          Name="isMultiLangAttr"
+          Value="true"/>
+      </CustomProperties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="odi11g.scene.alias"/>
+      </SchemaBasedProperties>
+    </Properties>
   </Attribute>
   <Attribute
     Name="SceneName"
@@ -54,6 +68,12 @@
     <DesignTime>
       <Attr Name="_DisplaySize" Value="100"/>
     </DesignTime>
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="odi11g.scene.name"/>
+      </SchemaBasedProperties>
+    </Properties>
   </Attribute>
   <Attribute
     Name="SceneVersion"
@@ -67,19 +87,31 @@
     <DesignTime>
       <Attr Name="_DisplaySize" Value="100"/>
     </DesignTime>
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="odi11g.scene.version"/>
+      </SchemaBasedProperties>
+    </Properties>
   </Attribute>
   <Attribute
     Name="AgentId"
-    IsNotNull="true"
     Precision="32"
     ColumnName="AGENT_ID"
     SQLType="VARCHAR"
     Type="java.lang.String"
     ColumnType="VARCHAR2"
-    TableName="ODI11_SCENE">
+    TableName="ODI11_SCENE"
+    IsNotNull="true">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="32"/>
     </DesignTime>
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="odi11g.scene.agent"/>
+      </SchemaBasedProperties>
+    </Properties>
   </Attribute>
   <Attribute
     Name="SceneContext"
@@ -93,10 +125,15 @@
     <DesignTime>
       <Attr Name="_DisplaySize" Value="100"/>
     </DesignTime>
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="odi11g.scene.context"/>
+      </SchemaBasedProperties>
+    </Properties>
   </Attribute>
   <Attribute
     Name="CatId"
-    IsNotNull="true"
     Precision="32"
     ColumnName="CAT_ID"
     SQLType="VARCHAR"
@@ -106,6 +143,12 @@
     <DesignTime>
       <Attr Name="_DisplaySize" Value="32"/>
     </DesignTime>
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="odi11g.scene.cat"/>
+      </SchemaBasedProperties>
+    </Properties>
   </Attribute>
   <Attribute
     Name="Locale"
@@ -120,6 +163,7 @@
     <DesignTime>
       <Attr Name="_DisplaySize" Value="10"/>
     </DesignTime>
+    <TransientExpression><![CDATA[adf.context.locale]]></TransientExpression>
   </Attribute>
   <Attribute
     Name="CreatedAt"
@@ -131,6 +175,17 @@
     <DesignTime>
       <Attr Name="_DisplaySize" Value="7"/>
     </DesignTime>
+    <TransientExpression><![CDATA[adf.currentDateTime]]></TransientExpression>
+    <Properties>
+      <SchemaBasedProperties>
+        <FMT_FORMATTER
+          ResId="team.epm.odi11g.model.Odi11Scene.CreatedAt_FMT_FORMATTER"/>
+        <FMT_FORMAT
+          ResId="team.epm.odi11g.model.Odi11Scene.CreatedAt_FMT_FORMAT"/>
+        <LABEL
+          ResId="createdAt"/>
+      </SchemaBasedProperties>
+    </Properties>
   </Attribute>
   <Attribute
     Name="UpdatedAt"
@@ -142,6 +197,17 @@
     <DesignTime>
       <Attr Name="_DisplaySize" Value="7"/>
     </DesignTime>
+    <TransientExpression><![CDATA[adf.currentDateTime]]></TransientExpression>
+    <Properties>
+      <SchemaBasedProperties>
+        <FMT_FORMATTER
+          ResId="team.epm.odi11g.model.Odi11Scene.UpdatedAt_FMT_FORMATTER"/>
+        <FMT_FORMAT
+          ResId="team.epm.odi11g.model.Odi11Scene.UpdatedAt_FMT_FORMAT"/>
+        <LABEL
+          ResId="updatedAt"/>
+      </SchemaBasedProperties>
+    </Properties>
   </Attribute>
   <Attribute
     Name="UpdatedBy"
@@ -154,6 +220,13 @@
     <DesignTime>
       <Attr Name="_DisplaySize" Value="32"/>
     </DesignTime>
+    <TransientExpression><![CDATA[adf.userSession.userData.userId]]></TransientExpression>
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="updatedBy"/>
+      </SchemaBasedProperties>
+    </Properties>
   </Attribute>
   <Attribute
     Name="CreatedBy"
@@ -162,10 +235,37 @@
     SQLType="VARCHAR"
     Type="java.lang.String"
     ColumnType="VARCHAR2"
+    TableName="ODI11_SCENE"
+    IsUpdateable="while_insert">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="32"/>
+    </DesignTime>
+    <TransientExpression><![CDATA[adf.userSession.userData.userId]]></TransientExpression>
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="createdBy"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </Attribute>
+  <Attribute
+    Name="WorkrepId"
+    IsNotNull="true"
+    Precision="32"
+    ColumnName="WORKREP_ID"
+    SQLType="VARCHAR"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
     TableName="ODI11_SCENE">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="32"/>
     </DesignTime>
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="odi11g.scene.workrep"/>
+      </SchemaBasedProperties>
+    </Properties>
   </Attribute>
   <Key
     Name="PkOdi11Scene"
@@ -266,4 +366,19 @@
       <Item Value="team.epm.odi11g.model.Odi11Scene.Locale"/>
     </AttrArray>
   </Key>
+  <Key
+    Name="SysC008499">
+    <DesignTime>
+      <Attr Name="_DBObjectName" Value="SYS_C008499"/>
+      <Attr Name="_checkCondition" Value='"WORKREP_ID" IS NOT NULL'/>
+      <Attr Name="_isCheck" Value="true"/>
+    </DesignTime>
+    <AttrArray Name="Attributes">
+      <Item Value="team.epm.odi11g.model.Odi11Scene.WorkrepId"/>
+    </AttrArray>
+  </Key>
+  <ResourceBundle>
+    <PropertiesBundle
+      PropertiesFile="ModelBundle"/>
+  </ResourceBundle>
 </Entity>

@@ -22,10 +22,40 @@
   BindingStyle="OracleName"
   CustomQuery="false"
   PageIterMode="Full"
-  UseGlueCode="false">
+  UseGlueCode="false"
+  Where="Odi11Agent.LOCALE=:locale"
+  OrderBy="Odi11Agent.AGENT_ALIAS">
   <DesignTime>
     <Attr Name="_codeGenFlag2" Value="Access|VarAccess"/>
   </DesignTime>
+  <Variable
+    Name="locale"
+    Kind="where"
+    Type="java.lang.String">
+    <TransientExpression><![CDATA[adf.context.locale]]></TransientExpression>
+  </Variable>
+  <ViewAccessor
+    Name="LST_USER"
+    ViewObjectName="team.epm.dms.view.DmsUserView"
+    RowLevelBinds="false"/>
+  <ListBinding
+    Name="LOV_UpdatedBy"
+    ListVOName="LST_USER"
+    ListRangeSize="-1"
+    NullValueFlag="start"
+    NullValueId="${adfBundle['oracle.javatools.resourcebundle.SystemBundle']['NULL_VALUE_RESID']}"
+    MRUCount="0">
+    <AttrArray Name="AttrNames">
+      <Item Value="UpdatedBy"/>
+    </AttrArray>
+    <AttrArray Name="ListAttrNames">
+      <Item Value="Id"/>
+    </AttrArray>
+    <AttrArray Name="ListDisplayAttrNames">
+      <Item Value="Name"/>
+    </AttrArray>
+    <DisplayCriteria/>
+  </ListBinding>
   <EntityUsage
     Name="Odi11Agent"
     Entity="team.epm.odi11g.model.Odi11Agent"/>
@@ -35,7 +65,8 @@
     PrecisionRule="true"
     EntityAttrName="Id"
     EntityUsage="Odi11Agent"
-    AliasName="ID"/>
+    AliasName="ID"
+    IsUpdateable="while_insert"/>
   <ViewAttribute
     Name="AgentAlias"
     IsNotNull="true"
@@ -102,7 +133,15 @@
     PrecisionRule="true"
     EntityAttrName="UpdatedBy"
     EntityUsage="Odi11Agent"
-    AliasName="UPDATED_BY"/>
+    AliasName="UPDATED_BY"
+    LOVName="LOV_UpdatedBy">
+    <Properties>
+      <SchemaBasedProperties>
+        <CONTROLTYPE
+          Value="choice"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewAttribute
     Name="CreatedBy"
     PrecisionRule="true"

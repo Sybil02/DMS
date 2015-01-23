@@ -1,0 +1,568 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.1"
+          xmlns:af="http://xmlns.oracle.com/adf/faces/rich"
+          xmlns:f="http://java.sun.com/jsf/core"
+          xmlns:c="http://java.sun.com/jsp/jstl/core"
+          xmlns:h="http://java.sun.com/jsf/html">
+  <c:set var="viewBundle" value="#{adfBundle['dms_v']}"/>
+  <af:panelStretchLayout id="psl1" topHeight="0px">
+    <f:facet name="top">
+      <af:panelGroupLayout id="pgl1">
+        <af:popup id="p1" autoCancel="disabled" childCreation="deferred">
+          <af:panelWindow id="pw1"
+                          title="#{viewBundle['odi11g.workrep.manage']}"
+                          modal="true">
+            <af:panelStretchLayout id="psl2"
+                                   inlineStyle="width:800px;height:450px">
+              <f:facet name="center">
+                <af:panelCollection id="pc2">
+                  <f:facet name="menus"/>
+                  <f:facet name="toolbar">
+                    <af:toolbar id="t4">
+                      <af:commandButton actionListener="#{bindings.CreateInsertWorkrep.execute}"
+                                        text="#{viewBundle['dms.common.add']}"
+                                        id="cb7"/>
+                      <af:commandButton actionListener="#{bindings.DeleteWorkrep.execute}"
+                                        text="#{viewBundle['dcm.common.delete']}"
+                                        id="cb8"/>
+                      <af:commandButton actionListener="#{bindings.Commit.execute}"
+                                        text="#{viewBundle['dms.common.save']}"
+                                        id="cb9"/>
+                      <af:commandButton actionListener="#{bindings.Rollback.execute}"
+                                        text="#{viewBundle['dms.common.cancel']}"
+                                        immediate="true" id="cb10">
+                        <af:resetActionListener/>
+                      </af:commandButton>
+                    </af:toolbar>
+                  </f:facet>
+                  <f:facet name="statusbar"/>
+                  <af:table value="#{bindings.Odi11WorkrepView.collectionModel}"
+                            var="row" editingMode="clickToEdit"
+                            rows="#{bindings.Odi11WorkrepView.rangeSize}"
+                            emptyText="#{viewBundle['dms.common.nodata']}"
+                            fetchSize="#{bindings.Odi11WorkrepView.rangeSize}"
+                            rowBandingInterval="0"
+                            selectedRowKeys="#{bindings.Odi11WorkrepView.collectionModel.selectedRow}"
+                            selectionListener="#{bindings.Odi11WorkrepView.collectionModel.makeCurrent}"
+                            rowSelection="single" id="t3"
+                            partialTriggers="::cb7 ::cb8">
+                    <af:column sortProperty="#{bindings.Odi11WorkrepView.hints.RepAlias.name}"
+                               sortable="false"
+                               headerText="#{bindings.Odi11WorkrepView.hints.RepAlias.label}"
+                               id="c10">
+                      <af:inputText value="#{row.bindings.RepAlias.inputValue}"
+                                    label="#{bindings.Odi11WorkrepView.hints.RepAlias.label}"
+                                    required="#{bindings.Odi11WorkrepView.hints.RepAlias.mandatory}"
+                                    columns="#{bindings.Odi11WorkrepView.hints.RepAlias.displayWidth}"
+                                    maximumLength="#{bindings.Odi11WorkrepView.hints.RepAlias.precision}"
+                                    shortDesc="#{bindings.Odi11WorkrepView.hints.RepAlias.tooltip}"
+                                    id="it8">
+                        <f:validator binding="#{row.bindings.RepAlias.validator}"/>
+                      </af:inputText>
+                    </af:column>
+                    <af:column sortProperty="#{bindings.Odi11WorkrepView.hints.RepName.name}"
+                               sortable="false"
+                               headerText="#{bindings.Odi11WorkrepView.hints.RepName.label}"
+                               id="c11">
+                      <af:inputText value="#{row.bindings.RepName.inputValue}"
+                                    label="#{bindings.Odi11WorkrepView.hints.RepName.label}"
+                                    required="#{bindings.Odi11WorkrepView.hints.RepName.mandatory}"
+                                    columns="#{bindings.Odi11WorkrepView.hints.RepName.displayWidth}"
+                                    maximumLength="#{bindings.Odi11WorkrepView.hints.RepName.precision}"
+                                    shortDesc="#{bindings.Odi11WorkrepView.hints.RepName.tooltip}"
+                                    id="it7">
+                        <f:validator binding="#{row.bindings.RepName.validator}"/>
+                      </af:inputText>
+                    </af:column>
+                    <af:column sortProperty="#{bindings.Odi11WorkrepView.hints.LoginUser.name}"
+                               sortable="false"
+                               headerText="#{bindings.Odi11WorkrepView.hints.LoginUser.label}"
+                               id="c9">
+                      <af:inputText value="#{row.bindings.LoginUser.inputValue}"
+                                    label="#{bindings.Odi11WorkrepView.hints.LoginUser.label}"
+                                    required="#{bindings.Odi11WorkrepView.hints.LoginUser.mandatory}"
+                                    columns="#{bindings.Odi11WorkrepView.hints.LoginUser.displayWidth}"
+                                    maximumLength="#{bindings.Odi11WorkrepView.hints.LoginUser.precision}"
+                                    shortDesc="#{bindings.Odi11WorkrepView.hints.LoginUser.tooltip}"
+                                    id="it6">
+                        <f:validator binding="#{row.bindings.LoginUser.validator}"/>
+                      </af:inputText>
+                    </af:column>
+                    <af:column sortProperty="#{bindings.Odi11WorkrepView.hints.LoginPwd.name}"
+                               sortable="false"
+                               headerText="#{bindings.Odi11WorkrepView.hints.LoginPwd.label}"
+                               id="c8">
+                      <af:inputText value="#{row.bindings.LoginPwd.inputValue}"
+                                    label="#{bindings.Odi11WorkrepView.hints.LoginPwd.label}"
+                                    required="#{bindings.Odi11WorkrepView.hints.LoginPwd.mandatory}"
+                                    columns="#{bindings.Odi11WorkrepView.hints.LoginPwd.displayWidth}"
+                                    maximumLength="#{bindings.Odi11WorkrepView.hints.LoginPwd.precision}"
+                                    shortDesc="#{bindings.Odi11WorkrepView.hints.LoginPwd.tooltip}"
+                                    id="it5" secret="true">
+                        <f:validator binding="#{row.bindings.LoginPwd.validator}"/>
+                      </af:inputText>
+                    </af:column>
+                  </af:table>
+                </af:panelCollection>
+              </f:facet>
+            </af:panelStretchLayout>
+          </af:panelWindow>
+        </af:popup>
+        <af:popup id="p2" autoCancel="disabled" childCreation="deferred">
+          <af:panelWindow id="pw2" title="#{viewBundle['odi11g.agent.manage']}"
+                          modal="true">
+            <af:panelStretchLayout id="psl3"
+                                   inlineStyle="width:800px;height:450px">
+              <f:facet name="center">
+                <af:panelCollection id="pc3">
+                  <f:facet name="menus"/>
+                  <f:facet name="toolbar">
+                    <af:toolbar id="t6">
+                      <af:commandButton actionListener="#{bindings.CreateInsertAgent.execute}"
+                                        text="#{viewBundle['dms.common.add']}"
+                                        id="cb11"/>
+                      <af:commandButton actionListener="#{bindings.DeleteAgent.execute}"
+                                        text="#{viewBundle['dcm.common.delete']}"
+                                        id="cb12"/>
+                      <af:commandButton actionListener="#{bindings.Commit.execute}"
+                                        text="#{viewBundle['dms.common.save']}"
+                                        id="cb13"/>
+                      <af:commandButton actionListener="#{bindings.Rollback.execute}"
+                                        text="#{viewBundle['dms.common.cancel']}"
+                                        immediate="true" id="cb14">
+                        <af:resetActionListener/>
+                      </af:commandButton>
+                    </af:toolbar>
+                  </f:facet>
+                  <f:facet name="statusbar"/>
+                  <af:table value="#{bindings.Odi11AgentView.collectionModel}"
+                            var="row" editingMode="clickToEdit"
+                            rows="#{bindings.Odi11AgentView.rangeSize}"
+                            emptyText="#{viewBundle['dms.common.nodata']}"
+                            fetchSize="#{bindings.Odi11AgentView.rangeSize}"
+                            rowBandingInterval="0"
+                            selectedRowKeys="#{bindings.Odi11AgentView.collectionModel.selectedRow}"
+                            selectionListener="#{bindings.Odi11AgentView.collectionModel.makeCurrent}"
+                            rowSelection="single" id="t5"
+                            partialTriggers="::cb11 ::cb12">
+                    <af:column sortProperty="#{bindings.Odi11AgentView.hints.AgentAlias.name}"
+                               sortable="false"
+                               headerText="#{bindings.Odi11AgentView.hints.AgentAlias.label}"
+                               id="c13">
+                      <af:inputText value="#{row.bindings.AgentAlias.inputValue}"
+                                    label="#{bindings.Odi11AgentView.hints.AgentAlias.label}"
+                                    required="#{bindings.Odi11AgentView.hints.AgentAlias.mandatory}"
+                                    columns="#{bindings.Odi11AgentView.hints.AgentAlias.displayWidth}"
+                                    maximumLength="#{bindings.Odi11AgentView.hints.AgentAlias.precision}"
+                                    shortDesc="#{bindings.Odi11AgentView.hints.AgentAlias.tooltip}"
+                                    id="it11">
+                        <f:validator binding="#{row.bindings.AgentAlias.validator}"/>
+                      </af:inputText>
+                    </af:column>
+                    <af:column sortProperty="#{bindings.Odi11AgentView.hints.AgentName.name}"
+                               sortable="false"
+                               headerText="#{bindings.Odi11AgentView.hints.AgentName.label}"
+                               id="c16">
+                      <af:inputText value="#{row.bindings.AgentName.inputValue}"
+                                    label="#{bindings.Odi11AgentView.hints.AgentName.label}"
+                                    required="#{bindings.Odi11AgentView.hints.AgentName.mandatory}"
+                                    columns="#{bindings.Odi11AgentView.hints.AgentName.displayWidth}"
+                                    maximumLength="#{bindings.Odi11AgentView.hints.AgentName.precision}"
+                                    shortDesc="#{bindings.Odi11AgentView.hints.AgentName.tooltip}"
+                                    id="it13">
+                        <f:validator binding="#{row.bindings.AgentName.validator}"/>
+                      </af:inputText>
+                    </af:column>
+                    <af:column sortProperty="#{bindings.Odi11AgentView.hints.AgentHost.name}"
+                               sortable="false"
+                               headerText="#{bindings.Odi11AgentView.hints.AgentHost.label}"
+                               id="c17">
+                      <af:inputText value="#{row.bindings.AgentHost.inputValue}"
+                                    label="#{bindings.Odi11AgentView.hints.AgentHost.label}"
+                                    required="#{bindings.Odi11AgentView.hints.AgentHost.mandatory}"
+                                    columns="#{bindings.Odi11AgentView.hints.AgentHost.displayWidth}"
+                                    maximumLength="#{bindings.Odi11AgentView.hints.AgentHost.precision}"
+                                    shortDesc="#{bindings.Odi11AgentView.hints.AgentHost.tooltip}"
+                                    id="it10">
+                        <f:validator binding="#{row.bindings.AgentHost.validator}"/>
+                      </af:inputText>
+                    </af:column>
+                    <af:column sortProperty="#{bindings.Odi11AgentView.hints.AgentContext.name}"
+                               sortable="false"
+                               headerText="#{bindings.Odi11AgentView.hints.AgentContext.label}"
+                               id="c12">
+                      <af:inputText value="#{row.bindings.AgentContext.inputValue}"
+                                    label="#{bindings.Odi11AgentView.hints.AgentContext.label}"
+                                    required="#{bindings.Odi11AgentView.hints.AgentContext.mandatory}"
+                                    columns="#{bindings.Odi11AgentView.hints.AgentContext.displayWidth}"
+                                    maximumLength="#{bindings.Odi11AgentView.hints.AgentContext.precision}"
+                                    shortDesc="#{bindings.Odi11AgentView.hints.AgentContext.tooltip}"
+                                    id="it9">
+                        <f:validator binding="#{row.bindings.AgentContext.validator}"/>
+                      </af:inputText>
+                    </af:column>
+                    <af:column sortProperty="#{bindings.Odi11AgentView.hints.AgentPort.name}"
+                               sortable="false"
+                               headerText="#{bindings.Odi11AgentView.hints.AgentPort.label}"
+                               id="c14">
+                      <af:inputText value="#{row.bindings.AgentPort.inputValue}"
+                                    label="#{bindings.Odi11AgentView.hints.AgentPort.label}"
+                                    required="#{bindings.Odi11AgentView.hints.AgentPort.mandatory}"
+                                    columns="#{bindings.Odi11AgentView.hints.AgentPort.displayWidth}"
+                                    maximumLength="#{bindings.Odi11AgentView.hints.AgentPort.precision}"
+                                    shortDesc="#{bindings.Odi11AgentView.hints.AgentPort.tooltip}"
+                                    id="it14">
+                        <f:validator binding="#{row.bindings.AgentPort.validator}"/>
+                      </af:inputText>
+                    </af:column>
+                    <af:column sortProperty="#{bindings.Odi11AgentView.hints.Protocol.name}"
+                               sortable="false"
+                               headerText="#{bindings.Odi11AgentView.hints.Protocol.label}"
+                               id="c15">
+                      <af:inputText value="#{row.bindings.Protocol.inputValue}"
+                                    label="#{bindings.Odi11AgentView.hints.Protocol.label}"
+                                    required="#{bindings.Odi11AgentView.hints.Protocol.mandatory}"
+                                    columns="#{bindings.Odi11AgentView.hints.Protocol.displayWidth}"
+                                    maximumLength="#{bindings.Odi11AgentView.hints.Protocol.precision}"
+                                    shortDesc="#{bindings.Odi11AgentView.hints.Protocol.tooltip}"
+                                    id="it12">
+                        <f:validator binding="#{row.bindings.Protocol.validator}"/>
+                      </af:inputText>
+                    </af:column>
+                  </af:table>
+                </af:panelCollection>
+              </f:facet>
+            </af:panelStretchLayout>
+          </af:panelWindow>
+        </af:popup>
+        <af:popup id="p3" autoCancel="disabled" childCreation="deferred">
+          <af:panelWindow id="pw3" modal="true"
+                          title="#{viewBundle['odi11g.param.manage']}">
+            <af:panelStretchLayout id="psl4"
+                                   inlineStyle="width:800px;height:450px">
+              <f:facet name="center">
+                <af:panelCollection id="pc4">
+                  <f:facet name="menus"/>
+                  <f:facet name="toolbar">
+                    <af:toolbar id="t8">
+                      <af:commandButton actionListener="#{bindings.CreateInsertParam.execute}"
+                                        text="#{viewBundle['dms.common.add']}"
+                                        id="cb16"/>
+                      <af:commandButton actionListener="#{bindings.DeleteParam.execute}"
+                                        text="#{viewBundle['dcm.common.delete']}"
+                                        id="cb17"/>
+                      <af:commandButton actionListener="#{bindings.Commit.execute}"
+                                        text="#{viewBundle['dms.common.save']}"
+                                        id="cb18"/>
+                      <af:commandButton actionListener="#{bindings.Rollback.execute}"
+                                        text="#{viewBundle['dms.common.cancel']}"
+                                        immediate="true" id="cb19">
+                        <af:resetActionListener/>
+                      </af:commandButton>
+                    </af:toolbar>
+                  </f:facet>
+                  <f:facet name="statusbar"/>
+                  <af:table value="#{bindings.Odi11ParameterView.collectionModel}"
+                            var="row"
+                            rows="#{bindings.Odi11ParameterView.rangeSize}"
+                            emptyText="#{viewBundle['dms.common.nodata']}"
+                            fetchSize="#{bindings.Odi11ParameterView.rangeSize}"
+                            rowBandingInterval="0"
+                            selectedRowKeys="#{bindings.Odi11ParameterView.collectionModel.selectedRow}"
+                            selectionListener="#{bindings.Odi11ParameterView.collectionModel.makeCurrent}"
+                            rowSelection="single" id="t7"
+                            editingMode="clickToEdit"
+                            partialTriggers="::cb16 ::cb17">
+                    <af:column sortProperty="#{bindings.Odi11ParameterView.hints.PAlias.name}"
+                               sortable="false"
+                               headerText="#{bindings.Odi11ParameterView.hints.PAlias.label}"
+                               id="c18">
+                      <af:inputText value="#{row.bindings.PAlias.inputValue}"
+                                    label="#{bindings.Odi11ParameterView.hints.PAlias.label}"
+                                    required="#{bindings.Odi11ParameterView.hints.PAlias.mandatory}"
+                                    columns="#{bindings.Odi11ParameterView.hints.PAlias.displayWidth}"
+                                    maximumLength="#{bindings.Odi11ParameterView.hints.PAlias.precision}"
+                                    shortDesc="#{bindings.Odi11ParameterView.hints.PAlias.tooltip}"
+                                    id="it16">
+                        <f:validator binding="#{row.bindings.PAlias.validator}"/>
+                      </af:inputText>
+                    </af:column>
+                    <af:column sortProperty="#{bindings.Odi11ParameterView.hints.PName.name}"
+                               sortable="false"
+                               headerText="#{bindings.Odi11ParameterView.hints.PName.label}"
+                               id="c20">
+                      <af:inputText value="#{row.bindings.PName.inputValue}"
+                                    label="#{bindings.Odi11ParameterView.hints.PName.label}"
+                                    required="#{bindings.Odi11ParameterView.hints.PName.mandatory}"
+                                    columns="#{bindings.Odi11ParameterView.hints.PName.displayWidth}"
+                                    maximumLength="#{bindings.Odi11ParameterView.hints.PName.precision}"
+                                    shortDesc="#{bindings.Odi11ParameterView.hints.PName.tooltip}"
+                                    id="it15">
+                        <f:validator binding="#{row.bindings.PName.validator}"/>
+                      </af:inputText>
+                    </af:column>
+                    <af:column sortProperty="#{bindings.Odi11ParameterView.hints.ValueSetId.name}"
+                               sortable="false"
+                               headerText="#{bindings.Odi11ParameterView.hints.ValueSetId.label}"
+                               id="c19">
+                      <af:selectOneChoice value="#{row.bindings.ValueSetId.inputValue}"
+                                          label="#{row.bindings.ValueSetId.label}"
+                                          required="#{bindings.Odi11ParameterView.hints.ValueSetId.mandatory}"
+                                          shortDesc="#{bindings.Odi11ParameterView.hints.ValueSetId.tooltip}"
+                                          id="soc4">
+                        <f:selectItems value="#{row.bindings.ValueSetId.items}"
+                                       id="si4"/>
+                      </af:selectOneChoice>
+                    </af:column>
+                  </af:table>
+                </af:panelCollection>
+              </f:facet>
+            </af:panelStretchLayout>
+          </af:panelWindow>
+        </af:popup>
+        <af:popup id="p4" autoCancel="disabled"
+                  binding="#{backingBeanScope.SceneMBean.selectParamPopup}">
+          <af:panelWindow id="pw4" title="#{viewBundle['odi11g.scene.param']}" modal="true">
+            <af:panelStretchLayout id="psl5" inlineStyle="width:800px;height:450px">
+              <f:facet name="center">
+                <af:panelCollection id="pc5">
+                  <f:facet name="menus"/>
+                  <f:facet name="toolbar">
+                    <af:toolbar id="t10">
+                      <af:commandButton text="#{viewBundle['dms.common.add']}" id="cb20"
+                                        actionListener="#{backingBeanScope.SceneMBean.addSceneParam}"/>
+                      <af:commandButton actionListener="#{bindings.DeleteSceneParam.execute}"
+                                        text="#{viewBundle['dcm.common.delete']}"
+                                        id="cb21"/>
+                      <af:commandButton actionListener="#{bindings.Commit.execute}"
+                                        text="#{viewBundle['dms.common.save']}"
+                                        id="cb22"/>
+                      <af:commandButton actionListener="#{bindings.Rollback.execute}"
+                                        text="#{viewBundle['dms.common.cancel']}"
+                                        disabled="#{!bindings.Rollback.enabled}"
+                                        immediate="true" id="cb23">
+                        <af:resetActionListener/>
+                      </af:commandButton>
+                    </af:toolbar>
+                  </f:facet>
+                  <f:facet name="statusbar"/>
+                  <af:table value="#{bindings.Odi11SceneParamView.collectionModel}"
+                            var="row" editingMode="clickToEdit"
+                            rows="#{bindings.Odi11SceneParamView.rangeSize}"
+                            emptyText="#{viewBundle['dms.common.nodata']}"
+                            fetchSize="#{bindings.Odi11SceneParamView.rangeSize}"
+                            rowBandingInterval="0"
+                            selectedRowKeys="#{bindings.Odi11SceneParamView.collectionModel.selectedRow}"
+                            selectionListener="#{bindings.Odi11SceneParamView.collectionModel.makeCurrent}"
+                            rowSelection="single" id="t9"
+                            partialTriggers="::cb21">
+                    <af:column sortProperty="#{bindings.Odi11SceneParamView.hints.ParameterId.name}"
+                               sortable="false"
+                               headerText="#{bindings.Odi11SceneParamView.hints.ParameterId.label}"
+                               id="c22">
+                      <af:selectOneChoice value="#{row.bindings.ParameterId.inputValue}"
+                                          label="#{row.bindings.ParameterId.label}"
+                                          required="#{bindings.Odi11SceneParamView.hints.ParameterId.mandatory}"
+                                          shortDesc="#{bindings.Odi11SceneParamView.hints.ParameterId.tooltip}"
+                                          id="soc6">
+                        <f:selectItems value="#{row.bindings.ParameterId.items}"
+                                       id="si6"/>
+                      </af:selectOneChoice>
+                    </af:column>
+                    <af:column sortProperty="#{bindings.Odi11SceneParamView.hints.Idx.name}"
+                               sortable="false"
+                               headerText="#{bindings.Odi11SceneParamView.hints.Idx.label}"
+                               id="c25">
+                      <af:inputText value="#{row.bindings.Idx.inputValue}"
+                                    label="#{bindings.Odi11SceneParamView.hints.Idx.label}"
+                                    required="#{bindings.Odi11SceneParamView.hints.Idx.mandatory}"
+                                    columns="#{bindings.Odi11SceneParamView.hints.Idx.displayWidth}"
+                                    maximumLength="#{bindings.Odi11SceneParamView.hints.Idx.precision}"
+                                    shortDesc="#{bindings.Odi11SceneParamView.hints.Idx.tooltip}"
+                                    id="it18">
+                        <f:validator binding="#{row.bindings.Idx.validator}"/>
+                        <af:convertNumber groupingUsed="false"
+                                          pattern="#{bindings.Odi11SceneParamView.hints.Idx.format}"/>
+                      </af:inputText>
+                    </af:column>
+                    <af:column sortProperty="#{bindings.Odi11SceneParamView.hints.UpdatedAt.name}"
+                               sortable="false"
+                               headerText="#{bindings.Odi11SceneParamView.hints.UpdatedAt.label}"
+                               id="c23">
+                      <af:outputText value="#{row.UpdatedAt}" id="ot1">
+                        <af:convertDateTime pattern="#{bindings.Odi11SceneParamView.hints.UpdatedAt.format}"/>
+                      </af:outputText>
+                    </af:column>
+                    <af:column sortProperty="#{bindings.Odi11SceneParamView.hints.UpdatedBy.name}"
+                               sortable="false"
+                               headerText="#{bindings.Odi11SceneParamView.hints.UpdatedBy.label}"
+                               id="c24">
+                      <af:selectOneChoice value="#{row.bindings.UpdatedBy.inputValue}"
+                                          label="#{row.bindings.UpdatedBy.label}"
+                                          required="#{bindings.Odi11SceneParamView.hints.UpdatedBy.mandatory}"
+                                          shortDesc="#{bindings.Odi11SceneParamView.hints.UpdatedBy.tooltip}"
+                                          id="soc5" readOnly="true">
+                        <f:selectItems value="#{row.bindings.UpdatedBy.items}"
+                                       id="si5"/>
+                      </af:selectOneChoice>
+                    </af:column>
+                  </af:table>
+                </af:panelCollection>
+              </f:facet>
+            </af:panelStretchLayout>
+          </af:panelWindow>
+        </af:popup>
+      </af:panelGroupLayout>
+    </f:facet>
+    <f:facet name="center">
+      <af:panelCollection id="pc1">
+        <f:facet name="menus"/>
+        <f:facet name="toolbar">
+          <af:toolbar id="t2">
+            <af:group id="g1">
+              <af:commandButton actionListener="#{bindings.CreateInsertScene.execute}"
+                                text="#{viewBundle['dms.common.add']}"
+                                id="cb1"/>
+              <af:commandButton actionListener="#{bindings.DeleteScene.execute}"
+                                text="#{viewBundle['dcm.common.delete']}"
+                                id="cb2"/>
+              <af:commandButton actionListener="#{bindings.Commit.execute}"
+                                text="#{viewBundle['dms.common.save']}"
+                                id="cb3"/>
+              <af:commandButton actionListener="#{bindings.Rollback.execute}"
+                                text="#{viewBundle['dms.common.cancel']}"
+                                immediate="true" id="cb4">
+                <af:resetActionListener/>
+              </af:commandButton>
+            </af:group>
+            <af:group id="g2">
+              <af:commandButton text="#{viewBundle['odi11g.workrep.manage']}"
+                                id="cb5">
+                <af:showPopupBehavior popupId="::p1"/>
+              </af:commandButton>
+              <af:commandButton text="#{viewBundle['odi11g.agent.manage']}"
+                                id="cb6">
+                <af:showPopupBehavior popupId="::p2"/>
+              </af:commandButton>
+              <af:commandButton text="#{viewBundle['odi11g.param.manage']}"
+                                id="cb15">
+                <af:showPopupBehavior popupId="::p3"/>
+              </af:commandButton>
+            </af:group>
+          </af:toolbar>
+        </f:facet>
+        <f:facet name="statusbar"/>
+        <af:table value="#{bindings.Odi11SceneView.collectionModel}" var="row"
+                  rows="#{bindings.Odi11SceneView.rangeSize}"
+                  emptyText="#{viewBundle['dms.common.nodata']}"
+                  fetchSize="#{bindings.Odi11SceneView.rangeSize}"
+                  rowBandingInterval="0"
+                  filterModel="#{bindings.Odi11SceneViewQuery.queryDescriptor}"
+                  queryListener="#{bindings.Odi11SceneViewQuery.processQuery}"
+                  filterVisible="false" varStatus="vs"
+                  selectedRowKeys="#{bindings.Odi11SceneView.collectionModel.selectedRow}"
+                  selectionListener="#{bindings.Odi11SceneView.collectionModel.makeCurrent}"
+                  rowSelection="single" id="t1" editingMode="clickToEdit"
+                  partialTriggers="::cb1 ::cb2">
+          <af:column sortProperty="#{bindings.Odi11SceneView.hints.SceneAlias.name}"
+                     filterable="true" sortable="true"
+                     headerText="#{bindings.Odi11SceneView.hints.SceneAlias.label}"
+                     id="c4">
+            <af:inputText value="#{row.bindings.SceneAlias.inputValue}"
+                          label="#{bindings.Odi11SceneView.hints.SceneAlias.label}"
+                          required="#{bindings.Odi11SceneView.hints.SceneAlias.mandatory}"
+                          columns="#{bindings.Odi11SceneView.hints.SceneAlias.displayWidth}"
+                          maximumLength="#{bindings.Odi11SceneView.hints.SceneAlias.precision}"
+                          shortDesc="#{bindings.Odi11SceneView.hints.SceneAlias.tooltip}"
+                          id="it3">
+              <f:validator binding="#{row.bindings.SceneAlias.validator}"/>
+            </af:inputText>
+          </af:column>
+          <af:column id="c21">
+            <af:commandImageLink text="#{viewBundle['odi11g.scene.param']}" id="cl1"
+                           actionListener="#{backingBeanScope.SceneMBean.selectParam}"/>
+          </af:column>
+          <af:column sortProperty="#{bindings.Odi11SceneView.hints.SceneName.name}"
+                     filterable="true" sortable="true"
+                     headerText="#{bindings.Odi11SceneView.hints.SceneName.label}"
+                     id="c5">
+            <af:inputText value="#{row.bindings.SceneName.inputValue}"
+                          label="#{bindings.Odi11SceneView.hints.SceneName.label}"
+                          required="#{bindings.Odi11SceneView.hints.SceneName.mandatory}"
+                          columns="#{bindings.Odi11SceneView.hints.SceneName.displayWidth}"
+                          maximumLength="#{bindings.Odi11SceneView.hints.SceneName.precision}"
+                          shortDesc="#{bindings.Odi11SceneView.hints.SceneName.tooltip}"
+                          id="it4">
+              <f:validator binding="#{row.bindings.SceneName.validator}"/>
+            </af:inputText>
+          </af:column>
+          <af:column sortProperty="#{bindings.Odi11SceneView.hints.SceneVersion.name}"
+                     sortable="true"
+                     headerText="#{bindings.Odi11SceneView.hints.SceneVersion.label}"
+                     id="c1">
+            <af:inputText value="#{row.bindings.SceneVersion.inputValue}"
+                          label="#{bindings.Odi11SceneView.hints.SceneVersion.label}"
+                          required="#{bindings.Odi11SceneView.hints.SceneVersion.mandatory}"
+                          columns="#{bindings.Odi11SceneView.hints.SceneVersion.displayWidth}"
+                          maximumLength="#{bindings.Odi11SceneView.hints.SceneVersion.precision}"
+                          shortDesc="#{bindings.Odi11SceneView.hints.SceneVersion.tooltip}"
+                          id="it1">
+              <f:validator binding="#{row.bindings.SceneVersion.validator}"/>
+            </af:inputText>
+          </af:column>
+          <af:column sortProperty="#{bindings.Odi11SceneView.hints.SceneContext.name}"
+                     sortable="true"
+                     headerText="#{bindings.Odi11SceneView.hints.SceneContext.label}"
+                     id="c3">
+            <af:inputText value="#{row.bindings.SceneContext.inputValue}"
+                          label="#{bindings.Odi11SceneView.hints.SceneContext.label}"
+                          required="#{bindings.Odi11SceneView.hints.SceneContext.mandatory}"
+                          columns="#{bindings.Odi11SceneView.hints.SceneContext.displayWidth}"
+                          maximumLength="#{bindings.Odi11SceneView.hints.SceneContext.precision}"
+                          shortDesc="#{bindings.Odi11SceneView.hints.SceneContext.tooltip}"
+                          id="it2">
+              <f:validator binding="#{row.bindings.SceneContext.validator}"/>
+            </af:inputText>
+          </af:column>
+          <af:column sortProperty="#{bindings.Odi11SceneView.hints.WorkrepId.name}"
+                     sortable="true"
+                     headerText="#{bindings.Odi11SceneView.hints.WorkrepId.label}"
+                     id="c6">
+            <af:selectOneChoice value="#{row.bindings.WorkrepId.inputValue}"
+                                label="#{row.bindings.WorkrepId.label}"
+                                required="#{bindings.Odi11SceneView.hints.WorkrepId.mandatory}"
+                                shortDesc="#{bindings.Odi11SceneView.hints.WorkrepId.tooltip}"
+                                id="soc2">
+              <f:selectItems value="#{row.bindings.WorkrepId.items}" id="si1"/>
+            </af:selectOneChoice>
+          </af:column>
+          <af:column sortProperty="#{bindings.Odi11SceneView.hints.AgentId.name}"
+                     sortable="true"
+                     headerText="#{bindings.Odi11SceneView.hints.AgentId.label}"
+                     id="c2">
+            <af:selectOneChoice value="#{row.bindings.AgentId.inputValue}"
+                                label="#{row.bindings.AgentId.label}"
+                                required="#{bindings.Odi11SceneView.hints.AgentId.mandatory}"
+                                shortDesc="#{bindings.Odi11SceneView.hints.AgentId.tooltip}"
+                                id="soc3">
+              <f:selectItems value="#{row.bindings.AgentId.items}" id="si3"/>
+            </af:selectOneChoice>
+          </af:column>
+          <af:column sortProperty="#{bindings.Odi11SceneView.hints.CatId.name}"
+                     sortable="true"
+                     headerText="#{bindings.Odi11SceneView.hints.CatId.label}"
+                     id="c7">
+            <af:selectOneChoice value="#{row.bindings.CatId.inputValue}"
+                                label="#{row.bindings.CatId.label}"
+                                required="#{bindings.Odi11SceneView.hints.CatId.mandatory}"
+                                shortDesc="#{bindings.Odi11SceneView.hints.CatId.tooltip}"
+                                id="soc1">
+              <f:selectItems value="#{row.bindings.CatId.items}" id="si2"/>
+            </af:selectOneChoice>
+          </af:column>
+        </af:table>
+      </af:panelCollection>
+    </f:facet>
+    <f:facet name="end"/>
+  </af:panelStretchLayout>
+</jsp:root>

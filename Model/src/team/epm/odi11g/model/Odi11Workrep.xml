@@ -3,17 +3,19 @@
 <!---->
 <Entity
   xmlns="http://xmlns.oracle.com/bc4j"
-  Name="Odi11SceneExec"
+  Name="Odi11Workrep"
   Version="11.1.1.64.93"
   InheritPersonalization="true"
   DBObjectType="table"
-  DBObjectName="ODI11_SCENE_EXEC"
-  AliasName="Odi11SceneExec"
+  DBObjectName="ODI11_WORKREP"
+  AliasName="Odi11Workrep"
   BindingStyle="OracleName"
-  UseGlueCode="false">
+  UseGlueCode="false"
+  RowClass="team.epm.odi11g.model.Odi11WorkrepImpl">
   <DesignTime>
     <Attr Name="_codeGenFlag2" Value="Access"/>
     <AttrArray Name="_publishEvents"/>
+    <Attr Name="_isCodegen" Value="true"/>
   </DesignTime>
   <Attribute
     Name="Id"
@@ -23,7 +25,7 @@
     SQLType="VARCHAR"
     Type="java.lang.String"
     ColumnType="VARCHAR2"
-    TableName="ODI11_SCENE_EXEC"
+    TableName="ODI11_WORKREP"
     PrimaryKey="true">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="32"/>
@@ -31,90 +33,100 @@
     <TransientExpression><![CDATA[java.util.UUID.randomUUID().toString().replace("-", "")]]></TransientExpression>
   </Attribute>
   <Attribute
-    Name="SceneId"
+    Name="RepAlias"
     IsNotNull="true"
-    Precision="32"
-    ColumnName="SCENE_ID"
-    SQLType="VARCHAR"
-    Type="java.lang.String"
-    ColumnType="VARCHAR2"
-    TableName="ODI11_SCENE_EXEC">
-    <DesignTime>
-      <Attr Name="_DisplaySize" Value="32"/>
-    </DesignTime>
-    <Properties>
-      <SchemaBasedProperties>
-        <LABEL
-          ResId="odi11g.exec.scene"/>
-      </SchemaBasedProperties>
-    </Properties>
-  </Attribute>
-  <Attribute
-    Name="Params"
-    IsNotNull="true"
-    Precision="1000"
-    ColumnName="PARAMS"
-    SQLType="VARCHAR"
-    Type="java.lang.String"
-    ColumnType="VARCHAR2"
-    TableName="ODI11_SCENE_EXEC">
-    <DesignTime>
-      <Attr Name="_DisplaySize" Value="1000"/>
-    </DesignTime>
-    <Properties>
-      <SchemaBasedProperties>
-        <LABEL
-          ResId="odi11g.exec.params"/>
-      </SchemaBasedProperties>
-    </Properties>
-  </Attribute>
-  <Attribute
-    Name="ExecStatus"
     Precision="100"
-    ColumnName="EXEC_STATUS"
+    ColumnName="REP_ALIAS"
     SQLType="VARCHAR"
     Type="java.lang.String"
     ColumnType="VARCHAR2"
-    TableName="ODI11_SCENE_EXEC">
+    TableName="ODI11_WORKREP">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="100"/>
+    </DesignTime>
+    <Properties>
+      <CustomProperties>
+        <Property
+          Name="isMultiLangAttr"
+          Value="true"/>
+      </CustomProperties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="odi11g.workrep.alias"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </Attribute>
+  <Attribute
+    Name="RepName"
+    IsNotNull="true"
+    Precision="100"
+    ColumnName="REP_NAME"
+    SQLType="VARCHAR"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    TableName="ODI11_WORKREP">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="100"/>
     </DesignTime>
     <Properties>
       <SchemaBasedProperties>
         <LABEL
-          ResId="odi11g.exec.status"/>
+          ResId="odi11g.workrep.name"/>
       </SchemaBasedProperties>
     </Properties>
   </Attribute>
   <Attribute
-    Name="SessionNum"
+    Name="LoginUser"
+    IsNotNull="true"
     Precision="100"
-    ColumnName="SESSION_NUM"
+    ColumnName="LOGIN_USER"
     SQLType="VARCHAR"
     Type="java.lang.String"
     ColumnType="VARCHAR2"
-    TableName="ODI11_SCENE_EXEC">
+    TableName="ODI11_WORKREP">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="100"/>
     </DesignTime>
     <Properties>
       <SchemaBasedProperties>
         <LABEL
-          ResId="odi11g.exec.session_num"/>
+          ResId="odi11g.workrep.loginuser"/>
       </SchemaBasedProperties>
     </Properties>
   </Attribute>
   <Attribute
-    Name="LogText"
-    Precision="1000"
-    ColumnName="LOG_TEXT"
+    Name="LoginPwd"
+    IsNotNull="true"
+    Precision="255"
+    ColumnName="LOGIN_PWD"
     SQLType="VARCHAR"
     Type="java.lang.String"
     ColumnType="VARCHAR2"
-    TableName="ODI11_SCENE_EXEC">
+    TableName="ODI11_WORKREP">
     <DesignTime>
-      <Attr Name="_DisplaySize" Value="1000"/>
+      <Attr Name="_DisplaySize" Value="255"/>
     </DesignTime>
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="odi11g.workrep.loginpwd"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </Attribute>
+  <Attribute
+    Name="Locale"
+    IsNotNull="true"
+    Precision="10"
+    ColumnName="LOCALE"
+    SQLType="VARCHAR"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    TableName="ODI11_WORKREP"
+    PrimaryKey="true">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="10"/>
+    </DesignTime>
+    <TransientExpression><![CDATA[adf.context.locale]]></TransientExpression>
   </Attribute>
   <Attribute
     Name="CreatedAt"
@@ -122,7 +134,7 @@
     SQLType="TIMESTAMP"
     Type="oracle.jbo.domain.Date"
     ColumnType="DATE"
-    TableName="ODI11_SCENE_EXEC">
+    TableName="ODI11_WORKREP">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="7"/>
     </DesignTime>
@@ -130,11 +142,9 @@
     <Properties>
       <SchemaBasedProperties>
         <FMT_FORMATTER
-          ResId="team.epm.odi11g.model.Odi11SceneExec.CreatedAt_FMT_FORMATTER"/>
+          ResId="team.epm.odi11g.model.Odi11Workrep.CreatedAt_FMT_FORMATTER"/>
         <FMT_FORMAT
-          ResId="team.epm.odi11g.model.Odi11SceneExec.CreatedAt_FMT_FORMAT"/>
-        <LABEL
-          ResId="createdAt"/>
+          ResId="team.epm.odi11g.model.Odi11Workrep.CreatedAt_FMT_FORMAT"/>
       </SchemaBasedProperties>
     </Properties>
   </Attribute>
@@ -144,7 +154,7 @@
     SQLType="TIMESTAMP"
     Type="oracle.jbo.domain.Date"
     ColumnType="DATE"
-    TableName="ODI11_SCENE_EXEC">
+    TableName="ODI11_WORKREP">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="7"/>
     </DesignTime>
@@ -152,11 +162,9 @@
     <Properties>
       <SchemaBasedProperties>
         <FMT_FORMATTER
-          ResId="team.epm.odi11g.model.Odi11SceneExec.UpdatedAt_FMT_FORMATTER"/>
+          ResId="team.epm.odi11g.model.Odi11Workrep.UpdatedAt_FMT_FORMATTER"/>
         <FMT_FORMAT
-          ResId="team.epm.odi11g.model.Odi11SceneExec.UpdatedAt_FMT_FORMAT"/>
-        <LABEL
-          ResId="updatedAt"/>
+          ResId="team.epm.odi11g.model.Odi11Workrep.UpdatedAt_FMT_FORMAT"/>
       </SchemaBasedProperties>
     </Properties>
   </Attribute>
@@ -167,17 +175,11 @@
     SQLType="VARCHAR"
     Type="java.lang.String"
     ColumnType="VARCHAR2"
-    TableName="ODI11_SCENE_EXEC">
-    <TransientExpression><![CDATA[adf.userSession.userData.userId]]></TransientExpression>
+    TableName="ODI11_WORKREP">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="32"/>
     </DesignTime>
-    <Properties>
-      <SchemaBasedProperties>
-        <LABEL
-          ResId="createdBy"/>
-      </SchemaBasedProperties>
-    </Properties>
+    <TransientExpression><![CDATA[adf.userSession.userData.userId]]></TransientExpression>
   </Attribute>
   <Attribute
     Name="CreatedBy"
@@ -186,59 +188,87 @@
     SQLType="VARCHAR"
     Type="java.lang.String"
     ColumnType="VARCHAR2"
-    TableName="ODI11_SCENE_EXEC">
-    <TransientExpression><![CDATA[adf.userSession.userData.userId]]></TransientExpression>
+    TableName="ODI11_WORKREP">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="32"/>
     </DesignTime>
-    <Properties>
-      <SchemaBasedProperties>
-        <LABEL
-          ResId="updatedBy"/>
-      </SchemaBasedProperties>
-    </Properties>
+    <TransientExpression><![CDATA[adf.userSession.userData.userId]]></TransientExpression>
   </Attribute>
   <Key
-    Name="PkOdi11SceneExec"
+    Name="PkOdi11Workrep"
     PrimaryKey="true">
     <DesignTime>
-      <Attr Name="_DBObjectName" Value="PK_ODI11_SCENE_EXEC"/>
+      <Attr Name="_DBObjectName" Value="PK_ODI11_WORKREP"/>
     </DesignTime>
     <AttrArray Name="Attributes">
-      <Item Value="team.epm.odi11g.model.Odi11SceneExec.Id"/>
+      <Item Value="team.epm.odi11g.model.Odi11Workrep.Id"/>
+      <Item Value="team.epm.odi11g.model.Odi11Workrep.Locale"/>
     </AttrArray>
   </Key>
   <Key
-    Name="SysC008487">
+    Name="SysC008492">
     <DesignTime>
-      <Attr Name="_DBObjectName" Value="SYS_C008487"/>
+      <Attr Name="_DBObjectName" Value="SYS_C008492"/>
       <Attr Name="_checkCondition" Value='"ID" IS NOT NULL'/>
       <Attr Name="_isCheck" Value="true"/>
     </DesignTime>
     <AttrArray Name="Attributes">
-      <Item Value="team.epm.odi11g.model.Odi11SceneExec.Id"/>
+      <Item Value="team.epm.odi11g.model.Odi11Workrep.Id"/>
     </AttrArray>
   </Key>
   <Key
-    Name="SysC008488">
+    Name="SysC008493">
     <DesignTime>
-      <Attr Name="_DBObjectName" Value="SYS_C008488"/>
-      <Attr Name="_checkCondition" Value='"SCENE_ID" IS NOT NULL'/>
+      <Attr Name="_DBObjectName" Value="SYS_C008493"/>
+      <Attr Name="_checkCondition" Value='"REP_ALIAS" IS NOT NULL'/>
       <Attr Name="_isCheck" Value="true"/>
     </DesignTime>
     <AttrArray Name="Attributes">
-      <Item Value="team.epm.odi11g.model.Odi11SceneExec.SceneId"/>
+      <Item Value="team.epm.odi11g.model.Odi11Workrep.RepAlias"/>
     </AttrArray>
   </Key>
   <Key
-    Name="SysC008489">
+    Name="SysC008494">
     <DesignTime>
-      <Attr Name="_DBObjectName" Value="SYS_C008489"/>
-      <Attr Name="_checkCondition" Value='"PARAMS" IS NOT NULL'/>
+      <Attr Name="_DBObjectName" Value="SYS_C008494"/>
+      <Attr Name="_checkCondition" Value='"REP_NAME" IS NOT NULL'/>
       <Attr Name="_isCheck" Value="true"/>
     </DesignTime>
     <AttrArray Name="Attributes">
-      <Item Value="team.epm.odi11g.model.Odi11SceneExec.Params"/>
+      <Item Value="team.epm.odi11g.model.Odi11Workrep.RepName"/>
+    </AttrArray>
+  </Key>
+  <Key
+    Name="SysC008495">
+    <DesignTime>
+      <Attr Name="_DBObjectName" Value="SYS_C008495"/>
+      <Attr Name="_checkCondition" Value='"LOGIN_USER" IS NOT NULL'/>
+      <Attr Name="_isCheck" Value="true"/>
+    </DesignTime>
+    <AttrArray Name="Attributes">
+      <Item Value="team.epm.odi11g.model.Odi11Workrep.LoginUser"/>
+    </AttrArray>
+  </Key>
+  <Key
+    Name="SysC008496">
+    <DesignTime>
+      <Attr Name="_DBObjectName" Value="SYS_C008496"/>
+      <Attr Name="_checkCondition" Value='"LOGIN_PWD" IS NOT NULL'/>
+      <Attr Name="_isCheck" Value="true"/>
+    </DesignTime>
+    <AttrArray Name="Attributes">
+      <Item Value="team.epm.odi11g.model.Odi11Workrep.LoginPwd"/>
+    </AttrArray>
+  </Key>
+  <Key
+    Name="SysC008497">
+    <DesignTime>
+      <Attr Name="_DBObjectName" Value="SYS_C008497"/>
+      <Attr Name="_checkCondition" Value='"LOCALE" IS NOT NULL'/>
+      <Attr Name="_isCheck" Value="true"/>
+    </DesignTime>
+    <AttrArray Name="Attributes">
+      <Item Value="team.epm.odi11g.model.Odi11Workrep.Locale"/>
     </AttrArray>
   </Key>
   <ResourceBundle>

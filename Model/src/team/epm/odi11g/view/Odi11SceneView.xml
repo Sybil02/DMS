@@ -17,15 +17,112 @@
        Odi11Scene.CREATED_AT, 
        Odi11Scene.UPDATED_AT, 
        Odi11Scene.UPDATED_BY, 
-       Odi11Scene.CREATED_BY"
+       Odi11Scene.CREATED_BY, 
+       Odi11Scene.WORKREP_ID"
   FromList="ODI11_SCENE Odi11Scene"
   BindingStyle="OracleName"
   CustomQuery="false"
   PageIterMode="Full"
-  UseGlueCode="false">
+  UseGlueCode="false"
+  Where="Odi11Scene.LOCALE=:locale"
+  OrderBy="Odi11Scene.SCENE_ALIAS">
   <DesignTime>
     <Attr Name="_codeGenFlag2" Value="Access|VarAccess"/>
   </DesignTime>
+  <Variable
+    Name="locale"
+    Kind="where"
+    Type="java.lang.String">
+    <TransientExpression><![CDATA[adf.context.locale]]></TransientExpression>
+  </Variable>
+  <ViewAccessor
+    Name="LST_USER"
+    ViewObjectName="team.epm.dms.view.DmsUserView"
+    RowLevelBinds="false"/>
+  <ViewAccessor
+    Name="LST_SCENE_CAT"
+    ViewObjectName="team.epm.odi11g.view.Odi11SceneCatView"
+    RowLevelBinds="false"/>
+  <ViewAccessor
+    Name="LST_AGENT"
+    ViewObjectName="team.epm.odi11g.view.Odi11AgentView"
+    RowLevelBinds="false"/>
+  <ViewAccessor
+    Name="LST_WORKREP"
+    ViewObjectName="team.epm.odi11g.view.Odi11WorkrepView"
+    RowLevelBinds="false"/>
+  <ListBinding
+    Name="LOV_AgentId"
+    ListVOName="LST_AGENT"
+    ListRangeSize="-1"
+    NullValueFlag="none"
+    NullValueId="LOV_AgentId_LOVUIHints_NullValueId"
+    MRUCount="0">
+    <AttrArray Name="AttrNames">
+      <Item Value="AgentId"/>
+    </AttrArray>
+    <AttrArray Name="ListAttrNames">
+      <Item Value="Id"/>
+    </AttrArray>
+    <AttrArray Name="ListDisplayAttrNames">
+      <Item Value="AgentAlias"/>
+    </AttrArray>
+    <DisplayCriteria/>
+  </ListBinding>
+  <ListBinding
+    Name="LOV_CatId"
+    ListVOName="LST_SCENE_CAT"
+    ListRangeSize="-1"
+    NullValueFlag="none"
+    NullValueId="LOV_CatId_LOVUIHints_NullValueId"
+    MRUCount="0">
+    <AttrArray Name="AttrNames">
+      <Item Value="CatId"/>
+    </AttrArray>
+    <AttrArray Name="ListAttrNames">
+      <Item Value="Id"/>
+    </AttrArray>
+    <AttrArray Name="ListDisplayAttrNames">
+      <Item Value="CatName"/>
+    </AttrArray>
+    <DisplayCriteria/>
+  </ListBinding>
+  <ListBinding
+    Name="LOV_UpdatedBy"
+    ListVOName="LST_USER"
+    ListRangeSize="-1"
+    NullValueFlag="none"
+    NullValueId="LOV_UpdatedBy_LOVUIHints_NullValueId"
+    MRUCount="0">
+    <AttrArray Name="AttrNames">
+      <Item Value="UpdatedBy"/>
+    </AttrArray>
+    <AttrArray Name="ListAttrNames">
+      <Item Value="Id"/>
+    </AttrArray>
+    <AttrArray Name="ListDisplayAttrNames">
+      <Item Value="Name"/>
+    </AttrArray>
+    <DisplayCriteria/>
+  </ListBinding>
+  <ListBinding
+    Name="LOV_WorkrepId"
+    ListVOName="LST_WORKREP"
+    ListRangeSize="-1"
+    NullValueFlag="none"
+    NullValueId="LOV_WorkrepId_LOVUIHints_NullValueId"
+    MRUCount="0">
+    <AttrArray Name="AttrNames">
+      <Item Value="WorkrepId"/>
+    </AttrArray>
+    <AttrArray Name="ListAttrNames">
+      <Item Value="Id"/>
+    </AttrArray>
+    <AttrArray Name="ListDisplayAttrNames">
+      <Item Value="RepAlias"/>
+    </AttrArray>
+    <DisplayCriteria/>
+  </ListBinding>
   <EntityUsage
     Name="Odi11Scene"
     Entity="team.epm.odi11g.model.Odi11Scene"/>
@@ -63,7 +160,15 @@
     PrecisionRule="true"
     EntityAttrName="AgentId"
     EntityUsage="Odi11Scene"
-    AliasName="AGENT_ID"/>
+    AliasName="AGENT_ID"
+    LOVName="LOV_AgentId">
+    <Properties>
+      <SchemaBasedProperties>
+        <CONTROLTYPE
+          Value="choice"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewAttribute
     Name="SceneContext"
     IsNotNull="true"
@@ -77,7 +182,15 @@
     PrecisionRule="true"
     EntityAttrName="CatId"
     EntityUsage="Odi11Scene"
-    AliasName="CAT_ID"/>
+    AliasName="CAT_ID"
+    LOVName="LOV_CatId">
+    <Properties>
+      <SchemaBasedProperties>
+        <CONTROLTYPE
+          Value="choice"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewAttribute
     Name="Locale"
     IsNotNull="true"
@@ -102,11 +215,35 @@
     PrecisionRule="true"
     EntityAttrName="UpdatedBy"
     EntityUsage="Odi11Scene"
-    AliasName="UPDATED_BY"/>
+    AliasName="UPDATED_BY"
+    LOVName="LOV_UpdatedBy">
+    <Properties>
+      <SchemaBasedProperties>
+        <CONTROLTYPE
+          Value="choice"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewAttribute
     Name="CreatedBy"
     PrecisionRule="true"
     EntityAttrName="CreatedBy"
     EntityUsage="Odi11Scene"
-    AliasName="CREATED_BY"/>
+    AliasName="CREATED_BY"
+    IsUpdateable="while_insert"/>
+  <ViewAttribute
+    Name="WorkrepId"
+    IsNotNull="true"
+    PrecisionRule="true"
+    EntityAttrName="WorkrepId"
+    EntityUsage="Odi11Scene"
+    AliasName="WORKREP_ID"
+    LOVName="LOV_WorkrepId">
+    <Properties>
+      <SchemaBasedProperties>
+        <CONTROLTYPE
+          Value="choice"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
 </ViewObject>

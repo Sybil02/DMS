@@ -2211,6 +2211,8 @@ drop table ODI11_SCENE_EXEC cascade constraints;
 
 drop table ODI11_SCENE_CAT cascade constraints;
 
+drop table ODI11_WORKREP cascade constraints;
+
 /*==============================================================*/
 /* Table: ODI11_AGENT                                           */
 /*==============================================================*/
@@ -2279,7 +2281,8 @@ create table ODI11_SCENE
    SCENE_ALIAS          VARCHAR2(100)        not null,
    SCENE_NAME           VARCHAR2(100)        not null,
    SCENE_VERSION        VARCHAR2(100)        not null,
-   AGENT_ID             VARCHAR2(32)         not null,
+   AGENT_ID             VARCHAR2(32)         ,
+   WORKREP_ID           VARCHAR2(32)         not null,    
    SCENE_CONTEXT        VARCHAR2(100)        not null,
    CAT_ID               VARCHAR2(32)         not null,
    LOCALE               VARCHAR2(10)         not null,
@@ -2304,6 +2307,9 @@ comment on column ODI11_SCENE.SCENE_NAME is
 
 comment on column ODI11_SCENE.AGENT_ID is
 '代理ID';
+
+comment on column ODI11_SCENE.WORKREP_ID is
+'资料库ID';
 
 comment on column ODI11_SCENE.SCENE_VERSION is
 '场景版本';
@@ -2513,5 +2519,53 @@ comment on column ODI11_SCENE_EXEC.UPDATED_BY is
 comment on column ODI11_SCENE_EXEC.CREATED_BY is
 '创建者';
 
+/*==============================================================*/
+/* Table: ODI11_WORKREP                                         */
+/*==============================================================*/
+create table ODI11_WORKREP
+(
+   ID                   VARCHAR2(32)         not null,
+   REP_ALIAS            VARCHAR2(100)        not null,
+   REP_NAME             VARCHAR2(100)        not null,
+   LOGIN_USER           VARCHAR2(100)        not null,
+   LOGIN_PWD            VARCHAR2(255)        not null,
+   LOCALE               VARCHAR2(10)         not null,      
+   CREATED_AT           DATE,
+   UPDATED_AT           DATE,
+   UPDATED_BY           VARCHAR2(32),
+   CREATED_BY           VARCHAR2(32),
+   constraint PK_ODI11_WORKREP primary key (ID,LOCALE)
+);
 
+comment on table ODI11_WORKREP is
+'工作资料库';
 
+comment on column ODI11_WORKREP.ID is
+'ID标识';
+
+comment on column ODI11_WORKREP.REP_ALIAS is
+'资料库别名';
+
+comment on column ODI11_WORKREP.REP_NAME is
+'资料库名称';
+
+comment on column ODI11_WORKREP.LOGIN_USER is
+'登录用户';
+
+comment on column ODI11_WORKREP.LOGIN_PWD is
+'登录密码';
+
+comment on column ODI11_WORKREP.LOCALE is
+'多语言标识';
+
+comment on column ODI11_WORKREP.CREATED_AT is
+'创建时间';
+
+comment on column ODI11_WORKREP.UPDATED_AT is
+'更新时间';
+
+comment on column ODI11_WORKREP.UPDATED_BY is
+'更新者';
+
+comment on column ODI11_WORKREP.CREATED_BY is
+'创建者';

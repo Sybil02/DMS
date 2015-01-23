@@ -28,6 +28,7 @@
     <DesignTime>
       <Attr Name="_DisplaySize" Value="32"/>
     </DesignTime>
+    <TransientExpression><![CDATA[java.util.UUID.randomUUID().toString().replace("-", "")]]></TransientExpression>
   </Attribute>
   <Attribute
     Name="SceneId"
@@ -54,6 +55,12 @@
     <DesignTime>
       <Attr Name="_DisplaySize" Value="32"/>
     </DesignTime>
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="odi11g.sceneparam.param"/>
+      </SchemaBasedProperties>
+    </Properties>
   </Attribute>
   <Attribute
     Name="Idx"
@@ -65,6 +72,12 @@
     <DesignTime>
       <Attr Name="_DisplaySize" Value="39"/>
     </DesignTime>
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="odi11g.sceneparam.idx"/>
+      </SchemaBasedProperties>
+    </Properties>
   </Attribute>
   <Attribute
     Name="CreatedAt"
@@ -76,6 +89,15 @@
     <DesignTime>
       <Attr Name="_DisplaySize" Value="7"/>
     </DesignTime>
+    <TransientExpression><![CDATA[adf.currentDateTime]]></TransientExpression>
+    <Properties>
+      <SchemaBasedProperties>
+        <FMT_FORMATTER
+          ResId="team.epm.odi11g.model.Odi11SceneParam.CreatedAt_FMT_FORMATTER"/>
+        <FMT_FORMAT
+          ResId="team.epm.odi11g.model.Odi11SceneParam.CreatedAt_FMT_FORMAT"/>
+      </SchemaBasedProperties>
+    </Properties>
   </Attribute>
   <Attribute
     Name="UpdatedAt"
@@ -87,6 +109,17 @@
     <DesignTime>
       <Attr Name="_DisplaySize" Value="7"/>
     </DesignTime>
+    <TransientExpression><![CDATA[adf.currentDateTime]]></TransientExpression>
+    <Properties>
+      <SchemaBasedProperties>
+        <FMT_FORMATTER
+          ResId="team.epm.odi11g.model.Odi11SceneParam.UpdatedAt_FMT_FORMATTER"/>
+        <FMT_FORMAT
+          ResId="team.epm.odi11g.model.Odi11SceneParam.UpdatedAt_FMT_FORMAT"/>
+        <LABEL
+          ResId="updatedAt"/>
+      </SchemaBasedProperties>
+    </Properties>
   </Attribute>
   <Attribute
     Name="UpdatedBy"
@@ -99,6 +132,13 @@
     <DesignTime>
       <Attr Name="_DisplaySize" Value="32"/>
     </DesignTime>
+    <TransientExpression><![CDATA[adf.userSession.userData.userId]]></TransientExpression>
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="updatedBy"/>
+      </SchemaBasedProperties>
+    </Properties>
   </Attribute>
   <Attribute
     Name="CreatedBy"
@@ -111,6 +151,7 @@
     <DesignTime>
       <Attr Name="_DisplaySize" Value="32"/>
     </DesignTime>
+    <TransientExpression><![CDATA[adf.userSession.userData.userId]]></TransientExpression>
   </Attribute>
   <Key
     Name="PkOdi11SceneParam"
@@ -155,4 +196,8 @@
       <Item Value="team.epm.odi11g.model.Odi11SceneParam.ParameterId"/>
     </AttrArray>
   </Key>
+  <ResourceBundle>
+    <PropertiesBundle
+      PropertiesFile="ModelBundle"/>
+  </ResourceBundle>
 </Entity>

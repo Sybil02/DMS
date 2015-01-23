@@ -10,10 +10,12 @@
   DBObjectName="ODI11_SCENE_CAT"
   AliasName="Odi11SceneCat"
   BindingStyle="OracleName"
-  UseGlueCode="false">
+  UseGlueCode="false"
+  RowClass="team.epm.odi11g.model.Odi11SceneCatImpl">
   <DesignTime>
     <Attr Name="_codeGenFlag2" Value="Access"/>
     <AttrArray Name="_publishEvents"/>
+    <Attr Name="_isCodegen" Value="true"/>
   </DesignTime>
   <Attribute
     Name="Id"
@@ -28,6 +30,7 @@
     <DesignTime>
       <Attr Name="_DisplaySize" Value="32"/>
     </DesignTime>
+    <TransientExpression><![CDATA[java.util.UUID.randomUUID().toString().replace("-", "")]]></TransientExpression>
   </Attribute>
   <Attribute
     Name="PId"
@@ -53,6 +56,17 @@
     <DesignTime>
       <Attr Name="_DisplaySize" Value="150"/>
     </DesignTime>
+    <Properties>
+      <CustomProperties>
+        <Property
+          Name="isMultiLangAttr"
+          Value="true"/>
+      </CustomProperties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="odi11g.cat.name"/>
+      </SchemaBasedProperties>
+    </Properties>
   </Attribute>
   <Attribute
     Name="Locale"
@@ -67,6 +81,7 @@
     <DesignTime>
       <Attr Name="_DisplaySize" Value="10"/>
     </DesignTime>
+    <TransientExpression><![CDATA[adf.context.locale]]></TransientExpression>
   </Attribute>
   <Attribute
     Name="Idx"
@@ -78,6 +93,12 @@
     <DesignTime>
       <Attr Name="_DisplaySize" Value="39"/>
     </DesignTime>
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="odi11g.cat.idx"/>
+      </SchemaBasedProperties>
+    </Properties>
   </Attribute>
   <Attribute
     Name="CreatedAt"
@@ -86,9 +107,18 @@
     Type="oracle.jbo.domain.Date"
     ColumnType="DATE"
     TableName="ODI11_SCENE_CAT">
+    <TransientExpression><![CDATA[adf.currentDateTime]]></TransientExpression>
     <DesignTime>
       <Attr Name="_DisplaySize" Value="7"/>
     </DesignTime>
+    <Properties>
+      <SchemaBasedProperties>
+        <FMT_FORMATTER
+          ResId="team.epm.odi11g.model.Odi11SceneCat.CreatedAt_FMT_FORMATTER"/>
+        <FMT_FORMAT
+          ResId="team.epm.odi11g.model.Odi11SceneCat.CreatedAt_FMT_FORMAT"/>
+      </SchemaBasedProperties>
+    </Properties>
   </Attribute>
   <Attribute
     Name="UpdatedAt"
@@ -100,6 +130,17 @@
     <DesignTime>
       <Attr Name="_DisplaySize" Value="7"/>
     </DesignTime>
+    <TransientExpression><![CDATA[adf.currentDateTime]]></TransientExpression>
+    <Properties>
+      <SchemaBasedProperties>
+        <FMT_FORMATTER
+          ResId="team.epm.odi11g.model.Odi11SceneCat.UpdatedAt_FMT_FORMATTER"/>
+        <FMT_FORMAT
+          ResId="team.epm.odi11g.model.Odi11SceneCat.UpdatedAt_FMT_FORMAT"/>
+        <LABEL
+          ResId="updatedAt"/>
+      </SchemaBasedProperties>
+    </Properties>
   </Attribute>
   <Attribute
     Name="UpdatedBy"
@@ -112,6 +153,13 @@
     <DesignTime>
       <Attr Name="_DisplaySize" Value="32"/>
     </DesignTime>
+    <TransientExpression><![CDATA[adf.userSession.userData.userId]]></TransientExpression>
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="updatedBy"/>
+      </SchemaBasedProperties>
+    </Properties>
   </Attribute>
   <Attribute
     Name="CreatedBy"
@@ -124,6 +172,7 @@
     <DesignTime>
       <Attr Name="_DisplaySize" Value="32"/>
     </DesignTime>
+    <TransientExpression><![CDATA[adf.userSession.userData.userId]]></TransientExpression>
   </Attribute>
   <Key
     Name="PkOdi11SceneCat"
@@ -169,4 +218,8 @@
       <Item Value="team.epm.odi11g.model.Odi11SceneCat.Locale"/>
     </AttrArray>
   </Key>
+  <ResourceBundle>
+    <PropertiesBundle
+      PropertiesFile="ModelBundle"/>
+  </ResourceBundle>
 </Entity>

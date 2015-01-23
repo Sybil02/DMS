@@ -34,6 +34,9 @@
             usageId="__validation_editPageDef"/>
       <page path="/dcm/index.jspx" usageId="__indexPageDef1"/>
       <page path="/dcm/data_display.jsff" usageId="__data_displayPageDef"/>
+      <page path="/odi11g/scene/scene_authority.jsff"
+            usageId="__scene_authorityPageDef"/>
+      <page path="/odi11g/scene/scene_edit.jsff" usageId="__scene_editPageDef"/>
    </pageMap>
    <pageDefinitionUsages>
       <page id="__dynamicTabShellPageDef"
@@ -63,6 +66,9 @@
             path="dcm.validation.validation_editPageDef"/>
       <page id="__indexPageDef1" path="dcm.indexPageDef"/>
       <page id="__data_displayPageDef" path="dcm.data_displayPageDef"/>
+      <page id="__scene_authorityPageDef"
+            path="odi11g.scene.scene_authorityPageDef"/>
+      <page id="__scene_editPageDef" path="odi11g.scene.scene_editPageDef"/>
    </pageDefinitionUsages>
    <dataControlUsages>
       <BC4JDataControl id="DmsModuleDataControl" Package="team.epm.module"
@@ -78,6 +84,13 @@
                        SupportsRangesize="true" SupportsResetState="true"
                        SupportsSortCollection="true"
                        Configuration="DcmModuleLocal" syncMode="Immediate"
+                       xmlns="http://xmlns.oracle.com/adfm/datacontrol"/>
+      <BC4JDataControl id="Odi11gModuleDataControl" Package="team.epm.module"
+                       FactoryClass="oracle.adf.model.bc4j.DataControlFactoryImpl"
+                       SupportsTransactions="true" SupportsFindMode="true"
+                       SupportsRangesize="true" SupportsResetState="true"
+                       SupportsSortCollection="true"
+                       Configuration="Odi11gModuleLocal" syncMode="Immediate"
                        xmlns="http://xmlns.oracle.com/adfm/datacontrol"/>
    </dataControlUsages>
 </Application>

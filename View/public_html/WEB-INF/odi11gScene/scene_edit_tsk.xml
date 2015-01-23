@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<adfc-config xmlns="http://xmlns.oracle.com/adf/controller" version="1.2">
+  <task-flow-definition id="scene_edit_tsk">
+    <default-activity id="__1">scene_edit</default-activity>
+    <transaction id="__2">
+      <new-transaction/>
+    </transaction>
+    <data-control-scope id="__3">
+      <isolated/>
+    </data-control-scope>
+    <managed-bean id="__7">
+      <managed-bean-name id="__6">SceneMBean</managed-bean-name>
+      <managed-bean-class id="__5">odi11g.scene.SceneMBean</managed-bean-class>
+      <managed-bean-scope id="__4">backingBean</managed-bean-scope>
+    </managed-bean>
+    <view id="scene_edit">
+      <page>/odi11g/scene/scene_edit.jsff</page>
+    </view>
+    <use-page-fragments/>
+  </task-flow-definition>
+</adfc-config>

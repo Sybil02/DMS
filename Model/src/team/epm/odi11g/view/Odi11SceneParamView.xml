@@ -18,10 +18,58 @@
   BindingStyle="OracleName"
   CustomQuery="false"
   PageIterMode="Full"
-  UseGlueCode="false">
+  UseGlueCode="false"
+  OrderBy="Odi11SceneParam.IDX"
+  Where="Odi11SceneParam.SCENE_ID=:sceneId">
   <DesignTime>
     <Attr Name="_codeGenFlag2" Value="Access|VarAccess"/>
   </DesignTime>
+  <Variable
+    Name="sceneId"
+    Kind="where"
+    Type="java.lang.String"/>
+  <ViewAccessor
+    Name="LST_USER"
+    ViewObjectName="team.epm.dms.view.DmsUserView"/>
+  <ViewAccessor
+    Name="LST_PARAM"
+    ViewObjectName="team.epm.odi11g.view.Odi11ParameterView"/>
+  <ListBinding
+    Name="LOV_UpdatedBy"
+    ListVOName="LST_USER"
+    ListRangeSize="-1"
+    NullValueFlag="start"
+    NullValueId="${adfBundle['oracle.javatools.resourcebundle.SystemBundle']['NULL_VALUE_RESID']}"
+    MRUCount="0">
+    <AttrArray Name="AttrNames">
+      <Item Value="UpdatedBy"/>
+    </AttrArray>
+    <AttrArray Name="ListAttrNames">
+      <Item Value="Id"/>
+    </AttrArray>
+    <AttrArray Name="ListDisplayAttrNames">
+      <Item Value="Name"/>
+    </AttrArray>
+    <DisplayCriteria/>
+  </ListBinding>
+  <ListBinding
+    Name="LOV_ParameterId"
+    ListVOName="LST_PARAM"
+    ListRangeSize="-1"
+    NullValueFlag="none"
+    NullValueId="LOV_ParameterId_LOVUIHints_NullValueId"
+    MRUCount="0">
+    <AttrArray Name="AttrNames">
+      <Item Value="ParameterId"/>
+    </AttrArray>
+    <AttrArray Name="ListAttrNames">
+      <Item Value="Id"/>
+    </AttrArray>
+    <AttrArray Name="ListDisplayAttrNames">
+      <Item Value="PAlias"/>
+    </AttrArray>
+    <DisplayCriteria/>
+  </ListBinding>
   <EntityUsage
     Name="Odi11SceneParam"
     Entity="team.epm.odi11g.model.Odi11SceneParam"/>
@@ -45,13 +93,22 @@
     PrecisionRule="true"
     EntityAttrName="ParameterId"
     EntityUsage="Odi11SceneParam"
-    AliasName="PARAMETER_ID"/>
+    AliasName="PARAMETER_ID"
+    LOVName="LOV_ParameterId">
+    <Properties>
+      <SchemaBasedProperties>
+        <CONTROLTYPE
+          Value="choice"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewAttribute
     Name="Idx"
     PrecisionRule="true"
     EntityAttrName="Idx"
     EntityUsage="Odi11SceneParam"
-    AliasName="IDX"/>
+    AliasName="IDX">
+  </ViewAttribute>
   <ViewAttribute
     Name="CreatedAt"
     PrecisionRule="true"
@@ -69,11 +126,23 @@
     PrecisionRule="true"
     EntityAttrName="UpdatedBy"
     EntityUsage="Odi11SceneParam"
-    AliasName="UPDATED_BY"/>
+    AliasName="UPDATED_BY"
+    LOVName="LOV_UpdatedBy">
+    <Properties>
+      <SchemaBasedProperties>
+        <CONTROLTYPE
+          Value="choice"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewAttribute
     Name="CreatedBy"
     PrecisionRule="true"
     EntityAttrName="CreatedBy"
     EntityUsage="Odi11SceneParam"
     AliasName="CREATED_BY"/>
+  <ResourceBundle>
+    <PropertiesBundle
+      PropertiesFile="ModelBundle"/>
+  </ResourceBundle>
 </ViewObject>

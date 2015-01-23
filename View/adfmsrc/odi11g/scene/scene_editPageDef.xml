@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pageDefinition xmlns="http://xmlns.oracle.com/adfm/uimodel"
+                version="11.1.1.64.93" id="scene_editPageDef"
+                Package="odi11g.scene">
+  <parameters/>
+  <executables>
+    <variableIterator id="variables"/>
+    <iterator Binds="Odi11SceneView" RangeSize="25"
+              DataControl="Odi11gModuleDataControl"
+              id="Odi11SceneViewIterator"/>
+    <searchRegion Binds="Odi11SceneViewIterator" Criteria=""
+                  Customizer="oracle.jbo.uicli.binding.JUSearchBindingCustomizer"
+                  id="Odi11SceneViewQuery"/>
+    <iterator Binds="Odi11WorkrepView" RangeSize="25"
+              DataControl="Odi11gModuleDataControl"
+              id="Odi11WorkrepViewIterator"/>
+    <iterator Binds="Odi11AgentView" RangeSize="25"
+              DataControl="Odi11gModuleDataControl"
+              id="Odi11AgentViewIterator"/>
+    <iterator Binds="Odi11ParameterView" RangeSize="25"
+              DataControl="Odi11gModuleDataControl"
+              id="Odi11ParameterViewIterator"/>
+    <iterator Binds="Odi11SceneParamView" RangeSize="25"
+              DataControl="Odi11gModuleDataControl"
+              id="Odi11SceneParamViewIterator"/>
+  </executables>
+  <bindings>
+    <tree IterBinding="Odi11SceneViewIterator" id="Odi11SceneView">
+      <nodeDefinition DefName="team.epm.odi11g.view.Odi11SceneView"
+                      Name="Odi11SceneView0">
+        <AttrNames>
+          <Item Value="SceneAlias"/>
+          <Item Value="SceneName"/>
+          <Item Value="SceneVersion"/>
+          <Item Value="SceneContext"/>
+          <Item Value="WorkrepId"/>
+          <Item Value="AgentId"/>
+          <Item Value="CatId"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <action IterBinding="Odi11SceneViewIterator" id="CreateInsertScene"
+            RequiresUpdateModel="true" Action="createInsertRow"/>
+    <action IterBinding="Odi11SceneViewIterator" id="DeleteScene"
+            RequiresUpdateModel="false" Action="removeCurrentRow"/>
+    <action id="Commit" RequiresUpdateModel="true" Action="commitTransaction"
+            DataControl="Odi11gModuleDataControl"/>
+    <action id="Rollback" RequiresUpdateModel="false"
+            Action="rollbackTransaction" DataControl="Odi11gModuleDataControl"/>
+    <tree IterBinding="Odi11WorkrepViewIterator" id="Odi11WorkrepView">
+      <nodeDefinition DefName="team.epm.odi11g.view.Odi11WorkrepView"
+                      Name="Odi11WorkrepView0">
+        <AttrNames>
+          <Item Value="RepAlias"/>
+          <Item Value="RepName"/>
+          <Item Value="LoginUser"/>
+          <Item Value="LoginPwd"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <action IterBinding="Odi11WorkrepViewIterator" id="CreateInsertWorkrep"
+            RequiresUpdateModel="true" Action="createInsertRow"/>
+    <action IterBinding="Odi11WorkrepViewIterator" id="DeleteWorkrep"
+            RequiresUpdateModel="false" Action="removeCurrentRow"/>
+    <tree IterBinding="Odi11AgentViewIterator" id="Odi11AgentView">
+      <nodeDefinition DefName="team.epm.odi11g.view.Odi11AgentView"
+                      Name="Odi11AgentView0">
+        <AttrNames>
+          <Item Value="AgentAlias"/>
+          <Item Value="AgentName"/>
+          <Item Value="AgentHost"/>
+          <Item Value="AgentContext"/>
+          <Item Value="AgentPort"/>
+          <Item Value="Protocol"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <action IterBinding="Odi11AgentViewIterator" id="CreateInsertAgent"
+            RequiresUpdateModel="true" Action="createInsertRow"/>
+    <action IterBinding="Odi11AgentViewIterator" id="DeleteAgent"
+            RequiresUpdateModel="false" Action="removeCurrentRow"/>
+    <tree IterBinding="Odi11ParameterViewIterator" id="Odi11ParameterView">
+      <nodeDefinition DefName="team.epm.odi11g.view.Odi11ParameterView"
+                      Name="Odi11ParameterView0">
+        <AttrNames>
+          <Item Value="PAlias"/>
+          <Item Value="PName"/>
+          <Item Value="ValueSetId"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <action IterBinding="Odi11ParameterViewIterator" id="CreateInsertParam"
+            RequiresUpdateModel="true" Action="createInsertRow"/>
+    <action IterBinding="Odi11ParameterViewIterator" id="DeleteParam"
+            RequiresUpdateModel="false" Action="removeCurrentRow"/>
+    <tree IterBinding="Odi11SceneParamViewIterator" id="Odi11SceneParamView">
+      <nodeDefinition DefName="team.epm.odi11g.view.Odi11SceneParamView"
+                      Name="Odi11SceneParamView0">
+        <AttrNames>
+          <Item Value="ParameterId"/>
+          <Item Value="Idx"/>
+          <Item Value="UpdatedAt"/>
+          <Item Value="UpdatedBy"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <action IterBinding="Odi11SceneParamViewIterator" id="DeleteSceneParam"
+            RequiresUpdateModel="false" Action="removeCurrentRow"/>
+  </bindings>
+</pageDefinition>

@@ -9,11 +9,11 @@
    SeparateXMLFiles="true"
    PackageName="">
    <DesignTime>
-      <Attr Name="_appModuleNames2" Value="team.epm.module.Odi11gModule"/>
       <Attr Name="_jprName" Value="../Model.jpr"/>
       <Attr Name="_appModuleNames1" Value="team.epm.module.DcmModule"/>
       <Attr Name="_appModuleNames0" Value="team.epm.module.DmsModule"/>
       <Attr Name="_NamedConnection" Value="DMSConn"/>
+      <Attr Name="_appModuleNames2" Value="team.epm.module.Odi11gModule"/>
    </DesignTime>
    <Containee
       Name="model"

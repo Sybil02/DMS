@@ -10,10 +10,12 @@
   DBObjectName="ODI11_AGENT"
   AliasName="Odi11Agent"
   BindingStyle="OracleName"
-  UseGlueCode="false">
+  UseGlueCode="false"
+  RowClass="team.epm.odi11g.model.Odi11AgentImpl">
   <DesignTime>
     <Attr Name="_codeGenFlag2" Value="Access"/>
     <AttrArray Name="_publishEvents"/>
+    <Attr Name="_isCodegen" Value="true"/>
   </DesignTime>
   <Attribute
     Name="Id"
@@ -24,10 +26,12 @@
     Type="java.lang.String"
     ColumnType="VARCHAR2"
     TableName="ODI11_AGENT"
-    PrimaryKey="true">
+    PrimaryKey="true"
+    IsUpdateable="while_insert">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="32"/>
     </DesignTime>
+    <TransientExpression><![CDATA[java.util.UUID.randomUUID().toString().replace("-", "")]]></TransientExpression>
   </Attribute>
   <Attribute
     Name="AgentAlias"
@@ -41,6 +45,17 @@
     <DesignTime>
       <Attr Name="_DisplaySize" Value="100"/>
     </DesignTime>
+    <Properties>
+      <CustomProperties>
+        <Property
+          Name="isMultiLangAttr"
+          Value="true"/>
+      </CustomProperties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="odi11g.agent.alias"/>
+      </SchemaBasedProperties>
+    </Properties>
   </Attribute>
   <Attribute
     Name="AgentName"
@@ -54,6 +69,12 @@
     <DesignTime>
       <Attr Name="_DisplaySize" Value="100"/>
     </DesignTime>
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="odi11g.agent.name"/>
+      </SchemaBasedProperties>
+    </Properties>
   </Attribute>
   <Attribute
     Name="AgentHost"
@@ -67,6 +88,12 @@
     <DesignTime>
       <Attr Name="_DisplaySize" Value="100"/>
     </DesignTime>
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="odi11g.agent.host"/>
+      </SchemaBasedProperties>
+    </Properties>
   </Attribute>
   <Attribute
     Name="AgentContext"
@@ -76,10 +103,17 @@
     SQLType="VARCHAR"
     Type="java.lang.String"
     ColumnType="VARCHAR2"
-    TableName="ODI11_AGENT">
+    TableName="ODI11_AGENT"
+    DefaultValue="oraclediagent">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="100"/>
     </DesignTime>
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="odi11g.agent.context"/>
+      </SchemaBasedProperties>
+    </Properties>
   </Attribute>
   <Attribute
     Name="AgentPort"
@@ -89,10 +123,17 @@
     SQLType="VARCHAR"
     Type="java.lang.String"
     ColumnType="VARCHAR2"
-    TableName="ODI11_AGENT">
+    TableName="ODI11_AGENT"
+    DefaultValue="20910">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="10"/>
     </DesignTime>
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="odi11g.agent.port"/>
+      </SchemaBasedProperties>
+    </Properties>
   </Attribute>
   <Attribute
     Name="Protocol"
@@ -102,10 +143,17 @@
     SQLType="VARCHAR"
     Type="java.lang.String"
     ColumnType="VARCHAR2"
-    TableName="ODI11_AGENT">
+    TableName="ODI11_AGENT"
+    DefaultValue="http">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="10"/>
     </DesignTime>
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="odi11g.agent.protocol"/>
+      </SchemaBasedProperties>
+    </Properties>
   </Attribute>
   <Attribute
     Name="Locale"
@@ -120,6 +168,7 @@
     <DesignTime>
       <Attr Name="_DisplaySize" Value="10"/>
     </DesignTime>
+    <TransientExpression><![CDATA[adf.context.locale]]></TransientExpression>
   </Attribute>
   <Attribute
     Name="CreatedAt"
@@ -131,6 +180,17 @@
     <DesignTime>
       <Attr Name="_DisplaySize" Value="7"/>
     </DesignTime>
+    <TransientExpression><![CDATA[adf.currentDateTime]]></TransientExpression>
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="createdAt"/>
+        <FMT_FORMATTER
+          ResId="team.epm.odi11g.model.Odi11Agent.CreatedAt_FMT_FORMATTER"/>
+        <FMT_FORMAT
+          ResId="team.epm.odi11g.model.Odi11Agent.UpdatedAt_FMT_FORMAT"/>
+      </SchemaBasedProperties>
+    </Properties>
   </Attribute>
   <Attribute
     Name="UpdatedAt"
@@ -142,6 +202,17 @@
     <DesignTime>
       <Attr Name="_DisplaySize" Value="7"/>
     </DesignTime>
+    <TransientExpression><![CDATA[adf.currentDateTime]]></TransientExpression>
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="updatedAt"/>
+        <FMT_FORMATTER
+          ResId="team.epm.odi11g.model.Odi11Agent.UpdatedAt_FMT_FORMATTER"/>
+        <FMT_FORMAT
+          ResId="team.epm.odi11g.model.Odi11Agent.UpdatedAt_FMT_FORMAT"/>
+      </SchemaBasedProperties>
+    </Properties>
   </Attribute>
   <Attribute
     Name="UpdatedBy"
@@ -154,6 +225,13 @@
     <DesignTime>
       <Attr Name="_DisplaySize" Value="32"/>
     </DesignTime>
+    <TransientExpression><![CDATA[adf.userSession.userData.userId]]></TransientExpression>
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="updatedBy"/>
+      </SchemaBasedProperties>
+    </Properties>
   </Attribute>
   <Attribute
     Name="CreatedBy"
@@ -166,6 +244,13 @@
     <DesignTime>
       <Attr Name="_DisplaySize" Value="32"/>
     </DesignTime>
+    <TransientExpression><![CDATA[adf.userSession.userData.userId]]></TransientExpression>
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="createdBy"/>
+      </SchemaBasedProperties>
+    </Properties>
   </Attribute>
   <Key
     Name="PkOdi11Agent"
@@ -266,4 +351,8 @@
       <Item Value="team.epm.odi11g.model.Odi11Agent.Locale"/>
     </AttrArray>
   </Key>
+  <ResourceBundle>
+    <PropertiesBundle
+      PropertiesFile="ModelBundle"/>
+  </ResourceBundle>
 </Entity>
