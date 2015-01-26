@@ -10,10 +10,12 @@
   DBObjectName="DCM_TEMPLATE_COMBINATION"
   AliasName="DcmTemplateCombination"
   BindingStyle="OracleName"
-  UseGlueCode="false">
+  UseGlueCode="false"
+  RowClass="team.epm.dcm.model.DcmTemplateCombinationImpl">
   <DesignTime>
     <Attr Name="_codeGenFlag2" Value="Access"/>
     <AttrArray Name="_publishEvents"/>
+    <Attr Name="_isCodegen" Value="true"/>
   </DesignTime>
   <Attribute
     Name="Id"
@@ -25,10 +27,10 @@
     ColumnType="VARCHAR2"
     TableName="DCM_TEMPLATE_COMBINATION"
     PrimaryKey="true">
-    <TransientExpression><![CDATA[java.util.UUID.randomUUID().toString().replace("-", "")]]></TransientExpression>
     <DesignTime>
       <Attr Name="_DisplaySize" Value="32"/>
     </DesignTime>
+    <TransientExpression><![CDATA[java.util.UUID.randomUUID().toString().replace("-", "")]]></TransientExpression>
   </Attribute>
   <Attribute
     Name="TemplateId"
@@ -74,10 +76,10 @@
     ColumnType="DATE"
     TableName="DCM_TEMPLATE_COMBINATION"
     IsUpdateable="while_insert">
-    <TransientExpression><![CDATA[adf.currentDateTime]]></TransientExpression>
     <DesignTime>
       <Attr Name="_DisplaySize" Value="7"/>
     </DesignTime>
+    <TransientExpression><![CDATA[adf.currentDateTime]]></TransientExpression>
   </Attribute>
   <Attribute
     Name="UpdatedAt"
@@ -86,10 +88,10 @@
     Type="oracle.jbo.domain.Date"
     ColumnType="DATE"
     TableName="DCM_TEMPLATE_COMBINATION">
-    <TransientExpression><![CDATA[adf.currentDateTime]]></TransientExpression>
     <DesignTime>
       <Attr Name="_DisplaySize" Value="7"/>
     </DesignTime>
+    <TransientExpression><![CDATA[adf.currentDateTime]]></TransientExpression>
     <Properties>
       <SchemaBasedProperties>
         <FMT_FORMATTER
@@ -107,10 +109,10 @@
     Type="java.lang.String"
     ColumnType="VARCHAR2"
     TableName="DCM_TEMPLATE_COMBINATION">
-    <TransientExpression><![CDATA[adf.userSession.userData.userId]]></TransientExpression>
     <DesignTime>
       <Attr Name="_DisplaySize" Value="32"/>
     </DesignTime>
+    <TransientExpression><![CDATA[adf.userSession.userData.userId]]></TransientExpression>
   </Attribute>
   <Attribute
     Name="CreatedBy"
@@ -120,10 +122,10 @@
     Type="java.lang.String"
     ColumnType="VARCHAR2"
     TableName="DCM_TEMPLATE_COMBINATION">
-    <TransientExpression><![CDATA[adf.userSession.userData.userId]]></TransientExpression>
     <DesignTime>
       <Attr Name="_DisplaySize" Value="32"/>
     </DesignTime>
+    <TransientExpression><![CDATA[adf.userSession.userData.userId]]></TransientExpression>
   </Attribute>
   <Key
     Name="PkDcmTemplateCombination"

@@ -347,7 +347,7 @@
                   </f:facet>
                   <f:facet name="statusbar"/>
                   <af:table value="#{bindings.Odi11SceneParamView.collectionModel}"
-                            var="row" editingMode="clickToEdit"
+                            var="row" 
                             rows="#{bindings.Odi11SceneParamView.rangeSize}"
                             emptyText="#{viewBundle['dms.common.nodata']}"
                             fetchSize="#{bindings.Odi11SceneParamView.rangeSize}"

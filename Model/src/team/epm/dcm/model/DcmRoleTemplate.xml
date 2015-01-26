@@ -11,10 +11,12 @@
   AliasName="DcmRoleTemplate"
   BindingStyle="OracleName"
   UseGlueCode="false"
-  xmlns:validation="http://xmlns.oracle.com/adfm/validation">
+  xmlns:validation="http://xmlns.oracle.com/adfm/validation"
+  RowClass="team.epm.dcm.model.DcmRoleTemplateImpl">
   <DesignTime>
     <Attr Name="_codeGenFlag2" Value="Access"/>
     <AttrArray Name="_publishEvents"/>
+    <Attr Name="_isCodegen" Value="true"/>
   </DesignTime>
   <Attribute
     Name="Id"

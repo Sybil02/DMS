@@ -10,10 +10,12 @@
   DBObjectName="ODI11_SCENE_PARAM"
   AliasName="Odi11SceneParam"
   BindingStyle="OracleName"
-  UseGlueCode="false">
+  UseGlueCode="false"
+  RowClass="team.epm.odi11g.model.Odi11SceneParamImpl">
   <DesignTime>
     <Attr Name="_codeGenFlag2" Value="Access"/>
     <AttrArray Name="_publishEvents"/>
+    <Attr Name="_isCodegen" Value="true"/>
   </DesignTime>
   <Attribute
     Name="Id"

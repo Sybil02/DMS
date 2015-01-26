@@ -10,10 +10,12 @@
   DBObjectName="DMS_USER_GROUP"
   AliasName="DmsUserGroup"
   BindingStyle="OracleName"
-  UseGlueCode="false">
+  UseGlueCode="false"
+  RowClass="team.epm.dms.model.DmsUserGroupImpl">
   <DesignTime>
     <Attr Name="_codeGenFlag2" Value="Access"/>
     <AttrArray Name="_publishEvents"/>
+    <Attr Name="_isCodegen" Value="true"/>
   </DesignTime>
   <Attribute
     Name="Id"

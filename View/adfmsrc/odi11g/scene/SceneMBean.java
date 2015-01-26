@@ -47,6 +47,7 @@ public class SceneMBean {
             Row row= sceneParamVO.createRow();
             row.setAttribute("SceneId", curSceneRow.getAttribute("Id"));
             sceneParamVO.insertRow(row);
+            sceneParamVO.setCurrentRow(row);
         }
     }
 }
