@@ -2213,6 +2213,8 @@ drop table ODI11_SCENE_CAT cascade constraints;
 
 drop table ODI11_WORKREP cascade constraints;
 
+drop table ODI11_ROLE_SCENE cascade constraints;
+
 /*==============================================================*/
 /* Table: ODI11_AGENT                                           */
 /*==============================================================*/
@@ -2568,4 +2570,43 @@ comment on column ODI11_WORKREP.UPDATED_BY is
 '更新者';
 
 comment on column ODI11_WORKREP.CREATED_BY is
+'创建者';
+
+/*==============================================================*/
+/* Table: ODI11_ROLE_SCENE                                          */
+/*==============================================================*/
+create table ODI11_ROLE_SCENE 
+(
+   ID                   VARCHAR2(32)         not null,
+   ROLE_ID              VARCHAR2(32)         not null,
+   SCENE_ID             VARCHAR2(32)         not null,
+   CREATED_AT           DATE,
+   UPDATED_AT           DATE,
+   UPDATED_BY           VARCHAR2(32),
+   CREATED_BY           VARCHAR2(32),
+   constraint PK_ODI11_ROLE_SCENE primary key (ID)
+);
+
+comment on table ODI11_ROLE_SCENE is
+'ODI11G角色场景权限';
+
+comment on column ODI11_ROLE_SCENE.ID is
+'标识ID';
+
+comment on column ODI11_ROLE_SCENE.ROLE_ID is
+'角色ID';
+
+comment on column ODI11_ROLE_SCENE.SCENE_ID is
+'场景ID';
+
+comment on column ODI11_ROLE_SCENE.CREATED_AT is
+'创建时间';
+
+comment on column ODI11_ROLE_SCENE.UPDATED_AT is
+'更新时间';
+
+comment on column ODI11_ROLE_SCENE.UPDATED_BY is
+'更新者';
+
+comment on column ODI11_ROLE_SCENE.CREATED_BY is
 '创建者';

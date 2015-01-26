@@ -5,6 +5,42 @@
   <parameters/>
   <executables>
     <variableIterator id="variables"/>
+    <iterator id="DmsEnabledRoleIterator" Binds="DmsEnabledRole"
+              DataControl="Odi11gModuleDataControl" RangeSize="25"/>
+    <iterator Binds="Odi11RoleSceneView" RangeSize="25"
+              DataControl="Odi11gModuleDataControl"
+              id="Odi11RoleSceneViewIterator"/>
+    <iterator Binds="Odi11UnauthedSceneView" RangeSize="25"
+              DataControl="Odi11gModuleDataControl"
+              id="Odi11UnauthedSceneViewIterator"/>
   </executables>
-  <bindings/>
+  <bindings>
+    <list ListOperMode="navigation" IterBinding="DmsEnabledRoleIterator"
+          ListIter="DmsEnabledRoleIterator" id="RoleName" DTSupportsMRU="true">
+      <AttrNames>
+        <Item Value="RoleName"/>
+      </AttrNames>
+    </list>
+    <tree IterBinding="Odi11RoleSceneViewIterator" id="Odi11RoleSceneView">
+      <nodeDefinition DefName="team.epm.odi11g.view.Odi11RoleSceneView"
+                      Name="Odi11RoleSceneView0">
+        <AttrNames>
+          <Item Value="SceneId"/>
+          <Item Value="UpdatedAt"/>
+          <Item Value="UpdatedBy"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <tree IterBinding="Odi11UnauthedSceneViewIterator"
+          id="Odi11UnauthedSceneView">
+      <nodeDefinition DefName="team.epm.odi11g.view.Odi11UnauthedSceneView"
+                      Name="Odi11UnauthedSceneView0">
+        <AttrNames>
+          <Item Value="SceneAlias"/>
+          <Item Value="UpdatedAt"/>
+          <Item Value="UpdatedBy"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+  </bindings>
 </pageDefinition>

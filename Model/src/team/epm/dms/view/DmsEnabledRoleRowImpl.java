@@ -126,6 +126,16 @@ public class DmsEnabledRoleRowImpl extends ViewRowImpl {
                 obj.setAttributeInternal(index(), value);
             }
         }
+        ,
+        Odi11RoleSceneView {
+            public Object get(DmsEnabledRoleRowImpl obj) {
+                return obj.getOdi11RoleSceneView();
+            }
+
+            public void put(DmsEnabledRoleRowImpl obj, Object value) {
+                obj.setAttributeInternal(index(), value);
+            }
+        }
         ;
         private static AttributesEnum[] vals = null;
         private static final int firstIndex = 0;
@@ -166,6 +176,7 @@ public class DmsEnabledRoleRowImpl extends ViewRowImpl {
     public static final int DMSROLEVALUEVIEW = AttributesEnum.DmsRoleValueView.index();
     public static final int DMSROLEFUNCTIONVIEW = AttributesEnum.DmsRoleFunctionView.index();
     public static final int DCMROLETEMPLATEVIEW = AttributesEnum.DcmRoleTemplateView.index();
+    public static final int ODI11ROLESCENEVIEW = AttributesEnum.Odi11RoleSceneView.index();
 
     /**
      * This is the default constructor (do not remove).
@@ -328,6 +339,13 @@ public class DmsEnabledRoleRowImpl extends ViewRowImpl {
      */
     public RowIterator getDcmRoleTemplateView() {
         return (RowIterator)getAttributeInternal(DCMROLETEMPLATEVIEW);
+    }
+
+    /**
+     * Gets the associated <code>RowIterator</code> using master-detail link Odi11RoleSceneView.
+     */
+    public RowIterator getOdi11RoleSceneView() {
+        return (RowIterator)getAttributeInternal(ODI11ROLESCENEVIEW);
     }
 
     /**

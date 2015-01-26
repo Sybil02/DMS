@@ -598,6 +598,7 @@
             <hash>
                <url n="content-folder-url" path="public_html/odi11g/scene/"/>
                <list n="pattern-filters">
+                  <string v="+odi11g/scene/SceneAuthorityBean.java"/>
                   <string v="+odi11g/scene/SceneMBean.java"/>
                </list>
                <list n="url-path">

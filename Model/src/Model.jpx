@@ -80,6 +80,14 @@
       </DesignTime>
    </Containee>
    <Containee
+      Name="odi11g"
+      PackageName="team.epm.odi11g"
+      ObjectType="JboPackage">
+      <DesignTime>
+         <Attr Name="_VL" Value="true"/>
+      </DesignTime>
+   </Containee>
+   <Containee
       Name="view"
       PackageName="team.epm.odi11g.view"
       ObjectType="JboPackage">

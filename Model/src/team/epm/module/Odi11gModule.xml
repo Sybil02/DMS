@@ -39,6 +39,21 @@
   <ViewUsage
     Name="Odi11WorkrepView"
     ViewObjectName="team.epm.odi11g.view.Odi11WorkrepView"/>
+  <ViewUsage
+    Name="Odi11RoleSceneView"
+    ViewObjectName="team.epm.odi11g.view.Odi11RoleSceneView"/>
+  <ViewUsage
+    Name="DmsEnabledRole"
+    ViewObjectName="team.epm.dms.view.DmsEnabledRole"/>
+  <ViewUsage
+    Name="Odi11UnauthedSceneView"
+    ViewObjectName="team.epm.odi11g.view.Odi11UnauthedSceneView"/>
+  <ViewLinkUsage
+    Name="Odi11gRoleSceneLnk"
+    ViewLinkObjectName="team.epm.odi11g.Odi11gRoleSceneLnk"
+    SrcViewUsageName="team.epm.module.Odi11gModule.DmsEnabledRole"
+    DstViewUsageName="team.epm.module.Odi11gModule.Odi11RoleSceneView"
+    Reversed="false"/>
   <ResourceBundle>
     <PropertiesBundle
       PropertiesFile="ModelBundle"/>
