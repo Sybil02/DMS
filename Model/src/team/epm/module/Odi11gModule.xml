@@ -54,6 +54,12 @@
     SrcViewUsageName="team.epm.module.Odi11gModule.DmsEnabledRole"
     DstViewUsageName="team.epm.module.Odi11gModule.Odi11RoleSceneView"
     Reversed="false"/>
+  <ViewLinkUsage
+    Name="Odi11gCatSceneLnk"
+    ViewLinkObjectName="team.epm.odi11g.Odi11gCatSceneLnk"
+    SrcViewUsageName="team.epm.module.Odi11gModule.Odi11SceneCatView"
+    DstViewUsageName="team.epm.module.Odi11gModule.Odi11SceneView"
+    Reversed="false"/>
   <ResourceBundle>
     <PropertiesBundle
       PropertiesFile="ModelBundle"/>

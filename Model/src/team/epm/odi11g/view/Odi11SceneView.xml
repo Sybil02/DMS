@@ -37,20 +37,16 @@
   </Variable>
   <ViewAccessor
     Name="LST_USER"
-    ViewObjectName="team.epm.dms.view.DmsUserView"
-    RowLevelBinds="false"/>
+    ViewObjectName="team.epm.dms.view.DmsUserView"/>
   <ViewAccessor
     Name="LST_SCENE_CAT"
-    ViewObjectName="team.epm.odi11g.view.Odi11SceneCatView"
-    RowLevelBinds="false"/>
+    ViewObjectName="team.epm.odi11g.view.Odi11SceneCatView"/>
   <ViewAccessor
     Name="LST_AGENT"
-    ViewObjectName="team.epm.odi11g.view.Odi11AgentView"
-    RowLevelBinds="false"/>
+    ViewObjectName="team.epm.odi11g.view.Odi11AgentView"/>
   <ViewAccessor
     Name="LST_WORKREP"
-    ViewObjectName="team.epm.odi11g.view.Odi11WorkrepView"
-    RowLevelBinds="false"/>
+    ViewObjectName="team.epm.odi11g.view.Odi11WorkrepView"/>
   <ListBinding
     Name="LOV_AgentId"
     ListVOName="LST_AGENT"

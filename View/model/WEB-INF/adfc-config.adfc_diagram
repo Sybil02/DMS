@@ -138,4 +138,38 @@
       <property
          name="sdm:polyPoints">B50,730.0,174.24707,730.5,232.74707,T50</property>
    </ControlFlowCase>
+   <View
+      id="View17">
+      <property
+         name="activityId">odi11_index</property>
+      <property
+         name="page">/odi11g/odi11_index.jspx</property>
+      <property
+         name="description">&lt;html>&lt;p>&lt;b>odi11_index&lt;/b>&lt;/p>&lt;p>Activity Type:  View&lt;/p></property>
+      <property
+         name="exceptionHandler">false</property>
+      <property
+         name="y">288.09766</property>
+      <property
+         name="x">860.3613</property>
+   </View>
+   <WildcardControlFlowRule
+      id="WildcardControlFlowRule18">
+      <property
+         name="activityId">*</property>
+      <property
+         name="y">133.19531</property>
+      <property
+         name="x">860.0</property>
+   </WildcardControlFlowRule>
+   <ControlFlowCase
+      islink="true"
+      id="ControlFlowCase19"
+      from="WildcardControlFlowRule18"
+      to="View17">
+      <property
+         name="fromOutcome">GoOdi11GIndex</property>
+      <property
+         name="sdm:polyPoints">B50,860.0,175.84473,860.3613,233.74707,T50</property>
+   </ControlFlowCase>
 </SDM>

@@ -12,6 +12,9 @@
   <view id="dcmIndex">
     <page>/dcm/index.jspx</page>
   </view>
+  <view id="odi11_index">
+    <page>/odi11g/odi11_index.jspx</page>
+  </view>
   <control-flow-rule id="__17">
     <from-activity-id id="__18">*</from-activity-id>
     <control-flow-case id="__20">
@@ -38,6 +41,13 @@
     <control-flow-case id="__39">
       <from-outcome id="__40">GoDcmIndex</from-outcome>
       <to-activity-id id="__38">dcmIndex</to-activity-id>
+    </control-flow-case>
+  </control-flow-rule>
+  <control-flow-rule id="__46">
+    <from-activity-id id="__45">*</from-activity-id>
+    <control-flow-case id="__48">
+      <from-outcome id="__49">GoOdi11GIndex</from-outcome>
+      <to-activity-id id="__47">odi11_index</to-activity-id>
     </control-flow-case>
   </control-flow-rule>
   <managed-bean id="__1">

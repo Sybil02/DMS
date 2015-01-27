@@ -207,9 +207,9 @@ insert into dms_function(id,locale,name,created_at,updated_at,updated_by,created
 values('101040','en','Validator Maintain',sysdate,sysdate,'10000','10000','/WEB-INF/dcmValidation/validation_edit_tsk.xml#validation_edit_tsk','Validator Maintain',101040,null);
 
 insert into dms_function(id,locale,name,created_at,updated_at,updated_by,created_by,action,category,seq,p_function_id)
-values('102000','zh_CN','数据采集',sysdate,sysdate,'10000','10000','dcmIndex','通用',100000,null);
+values('102000','zh_CN','数据采集',sysdate,sysdate,'10000','10000','dcmIndex','通用',103000,null);
 insert into dms_function(id,locale,name,created_at,updated_at,updated_by,created_by,action,category,seq,p_function_id)
-values('102000','en','Data Collection',sysdate,sysdate,'10000','10000','dcmIndex','General',100000,null);
+values('102000','en','Data Collection',sysdate,sysdate,'10000','10000','dcmIndex','General',103000,null);
 
 insert into dms_function(id,locale,name,created_at,updated_at,updated_by,created_by,action,category,seq,p_function_id)
 values('101045','zh_CN','ODI场景维护',sysdate,sysdate,'10000','10000','/WEB-INF/odi11gScene/scene_edit_tsk.xml#scene_edit_tsk','ODI场景维护',101045,null);
@@ -220,6 +220,11 @@ insert into dms_function(id,locale,name,created_at,updated_at,updated_by,created
 values('101046','zh_CN','ODI场景权限',sysdate,sysdate,'10000','10000','/WEB-INF/odi11gScene/scene_authority_tsk.xml#scene_authority_tsk','ODI场景权限',101046,null);
 insert into dms_function(id,locale,name,created_at,updated_at,updated_by,created_by,action,category,seq,p_function_id)
 values('101046','en','ODI Scenario Authority',sysdate,sysdate,'10000','10000','/WEB-INF/odi11gScene/scene_authority_tsk.xml#scene_authority_tsk','ODI Scenario Authority',101046,null);
+
+insert into dms_function(id,locale,name,created_at,updated_at,updated_by,created_by,action,category,seq,p_function_id)
+values('103000','zh_CN','ODI11G接口',sysdate,sysdate,'10000','10000','odi11_index','通用',103000,null);
+insert into dms_function(id,locale,name,created_at,updated_at,updated_by,created_by,action,category,seq,p_function_id)
+values('103000','en','ODI11G Interface',sysdate,sysdate,'10000','10000','odi11_index','General',103000,null);
 /*==============================================================*/
 /* 初始化菜单                                                     */
 /*==============================================================*/
@@ -352,3 +357,8 @@ insert into dms_menu(id,locale,seq,label,enable_flag,p_id,function_id,created_at
 values('101072','zh_CN',101072,'场景权限','Y','101070','101046',sysdate,sysdate,'10000','10000');
 insert into dms_menu(id,locale,seq,label,enable_flag,p_id,function_id,created_at,updated_at,updated_by,created_by)
 values('101072','en',101072,'Scenario Authority','Y','101070','101046',sysdate,sysdate,'10000','10000');
+
+insert into dms_menu(id,locale,seq,label,enable_flag,p_id,function_id,created_at,updated_at,updated_by,created_by)
+values('103000','zh_CN',100002,'ODI11G接口','Y',null,'103000',sysdate,sysdate,'10000','10000');
+insert into dms_menu(id,locale,seq,label,enable_flag,p_id,function_id,created_at,updated_at,updated_by,created_by)
+values('103000','en',100002,'ODI11G Interface','Y',null,'103000',sysdate,sysdate,'10000','10000');

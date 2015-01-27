@@ -137,6 +137,7 @@ public class Odi11SceneCatImpl extends DmsEntityImpl {
             return vals;
         }
     }
+
     public static final int ID = AttributesEnum.Id.index();
     public static final int PID = AttributesEnum.PId.index();
     public static final int CATNAME = AttributesEnum.CatName.index();
@@ -151,6 +152,16 @@ public class Odi11SceneCatImpl extends DmsEntityImpl {
      * This is the default constructor (do not remove).
      */
     public Odi11SceneCatImpl() {
+    }
+
+    /**
+     * @return the definition object for this instance class.
+     */
+    public static synchronized EntityDefImpl getDefinitionObject() {
+        if (mDefinitionObject == null) {
+            mDefinitionObject = EntityDefImpl.findDefObject("team.epm.odi11g.model.Odi11SceneCat");
+        }
+        return mDefinitionObject;
     }
 
     /**
@@ -340,13 +351,5 @@ public class Odi11SceneCatImpl extends DmsEntityImpl {
         return new Key(new Object[]{id, locale});
     }
 
-    /**
-     * @return the definition object for this instance class.
-     */
-    public static synchronized EntityDefImpl getDefinitionObject() {
-        if (mDefinitionObject == null) {
-            mDefinitionObject = EntityDefImpl.findDefObject("team.epm.odi11g.model.Odi11SceneCat");
-        }
-        return mDefinitionObject;
-    }
+
 }

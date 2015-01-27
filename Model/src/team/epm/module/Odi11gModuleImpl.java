@@ -118,4 +118,12 @@ public class Odi11gModuleImpl extends ApplicationModuleImpl {
     public ViewObjectImpl getOdi11UnauthedSceneView() {
         return (ViewObjectImpl)findViewObject("Odi11UnauthedSceneView");
     }
+
+    /**
+     * Container's getter for Odi11gCatSceneLnk.
+     * @return Odi11gCatSceneLnk
+     */
+    public ViewLinkImpl getOdi11gCatSceneLnk() {
+        return (ViewLinkImpl)findViewLink("Odi11gCatSceneLnk");
+    }
 }

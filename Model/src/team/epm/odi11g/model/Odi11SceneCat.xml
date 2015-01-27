@@ -107,10 +107,10 @@
     Type="oracle.jbo.domain.Date"
     ColumnType="DATE"
     TableName="ODI11_SCENE_CAT">
-    <TransientExpression><![CDATA[adf.currentDateTime]]></TransientExpression>
     <DesignTime>
       <Attr Name="_DisplaySize" Value="7"/>
     </DesignTime>
+    <TransientExpression><![CDATA[adf.currentDateTime]]></TransientExpression>
     <Properties>
       <SchemaBasedProperties>
         <FMT_FORMATTER
