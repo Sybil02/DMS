@@ -80,4 +80,9 @@
     <managed-bean-class id="__43">dcm.DcmIndexBean</managed-bean-class>
     <managed-bean-scope id="__42">view</managed-bean-scope>
   </managed-bean>
+  <managed-bean id="__50">
+    <managed-bean-name id="__52">Odi11gIndexMBean</managed-bean-name>
+    <managed-bean-class id="__53">odi11g.Odi11gIndexMBean</managed-bean-class>
+    <managed-bean-scope id="__51">view</managed-bean-scope>
+  </managed-bean>
 </adfc-config>

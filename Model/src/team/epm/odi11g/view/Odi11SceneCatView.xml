@@ -120,9 +120,4 @@
     EntityAttrName="CreatedBy"
     EntityUsage="Odi11SceneCat"
     AliasName="CREATED_BY"/>
-  <ViewLinkAccessor
-    Name="Odi11SceneView"
-    ViewLink="team.epm.odi11g.Odi11gCatSceneLnk"
-    Type="oracle.jbo.RowIterator"
-    IsUpdateable="false"/>
 </ViewObject>

@@ -18,6 +18,7 @@ import org.apache.myfaces.trinidad.model.CollectionModel;
 
 import team.epm.module.DcmModuleImpl;
 import team.epm.module.DmsModuleImpl;
+import team.epm.module.Odi11gModuleImpl;
 
 public class DmsUtils {
     public DmsUtils() {
@@ -64,5 +65,8 @@ public class DmsUtils {
     }
     public static DcmModuleImpl getDcmApplicationModule(){
         return (DcmModuleImpl)ADFUtils.getApplicationModuleForDataControl("DcmModuleDataControl");
+    }
+    public static Odi11gModuleImpl getOdi11gApplicationModule(){
+        return (Odi11gModuleImpl)ADFUtils.getApplicationModuleForDataControl("Odi11gModuleDataControl");
     }
 }

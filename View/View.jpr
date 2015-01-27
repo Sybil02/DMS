@@ -605,6 +605,17 @@
                   <url path="public_html/"/>
                </list>
             </hash>
+            <hash>
+               <url n="content-folder-url" path="adfmsrc/odi11g/"/>
+               <list n="pattern-filters">
+                  <string v="+odi11g/Odi11gIndexMBean.java"/>
+                  <string v="+odi11g/Odi11gCatTreeItem.java"/>
+                  <string v="+odi11g/Odi11gCatTreeModel.java"/>
+               </list>
+               <list n="url-path">
+                  <url path="adfmsrc/"/>
+               </list>
+            </hash>
          </list>
          <list n="url-path"/>
       </hash>

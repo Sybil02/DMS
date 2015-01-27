@@ -9,17 +9,27 @@
   <f:view locale="#{sessionScope.cur_user.locale}"
           beforePhase="#{MainPageMBean.initMenuBar}">
     <af:document id="d1" title="#{viewBundle['odi11g.title']}">
+      <af:messages id="m1"/>
       <af:form id="f1">
         <af:pageTemplate viewId="/dms/dynamicShell/dynamicTabShell.jspx"
                          value="#{bindings.pageTemplateBinding}" id="pt1">
-          <f:facet name="navigation"/>
+          <f:facet name="navigation">
+            <af:tree id="tr1" var="node"
+                     value="#{viewScope.Odi11gIndexMBean.model}"
+                     rowSelection="single"
+                     selectionListener="#{viewScope.Odi11gIndexMBean.selectListener}"
+                     partialTriggers="">
+              <f:facet name="nodeStamp">
+                <af:outputLabel value="#{node.label}"/>
+              </f:facet>
+            </af:tree>
+          </f:facet>
           <f:facet name="globalLinks"/>
           <f:facet name="status"/>
           <f:facet name="globalToolbar"/>
           <f:facet name="globalSearch"/>
           <f:facet name="globalTabs">
-            <af:menuBar id="mb1" binding="#{MainPageMBean.menuBar}">
-            </af:menuBar>
+            <af:menuBar id="mb1" binding="#{MainPageMBean.menuBar}"></af:menuBar>
           </f:facet>
           <f:facet name="welcome">
             <af:panelStretchLayout id="psl1">
@@ -28,6 +38,47 @@
                   <f:facet name="menus"/>
                   <f:facet name="toolbar"/>
                   <f:facet name="statusbar"/>
+                  <af:table value="#{bindings.Odi11AuthedSceneView.collectionModel}"
+                            var="row"
+                            rows="#{bindings.Odi11AuthedSceneView.rangeSize}"
+                            emptyText="#{viewBundle['dms.common.nodata']}"
+                            fetchSize="#{bindings.Odi11AuthedSceneView.rangeSize}"
+                            rowBandingInterval="0"
+                            filterModel="#{bindings.Odi11AuthedSceneViewQuery.queryDescriptor}"
+                            queryListener="#{bindings.Odi11AuthedSceneViewQuery.processQuery}"
+                            filterVisible="false" varStatus="vs"
+                            selectedRowKeys="#{bindings.Odi11AuthedSceneView.collectionModel.selectedRow}"
+                            selectionListener="#{bindings.Odi11AuthedSceneView.collectionModel.makeCurrent}"
+                            rowSelection="single" id="t1"
+                            binding="#{viewScope.Odi11gIndexMBean.sceneTable}">
+                    <af:column sortProperty="#{bindings.Odi11AuthedSceneView.hints.SceneAlias.name}"
+                               filterable="true" sortable="true"
+                               headerText="#{bindings.Odi11AuthedSceneView.hints.SceneAlias.label}"
+                               id="c2" width="200">
+                      <af:outputText value="#{row.SceneAlias}" id="ot3"/>
+                    </af:column>
+                    <af:column sortProperty="#{bindings.Odi11AuthedSceneView.hints.UpdatedAt.name}"
+                               filterable="false" sortable="true"
+                               headerText="#{bindings.Odi11AuthedSceneView.hints.UpdatedAt.label}"
+                               id="c3" width="120">
+                      <af:outputText value="#{row.UpdatedAt}" id="ot2">
+                        <af:convertDateTime pattern="#{bindings.Odi11AuthedSceneView.hints.UpdatedAt.format}"/>
+                      </af:outputText>
+                    </af:column>
+                    <af:column sortProperty="#{bindings.Odi11AuthedSceneView.hints.UpdatedBy.name}"
+                               filterable="false" sortable="true"
+                               headerText="#{bindings.Odi11AuthedSceneView.hints.UpdatedBy.label}"
+                               id="c1">
+                      <af:selectOneChoice value="#{row.bindings.UpdatedBy.inputValue}"
+                                          label="#{row.bindings.UpdatedBy.label}"
+                                          required="#{bindings.Odi11AuthedSceneView.hints.UpdatedBy.mandatory}"
+                                          shortDesc="#{bindings.Odi11AuthedSceneView.hints.UpdatedBy.tooltip}"
+                                          id="soc1" readOnly="true">
+                        <f:selectItems value="#{row.bindings.UpdatedBy.items}"
+                                       id="si1"/>
+                      </af:selectOneChoice>
+                    </af:column>
+                  </af:table>
                 </af:panelCollection>
               </f:facet>
             </af:panelStretchLayout>
@@ -35,7 +86,7 @@
           <f:facet name="innerToolbar"/>
           <f:attribute name="brandingTitle" value="#{viewBundle['dms.title']}"/>
           <f:attribute name="globalAreaSplitterPosition" value="0"/>
-          <f:attribute name="navSplitterPosition" value="0"/>
+          <f:attribute name="navSplitterPosition" value="200"/>
           <f:attribute name="navSplitterDisabled" value="true"/>
         </af:pageTemplate>
       </af:form>

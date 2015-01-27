@@ -4,6 +4,21 @@
   <parameters/>
   <executables>
     <variableIterator id="variables"/>
+    <iterator Binds="Odi11SceneCatView1" RangeSize="25"
+              DataControl="Odi11gModuleDataControl"
+              id="Odi11SceneCatView1Iterator"/>
   </executables>
-  <bindings/>
+  <bindings>
+    <tree IterBinding="Odi11SceneCatView1Iterator" id="Odi11SceneCatView1">
+      <nodeDefinition DefName="team.epm.odi11g.view.Odi11SceneCatView"
+                      Name="Odi11SceneCatView10">
+        <AttrNames>
+          <Item Value="CatName"/>
+        </AttrNames>
+        <Accessors>
+          <Item Value="Odi11SceneCatViewLnk"/>
+        </Accessors>
+      </nodeDefinition>
+    </tree>
+  </bindings>
 </pageDefinition>
