@@ -24,15 +24,155 @@
               </f:facet>
             </af:tree>
           </f:facet>
-          <f:facet name="globalLinks"/>
-          <f:facet name="status"/>
-          <f:facet name="globalToolbar"/>
-          <f:facet name="globalSearch"/>
           <f:facet name="globalTabs">
             <af:menuBar id="mb1" binding="#{MainPageMBean.menuBar}"></af:menuBar>
           </f:facet>
           <f:facet name="welcome">
-            <af:panelStretchLayout id="psl1">
+            <af:panelStretchLayout id="psl1" topHeight="0">
+              <f:facet name="top">
+                <af:panelGroupLayout layout="scroll"
+                                     xmlns:af="http://xmlns.oracle.com/adf/faces/rich"
+                                     id="pgl1">
+                  <af:popup id="p1" autoCancel="disabled"
+                            childCreation="deferred"
+                            binding="#{viewScope.Odi11gIndexMBean.popup}">
+                    <af:panelWindow id="pw1" modal="true"
+                                    title="#{viewBundle['odi11g.scene.execute_param']}">
+                      <af:panelCollection id="pc2">
+                        <f:facet name="menus"/>
+                        <f:facet name="toolbar">
+                          <af:toolbar id="t3">
+                            <af:commandButton text="#{viewBundle['odi11g.scene.execute']}"
+                                              id="cb1"
+                                              actionListener="#{viewScope.Odi11gIndexMBean.execute}"/>
+                          </af:toolbar>
+                        </f:facet>
+                        <f:facet name="statusbar"/>
+                        <af:table value="#{bindings.Odi11SceneParamExView.collectionModel}"
+                                  var="row"
+                                  rows="#{bindings.Odi11SceneParamExView.rangeSize}"
+                                  emptyText="#{viewBundle['dms.common.nodata']}"
+                                  fetchSize="#{bindings.Odi11SceneParamExView.rangeSize}"
+                                  rowBandingInterval="0"
+                                  selectedRowKeys="#{bindings.Odi11SceneParamExView.collectionModel.selectedRow}"
+                                  selectionListener="#{bindings.Odi11SceneParamExView.collectionModel.makeCurrent}"
+                                  rowSelection="single" id="t2"
+                                  binding="#{viewScope.Odi11gIndexMBean.paramTable}">
+                          <af:column sortProperty="#{bindings.Odi11SceneParamExView.hints.PAlias.name}"
+                                     sortable="false"
+                                     headerText="#{bindings.Odi11SceneParamExView.hints.PAlias.label}"
+                                     id="c6">
+                            <af:inputText value="#{row.bindings.PAlias.inputValue}"
+                                          label="#{bindings.Odi11SceneParamExView.hints.PAlias.label}"
+                                          required="#{bindings.Odi11SceneParamExView.hints.PAlias.mandatory}"
+                                          columns="#{bindings.Odi11SceneParamExView.hints.PAlias.displayWidth}"
+                                          maximumLength="#{bindings.Odi11SceneParamExView.hints.PAlias.precision}"
+                                          shortDesc="#{bindings.Odi11SceneParamExView.hints.PAlias.tooltip}"
+                                          id="it3">
+                              <f:validator binding="#{row.bindings.PAlias.validator}"/>
+                            </af:inputText>
+                          </af:column>
+                          <af:column headerText="#{bindings.Odi11SceneParamExView.hints.value.label}"
+                                     id="c5">
+                            <af:selectOneChoice value="#{row.bindings.value.inputValue}"
+                                                rendered="#{row.bindings.ValueSetId.inputValue ne null}"
+                                                label="#{bindings.Odi11SceneParamExView.hints.value.label}"
+                                                id="soc2">
+                              <f:selectItems value="#{viewScope.Odi11gIndexMBean.valueList[row.bindings.ValueSetId.inputValue]}"
+                                             id="si2"/>
+                            </af:selectOneChoice>
+                            <af:inputText label="#{bindings.Odi11SceneParamExView.hints.value.label}"
+                                          id="it1"
+                                          rendered="#{row.bindings.ValueSetId.inputValue eq null}"
+                                          value="#{row.bindings.value.inputValue}"/>
+                          </af:column>
+                        </af:table>
+                      </af:panelCollection>
+                    </af:panelWindow>
+                  </af:popup>
+                  <af:popup id="p2" autoCancel="disabled"
+                            childCreation="deferred"
+                            binding="#{viewScope.Odi11gIndexMBean.statusPopup}">
+                    <af:panelWindow id="pw2"
+                                    title="#{viewBundle['odi11g.scene.status']}"
+                                    modal="true">
+                      <af:panelStretchLayout id="psl2"
+                                             inlineStyle="width:950px;height:450px">
+                        <f:facet name="center">
+                          <af:panelCollection id="pc3">
+                            <f:facet name="menus"/>
+                            <f:facet name="toolbar">
+                              <af:toolbar id="t4">
+                                <af:commandButton text="#{viewBundle['dms.common.refresh']}"
+                                                  id="cb2"
+                                                  actionListener="#{viewScope.Odi11gIndexMBean.refreshSceneStatus}"/>
+                              </af:toolbar>
+                            </f:facet>
+                            <f:facet name="statusbar"/>
+                            <af:table value="#{bindings.Odi11SceneExecView.collectionModel}"
+                                      var="row"
+                                      rows="#{bindings.Odi11SceneExecView.rangeSize}"
+                                      emptyText="#{viewBundle['dms.common.nodata']}"
+                                      fetchSize="#{bindings.Odi11SceneExecView.rangeSize}"
+                                      rowBandingInterval="0"
+                                      selectedRowKeys="#{bindings.Odi11SceneExecView.collectionModel.selectedRow}"
+                                      selectionListener="#{bindings.Odi11SceneExecView.collectionModel.makeCurrent}"
+                                      rowSelection="single" id="t5">
+                              <af:column sortProperty="#{bindings.Odi11SceneExecView.hints.Params.name}"
+                                         sortable="false"
+                                         headerText="#{bindings.Odi11SceneExecView.hints.Params.label}"
+                                         id="c11">
+                                <af:outputText value="#{row.Params}" id="ot7"/>
+                              </af:column>
+                              <af:column sortProperty="#{bindings.Odi11SceneExecView.hints.ExecStatus.name}"
+                                         sortable="false"
+                                         headerText="#{bindings.Odi11SceneExecView.hints.ExecStatus.label}"
+                                         id="c7">
+                                <af:selectOneChoice value="#{row.bindings.ExecStatus.inputValue}"
+                                                    label="#{row.bindings.ExecStatus.label}"
+                                                    required="#{bindings.Odi11SceneExecView.hints.ExecStatus.mandatory}"
+                                                    shortDesc="#{bindings.Odi11SceneExecView.hints.ExecStatus.tooltip}"
+                                                    id="soc3" readOnly="true">
+                                  <f:selectItems value="#{row.bindings.ExecStatus.items}"
+                                                 id="si3"/>
+                                </af:selectOneChoice>
+                              </af:column>
+                              <af:column sortProperty="#{bindings.Odi11SceneExecView.hints.LogText.name}"
+                                         sortable="false"
+                                         headerText="#{bindings.Odi11SceneExecView.hints.LogText.label}"
+                                         id="c8" noWrap="false" width="450">
+                                <af:outputText value="#{row.LogText}" id="ot4"/>
+                              </af:column>
+                              <af:column sortProperty="#{bindings.Odi11SceneExecView.hints.UpdatedAt.name}"
+                                         sortable="false"
+                                         headerText="#{bindings.Odi11SceneExecView.hints.UpdatedAt.label}"
+                                         id="c10" noWrap="true">
+                                <af:outputText value="#{row.UpdatedAt}"
+                                               id="ot1">
+                                  <af:convertDateTime pattern="#{bindings.Odi11SceneExecView.hints.UpdatedAt.format}"/>
+                                </af:outputText>
+                              </af:column>
+                              <af:column sortProperty="#{bindings.Odi11SceneExecView.hints.UpdatedBy.name}"
+                                         sortable="false"
+                                         headerText="#{bindings.Odi11SceneExecView.hints.UpdatedBy.label}"
+                                         id="c9">
+                                <af:selectOneChoice value="#{row.bindings.UpdatedBy.inputValue}"
+                                                    label="#{row.bindings.UpdatedBy.label}"
+                                                    required="#{bindings.Odi11SceneExecView.hints.UpdatedBy.mandatory}"
+                                                    shortDesc="#{bindings.Odi11SceneExecView.hints.UpdatedBy.tooltip}"
+                                                    id="soc4" readOnly="true">
+                                  <f:selectItems value="#{row.bindings.UpdatedBy.items}"
+                                                 id="si4"/>
+                                </af:selectOneChoice>
+                              </af:column>
+                            </af:table>
+                          </af:panelCollection>
+                        </f:facet>
+                      </af:panelStretchLayout>
+                    </af:panelWindow>
+                  </af:popup>
+                </af:panelGroupLayout>
+              </f:facet>
               <f:facet name="center">
                 <af:panelCollection id="pc1">
                   <f:facet name="menus"/>
@@ -56,6 +196,17 @@
                                headerText="#{bindings.Odi11AuthedSceneView.hints.SceneAlias.label}"
                                id="c2" width="200">
                       <af:outputText value="#{row.SceneAlias}" id="ot3"/>
+                    </af:column>
+                    <af:column id="c4">
+                      <af:panelGroupLayout id="pgl2">
+                        <af:commandLink text="#{viewBundle['odi11g.scene.execute']}"
+                                        id="cl1"
+                                        actionListener="#{viewScope.Odi11gIndexMBean.showExcutePopup}"/>
+                        <af:spacer width="10" id="sp1"/>
+                        <af:commandLink text="#{viewBundle['odi11g.scene.status']}"
+                                        id="cl2"
+                                        actionListener="#{viewScope.Odi11gIndexMBean.showStatusPopup}"/>
+                      </af:panelGroupLayout>
                     </af:column>
                     <af:column sortProperty="#{bindings.Odi11AuthedSceneView.hints.UpdatedAt.name}"
                                filterable="false" sortable="true"

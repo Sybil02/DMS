@@ -14,6 +14,12 @@
     <searchRegion Binds="Odi11AuthedSceneViewIterator" Criteria=""
                   Customizer="oracle.jbo.uicli.binding.JUSearchBindingCustomizer"
                   id="Odi11AuthedSceneViewQuery"/>
+    <iterator Binds="Odi11SceneParamExView" RangeSize="25"
+              DataControl="Odi11gModuleDataControl"
+              id="Odi11SceneParamExViewIterator"/>
+    <iterator Binds="Odi11SceneExecView" RangeSize="25"
+              DataControl="Odi11gModuleDataControl"
+              id="Odi11SceneExecViewIterator"/>
   </executables>
   <bindings>
     <tree IterBinding="Odi11AuthedSceneViewIterator" id="Odi11AuthedSceneView">
@@ -21,6 +27,30 @@
                       Name="Odi11AuthedSceneView0">
         <AttrNames>
           <Item Value="SceneAlias"/>
+          <Item Value="UpdatedAt"/>
+          <Item Value="UpdatedBy"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <tree IterBinding="Odi11SceneParamExViewIterator"
+          id="Odi11SceneParamExView">
+      <nodeDefinition DefName="team.epm.odi11g.view.Odi11SceneParamExView"
+                      Name="Odi11SceneParamExView0">
+        <AttrNames>
+          <Item Value="SceneId"/>
+          <Item Value="PAlias"/>
+          <Item Value="ValueSetId"/>
+          <Item Value="value"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <tree IterBinding="Odi11SceneExecViewIterator" id="Odi11SceneExecView">
+      <nodeDefinition DefName="team.epm.odi11g.view.Odi11SceneExecView"
+                      Name="Odi11SceneExecView0">
+        <AttrNames>
+          <Item Value="Params"/>
+          <Item Value="ExecStatus"/>
+          <Item Value="LogText"/>
           <Item Value="UpdatedAt"/>
           <Item Value="UpdatedBy"/>
         </AttrNames>

@@ -121,6 +121,42 @@ values ('10020', 'zh_CN', 'DCM_IMPORT_TYPE', 'R'||chr(38)||'I', '覆盖和增量
 
 insert into dms_lookup (ID, LOCALE, LOOKUP_TYPE, CODE, MEANING, IDX, CREATED_AT, UPDATED_AT, UPDATED_BY, CREATED_BY)
 values ('10020', 'en', 'DCM_IMPORT_TYPE', 'R'||chr(38)||'I', 'Replace'||chr(38)||'Increment', 30, sysdate, sysdate, '10000', '10000');
+
+insert into dms_lookup (ID, LOCALE, LOOKUP_TYPE, CODE, MEANING, IDX, CREATED_AT, UPDATED_AT, UPDATED_BY, CREATED_BY)
+values ('10030', 'zh_CN', 'ODI_RUN_STATUS', 'D', '已完成', 10, sysdate, sysdate, '10000', '10000');
+
+insert into dms_lookup (ID, LOCALE, LOOKUP_TYPE, CODE, MEANING, IDX, CREATED_AT, UPDATED_AT, UPDATED_BY, CREATED_BY)
+values ('10030', 'en', 'ODI_RUN_STATUS', 'D', 'Done', 10, sysdate, sysdate, '10000', '10000');
+
+insert into dms_lookup (ID, LOCALE, LOOKUP_TYPE, CODE, MEANING, IDX, CREATED_AT, UPDATED_AT, UPDATED_BY, CREATED_BY)
+values ('10031', 'zh_CN', 'ODI_RUN_STATUS', 'E', '执行出错', 20, sysdate, sysdate, '10000', '10000');
+
+insert into dms_lookup (ID, LOCALE, LOOKUP_TYPE, CODE, MEANING, IDX, CREATED_AT, UPDATED_AT, UPDATED_BY, CREATED_BY)
+values ('10031', 'en', 'ODI_RUN_STATUS', 'E', 'Error', 20, sysdate, sysdate, '10000', '10000');
+
+insert into dms_lookup (ID, LOCALE, LOOKUP_TYPE, CODE, MEANING, IDX, CREATED_AT, UPDATED_AT, UPDATED_BY, CREATED_BY)
+values ('10032', 'zh_CN', 'ODI_RUN_STATUS', 'M', '有警告', 30, sysdate, sysdate, '10000', '10000');
+
+insert into dms_lookup (ID, LOCALE, LOOKUP_TYPE, CODE, MEANING, IDX, CREATED_AT, UPDATED_AT, UPDATED_BY, CREATED_BY)
+values ('10032', 'en', 'ODI_RUN_STATUS', 'M', 'Warning', 30, sysdate, sysdate, '10000', '10000');
+
+insert into dms_lookup (ID, LOCALE, LOOKUP_TYPE, CODE, MEANING, IDX, CREATED_AT, UPDATED_AT, UPDATED_BY, CREATED_BY)
+values ('10033', 'zh_CN', 'ODI_RUN_STATUS', 'Q', '排队中', 40, sysdate, sysdate, '10000', '10000');
+
+insert into dms_lookup (ID, LOCALE, LOOKUP_TYPE, CODE, MEANING, IDX, CREATED_AT, UPDATED_AT, UPDATED_BY, CREATED_BY)
+values ('10033', 'en', 'ODI_RUN_STATUS', 'Q', 'Queued', 40, sysdate, sysdate, '10000', '10000');
+
+insert into dms_lookup (ID, LOCALE, LOOKUP_TYPE, CODE, MEANING, IDX, CREATED_AT, UPDATED_AT, UPDATED_BY, CREATED_BY)
+values ('10034', 'zh_CN', 'ODI_RUN_STATUS', 'R', '运行中', 50, sysdate, sysdate, '10000', '10000');
+
+insert into dms_lookup (ID, LOCALE, LOOKUP_TYPE, CODE, MEANING, IDX, CREATED_AT, UPDATED_AT, UPDATED_BY, CREATED_BY)
+values ('10034', 'en', 'ODI_RUN_STATUS', 'R', 'Running', 50, sysdate, sysdate, '10000', '10000');
+
+insert into dms_lookup (ID, LOCALE, LOOKUP_TYPE, CODE, MEANING, IDX, CREATED_AT, UPDATED_AT, UPDATED_BY, CREATED_BY)
+values ('10035', 'zh_CN', 'ODI_RUN_STATUS', 'W', '等待执行', 60, sysdate, sysdate, '10000', '10000');
+
+insert into dms_lookup (ID, LOCALE, LOOKUP_TYPE, CODE, MEANING, IDX, CREATED_AT, UPDATED_AT, UPDATED_BY, CREATED_BY)
+values ('10035', 'en', 'ODI_RUN_STATUS', 'W', 'Waiting', 60, sysdate, sysdate, '10000', '10000');
 /*==============================================================*/
 /* 初始化功能                                                     */
 /*==============================================================*/

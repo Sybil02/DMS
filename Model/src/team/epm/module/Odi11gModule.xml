@@ -51,6 +51,9 @@
   <ViewUsage
     Name="Odi11AuthedSceneView"
     ViewObjectName="team.epm.odi11g.view.Odi11AuthedSceneView"/>
+  <ViewUsage
+    Name="Odi11SceneParamExView"
+    ViewObjectName="team.epm.odi11g.view.Odi11SceneParamExView"/>
   <ViewLinkUsage
     Name="Odi11gRoleSceneLnk"
     ViewLinkObjectName="team.epm.odi11g.Odi11gRoleSceneLnk"

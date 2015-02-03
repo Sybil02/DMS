@@ -536,6 +536,10 @@
             <hash>
                <url n="content-folder-url" path="adfmsrc/dms/valueSet/"/>
                <list n="pattern-filters">
+                  <string v="+dms/valueSet/ColumnDescriporImpl.java"/>
+                  <string v="+dms/valueSet/DmsValuesetTableModel.java"/>
+                  <string v="+dms/valueSet/DmsValueSetVLModel.java"/>
+                  <string v="+dms/valueSet/DmsListValueModel.java"/>
                   <string v="+dms/valueSet/ValueSetAuthorityBean.java"/>
                </list>
                <list n="url-path">

@@ -61,6 +61,7 @@ import oracle.jbo.ViewCriteriaItem;
 import oracle.jbo.ViewCriteriaRow;
 import oracle.jbo.ViewObject;
 
+import oracle.jbo.jbotester.load.SimpleDateFormatter;
 import oracle.jbo.server.DBTransaction;
 
 import org.apache.commons.lang.ObjectUtils;
@@ -713,7 +714,14 @@ public class DcmDataDisplayBean extends AbstractExcel2007Writer {
             while (rs.next()) {
                 Map row = new HashMap();
                 for (ColumnDef col : this.colsdef) {
-                    row.put(col.getCode(),rs.getString(col.getCode().toUpperCase()));
+                    Object obj=rs.getObject(col.getCode().toUpperCase());
+                    if(obj instanceof java.sql.Date){
+                        SimpleDateFormatter format=new SimpleDateFormatter("yyyy-MM-dd hh:mm:ss");
+                        obj=format.format((java.sql.Date)obj);
+                    }else{
+                        obj=ObjectUtils.toString(obj);
+                    }
+                    row.put(col.getCode(),obj);
                 }
                 row.put("ROW_ID", rs.getString("ROW_ID"));
                 data.add(row);

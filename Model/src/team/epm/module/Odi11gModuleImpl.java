@@ -134,4 +134,12 @@ public class Odi11gModuleImpl extends ApplicationModuleImpl {
     public ViewObjectImpl getOdi11AuthedSceneView() {
         return (ViewObjectImpl)findViewObject("Odi11AuthedSceneView");
     }
+
+    /**
+     * Container's getter for Odi11SceneParamExView.
+     * @return Odi11SceneParamExView
+     */
+    public ViewObjectImpl getOdi11SceneParamExView() {
+        return (ViewObjectImpl)findViewObject("Odi11SceneParamExView");
+    }
 }

@@ -267,22 +267,6 @@ public class DmsModuleImpl extends ApplicationModuleImpl implements DmsModule {
     }
 
     /**
-     * Container's getter for DmsValueSetView1.
-     * @return DmsValueSetView1
-     */
-    public DmsValueSetViewImpl getDmsValueSetView1() {
-        return (DmsValueSetViewImpl)findViewObject("DmsValueSetView1");
-    }
-
-    /**
-     * Container's getter for DmsRoleValueView1.
-     * @return DmsRoleValueView1
-     */
-    public ViewObjectImpl getDmsRoleValueView1() {
-        return (ViewObjectImpl)findViewObject("DmsRoleValueView1");
-    }
-
-    /**
      * Container's getter for DmsValusetValueLnk.
      * @return DmsValusetValueLnk
      */
