@@ -26,6 +26,8 @@ import oracle.jbo.server.EntityDefImpl;
 import oracle.jbo.server.EntityImpl;
 import oracle.jbo.server.TransactionEvent;
 
+import org.apache.commons.lang.ObjectUtils;
+
 import team.epm.dms.model.DmsGroupCollImpl;
 import team.epm.dms.model.DmsGroupDefImpl;
 import team.epm.dms.model.DmsGroupImpl;
@@ -47,8 +49,7 @@ public class DmsEntityImpl extends EntityImpl {
             this.setAttribute("UpdatedAt",
                               new Date(new java.sql.Timestamp(System.currentTimeMillis())));
             this.setAttribute("UpdatedBy",
-                              this.getDBTransaction().getSession().getUserData().get("userId") +
-                              "");
+                              ObjectUtils.toString(this.getDBTransaction().getSession().getUserData().get("userId")));
         }
     }
     //获取所有语言列表
@@ -99,43 +100,45 @@ public class DmsEntityImpl extends EntityImpl {
                                    AttributeDefImpl[] attributeDefImpl3,
                                    HashMap hashMap,
                                    boolean b) throws SQLException {
-        if (operation == DML_UPDATE || operation == DML_DELETE) {
-            StringBuffer sqlBuf =
-                super.buildDMLStatement(operation, trimMultiLangAttr(attributeDefImpl),
-                                        trimMultiLangAttr(attributeDefImpl2),
-                                        trimMultiLangAttr(attributeDefImpl3),
-                                        b);
-            String sql = sqlBuf.toString();
-            sql = sql.replaceAll("LOCALE=", "'-1'!=");
-            PreparedStatement stat =
-                preparedStatement.getConnection().prepareStatement(sql);
-            super.bindDMLStatement(operation, stat,
-                                   trimMultiLangAttr(attributeDefImpl),
-                                   trimMultiLangAttr(attributeDefImpl2),
-                                   trimMultiLangAttr(attributeDefImpl3),
-                                   hashMap, b);
-            stat.execute();
-            stat.close();
-        } else if (operation == DML_INSERT) {
-            StringBuffer sqlBuf =
-                super.buildDMLStatement(operation, attributeDefImpl,
-                                        attributeDefImpl2, attributeDefImpl3,
-                                        b);
-            String sql = sqlBuf.toString();
-            String curLang = this.getAttribute("Locale").toString();
-            PreparedStatement stat =
-                preparedStatement.getConnection().prepareStatement(sql);
-            for (String lang : this.getLangList()) {
-                if (lang.equals(curLang))
-                    continue;
-                this.setAttributeInternal("Locale", lang);
-                super.bindDMLStatement(operation, stat, attributeDefImpl,
-                                       attributeDefImpl2, attributeDefImpl3,
+        if (this.isMutltiLangEntiy()) {
+            if (operation == DML_UPDATE || operation == DML_DELETE) {
+                StringBuffer sqlBuf =
+                    super.buildDMLStatement(operation, trimMultiLangAttr(attributeDefImpl),
+                                            trimMultiLangAttr(attributeDefImpl2),
+                                            trimMultiLangAttr(attributeDefImpl3),
+                                            b);
+                String sql = sqlBuf.toString();
+                sql = sql.replaceAll("LOCALE=", "'-1'!=");
+                PreparedStatement stat =
+                    preparedStatement.getConnection().prepareStatement(sql);
+                super.bindDMLStatement(operation, stat,
+                                       trimMultiLangAttr(attributeDefImpl),
+                                       trimMultiLangAttr(attributeDefImpl2),
+                                       trimMultiLangAttr(attributeDefImpl3),
                                        hashMap, b);
                 stat.execute();
+                stat.close();
+            } else if (operation == DML_INSERT) {
+                StringBuffer sqlBuf =
+                    super.buildDMLStatement(operation, attributeDefImpl,
+                                            attributeDefImpl2,
+                                            attributeDefImpl3, b);
+                String sql = sqlBuf.toString();
+                String curLang = this.getAttribute("Locale").toString();
+                PreparedStatement stat =
+                    preparedStatement.getConnection().prepareStatement(sql);
+                for (String lang : this.getLangList()) {
+                    if (lang.equals(curLang))
+                        continue;
+                    this.setAttributeInternal("Locale", lang);
+                    super.bindDMLStatement(operation, stat, attributeDefImpl,
+                                           attributeDefImpl2,
+                                           attributeDefImpl3, hashMap, b);
+                    stat.execute();
+                }
+                stat.close();
+                this.setAttributeInternal("Locale", curLang);
             }
-            stat.close();
-            this.setAttributeInternal("Locale", curLang);
         }
         return super.bindDMLStatement(operation, preparedStatement,
                                       attributeDefImpl, attributeDefImpl2,
@@ -155,5 +158,17 @@ public class DmsEntityImpl extends EntityImpl {
             }
         }
         return attrs.toArray(new AttributeDefImpl[] { });
+    }
+
+    private boolean isMutltiLangEntiy() {
+        boolean isMultiLange = false;
+        AttributeDef[] attrs = this.getEntityDef().getAttributeDefs();
+        for (AttributeDef attr : attrs) {
+            if ("true".equals(attr.getProperty("isMultiLangAttr"))) {
+                isMultiLange = true;
+                break;
+            }
+        }
+        return isMultiLange;
     }
 }
