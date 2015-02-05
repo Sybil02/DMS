@@ -13,8 +13,8 @@
   UseGlueCode="false"
   RowClass="team.epm.dcm.model.DcmErrorImpl">
   <DesignTime>
-    <Attr Name="_codeGenFlag2" Value="Access"/>
     <AttrArray Name="_publishEvents"/>
+    <Attr Name="_codeGenFlag2" Value="Access"/>
     <Attr Name="_isCodegen" Value="true"/>
   </DesignTime>
   <Attribute
@@ -25,8 +25,7 @@
     Type="java.lang.String"
     ColumnType="VARCHAR2"
     TableName="DCM_ERROR"
-    IsNotNull="true"
-    PrimaryKey="true">
+    DefaultValue="NA">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="300"/>
     </DesignTime>
@@ -39,15 +38,13 @@
   </Attribute>
   <Attribute
     Name="RowNum"
-    IsNotNull="true"
     Precision="38"
     Scale="0"
     ColumnName="ROW_NUM"
     SQLType="NUMERIC"
     Type="oracle.jbo.domain.Number"
     ColumnType="NUMBER"
-    TableName="DCM_ERROR"
-    PrimaryKey="true">
+    TableName="DCM_ERROR">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="22"/>
     </DesignTime>
@@ -70,6 +67,11 @@
       <Attr Name="_DisplaySize" Value="3000"/>
     </DesignTime>
     <Properties>
+      <CustomProperties>
+        <Property
+          Name="isMultiLangAttr"
+          Value="true"/>
+      </CustomProperties>
       <SchemaBasedProperties>
         <LABEL
           ResId="dcm.error.message"/>
@@ -102,8 +104,7 @@
     SQLType="VARCHAR"
     Type="java.lang.String"
     ColumnType="VARCHAR2"
-    TableName="DCM_ERROR"
-    PrimaryKey="true">
+    TableName="DCM_ERROR">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="10"/>
     </DesignTime>
@@ -111,14 +112,12 @@
   </Attribute>
   <Attribute
     Name="ValidationId"
-    IsNotNull="true"
     Precision="32"
     ColumnName="VALIDATION_ID"
     SQLType="VARCHAR"
     Type="java.lang.String"
     ColumnType="VARCHAR2"
-    TableName="DCM_ERROR"
-    PrimaryKey="true">
+    TableName="DCM_ERROR">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="32"/>
     </DesignTime>
@@ -197,17 +196,28 @@
     SQLType="VARCHAR"
     Type="java.lang.String"
     ColumnType="VARCHAR2"
-    TableName="DCM_ERROR"
-    PrimaryKey="true">
+    TableName="DCM_ERROR">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="32"/>
     </DesignTime>
   </Attribute>
   <Attribute
     Name="ComRecordId"
-    IsNotNull="true"
     Precision="32"
     ColumnName="COM_RECORD_ID"
+    SQLType="VARCHAR"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    TableName="DCM_ERROR">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="32"/>
+    </DesignTime>
+  </Attribute>
+  <Attribute
+    Name="Id"
+    IsNotNull="true"
+    Precision="32"
+    ColumnName="ID"
     SQLType="VARCHAR"
     Type="java.lang.String"
     ColumnType="VARCHAR2"
@@ -216,6 +226,7 @@
     <DesignTime>
       <Attr Name="_DisplaySize" Value="32"/>
     </DesignTime>
+    <TransientExpression><![CDATA[java.util.UUID.randomUUID().toString().replace("-", "")]]></TransientExpression>
   </Attribute>
   <Key
     Name="PkDcmError"
@@ -224,45 +235,29 @@
       <Attr Name="_DBObjectName" Value="PK_DCM_ERROR"/>
     </DesignTime>
     <AttrArray Name="Attributes">
-      <Item Value="team.epm.dcm.model.DcmError.RowNum"/>
-      <Item Value="team.epm.dcm.model.DcmError.Locale"/>
-      <Item Value="team.epm.dcm.model.DcmError.ValidationId"/>
-      <Item Value="team.epm.dcm.model.DcmError.TemplateId"/>
-      <Item Value="team.epm.dcm.model.DcmError.ComRecordId"/>
-      <Item Value="team.epm.dcm.model.DcmError.SheetName"/>
+      <Item Value="team.epm.dcm.model.DcmError.Id"/>
     </AttrArray>
   </Key>
   <Key
-    Name="SysC007434">
+    Name="SysC008402">
     <DesignTime>
-      <Attr Name="_DBObjectName" Value="SYS_C007434"/>
-      <Attr Name="_checkCondition" Value='"ROW_NUM" IS NOT NULL'/>
+      <Attr Name="_DBObjectName" Value="SYS_C008402"/>
+      <Attr Name="_checkCondition" Value='"TEMPLATE_ID" IS NOT NULL'/>
       <Attr Name="_isCheck" Value="true"/>
     </DesignTime>
     <AttrArray Name="Attributes">
-      <Item Value="team.epm.dcm.model.DcmError.RowNum"/>
+      <Item Value="team.epm.dcm.model.DcmError.TemplateId"/>
     </AttrArray>
   </Key>
   <Key
-    Name="SysC007435">
+    Name="SysC008405">
     <DesignTime>
-      <Attr Name="_DBObjectName" Value="SYS_C007435"/>
+      <Attr Name="_DBObjectName" Value="SYS_C008405"/>
       <Attr Name="_checkCondition" Value='"LOCALE" IS NOT NULL'/>
       <Attr Name="_isCheck" Value="true"/>
     </DesignTime>
     <AttrArray Name="Attributes">
       <Item Value="team.epm.dcm.model.DcmError.Locale"/>
-    </AttrArray>
-  </Key>
-  <Key
-    Name="SysC007437">
-    <DesignTime>
-      <Attr Name="_DBObjectName" Value="SYS_C007437"/>
-      <Attr Name="_checkCondition" Value='"VALIDATION_ID" IS NOT NULL'/>
-      <Attr Name="_isCheck" Value="true"/>
-    </DesignTime>
-    <AttrArray Name="Attributes">
-      <Item Value="team.epm.dcm.model.DcmError.ValidationId"/>
     </AttrArray>
   </Key>
   <ResourceBundle>

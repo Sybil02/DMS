@@ -484,6 +484,17 @@
               <f:validator binding="#{row.bindings.DbTableCol.validator}"/>
             </af:inputText>
           </af:column>
+          <af:column headerText="#{viewBundle['dcm.template_column.value_set_id']}"
+                     id="c28">
+            <af:selectOneChoice value="#{row.bindings.ValueSetId.inputValue}"
+                                label="#{row.bindings.ValueSetId.label}"
+                                required="#{bindings.DcmTemplateColumnView.hints.ValueSetId.mandatory}"
+                                shortDesc="#{bindings.DcmTemplateColumnView.hints.ValueSetId.tooltip}"
+                                id="soc11">
+              <f:selectItems value="#{row.bindings.ValueSetId.items}"
+                             id="si11"/>
+            </af:selectOneChoice>
+          </af:column>
           <af:column sortProperty="#{bindings.DcmTemplateColumnView.hints.Seq.name}"
                      sortable="false"
                      headerText="#{bindings.DcmTemplateColumnView.hints.Seq.label}"

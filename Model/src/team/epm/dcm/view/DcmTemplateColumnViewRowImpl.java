@@ -159,6 +159,16 @@ public class DcmTemplateColumnViewRowImpl extends ViewRowImpl {
             }
         }
         ,
+        ValueSetId {
+            public Object get(DcmTemplateColumnViewRowImpl obj) {
+                return obj.getValueSetId();
+            }
+
+            public void put(DcmTemplateColumnViewRowImpl obj, Object value) {
+                obj.setValueSetId((String)value);
+            }
+        }
+        ,
         LKP_YES_NO {
             public Object get(DcmTemplateColumnViewRowImpl obj) {
                 return obj.getLKP_YES_NO();
@@ -198,6 +208,16 @@ public class DcmTemplateColumnViewRowImpl extends ViewRowImpl {
                 obj.setAttributeInternal(index(), value);
             }
         }
+        ,
+        LST_VS {
+            public Object get(DcmTemplateColumnViewRowImpl obj) {
+                return obj.getLST_VS();
+            }
+
+            public void put(DcmTemplateColumnViewRowImpl obj, Object value) {
+                obj.setAttributeInternal(index(), value);
+            }
+        }
         ;
         private static AttributesEnum[] vals = null;
         private static final int firstIndex = 0;
@@ -227,6 +247,7 @@ public class DcmTemplateColumnViewRowImpl extends ViewRowImpl {
         }
     }
 
+
     public static final int ID = AttributesEnum.Id.index();
     public static final int LOCALE = AttributesEnum.Locale.index();
     public static final int COLUMNLABEL = AttributesEnum.ColumnLabel.index();
@@ -241,10 +262,12 @@ public class DcmTemplateColumnViewRowImpl extends ViewRowImpl {
     public static final int VISIBLE = AttributesEnum.Visible.index();
     public static final int SEQ = AttributesEnum.Seq.index();
     public static final int TEMPLATEID = AttributesEnum.TemplateId.index();
+    public static final int VALUESETID = AttributesEnum.ValueSetId.index();
     public static final int LKP_YES_NO = AttributesEnum.LKP_YES_NO.index();
     public static final int LST_USER = AttributesEnum.LST_USER.index();
     public static final int LKP_LANG = AttributesEnum.LKP_LANG.index();
     public static final int LKP_DATA_TYPE = AttributesEnum.LKP_DATA_TYPE.index();
+    public static final int LST_VS = AttributesEnum.LST_VS.index();
 
     /**
      * This is the default constructor (do not remove).
@@ -486,6 +509,22 @@ public class DcmTemplateColumnViewRowImpl extends ViewRowImpl {
 
 
     /**
+     * Gets the attribute value for VALUE_SET_ID using the alias name ValueSetId.
+     * @return the VALUE_SET_ID
+     */
+    public String getValueSetId() {
+        return (String) getAttributeInternal(VALUESETID);
+    }
+
+    /**
+     * Sets <code>value</code> as attribute value for VALUE_SET_ID using the alias name ValueSetId.
+     * @param value value to set the VALUE_SET_ID
+     */
+    public void setValueSetId(String value) {
+        setAttributeInternal(VALUESETID, value);
+    }
+
+    /**
      * Gets the view accessor <code>RowSet</code> LKP_YES_NO.
      */
     public RowSet getLKP_YES_NO() {
@@ -511,6 +550,13 @@ public class DcmTemplateColumnViewRowImpl extends ViewRowImpl {
      */
     public RowSet getLKP_DATA_TYPE() {
         return (RowSet)getAttributeInternal(LKP_DATA_TYPE);
+    }
+
+    /**
+     * Gets the view accessor <code>RowSet</code> LST_VS.
+     */
+    public RowSet getLST_VS() {
+        return (RowSet)getAttributeInternal(LST_VS);
     }
 
     /**

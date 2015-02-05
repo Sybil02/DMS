@@ -19,7 +19,8 @@
        DcmTemplateColumn.DATA_TYPE, 
        DcmTemplateColumn.VISIBLE, 
        DcmTemplateColumn.SEQ, 
-       DcmTemplateColumn.TEMPLATE_ID"
+       DcmTemplateColumn.TEMPLATE_ID, 
+       DcmTemplateColumn.VALUE_SET_ID"
   FromList="DCM_TEMPLATE_COLUMN DcmTemplateColumn"
   BindingStyle="OracleName"
   CustomQuery="false"
@@ -92,6 +93,10 @@
       </PIMap>
     </ParameterMap>
   </ViewAccessor>
+  <ViewAccessor
+    Name="LST_VS"
+    ViewObjectName="team.epm.dms.view.DmsValueSetView"
+    RowLevelBinds="true"/>
   <ListBinding
     Name="LOV_Locale"
     ListVOName="LKP_LANG"
@@ -215,6 +220,24 @@
     </AttrArray>
     <AttrArray Name="ListDisplayAttrNames">
       <Item Value="Meaning"/>
+    </AttrArray>
+    <DisplayCriteria/>
+  </ListBinding>
+  <ListBinding
+    Name="LOV_ValueSetId"
+    ListVOName="LST_VS"
+    ListRangeSize="-1"
+    NullValueFlag="start"
+    NullValueId="${adfBundle['oracle.javatools.resourcebundle.SystemBundle']['NULL_VALUE_RESID']}"
+    MRUCount="0">
+    <AttrArray Name="AttrNames">
+      <Item Value="ValueSetId"/>
+    </AttrArray>
+    <AttrArray Name="ListAttrNames">
+      <Item Value="Id"/>
+    </AttrArray>
+    <AttrArray Name="ListDisplayAttrNames">
+      <Item Value="Name"/>
     </AttrArray>
     <DisplayCriteria/>
   </ListBinding>
@@ -398,6 +421,20 @@
       <SchemaBasedProperties>
         <LABEL
           ResId="dcm.template.name"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="ValueSetId"
+    PrecisionRule="true"
+    EntityAttrName="ValueSetId"
+    EntityUsage="DcmTemplateColumn"
+    AliasName="VALUE_SET_ID"
+    LOVName="LOV_ValueSetId">
+    <Properties>
+      <SchemaBasedProperties>
+        <CONTROLTYPE
+          Value="choice"/>
       </SchemaBasedProperties>
     </Properties>
   </ViewAttribute>

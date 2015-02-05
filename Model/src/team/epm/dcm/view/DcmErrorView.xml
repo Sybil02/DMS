@@ -54,7 +54,8 @@
        DcmError.UPDATED_BY, 
        DcmError.CREATED_BY, 
        DcmError.COM_RECORD_ID, 
-       DcmError.TEMPLATE_ID
+       DcmError.TEMPLATE_ID,
+       DcmError.ID
 FROM DCM_ERROR DcmError
 WHERE  DcmError.LOCALE=:locale]]>
   </SQLQuery>
@@ -146,4 +147,11 @@ WHERE  DcmError.LOCALE=:locale]]>
     EntityAttrName="TemplateId"
     EntityUsage="DcmError"
     AliasName="TEMPLATE_ID"/>
+  <ViewAttribute
+    Name="Id"
+    IsNotNull="true"
+    PrecisionRule="true"
+    EntityAttrName="Id"
+    EntityUsage="DcmError"
+    AliasName="ID"/>
 </ViewObject>

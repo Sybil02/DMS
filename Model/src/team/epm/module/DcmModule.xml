@@ -219,4 +219,17 @@
             Type="java.lang.String"/>
       </Method>
    </ClientInterface>
+   <ClientInterface>
+      <Method
+         Name="getCombinationRecordView">
+         <Return
+            Type="oracle.jbo.ViewObject"/>
+         <Parameter
+            Name="templateId"
+            Type="java.lang.String"/>
+         <Parameter
+            Name="combinationId"
+            Type="java.lang.String"/>
+      </Method>
+   </ClientInterface>
 </AppModule>

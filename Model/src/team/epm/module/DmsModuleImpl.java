@@ -286,22 +286,6 @@ public class DmsModuleImpl extends ApplicationModuleImpl implements DmsModule {
     }
 
     /**
-     * Container's getter for DmsEnabledRole1.
-     * @return DmsEnabledRole1
-     */
-    public DmsEnabledRoleImpl getDmsEnabledRole1() {
-        return (DmsEnabledRoleImpl)findViewObject("DmsEnabledRole1");
-    }
-
-    /**
-     * Container's getter for DmsRoleFunctionView1.
-     * @return DmsRoleFunctionView1
-     */
-    public ViewObjectImpl getDmsRoleFunctionView1() {
-        return (ViewObjectImpl)findViewObject("DmsRoleFunctionView1");
-    }
-
-    /**
      * Container's getter for DmsRoleFunctionLnk.
      * @return DmsRoleFunctionLnk
      */

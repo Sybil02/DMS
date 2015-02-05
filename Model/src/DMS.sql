@@ -369,6 +369,7 @@ create table DCM_TEMPLATE_COLUMN
    VISIBLE              VARCHAR2(10),
    SEQ                  INTEGER,
    TEMPLATE_ID          VARCHAR2(32),
+   VALUE_SET_ID         VARCHAR2(32)
    constraint PK_DCM_TEMPLATE_COLUMN primary key (ID, LOCALE)
 );
 
@@ -416,6 +417,9 @@ comment on column DCM_TEMPLATE_COLUMN.SEQ is
 
 comment on column DCM_TEMPLATE_COLUMN.TEMPLATE_ID is
 '模版ID';
+
+comment on column DCM_TEMPLATE_COLUMN.VALUE_SET_ID is
+'值集ID'
 
 /*==============================================================*/
 /* Table: DCM_TEMPLATE_COMBINATION                              */
@@ -466,18 +470,18 @@ comment on column DCM_TEMPLATE_COMBINATION.CREATED_BY is
 create table DCM_ERROR 
 (
    TEMPLATE_ID          VARCHAR2(32)         not null,
-   COM_RECORD_ID        VARCHAR2(32)         ,
-   SHEET_NAME           VARCHAR2(300)        not null,     
-   ROW_NUM              INTEGER              not null,
+   COM_RECORD_ID        VARCHAR2(32),
+   SHEET_NAME           VARCHAR2(300),     
+   ROW_NUM              INTEGER,
    MSG                  VARCHAR2(3000),
    ELEVEL               VARCHAR2(10),
    LOCALE               VARCHAR2(10)         not null,
-   VALIDATION_ID        VARCHAR2(32)         not null,
+   VALIDATION_ID        VARCHAR2(32),
    CREATED_AT           DATE,
    UPDATED_AT           DATE,
    UPDATED_BY           VARCHAR2(32),
    CREATED_BY           VARCHAR2(32),
-   constraint PK_DCM_ERROR primary key (TEMPLATE_ID,COM_RECORD_ID, ROW_NUM, LOCALE, SHEET_NAME, VALIDATION_ID)
+   constraint PK_DCM_ERROR primary key (ID, LOCALE)
 );
 
 comment on table DCM_ERROR is

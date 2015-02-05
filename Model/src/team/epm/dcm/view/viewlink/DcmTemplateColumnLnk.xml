@@ -29,11 +29,11 @@
     </AttrArray>
   </ViewLinkDefEnd>
   <ViewLinkDefEnd
-    Name="DcmTemplateColumnView1"
+    Name="DcmTemplateColumnView"
     Cardinality="-1"
     Owner="team.epm.dcm.view.DcmTemplateColumnView">
     <DesignTime>
-      <Attr Name="_finderName" Value="DcmTemplateColumnView1"/>
+      <Attr Name="_finderName" Value="DcmTemplateColumnView"/>
       <Attr Name="_isUpdateable" Value="true"/>
     </DesignTime>
     <AttrArray Name="Attributes">

@@ -89,8 +89,7 @@
     SQLType="TIMESTAMP"
     Type="oracle.jbo.domain.Date"
     ColumnType="DATE"
-    TableName="DCM_COMBINATION"
-    IsNotNull="true">
+    TableName="DCM_COMBINATION">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="7"/>
     </DesignTime>
@@ -110,8 +109,7 @@
     SQLType="TIMESTAMP"
     Type="oracle.jbo.domain.Date"
     ColumnType="DATE"
-    TableName="DCM_COMBINATION"
-    IsNotNull="true">
+    TableName="DCM_COMBINATION">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="7"/>
     </DesignTime>
@@ -186,7 +184,8 @@
     Type="java.lang.String"
     ColumnType="VARCHAR2"
     TableName="DCM_TEMPLATE_COLUMN"
-    DefaultValue="TEXT">
+    DefaultValue="TEXT"
+    IsNotNull="true">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="100"/>
     </DesignTime>
@@ -230,6 +229,18 @@
       <Attr Name="_DisplaySize" Value="32"/>
     </DesignTime>
   </Attribute>
+  <Attribute
+    Name="ValueSetId"
+    Precision="32"
+    ColumnName="VALUE_SET_ID"
+    SQLType="VARCHAR"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    TableName="DCM_TEMPLATE_COLUMN">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="32"/>
+    </DesignTime>
+  </Attribute>
   <Key
     Name="PkDcmTemplateColumn"
     PrimaryKey="true">
@@ -242,9 +253,9 @@
     </AttrArray>
   </Key>
   <Key
-    Name="SysC007220">
+    Name="SysC008397">
     <DesignTime>
-      <Attr Name="_DBObjectName" Value="SYS_C007220"/>
+      <Attr Name="_DBObjectName" Value="SYS_C008397"/>
       <Attr Name="_checkCondition" Value='"ID" IS NOT NULL'/>
       <Attr Name="_isCheck" Value="true"/>
     </DesignTime>
@@ -253,14 +264,58 @@
     </AttrArray>
   </Key>
   <Key
-    Name="SysC007221">
+    Name="SysC008398">
     <DesignTime>
-      <Attr Name="_DBObjectName" Value="SYS_C007221"/>
+      <Attr Name="_DBObjectName" Value="SYS_C008398"/>
       <Attr Name="_checkCondition" Value='"LOCALE" IS NOT NULL'/>
       <Attr Name="_isCheck" Value="true"/>
     </DesignTime>
     <AttrArray Name="Attributes">
       <Item Value="team.epm.dcm.model.DcmTemplateColumn.Locale"/>
+    </AttrArray>
+  </Key>
+  <Key
+    Name="SysC008536">
+    <DesignTime>
+      <Attr Name="_DBObjectName" Value="SYS_C008536"/>
+      <Attr Name="_checkCondition" Value='"COLUMN_LABEL" IS NOT NULL'/>
+      <Attr Name="_isCheck" Value="true"/>
+    </DesignTime>
+    <AttrArray Name="Attributes">
+      <Item Value="team.epm.dcm.model.DcmTemplateColumn.ColumnLabel"/>
+    </AttrArray>
+  </Key>
+  <Key
+    Name="SysC008537">
+    <DesignTime>
+      <Attr Name="_DBObjectName" Value="SYS_C008537"/>
+      <Attr Name="_checkCondition" Value='"DB_TABLE_COL" IS NOT NULL'/>
+      <Attr Name="_isCheck" Value="true"/>
+    </DesignTime>
+    <AttrArray Name="Attributes">
+      <Item Value="team.epm.dcm.model.DcmTemplateColumn.DbTableCol"/>
+    </AttrArray>
+  </Key>
+  <Key
+    Name="SysC008538">
+    <DesignTime>
+      <Attr Name="_DBObjectName" Value="SYS_C008538"/>
+      <Attr Name="_checkCondition" Value='"DATA_TYPE" IS NOT NULL'/>
+      <Attr Name="_isCheck" Value="true"/>
+    </DesignTime>
+    <AttrArray Name="Attributes">
+      <Item Value="team.epm.dcm.model.DcmTemplateColumn.DataType"/>
+    </AttrArray>
+  </Key>
+  <Key
+    Name="SysC008539">
+    <DesignTime>
+      <Attr Name="_DBObjectName" Value="SYS_C008539"/>
+      <Attr Name="_checkCondition" Value='"TEMPLATE_ID" IS NOT NULL'/>
+      <Attr Name="_isCheck" Value="true"/>
+    </DesignTime>
+    <AttrArray Name="Attributes">
+      <Item Value="team.epm.dcm.model.DcmTemplateColumn.TemplateId"/>
     </AttrArray>
   </Key>
   <ResourceBundle>

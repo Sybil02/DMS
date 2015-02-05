@@ -5,6 +5,7 @@
           xmlns:c="http://java.sun.com/jsp/jstl/core">
   <c:set var="viewBundle" value="#{adfBundle['dms_v']}"/>
   <af:panelStretchLayout id="psl1"
+                         bottomHeight="0"
                          topHeight="#{viewScope.DcmDataDisplayBean.combinationId==null ? '0px':'35px'}">
     <f:facet name="top">
       <af:panelGroupLayout layout="horizontal"
@@ -54,10 +55,10 @@
               <af:commandButton text="#{viewBundle['dcm.action.import']}"
                                 id="cb5"
                                 action="#{viewScope.DcmDataDisplayBean.operation_import}"/>
-              <af:commandButton text="#{viewBundle['dcm.import_error']}" id="cb8"
+              <af:commandButton text="#{viewBundle['dcm.import_error']}"
+                                id="cb8"
                                 actionListener="#{viewScope.DcmDataDisplayBean.showErrors}"
-                                partialSubmit="true">
-              </af:commandButton>
+                                partialSubmit="true"></af:commandButton>
             </af:group>
             <af:group id="grp3">
               <af:selectBooleanRadio text="#{viewBundle['dcm.export.03format']}"
@@ -88,88 +89,98 @@
                   scrollPolicy="page"
                   selectionListener="#{viewScope.DcmDataDisplayBean.rowSelectionListener}"
                   selectedRowKeys="#{viewScope.DcmDataDisplayBean.dataModel.selectedRows}"
-                  rowSelection="multiple" editingMode="clickToEdit">
+                  rowSelection="multiple" editingMode="clickToEdit"
+                  fetchSize="50"
+                  sortListener="#{viewScope.DcmDataDisplayBean.sortListener}"
+                  emptyText="#{viewBundle['dms.common.nodata']}"
+                  filterModel="#{viewScope.DcmDataDisplayBean.queryDescriptor}"
+                  filterVisible="false"
+                  queryListener="#{viewScope.DcmDataDisplayBean.queryListener}">
           <af:forEach items="#{viewScope.DcmDataDisplayBean.dataModel.colsdef}"
                       var="attr" varStatus="vs">
-            <af:column sortable="false" headerText="#{attr.label}"
+            <af:column sortable="true" headerText="#{attr.columnLabel}"
+                       sortProperty="#{attr.dbTableCol}"
                        inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
                                     #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
-                                    #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}">
-              <af:inputText value="#{row[attr.code]}"
+                                    #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}"
+                       filterable="#{attr.dataType ne 'DATE'}">
+              <af:inputText value="#{row[attr.dbTableCol]}"
                             valueChangeListener="#{viewScope.DcmDataDisplayBean.valueChangeListener}"/>
             </af:column>
           </af:forEach>
         </af:table>
       </af:panelCollection>
     </f:facet>
-    <f:facet name="bottom"/>
     <f:facet name="start"/>
-    <f:facet name="end"/>
+    <f:facet name="bottom">
+      <af:popup id="p1" binding="#{viewScope.DcmDataDisplayBean.errorWindow}">
+        <af:panelWindow id="pw1" title="#{viewBundle['dcm.import_error']}">
+          <af:panelStretchLayout id="psl2"
+                                 inlineStyle="width:1000px;height:400px">
+            <f:facet name="center">
+              <af:table value="#{bindings.DcmErrorView.collectionModel}"
+                        var="row" rows="#{bindings.DcmErrorView.rangeSize}"
+                        emptyText="#{viewBundle['dms.common.nodata']}"
+                        fetchSize="#{bindings.DcmErrorView.rangeSize}"
+                        rowBandingInterval="0" filterVisible="false"
+                        varStatus="vs"
+                        selectedRowKeys="#{bindings.DcmErrorView.collectionModel.selectedRow}"
+                        selectionListener="#{bindings.DcmErrorView.collectionModel.makeCurrent}"
+                        rowSelection="single" id="t3"
+                        columnStretching="column:c1">
+                <af:column sortProperty="#{bindings.DcmErrorView.hints.SheetName.name}"
+                           filterable="true" sortable="true"
+                           headerText="#{bindings.DcmErrorView.hints.SheetName.label}"
+                           id="c2">
+                  <af:outputText value="#{row.SheetName}" id="ot1"/>
+                </af:column>
+                <af:column sortProperty="#{bindings.DcmErrorView.hints.RowNum.name}"
+                           filterable="true" sortable="true"
+                           headerText="#{bindings.DcmErrorView.hints.RowNum.label}"
+                           id="c3">
+                  <af:outputText value="#{row.RowNum}" id="ot2">
+                    <af:convertNumber groupingUsed="false"
+                                      pattern="#{bindings.DcmErrorView.hints.RowNum.format}"/>
+                  </af:outputText>
+                </af:column>
+                <af:column sortProperty="#{bindings.DcmErrorView.hints.Msg.name}"
+                           filterable="true" sortable="true"
+                           headerText="#{bindings.DcmErrorView.hints.Msg.label}"
+                           id="c1">
+                  <af:inputText value="#{row.bindings.Msg.inputValue}"
+                                simple="true"
+                                maximumLength="#{bindings.DcmErrorView.hints.Msg.precision}"
+                                shortDesc="#{bindings.DcmErrorView.hints.Msg.tooltip}"
+                                id="it1" rows="1"></af:inputText>
+                </af:column>
+                <af:column sortProperty="#{bindings.DcmErrorView.hints.Level.name}"
+                           filterable="true" sortable="true"
+                           headerText="#{bindings.DcmErrorView.hints.Level.label}"
+                           id="c4">
+                  <af:outputText value="#{row.Level}" id="ot3"/>
+                </af:column>
+                <af:column headerText="#{bindings.DcmErrorView.hints.CreatedAt.label}"
+                           id="c6">
+                  <af:outputText value="#{row.CreatedAt}" id="ot5">
+                    <af:convertDateTime pattern="#{bindings.DcmErrorView.hints.CreatedAt.format}"/>
+                  </af:outputText>
+                </af:column>
+                <af:column headerText="#{bindings.DcmErrorView.hints.CreatedBy.label}"
+                           id="c5">
+                  <af:selectOneChoice value="#{row.bindings.CreatedBy.inputValue}"
+                                      label="#{row.bindings.CreatedBy.label}"
+                                      required="#{bindings.DcmErrorView.hints.CreatedBy.mandatory}"
+                                      shortDesc="#{bindings.DcmErrorView.hints.CreatedBy.tooltip}"
+                                      id="soc1" readOnly="true">
+                    <f:selectItems value="#{row.bindings.CreatedBy.items}"
+                                   id="si1"/>
+                  </af:selectOneChoice>
+                </af:column>
+              </af:table>
+            </f:facet>
+          </af:panelStretchLayout>
+        </af:panelWindow>
+      </af:popup>
+    </f:facet>
   </af:panelStretchLayout>
-  <af:popup id="p1" binding="#{viewScope.DcmDataDisplayBean.errorWindow}">
-    <af:panelWindow id="pw1" 
-                    title="#{viewBundle['dcm.import_error']}">
-      <af:panelStretchLayout id="psl2" inlineStyle="width:1000px;height:400px">
-        <f:facet name="center">
-        <af:table value="#{bindings.DcmErrorView.collectionModel}" var="row"
-                rows="#{bindings.DcmErrorView.rangeSize}"
-                emptyText="#{viewBundle['dms.common.nodata']}"
-                fetchSize="#{bindings.DcmErrorView.rangeSize}"
-                rowBandingInterval="0"
-                filterVisible="false" varStatus="vs"
-                selectedRowKeys="#{bindings.DcmErrorView.collectionModel.selectedRow}"
-                selectionListener="#{bindings.DcmErrorView.collectionModel.makeCurrent}"
-                rowSelection="single" id="t3" columnStretching="column:c1">
-        <af:column sortProperty="#{bindings.DcmErrorView.hints.SheetName.name}"
-                   filterable="true" sortable="true"
-                   headerText="#{bindings.DcmErrorView.hints.SheetName.label}"
-                   id="c2">
-          <af:outputText value="#{row.SheetName}" id="ot1"/>
-        </af:column>
-        <af:column sortProperty="#{bindings.DcmErrorView.hints.RowNum.name}"
-                   filterable="true" sortable="true"
-                   headerText="#{bindings.DcmErrorView.hints.RowNum.label}"
-                   id="c3">
-          <af:outputText value="#{row.RowNum}" id="ot2">
-            <af:convertNumber groupingUsed="false"
-                              pattern="#{bindings.DcmErrorView.hints.RowNum.format}"/>
-          </af:outputText>
-        </af:column>
-        <af:column sortProperty="#{bindings.DcmErrorView.hints.Msg.name}"
-                   filterable="true" sortable="true"
-                   headerText="#{bindings.DcmErrorView.hints.Msg.label}"
-                   id="c1">
-              <af:inputText value="#{row.bindings.Msg.inputValue}" simple="true"
-                            maximumLength="#{bindings.DcmErrorView.hints.Msg.precision}"
-                            shortDesc="#{bindings.DcmErrorView.hints.Msg.tooltip}"
-                            id="it1" rows="1">
-              </af:inputText>
-        </af:column>
-        <af:column sortProperty="#{bindings.DcmErrorView.hints.Level.name}"
-                   filterable="true" sortable="true"
-                   headerText="#{bindings.DcmErrorView.hints.Level.label}"
-                   id="c4">
-          <af:outputText value="#{row.Level}" id="ot3"/>
-        </af:column>
-            <af:column headerText="#{bindings.DcmErrorView.hints.CreatedAt.label}"
-                       id="c6">
-              <af:outputText value="#{row.CreatedAt}" id="ot5">
-                <af:convertDateTime pattern="#{bindings.DcmErrorView.hints.CreatedAt.format}"/>
-              </af:outputText>
-            </af:column>
-            <af:column headerText="#{bindings.DcmErrorView.hints.CreatedBy.label}"
-                   id="c5">
-          <af:selectOneChoice value="#{row.bindings.CreatedBy.inputValue}"
-                              label="#{row.bindings.CreatedBy.label}"
-                              required="#{bindings.DcmErrorView.hints.CreatedBy.mandatory}"
-                              shortDesc="#{bindings.DcmErrorView.hints.CreatedBy.tooltip}"
-                              id="soc1" readOnly="true">
-            <f:selectItems value="#{row.bindings.CreatedBy.items}" id="si1"/>
-          </af:selectOneChoice>
-        </af:column>
-      </af:table>
-        </f:facet>
-      </af:panelStretchLayout>
-    </af:panelWindow>
-  </af:popup>
 </jsp:root>

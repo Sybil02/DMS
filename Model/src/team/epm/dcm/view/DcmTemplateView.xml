@@ -12,7 +12,6 @@
   PageIterMode="Full"
   UseGlueCode="false"
   Where="DcmTemplate.LOCALE=:locale"
-  ComponentClass="team.epm.dcm.view.DcmTemplateViewImpl"
   SelectList="DcmTemplate.ID, 
        DcmTemplate.LOCALE, 
        DcmTemplate.NAME, 
@@ -35,7 +34,8 @@
        DcmTemplate.COMBINATION_ID, 
        DcmTemplate.CATEGORY_ID"
   OrderBy="DcmTemplate.SEQ"
-  RowClass="team.epm.dcm.view.DcmTemplateViewRowImpl">
+  RowClass="team.epm.dcm.view.DcmTemplateViewRowImpl"
+  ComponentClass="team.epm.dcm.view.DcmTemplateViewImpl">
   <DesignTime>
     <Attr Name="_codeGenFlag2" Value="Access|Coll|VarAccess"/>
     <Attr Name="_isCodegen" Value="true"/>
@@ -431,13 +431,13 @@
       </SchemaBasedProperties>
     </Properties>
   </ViewAttribute>
-<ViewAttribute
+  <ViewAttribute
     Name="TmpTable"
     PrecisionRule="true"
     EntityAttrName="TmpTable"
     EntityUsage="DcmTemplate"
     AliasName="TMP_TABLE"
-  LOVName="LOV_TmpTable">
+    LOVName="LOV_TmpTable">
     <Properties>
       <SchemaBasedProperties>
         <LABEL

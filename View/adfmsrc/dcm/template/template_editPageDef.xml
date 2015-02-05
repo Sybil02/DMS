@@ -59,6 +59,7 @@
           <Item Value="IsPk"/>
           <Item Value="Readonly"/>
           <Item Value="Visible"/>
+          <Item Value="ValueSetId"/>
         </AttrNames>
       </nodeDefinition>
     </tree>

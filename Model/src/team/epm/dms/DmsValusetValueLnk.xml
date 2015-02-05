@@ -16,7 +16,7 @@
     </SchemaBasedProperties>
   </Properties>
   <ViewLinkDefEnd
-    Name="DmsValueSetView1"
+    Name="DmsValueSetView"
     Cardinality="1"
     Owner="team.epm.dms.view.DmsValueSetView"
     Source="true">
@@ -29,7 +29,7 @@
     </AttrArray>
   </ViewLinkDefEnd>
   <ViewLinkDefEnd
-    Name="DmsRoleValueView1"
+    Name="DmsRoleValueView"
     Cardinality="-1"
     Owner="team.epm.dms.view.DmsRoleValueView">
     <DesignTime>

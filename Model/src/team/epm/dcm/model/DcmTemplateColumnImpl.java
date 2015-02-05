@@ -160,6 +160,16 @@ public class DcmTemplateColumnImpl extends DmsEntityImpl {
                 obj.setTemplateId((String)value);
             }
         }
+        ,
+        ValueSetId {
+            public Object get(DcmTemplateColumnImpl obj) {
+                return obj.getValueSetId();
+            }
+
+            public void put(DcmTemplateColumnImpl obj, Object value) {
+                obj.setValueSetId((String)value);
+            }
+        }
         ;
         private static AttributesEnum[] vals = null;
         private static final int firstIndex = 0;
@@ -187,6 +197,7 @@ public class DcmTemplateColumnImpl extends DmsEntityImpl {
             return vals;
         }
     }
+
     public static final int ID = AttributesEnum.Id.index();
     public static final int LOCALE = AttributesEnum.Locale.index();
     public static final int COLUMNLABEL = AttributesEnum.ColumnLabel.index();
@@ -201,11 +212,22 @@ public class DcmTemplateColumnImpl extends DmsEntityImpl {
     public static final int VISIBLE = AttributesEnum.Visible.index();
     public static final int SEQ = AttributesEnum.Seq.index();
     public static final int TEMPLATEID = AttributesEnum.TemplateId.index();
+    public static final int VALUESETID = AttributesEnum.ValueSetId.index();
 
     /**
      * This is the default constructor (do not remove).
      */
     public DcmTemplateColumnImpl() {
+    }
+
+    /**
+     * @return the definition object for this instance class.
+     */
+    public static synchronized EntityDefImpl getDefinitionObject() {
+        if (mDefinitionObject == null) {
+            mDefinitionObject = EntityDefImpl.findDefObject("team.epm.dcm.model.DcmTemplateColumn");
+        }
+        return mDefinitionObject;
     }
 
     /**
@@ -433,6 +455,22 @@ public class DcmTemplateColumnImpl extends DmsEntityImpl {
     }
 
     /**
+     * Gets the attribute value for ValueSetId, using the alias name ValueSetId.
+     * @return the ValueSetId
+     */
+    public String getValueSetId() {
+        return (String)getAttributeInternal(VALUESETID);
+    }
+
+    /**
+     * Sets <code>value</code> as the attribute value for ValueSetId.
+     * @param value value to set the ValueSetId
+     */
+    public void setValueSetId(String value) {
+        setAttributeInternal(VALUESETID, value);
+    }
+
+    /**
      * getAttrInvokeAccessor: generated method. Do not modify.
      * @param index the index identifying the attribute
      * @param attrDef the attribute
@@ -475,13 +513,5 @@ public class DcmTemplateColumnImpl extends DmsEntityImpl {
         return new Key(new Object[]{id, locale});
     }
 
-    /**
-     * @return the definition object for this instance class.
-     */
-    public static synchronized EntityDefImpl getDefinitionObject() {
-        if (mDefinitionObject == null) {
-            mDefinitionObject = EntityDefImpl.findDefObject("team.epm.dcm.model.DcmTemplateColumn");
-        }
-        return mDefinitionObject;
-    }
+
 }
