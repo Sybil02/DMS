@@ -104,8 +104,13 @@
                                     #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
                                     #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}"
                        filterable="#{attr.dataType ne 'DATE'}">
-              <af:inputText value="#{row[attr.dbTableCol]}"
+              <af:inputText value="#{row[attr.dbTableCol]}" rendered="#{attr.valueSetId eq null}"
                             valueChangeListener="#{viewScope.DcmDataDisplayBean.valueChangeListener}"/>
+              <af:selectOneChoice label="#{attr.columnLabel}" value="#{row[attr.dbTableCol]}"  
+                                  valueChangeListener="#{viewScope.DcmDataDisplayBean.valueChangeListener}"
+                                  id="soc2" rendered="#{attr.valueSetId ne null}">
+                <f:selectItems value="#{viewScope.DcmDataDisplayBean.valueSet[attr.valueSetId]}" id="si2"/>
+              </af:selectOneChoice>
             </af:column>
           </af:forEach>
         </af:table>

@@ -114,6 +114,8 @@ public class DcmDataDisplayBean extends AbstractExcel2007Writer {
     private boolean isXlsx = true;
     //组合信息
     private List<ComHeader> templateHeader = new ArrayList<ComHeader>();
+    //值集信息
+    private Map valueSet=new HashMap();
     //日志
     private static ADFLogger _logger =ADFLogger.createADFLogger(DcmDataDisplayBean.class);
     //页面绑定组件
@@ -615,11 +617,42 @@ public class DcmDataDisplayBean extends AbstractExcel2007Writer {
                 Row colRow = itr.next();
                 ColumnDef colDef = new ColumnDef((DcmTemplateColumnViewRowImpl)colRow);
                 this.colsdef.add(colDef);
+                //获取值列表
+                if(colDef.getValueSetId()!=null&&this.valueSet.get(colDef.getValueSetId())==null){
+                    this.valueSet.put(colDef.getValueSetId(), 
+                                      this.fetchValueList(colDef.getValueSetId()));            
+                }
             }
             ((DcmDataTableModel)this.dataModel).setColsdef(this.colsdef);
         }else{
             JSFUtils.addFacesErrorMessage(DmsUtils.getMsg("dcm.template_not_found"));
         }
+    }
+    //获取值列表
+    private List<SelectItem> fetchValueList(String vsId){
+        List<SelectItem> list=new ArrayList<SelectItem>();
+        list.add(new SelectItem());
+        Row[] vsRows=DmsUtils.getDmsApplicationModule().getDmsValueSetView()
+            .findByKey(new Key(new Object[]{vsId,ADFContext.getCurrent().getLocale().toString()}), 1);
+        if(vsRows.length>0){
+            String vsCode=(String)vsRows[0].getAttribute("Source");
+            StringBuffer sql=new StringBuffer();
+            sql.append("SELECT T.CODE, T.MEANING FROM \"").append(vsCode)
+            .append("\" T WHERE T.LOCALE = 'zh_CN'  ORDER BY T.IDX ");
+            Statement stmt= DmsUtils.getDmsApplicationModule().getDBTransaction().createStatement(DBTransaction.DEFAULT);
+            try {
+                ResultSet rs = stmt.executeQuery(sql.toString());
+                while(rs.next()){
+                    SelectItem itm=new SelectItem();
+                    itm.setLabel(rs.getString("MEANING"));
+                    itm.setValue(rs.getString("CODE"));
+                    list.add(itm);
+                }
+            } catch (SQLException e) {
+                this._logger.severe(e);
+            }
+        }
+        return list;
     }
     //查询数据
     private void queryTemplateData() {
@@ -991,5 +1024,9 @@ public class DcmDataDisplayBean extends AbstractExcel2007Writer {
         DcmQueryDescriptor descriptor = (DcmQueryDescriptor)queryEvent.getDescriptor();
         this.filters=descriptor.getFilterCriteria();
         this.queryTemplateData();
+    }
+
+    public Map getValueSet() {
+        return valueSet;
     }
 }
