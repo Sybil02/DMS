@@ -40,7 +40,7 @@
                             emptyText="#{viewBundle['dms.common.nodata']}"
                             var="row" rowBandingInterval="0"
                             value="#{bindings.return.collectionModel}"
-                            selectedRowKeys="#{bindings.return.collectionModel.selectedRow}"
+                            selectedRowKeys="#{pageFlowScope.TemplateBackingBean.selectedRows}"
                             selectionListener="#{bindings.return.collectionModel.makeCurrent}"
                             rowSelection="multiple" id="t5"
                             clientComponent="true"
