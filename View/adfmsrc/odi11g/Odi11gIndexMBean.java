@@ -358,7 +358,7 @@ public class Odi11gIndexMBean {
                 odiGetSessionsStatusResponse.getSessionStatusResponse();
             if (statuses.size() > 0) {
                 status = statuses.get(0).getSessionStatus();
-                String msg = statuses.get(0).getSessionMessage();
+                String msg = ObjectUtils.toString(statuses.get(0).getSessionMessage());
                 execRow.setAttribute("ExecStatus", status);
                 execRow.setAttribute("LogText",
                                      msg.length() <= 1000 ? msg : msg.substring(0,

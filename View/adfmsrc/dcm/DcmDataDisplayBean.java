@@ -607,6 +607,7 @@ public class DcmDataDisplayBean extends AbstractExcel2007Writer {
     private void initTemplate() {
         String curTemplateId = (String)ADFContext.getCurrent().getPageFlowScope().get("curTemplateId");
         ViewObject templateView =DmsUtils.getDcmApplicationModule().getDcmTemplateView();
+        templateView.executeQuery();
         Row[] rows=templateView.findByKey(new Key(new Object[]{curTemplateId,ADFContext.getCurrent().getLocale().toString()}), 1);
         if(rows.length>0){
             this.curTempalte=new TemplateEO((DcmTemplateViewRowImpl)rows[0]); 
@@ -625,7 +626,8 @@ public class DcmDataDisplayBean extends AbstractExcel2007Writer {
             }
             ((DcmDataTableModel)this.dataModel).setColsdef(this.colsdef);
         }else{
-            JSFUtils.addFacesErrorMessage(DmsUtils.getMsg("dcm.template_not_found"));
+            this._logger.severe(DmsUtils.getMsg("dcm.template_not_found"));
+            throw new RuntimeException(DmsUtils.getMsg("dcm.template_not_found")+":tempateId:"+curTemplateId);
         }
     }
     //获取值列表
@@ -716,7 +718,7 @@ public class DcmDataDisplayBean extends AbstractExcel2007Writer {
         if(this.sortCriterions==null){
             sql_where.append(" ORDER BY IDX");
         }else{
-            sql_where.append("ORDER BY ");
+            sql_where.append(" ORDER BY ");
             for(int i=0;i<this.sortCriterions.size();i++){
                 SortCriterion s=this.sortCriterions.get(i);
                 if(i>0){

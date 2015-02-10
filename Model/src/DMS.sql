@@ -2477,7 +2477,7 @@ create table ODI11_SCENE_EXEC
 (
    ID                   VARCHAR2(32)         not null,
    SCENE_ID             VARCHAR2(32)         not null,
-   PARAMS               VARCHAR2(1000)       not null,
+   PARAMS               VARCHAR2(1000),
    EXEC_STATUS          VARCHAR2(100),
    SESSION_NUM          VARCHAR2(100), 
    LOG_TEXT             VARCHAR2(1000),      

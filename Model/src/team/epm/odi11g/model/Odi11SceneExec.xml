@@ -51,7 +51,6 @@
   </Attribute>
   <Attribute
     Name="Params"
-    IsNotNull="true"
     Precision="1000"
     ColumnName="PARAMS"
     SQLType="VARCHAR"
@@ -174,10 +173,10 @@
     Type="java.lang.String"
     ColumnType="VARCHAR2"
     TableName="ODI11_SCENE_EXEC">
-    <TransientExpression><![CDATA[adf.userSession.userData.userId]]></TransientExpression>
     <DesignTime>
       <Attr Name="_DisplaySize" Value="32"/>
     </DesignTime>
+    <TransientExpression><![CDATA[adf.userSession.userData.userId]]></TransientExpression>
     <Properties>
       <SchemaBasedProperties>
         <LABEL
@@ -193,10 +192,10 @@
     Type="java.lang.String"
     ColumnType="VARCHAR2"
     TableName="ODI11_SCENE_EXEC">
-    <TransientExpression><![CDATA[adf.userSession.userData.userId]]></TransientExpression>
     <DesignTime>
       <Attr Name="_DisplaySize" Value="32"/>
     </DesignTime>
+    <TransientExpression><![CDATA[adf.userSession.userData.userId]]></TransientExpression>
     <Properties>
       <SchemaBasedProperties>
         <LABEL
@@ -215,9 +214,9 @@
     </AttrArray>
   </Key>
   <Key
-    Name="SysC008487">
+    Name="SysC0028903">
     <DesignTime>
-      <Attr Name="_DBObjectName" Value="SYS_C008487"/>
+      <Attr Name="_DBObjectName" Value="SYS_C0028903"/>
       <Attr Name="_checkCondition" Value='"ID" IS NOT NULL'/>
       <Attr Name="_isCheck" Value="true"/>
     </DesignTime>
@@ -226,25 +225,14 @@
     </AttrArray>
   </Key>
   <Key
-    Name="SysC008488">
+    Name="SysC0028904">
     <DesignTime>
-      <Attr Name="_DBObjectName" Value="SYS_C008488"/>
+      <Attr Name="_DBObjectName" Value="SYS_C0028904"/>
       <Attr Name="_checkCondition" Value='"SCENE_ID" IS NOT NULL'/>
       <Attr Name="_isCheck" Value="true"/>
     </DesignTime>
     <AttrArray Name="Attributes">
       <Item Value="team.epm.odi11g.model.Odi11SceneExec.SceneId"/>
-    </AttrArray>
-  </Key>
-  <Key
-    Name="SysC008489">
-    <DesignTime>
-      <Attr Name="_DBObjectName" Value="SYS_C008489"/>
-      <Attr Name="_checkCondition" Value='"PARAMS" IS NOT NULL'/>
-      <Attr Name="_isCheck" Value="true"/>
-    </DesignTime>
-    <AttrArray Name="Attributes">
-      <Item Value="team.epm.odi11g.model.Odi11SceneExec.Params"/>
     </AttrArray>
   </Key>
   <ResourceBundle>
