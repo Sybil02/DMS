@@ -442,8 +442,7 @@
                   selectedRowKeys="#{bindings.DcmTemplateColumnView.collectionModel.selectedRow}"
                   selectionListener="#{bindings.DcmTemplateColumnView.collectionModel.makeCurrent}"
                   rowSelection="single" id="t2"
-                  partialTriggers=":::pc2:t1 ::cb9 ::cb8 :::pc2:cb6"
-                  contentDelivery="lazy">
+                  partialTriggers=":::pc2:t1 ::cb9 ::cb8 :::pc2:cb6">
           <af:column sortProperty="#{bindings.DcmTemplateColumnView.hints.ColumnLabel.name}"
                      sortable="false"
                      headerText="#{bindings.DcmTemplateColumnView.hints.ColumnLabel.label}"

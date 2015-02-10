@@ -776,6 +776,8 @@ public class DcmDataDisplayBean extends AbstractExcel2007Writer {
             if (!h.equals(header)) {
                 sql.append("AND T.\"").append(h.getCode()).append("\"='");
                 sql.append(h.getValue()).append("'");
+            }else{
+                break;
             }
         }
         sql.append(")");

@@ -9,8 +9,7 @@
               DataControl="DcmModuleDataControl" id="DcmTemplateViewIterator"/>
     <iterator Binds="DcmTemplateColumnView" RangeSize="25"
               DataControl="DcmModuleDataControl"
-              id="DcmTemplateColumnViewIterator"
-              RefreshCondition="#{bindings.DcmTemplateView.currentRow ne null}"/>
+              id="DcmTemplateColumnViewIterator"/>
     <methodIterator Binds="getCombinationRecordView.result"
                     DataControl="DcmModuleDataControl" RangeSize="25"
                     id="getCombinationRecordViewIterator"/>

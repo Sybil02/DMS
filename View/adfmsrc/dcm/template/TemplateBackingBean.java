@@ -272,6 +272,7 @@ public class TemplateBackingBean {
             Row row = columnVo.createRow();
             row.setAttribute("TemplateId", curTemplate.getAttribute("Id"));
             columnVo.insertRow(row);
+            columnVo.setCurrentRow(row);
         }
     }
 
