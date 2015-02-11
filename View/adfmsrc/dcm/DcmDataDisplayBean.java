@@ -5,6 +5,8 @@ import common.DmsUtils;
 
 import common.JSFUtils;
 
+import common.TablePagination;
+
 import dcm.combinantion.CombinationEO;
 
 import dcm.template.TemplateEO;
@@ -35,16 +37,15 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import java.util.UUID;
 
-import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import javax.faces.event.FacesEvent;
 import javax.faces.event.ValueChangeEvent;
 
 import javax.faces.model.SelectItem;
@@ -61,8 +62,6 @@ import oracle.adf.view.rich.context.AdfFacesContext;
 
 import oracle.adf.view.rich.event.QueryEvent;
 import oracle.adf.view.rich.model.FilterableQueryDescriptor;
-
-import oracle.adf.view.rich.model.QueryDescriptor;
 
 import oracle.jbo.ApplicationModule;
 import oracle.jbo.Key;
@@ -84,7 +83,6 @@ import org.apache.myfaces.trinidad.model.SortCriterion;
 import org.apache.myfaces.trinidad.model.UploadedFile;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 
@@ -93,14 +91,12 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import org.hexj.excelhandler.reader.ExcelReaderUtil;
-import org.hexj.excelhandler.writer.AbstractExcel2007Writer;
 
 import team.epm.dcm.view.DcmCombinationViewRowImpl;
-import team.epm.dcm.view.DcmTemplateColumnViewImpl;
 import team.epm.dcm.view.DcmTemplateColumnViewRowImpl;
 import team.epm.dcm.view.DcmTemplateViewRowImpl;
 
-public class DcmDataDisplayBean extends AbstractExcel2007Writer {
+public class DcmDataDisplayBean extends TablePagination{
     private CollectionModel dataModel;
     //模板信息
     private TemplateEO curTempalte;
@@ -116,6 +112,10 @@ public class DcmDataDisplayBean extends AbstractExcel2007Writer {
     private List<ComHeader> templateHeader = new ArrayList<ComHeader>();
     //值集信息
     private Map valueSet=new HashMap();
+    //是否可编辑
+    private boolean isEditable=true;
+    //
+    private String curCombiantionRecord;
     //日志
     private static ADFLogger _logger =ADFLogger.createADFLogger(DcmDataDisplayBean.class);
     //页面绑定组件
@@ -124,6 +124,9 @@ public class DcmDataDisplayBean extends AbstractExcel2007Writer {
     private RichPanelCollection panelaCollection;
     private Person curUser;
     private RichPopup errorWindow;
+    private RichPopup dataImportWnd;
+    private RichPopup dataExportWnd;
+    private RichPopup templateExportWnd;
     //排序
     private List<SortCriterion> sortCriterions;
     //搜索
@@ -199,7 +202,7 @@ public class DcmDataDisplayBean extends AbstractExcel2007Writer {
     //数据保存操作
     public void operation_save() {
         boolean flag = true;
-        String curComRecordId = this.getCurCombinationRecord();
+        String curComRecordId = this.curCombiantionRecord;
         List<Map> modelData = (List<Map>)this.dataModel.getWrappedData();
         StringBuffer sql_insert = new StringBuffer();
         StringBuffer sql_value = new StringBuffer();
@@ -264,8 +267,9 @@ public class DcmDataDisplayBean extends AbstractExcel2007Writer {
         this.queryTemplateData();
     }
     //数据导入操作
-    public void operation_import() throws SQLException {
-        String curComRecordId = this.getCurCombinationRecord();
+    public void operation_import(ActionEvent actionEvent) throws SQLException {
+        this.dataImportWnd.cancel();
+        String curComRecordId = this.curCombiantionRecord;
         //组合找不到
         if (this.curTempalte.getCombinationId() != null && curComRecordId == null) {
             JSFUtils.addFacesErrorMessage(DmsUtils.getMsg("dcm.inform.select_correct_combination"));
@@ -273,8 +277,7 @@ public class DcmDataDisplayBean extends AbstractExcel2007Writer {
         }
         //上传文件为空
         if (null == this.fileInput.getValue()) {
-            String msg = DmsUtils.getMsg("dcm.plz_select_import_file");
-            JSFUtils.addFacesErrorMessage(msg);
+            JSFUtils.addFacesErrorMessage(DmsUtils.getMsg("dcm.plz_select_import_file"));
             return;
         }
         //获取文件上传路径
@@ -507,38 +510,21 @@ public class DcmDataDisplayBean extends AbstractExcel2007Writer {
     }
     //数据导出
     public void operation_export(FacesContext facesContext,java.io.OutputStream outputStream) {
+        this.dataExportWnd.cancel();
         String type = this.isXlsx ? "xlsx" : "xls";
         try {
             if ("xls".equals(type)) {
-                String querySql = this.getQuerySql();
-                DBTransaction dbTransaction =(DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
-                PreparedStatement stat =dbTransaction.createPreparedStatement(querySql, -1);
-                ResultSet rs = stat.executeQuery();
-                // 创建excel2003对象
-                Workbook wb = new HSSFWorkbook();
-                // 创建新的表单
-                Sheet sheet = wb.createSheet(this.curTempalte.getName());
-                // 创建新行
-                org.apache.poi.ss.usermodel.Row headerRow =
-                    sheet.createRow((int)this.curTempalte.getDataStartLine().getValue() - 2);
-                for (int i = 0; i < this.colsdef.size(); i++) {
-                    headerRow.createCell(i).setCellValue(this.colsdef.get(i).getColumnLabel());
-                }
-                int n = (int)this.curTempalte.getDataStartLine().getValue() - 1;
-                while (rs.next()) {
-                    int colInx = 0;
-                    org.apache.poi.ss.usermodel.Row row = sheet.createRow(n);
-                    for (ColumnDef col : this.colsdef) {
-                        Cell cell = row.createCell(colInx);
-                        ++colInx;
-                        cell.setCellValue(rs.getString(col.getDbTableCol()));
-                    }
-                    ++n;
-                }
-                rs.close();
-                wb.write(outputStream);
+                Excel2003WriterImpl writer=new Excel2003WriterImpl(
+                                               this.getQuerySql(),
+                                               this.curTempalte,
+                                               this.colsdef,
+                                               outputStream);
+                writer.writoToFile();
             } else {
-                this.process(outputStream, this.curTempalte.getName());
+                Excel2007WriterImpl writer=new Excel2007WriterImpl(this.getQuerySql(),
+                                                                   (int)this.curTempalte.getDataStartLine().getValue(),
+                                                                   this.colsdef);
+                writer.process(outputStream, this.curTempalte.getName());
             }
             outputStream.flush();
         } catch (Exception e) {
@@ -547,6 +533,7 @@ public class DcmDataDisplayBean extends AbstractExcel2007Writer {
     }
     //下载模板
     public void operation_download(FacesContext facesContext,java.io.OutputStream outputStream) {
+        this.templateExportWnd.cancel();
         try {
             if (this.isXlsx) {
                 if (this.curTempalte.getTemplateFile() == null) {
@@ -611,6 +598,14 @@ public class DcmDataDisplayBean extends AbstractExcel2007Writer {
         Row[] rows=templateView.findByKey(new Key(new Object[]{curTemplateId,ADFContext.getCurrent().getLocale().toString()}), 1);
         if(rows.length>0){
             this.curTempalte=new TemplateEO((DcmTemplateViewRowImpl)rows[0]); 
+            //只读模板
+            if("Y".equals(this.curTempalte.getReadonly())){
+                this.isEditable=false;
+            }
+            //对该模板仅有只读权限
+            if(this.isEditable){
+                this.isEditable=!this.isReadOnly();
+            }
             templateView.setCurrentRow(rows[0]);
             DcmTemplateViewRowImpl row=(DcmTemplateViewRowImpl)rows[0];
             RowIterator itr=row.getDcmTemplateColumnView();
@@ -660,7 +655,19 @@ public class DcmDataDisplayBean extends AbstractExcel2007Writer {
     private void queryTemplateData() {
         List<Map> data = new ArrayList<Map>();
         DBTransaction dbTransaction =(DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
-        String sql = this.getQuerySql();
+        String countSql=this.getCountSql(this.getQuerySql());
+        PreparedStatement cstat =dbTransaction.createPreparedStatement(countSql, -1);
+        try {
+            ResultSet crs = cstat.executeQuery();
+            if(crs.next()){
+                this.setTotalCount(crs.getInt(1));
+            }
+            crs.close();
+            cstat.close();
+        } catch (SQLException e) {
+            this._logger.severe(e);
+        }
+        String sql =this.getPaginationSql(this.getQuerySql());
         PreparedStatement stat =dbTransaction.createPreparedStatement(sql, -1);
         ResultSet rs = null;
         try {
@@ -703,7 +710,7 @@ public class DcmDataDisplayBean extends AbstractExcel2007Writer {
             sql_select.append(",\"").append(col.getDbTableCol()).append("\"");
         }
         if (this.curCombiantion != null) {
-            sql_where.append(" WHERE COM_RECORD_ID='").append(this.getCurCombinationRecord()).append("'");
+            sql_where.append(" WHERE COM_RECORD_ID='").append(this.curCombiantionRecord).append("'");
         } else {
             sql_where.append(" WHERE COM_RECORD_ID IS NULL");
         }
@@ -757,6 +764,7 @@ public class DcmDataDisplayBean extends AbstractExcel2007Writer {
                 header.setValue(header.getValues().size() > 0 ? (String)header.getValues().get(0).getValue() : null);
                 this.templateHeader.add(header);
             }
+            this.curCombiantionRecord=this.getCurCombinationRecord();
         }
     }
     //获取某一值集值列表
@@ -875,6 +883,7 @@ public class DcmDataDisplayBean extends AbstractExcel2007Writer {
             i++;
         }
         this.queryTemplateData();
+        this.curCombiantionRecord=this.getCurCombinationRecord();
         AdfFacesContext adfFacesContext = AdfFacesContext.getCurrentInstance();
         adfFacesContext.addPartialTarget(this.panelaCollection);
     }
@@ -889,46 +898,6 @@ public class DcmDataDisplayBean extends AbstractExcel2007Writer {
 
     public RichPanelCollection getPanelaCollection() {
         return panelaCollection;
-    }
-    //生成excel数据
-    public void generate() {
-        try {
-            String querySql = this.getQuerySql();
-            DBTransaction dbTransaction =(DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
-            PreparedStatement stat =dbTransaction.createPreparedStatement(querySql, -1);
-            ResultSet rs = stat.executeQuery();
-            //电子表格开始
-            beginSheet();
-            insertRow((int)this.curTempalte.getDataStartLine().getValue() - 2);
-            for (int i = 0; i < this.colsdef.size(); i++) {
-                createCell(i, this.colsdef.get(i).getColumnLabel());
-            }
-            endRow();
-            int n = (int)this.curTempalte.getDataStartLine().getValue() - 1;
-            while (rs.next()) {
-                int colInx = 0;
-                insertRow(n);
-                for (ColumnDef col : this.colsdef) {
-                    Object obj=rs.getObject(col.getDbTableCol());
-                    if(obj instanceof java.sql.Date){
-                        SimpleDateFormatter format=new SimpleDateFormatter("yyyy-MM-dd hh:mm:ss");
-                        obj=format.format((java.sql.Date)obj);
-                    }else{
-                        obj=ObjectUtils.toString(obj);
-                    }
-                    createCell(colInx,(String)obj);
-                    ++colInx;
-                }
-                ++n;
-                //结束行
-                endRow();
-            }
-            rs.close();
-            //电子表格结束
-            endSheet();
-        } catch (Exception e) {
-            this._logger.severe(e);
-        }
     }
 
     public String getTemplateName() {
@@ -980,7 +949,7 @@ public class DcmDataDisplayBean extends AbstractExcel2007Writer {
         if (this.curCombiantion == null) {
             vr.setAttribute("ComRecordId", " is null");
         } else {
-            vr.setAttribute("ComRecordId", "='" + this.getCurCombinationRecord() + "'");
+            vr.setAttribute("ComRecordId", "='" + this.curCombiantionRecord + "'");
         }
         vr.setAttribute("TemplateId", "='" + this.curTempalte.getId() + "'");
         viewCriteria.addRow(vr);
@@ -1032,5 +1001,89 @@ public class DcmDataDisplayBean extends AbstractExcel2007Writer {
 
     public Map getValueSet() {
         return valueSet;
+    }
+
+    public void nextPage(ActionEvent event) {
+        this.setCurPage(this.getCurPage()+1);
+        this.queryTemplateData();
+    }
+
+    public void prePage(ActionEvent event) {
+        this.setCurPage(this.getCurPage()-1);
+        this.queryTemplateData();
+    }
+
+    public void refreshPage(ActionEvent event) {
+    }
+
+    public void gotoPage(ValueChangeEvent event) {
+        this.setCurPage((Integer)event.getNewValue());
+        this.queryTemplateData();
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.panelaCollection);
+    }
+
+    public void firstPage(ActionEvent event) {
+        this.setCurPage(1);
+        this.queryTemplateData();
+    }
+
+    public void lastPage(ActionEvent event) {
+        this.setCurPage(this.getTotalPage());
+        this.queryTemplateData();
+    }
+
+    public void setDataImportWnd(RichPopup dataImportWnd) {
+        this.dataImportWnd = dataImportWnd;
+    }
+
+    public RichPopup getDataImportWnd() {
+        return dataImportWnd;
+    }
+
+    public void setDataExportWnd(RichPopup dataExportWnd) {
+        this.dataExportWnd = dataExportWnd;
+    }
+
+    public RichPopup getDataExportWnd() {
+        return dataExportWnd;
+    }
+
+    public void setTemplateExportWnd(RichPopup templateExportWnd) {
+        this.templateExportWnd = templateExportWnd;
+    }
+
+    public RichPopup getTemplateExportWnd() {
+        return templateExportWnd;
+    }
+    public boolean getIsEditable(){
+        if(this.curCombiantion==null){
+            return this.isEditable;
+        }else{
+            return this.isEditable&&this.curCombiantionRecord!=null;
+        }
+    }
+    private boolean isReadOnly(){
+        boolean readonly=false;
+        StringBuffer sql=new StringBuffer();
+        sql.append("SELECT T1.READ_ONLY ")
+           .append("  FROM DCM_ROLE_TEMPLATE T1, DMS_GROUP_ROLE T2, DMS_USER_GROUP T3 ")
+           .append(" WHERE T1.ROLE_ID = T2.ROLE_ID ") 
+           .append("   AND T2.GROUP_ID = T3.GROUP_ID ") 
+           .append("   AND T3.USER_ID = '").append(this.curUser.getId()).append("' ")
+           .append("   AND T1.TEMPLATE_ID = '").append(this.curTempalte.getId()).append("'");
+        Statement stmt=DmsUtils.getDcmApplicationModule().getDBTransaction().createStatement(DBTransaction.DEFAULT);
+        try {
+            ResultSet rs = stmt.executeQuery(sql.toString());
+            if(rs.next()){
+                if("Y".equals(rs.getString("READ_ONLY"))){
+                    readonly=true;
+                }
+            }
+            rs.close();
+            stmt.close();
+        } catch (SQLException e) {
+            this._logger.severe(e);
+        }
+        return readonly;
     }
 }

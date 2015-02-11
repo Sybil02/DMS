@@ -4,8 +4,7 @@
           xmlns:f="http://java.sun.com/jsf/core"
           xmlns:c="http://java.sun.com/jsp/jstl/core">
   <c:set var="viewBundle" value="#{adfBundle['dms_v']}"/>
-  <af:panelStretchLayout id="psl1"
-                         bottomHeight="0"
+  <af:panelStretchLayout id="psl1" bottomHeight="0"
                          topHeight="#{viewScope.DcmDataDisplayBean.combinationId==null ? '0px':'35px'}">
     <f:facet name="top">
       <af:panelGroupLayout layout="horizontal"
@@ -31,59 +30,87 @@
         <f:facet name="toolbar">
           <af:toolbar id="t2">
             <af:group id="grp1">
-              <af:commandButton text="#{viewBundle['dcm.action.new']}" id="cb1"
+              <af:commandButton disabled="#{viewScope.DcmDataDisplayBean.isEditable eq false}" 
+                                text="#{viewBundle['dcm.action.new']}" id="cb1"
+                                partialTriggers="::pgl1"
                                 action="#{viewScope.DcmDataDisplayBean.operation_new}"/>
               <af:commandButton text="#{viewBundle['dcm.action.delete']}"
                                 id="cb2"
+                                partialTriggers="::pgl1"
+                                disabled="#{viewScope.DcmDataDisplayBean.isEditable eq false}"
                                 action="#{viewScope.DcmDataDisplayBean.operation_delete}"/>
               <af:commandButton text="#{viewBundle['dcm.action.save']}" id="cb3"
+                                disabled="#{viewScope.DcmDataDisplayBean.isEditable eq false}"
+                                partialTriggers="::pgl1"
                                 action="#{viewScope.DcmDataDisplayBean.operation_save}"/>
               <af:commandButton text="#{viewBundle['dcm.action.reset']}"
                                 id="cb4"
+                                partialTriggers="::pgl1"
+                                disabled="#{viewScope.DcmDataDisplayBean.isEditable eq false}"
                                 action="#{viewScope.DcmDataDisplayBean.operation_reset}"/>
             </af:group>
             <af:group id="grp2">
-              <af:inputFile id="if1" simple="true" inlineStyle="width:50px"
-                            binding="#{viewScope.DcmDataDisplayBean.fileInput}"
-                            columns="5"/>
-              <af:selectBooleanRadio text="#{viewBundle['dcm.import.increment']}"
-                                     id="sbr3" group="handleMode" simple="true"
-                                     value="#{viewScope.DcmDataDisplayBean.isIncrement}"/>
-              <af:selectBooleanRadio text="#{viewBundle['dcm.import.repalce']}"
-                                     id="sbr4" group="handleMode"
-                                     simple="true"/>
               <af:commandButton text="#{viewBundle['dcm.action.import']}"
-                                id="cb5"
-                                action="#{viewScope.DcmDataDisplayBean.operation_import}"/>
+                                id="cb10"
+                                partialTriggers="::pgl1"
+                                disabled="#{viewScope.DcmDataDisplayBean.isEditable eq false}">
+                <af:showPopupBehavior popupId="::p2"/>
+              </af:commandButton>
               <af:commandButton text="#{viewBundle['dcm.import_error']}"
                                 id="cb8"
                                 actionListener="#{viewScope.DcmDataDisplayBean.showErrors}"
                                 partialSubmit="true"></af:commandButton>
-            </af:group>
-            <af:group id="grp3">
-              <af:selectBooleanRadio text="#{viewBundle['dcm.export.03format']}"
-                                     id="sbr1" group="excelFormat"
-                                     simple="true"/>
-              <af:selectBooleanRadio text="#{viewBundle['dcm.export.07format']}"
-                                     id="sbr2" group="excelFormat" simple="true"
-                                     autoSubmit="true"
-                                     value="#{viewScope.DcmDataDisplayBean.isXlsx}"/>
               <af:commandButton text="#{viewBundle['dcm.action.export']}"
                                 id="cb6">
-                <af:fileDownloadActionListener contentType="application/vnd.ms-excel"
-                                               method="#{viewScope.DcmDataDisplayBean.operation_export}"
-                                               filename="#{viewScope.DcmDataDisplayBean.exportDataExcelName}"/>
+                <af:showPopupBehavior popupId="::p3"/>
               </af:commandButton>
+            </af:group>
+            <af:group id="grp3">
               <af:commandButton text="#{viewBundle['dcm.action.template_download']}"
                                 id="cb7">
-                <af:fileDownloadActionListener contentType="application/vnd.ms-excel"
-                                               method="#{viewScope.DcmDataDisplayBean.operation_download}"
-                                               filename="#{viewScope.DcmDataDisplayBean.exportTemplateExcelName}"/>
+                <af:showPopupBehavior popupId="::p4"/>
               </af:commandButton>
             </af:group>
           </af:toolbar>
         </f:facet>
-        <f:facet name="statusbar"/>
+        <!-- 分页控件 -->
+        <f:facet name="statusbar">
+          <af:toolbar id="t4">
+            <af:group id="g1">
+              <af:commandImageLink id="cil1" icon="/images/page-first.gif"
+                                   actionListener="#{viewScope.DcmDataDisplayBean.firstPage}"/>
+              <af:commandImageLink id="cil2" icon="/images/page-prev.gif"
+                                   actionListener="#{viewScope.DcmDataDisplayBean.prePage}"/>
+            </af:group>
+            <af:group id="g2">
+              <af:outputText value="#{viewBundle['dms.common.pagenation_seg01']}"
+                             id="ot6"
+                             />
+              <af:inputText id="it2" simple="true" columns="4"
+                            autoSubmit="true"
+                            valueChangeListener="#{viewScope.DcmDataDisplayBean.gotoPage}"
+                            value="#{viewScope.DcmDataDisplayBean.curPage}"/>
+              <af:outputText value="#{af:formatString(viewBundle['dms.common.pagenation_seg02'],viewScope.DcmDataDisplayBean.totalPage)}"
+                             id="ot7"/>
+            </af:group>
+            <af:group id="g3">
+              <af:commandImageLink id="cil3" icon="/images/page-next.gif"
+                            actionListener="#{viewScope.DcmDataDisplayBean.nextPage}"/>
+              <af:commandImageLink id="cil4" icon="/images/page-last.gif"
+                            actionListener="#{viewScope.DcmDataDisplayBean.lastPage}"/>
+            </af:group>
+            <af:group id="g4">
+              <af:commandImageLink id="cil5" icon="/images/refresh.gif"/>
+            </af:group>
+            <af:group id="g5">
+              <af:outputText value="#{af:formatString3(viewBundle['dms.common.pagenation.seg03'],
+                                    viewScope.DcmDataDisplayBean.startPoint+1,
+                                    viewScope.DcmDataDisplayBean.endPoint,
+                                    viewScope.DcmDataDisplayBean.totalCount)}"
+                             id="ot4"/>
+            </af:group>
+          </af:toolbar>
+        </f:facet>
         <af:table var="row" rowBandingInterval="0" id="t1"
                   value="#{viewScope.DcmDataDisplayBean.dataModel}"
                   scrollPolicy="page"
@@ -100,16 +127,23 @@
                       var="attr" varStatus="vs">
             <af:column sortable="true" headerText="#{attr.columnLabel}"
                        sortProperty="#{attr.dbTableCol}"
+                       visible="#{attr.visible eq 'Y'}"
                        inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
                                     #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
                                     #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}"
                        filterable="#{attr.dataType ne 'DATE'}">
-              <af:inputText value="#{row[attr.dbTableCol]}" rendered="#{attr.valueSetId eq null}"
+              <af:inputText value="#{row[attr.dbTableCol]}"
+                            rendered="#{attr.valueSetId eq null}"
+                            readOnly="#{(viewScope.DcmDataDisplayBean.isEditable and (attr.readonly eq 'N')) eq false}"
                             valueChangeListener="#{viewScope.DcmDataDisplayBean.valueChangeListener}"/>
-              <af:selectOneChoice label="#{attr.columnLabel}" value="#{row[attr.dbTableCol]}"  
+              <af:selectOneChoice label="#{attr.columnLabel}"
+                                  value="#{row[attr.dbTableCol]}"
                                   valueChangeListener="#{viewScope.DcmDataDisplayBean.valueChangeListener}"
-                                  id="soc2" rendered="#{attr.valueSetId ne null}">
-                <f:selectItems value="#{viewScope.DcmDataDisplayBean.valueSet[attr.valueSetId]}" id="si2"/>
+                                  id="soc2"
+                                  readOnly="#{(viewScope.DcmDataDisplayBean.isEditable and (attr.readonly eq 'N')) eq false}"
+                                  rendered="#{attr.valueSetId ne null}">
+                <f:selectItems value="#{viewScope.DcmDataDisplayBean.valueSet[attr.valueSetId]}"
+                               id="si2"/>
               </af:selectOneChoice>
             </af:column>
           </af:forEach>
@@ -118,74 +152,205 @@
     </f:facet>
     <f:facet name="start"/>
     <f:facet name="bottom">
-      <af:popup id="p1" binding="#{viewScope.DcmDataDisplayBean.errorWindow}">
-        <af:panelWindow id="pw1" title="#{viewBundle['dcm.import_error']}">
-          <af:panelStretchLayout id="psl2"
-                                 inlineStyle="width:1000px;height:400px">
-            <f:facet name="center">
-              <af:table value="#{bindings.DcmErrorView.collectionModel}"
-                        var="row" rows="#{bindings.DcmErrorView.rangeSize}"
-                        emptyText="#{viewBundle['dms.common.nodata']}"
-                        fetchSize="#{bindings.DcmErrorView.rangeSize}"
-                        rowBandingInterval="0" filterVisible="false"
-                        varStatus="vs"
-                        selectedRowKeys="#{bindings.DcmErrorView.collectionModel.selectedRow}"
-                        selectionListener="#{bindings.DcmErrorView.collectionModel.makeCurrent}"
-                        rowSelection="single" id="t3"
-                        columnStretching="column:c1">
-                <af:column sortProperty="#{bindings.DcmErrorView.hints.SheetName.name}"
-                           filterable="true" sortable="true"
-                           headerText="#{bindings.DcmErrorView.hints.SheetName.label}"
-                           id="c2">
-                  <af:outputText value="#{row.SheetName}" id="ot1"/>
-                </af:column>
-                <af:column sortProperty="#{bindings.DcmErrorView.hints.RowNum.name}"
-                           filterable="true" sortable="true"
-                           headerText="#{bindings.DcmErrorView.hints.RowNum.label}"
-                           id="c3">
-                  <af:outputText value="#{row.RowNum}" id="ot2">
-                    <af:convertNumber groupingUsed="false"
-                                      pattern="#{bindings.DcmErrorView.hints.RowNum.format}"/>
-                  </af:outputText>
-                </af:column>
-                <af:column sortProperty="#{bindings.DcmErrorView.hints.Msg.name}"
-                           filterable="true" sortable="true"
-                           headerText="#{bindings.DcmErrorView.hints.Msg.label}"
-                           id="c1">
-                  <af:inputText value="#{row.bindings.Msg.inputValue}"
-                                simple="true"
-                                maximumLength="#{bindings.DcmErrorView.hints.Msg.precision}"
-                                shortDesc="#{bindings.DcmErrorView.hints.Msg.tooltip}"
-                                id="it1" rows="1"></af:inputText>
-                </af:column>
-                <af:column sortProperty="#{bindings.DcmErrorView.hints.Level.name}"
-                           filterable="true" sortable="true"
-                           headerText="#{bindings.DcmErrorView.hints.Level.label}"
-                           id="c4">
-                  <af:outputText value="#{row.Level}" id="ot3"/>
-                </af:column>
-                <af:column headerText="#{bindings.DcmErrorView.hints.CreatedAt.label}"
-                           id="c6">
-                  <af:outputText value="#{row.CreatedAt}" id="ot5">
-                    <af:convertDateTime pattern="#{bindings.DcmErrorView.hints.CreatedAt.format}"/>
-                  </af:outputText>
-                </af:column>
-                <af:column headerText="#{bindings.DcmErrorView.hints.CreatedBy.label}"
-                           id="c5">
-                  <af:selectOneChoice value="#{row.bindings.CreatedBy.inputValue}"
-                                      label="#{row.bindings.CreatedBy.label}"
-                                      required="#{bindings.DcmErrorView.hints.CreatedBy.mandatory}"
-                                      shortDesc="#{bindings.DcmErrorView.hints.CreatedBy.tooltip}"
-                                      id="soc1" readOnly="true">
-                    <f:selectItems value="#{row.bindings.CreatedBy.items}"
-                                   id="si1"/>
-                  </af:selectOneChoice>
-                </af:column>
-              </af:table>
-            </f:facet>
-          </af:panelStretchLayout>
-        </af:panelWindow>
-      </af:popup>
+      <af:panelGroupLayout layout="scroll"
+                           xmlns:af="http://xmlns.oracle.com/adf/faces/rich"
+                           id="pgl2">
+        <af:popup id="p1" binding="#{viewScope.DcmDataDisplayBean.errorWindow}">
+          <af:panelWindow id="pw1" title="#{viewBundle['dcm.import_error']}">
+            <af:panelStretchLayout id="psl2"
+                                   inlineStyle="width:1000px;height:400px">
+              <f:facet name="center">
+                <af:table value="#{bindings.DcmErrorView.collectionModel}"
+                          var="row" rows="#{bindings.DcmErrorView.rangeSize}"
+                          emptyText="#{viewBundle['dms.common.nodata']}"
+                          fetchSize="#{bindings.DcmErrorView.rangeSize}"
+                          rowBandingInterval="0" filterVisible="false"
+                          varStatus="vs"
+                          selectedRowKeys="#{bindings.DcmErrorView.collectionModel.selectedRow}"
+                          selectionListener="#{bindings.DcmErrorView.collectionModel.makeCurrent}"
+                          rowSelection="single" id="t3"
+                          columnStretching="column:c1">
+                  <af:column sortProperty="#{bindings.DcmErrorView.hints.SheetName.name}"
+                             filterable="true" sortable="true"
+                             headerText="#{bindings.DcmErrorView.hints.SheetName.label}"
+                             id="c2">
+                    <af:outputText value="#{row.SheetName}" id="ot1"/>
+                  </af:column>
+                  <af:column sortProperty="#{bindings.DcmErrorView.hints.RowNum.name}"
+                             filterable="true" sortable="true"
+                             headerText="#{bindings.DcmErrorView.hints.RowNum.label}"
+                             id="c3">
+                    <af:outputText value="#{row.RowNum}" id="ot2">
+                      <af:convertNumber groupingUsed="false"
+                                        pattern="#{bindings.DcmErrorView.hints.RowNum.format}"/>
+                    </af:outputText>
+                  </af:column>
+                  <af:column sortProperty="#{bindings.DcmErrorView.hints.Msg.name}"
+                             filterable="true" sortable="true"
+                             headerText="#{bindings.DcmErrorView.hints.Msg.label}"
+                             id="c1">
+                    <af:inputText value="#{row.bindings.Msg.inputValue}"
+                                  simple="true"
+                                  maximumLength="#{bindings.DcmErrorView.hints.Msg.precision}"
+                                  shortDesc="#{bindings.DcmErrorView.hints.Msg.tooltip}"
+                                  id="it1" rows="1"/>
+                  </af:column>
+                  <af:column sortProperty="#{bindings.DcmErrorView.hints.Level.name}"
+                             filterable="true" sortable="true"
+                             headerText="#{bindings.DcmErrorView.hints.Level.label}"
+                             id="c4">
+                    <af:outputText value="#{row.Level}" id="ot3"/>
+                  </af:column>
+                  <af:column headerText="#{bindings.DcmErrorView.hints.CreatedAt.label}"
+                             id="c6">
+                    <af:outputText value="#{row.CreatedAt}" id="ot5">
+                      <af:convertDateTime pattern="#{bindings.DcmErrorView.hints.CreatedAt.format}"/>
+                    </af:outputText>
+                  </af:column>
+                  <af:column headerText="#{bindings.DcmErrorView.hints.CreatedBy.label}"
+                             id="c5">
+                    <af:selectOneChoice value="#{row.bindings.CreatedBy.inputValue}"
+                                        label="#{row.bindings.CreatedBy.label}"
+                                        required="#{bindings.DcmErrorView.hints.CreatedBy.mandatory}"
+                                        shortDesc="#{bindings.DcmErrorView.hints.CreatedBy.tooltip}"
+                                        id="soc1" readOnly="true">
+                      <f:selectItems value="#{row.bindings.CreatedBy.items}"
+                                     id="si1"/>
+                    </af:selectOneChoice>
+                  </af:column>
+                </af:table>
+              </f:facet>
+            </af:panelStretchLayout>
+          </af:panelWindow>
+        </af:popup>
+        <af:popup id="p2" autoCancel="disabled" childCreation="deferred"
+                  binding="#{viewScope.DcmDataDisplayBean.dataImportWnd}">
+          <af:panelWindow id="pw2"
+                          title="#{viewBundle['dcm.template.data_import']}"
+                          modal="true">
+            <af:panelGridLayout id="pgl3">
+              <af:gridRow marginTop="5px" height="auto" id="gr2">
+                <af:gridCell width="auto" id="gc1"
+                             inlineStyle="padding-top:5px">
+                  <af:outputText value="#{viewBundle['dcm.template.import_file']}"
+                                 id="ot9"/>
+                </af:gridCell>
+                <af:gridCell marginStart="5px" marginEnd="5px" width="auto"
+                             id="gc4">
+                  <af:inputFile id="if2" simple="true"
+                                binding="#{viewScope.DcmDataDisplayBean.fileInput}"
+                                columns="15"/>
+                </af:gridCell>
+              </af:gridRow>
+              <af:gridRow marginTop="5px" marginBottom="5px" height="auto"
+                          id="gr1">
+                <af:gridCell width="auto" id="gc3"
+                             inlineStyle="padding-top:5px">
+                  <af:outputText value="#{viewBundle['dcm.template.import_type_msg']}"
+                                 id="ot8"/>
+                </af:gridCell>
+                <af:gridCell marginStart="5px" marginEnd="5px" width="auto"
+                             id="gc2">
+                  <af:selectBooleanRadio text="#{viewBundle['dcm.import.increment']}"
+                                         id="sbr5" group="handleMode"
+                                         simple="true"
+                                         value="#{viewScope.DcmDataDisplayBean.isIncrement}"/>
+                  <af:selectBooleanRadio text="#{viewBundle['dcm.import.repalce']}"
+                                         id="sbr6" group="handleMode"
+                                         simple="true"/>
+                </af:gridCell>
+              </af:gridRow>
+              <af:gridRow marginTop="5px" marginBottom="5px" height="auto"
+                          id="gr3">
+                <af:gridCell halign="center" width="auto" id="gc5"
+                             columnSpan="2">
+                  <af:commandButton text="#{viewBundle['dcm.action.import']}"
+                                    id="cb9" inlineStyle="margin-top:5px"
+                                    actionListener="#{viewScope.DcmDataDisplayBean.operation_import}"/>
+                </af:gridCell>
+              </af:gridRow>
+            </af:panelGridLayout>
+          </af:panelWindow>
+        </af:popup>
+        <af:popup id="p3" autoCancel="disabled" childCreation="deferred"
+                  binding="#{viewScope.DcmDataDisplayBean.dataExportWnd}">
+          <af:panelWindow id="pw3"
+                          title="#{viewBundle['dcm.template.data_export']}"
+                          modal="true">
+            <af:panelGridLayout id="pgl4">
+              <af:gridRow marginTop="5px" height="auto" id="gr4">
+                <af:gridCell marginStart="5px" width="auto" id="gc6"
+                             inlineStyle="padding-top:5px">
+                  <af:outputText value="#{viewBundle['dcm.template.excel_type']}"
+                                 id="ot10"/>
+                </af:gridCell>
+                <af:gridCell marginStart="5px" marginEnd="5px" width="auto"
+                             id="gc9">
+                  <af:selectBooleanRadio text="#{viewBundle['dcm.export.03format']}"
+                                         id="sbr3" group="excelFormat"
+                                         simple="true"/>
+                  <af:selectBooleanRadio text="#{viewBundle['dcm.export.07format']}"
+                                         id="sbr4" group="excelFormat"
+                                         simple="true" autoSubmit="true"
+                                         value="#{viewScope.DcmDataDisplayBean.isXlsx}"/>
+                </af:gridCell>
+              </af:gridRow>
+              <af:gridRow marginTop="5px" marginBottom="5px" height="auto"
+                          id="gr5">
+                <af:gridCell marginStart="5px" width="auto" columnSpan="2"
+                             halign="center" id="gc8"
+                             inlineStyle="margin-top:5px">
+                  <af:commandButton text="#{viewBundle['dcm.action.export']}"
+                                    id="cb11">
+                    <af:fileDownloadActionListener contentType="application/vnd.ms-excel"
+                                                   method="#{viewScope.DcmDataDisplayBean.operation_export}"
+                                                   filename="#{viewScope.DcmDataDisplayBean.exportDataExcelName}"/>
+                  </af:commandButton>
+                </af:gridCell>
+              </af:gridRow>
+            </af:panelGridLayout>
+          </af:panelWindow>
+        </af:popup>
+        <af:popup id="p4" autoCancel="disabled" childCreation="deferred"
+                  binding="#{viewScope.DcmDataDisplayBean.templateExportWnd}">
+          <af:panelWindow id="pw4"
+                          title="#{viewBundle['dcm.action.template_download']}"
+                          modal="true">
+            <af:panelGridLayout id="pg24">
+              <af:gridRow marginTop="5px" height="auto" id="gr24">
+                <af:gridCell marginStart="5px" width="auto" id="gc26"
+                             inlineStyle="padding-top:5px">
+                  <af:outputText value="#{viewBundle['dcm.template.excel_type']}"
+                                 id="ot20"/>
+                </af:gridCell>
+                <af:gridCell marginStart="5px" marginEnd="5px" width="auto"
+                             id="gc29">
+                  <af:selectBooleanRadio text="#{viewBundle['dcm.export.03format']}"
+                                         id="sbr23" group="excelFormat"
+                                         simple="true"/>
+                  <af:selectBooleanRadio text="#{viewBundle['dcm.export.07format']}"
+                                         id="sbr24" group="excelFormat"
+                                         simple="true" autoSubmit="true"
+                                         value="#{viewScope.DcmDataDisplayBean.isXlsx}"/>
+                </af:gridCell>
+              </af:gridRow>
+              <af:gridRow marginTop="5px" marginBottom="5px" height="auto"
+                          id="gr25">
+                <af:gridCell marginStart="5px" width="auto" columnSpan="2"
+                             halign="center" id="gc28"
+                             inlineStyle="margin-top:5px">
+                  <af:commandButton text="#{viewBundle['dcm.action.template_download']}"
+                                    id="cb27">
+                    <af:fileDownloadActionListener contentType="application/vnd.ms-excel"
+                                                   method="#{viewScope.DcmDataDisplayBean.operation_download}"
+                                                   filename="#{viewScope.DcmDataDisplayBean.exportTemplateExcelName}"/>
+                  </af:commandButton>
+                </af:gridCell>
+              </af:gridRow>
+            </af:panelGridLayout>
+          </af:panelWindow>
+        </af:popup>
+      </af:panelGroupLayout>
     </f:facet>
   </af:panelStretchLayout>
 </jsp:root>

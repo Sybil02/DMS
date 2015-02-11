@@ -1,12 +1,14 @@
 package common;
 
+import javax.faces.event.ActionEvent;
 import javax.faces.event.FacesEvent;
+import javax.faces.event.ValueChangeEvent;
 
 public abstract class TablePagination {
     //每页加载500行
-    private static final int pageSize=500;
+    private static final int pageSize=100;
     //当前页
-    private int curPage;
+    private int curPage=1;
     //总页数
     private int totalPage;
     //数据总行数
@@ -35,6 +37,9 @@ public abstract class TablePagination {
         }
     }
     public int getStartPoint(){
+        if(this.curPage==0){
+            return 0;
+        }
         return (this.curPage-1)*this.pageSize;  
     }
     public int getEndPoint(){
@@ -57,15 +62,15 @@ public abstract class TablePagination {
         return sql.toString();
     }
     //下一页
-    public abstract void nextPage(FacesEvent event);
+    public abstract void nextPage(ActionEvent event);
     //上一页
-    public abstract void prePage(FacesEvent event);
+    public abstract void prePage(ActionEvent event);
     //刷新
-    public abstract void refreshPage(FacesEvent event);
+    public abstract void refreshPage(ActionEvent event);
     //跳到
-    public abstract void gotoPage(FacesEvent event);
+    public abstract void gotoPage(ValueChangeEvent event);
     //第一页
-    public abstract void firstPage(FacesEvent event);
+    public abstract void firstPage(ActionEvent event);
     //最后一页
-    public abstract void lastPage(FacesEvent event);
+    public abstract void lastPage(ActionEvent event);
 }

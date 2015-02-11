@@ -560,6 +560,8 @@
             <hash>
                <url n="content-folder-url" path="adfmsrc/dcm/"/>
                <list n="pattern-filters">
+                  <string v="+dcm/Excel2003WriterImpl.java"/>
+                  <string v="+dcm/Excel2007WriterImpl.java"/>
                   <string v="+dcm/DcmQueryDescriptor.java"/>
                   <string v="+dcm/combinantion/CombinationEO.java"/>
                   <string v="+dcm/Class1.java"/>
