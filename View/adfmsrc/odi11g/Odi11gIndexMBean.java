@@ -239,6 +239,7 @@ public class Odi11gIndexMBean {
         if (this.isRunning((String)sceneRow.getAttribute("Id"),
                            parmStr.toString())) {
             JSFUtils.addFacesInformationMessage(DmsUtils.getMsg("odi11g.scene.running"));
+            this.statusPopup.cancel();
             return;
         }
         try {
@@ -295,6 +296,8 @@ public class Odi11gIndexMBean {
             execVo.getApplicationModule().getTransaction().commit();
             this.popup.cancel();
             this.showStatus();
+            RichPopup.PopupHints hint = new RichPopup.PopupHints();
+            this.statusPopup.show(hint);
         } catch (IndexOutOfBoundsException e) {
             this._logger.severe("Agent or Workrepository may not exits!");
             this._logger.severe(e);
@@ -309,15 +312,13 @@ public class Odi11gIndexMBean {
         ViewCriteria vc = execVo.createViewCriteria();
         ViewCriteriaRow row = vc.createViewCriteriaRow();
         row.setAttribute("SceneId", "='" + sceneId + "'");
-        vc.addElement(row);
+
         if (params.length() > 0) {
             row.setAttribute("Params", "='" + params + "'");
         } else {
             row.setAttribute("Params", " is null");
         }
-        row.setConjunction(row.VC_CONJ_AND);
-        vc.addElement(row);
-        row.setAttribute("ExecStatus", "in('R','Q','W')");
+        row.setAttribute("ExecStatus", " in ('R','Q','W')");
         row.setConjunction(row.VC_CONJ_AND);
         vc.addElement(row);
         execVo.applyViewCriteria(vc);
@@ -334,8 +335,9 @@ public class Odi11gIndexMBean {
     }
     //获取执行状态
 
-    private String queryStatus(Row execRow) throws MalformedURLException {
+    private String queryStatus(Row execRow) {
         String status = "D";
+
         String sceneId = (String)execRow.getAttribute("SceneId");
         ViewObject vo =
             DmsUtils.getOdi11gApplicationModule().getOdi11SceneView();
@@ -343,6 +345,7 @@ public class Odi11gIndexMBean {
             vo.findByKey(new Key(new Object[] { sceneId, ADFContext.getCurrent().getLocale().toString() }),
                          1);
         if (rows.length > 0) {
+            try{
             Row sceneRow = rows[0];
             RequestPortType requestPortType =
                 this.getRequestPortType(sceneRow);
@@ -358,12 +361,21 @@ public class Odi11gIndexMBean {
                 odiGetSessionsStatusResponse.getSessionStatusResponse();
             if (statuses.size() > 0) {
                 status = statuses.get(0).getSessionStatus();
-                String msg = ObjectUtils.toString(statuses.get(0).getSessionMessage());
+                String msg =
+                    ObjectUtils.toString(statuses.get(0).getSessionMessage());
                 execRow.setAttribute("ExecStatus", status);
                 execRow.setAttribute("LogText",
                                      msg.length() <= 1000 ? msg : msg.substring(0,
                                                                                 1000));
                 vo.getApplicationModule().getTransaction().commit();
+            }
+            }
+            catch(Exception ex){
+                if(ex.getMessage().contains("ODI-1701")){
+                    execRow.remove();   
+                    vo.getApplicationModule().getTransaction().commit();
+                }
+                this._logger.severe(ex);
             }
         }
         return status;
@@ -415,6 +427,8 @@ public class Odi11gIndexMBean {
     public void showStatusPopup(ActionEvent actionEvent) throws MalformedURLException {
         this.refreshStatus((String)ADFUtils.findIterator("Odi11AuthedSceneViewIterator").getViewObject().getCurrentRow().getAttribute("Id"));
         this.showStatus();
+        RichPopup.PopupHints hint = new RichPopup.PopupHints();
+        this.statusPopup.show(hint);
     }
 
     private void showStatus() {
@@ -435,8 +449,6 @@ public class Odi11gIndexMBean {
         sceneExecVo.applyViewCriteria(vc);
         sceneExecVo.executeQuery();
         sceneExecVo.getViewCriteriaManager().setApplyViewCriteriaNames(null);
-        RichPopup.PopupHints hint = new RichPopup.PopupHints();
-        this.statusPopup.show(hint);
     }
 
     public void setStatusPopup(RichPopup statusPopup) {

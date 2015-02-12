@@ -606,6 +606,10 @@ public class DcmDataDisplayBean extends TablePagination{
             if(this.isEditable){
                 this.isEditable=!this.isReadOnly();
             }
+            //不支持增量导入则设置默认覆盖导入
+            if(!this.curTempalte.getHandleMode().contains("I")){
+               this.isIncrement=false; 
+            }
             templateView.setCurrentRow(rows[0]);
             DcmTemplateViewRowImpl row=(DcmTemplateViewRowImpl)rows[0];
             RowIterator itr=row.getDcmTemplateColumnView();
@@ -1085,5 +1089,17 @@ public class DcmDataDisplayBean extends TablePagination{
             this._logger.severe(e);
         }
         return readonly;
+    }
+    public boolean getCanIncrementImport(){
+        return this.curTempalte.getHandleMode().contains("I") ? true:false;
+    }
+    public boolean getCanReplaceImport(){
+        return this.curTempalte.getHandleMode().contains("R") ? true:false;
+    }
+    public boolean getIsReplaceDefault(){
+        return !this.getCanIncrementImport();
+    }
+    public void setIsReplaceDefault(boolean flag){
+       
     }
 }

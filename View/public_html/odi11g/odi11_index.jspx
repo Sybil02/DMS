@@ -105,6 +105,7 @@
                               <af:toolbar id="t4">
                                 <af:commandButton text="#{viewBundle['dms.common.refresh']}"
                                                   id="cb2"
+                                                  partialSubmit="true"
                                                   actionListener="#{viewScope.Odi11gIndexMBean.refreshSceneStatus}"/>
                               </af:toolbar>
                             </f:facet>
@@ -117,7 +118,8 @@
                                       rowBandingInterval="0"
                                       selectedRowKeys="#{bindings.Odi11SceneExecView.collectionModel.selectedRow}"
                                       selectionListener="#{bindings.Odi11SceneExecView.collectionModel.makeCurrent}"
-                                      rowSelection="single" id="t5">
+                                      rowSelection="single" id="t5"
+                                      partialTriggers="::cb2">
                               <af:column sortProperty="#{bindings.Odi11SceneExecView.hints.Params.name}"
                                          sortable="false"
                                          headerText="#{bindings.Odi11SceneExecView.hints.Params.label}"

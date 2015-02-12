@@ -54,7 +54,7 @@
                                 id="cb10"
                                 partialTriggers="::pgl1"
                                 disabled="#{viewScope.DcmDataDisplayBean.isEditable eq false}">
-                <af:showPopupBehavior popupId="::p2"/>
+                <af:showPopupBehavior popupId="::p2" alignId=""/>
               </af:commandButton>
               <af:commandButton text="#{viewBundle['dcm.import_error']}"
                                 id="cb8"
@@ -62,13 +62,13 @@
                                 partialSubmit="true"></af:commandButton>
               <af:commandButton text="#{viewBundle['dcm.action.export']}"
                                 id="cb6">
-                <af:showPopupBehavior popupId="::p3"/>
+                <af:showPopupBehavior popupId="::p3" alignId=""/>
               </af:commandButton>
             </af:group>
             <af:group id="grp3">
               <af:commandButton text="#{viewBundle['dcm.action.template_download']}"
                                 id="cb7">
-                <af:showPopupBehavior popupId="::p4"/>
+                <af:showPopupBehavior popupId="::p4" alignId=""/>
               </af:commandButton>
             </af:group>
           </af:toolbar>
@@ -254,10 +254,13 @@
                   <af:selectBooleanRadio text="#{viewBundle['dcm.import.increment']}"
                                          id="sbr5" group="handleMode"
                                          simple="true"
-                                         value="#{viewScope.DcmDataDisplayBean.isIncrement}"/>
+                                         value="#{viewScope.DcmDataDisplayBean.isIncrement}"
+                                         rendered="#{viewScope.DcmDataDisplayBean.canIncrementImport}"/>
                   <af:selectBooleanRadio text="#{viewBundle['dcm.import.repalce']}"
                                          id="sbr6" group="handleMode"
-                                         simple="true"/>
+                                         simple="true"
+                                         value="#{viewScope.DcmDataDisplayBean.isReplaceDefault}"
+                                         rendered="#{viewScope.DcmDataDisplayBean.canReplaceImport}"/>
                 </af:gridCell>
               </af:gridRow>
               <af:gridRow marginTop="5px" marginBottom="5px" height="auto"
