@@ -882,8 +882,8 @@ public class DcmDataDisplayBean extends TablePagination{
             }
             i++;
         }
-        this.queryTemplateData();
         this.curCombiantionRecord=this.getCurCombinationRecord();
+        this.queryTemplateData();
         AdfFacesContext adfFacesContext = AdfFacesContext.getCurrentInstance();
         adfFacesContext.addPartialTarget(this.panelaCollection);
     }

@@ -75,7 +75,7 @@
         </f:facet>
         <!-- 分页控件 -->
         <f:facet name="statusbar">
-          <af:toolbar id="t4">
+          <af:toolbar id="t4" partialTriggers="t1">
             <af:group id="g1">
               <af:commandImageLink id="cil1" icon="/images/page-first.gif"
                                    actionListener="#{viewScope.DcmDataDisplayBean.firstPage}"/>
@@ -287,10 +287,10 @@
                 <af:gridCell marginStart="5px" marginEnd="5px" width="auto"
                              id="gc9">
                   <af:selectBooleanRadio text="#{viewBundle['dcm.export.03format']}"
-                                         id="sbr3" group="excelFormat"
+                                         id="sbr3" group="excelFormat1"
                                          simple="true"/>
                   <af:selectBooleanRadio text="#{viewBundle['dcm.export.07format']}"
-                                         id="sbr4" group="excelFormat"
+                                         id="sbr4" group="excelFormat1"
                                          simple="true" autoSubmit="true"
                                          value="#{viewScope.DcmDataDisplayBean.isXlsx}"/>
                 </af:gridCell>
@@ -327,7 +327,8 @@
                              id="gc29">
                   <af:selectBooleanRadio text="#{viewBundle['dcm.export.03format']}"
                                          id="sbr23" group="excelFormat"
-                                         simple="true"/>
+                                         simple="true"
+                                         />
                   <af:selectBooleanRadio text="#{viewBundle['dcm.export.07format']}"
                                          id="sbr24" group="excelFormat"
                                          simple="true" autoSubmit="true"
