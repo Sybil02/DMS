@@ -43,12 +43,15 @@
                             selectedRowKeys="#{pageFlowScope.TemplateBackingBean.selectedRows}"
                             selectionListener="#{bindings.return.collectionModel.makeCurrent}"
                             rowSelection="multiple" id="t5"
-                            clientComponent="true"
+                            clientComponent="true" 
+                            filterModel="#{pageFlowScope.TemplateBackingBean.queryDescriptor}"
+                            queryListener="#{pageFlowScope.TemplateBackingBean.comRecordQueryListener}"
                             binding="#{pageFlowScope.TemplateBackingBean.recordTable}">
                     <af:forEach items="#{pageFlowScope.TemplateBackingBean.comheaderInfo}"
                                 var="header">
-                      <af:column headerText="#{header['label']}" sortable="true"
-                                 sortProperty="#{header['code']}" id="c23">
+                      <af:column headerText="#{header['label']}" sortable="false"
+                                 sortProperty="#{header['code']}" id="c23"
+                                 filterable="#{header['code'] eq 'STATUS' ? false : true}">
                         <af:outputText value="#{header['code'] eq 'STATUS' ? (row[header['code']] eq 'CLOSE' ? viewBundle['dcm.combintion_record.close'] : viewBundle['dcm.combintion_record.open']) : row[header['code']]}"
                                        id="ot1"/>
                       </af:column>

@@ -8,6 +8,8 @@ import common.JSFUtils;
 
 import dcm.DcmDataTableModel;
 
+import dcm.DcmQueryDescriptor;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -35,9 +37,15 @@ import oracle.adf.view.rich.component.rich.data.RichTable;
 import oracle.adf.view.rich.component.rich.nav.RichCommandButton;
 import oracle.adf.view.rich.context.AdfFacesContext;
 
+import oracle.adf.view.rich.event.QueryEvent;
+
+import oracle.adf.view.rich.model.FilterableQueryDescriptor;
+
 import oracle.jbo.Key;
 import oracle.jbo.Row;
 import oracle.jbo.RowSetIterator;
+import oracle.jbo.ViewCriteria;
+import oracle.jbo.ViewCriteriaRow;
 import oracle.jbo.ViewObject;
 import oracle.jbo.server.DBTransaction;
 import oracle.jbo.server.ViewRowImpl;
@@ -56,6 +64,8 @@ public class TemplateBackingBean {
         ADFLogger.createADFLogger(TemplateBackingBean.class);
     private RichPopup comPopup;
     private RichPopup validationPopup;
+    //搜索
+    private FilterableQueryDescriptor queryDescriptor=new DcmQueryDescriptor();
     static {
         dcmRemainAttr.add("IDX");
         dcmRemainAttr.add("COM_RECORD_ID");
@@ -188,7 +198,7 @@ public class TemplateBackingBean {
             }
         }
         vo.getApplicationModule().getTransaction().commit();
-        iterator.getViewObject().clearCache();
+        iterator.getViewObject().executeQuery();
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.recordTable);
     }
 
@@ -212,7 +222,7 @@ public class TemplateBackingBean {
             }
         }
         vo.getApplicationModule().getTransaction().commit();
-        iterator.getViewObject().clearCache();
+        iterator.getViewObject().getViewObject().executeQuery();
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.recordTable);
     }
 
@@ -306,5 +316,28 @@ public class TemplateBackingBean {
 
     public RichPopup getValidationPopup() {
         return validationPopup;
+    }
+
+    public void comRecordQueryListener(QueryEvent queryEvent) {
+        DcmQueryDescriptor descriptor =(DcmQueryDescriptor)queryEvent.getDescriptor();  
+        if(descriptor.getFilterCriteria()!=null){
+            ViewObject vo=ADFUtils.findIterator("getCombinationRecordViewIterator").getViewObject();
+            vo.getViewCriteriaManager().setApplyViewCriteriaNames(null);
+            ViewCriteria vc=vo.createViewCriteria();
+            ViewCriteriaRow vcr=vc.createViewCriteriaRow();
+            for(Object key:descriptor.getFilterCriteria().keySet()){
+                if(!ObjectUtils.toString(descriptor.getFilterCriteria().get(key)).trim().equals("")){
+                    vcr.setAttribute(key.toString(), "%"+descriptor.getFilterCriteria().get(key)+"%");             
+                }
+            }
+            vc.addRow(vcr);
+            vo.applyViewCriteria(vc);
+            vo.executeQuery();
+            AdfFacesContext.getCurrentInstance().addPartialTarget(this.recordTable);
+        }
+    }
+
+    public FilterableQueryDescriptor getQueryDescriptor() {
+        return queryDescriptor;
     }
 }
