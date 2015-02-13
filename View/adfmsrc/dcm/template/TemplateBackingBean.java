@@ -297,6 +297,7 @@ public class TemplateBackingBean {
     //弹出组合管理窗口
     public void showComPopup(ActionEvent actionEvent) {
         ViewObject vo=ADFUtils.findIterator("getCombinationRecordViewIterator").getViewObject();
+        if(vo==null) return;
         if(vo.getApplicationModule().getTransaction().isDirty()){
             JSFUtils.addFacesInformationMessage(DmsUtils.getMsg("dms.common.save_data_alert"));
         }else{
