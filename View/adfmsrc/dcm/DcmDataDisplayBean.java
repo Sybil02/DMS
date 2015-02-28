@@ -114,6 +114,8 @@ public class DcmDataDisplayBean extends TablePagination{
     private Map valueSet=new HashMap();
     //是否可编辑
     private boolean isEditable=true;
+    //当前组合是否可编辑
+    private boolean curCombinationRecordEditable=true;
     //
     private String curCombiantionRecord;
     //日志
@@ -780,16 +782,109 @@ public class DcmDataDisplayBean extends TablePagination{
                 header.setSrcTable((String)row.getAttribute("Source"));
                 header.setValueSetId((String)row.getAttribute("ValueSetId"));
                 header.setCode((String)row.getAttribute("Code"));
-                header.setValues(this.fetchHeaderValueList(header));
-                header.setValue(header.getValues().size() > 0 ? (String)header.getValues().get(0).getValue() : null);
+                this.initHeaderValueList(header);
+                this.setDefaultHeaderValue(header);
                 this.templateHeader.add(header);
             }
             this.curCombiantionRecord=this.getCurCombinationRecord();
+            this.setCurCombinationRecordEditable();
         }
     }
-    //获取某一值集值列表
-    private List<SelectItem> fetchHeaderValueList(ComHeader header) {
+    private void setCurCombinationRecordEditable(){
+        if(this.curCombiantionRecord==null){
+            this.curCombinationRecordEditable=false;
+        }else{
+            boolean flag=true;
+            StringBuffer sql=new StringBuffer();
+            sql.append("SELECT T.STATUS FROM DCM_TEMPLATE_COMBINATION T WHERE T.TEMPLATE_ID='")
+                .append(this.curTempalte.getId()).append("' AND T.COM_RECORD_ID='")
+                .append(this.curCombiantionRecord).append("'");
+            DBTransaction dbTransaction =(DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
+            Statement stat=dbTransaction.createStatement(DBTransaction.DEFAULT);
+            try {
+                ResultSet rs=stat.executeQuery(sql.toString());
+                if(rs.next()){
+                    String status=rs.getString("STATUS");
+                    if("OPEN".equals(status)){
+                        for(ComHeader h:this.templateHeader){
+                            StringBuffer sql0=new StringBuffer();
+                            sql0.append("SELECT T.ENABLED FROM \"").append(h.getSrcTable())
+                                .append("\" T WHERE T.CODE='")
+                                .append(h.getValue()).append("' AND T.LOCALE='")
+                                .append(ADFContext.getCurrent().getLocale()).append("'");
+                            ResultSet rst=stat.executeQuery(sql0.toString());
+                            if(rst.next()){
+                                String enabled=rst.getString("ENABLED");
+                                if("N".equals(enabled)){
+                                    flag=false;
+                                    break;
+                                }
+                            }else{
+                                flag=false;
+                                break;
+                            }
+                            rst.close();
+                        }
+                    }else{
+                        flag=false;
+                    }         
+                }else{
+                    flag=false;
+                }
+                rs.close();
+                stat.close();
+            } catch (SQLException e) {
+                this._logger.severe(e);
+            }
+            this.curCombinationRecordEditable=flag;
+        }
+    }
+    private void initHeaderValueList(ComHeader header){
         List<SelectItem> values = new ArrayList<SelectItem>();
+        DBTransaction dbTransaction =(DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
+        StringBuffer sql = new StringBuffer();
+        sql.append("SELECT V.CODE,V.MEANING FROM \"");
+        sql.append(header.getSrcTable()).append("\" V");
+        sql.append(" WHERE V.LOCALE='").append(this.curUser.getLocale()).append("'");
+        sql.append(" AND V.ENABLED='Y'");
+        if ("Y".equals(header.getIsAuthority())) {
+            sql.append(" AND EXISTS(SELECT 1 FROM ");
+            sql.append("DMS_USER       T1,");
+            sql.append("DMS_USER_GROUP T2,");
+            sql.append("DMS_GROUP_ROLE T3,");
+            sql.append("DMS_ROLE_VALUE T4,");
+            sql.append("DMS_GROUP      T5,");
+            sql.append("DMS_ROLE       T6");
+            sql.append(" WHERE T1.ID = '").append(this.curUser.getId()).append("'");
+            sql.append(" AND T2.USER_ID = T1.ID");
+            sql.append(" AND T3.GROUP_ID = T2.GROUP_ID");
+            sql.append(" AND T2.GROUP_ID = T5.ID");
+            sql.append(" AND T5.ENABLE_FLAG = 'Y'");
+            sql.append(" AND T5.LOCALE = '").append(this.curUser.getLocale()).append("'");
+            sql.append(" AND T4.ROLE_ID = T3.ROLE_ID");
+            sql.append(" AND T3.ROLE_ID = T6.ID");
+            sql.append(" AND T6.ENABLE_FLAG = 'Y'");
+            sql.append(" AND T6.LOCALE = T5.LOCALE");
+            sql.append(" AND T4.VALUE_SET_ID = '").append(header.getValueSetId()).append("'");
+            sql.append(" AND T4.VALUE_ID=V.CODE)");
+        }
+        sql.append(" ORDER BY V.IDX");
+        PreparedStatement stat =
+            dbTransaction.createPreparedStatement(sql.toString(), -1);
+        try {
+            ResultSet rs = stat.executeQuery();
+            while (rs.next()) {
+                SelectItem item = new SelectItem();
+                item.setLabel(rs.getString("MEANING"));
+                item.setValue(rs.getString("CODE"));
+                values.add(item);
+            }
+        } catch (SQLException e) {
+            this._logger.severe(e);
+        }   
+        header.setValues(values);
+    }
+    private void setDefaultHeaderValue(ComHeader header){
         DBTransaction dbTransaction =(DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
         StringBuffer sql = new StringBuffer();
         sql.append("SELECT V.CODE,V.MEANING FROM \"");
@@ -835,16 +930,12 @@ public class DcmDataDisplayBean extends TablePagination{
             dbTransaction.createPreparedStatement(sql.toString(), -1);
         try {
             ResultSet rs = stat.executeQuery();
-            while (rs.next()) {
-                SelectItem item = new SelectItem();
-                item.setLabel(rs.getString("MEANING"));
-                item.setValue(rs.getString("CODE"));
-                values.add(item);
+            if (rs.next()) {
+                header.setValue(rs.getString("CODE"));
             }
         } catch (SQLException e) {
             this._logger.severe(e);
-        }
-        return values;
+        }    
     }
 
     public String getCombinationId() {
@@ -870,39 +961,16 @@ public class DcmDataDisplayBean extends TablePagination{
     public void headerSelectChangeListener(ValueChangeEvent valueChangeEvent) {
         RichSelectOneChoice header =
             (RichSelectOneChoice)valueChangeEvent.getSource();
-        int flag = 0;
         int i = 0;
         for (Object key : this.headerComponents.keySet()) {
-            //刷新后续表头数据
-            if (flag == 1) {
-                ComHeader headerData = null;
-                for (ComHeader h : this.templateHeader) {
-                    if (key.equals(h.getCode())) {
-                        headerData = h;
-                    }
-                }
-                //设置新的值列表
-                headerData.setValues(this.fetchHeaderValueList(headerData));
-                RichSelectOneChoice rsoc =
-                    (RichSelectOneChoice)this.headerComponents.get(key);
-                //设置默认值
-                if (headerData.getValues().size() < 1) {
-                    headerData.setValue(null);
-                } else {
-                    headerData.setValue((String)headerData.getValues().get(0).getValue());
-                }
-                AdfFacesContext adfFacesContext =
-                    AdfFacesContext.getCurrentInstance();
-                adfFacesContext.addPartialTarget(rsoc);
-            }
             //找到当前表头
             if (header.equals(this.headerComponents.get(key))) {
-                flag = 1;
                 this.templateHeader.get(i).setValue((String)valueChangeEvent.getNewValue());
             }
             i++;
         }
         this.curCombiantionRecord=this.getCurCombinationRecord();
+        this.setCurCombinationRecordEditable();
         this.queryTemplateData();
         AdfFacesContext adfFacesContext = AdfFacesContext.getCurrentInstance();
         adfFacesContext.addPartialTarget(this.panelaCollection);
@@ -1079,7 +1147,7 @@ public class DcmDataDisplayBean extends TablePagination{
         if(this.curCombiantion==null){
             return this.isEditable;
         }else{
-            return this.isEditable&&this.curCombiantionRecord!=null;
+            return this.isEditable&&this.curCombiantionRecord!=null&&this.curCombinationRecordEditable;
         }
     }
     private boolean isReadOnly(){
