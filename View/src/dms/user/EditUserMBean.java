@@ -66,6 +66,7 @@ public class EditUserMBean {
             try {
                 encyptPwd = DigestUtils.digestSHA1(usrAcc + pwd);
                 usrVo.getCurrentRow().setAttribute("Pwd", encyptPwd);
+                usrVo.getApplicationModule().getTransaction().commit();
                 this.popup.cancel();
             } catch (Exception e) {
                 this.logger.severe(e);

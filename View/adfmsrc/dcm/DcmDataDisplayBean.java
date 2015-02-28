@@ -721,8 +721,24 @@ public class DcmDataDisplayBean extends TablePagination{
         if(this.filters!=null){
             for(Object key:this.filters.keySet()){
                 if(!ObjectUtils.toString(this.filters.get(key)).trim().equals("")){
-                    sql_where.append(" AND UPPER(\"").append(key).append("\") LIKE UPPER('%")
-                        .append(this.filters.get(key)).append("%')");         
+                    String fv=ObjectUtils.toString(this.filters.get(key));
+                    if("NULL".equals(fv.toUpperCase())){
+                        sql_where.append(" AND \"").append(key).append("\" IS NULL");
+                    }else{
+                        sql_where.append(" AND UPPER(\"").append(key).append("\") LIKE UPPER('");
+                        if(fv.startsWith("%")){
+                            sql_where.append("%");
+                            fv=fv.substring(1);
+                        }
+                        if(fv.endsWith("%")){
+                            fv=fv.substring(0,fv.lastIndexOf("%"));
+                            sql_where.append(fv);
+                            sql_where.append("%");
+                        }else{
+                            sql_where.append(fv);
+                        } 
+                        sql_where.append("')");
+                    }
                 }
             }
         }
