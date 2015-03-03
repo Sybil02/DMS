@@ -86,7 +86,8 @@
     Type="java.lang.String"
     ColumnType="VARCHAR2"
     TableName="DMS_VALUE_SET"
-    IsNotNull="true">
+    IsNotNull="true"
+    IsUpdateable="while_insert">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="100"/>
     </DesignTime>

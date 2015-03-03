@@ -28,13 +28,10 @@ import org.apache.myfaces.trinidad.model.CollectionModel;
 import org.apache.myfaces.trinidad.model.SortCriterion;
 
 public class TemplateTreeModel  extends ChildPropertyTreeModel {
-    private ViewObject catVo;
-    private ViewObject templateVo;
     private Map authoriedTemplate=new HashMap();
     public TemplateTreeModel() {
         super();
-        this.catVo = DmsUtils.getDcmApplicationModule().getDcmTemplateCatView();
-        this.templateVo =DmsUtils.getDcmApplicationModule().getDcmTemplateView();
+        
         ViewObject vo=DmsUtils.getDcmApplicationModule().getDcmUserTemplateView();
         vo.executeQuery();
         while(vo.hasNext()){
@@ -53,17 +50,20 @@ public class TemplateTreeModel  extends ChildPropertyTreeModel {
     }
 
     private List<TemplateTreeItem> getChildTreeItem(String pid) {
-        pid=pid==null ? "is null" : pid;
+        pid=pid==null ? "is null" : "='"+pid+"'";
         List<TemplateTreeItem> items = new ArrayList<TemplateTreeItem>();
-        
-        ViewCriteria vc=this.catVo.createViewCriteria();
+        ViewObject catVo = DmsUtils.getDcmApplicationModule().getDcmTemplateCatView();
+        ViewObject templateVo =DmsUtils.getDcmApplicationModule().getDcmTemplateView();
+        ViewCriteria vc=catVo.createViewCriteria();
         ViewCriteriaRow vcRow = vc.createViewCriteriaRow();
         vcRow.setAttribute("PId", pid);
         vc.addElement(vcRow);
-        this.catVo.applyViewCriteria(vc);
-        this.catVo.executeQuery();
-        while (this.catVo.hasNext()) {
-            Row row = this.catVo.next();
+        catVo.applyViewCriteria(vc);
+        catVo.reset();
+        catVo.executeQuery();
+        catVo.getViewCriteriaManager().setApplyViewCriteriaNames(null);
+        while (catVo.hasNext()) {
+            Row row = catVo.next();
             String id=ObjectUtils.toString(row.getAttribute("Id"));
             String label=ObjectUtils.toString(row.getAttribute("Name"));
             TemplateTreeItem item = new TemplateTreeItem(id,label,TemplateTreeItem.TYPE_CATEGORY);
@@ -71,15 +71,15 @@ public class TemplateTreeModel  extends ChildPropertyTreeModel {
                 items.add(item);
             }
         }
-        vc=this.templateVo.createViewCriteria();
+        vc=templateVo.createViewCriteria();
         vcRow = vc.createViewCriteriaRow();
         vcRow.setAttribute("CategoryId", pid);
         vc.addElement(vcRow);
-        this.templateVo.applyViewCriteria(vc);
-        this.templateVo.executeQuery();
-        this.templateVo.getViewCriteriaManager().setApplyViewCriteriaNames(null);
-        while (this.templateVo.hasNext()) {
-            Row row = this.templateVo.next();
+        templateVo.applyViewCriteria(vc);
+        templateVo.executeQuery();
+        templateVo.getViewCriteriaManager().setApplyViewCriteriaNames(null);
+        while (templateVo.hasNext()) {
+            Row row = templateVo.next();
             String id=ObjectUtils.toString(row.getAttribute("Id"));
             String label=ObjectUtils.toString(row.getAttribute("Name"));
             TemplateTreeItem item = new TemplateTreeItem(id,label,TemplateTreeItem.TYPE_TEMPLATE);

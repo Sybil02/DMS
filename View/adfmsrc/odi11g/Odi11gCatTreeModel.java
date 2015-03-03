@@ -16,11 +16,8 @@ import org.apache.myfaces.trinidad.model.CollectionModel;
 import org.apache.myfaces.trinidad.model.SortCriterion;
 
 public class Odi11gCatTreeModel extends ChildPropertyTreeModel {
-    private ViewObject catVo;
     public Odi11gCatTreeModel() {
-        super();
-        this.catVo = DmsUtils.getOdi11gApplicationModule().getOdi11SceneCatView();
-        
+        super();        
         List<Odi11gCatTreeItem> root = this.getChildTreeItem(null);
         for (Odi11gCatTreeItem itm : root) {
                 itm.setChildren(this.getChildTreeItem(itm.getId()));
@@ -32,17 +29,18 @@ public class Odi11gCatTreeModel extends ChildPropertyTreeModel {
     private List<Odi11gCatTreeItem> getChildTreeItem(String pid) {
         pid=pid==null ? "is null" : "='"+pid+"'";
         List<Odi11gCatTreeItem> items = new ArrayList<Odi11gCatTreeItem>();
-        
-        ViewCriteria vc=this.catVo.createViewCriteria();
+        ViewObject catVo = DmsUtils.getOdi11gApplicationModule().getOdi11SceneCatView();
+
+        ViewCriteria vc=catVo.createViewCriteria();
         ViewCriteriaRow vcRow = vc.createViewCriteriaRow();
         vcRow.setAttribute("PId", pid);
         vc.addElement(vcRow);
         
-        this.catVo.applyViewCriteria(vc);
-        this.catVo.executeQuery();
-        this.catVo.getViewCriteriaManager().setApplyViewCriteriaNames(null);
-        while (this.catVo.hasNext()) {
-            Row row = this.catVo.next();
+        catVo.applyViewCriteria(vc);
+        catVo.executeQuery();
+        catVo.getViewCriteriaManager().setApplyViewCriteriaNames(null);
+        while (catVo.hasNext()) {
+            Row row = catVo.next();
             String id=ObjectUtils.toString(row.getAttribute("Id"));
             String label=ObjectUtils.toString(row.getAttribute("CatName"));
             Odi11gCatTreeItem item = new Odi11gCatTreeItem();
