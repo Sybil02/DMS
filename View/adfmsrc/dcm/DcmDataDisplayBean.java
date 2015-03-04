@@ -641,14 +641,14 @@ public class DcmDataDisplayBean extends TablePagination{
             String vsCode=(String)vsRows[0].getAttribute("Source");
             StringBuffer sql=new StringBuffer();
             sql.append("SELECT T.CODE, T.MEANING FROM \"").append(vsCode)
-            .append("\" T WHERE T.LOCALE = 'zh_CN'  ORDER BY T.IDX ");
+            .append("\" T WHERE T.LOCALE = '").append(ADFContext.getCurrent().getLocale()).append("'  ORDER BY T.IDX ");
             Statement stmt= DmsUtils.getDmsApplicationModule().getDBTransaction().createStatement(DBTransaction.DEFAULT);
             try {
                 ResultSet rs = stmt.executeQuery(sql.toString());
                 while(rs.next()){
                     SelectItem itm=new SelectItem();
                     itm.setLabel(rs.getString("MEANING"));
-                    itm.setValue(rs.getString("CODE"));
+                    itm.setValue(rs.getString("MEANING"));
                     list.add(itm);
                 }
             } catch (SQLException e) {
