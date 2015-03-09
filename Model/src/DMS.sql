@@ -44,7 +44,7 @@ drop table DMS_ROLE_FUNCTION cascade constraints;
 
 drop table DMS_ROLE_MENU cascade constraints;
 
-drop table DMS_ROLE_VALUE cascade constraints;
+drop table DMS_GROUP_VALUE cascade constraints;
 
 drop table DMS_USER cascade constraints;
 
@@ -71,6 +71,10 @@ drop table DCM_TEMPTABLE80 cascade constraints;
 drop table DCM_TEMPTABLE100 cascade constraints;
 
 drop sequence DCM_SEQ;
+drop VIEW DMS_USER_VALUE_V;
+drop VIEW DMS_USER_FUNCTION_V;
+drop VIEW DCM_USER_TEMPLATE_V;
+drop VIEW ODI11_USER_SCENE_V;
 
 /*==============================================================*/
 /* Sequence: DCM_SEQ                                            */
@@ -1079,46 +1083,46 @@ comment on column DMS_ROLE_MENU.CREATED_BY is
 '创建者';
 
 /*==============================================================*/
-/* Table: DMS_ROLE_VALUE                                        */
+/* Table: DMS_GROUP_VALUE                                        */
 /*==============================================================*/
-create table DMS_ROLE_VALUE 
+create table DMS_GROUP_VALUE 
 (
    ID                   VARCHAR2(32)         not null,
-   ROLE_ID              VARCHAR2(32),
+   GROUP_ID              VARCHAR2(32),
    VALUE_SET_ID         VARCHAR2(32),
    VALUE_ID             VARCHAR2(100),
    UPDATED_BY           VARCHAR2(32),
    CREATED_BY           VARCHAR2(32),
    CREATED_AT           DATE,
    UPDATED_AT           DATE,
-   constraint PK_DMS_ROLE_VALUE primary key (ID)
+   constraint PK_DMS_GROUP_VALUE primary key (ID)
 );
 
-comment on table DMS_ROLE_VALUE is
-'角色和值对应表';
+comment on table DMS_GROUP_VALUE is
+'用户组和值对应表';
 
-comment on column DMS_ROLE_VALUE.ID is
+comment on column DMS_GROUP_VALUE.ID is
 '标识ID';
 
-comment on column DMS_ROLE_VALUE.ROLE_ID is
+comment on column DMS_GROUP_VALUE.GROUP_ID is
 '角色ID';
 
-comment on column DMS_ROLE_VALUE.VALUE_SET_ID is
+comment on column DMS_GROUP_VALUE.VALUE_SET_ID is
 '值集ID';
 
-comment on column DMS_ROLE_VALUE.VALUE_ID is
+comment on column DMS_GROUP_VALUE.VALUE_ID is
 '值ID';
 
-comment on column DMS_ROLE_VALUE.UPDATED_BY is
+comment on column DMS_GROUP_VALUE.UPDATED_BY is
 '更新者';
 
-comment on column DMS_ROLE_VALUE.CREATED_BY is
+comment on column DMS_GROUP_VALUE.CREATED_BY is
 '创建者';
 
-comment on column DMS_ROLE_VALUE.CREATED_AT is
+comment on column DMS_GROUP_VALUE.CREATED_AT is
 '创建时间';
 
-comment on column DMS_ROLE_VALUE.UPDATED_AT is
+comment on column DMS_GROUP_VALUE.UPDATED_AT is
 '更新时间';
 
 /*==============================================================*/
@@ -1363,6 +1367,70 @@ comment on column DMS_LOOKUP.UPDATED_BY is
 
 comment on column DMS_LOOKUP.CREATED_BY is
 '创建者';
+
+/*==============================================================*/
+/* View: DMS_USER_VALUE_V                                       */
+/*==============================================================*/
+CREATE VIEW DMS_USER_VALUE_V AS
+SELECT DISTINCT UG.USER_ID, GV.VALUE_SET_ID, GV.VALUE_ID
+  FROM DMS_GROUP_VALUE GV, DMS_USER_GROUP UG, DMS_GROUP GRP
+ WHERE GV.GROUP_ID = UG.GROUP_ID
+   AND GRP.ENABLE_FLAG = 'Y'
+   AND GRP.ID = UG.GROUP_ID
+ ORDER BY GV.VALUE_ID;
+
+/*==============================================================*/
+/* View: DMS_USER_FUNCTION_V                                    */
+/*==============================================================*/
+CREATE VIEW DMS_USER_FUNCTION_V AS
+SELECT DISTINCT UG.USER_ID, RF.FUNCTION_ID
+  FROM DMS_ROLE_FUNCTION RF,
+       DMS_USER_GROUP    UG,
+       DMS_GROUP_ROLE    GR,
+       DMS_GROUP         GRP,
+       DMS_ROLE          RL
+ WHERE RF.ROLE_ID = GR.ROLE_ID
+   AND GR.GROUP_ID = UG.GROUP_ID
+   AND UG.GROUP_ID = GRP.ID
+   AND RF.ROLE_ID = RL.ID
+   AND GRP.ENABLE_FLAG = 'Y'
+   AND RL.ENABLE_FLAG = 'Y';
+
+/*==============================================================*/
+/* View: DCM_USER_TEMPLATE_V                                    */
+/*==============================================================*/
+CREATE VIEW DCM_USER_TEMPLATE_V AS
+SELECT DISTINCT UG.USER_ID, RT.TEMPLATE_ID, RT.READ_ONLY
+  FROM DCM_ROLE_TEMPLATE RT,
+       DMS_GROUP_ROLE    GR,
+       DMS_USER_GROUP    UG,
+       DMS_ROLE          RL,
+       DMS_GROUP         GRP
+ WHERE RT.ROLE_ID = GR.ROLE_ID
+   AND GR.GROUP_ID = UG.GROUP_ID
+   AND RT.ROLE_ID = RL.ID
+   AND UG.GROUP_ID = GRP.ID
+   AND RL.ENABLE_FLAG = 'Y'
+   AND GRP.ENABLE_FLAG = 'Y'
+ ORDER BY RT.READ_ONLY;
+
+/*==============================================================*/
+/* View: ODI11_USER_SCENE_V                                     */
+/*==============================================================*/
+CREATE VIEW ODI11_USER_SCENE_V AS
+SELECT DISTINCT UG.USER_ID, RS.SCENE_ID
+  FROM ODI11_ROLE_SCENE RS,
+       DMS_GROUP_ROLE   GR,
+       DMS_USER_GROUP   UG,
+       DMS_GROUP        GRP,
+       DMS_ROLE         RL
+ WHERE RS.ROLE_ID = GR.ROLE_ID
+   AND GR.GROUP_ID = UG.GROUP_ID
+   AND RS.ROLE_ID = RL.ID
+   AND UG.GROUP_ID = GRP.ID
+   AND RL.ENABLE_FLAG = 'Y'
+   AND GRP.ENABLE_FLAG = 'Y';
+   
 /*==============================================================*/
 /* Table: DCM_TEMPTABLE10                                         */
 /*==============================================================*/

@@ -140,6 +140,7 @@ public class DmsValueSetImpl extends DmsEntityImpl {
         }
     }
 
+
     public static final int ID = AttributesEnum.Id.index();
     public static final int LOCALE = AttributesEnum.Locale.index();
     public static final int NAME = AttributesEnum.Name.index();

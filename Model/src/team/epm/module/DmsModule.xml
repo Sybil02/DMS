@@ -39,9 +39,6 @@
     Name="DmsRoleMenuView"
     ViewObjectName="team.epm.dms.view.DmsRoleMenuView"/>
   <ViewUsage
-    Name="DmsRoleValueView"
-    ViewObjectName="team.epm.dms.view.DmsRoleValueView"/>
-  <ViewUsage
     Name="DmsRoleView"
     ViewObjectName="team.epm.dms.view.DmsRoleView"/>
   <ViewUsage
@@ -89,6 +86,9 @@
   <ViewUsage
     Name="DmsUnassignedFunctionView"
     ViewObjectName="team.epm.dms.view.DmsUnassignedFunctionView"/>
+  <ViewUsage
+    Name="DmsGroupValueView"
+    ViewObjectName="team.epm.dms.view.DmsGroupValueView"/>
   <ViewLinkUsage
     Name="DmsGroupedRoleLnk"
     ViewLinkObjectName="team.epm.dms.DmsGroupedRoleLnk"
@@ -102,27 +102,75 @@
     DstViewUsageName="team.epm.module.DmsModule.DmsGroupedUserView"
     Reversed="false"/>
   <ViewLinkUsage
-    Name="DmsRoleValueLnk"
-    ViewLinkObjectName="team.epm.dms.DmsRoleValueLnk"
-    SrcViewUsageName="team.epm.module.DmsModule.DmsEnabledRole"
-    DstViewUsageName="team.epm.module.DmsModule.DmsRoleValueView"
-    Reversed="false"/>
-  <ViewLinkUsage
-    Name="DmsValusetValueLnk"
-    ViewLinkObjectName="team.epm.dms.DmsValusetValueLnk"
-    SrcViewUsageName="team.epm.module.DmsModule.DmsValueSetView"
-    DstViewUsageName="team.epm.module.DmsModule.DmsRoleValueView"
-    Reversed="false"/>
-  <ViewLinkUsage
     Name="DmsRoleFunctionLnk"
     ViewLinkObjectName="team.epm.dms.DmsRoleFunctionLnk"
     SrcViewUsageName="team.epm.module.DmsModule.DmsEnabledRole"
     DstViewUsageName="team.epm.module.DmsModule.DmsRoleFunctionView"
     Reversed="false"/>
+  <ViewLinkUsage
+    Name="DmsValuesetGValueLnk"
+    ViewLinkObjectName="team.epm.dms.DmsValuesetGValueLnk"
+    SrcViewUsageName="team.epm.module.DmsModule.DmsValueSetView"
+    DstViewUsageName="team.epm.module.DmsModule.DmsGroupValueView"
+    Reversed="false"/>
+  <ViewLinkUsage
+    Name="DmsGroupGValueLnk"
+    ViewLinkObjectName="team.epm.dms.DmsGroupGValueLnk"
+    SrcViewUsageName="team.epm.module.DmsModule.DmsEnabledGroupView"
+    DstViewUsageName="team.epm.module.DmsModule.DmsGroupValueView"
+    Reversed="false"/>
   <ResourceBundle>
     <PropertiesBundle
       PropertiesFile="ModelBundle"/>
   </ResourceBundle>
+  <ClientInterface>
+    <Method
+      Name="getDmsValueView">
+      <Return
+        Type="oracle.jbo.ViewObject"/>
+      <Parameter
+        Name="valueSetSrc"
+        Type="java.lang.String"/>
+      <Parameter
+        Name="valueSetId"
+        Type="java.lang.String"/>
+      <Parameter
+        Name="roleId"
+        Type="java.lang.String"/>
+    </Method>
+  </ClientInterface>
+  <ClientInterface>
+    <Method
+      Name="getDmsValueView">
+      <Return
+        Type="oracle.jbo.ViewObject"/>
+      <Parameter
+        Name="valueSetSrc"
+        Type="java.lang.String"/>
+      <Parameter
+        Name="valueSetId"
+        Type="java.lang.String"/>
+      <Parameter
+        Name="roleId"
+        Type="java.lang.String"/>
+    </Method>
+  </ClientInterface>
+  <ClientInterface>
+    <Method
+      Name="getDmsValueView">
+      <Return
+        Type="oracle.jbo.ViewObject"/>
+      <Parameter
+        Name="valueSetSrc"
+        Type="java.lang.String"/>
+      <Parameter
+        Name="valueSetId"
+        Type="java.lang.String"/>
+      <Parameter
+        Name="roleId"
+        Type="java.lang.String"/>
+    </Method>
+  </ClientInterface>
   <ClientInterface>
     <Method
       Name="getDmsValueView">

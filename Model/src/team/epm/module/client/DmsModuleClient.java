@@ -19,9 +19,9 @@ public class DmsModuleClient extends ApplicationModuleImpl implements DmsModule 
     }
 
     public ViewObject getDmsValueView(String valueSetSrc, String valueSetId,
-                                      String roleId) {
+                                      String groupId) {
         Object _ret =
-            this.riInvokeExportedMethod(this,"getDmsValueView",new String [] {"java.lang.String","java.lang.String","java.lang.String"},new Object[] {valueSetSrc, valueSetId, roleId});
+            this.riInvokeExportedMethod(this,"getDmsValueView",new String [] {"java.lang.String","java.lang.String","java.lang.String"},new Object[] {valueSetSrc, valueSetId, groupId});
         return (ViewObject)_ret;
     }
 }

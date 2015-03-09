@@ -261,8 +261,13 @@ insert into dms_function(id,locale,name,created_at,updated_at,updated_by,created
 values('103000','zh_CN','ODI11G接口',sysdate,sysdate,'10000','10000','odi11_index','通用',103000,null);
 insert into dms_function(id,locale,name,created_at,updated_at,updated_by,created_by,action,category,seq,p_function_id)
 values('103000','en','ODI11G Interface',sysdate,sysdate,'10000','10000','odi11_index','General',103000,null);
+
+insert into dms_function(id,locale,name,created_at,updated_at,updated_by,created_by,action,category,seq,p_function_id)
+values('104000','zh_CN','底稿平台',sysdate,sysdate,'10000','10000','dgptIndex','通用',104000,null);
+insert into dms_function(id,locale,name,created_at,updated_at,updated_by,created_by,action,category,seq,p_function_id)
+values('104000','en','Papers Platform',sysdate,sysdate,'10000','10000','dgptIndex','General',104000,null);
 /*==============================================================*/
-/* 初始化菜单                                                     */
+/* 初始化菜单                                                    */
 /*==============================================================*/
 truncate table dms_menu;
 insert into dms_menu(id,locale,seq,label,enable_flag,p_id,function_id,created_at,updated_at,updated_by,created_by)
@@ -398,3 +403,8 @@ insert into dms_menu(id,locale,seq,label,enable_flag,p_id,function_id,created_at
 values('103000','zh_CN',100002,'ODI11G接口','Y',null,'103000',sysdate,sysdate,'10000','10000');
 insert into dms_menu(id,locale,seq,label,enable_flag,p_id,function_id,created_at,updated_at,updated_by,created_by)
 values('103000','en',100002,'ODI11G Interface','Y',null,'103000',sysdate,sysdate,'10000','10000');
+
+insert into dms_menu(id,locale,seq,label,enable_flag,p_id,function_id,created_at,updated_at,updated_by,created_by)
+values('104000','zh_CN',100003,'底稿平台','Y',null,'104000',sysdate,sysdate,'10000','10000');
+insert into dms_menu(id,locale,seq,label,enable_flag,p_id,function_id,created_at,updated_at,updated_by,created_by)
+values('104000','en',100003,'Papers Platform','Y',null,'104000',sysdate,sysdate,'10000','10000');

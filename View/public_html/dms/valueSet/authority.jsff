@@ -42,13 +42,13 @@
             <f:facet name="toolbar">
                <af:toolbar id="t1">
                   <af:group id="g1">
-                     <af:selectOneChoice value="#{bindings.RoleName.inputValue}"
-                                         label="#{bindings.RoleName.label}"
-                                         required="#{bindings.RoleName.hints.mandatory}"
-                                         shortDesc="#{bindings.RoleName.hints.tooltip}"
+                     <af:selectOneChoice value="#{bindings.GroupName.inputValue}"
+                                         label="#{bindings.GroupName.label}"
+                                         required="#{bindings.GroupName.hints.mandatory}"
+                                         shortDesc="#{bindings.GroupName.hints.tooltip}"
                                          id="soc1" autoSubmit="true"
-                                         valueChangeListener="#{viewScope.ValueSetAuthorityBean.roleChangeListener}">
-                        <f:selectItems value="#{bindings.RoleName.items}"
+                                         valueChangeListener="#{viewScope.ValueSetAuthorityBean.groupChangeListener}">
+                        <f:selectItems value="#{bindings.GroupName.items}"
                                        id="si1"/>
                      </af:selectOneChoice>
                      <af:selectOneChoice value="#{bindings.Name.inputValue}"
@@ -69,39 +69,39 @@
                </af:toolbar>
             </f:facet>
             <f:facet name="statusbar"/>
-            <af:table value="#{bindings.DmsRoleValueView.collectionModel}"
-                      var="row" rows="#{bindings.DmsRoleValueView.rangeSize}"
+            <af:table value="#{bindings.DmsGroupValueView.collectionModel}"
+                      var="row" rows="#{bindings.DmsGroupValueView.rangeSize}"
                       emptyText="#{viewBundle['dms.common.nodata']}"
-                      fetchSize="#{bindings.DmsRoleValueView.rangeSize}"
+                      fetchSize="#{bindings.DmsGroupValueView.rangeSize}"
                       rowBandingInterval="0"
-                      selectionListener="#{bindings.DmsRoleValueView.collectionModel.makeCurrent}"
+                      selectionListener="#{bindings.DmsGroupValueView.collectionModel.makeCurrent}"
                       rowSelection="multiple" id="t2"
                       binding="#{viewScope.ValueSetAuthorityBean.assignedValueTable}">
-               <af:column sortProperty="#{bindings.DmsRoleValueView.hints.ValueId.name}"
+               <af:column sortProperty="#{bindings.DmsGroupValueView.hints.ValueId.name}"
                           sortable="false"
-                          headerText="#{bindings.DmsRoleValueView.hints.ValueId.label}"
+                          headerText="#{bindings.DmsGroupValueView.hints.ValueId.label}"
                           id="c1">
                   <af:outputText value="#{viewScope.ValueSetAuthorityBean.valueMap[row.ValueId]}" id="ot1"/>
                </af:column>
-               <af:column sortProperty="#{bindings.DmsRoleValueView.hints.UpdatedBy.name}"
+               <af:column sortProperty="#{bindings.DmsGroupValueView.hints.UpdatedBy.name}"
                           sortable="false"
-                          headerText="#{bindings.DmsRoleValueView.hints.UpdatedBy.label}"
+                          headerText="#{bindings.DmsGroupValueView.hints.UpdatedBy.label}"
                           id="c2">
                   <af:selectOneChoice value="#{row.bindings.UpdatedBy.inputValue}"
                                       label="#{row.bindings.UpdatedBy.label}"
-                                      required="#{bindings.DmsRoleValueView.hints.UpdatedBy.mandatory}"
-                                      shortDesc="#{bindings.DmsRoleValueView.hints.UpdatedBy.tooltip}"
+                                      required="#{bindings.DmsGroupValueView.hints.UpdatedBy.mandatory}"
+                                      shortDesc="#{bindings.DmsGroupValueView.hints.UpdatedBy.tooltip}"
                                       id="soc3" readOnly="true">
                      <f:selectItems value="#{row.bindings.UpdatedBy.items}"
                                     id="si3"/>
                   </af:selectOneChoice>
                </af:column>
-               <af:column sortProperty="#{bindings.DmsRoleValueView.hints.UpdatedAt.name}"
+               <af:column sortProperty="#{bindings.DmsGroupValueView.hints.UpdatedAt.name}"
                           sortable="false"
-                          headerText="#{bindings.DmsRoleValueView.hints.UpdatedAt.label}"
+                          headerText="#{bindings.DmsGroupValueView.hints.UpdatedAt.label}"
                           id="c3">
                   <af:outputText value="#{row.UpdatedAt}" id="ot3">
-                     <af:convertDateTime pattern="#{bindings.DmsRoleValueView.hints.UpdatedAt.format}"/>
+                     <af:convertDateTime pattern="#{bindings.DmsGroupValueView.hints.UpdatedAt.format}"/>
                   </af:outputText>
                </af:column>
             </af:table>

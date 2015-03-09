@@ -118,9 +118,9 @@ public class DmsValueSetViewRowImpl extends ViewRowImpl {
             }
         }
         ,
-        DmsRoleValueView {
+        DmsGroupValueView {
             public Object get(DmsValueSetViewRowImpl obj) {
-                return obj.getDmsRoleValueView();
+                return obj.getDmsGroupValueView();
             }
 
             public void put(DmsValueSetViewRowImpl obj, Object value) {
@@ -174,6 +174,8 @@ public class DmsValueSetViewRowImpl extends ViewRowImpl {
             return vals;
         }
     }
+
+
     public static final int ID = AttributesEnum.Id.index();
     public static final int LOCALE = AttributesEnum.Locale.index();
     public static final int NAME = AttributesEnum.Name.index();
@@ -184,7 +186,7 @@ public class DmsValueSetViewRowImpl extends ViewRowImpl {
     public static final int UPDATEDBY = AttributesEnum.UpdatedBy.index();
     public static final int CREATEDBY = AttributesEnum.CreatedBy.index();
     public static final int VALUESETID = AttributesEnum.ValueSetId.index();
-    public static final int DMSROLEVALUEVIEW = AttributesEnum.DmsRoleValueView.index();
+    public static final int DMSGROUPVALUEVIEW = AttributesEnum.DmsGroupValueView.index();
     public static final int LKP_LANG = AttributesEnum.LKP_LANG.index();
     public static final int LSV_USER = AttributesEnum.LSV_USER.index();
 
@@ -362,11 +364,12 @@ public class DmsValueSetViewRowImpl extends ViewRowImpl {
         setAttributeInternal(VALUESETID, value);
     }
 
+
     /**
-     * Gets the associated <code>RowIterator</code> using master-detail link DmsRoleValueView.
+     * Gets the associated <code>RowIterator</code> using master-detail link DmsGroupValueView.
      */
-    public RowIterator getDmsRoleValueView() {
-        return (RowIterator)getAttributeInternal(DMSROLEVALUEVIEW);
+    public RowIterator getDmsGroupValueView() {
+        return (RowIterator)getAttributeInternal(DMSGROUPVALUEVIEW);
     }
 
     /**

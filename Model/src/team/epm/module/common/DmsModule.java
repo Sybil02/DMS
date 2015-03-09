@@ -9,5 +9,5 @@ import oracle.jbo.ViewObject;
 // ---------------------------------------------------------------------
 public interface DmsModule extends ApplicationModule {
     ViewObject getDmsValueView(String valueSetSrc, String valueSetId,
-                               String roleId);
+                               String groupId);
 }

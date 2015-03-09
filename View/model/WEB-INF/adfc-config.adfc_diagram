@@ -172,4 +172,38 @@
       <property
          name="sdm:polyPoints">B50,860.0,175.84473,860.3613,233.74707,T50</property>
    </ControlFlowCase>
+   <View
+      id="View21">
+      <property
+         name="activityId">dgptIndex</property>
+      <property
+         name="page">/dgpt/index.jspx</property>
+      <property
+         name="description">&lt;html>&lt;p>&lt;b>dgptIndex&lt;/b>&lt;/p>&lt;p>Activity Type:  View&lt;/p></property>
+      <property
+         name="exceptionHandler">false</property>
+      <property
+         name="y">293.99414</property>
+      <property
+         name="x">1018.5</property>
+   </View>
+   <WildcardControlFlowRule
+      id="WildcardControlFlowRule22">
+      <property
+         name="activityId">*</property>
+      <property
+         name="y">136.59766</property>
+      <property
+         name="x">1018.0</property>
+   </WildcardControlFlowRule>
+   <ControlFlowCase
+      islink="true"
+      id="ControlFlowCase23"
+      from="WildcardControlFlowRule22"
+      to="View21">
+      <property
+         name="fromOutcome">GoDgptIndex</property>
+      <property
+         name="sdm:polyPoints">B50,1018.0,179.24707,1018.5,239.64355,T50</property>
+   </ControlFlowCase>
 </SDM>

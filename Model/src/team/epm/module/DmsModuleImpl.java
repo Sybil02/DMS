@@ -115,14 +115,6 @@ public class DmsModuleImpl extends ApplicationModuleImpl implements DmsModule {
     }
 
     /**
-     * Container's getter for DmsRoleValueView.
-     * @return DmsRoleValueView
-     */
-    public ViewObjectImpl getDmsRoleValueView() {
-        return (ViewObjectImpl)findViewObject("DmsRoleValueView");
-    }
-
-    /**
      * Container's getter for DmsRoleView.
      * @return DmsRoleView
      */
@@ -258,28 +250,13 @@ public class DmsModuleImpl extends ApplicationModuleImpl implements DmsModule {
         return (ViewLinkImpl)findViewLink("DmsGroupedUserLnk");
     }
 
-    /**
-     * Container's getter for DmsRoleValueLnk.
-     * @return DmsRoleValueLnk
-     */
-    public ViewLinkImpl getDmsRoleValueLnk() {
-        return (ViewLinkImpl)findViewLink("DmsRoleValueLnk");
-    }
-
-    /**
-     * Container's getter for DmsValusetValueLnk.
-     * @return DmsValusetValueLnk
-     */
-    public ViewLinkImpl getDmsValusetValueLnk() {
-        return (ViewLinkImpl)findViewLink("DmsValusetValueLnk");
-    }
     
-    public ViewObject getDmsValueView(String valueSetSrc,String valueSetId,String roleId){
+    public ViewObject getDmsValueView(String valueSetSrc,String valueSetId,String groupId){
         String voName="DmsVs"+valueSetSrc;
         ViewObject vo=this.getApplicationModule().findViewObject(voName);
         if(vo==null&&valueSetSrc!=null){
             String sql="select t.code,t.meaning from \""+valueSetSrc.toUpperCase()+"\" t where t.locale='"
-                +ADFContext.getCurrent().getLocale()+"' and not exists(select 1 from dms_role_value v where v.role_id='"+roleId+"' and v.value_id=t.code and v.value_set_id='"+valueSetId+"') order by t.idx";
+                +ADFContext.getCurrent().getLocale()+"' and not exists(select 1 from dms_group_value v where v.group_id='"+groupId+"' and v.value_id=t.code and v.value_set_id='"+valueSetId+"') order by t.idx";
             vo=this.getApplicationModule().createViewObjectFromQueryStmt(voName, sql);
         }
         return vo;
@@ -299,5 +276,37 @@ public class DmsModuleImpl extends ApplicationModuleImpl implements DmsModule {
      */
     public ViewObjectImpl getDmsUnassignedFunctionView() {
         return (ViewObjectImpl)findViewObject("DmsUnassignedFunctionView");
+    }
+
+    /**
+     * Container's getter for DmsGroupValueView.
+     * @return DmsGroupValueView
+     */
+    public ViewObjectImpl getDmsGroupValueView() {
+        return (ViewObjectImpl)findViewObject("DmsGroupValueView");
+    }
+
+    /**
+     * Container's getter for DmsGroupValueLnk.
+     * @return DmsGroupValueLnk
+     */
+    public ViewLinkImpl getDmsGroupValueLnk() {
+        return (ViewLinkImpl)findViewLink("DmsGroupValueLnk");
+    }
+
+    /**
+     * Container's getter for DmsValuesetGValueLnk.
+     * @return DmsValuesetGValueLnk
+     */
+    public ViewLinkImpl getDmsValuesetGValueLnk() {
+        return (ViewLinkImpl)findViewLink("DmsValuesetGValueLnk");
+    }
+
+    /**
+     * Container's getter for DmsGroupGValueLnk.
+     * @return DmsGroupGValueLnk
+     */
+    public ViewLinkImpl getDmsGroupGValueLnk() {
+        return (ViewLinkImpl)findViewLink("DmsGroupGValueLnk");
     }
 }

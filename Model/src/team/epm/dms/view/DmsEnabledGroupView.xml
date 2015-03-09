@@ -11,10 +11,12 @@
   CustomQuery="true"
   ComponentClass="team.epm.dms.view.DmsEnabledGroupViewImpl"
   PageIterMode="Full"
-  UseGlueCode="false">
+  UseGlueCode="false"
+  RowClass="team.epm.dms.view.DmsEnabledGroupViewRowImpl">
   <DesignTime>
-    <Attr Name="_codeGenFlag2" Value="Coll|VarAccess"/>
+    <Attr Name="_codeGenFlag2" Value="Access|Coll|VarAccess"/>
     <Attr Name="_isExpertMode" Value="true"/>
+    <Attr Name="_isCodegen" Value="true"/>
   </DesignTime>
   <Properties>
     <SchemaBasedProperties>
@@ -90,7 +92,16 @@ WHERE DmsGroup.ENABLE_FLAG='Y'
     PrecisionRule="true"
     EntityAttrName="UpdatedAt"
     EntityUsage="DmsGroup"
-    AliasName="UPDATED_AT"/>
+    AliasName="UPDATED_AT">
+    <Properties>
+      <SchemaBasedProperties>
+        <FMT_FORMATTER
+          ResId="team.epm.dms.view.DmsEnabledGroupView.UpdatedAt_FMT_FORMATTER"/>
+        <FMT_FORMAT
+          ResId="team.epm.dms.view.DmsEnabledGroupView.UpdatedAt_FMT_FORMAT"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewAttribute
     Name="UpdatedBy"
     PrecisionRule="true"
@@ -105,6 +116,11 @@ WHERE DmsGroup.ENABLE_FLAG='Y'
   <ViewLinkAccessor
     Name="DmsGroupedRoleView"
     ViewLink="team.epm.dms.DmsGroupedRoleLnk"
+    Type="oracle.jbo.RowIterator"
+    IsUpdateable="false"/>
+  <ViewLinkAccessor
+    Name="DmsGroupValueView"
+    ViewLink="team.epm.dms.DmsGroupGValueLnk"
     Type="oracle.jbo.RowIterator"
     IsUpdateable="false"/>
   <ResourceBundle>

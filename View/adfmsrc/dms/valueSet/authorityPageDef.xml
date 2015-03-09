@@ -5,32 +5,27 @@
   <parameters/>
   <executables>
     <variableIterator id="variables"/>
-    <iterator id="DmsEnabledRoleIterator" Binds="DmsEnabledRole"
-              DataControl="DmsModuleDataControl" RangeSize="25"/>
     <iterator id="DmsValueSetViewIterator" Binds="DmsValueSetView"
               DataControl="DmsModuleDataControl" RangeSize="25"/>
-    <iterator Binds="DmsRoleValueView" RangeSize="25"
-              DataControl="DmsModuleDataControl" id="DmsRoleValueViewIterator"/>
     <methodIterator Binds="getDmsValueView.result"
                     DataControl="DmsModuleDataControl" RangeSize="25"
                     id="getDmsValueViewIterator"/>
+    <iterator Binds="DmsEnabledGroupView" RangeSize="10"
+              DataControl="DmsModuleDataControl"
+              id="DmsEnabledGroupViewIterator"/>
+    <iterator id="DmsGroupValueViewIterator" Binds="DmsGroupValueView"
+              DataControl="DmsModuleDataControl" RangeSize="25"/>
   </executables>
   <bindings>
-    <list ListOperMode="navigation" IterBinding="DmsEnabledRoleIterator"
-          ListIter="DmsEnabledRoleIterator" id="RoleName" DTSupportsMRU="true">
-      <AttrNames>
-        <Item Value="RoleName"/>
-      </AttrNames>
-    </list>
     <list ListOperMode="navigation" IterBinding="DmsValueSetViewIterator"
           ListIter="DmsValueSetViewIterator" id="Name" DTSupportsMRU="true">
       <AttrNames>
         <Item Value="Name"/>
       </AttrNames>
     </list>
-    <tree IterBinding="DmsRoleValueViewIterator" id="DmsRoleValueView">
-      <nodeDefinition DefName="team.epm.dms.view.DmsRoleValueView"
-                      Name="DmsRoleValueView0">
+    <tree IterBinding="DmsGroupValueViewIterator" id="DmsGroupValueView">
+      <nodeDefinition DefName="team.epm.dms.view.DmsGroupValueView"
+                      Name="DmsGroupValueView">
         <AttrNames>
           <Item Value="ValueId"/>
           <Item Value="UpdatedBy"/>
@@ -49,12 +44,18 @@
       <NamedData NDName="valueSetId"
                  NDValue="#{bindings.DmsValueSetViewIterator.currentRow.id}"
                  NDType="java.lang.String"/>
-      <NamedData NDName="roleId"
-                 NDValue="#{bindings.DmsEnabledRoleIterator.currentRow.id}"
+      <NamedData NDName="groupId"
+                 NDValue="#{bindings.DmsEnabledGroupViewIterator.currentRow.id}"
                  NDType="java.lang.String"/>
     </methodAction>
     <tree IterBinding="getDmsValueViewIterator" id="return">
       <nodeDefinition Name="return0"/>
     </tree>
+    <list ListOperMode="navigation" IterBinding="DmsEnabledGroupViewIterator"
+          ListIter="DmsEnabledGroupViewIterator" id="GroupName">
+      <AttrNames>
+        <Item Value="Name"/>
+      </AttrNames>
+    </list>
   </bindings>
 </pageDefinition>

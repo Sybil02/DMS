@@ -70,7 +70,7 @@ public class ValueSetAuthorityBean {
         return assignedValueTable;
     }
 
-    public void roleChangeListener(ValueChangeEvent valueChangeEvent) {
+    public void groupChangeListener(ValueChangeEvent valueChangeEvent) {
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.assignedValueTable);
     }
 
@@ -133,7 +133,7 @@ public class ValueSetAuthorityBean {
     public void remove_value(ActionEvent actionEvent) {
         if (this.assignedValueTable.getSelectedRowKeys() != null) {
             Iterator itr = this.assignedValueTable.getSelectedRowKeys().iterator();
-            RowSetIterator rowSetIterator =ADFUtils.findIterator("DmsRoleValueViewIterator").getRowSetIterator();
+            RowSetIterator rowSetIterator =ADFUtils.findIterator("DmsGroupValueViewIterator").getRowSetIterator();
             while(itr.hasNext()){
                 List key = (List)itr.next();
                 Row row = rowSetIterator.getRow((Key)key.get(0));
@@ -144,15 +144,15 @@ public class ValueSetAuthorityBean {
             ADFUtils.findIterator("getDmsValueViewIterator").getViewObject()
                 .getApplicationModule().getTransaction().commit();
             ADFUtils.findIterator("getDmsValueViewIterator").getViewObject().executeQuery();
-            ADFUtils.findIterator("DmsRoleValueViewIterator").getViewObject().executeQuery();
+            ADFUtils.findIterator("DmsGroupValueViewIterator").getViewObject().executeQuery();
             AdfFacesContext.getCurrentInstance().addPartialTarget(this.assignedValueTable);
         }
     }
 
     public void add_value_authority(ActionEvent actionEvent) {
         if (this.unassignedValueTable.getSelectedRowKeys() != null) {
-            ViewObject roleValueVo =ADFUtils.findIterator("DmsRoleValueViewIterator").getViewObject();
-            String roleId =(String)ADFUtils.findIterator("DmsEnabledRoleIterator").getViewObject().getCurrentRow().getAttribute("Id");
+            ViewObject groupValueVo =ADFUtils.findIterator("DmsGroupValueViewIterator").getViewObject();
+            String groupId =(String)ADFUtils.findIterator("DmsEnabledGroupViewIterator").getViewObject().getCurrentRow().getAttribute("Id");
             String valueSetId=(String)ADFUtils.findIterator("DmsValueSetViewIterator").getViewObject().getCurrentRow().getAttribute("Id");            
             Iterator itr =
                 this.unassignedValueTable.getSelectedRowKeys().iterator();
@@ -161,15 +161,15 @@ public class ValueSetAuthorityBean {
             while (itr.hasNext()) {
                 List key = (List)itr.next();
                 Row valueRow = rowSetIterator.getRow((Key)key.get(0));
-                Row row = roleValueVo.createRow();
-                row.setAttribute("RoleId", roleId);
+                Row row = groupValueVo.createRow();
+                row.setAttribute("GroupId", groupId);
                 row.setAttribute("ValueSetId", valueSetId);
                 row.setAttribute("ValueId", valueRow.getAttribute("CODE"));
-                roleValueVo.insertRow(row);
+                groupValueVo.insertRow(row);
             }
-            roleValueVo.getApplicationModule().getTransaction().commit();
+            groupValueVo.getApplicationModule().getTransaction().commit();
             ADFUtils.findIterator("getDmsValueViewIterator").getViewObject().executeQuery();
-            ADFUtils.findIterator("DmsRoleValueViewIterator").getViewObject().executeQuery();
+            ADFUtils.findIterator("DmsGroupValueViewIterator").getViewObject().executeQuery();
             AdfFacesContext.getCurrentInstance().addPartialTarget(this.assignedValueTable);
             AdfFacesContext.getCurrentInstance().addPartialTarget(this.unassignedValueTable);
         }
