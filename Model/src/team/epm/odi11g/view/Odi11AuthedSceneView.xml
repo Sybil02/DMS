@@ -76,11 +76,9 @@
    AND ODI11SCENE.CAT_ID = :catId
    AND EXISTS
  (SELECT 1
-          FROM DMS_USER_GROUP GRP, DMS_GROUP_ROLE RL, ODI11_ROLE_SCENE SC
-         WHERE GRP.USER_ID = :userId
-           AND GRP.GROUP_ID = RL.GROUP_ID
-           AND RL.ROLE_ID = SC.ROLE_ID
-           AND SC.SCENE_ID = ODI11SCENE.ID)]]>
+          FROM ODI11_USER_SCENE_V V
+         WHERE V.USER_ID = :userId
+           AND V.SCENE_ID = ODI11SCENE.ID)]]>
   </SQLQuery>
   <EntityUsage
     Name="Odi11Scene"

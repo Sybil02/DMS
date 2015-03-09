@@ -98,11 +98,6 @@ WHERE  DmsRole.LOCALE=:locale
     EntityUsage="DmsRole"
     AliasName="UPDATED_BY"/>
   <ViewLinkAccessor
-    Name="DmsRoleValueView"
-    ViewLink="team.epm.dms.DmsRoleValueLnk"
-    Type="oracle.jbo.RowIterator"
-    IsUpdateable="false"/>
-  <ViewLinkAccessor
     Name="DmsRoleFunctionView"
     ViewLink="team.epm.dms.DmsRoleFunctionLnk"
     Type="oracle.jbo.RowIterator"

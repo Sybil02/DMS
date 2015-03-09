@@ -97,16 +97,6 @@ public class DmsEnabledRoleRowImpl extends ViewRowImpl {
             }
         }
         ,
-        DmsRoleValueView {
-            public Object get(DmsEnabledRoleRowImpl obj) {
-                return obj.getDmsRoleValueView();
-            }
-
-            public void put(DmsEnabledRoleRowImpl obj, Object value) {
-                obj.setAttributeInternal(index(), value);
-            }
-        }
-        ,
         DmsRoleFunctionView {
             public Object get(DmsEnabledRoleRowImpl obj) {
                 return obj.getDmsRoleFunctionView();
@@ -173,7 +163,6 @@ public class DmsEnabledRoleRowImpl extends ViewRowImpl {
     public static final int ROLENAME = AttributesEnum.RoleName.index();
     public static final int UPDATEDAT = AttributesEnum.UpdatedAt.index();
     public static final int UPDATEDBY = AttributesEnum.UpdatedBy.index();
-    public static final int DMSROLEVALUEVIEW = AttributesEnum.DmsRoleValueView.index();
     public static final int DMSROLEFUNCTIONVIEW = AttributesEnum.DmsRoleFunctionView.index();
     public static final int DCMROLETEMPLATEVIEW = AttributesEnum.DcmRoleTemplateView.index();
     public static final int ODI11ROLESCENEVIEW = AttributesEnum.Odi11RoleSceneView.index();
@@ -320,12 +309,6 @@ public class DmsEnabledRoleRowImpl extends ViewRowImpl {
         setAttributeInternal(UPDATEDBY, value);
     }
 
-    /**
-     * Gets the associated <code>RowIterator</code> using master-detail link DmsRoleValueView.
-     */
-    public RowIterator getDmsRoleValueView() {
-        return (RowIterator)getAttributeInternal(DMSROLEVALUEVIEW);
-    }
 
     /**
      * Gets the associated <code>RowIterator</code> using master-detail link DmsRoleFunctionView.

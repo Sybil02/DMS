@@ -36,32 +36,4 @@ public class DmsValueSetViewImpl extends ViewObjectImpl {
     public void setlocale(String value) {
         setNamedWhereClauseParam("locale", value);
     }
-    public ViewObject getUnAssignedValueObject(){
-        ViewObject vo=null;
-        Row row=this.getCurrentRow();
-        if(row!=null){
-            String viewName="UnAssignedVs"+row.getAttribute("Id")+"Vo";
-            if(this.getApplicationModule().findViewObject(viewName)!=null){
-                vo=this.getApplicationModule().findViewObject(viewName);
-            }else{
-                StringBuffer sql=new StringBuffer();
-                sql.append("SELECT T.CODE,T.MEANING FROM \"");
-                sql.append(row.getAttribute("Source").toString().toUpperCase());
-                sql.append("\" T");
-                sql.append(" WHERE T.LOCALE='");
-                sql.append(ADFContext.getCurrent().getLocale());
-                sql.append("'");
-                sql.append(" AND NOT EXISTS (SELECT 1 FROM DMS_ROLE_VALUE RV WHERE RV.ROLE_ID = :roleId");
-                sql.append(" AND RV.VALUE_ID = T.CODE");
-                sql.append(" AND RV.VALUE_SET_ID = '");
-                sql.append(row.getAttribute("Id"));
-                sql.append("'");
-                sql.append(")");
-                sql.append(" ORDER BY IDX");
-                vo=this.getApplicationModule().createViewObjectFromQueryStmt(viewName, sql.toString());
-                vo.defineNamedWhereClauseParam("roleId", null, null);
-            }
-        }
-        return vo;
-    }
 }

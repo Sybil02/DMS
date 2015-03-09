@@ -849,24 +849,10 @@ public class DcmDataDisplayBean extends TablePagination{
         sql.append(" AND V.ENABLED='Y'");
         if ("Y".equals(header.getIsAuthority())) {
             sql.append(" AND EXISTS(SELECT 1 FROM ");
-            sql.append("DMS_USER       T1,");
-            sql.append("DMS_USER_GROUP T2,");
-            sql.append("DMS_GROUP_ROLE T3,");
-            sql.append("DMS_ROLE_VALUE T4,");
-            sql.append("DMS_GROUP      T5,");
-            sql.append("DMS_ROLE       T6");
-            sql.append(" WHERE T1.ID = '").append(this.curUser.getId()).append("'");
-            sql.append(" AND T2.USER_ID = T1.ID");
-            sql.append(" AND T3.GROUP_ID = T2.GROUP_ID");
-            sql.append(" AND T2.GROUP_ID = T5.ID");
-            sql.append(" AND T5.ENABLE_FLAG = 'Y'");
-            sql.append(" AND T5.LOCALE = '").append(this.curUser.getLocale()).append("'");
-            sql.append(" AND T4.ROLE_ID = T3.ROLE_ID");
-            sql.append(" AND T3.ROLE_ID = T6.ID");
-            sql.append(" AND T6.ENABLE_FLAG = 'Y'");
-            sql.append(" AND T6.LOCALE = T5.LOCALE");
-            sql.append(" AND T4.VALUE_SET_ID = '").append(header.getValueSetId()).append("'");
-            sql.append(" AND T4.VALUE_ID=V.CODE)");
+            sql.append(" DMS_USER_VALUE_V T");
+            sql.append(" WHERE T.USER_ID = '").append(this.curUser.getId()).append("'");
+            sql.append(" AND T.VALUE_SET_ID = '").append(header.getValueSetId()).append("'");
+            sql.append(" AND T.VALUE_ID=V.CODE)");
         }
         sql.append(" ORDER BY V.IDX");
         PreparedStatement stat =
@@ -906,24 +892,10 @@ public class DcmDataDisplayBean extends TablePagination{
         sql.append(")");
         if ("Y".equals(header.getIsAuthority())) {
             sql.append(" AND EXISTS(SELECT 1 FROM ");
-            sql.append("DMS_USER       T1,");
-            sql.append("DMS_USER_GROUP T2,");
-            sql.append("DMS_GROUP_ROLE T3,");
-            sql.append("DMS_ROLE_VALUE T4,");
-            sql.append("DMS_GROUP      T5,");
-            sql.append("DMS_ROLE       T6");
-            sql.append(" WHERE T1.ID = '").append(this.curUser.getId()).append("'");
-            sql.append(" AND T2.USER_ID = T1.ID");
-            sql.append(" AND T3.GROUP_ID = T2.GROUP_ID");
-            sql.append(" AND T2.GROUP_ID = T5.ID");
-            sql.append(" AND T5.ENABLE_FLAG = 'Y'");
-            sql.append(" AND T5.LOCALE = '").append(this.curUser.getLocale()).append("'");
-            sql.append(" AND T4.ROLE_ID = T3.ROLE_ID");
-            sql.append(" AND T3.ROLE_ID = T6.ID");
-            sql.append(" AND T6.ENABLE_FLAG = 'Y'");
-            sql.append(" AND T6.LOCALE = T5.LOCALE");
-            sql.append(" AND T4.VALUE_SET_ID = '").append(header.getValueSetId()).append("'");
-            sql.append(" AND T4.VALUE_ID=V.CODE)");
+            sql.append(" DMS_USER_VALUE_V T");
+            sql.append(" WHERE T.USER_ID = '").append(this.curUser.getId()).append("'");
+            sql.append(" AND T.VALUE_SET_ID = '").append(header.getValueSetId()).append("'");
+            sql.append(" AND T.VALUE_ID=V.CODE)");
         }
         sql.append(" ORDER BY V.IDX");
         PreparedStatement stat =
@@ -1153,19 +1125,15 @@ public class DcmDataDisplayBean extends TablePagination{
     private boolean isReadOnly(){
         boolean readonly=false;
         StringBuffer sql=new StringBuffer();
-        sql.append("SELECT T1.READ_ONLY ")
-           .append("  FROM DCM_ROLE_TEMPLATE T1, DMS_GROUP_ROLE T2, DMS_USER_GROUP T3 ")
-           .append(" WHERE T1.ROLE_ID = T2.ROLE_ID ") 
-           .append("   AND T2.GROUP_ID = T3.GROUP_ID ") 
-           .append("   AND T3.USER_ID = '").append(this.curUser.getId()).append("' ")
-           .append("   AND T1.TEMPLATE_ID = '").append(this.curTempalte.getId()).append("'");
+        sql.append("SELECT 1 ")
+           .append("  FROM DCM_USER_TEMPLATE_V T ")
+           .append(" WHERE T.READ_ONLY='Y' AND T.USER_ID = '").append(this.curUser.getId()).append("' ")
+           .append("   AND T.TEMPLATE_ID = '").append(this.curTempalte.getId()).append("'");
         Statement stmt=DmsUtils.getDcmApplicationModule().getDBTransaction().createStatement(DBTransaction.DEFAULT);
         try {
             ResultSet rs = stmt.executeQuery(sql.toString());
             if(rs.next()){
-                if("Y".equals(rs.getString("READ_ONLY"))){
-                    readonly=true;
-                }
+                readonly=true;
             }
             rs.close();
             stmt.close();

@@ -159,7 +159,13 @@ public class Odi11gIndexMBean {
             StringBuffer sql = new StringBuffer();
             sql.append("SELECT T.CODE,T.MEANING FROM \"").append(source).append("\" T").append("  WHERE T.LOCALE='").append(ADFContext.getCurrent().getLocale()).append("'");
             if (isAuth) {
-                sql.append("  AND EXISTS (SELECT 1 FROM DMS_USER_GROUP GRP, DMS_GROUP_ROLE RL, DMS_ROLE_VALUE RV").append("  WHERE GRP.USER_ID = '").append(((Person)ADFContext.getCurrent().getSessionScope().get("cur_user")).getId()).append("'").append("  AND GRP.GROUP_ID = RL.GROUP_ID AND RL.ROLE_ID = RV.ROLE_ID ").append("  AND RV.VALUE_SET_ID='").append(valueSetId).append("'").append("  AND RV.VALUE_ID = T.CODE)");
+                sql.append("  AND EXISTS (SELECT 1 FROM DMS_USER_VALUE_V V")
+                    .append("  WHERE V.USER_ID = '")
+                    .append(((Person)ADFContext.getCurrent().getSessionScope().get("cur_user")).getId())
+                    .append("'")
+                    .append("  AND V.VALUE_SET_ID='")
+                    .append(valueSetId).append("'")
+                    .append("  AND V.VALUE_ID = T.CODE)");
             }
             sql.append(" AND T.ENABLED='Y'  ORDER BY T.IDX");
             ViewObject vo =
