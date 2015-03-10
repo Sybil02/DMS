@@ -376,7 +376,7 @@ public class Odi11gIndexMBean {
                 execRow.setAttribute("ExecStatus", status);
                 execRow.setAttribute("LogText",
                                      msg.length() <= 512 ? msg : (msg.substring(0,
-                                                                                5))+"......");
+                                                                                512)+"......"));
                 if(this.hasException(ObjectUtils.toString(execRow.getAttribute("SessionNum")))){
                     execRow.setAttribute("HasException", "Y");
                 }
