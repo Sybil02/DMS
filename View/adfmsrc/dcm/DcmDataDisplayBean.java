@@ -1056,6 +1056,7 @@ public class DcmDataDisplayBean extends TablePagination{
     public void queryListener(QueryEvent queryEvent) {
         DcmQueryDescriptor descriptor = (DcmQueryDescriptor)queryEvent.getDescriptor();
         this.filters=descriptor.getFilterCriteria();
+        this.setCurPage(1);
         this.queryTemplateData();
     }
 
