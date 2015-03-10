@@ -20,6 +20,12 @@
     <iterator Binds="Odi11SceneExecView" RangeSize="25"
               DataControl="Odi11gModuleDataControl"
               id="Odi11SceneExecViewIterator"/>
+    <iterator Binds="Odi11SceneLogView" RangeSize="25"
+              DataControl="Odi11gModuleDataControl"
+              id="Odi11SceneLogViewIterator"/>
+    <searchRegion Binds="Odi11SceneLogViewIterator" Criteria=""
+                  Customizer="oracle.jbo.uicli.binding.JUSearchBindingCustomizer"
+                  id="Odi11SceneLogViewQuery"/>
   </executables>
   <bindings>
     <tree IterBinding="Odi11AuthedSceneViewIterator" id="Odi11AuthedSceneView">
@@ -50,9 +56,18 @@
         <AttrNames>
           <Item Value="Params"/>
           <Item Value="ExecStatus"/>
+          <Item Value="HasException"/>
           <Item Value="LogText"/>
           <Item Value="UpdatedAt"/>
           <Item Value="UpdatedBy"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <tree IterBinding="Odi11SceneLogViewIterator" id="Odi11SceneLogView">
+      <nodeDefinition DefName="team.epm.odi11g.view.Odi11SceneLogView"
+                      Name="Odi11SceneLogView0">
+        <AttrNames>
+          <Item Value="Msg"/>
         </AttrNames>
       </nodeDefinition>
     </tree>

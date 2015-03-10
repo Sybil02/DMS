@@ -54,11 +54,20 @@
   <ViewUsage
     Name="Odi11SceneParamExView"
     ViewObjectName="team.epm.odi11g.view.Odi11SceneParamExView"/>
+  <ViewUsage
+    Name="Odi11SceneLogView"
+    ViewObjectName="team.epm.odi11g.view.Odi11SceneLogView"/>
   <ViewLinkUsage
     Name="Odi11gRoleSceneLnk"
     ViewLinkObjectName="team.epm.odi11g.Odi11gRoleSceneLnk"
     SrcViewUsageName="team.epm.module.Odi11gModule.DmsEnabledRole"
     DstViewUsageName="team.epm.module.Odi11gModule.Odi11RoleSceneView"
+    Reversed="false"/>
+  <ViewLinkUsage
+    Name="Odi11gStatusLogLnk"
+    ViewLinkObjectName="team.epm.odi11g.Odi11gStatusLogLnk"
+    SrcViewUsageName="team.epm.module.Odi11gModule.Odi11SceneExecView"
+    DstViewUsageName="team.epm.module.Odi11gModule.Odi11SceneLogView"
     Reversed="false"/>
   <ResourceBundle>
     <PropertiesBundle

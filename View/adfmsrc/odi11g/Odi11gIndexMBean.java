@@ -11,6 +11,10 @@ import dms.login.Person;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -371,9 +375,13 @@ public class Odi11gIndexMBean {
                     ObjectUtils.toString(statuses.get(0).getSessionMessage());
                 execRow.setAttribute("ExecStatus", status);
                 execRow.setAttribute("LogText",
-                                     msg.length() <= 1000 ? msg : msg.substring(0,
-                                                                                1000));
+                                     msg.length() <= 512 ? msg : (msg.substring(0,
+                                                                                5))+"......");
+                if(this.hasException(ObjectUtils.toString(execRow.getAttribute("SessionNum")))){
+                    execRow.setAttribute("HasException", "Y");
+                }
                 vo.getApplicationModule().getTransaction().commit();
+                
             }
             }
             catch(Exception ex){
@@ -386,7 +394,20 @@ public class Odi11gIndexMBean {
         }
         return status;
     }
-
+    private boolean hasException(String sessionNum){
+        boolean flag=false;
+        String sql="select 1 from ODI11_SCENE_LOG t where t.session_num='"+sessionNum+"'";
+        Statement stmt=DmsUtils.getOdi11gApplicationModule().getDBTransaction().createStatement(1);
+        try {
+            ResultSet rs=stmt.executeQuery(sql);
+            if(rs.next()){
+                flag=true;
+            }
+        } catch (SQLException e) {
+            this._logger.severe(e);
+        }
+        return flag;
+    }
     private void refreshStatus(String sceneId) throws MalformedURLException {
         ViewObject sceneVo =
             ADFUtils.findIterator("Odi11AuthedSceneViewIterator").getViewObject();

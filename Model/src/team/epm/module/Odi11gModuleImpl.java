@@ -142,4 +142,20 @@ public class Odi11gModuleImpl extends ApplicationModuleImpl {
     public ViewObjectImpl getOdi11SceneParamExView() {
         return (ViewObjectImpl)findViewObject("Odi11SceneParamExView");
     }
+
+    /**
+     * Container's getter for Odi11SceneLogView.
+     * @return Odi11SceneLogView
+     */
+    public ViewObjectImpl getOdi11SceneLogView() {
+        return (ViewObjectImpl)findViewObject("Odi11SceneLogView");
+    }
+
+    /**
+     * Container's getter for Odi11gStatusLogLnk.
+     * @return Odi11gStatusLogLnk
+     */
+    public ViewLinkImpl getOdi11gStatusLogLnk() {
+        return (ViewLinkImpl)findViewLink("Odi11gStatusLogLnk");
+    }
 }

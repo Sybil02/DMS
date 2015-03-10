@@ -203,6 +203,20 @@
       </SchemaBasedProperties>
     </Properties>
   </Attribute>
+  <Attribute
+    Name="HasException"
+    Precision="1"
+    ColumnName="HAS_EXCEPTION"
+    SQLType="CHAR"
+    Type="java.lang.String"
+    ColumnType="CHAR"
+    TableName="ODI11_SCENE_EXEC"
+    RetrievedOnUpdate="true"
+    RetrievedOnInsert="true">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="1"/>
+    </DesignTime>
+  </Attribute>
   <Key
     Name="PkOdi11SceneExec"
     PrimaryKey="true">

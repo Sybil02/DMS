@@ -2548,7 +2548,8 @@ create table ODI11_SCENE_EXEC
    PARAMS               VARCHAR2(1000),
    EXEC_STATUS          VARCHAR2(100),
    SESSION_NUM          VARCHAR2(100), 
-   LOG_TEXT             VARCHAR2(1000),      
+   LOG_TEXT             VARCHAR2(1000), 
+   HAS_EXCEPTION        CHAR(1),
    CREATED_AT           DATE,
    UPDATED_AT           DATE,
    UPDATED_BY           VARCHAR2(32),
@@ -2588,6 +2589,9 @@ comment on column ODI11_SCENE_EXEC.UPDATED_BY is
 
 comment on column ODI11_SCENE_EXEC.CREATED_BY is
 '创建者';
+
+comment on column ODI11_SCENE_EXEC.HAS_EXCEPTION is
+'有异常数据';
 
 /*==============================================================*/
 /* Table: ODI11_WORKREP                                         */
@@ -2678,3 +2682,21 @@ comment on column ODI11_ROLE_SCENE.UPDATED_BY is
 
 comment on column ODI11_ROLE_SCENE.CREATED_BY is
 '创建者';
+/*==============================================================*/
+/* Table: ODI11_SCENE_LOG                                       */
+/*==============================================================*/
+create table ODI11_SCENE_LOG
+(
+  ID          VARCHAR2(32) not null,
+  SESSION_NUM VARCHAR2(32) not null,
+  MSG         VARCHAR2(4000),
+  constraint ODI11_SCENE_LOG_PK primary key (ID)
+);
+comment on table ODI11_SCENE_LOG is
+'ODI11G接口运行日志';
+comment on column ODI11_SCENE_LOG.ID is
+'ID标识';
+comment on column ODI11_SCENE_LOG.SESSION_NUM is
+'接口运行ID';
+comment on column ODI11_SCENE_LOG.MSG is
+'日志信息';

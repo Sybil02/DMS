@@ -15,7 +15,8 @@
        Odi11SceneExec.CREATED_AT, 
        Odi11SceneExec.UPDATED_AT, 
        Odi11SceneExec.UPDATED_BY, 
-       Odi11SceneExec.CREATED_BY"
+       Odi11SceneExec.CREATED_BY, 
+       Odi11SceneExec.HAS_EXCEPTION"
   FromList="ODI11_SCENE_EXEC Odi11SceneExec"
   BindingStyle="OracleName"
   CustomQuery="false"
@@ -217,4 +218,15 @@
       </SchemaBasedProperties>
     </Properties>
   </ViewAttribute>
+  <ViewAttribute
+    Name="HasException"
+    PrecisionRule="true"
+    EntityAttrName="HasException"
+    EntityUsage="Odi11SceneExec"
+    AliasName="HAS_EXCEPTION"/>
+  <ViewLinkAccessor
+    Name="Odi11SceneLogView"
+    ViewLink="team.epm.odi11g.Odi11gStatusLogLnk"
+    Type="oracle.jbo.RowIterator"
+    IsUpdateable="false"/>
 </ViewObject>
