@@ -67,6 +67,7 @@ public class Odi11gIndexMBean {
     private RichPopup popup;
     private RichTable paramTable;
     private RichPopup statusPopup;
+    private RichPopup exceptionPopup;
 
     public void setModel(Odi11gCatTreeModel model) {
         this.model = model;
@@ -484,5 +485,18 @@ public class Odi11gIndexMBean {
 
     public RichPopup getStatusPopup() {
         return statusPopup;
+    }
+
+    public void showExceptionData(ActionEvent actionEvent) {
+        RichPopup.PopupHints hint=new RichPopup.PopupHints();
+        this.exceptionPopup.show(hint);
+    }
+
+    public void setExceptionPopup(RichPopup exceptionPopup) {
+        this.exceptionPopup = exceptionPopup;
+    }
+
+    public RichPopup getExceptionPopup() {
+        return exceptionPopup;
     }
 }

@@ -142,8 +142,8 @@
                                   <af:commandLink text="#{viewBundle['odi11g.scene.exception_data']}" 
                                                   inlineStyle="margin-left:5px;color:red"  
                                                   rendered="#{row.bindings.HasException.inputValue eq 'Y'}"
-                                                  id="cl3">
-                                    <af:showPopupBehavior popupId=":::p3"/>
+                                                  id="cl3" partialSubmit="true"
+                                                  actionListener="#{viewScope.Odi11gIndexMBean.showExceptionData}">
                                   </af:commandLink>
                                 </af:group>
                               </af:column>
@@ -182,7 +182,8 @@
                     </af:panelWindow>
                   </af:popup>
                   <af:popup id="p3" autoCancel="disabled"
-                            childCreation="deferred">
+                            childCreation="deferred"
+                            binding="#{viewScope.Odi11gIndexMBean.exceptionPopup}">
                     <af:panelWindow id="pw3"
                                     title="#{viewBundle['odi11g.scene.exception_data']}"
                                     modal="true">
