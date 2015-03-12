@@ -167,10 +167,11 @@ public class LoginBean {
                     String newPwd=DmsUtils.getRandomString(8);
                     try {
                         row.setPwd(DigestUtils.digestSHA1(row.getAcc() +newPwd));
-                        row.getApplicationModule().getTransaction().commit();
+                        
                         this.sendMail(row.getMail(), 
                                       DmsUtils.getMsg("login.password_reset"), 
                                       DmsUtils.getMsg("login.pwd_reset_msg")+newPwd);
+                        row.getApplicationModule().getTransaction().commit();
                         JSFUtils.addFacesInformationMessage(DmsUtils.getMsg("login.reset_mail"));
                     } catch (Exception e) {
                         this._logger.severe(e);
