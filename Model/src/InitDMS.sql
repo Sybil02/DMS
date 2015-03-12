@@ -408,3 +408,14 @@ insert into dms_menu(id,locale,seq,label,enable_flag,p_id,function_id,created_at
 values('104000','zh_CN',100003,'底稿平台','Y',null,'104000',sysdate,sysdate,'10000','10000');
 insert into dms_menu(id,locale,seq,label,enable_flag,p_id,function_id,created_at,updated_at,updated_by,created_by)
 values('104000','en',100003,'Papers Platform','Y',null,'104000',sysdate,sysdate,'10000','10000');
+/*==============================================================*/
+/* 初始化系统属性                                                 */
+/*==============================================================*/
+insert into dms_property(id,key,value,enable_flag,"DESC",created_at,updated_at,created_by,updated_by)
+values('10001','mail.host','mail.hand-china.com','Y','邮件服务器',sysdate,sysdate,'10000','10000');
+
+insert into dms_property(id,key,value,enable_flag,"DESC",created_at,updated_at,created_by,updated_by)
+values('10002','mail.account','xxxx@hand-china.com','Y','邮箱帐号',sysdate,sysdate,'10000','10000');
+
+insert into dms_property(id,key,value,enable_flag,"DESC",created_at,updated_at,created_by,updated_by)
+values('10003','mail.password','xxxx','Y','邮箱密码',sysdate,sysdate,'10000','10000');

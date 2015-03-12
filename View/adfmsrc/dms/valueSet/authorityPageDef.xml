@@ -6,11 +6,11 @@
   <executables>
     <variableIterator id="variables"/>
     <iterator id="DmsValueSetViewIterator" Binds="DmsValueSetView"
-              DataControl="DmsModuleDataControl" RangeSize="25"/>
+              DataControl="DmsModuleDataControl" RangeSize="-1"/>
     <methodIterator Binds="getDmsValueView.result"
                     DataControl="DmsModuleDataControl" RangeSize="25"
                     id="getDmsValueViewIterator"/>
-    <iterator Binds="DmsEnabledGroupView" RangeSize="10"
+    <iterator Binds="DmsEnabledGroupView" RangeSize="-1"
               DataControl="DmsModuleDataControl"
               id="DmsEnabledGroupViewIterator"/>
     <iterator id="DmsGroupValueViewIterator" Binds="DmsGroupValueView"

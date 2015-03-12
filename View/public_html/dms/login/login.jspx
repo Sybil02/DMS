@@ -26,7 +26,25 @@
                                -moz-background-size: contain;
                                -o-background-size: contain;
                                background-size: contain;">
-          <f:facet name="bottom"/>
+          <f:facet name="bottom">
+            <af:popup id="p1" autoCancel="disabled" childCreation="deferred"
+                      binding="#{LoginBean.popup}">
+              <af:panelWindow id="pw1" modal="true"
+                              title="#{viewBundle['login.forget_password']}">
+                <af:panelFormLayout id="pfl2" inlineStyle="width:230px;height:80px;">
+                  <af:inputText label="#{viewBundle['login.account']}" id="it1"
+                                binding="#{LoginBean.acc}"/>
+                  <af:inputText label="#{viewBundle['dms.user.mail']}" id="it2"
+                                binding="#{LoginBean.mail}"/>
+                  <f:facet name="footer">
+                    <af:commandButton inlineStyle="width:80px;margin-top:10px;margin-left:70px" text="#{viewBundle['login.reset_password']}" id="cb1"
+                                      actionListener="#{LoginBean.forgetPassword}"
+                                      partialSubmit="true"/>
+                  </f:facet>
+                </af:panelFormLayout>
+              </af:panelWindow>
+            </af:popup>
+          </f:facet>
           <f:facet name="center">
             <af:panelFormLayout id="pfl1">
               <af:inputText label="#{viewBundle['login.account']}"
@@ -38,9 +56,11 @@
                               inlineStyle="color:#d00000;"/>
               <f:facet name="footer">
                 <af:panelGroupLayout id="pgl1">
-                  <af:goLink text="#{viewBundle['login.forget_password']}"
+                  <af:commandLink text="#{viewBundle['login.forget_password']}"
                              id="login_forget_pwd"
-                             inlineStyle="margin-left:2px"/>
+                             inlineStyle="margin-left:2px">
+                    <af:showPopupBehavior popupId="p1"/>
+                  </af:commandLink>
                   <af:commandButton text="#{viewBundle['login.login_action']}"
                                     id="login_action"
                                     inlineStyle="margin-left:108px;width:50px"

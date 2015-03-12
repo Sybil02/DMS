@@ -631,6 +631,11 @@
    </hash>
    <hash n="oracle.jdeveloper.runner.RunConfigurations">
       <hash n="runConfigurationDefinitions">
+         <hash n="Copy of Default">
+            <value n="custom" v="false"/>
+            <value n="name" v="Copy of Default"/>
+            <url n="targetURL" path="src/common/MailTest.java"/>
+         </hash>
          <hash n="Default">
             <value n="custom" v="false"/>
             <value n="javaOptions" v=""/>
@@ -649,6 +654,7 @@
          </hash>
       </hash>
       <list n="runConfigurationList">
+         <string v="Copy of Default"/>
          <string v="Default"/>
       </list>
    </hash>

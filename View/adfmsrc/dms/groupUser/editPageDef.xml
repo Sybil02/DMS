@@ -5,7 +5,7 @@
   <executables>
     <variableIterator id="variables"/>
     <iterator id="DmsGroupViewIterator" Binds="DmsEnabledGroupView"
-              DataControl="DmsModuleDataControl" RangeSize="25"/>
+              DataControl="DmsModuleDataControl" RangeSize="-1"/>
     <iterator Binds="DmsGroupedUserView" RangeSize="25"
               DataControl="DmsModuleDataControl"
               id="DmsGroupedUserViewIterator"/>

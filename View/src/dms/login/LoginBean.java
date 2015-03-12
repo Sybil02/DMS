@@ -4,13 +4,28 @@ import com.bea.security.utils.DigestUtils;
 
 import common.DmsUtils;
 
+import common.JSFUtils;
+
+import common.MailSender;
+
 import java.io.IOException;
+
+import java.io.UnsupportedEncodingException;
+
+import java.security.NoSuchAlgorithmException;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import java.util.Random;
+
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+
+import javax.faces.event.ActionEvent;
+
+import javax.mail.MessagingException;
+import javax.mail.internet.AddressException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -19,6 +34,9 @@ import oracle.adf.controller.ControllerContext;
 
 import oracle.adf.share.ADFContext;
 import oracle.adf.share.logging.ADFLogger;
+
+import oracle.adf.view.rich.component.rich.RichPopup;
+import oracle.adf.view.rich.component.rich.input.RichInputText;
 
 import oracle.jbo.ApplicationModule;
 import oracle.jbo.Row;
@@ -39,6 +57,9 @@ public class LoginBean {
     private String password;
     private static ADFLogger _logger =
         ADFLogger.createADFLogger(LoginBean.class);
+    private RichInputText acc;
+    private RichInputText mail;
+    private RichPopup popup;
 
     public LoginBean() {
     }
@@ -123,5 +144,71 @@ public class LoginBean {
         } catch (IOException e) {
             _logger.severe(e);
         }
+    }
+
+    public void forgetPassword(ActionEvent actionEvent) {
+        String account=ObjectUtils.toString(this.acc.getValue()).trim();
+        String mail=ObjectUtils.toString(this.mail.getValue()).trim();
+        if(account.length()==0){
+            JSFUtils.addFacesInformationMessage(DmsUtils.getMsg("login.input_account_msg"));
+        }else if(mail.length()==0){
+            JSFUtils.addFacesInformationMessage(DmsUtils.getMsg("login.mail_input.message"));
+        }
+        else{
+            DmsUserViewImpl userVo=DmsUtils.getDmsApplicationModule().getDmsUserView();
+            userVo.queryUserByAcc(account);
+            DmsUserViewRowImpl row = (DmsUserViewRowImpl)userVo.first();
+            if(row==null){
+                JSFUtils.addFacesInformationMessage(DmsUtils.getMsg("login.account_not_exist"));
+            }else{
+                if(!mail.equals(row.getMail())){
+                    JSFUtils.addFacesInformationMessage(DmsUtils.getMsg("login.acc.mail.msg"));
+                }else{
+                    String newPwd=DmsUtils.getRandomString(8);
+                    try {
+                        row.setPwd(DigestUtils.digestSHA1(row.getAcc() +newPwd));
+                        row.getApplicationModule().getTransaction().commit();
+                        this.sendMail(row.getMail(), 
+                                      DmsUtils.getMsg("login.password_reset"), 
+                                      DmsUtils.getMsg("login.pwd_reset_msg")+newPwd);
+                        JSFUtils.addFacesInformationMessage(DmsUtils.getMsg("login.reset_mail"));
+                    } catch (Exception e) {
+                        this._logger.severe(e);
+                        JSFUtils.addFacesInformationMessage(DmsUtils.getMsg("login.passwrod_reset_fail"));
+                    }
+                }
+            }
+        }
+        this.popup.cancel();
+    } 
+    
+    private void sendMail(String mailAddr,String title,String msg) throws AddressException,
+                                             MessagingException {
+        MailSender sender=new MailSender();
+        sender.send(mailAddr, title, msg);
+    }
+
+    public void setAcc(RichInputText acc) {
+        this.acc = acc;
+    }
+
+    public RichInputText getAcc() {
+        return acc;
+    }
+
+    public void setMail(RichInputText mail) {
+        this.mail = mail;
+    }
+
+    public RichInputText getMail() {
+        return mail;
+    }
+
+    public void setPopup(RichPopup popup) {
+        this.popup = popup;
+    }
+
+    public RichPopup getPopup() {
+        return popup;
     }
 }

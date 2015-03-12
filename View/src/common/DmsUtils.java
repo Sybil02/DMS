@@ -1,5 +1,8 @@
 package common;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
 import java.util.ResourceBundle;
 
 import javax.faces.application.FacesMessage;
@@ -9,6 +12,8 @@ import oracle.adf.model.binding.DCIteratorBinding;
 import oracle.adf.view.rich.component.rich.data.RichTable;
 
 import oracle.jbo.Key;
+import oracle.jbo.Row;
+import oracle.jbo.ViewObject;
 import oracle.jbo.uicli.binding.JUCtrlHierBinding;
 
 import oracle.jbo.uicli.binding.JUCtrlHierNodeBinding;
@@ -24,7 +29,18 @@ public class DmsUtils {
     public DmsUtils() {
         super();
     }
-
+    
+    public static String getRandomString(int length) { //length表示生成字符串的长度  
+        String base = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";     
+        Random random = new Random();     
+        StringBuffer sb = new StringBuffer();     
+        for (int i = 0; i < length; i++) {     
+            int number = random.nextInt(base.length());     
+            sb.append(base.charAt(number));     
+        }     
+        return sb.toString();     
+     }  
+    
     public static String getMsg(String key) {
         FacesContext context = FacesContext.getCurrentInstance();
         ResourceBundle bundle =
@@ -68,5 +84,16 @@ public class DmsUtils {
     }
     public static Odi11gModuleImpl getOdi11gApplicationModule(){
         return (Odi11gModuleImpl)ADFUtils.getApplicationModuleForDataControl("Odi11gModuleDataControl");
+    }
+    public static Map getSystemProperty(){
+        Map props=new HashMap();
+        ViewObject vo=getDmsApplicationModule().getDmsPropertyView();
+        vo.reset();
+        vo.executeQuery();
+        while(vo.hasNext()){
+            Row row=vo.next();
+            props.put(row.getAttribute("Key1"), row.getAttribute("Value"));
+        }
+        return props;
     }
 }

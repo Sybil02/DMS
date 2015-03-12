@@ -10,7 +10,7 @@
   <af:document id="d1">
     <af:messages id="m1"/>
     <af:form id="f1">
-      <af:outputLabel value="#{viewBundle['dcm.template_not_found']}" id="ol1"/>
+      <af:outputLabel value="#{viewBundle['login.reset_mail']}" id="ol1"/>
     </af:form>
   </af:document>
 </f:view>

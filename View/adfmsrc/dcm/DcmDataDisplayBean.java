@@ -846,7 +846,6 @@ public class DcmDataDisplayBean extends TablePagination{
         sql.append("SELECT V.CODE,V.MEANING FROM \"");
         sql.append(header.getSrcTable()).append("\" V");
         sql.append(" WHERE V.LOCALE='").append(this.curUser.getLocale()).append("'");
-        sql.append(" AND V.ENABLED='Y'");
         if ("Y".equals(header.getIsAuthority())) {
             sql.append(" AND EXISTS(SELECT 1 FROM ");
             sql.append(" DMS_USER_VALUE_V T");

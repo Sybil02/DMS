@@ -24,7 +24,8 @@
        DmsProperty.UPDATED_AT, 
        DmsProperty.UPDATED_BY, 
        DmsProperty.CREATED_BY
-FROM DMS_PROPERTY DmsProperty]]>
+FROM DMS_PROPERTY DmsProperty
+WHERE  DmsProperty.ENABLE_FLAG='Y']]>
   </SQLQuery>
   <EntityUsage
     Name="DmsProperty"

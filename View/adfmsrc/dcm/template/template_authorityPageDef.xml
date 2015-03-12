@@ -6,7 +6,7 @@
   <executables>
     <variableIterator id="variables"/>
     <iterator id="DmsEnabledRoleIterator" Binds="DmsEnabledRole"
-              DataControl="DcmModuleDataControl" RangeSize="25"/>
+              DataControl="DcmModuleDataControl" RangeSize="-1"/>
     <iterator Binds="DcmRoleTemplateView" RangeSize="25"
               DataControl="DcmModuleDataControl"
               id="DcmRoleTemplateViewIterator"/>

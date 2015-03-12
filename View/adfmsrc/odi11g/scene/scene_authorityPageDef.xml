@@ -6,7 +6,7 @@
   <executables>
     <variableIterator id="variables"/>
     <iterator id="DmsEnabledRoleIterator" Binds="DmsEnabledRole"
-              DataControl="Odi11gModuleDataControl" RangeSize="25"/>
+              DataControl="Odi11gModuleDataControl" RangeSize="-1"/>
     <iterator Binds="Odi11RoleSceneView" RangeSize="25"
               DataControl="Odi11gModuleDataControl"
               id="Odi11RoleSceneViewIterator"/>
