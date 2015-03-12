@@ -92,7 +92,7 @@ public class DmsUtils {
         vo.executeQuery();
         while(vo.hasNext()){
             Row row=vo.next();
-            props.put(row.getAttribute("Key1"), row.getAttribute("Value"));
+            props.put(row.getAttribute("Ckey"), row.getAttribute("Cvalue"));
         }
         return props;
     }

@@ -30,30 +30,6 @@
     </DesignTime>
   </Attribute>
   <Attribute
-    Name="Key1"
-    Precision="100"
-    ColumnName="KEY"
-    SQLType="VARCHAR"
-    Type="java.lang.String"
-    ColumnType="VARCHAR2"
-    TableName="DMS_PROPERTY">
-    <DesignTime>
-      <Attr Name="_DisplaySize" Value="100"/>
-    </DesignTime>
-  </Attribute>
-  <Attribute
-    Name="Value"
-    Precision="100"
-    ColumnName="VALUE"
-    SQLType="VARCHAR"
-    Type="java.lang.String"
-    ColumnType="VARCHAR2"
-    TableName="DMS_PROPERTY">
-    <DesignTime>
-      <Attr Name="_DisplaySize" Value="100"/>
-    </DesignTime>
-  </Attribute>
-  <Attribute
     Name="EnableFlag"
     Precision="10"
     ColumnName="ENABLE_FLAG"
@@ -63,18 +39,6 @@
     TableName="DMS_PROPERTY">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="39"/>
-    </DesignTime>
-  </Attribute>
-  <Attribute
-    Name="Desc1"
-    Precision="300"
-    ColumnName="DESC"
-    SQLType="VARCHAR"
-    Type="java.lang.String"
-    ColumnType="VARCHAR2"
-    TableName="DMS_PROPERTY">
-    <DesignTime>
-      <Attr Name="_DisplaySize" Value="300"/>
     </DesignTime>
   </Attribute>
   <Attribute
@@ -123,6 +87,42 @@
       <Attr Name="_DisplaySize" Value="32"/>
     </DesignTime>
   </Attribute>
+  <Attribute
+    Name="Ckey"
+    Precision="100"
+    ColumnName="CKEY"
+    SQLType="VARCHAR"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    TableName="DMS_PROPERTY">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="100"/>
+    </DesignTime>
+  </Attribute>
+  <Attribute
+    Name="Cvalue"
+    Precision="100"
+    ColumnName="CVALUE"
+    SQLType="VARCHAR"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    TableName="DMS_PROPERTY">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="100"/>
+    </DesignTime>
+  </Attribute>
+  <Attribute
+    Name="Cdesc"
+    Precision="300"
+    ColumnName="CDESC"
+    SQLType="VARCHAR"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    TableName="DMS_PROPERTY">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="300"/>
+    </DesignTime>
+  </Attribute>
   <Key
     Name="PkDmsProperty"
     PrimaryKey="true">
@@ -134,9 +134,9 @@
     </AttrArray>
   </Key>
   <Key
-    Name="SysC007090">
+    Name="SysC0017923">
     <DesignTime>
-      <Attr Name="_DBObjectName" Value="SYS_C007090"/>
+      <Attr Name="_DBObjectName" Value="SYS_C0017923"/>
       <Attr Name="_checkCondition" Value='"ID" IS NOT NULL'/>
       <Attr Name="_isCheck" Value="true"/>
     </DesignTime>

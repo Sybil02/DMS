@@ -920,10 +920,10 @@ comment on column DMS_MENU.CREATED_BY is
 create table DMS_PROPERTY 
 (
    ID                   VARCHAR2(32)         not null,
-   KEY                  VARCHAR2(100),
-   VALUE                VARCHAR2(100),
+   CKEY                  VARCHAR2(100),
+   CVALUE                VARCHAR2(100),
    ENABLE_FLAG          VARCHAR2(10),
-   "DESC"               VARCHAR2(300),
+   CDESC               VARCHAR2(300),
    CREATED_AT           DATE,
    UPDATED_AT           DATE,
    UPDATED_BY           VARCHAR2(32),

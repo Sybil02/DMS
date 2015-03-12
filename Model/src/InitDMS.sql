@@ -411,11 +411,15 @@ values('104000','en',100003,'Papers Platform','Y',null,'104000',sysdate,sysdate,
 /*==============================================================*/
 /* 初始化系统属性                                                 */
 /*==============================================================*/
-insert into dms_property(id,key,value,enable_flag,"DESC",created_at,updated_at,created_by,updated_by)
-values('10001','mail.host','mail.hand-china.com','Y','邮件服务器',sysdate,sysdate,'10000','10000');
 
-insert into dms_property(id,key,value,enable_flag,"DESC",created_at,updated_at,created_by,updated_by)
-values('10002','mail.account','xxxx@hand-china.com','Y','邮箱帐号',sysdate,sysdate,'10000','10000');
+insert into dms_property(id,ckey,cvalue,enable_flag,cdesc,created_at,updated_at,created_by,updated_by)
+values('10001','mail.host','smtp.sina.com','Y','邮件服务器',sysdate,sysdate,'10000','10000');
 
-insert into dms_property(id,key,value,enable_flag,"DESC",created_at,updated_at,created_by,updated_by)
-values('10003','mail.password','xxxx','Y','邮箱密码',sysdate,sysdate,'10000','10000');
+insert into dms_property(id,ckey,cvalue,enable_flag,cdesc,created_at,updated_at,created_by,updated_by)
+values('10002','mail.account','dmshand@sina.com','Y','邮箱帐号',sysdate,sysdate,'10000','10000');
+
+insert into dms_property(id,ckey,cvalue,enable_flag,cdesc,created_at,updated_at,created_by,updated_by)
+values('10003','mail.password','handhand','Y','邮箱密码',sysdate,sysdate,'10000','10000');
+
+insert into dms_property(id,ckey,cvalue,enable_flag,cdesc,created_at,updated_at,created_by,updated_by)
+values('10004','mail.port','25','Y','邮箱端口',sysdate,sysdate,'10000','10000');

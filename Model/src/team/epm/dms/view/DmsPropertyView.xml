@@ -16,14 +16,14 @@
   </DesignTime>
   <SQLQuery>
     <![CDATA[SELECT DmsProperty.ID, 
-       DmsProperty.KEY, 
-       DmsProperty.VALUE, 
        DmsProperty.ENABLE_FLAG, 
-       DmsProperty."DESC", 
        DmsProperty.CREATED_AT, 
        DmsProperty.UPDATED_AT, 
        DmsProperty.UPDATED_BY, 
-       DmsProperty.CREATED_BY
+       DmsProperty.CREATED_BY,
+       DmsProperty.CKEY, 
+       DmsProperty.CVALUE, 
+       DmsProperty.CDESC
 FROM DMS_PROPERTY DmsProperty
 WHERE  DmsProperty.ENABLE_FLAG='Y']]>
   </SQLQuery>
@@ -38,29 +38,11 @@ WHERE  DmsProperty.ENABLE_FLAG='Y']]>
     EntityUsage="DmsProperty"
     AliasName="ID"/>
   <ViewAttribute
-    Name="Key1"
-    PrecisionRule="true"
-    EntityAttrName="Key1"
-    EntityUsage="DmsProperty"
-    AliasName="KEY"/>
-  <ViewAttribute
-    Name="Value"
-    PrecisionRule="true"
-    EntityAttrName="Value"
-    EntityUsage="DmsProperty"
-    AliasName="VALUE"/>
-  <ViewAttribute
     Name="EnableFlag"
     PrecisionRule="true"
     EntityAttrName="EnableFlag"
     EntityUsage="DmsProperty"
     AliasName="ENABLE_FLAG"/>
-  <ViewAttribute
-    Name="Desc1"
-    PrecisionRule="true"
-    EntityAttrName="Desc1"
-    EntityUsage="DmsProperty"
-    AliasName="DESC"/>
   <ViewAttribute
     Name="CreatedAt"
     PrecisionRule="true"
@@ -85,4 +67,22 @@ WHERE  DmsProperty.ENABLE_FLAG='Y']]>
     EntityAttrName="CreatedBy"
     EntityUsage="DmsProperty"
     AliasName="CREATED_BY"/>
+  <ViewAttribute
+    Name="Ckey"
+    PrecisionRule="true"
+    EntityAttrName="Ckey"
+    EntityUsage="DmsProperty"
+    AliasName="CKEY"/>
+  <ViewAttribute
+    Name="Cvalue"
+    PrecisionRule="true"
+    EntityAttrName="Cvalue"
+    EntityUsage="DmsProperty"
+    AliasName="CVALUE"/>
+  <ViewAttribute
+    Name="Cdesc"
+    PrecisionRule="true"
+    EntityAttrName="Cdesc"
+    EntityUsage="DmsProperty"
+    AliasName="CDESC"/>
 </ViewObject>
