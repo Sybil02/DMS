@@ -125,7 +125,7 @@ public class ValueSetAuthorityBean {
     }
 
     public void add_value(ActionEvent actionEvent) {
-        ADFUtils.findIterator("getDmsValueViewIterator").getViewObject().remove();
+        ADFUtils.findIterator("getDmsValueViewIterator").getViewObject().executeQuery();
         RichPopup.PopupHints hint=new RichPopup.PopupHints();
         this.popup.show(hint);
     }

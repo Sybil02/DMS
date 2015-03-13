@@ -150,6 +150,6 @@
     </jsp-property-group>
   </jsp-config>
   <welcome-file-list>
-    <welcome-file >/faces/index</welcome-file>
+    <welcome-file >faces/index</welcome-file>
   </welcome-file-list>
 </web-app>

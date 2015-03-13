@@ -1149,7 +1149,8 @@ create table DMS_USER
    OTHER_INFO           VARCHAR2(1000),
    constraint PK_DMS_USER primary key (ID)
 );
-
+alter table DMS_USER
+  add constraint UK_DMS_USER_ACC unique (ACC);
 comment on table DMS_USER is
 '用户表';
 
