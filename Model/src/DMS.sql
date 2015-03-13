@@ -937,16 +937,16 @@ comment on table DMS_PROPERTY is
 comment on column DMS_PROPERTY.ID is
 '标识ID';
 
-comment on column DMS_PROPERTY.KEY is
+comment on column DMS_PROPERTY.CKEY is
 '属性';
 
-comment on column DMS_PROPERTY.VALUE is
+comment on column DMS_PROPERTY.CVALUE is
 '属性值';
 
 comment on column DMS_PROPERTY.ENABLE_FLAG is
 '有效标识';
 
-comment on column DMS_PROPERTY."DESC" is
+comment on column DMS_PROPERTY."CDESC" is
 '描述';
 
 comment on column DMS_PROPERTY.CREATED_AT is
