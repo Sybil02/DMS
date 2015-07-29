@@ -65,6 +65,12 @@
    <ViewUsage
       Name="DcmUnAssignedTemplate"
       ViewObjectName="team.epm.dcm.view.DcmUnAssignedTemplate"/>
+   <ViewUsage
+      Name="DcmTemplateCalcVO"
+      ViewObjectName="team.epm.dcm.view.DcmTemplateCalcVO"/>
+   <ViewUsage
+      Name="DcmCalcParameterVO"
+      ViewObjectName="team.epm.dcm.view.DcmCalcParameterVO"/>
    <ViewLinkUsage
       Name="DcmCombinationVsLnk"
       ViewLinkObjectName="team.epm.dcm.view.viewlink.DcmCombinationVsLnk"
@@ -89,6 +95,57 @@
       SrcViewUsageName="team.epm.module.DcmModule.DcmTemplateView"
       DstViewUsageName="team.epm.module.DcmModule.DcmTemplateValidationView"
       Reversed="false"/>
+   <ViewLinkUsage
+      Name="DcmTemplateCalcLnk1"
+      ViewLinkObjectName="team.epm.dcm.view.viewlink.DcmTemplateCalcLnk"
+      SrcViewUsageName="team.epm.module.DcmModule.DcmTemplateView"
+      DstViewUsageName="team.epm.module.DcmModule.DcmTemplateCalcVO"
+      Reversed="false"/>
+   <ViewLinkUsage
+      Name="DcmCalcParameterLnk"
+      ViewLinkObjectName="team.epm.dcm.view.viewlink.DcmCalcParameterLnk"
+      SrcViewUsageName="team.epm.module.DcmModule.DcmTemplateCalcVO"
+      DstViewUsageName="team.epm.module.DcmModule.DcmCalcParameterVO"
+      Reversed="false"/>
+   <ClientInterface>
+      <Method
+         Name="getCombinationRecordView">
+         <Return
+            Type="oracle.jbo.ViewObject"/>
+         <Parameter
+            Name="templateId"
+            Type="java.lang.String"/>
+         <Parameter
+            Name="combinationId"
+            Type="java.lang.String"/>
+      </Method>
+   </ClientInterface>
+   <ClientInterface>
+      <Method
+         Name="getCombinationRecordView">
+         <Return
+            Type="oracle.jbo.ViewObject"/>
+         <Parameter
+            Name="templateId"
+            Type="java.lang.String"/>
+         <Parameter
+            Name="combinationId"
+            Type="java.lang.String"/>
+      </Method>
+   </ClientInterface>
+   <ClientInterface>
+      <Method
+         Name="getCombinationRecordView">
+         <Return
+            Type="oracle.jbo.ViewObject"/>
+         <Parameter
+            Name="templateId"
+            Type="java.lang.String"/>
+         <Parameter
+            Name="combinationId"
+            Type="java.lang.String"/>
+      </Method>
+   </ClientInterface>
    <ClientInterface>
       <Method
          Name="getCombinationRecordView">

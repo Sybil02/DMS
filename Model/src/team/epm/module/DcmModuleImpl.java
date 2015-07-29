@@ -295,6 +295,40 @@ public class DcmModuleImpl extends ApplicationModuleImpl implements DcmModule {
     public ViewObjectImpl getDcmUnAssignedTemplate() {
         return (ViewObjectImpl)findViewObject("DcmUnAssignedTemplate");
     }
+
+
+    /**
+     * Container's getter for DcmTemplateCalcVO.
+     * @return DcmTemplateCalcVO
+     */
+    public ViewObjectImpl getDcmTemplateCalcVO() {
+        return (ViewObjectImpl)findViewObject("DcmTemplateCalcVO");
+    }
+
+    /**
+     * Container's getter for DcmTemplateCalcLnk1.
+     * @return DcmTemplateCalcLnk1
+     */
+    public ViewLinkImpl getDcmTemplateCalcLnk1() {
+        return (ViewLinkImpl)findViewLink("DcmTemplateCalcLnk1");
+    }
+
+
+    /**
+     * Container's getter for DcmCalcParameterVO.
+     * @return DcmCalcParameterVO
+     */
+    public ViewObjectImpl getDcmCalcParameterVO() {
+        return (ViewObjectImpl)findViewObject("DcmCalcParameterVO");
+    }
+
+    /**
+     * Container's getter for DcmCalcParameterLnk.
+     * @return DcmCalcParameterLnk
+     */
+    public ViewLinkImpl getDcmCalcParameterLnk() {
+        return (ViewLinkImpl)findViewLink("DcmCalcParameterLnk");
+    }
 }
 
 

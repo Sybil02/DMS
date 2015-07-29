@@ -62,6 +62,130 @@
             </af:panelStretchLayout>
           </af:panelWindow>
         </af:popup>
+        <!-- 计算程序管理 -->
+        <af:popup id="p3" autoCancel="disabled"
+                  binding="#{pageFlowScope.TemplateBackingBean.calcWnd}">
+          <af:panelWindow id="pw3">
+            <af:panelStretchLayout id="psl4" topHeight="250px" inlineStyle="width:800px;height:450px">
+              <f:facet name="top">
+                 <af:panelCollection id="pc5">
+              <f:facet name="menus"/>
+              <f:facet name="toolbar">
+                <af:toolbar id="t10">
+                  <af:commandButton text="增加" actionListener="#{bindings.CreateInsertCalc.execute}" id="cb16"/>
+                  <af:commandButton text="删除" actionListener="#{bindings.DeleteCalc.execute}" id="cb17"/>
+                  <af:commandButton text="保存" actionListener="#{bindings.Commit.execute}" id="cb18"/>
+                  <af:commandButton text="取消" actionListener="#{bindings.Rollback.execute}" id="cb19"/>
+                </af:toolbar>
+              </f:facet>
+              <f:facet name="statusbar"/>
+              <af:table value="#{bindings.DcmTemplateCalcVO.collectionModel}"
+                        var="row" rows="#{bindings.DcmTemplateCalcVO.rangeSize}"
+                        rowSelection="single" editingMode="clickToEdit"
+                        selectionListener="#{bindings.DcmTemplateCalcVO.collectionModel.makeCurrent}"
+                        emptyText="#{bindings.DcmTemplateCalcVO.viewable ? 'No data to display.' : 'Access Denied.'}"
+                        fetchSize="#{bindings.DcmTemplateCalcVO.rangeSize}"
+                        rowBandingInterval="0" id="t9"
+                        partialTriggers="::cb16 ::cb17">
+                <af:column sortProperty="#{bindings.DcmTemplateCalcVO.hints.CalcName.name}"
+                           sortable="false"
+                           headerText="#{bindings.DcmTemplateCalcVO.hints.CalcName.label}"
+                           id="c31">
+                  <af:inputText value="#{row.bindings.CalcName.inputValue}"
+                                label="#{bindings.DcmTemplateCalcVO.hints.CalcName.label}"
+                                required="#{bindings.DcmTemplateCalcVO.hints.CalcName.mandatory}"
+                                columns="#{bindings.DcmTemplateCalcVO.hints.CalcName.displayWidth}"
+                                maximumLength="#{bindings.DcmTemplateCalcVO.hints.CalcName.precision}"
+                                shortDesc="#{bindings.DcmTemplateCalcVO.hints.CalcName.tooltip}"
+                                id="it18">
+                    <f:validator binding="#{row.bindings.CalcName.validator}"/>
+                  </af:inputText>
+                </af:column>
+                <af:column sortProperty="#{bindings.DcmTemplateCalcVO.hints.CalcProcedure.name}"
+                           sortable="false"
+                           headerText="#{bindings.DcmTemplateCalcVO.hints.CalcProcedure.label}"
+                           id="c29">
+                  <af:inputText value="#{row.bindings.CalcProcedure.inputValue}"
+                                label="#{bindings.DcmTemplateCalcVO.hints.CalcProcedure.label}"
+                                required="#{bindings.DcmTemplateCalcVO.hints.CalcProcedure.mandatory}"
+                                columns="#{bindings.DcmTemplateCalcVO.hints.CalcProcedure.displayWidth}"
+                                maximumLength="#{bindings.DcmTemplateCalcVO.hints.CalcProcedure.precision}"
+                                shortDesc="#{bindings.DcmTemplateCalcVO.hints.CalcProcedure.tooltip}"
+                                id="it17">
+                    <f:validator binding="#{row.bindings.CalcProcedure.validator}"/>
+                  </af:inputText>
+                </af:column>
+                <af:column sortProperty="#{bindings.DcmTemplateCalcVO.hints.CalcSeq.name}"
+                           sortable="false"
+                           headerText="#{bindings.DcmTemplateCalcVO.hints.CalcSeq.label}"
+                           id="c30">
+                  <af:inputText value="#{row.bindings.CalcSeq.inputValue}"
+                                label="#{bindings.DcmTemplateCalcVO.hints.CalcSeq.label}"
+                                required="#{bindings.DcmTemplateCalcVO.hints.CalcSeq.mandatory}"
+                                columns="#{bindings.DcmTemplateCalcVO.hints.CalcSeq.displayWidth}"
+                                maximumLength="#{bindings.DcmTemplateCalcVO.hints.CalcSeq.precision}"
+                                shortDesc="#{bindings.DcmTemplateCalcVO.hints.CalcSeq.tooltip}"
+                                id="it16">
+                    <f:validator binding="#{row.bindings.CalcSeq.validator}"/>
+                    <af:convertNumber groupingUsed="false"
+                                      pattern="#{bindings.DcmTemplateCalcVO.hints.CalcSeq.format}"/>
+                  </af:inputText>
+                </af:column>
+              </af:table>
+              </af:panelCollection>
+              </f:facet>
+              <f:facet name="center">
+              <af:panelCollection id="pc6">
+              <f:facet name="menus"/>
+                  <f:facet name="toolbar">
+                    <af:toolbar id="t12">
+                      <af:commandButton text="增加" actionListener="#{bindings.CreateInsertParameter.execute}" id="cb20"/>
+                      <af:commandButton text="删除" actionListener="#{bindings.DeleteParameter.execute}" id="cb21"/>
+                      <af:commandButton text="保存" actionListener="#{bindings.Commit.execute}" id="cb22"/>
+                      <af:commandButton text="取消" actionListener="#{bindings.Rollback.execute}" id="cb23"/>
+                    </af:toolbar>
+                  </f:facet>
+              <f:facet name="statusbar"/>
+              <af:table value="#{bindings.DcmCalcParameterVO.collectionModel}"
+                        var="row" partialTriggers=":::pc5:t9 ::cb20 ::cb21"
+                        rows="#{bindings.DcmCalcParameterVO.rangeSize}"
+                        emptyText="#{bindings.DcmCalcParameterVO.viewable ? 'No data to display.' : 'Access Denied.'}"
+                        fetchSize="#{bindings.DcmCalcParameterVO.rangeSize}"
+                        rowBandingInterval="0" id="t11">
+                <af:column sortProperty="#{bindings.DcmCalcParameterVO.hints.PName.name}"
+                           sortable="false"
+                           headerText="#{bindings.DcmCalcParameterVO.hints.PName.label}"
+                           id="c32">
+                  <af:inputText value="#{row.bindings.PName.inputValue}"
+                                label="#{bindings.DcmCalcParameterVO.hints.PName.label}"
+                                required="#{bindings.DcmCalcParameterVO.hints.PName.mandatory}"
+                                columns="#{bindings.DcmCalcParameterVO.hints.PName.displayWidth}"
+                                maximumLength="#{bindings.DcmCalcParameterVO.hints.PName.precision}"
+                                shortDesc="#{bindings.DcmCalcParameterVO.hints.PName.tooltip}"
+                                id="it20">
+                    <f:validator binding="#{row.bindings.PName.validator}"/>
+                  </af:inputText>
+                </af:column>
+                <af:column sortProperty="#{bindings.DcmCalcParameterVO.hints.ValueSetId.name}"
+                           sortable="false"
+                           headerText="#{bindings.DcmCalcParameterVO.hints.ValueSetId.label}"
+                           id="c33">
+                  <af:inputText value="#{row.bindings.ValueSetId.inputValue}"
+                                label="#{bindings.DcmCalcParameterVO.hints.ValueSetId.label}"
+                                required="#{bindings.DcmCalcParameterVO.hints.ValueSetId.mandatory}"
+                                columns="#{bindings.DcmCalcParameterVO.hints.ValueSetId.displayWidth}"
+                                maximumLength="#{bindings.DcmCalcParameterVO.hints.ValueSetId.precision}"
+                                shortDesc="#{bindings.DcmCalcParameterVO.hints.ValueSetId.tooltip}"
+                                id="it19">
+                    <f:validator binding="#{row.bindings.ValueSetId.validator}"/>
+                  </af:inputText>
+                </af:column>
+              </af:table>
+            </af:panelCollection>
+              </f:facet>
+            </af:panelStretchLayout>
+          </af:panelWindow>
+        </af:popup>
         <!-- 校验程序管理 -->
         <af:popup id="p2" autoCancel="disabled"
                   binding="#{pageFlowScope.TemplateBackingBean.validationPopup}">
@@ -192,6 +316,10 @@
               <af:commandButton text="#{viewBundle['dcm.validation.manage']}"
                                 id="cb3"
                                 actionListener="#{pageFlowScope.TemplateBackingBean.showValidationPopup}"/>
+              <af:commandButton text="计算程序管理" id="btn4"
+                                actionListener="#{pageFlowScope.TemplateBackingBean.showCalcWnd}">
+                
+              </af:commandButton>
             </af:group>
           </af:toolbar>
         </f:facet>

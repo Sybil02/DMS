@@ -66,6 +66,7 @@ public class TemplateBackingBean {
     private RichPopup validationPopup;
     //搜索
     private FilterableQueryDescriptor queryDescriptor=new DcmQueryDescriptor();
+    private RichPopup calcWnd;
     static {
         dcmRemainAttr.add("IDX");
         dcmRemainAttr.add("COM_RECORD_ID");
@@ -310,6 +311,11 @@ public class TemplateBackingBean {
         RichPopup.PopupHints hint=new RichPopup.PopupHints();
         this.validationPopup.show(hint);
     }
+    
+    public void showCalcWnd(ActionEvent actionEvent) {
+        RichPopup.PopupHints hint = new RichPopup.PopupHints();
+        this.calcWnd.show(hint);
+    }
 
     public void setValidationPopup(RichPopup validationPopup) {
         this.validationPopup = validationPopup;
@@ -341,4 +347,14 @@ public class TemplateBackingBean {
     public FilterableQueryDescriptor getQueryDescriptor() {
         return queryDescriptor;
     }
+
+    public void setCalcWnd(RichPopup calcWnd) {
+        this.calcWnd = calcWnd;
+    }
+
+    public RichPopup getCalcWnd() {
+        return calcWnd;
+    }
+
+
 }

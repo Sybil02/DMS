@@ -258,6 +258,7 @@ public class DcmTemplateImpl extends DmsEntityImpl {
         }
     }
 
+
     public static final int ID = AttributesEnum.Id.index();
     public static final int LOCALE = AttributesEnum.Locale.index();
     public static final int NAME = AttributesEnum.Name.index();
@@ -285,6 +286,7 @@ public class DcmTemplateImpl extends DmsEntityImpl {
      */
     public DcmTemplateImpl() {
     }
+
 
     /**
      * @return the definition object for this instance class.

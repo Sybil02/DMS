@@ -570,6 +570,11 @@
     ViewLink="team.epm.dcm.view.viewlink.DcmTemplateValidationLnk"
     Type="oracle.jbo.RowIterator"
     IsUpdateable="false"/>
+  <ViewLinkAccessor
+    Name="DcmTemplateCalcVO"
+    ViewLink="team.epm.dcm.view.viewlink.DcmTemplateCalcLnk"
+    Type="oracle.jbo.RowIterator"
+    IsUpdateable="false"/>
   <ResourceBundle>
     <PropertiesBundle
       PropertiesFile="ModelBundle"/>

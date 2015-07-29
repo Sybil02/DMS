@@ -16,6 +16,12 @@
     <iterator Binds="DcmTemplateValidationView" RangeSize="25"
               DataControl="DcmModuleDataControl"
               id="DcmTemplateValidationViewIterator"/>
+    <iterator Binds="DcmTemplateCalcVO" RangeSize="25"
+              DataControl="DcmModuleDataControl"
+              id="DcmTemplateCalcVOIterator"/>
+    <iterator Binds="DcmCalcParameterVO" RangeSize="25"
+              DataControl="DcmModuleDataControl"
+              id="DcmCalcParameterVOIterator"/>
   </executables>
   <bindings>
     <action IterBinding="DcmTemplateViewIterator" id="CreateInsert"
@@ -97,5 +103,40 @@
         </AttrNames>
       </nodeDefinition>
     </tree>
+    <tree IterBinding="DcmTemplateCalcVOIterator" id="DcmTemplateCalcVO">
+      <nodeDefinition DefName="team.epm.dcm.view.DcmTemplateCalcVO"
+                      Name="DcmTemplateCalcVO0">
+        <AttrNames>
+          <Item Value="CalcName"/>
+          <Item Value="CalcProcedure"/>
+          <Item Value="CalcSeq"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <action IterBinding="DcmTemplateCalcVOIterator" id="CreateInsertCalc"
+            InstanceName="DcmModuleDataControl.DcmTemplateCalcVO"
+            DataControl="DcmModuleDataControl" RequiresUpdateModel="true"
+            Action="createInsertRow"/>
+    <action IterBinding="DcmTemplateCalcVOIterator" id="DeleteCalc"
+            InstanceName="DcmModuleDataControl.DcmTemplateCalcVO"
+            DataControl="DcmModuleDataControl" RequiresUpdateModel="false"
+            Action="removeCurrentRow"/>
+    <tree IterBinding="DcmCalcParameterVOIterator" id="DcmCalcParameterVO">
+      <nodeDefinition DefName="team.epm.dcm.view.DcmCalcParameterVO"
+                      Name="DcmCalcParameterVO0">
+        <AttrNames>
+          <Item Value="PName"/>
+          <Item Value="ValueSetId"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <action IterBinding="DcmCalcParameterVOIterator" id="CreateInsertParameter"
+            InstanceName="DcmModuleDataControl.DcmCalcParameterVO"
+            DataControl="DcmModuleDataControl" RequiresUpdateModel="true"
+            Action="createInsertRow"/>
+    <action IterBinding="DcmCalcParameterVOIterator" id="DeleteParameter"
+            InstanceName="DcmModuleDataControl.DcmCalcParameterVO"
+            DataControl="DcmModuleDataControl" RequiresUpdateModel="false"
+            Action="removeCurrentRow"/>
   </bindings>
 </pageDefinition>

@@ -249,6 +249,16 @@ public class DcmTemplateViewRowImpl extends ViewRowImpl {
             }
         }
         ,
+        DcmTemplateCalcVO {
+            public Object get(DcmTemplateViewRowImpl obj) {
+                return obj.getDcmTemplateCalcVO();
+            }
+
+            public void put(DcmTemplateViewRowImpl obj, Object value) {
+                obj.setAttributeInternal(index(), value);
+            }
+        }
+        ,
         LKP_YES_NO {
             public Object get(DcmTemplateViewRowImpl obj) {
                 return obj.getLKP_YES_NO();
@@ -345,6 +355,7 @@ public class DcmTemplateViewRowImpl extends ViewRowImpl {
             return vals;
         }
     }
+
     public static final int ID = AttributesEnum.Id.index();
     public static final int LOCALE = AttributesEnum.Locale.index();
     public static final int NAME = AttributesEnum.Name.index();
@@ -368,6 +379,7 @@ public class DcmTemplateViewRowImpl extends ViewRowImpl {
     public static final int CATEGORYID = AttributesEnum.CategoryId.index();
     public static final int DCMTEMPLATECOLUMNVIEW = AttributesEnum.DcmTemplateColumnView.index();
     public static final int DCMTEMPLATEVALIDATIONVIEW = AttributesEnum.DcmTemplateValidationView.index();
+    public static final int DCMTEMPLATECALCVO = AttributesEnum.DcmTemplateCalcVO.index();
     public static final int LKP_YES_NO = AttributesEnum.LKP_YES_NO.index();
     public static final int LST_USER = AttributesEnum.LST_USER.index();
     public static final int LKP_LANG = AttributesEnum.LKP_LANG.index();
@@ -738,6 +750,13 @@ public class DcmTemplateViewRowImpl extends ViewRowImpl {
      */
     public RowIterator getDcmTemplateValidationView() {
         return (RowIterator)getAttributeInternal(DCMTEMPLATEVALIDATIONVIEW);
+    }
+
+    /**
+     * Gets the associated <code>RowIterator</code> using master-detail link DcmTemplateCalcVO.
+     */
+    public RowIterator getDcmTemplateCalcVO() {
+        return (RowIterator)getAttributeInternal(DCMTEMPLATECALCVO);
     }
 
     /**
