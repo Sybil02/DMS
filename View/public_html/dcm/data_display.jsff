@@ -373,7 +373,14 @@
                 </af:panelGroupLayout>
               </f:facet>
               <f:facet name="center">
-                    
+                <af:panelGroupLayout id="pgl6" layout="horizontal"
+                                     partialTriggers="soc3">
+                    <af:forEach items="#{viewScope.DcmDataDisplayBean.parameterList}" var="calcParameter">
+                    <af:selectOneChoice label="#{calcParameter.paraLabel}" id="soc4">
+                      <f:selectItems value="#{calcParameter.values}" id="si4"/>
+                    </af:selectOneChoice>
+                  </af:forEach>
+                </af:panelGroupLayout>
               </f:facet>
             </af:panelStretchLayout>
           </af:panelWindow>

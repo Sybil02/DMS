@@ -339,6 +339,14 @@ public class DcmModuleImpl extends ApplicationModuleImpl implements DcmModule {
     public ViewObjectImpl getDcmTemplateCalcQueryVO() {
         return (ViewObjectImpl)findViewObject("DcmTemplateCalcQueryVO");
     }
+
+    /**
+     * Container's getter for DcmCalcParameterQueryVO.
+     * @return DcmCalcParameterQueryVO
+     */
+    public ViewObjectImpl getDcmCalcParameterQueryVO() {
+        return (ViewObjectImpl)findViewObject("DcmCalcParameterQueryVO");
+    }
 }
 
 

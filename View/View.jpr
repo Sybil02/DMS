@@ -560,6 +560,7 @@
             <hash>
                <url n="content-folder-url" path="adfmsrc/dcm/"/>
                <list n="pattern-filters">
+                  <string v="+dcm/CalcParameter.java"/>
                   <string v="+dcm/Excel2003WriterImpl.java"/>
                   <string v="+dcm/Excel2007WriterImpl.java"/>
                   <string v="+dcm/DcmQueryDescriptor.java"/>
@@ -645,7 +646,10 @@
             <value n="JavaScriptRunConfigurationStopOnException" v="false"/>
             <value n="JavaScriptRunConfigurationTransferErrors" v="true"/>
             <value n="name" v="Default"/>
-            <hash n="oracle.adfdt.controller.adfc.source.runner.JsfJspRunnerLaunchSettings"/>
+            <hash n="oracle.adfdt.controller.adfc.source.runner.JsfJspRunnerLaunchSettings">
+               <value n="delegateRunTarget" v="/WEB-INF/adfc-config.xml"/>
+               <value n="viewActivityId" v="index"/>
+            </hash>
             <hash n="oracle.jdevimpl.runner.debug.DebugConfiguration">
                <value n="remoteParameter:jpda:jdi_attach_method:" v=""/>
                <value n="remoteParameter:jpdaListen:localAddress" v=""/>

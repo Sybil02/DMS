@@ -138,8 +138,8 @@ public class DcmDataDisplayBean extends TablePagination{
     private Map filters;
     //计算程序窗口
     private RichPopup calcWnd;
-    //模板计算程序
-    //List calcList
+    //计算程序参数
+    List<CalcParameter> parameterList = new ArrayList<CalcParameter>(); 
     //初始化
     public DcmDataDisplayBean() {
         this.curUser =(Person)ADFContext.getCurrent().getSessionScope().get("cur_user");
@@ -1053,6 +1053,8 @@ public class DcmDataDisplayBean extends TablePagination{
     private List<SelectItem> calcNameList = new ArrayList<SelectItem>();
     //初始化计算窗口，查询模板计算程序
     public void showCalcWnd(ActionEvent actionEvent) {
+        //每次打开窗口，清楚上次计算程序
+        this.calcNameList.clear();
         DCIteratorBinding calcIter = ADFUtils.findIterator("DcmTemplateCalcQueryVOIterator");
         ViewObject calcVo = calcIter.getViewObject();
         String whereClause = "TEMPLATE_ID ='"+this.curTempalte.getId()+"'";
@@ -1191,9 +1193,53 @@ public class DcmDataDisplayBean extends TablePagination{
     }
 
     public void calcChange(ValueChangeEvent valueChangeEvent) {
+        System.out.println("change:"+valueChangeEvent.getNewValue());
+        //每次改变程序，清除参数集合
+        this.parameterList.clear();
+        //key：参数名 ， value：值集源表
+        Map<String,String> vsMap = new HashMap<String,String>();
         RichSelectOneChoice calcSoc = (RichSelectOneChoice)valueChangeEvent.getSource();
+        //get calcId
         String calcId = valueChangeEvent.getNewValue().toString();
-        
+        //query calcParameter
+        DCIteratorBinding paraIter = ADFUtils.findIterator("DcmCalcParameterQueryVOIterator");
+        ViewObject paraVo = paraIter.getViewObject();
+        String whereClause = "CALC_ID = '" + calcId + "'";
+        paraVo.setWhereClause(whereClause);
+        paraVo.executeQuery();
+        Row[] rows = paraIter.getAllRowsInRange();
+        System.out.println(calcId+":size:"+rows.length);
+        //获得事务
+        DBTransaction dbTransaction =(DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
+        Statement stat=dbTransaction.createStatement(DBTransaction.DEFAULT);
+        try {
+        for(Row row:rows){
+            String pName = row.getAttribute("PName").toString();
+            String valueSetId = row.getAttribute("ValueSetId").toString();
+            StringBuffer sqlStr = new StringBuffer();
+            sqlStr.append("select distinct t.source from dms_value_set t where t.code = '");
+            sqlStr.append(valueSetId).append("'");
+            ResultSet rs;
+            //值集对应的表源
+            String source = "";
+                System.out.println("sql:"+sqlStr.toString());
+                rs = stat.executeQuery(sqlStr.toString());
+                if(rs.next()){
+                    source = rs.getString("SOURCE");
+                    System.out.println("table:"+source);
+                }
+                rs.close();
+                vsMap.put(pName, source);
+        }
+        stat.close();
+        } catch (SQLException e) {
+            this._logger.severe(e);
+        }
+        for(Map.Entry<String,String> entry : vsMap.entrySet()){
+            System.out.println(entry.getKey()+"~~~8~~~"+entry.getValue());
+        }
+        //查询参数对应的值集
+        queryVS(vsMap);
     }
 
     public void setCalcNameList(List<SelectItem> calcNameList) {
@@ -1202,5 +1248,43 @@ public class DcmDataDisplayBean extends TablePagination{
 
     public List<SelectItem> getCalcNameList() {
         return calcNameList;
+    }
+
+    private void queryVS(Map<String, String> vsMap) {
+        //获得事务
+        DBTransaction dbTransaction =(DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
+        Statement stat=dbTransaction.createStatement(DBTransaction.DEFAULT);
+        try{
+        //查询出所有值并生成SelectItem
+        for(Map.Entry<String,String> entry : vsMap.entrySet()){
+            String sqlStr = "select code,meaning from " + entry.getValue() + " where locale ='" + this.curUser.getLocale() + "' order by idx";
+            ResultSet rs ;
+            List<SelectItem> itemList = new ArrayList<SelectItem>();
+            rs = stat.executeQuery(sqlStr);
+            while(rs.next()){
+                String code = rs.getString("CODE");
+                String meaning = rs.getString("MEANING");
+                SelectItem item = new SelectItem();
+                item.setLabel(meaning);
+                item.setValue(code);
+                itemList.add(item);
+            }
+            rs.close();
+            //每个参数实例化一个CalcParameter类
+            CalcParameter calcpara = new CalcParameter(entry.getKey(),"","",itemList);
+            parameterList.add(calcpara);
+        }
+            stat.close();
+        }catch(Exception e){
+            this._logger.severe(e);
+        }
+    }
+
+    public void setParameterList(List<CalcParameter> parameterList) {
+        this.parameterList = parameterList;
+    }
+
+    public List<CalcParameter> getParameterList() {
+        return parameterList;
     }
 }
