@@ -71,6 +71,10 @@
                 <af:showPopupBehavior popupId="::p4" alignId=""/>
               </af:commandButton>
             </af:group>
+            <af:group id="g6">
+              <af:commandButton text="模板计算" id="cb5"
+                                actionListener="#{viewScope.DcmDataDisplayBean.showCalcWnd}"/>
+            </af:group>
           </af:toolbar>
         </f:facet>
         <!-- 分页控件 -->
@@ -352,6 +356,26 @@
                 </af:gridCell>
               </af:gridRow>
             </af:panelGridLayout>
+          </af:panelWindow>
+        </af:popup>
+        <!-- 计算程序 -->
+        <af:popup id="p5" binding="#{viewScope.DcmDataDisplayBean.calcWnd}">
+          <af:panelWindow title="运行计算程序" id="pw5" >
+            <af:panelStretchLayout id="psl3" inlineStyle="width:400px;height:120px">
+              <f:facet name="top">
+                <af:panelGroupLayout id="pgl5">
+                  <af:selectOneChoice label="计算程序" id="soc3"
+                   autoSubmit="true"
+                   valueChangeListener="#{viewScope.DcmDataDisplayBean.calcChange}">
+                    <f:selectItems value="#{viewScope.DcmDataDisplayBean.calcNameList}"
+                                   id="si3"/>
+                  </af:selectOneChoice>
+                </af:panelGroupLayout>
+              </f:facet>
+              <f:facet name="center">
+                    
+              </f:facet>
+            </af:panelStretchLayout>
           </af:panelWindow>
         </af:popup>
       </af:panelGroupLayout>

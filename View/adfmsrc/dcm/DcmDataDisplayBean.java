@@ -50,6 +50,8 @@ import javax.faces.event.ValueChangeEvent;
 
 import javax.faces.model.SelectItem;
 
+import oracle.adf.model.binding.DCIteratorBinding;
+import oracle.adf.model.binding.DCIteratorBindingDef;
 import oracle.adf.share.ADFContext;
 import oracle.adf.share.logging.ADFLogger;
 import oracle.adf.view.rich.component.rich.RichPopup;
@@ -134,6 +136,10 @@ public class DcmDataDisplayBean extends TablePagination{
     //搜索
     private FilterableQueryDescriptor queryDescriptor=new DcmQueryDescriptor();
     private Map filters;
+    //计算程序窗口
+    private RichPopup calcWnd;
+    //模板计算程序
+    //List calcList
     //初始化
     public DcmDataDisplayBean() {
         this.curUser =(Person)ADFContext.getCurrent().getSessionScope().get("cur_user");
@@ -1043,6 +1049,27 @@ public class DcmDataDisplayBean extends TablePagination{
         dcmApplicationModule.getTransaction().executeCommand(clearErrTableSql);
         dcmApplicationModule.getTransaction().commit();
     }
+    //calcName
+    private List<SelectItem> calcNameList = new ArrayList<SelectItem>();
+    //初始化计算窗口，查询模板计算程序
+    public void showCalcWnd(ActionEvent actionEvent) {
+        DCIteratorBinding calcIter = ADFUtils.findIterator("DcmTemplateCalcQueryVOIterator");
+        ViewObject calcVo = calcIter.getViewObject();
+        String whereClause = "TEMPLATE_ID ='"+this.curTempalte.getId()+"'";
+        calcVo.setWhereClause(whereClause);
+        calcVo.executeQuery();
+        Row[] rows = calcIter.getAllRowsInRange();
+        for(Row row:rows){
+            String calcName = row.getAttribute("CalcName").toString();
+            String calcId = row.getAttribute("CalcId").toString();
+            SelectItem item = new SelectItem();
+            item.setLabel(calcName);
+            item.setValue(calcId);
+            calcNameList.add(item);
+        }
+        RichPopup.PopupHints hint = new RichPopup.PopupHints();
+        this.calcWnd.show(hint);
+    }
 
     public void sortListener(SortEvent sortEvent) {
         this.sortCriterions=sortEvent.getSortCriteria();
@@ -1153,5 +1180,27 @@ public class DcmDataDisplayBean extends TablePagination{
     }
     public void setIsReplaceDefault(boolean flag){
        
+    }
+
+    public void setCalcWnd(RichPopup calcWnd) {
+        this.calcWnd = calcWnd;
+    }
+
+    public RichPopup getCalcWnd() {
+        return calcWnd;
+    }
+
+    public void calcChange(ValueChangeEvent valueChangeEvent) {
+        RichSelectOneChoice calcSoc = (RichSelectOneChoice)valueChangeEvent.getSource();
+        String calcId = valueChangeEvent.getNewValue().toString();
+        
+    }
+
+    public void setCalcNameList(List<SelectItem> calcNameList) {
+        this.calcNameList = calcNameList;
+    }
+
+    public List<SelectItem> getCalcNameList() {
+        return calcNameList;
     }
 }

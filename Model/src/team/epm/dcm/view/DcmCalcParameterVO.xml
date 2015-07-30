@@ -19,13 +19,54 @@
   BindingStyle="OracleName"
   CustomQuery="false"
   PageIterMode="Full"
-  UseGlueCode="false">
+  UseGlueCode="false"
+  Where="DcmCalcParameterEO.LOCALE =: locale"
+  ComponentClass="team.epm.dcm.view.DcmCalcParameterVOImpl">
+  <DesignTime>
+    <Attr Name="_codeGenFlag2" Value="Coll"/>
+  </DesignTime>
   <Properties>
     <SchemaBasedProperties>
       <LABEL
         ResId="team.epm.dcm.view.DcmCalcParameterVO_LABEL"/>
     </SchemaBasedProperties>
   </Properties>
+  <Variable
+    Name="locale"
+    Kind="where"
+    Type="java.lang.String">
+    <TransientExpression><![CDATA[adf.context.locale]]></TransientExpression>
+  </Variable>
+  <ViewAccessor
+    Name="DmsValueSetView"
+    ViewObjectName="team.epm.dms.view.DmsValueSetView">
+    <ViewCriteriaUsage
+      Name="DmsValueSetViewCriteria"
+      FullName="team.epm.dms.view.DmsValueSetView.DmsValueSetViewCriteria"/>
+    <ParameterMap>
+      <PIMap Variable="locale">
+        <TransientExpression><![CDATA[adf.context.locale]]></TransientExpression>
+      </PIMap>
+    </ParameterMap>
+  </ViewAccessor>
+  <ListBinding
+    Name="LOV_ValueSetId"
+    ListVOName="DmsValueSetView"
+    ListRangeSize="-1"
+    NullValueFlag="start"
+    NullValueId="${adfBundle['oracle.javatools.resourcebundle.SystemBundle']['NULL_VALUE_RESID']}"
+    MRUCount="0">
+    <AttrArray Name="AttrNames">
+      <Item Value="ValueSetId"/>
+    </AttrArray>
+    <AttrArray Name="ListAttrNames">
+      <Item Value="Code"/>
+    </AttrArray>
+    <AttrArray Name="ListDisplayAttrNames">
+      <Item Value="Name"/>
+    </AttrArray>
+    <DisplayCriteria/>
+  </ListBinding>
   <EntityUsage
     Name="DcmCalcParameterEO"
     Entity="team.epm.dcm.model.DcmCalcParameterEO"/>
@@ -93,11 +134,14 @@
     PrecisionRule="true"
     EntityAttrName="ValueSetId"
     EntityUsage="DcmCalcParameterEO"
-    AliasName="VALUE_SET_ID">
+    AliasName="VALUE_SET_ID"
+    LOVName="LOV_ValueSetId">
     <Properties>
       <SchemaBasedProperties>
         <LABEL
           ResId="team.epm.dcm.view.DcmCalcParameterVO.ValueSetId_LABEL"/>
+        <CONTROLTYPE
+          Value="choice"/>
       </SchemaBasedProperties>
     </Properties>
   </ViewAttribute>

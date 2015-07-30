@@ -10,9 +10,11 @@
   DBObjectName="CALC_PARAMETER"
   AliasName="DcmCalcParameterEO"
   BindingStyle="OracleName"
-  UseGlueCode="false">
+  UseGlueCode="false"
+  RowClass="team.epm.dcm.model.DcmCalcParameterEOImpl">
   <DesignTime>
     <AttrArray Name="_publishEvents"/>
+    <Attr Name="_isCodegen" Value="true"/>
   </DesignTime>
   <Attribute
     Name="CalcId"
@@ -55,6 +57,11 @@
     <DesignTime>
       <Attr Name="_DisplaySize" Value="100"/>
     </DesignTime>
+    <Properties>
+      <CustomProperties>
+        <Property Name="isMultiLangAttr" Value="true"/>
+      </CustomProperties>
+    </Properties>
   </Attribute>
   <Attribute
     Name="ValueSetId"

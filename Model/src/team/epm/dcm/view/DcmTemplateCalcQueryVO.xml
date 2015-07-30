@@ -3,11 +3,11 @@
 <!---->
 <ViewObject
   xmlns="http://xmlns.oracle.com/bc4j"
-  Name="DcmTemplateCalcVO"
+  Name="DcmTemplateCalcQueryVO"
   Version="11.1.1.64.93"
   InheritPersonalization="true"
-  SelectList="DcmTemplateCalcEO.CALC_ARGS, 
-       DcmTemplateCalcEO.CALC_ID, 
+  SelectList="DcmTemplateCalcEO.CALC_ID, 
+       DcmTemplateCalcEO.CALC_ARGS, 
        DcmTemplateCalcEO.CALC_NAME, 
        DcmTemplateCalcEO.CALC_PROCEDURE, 
        DcmTemplateCalcEO.CALC_SEQ, 
@@ -20,26 +20,34 @@
   <Properties>
     <SchemaBasedProperties>
       <LABEL
-        ResId="team.epm.dcm.view.DcmTemplateCalcVO_LABEL"/>
+        ResId="team.epm.dcm.view.DcmTemplateCalcQueryVO_LABEL"/>
     </SchemaBasedProperties>
   </Properties>
   <ViewAccessor
-    Name="DcmCalcParameterVOQuery"
-    ViewObjectName="team.epm.dcm.view.DcmCalcParameterVO"
+    Name="DcmTemplateCalcQueryVO"
+    ViewObjectName="team.epm.dcm.view.DcmTemplateCalcQueryVO"
     RowLevelBinds="true"/>
-  <ViewAccessor
-    Name="DcmTemplateCalcVOQuery"
-    ViewObjectName="team.epm.dcm.view.DcmTemplateCalcVO"
-    RowLevelBinds="true"/>
+  <ListBinding
+    Name="LOV_CalcName"
+    ListVOName="DcmTemplateCalcQueryVO"
+    ListRangeSize="-1"
+    NullValueFlag="start"
+    NullValueId="${adfBundle['oracle.javatools.resourcebundle.SystemBundle']['NULL_VALUE_RESID']}"
+    MRUCount="0">
+    <AttrArray Name="AttrNames">
+      <Item Value="CalcName"/>
+    </AttrArray>
+    <AttrArray Name="ListAttrNames">
+      <Item Value="CalcId"/>
+    </AttrArray>
+    <AttrArray Name="ListDisplayAttrNames">
+      <Item Value="CalcName"/>
+    </AttrArray>
+    <DisplayCriteria/>
+  </ListBinding>
   <EntityUsage
     Name="DcmTemplateCalcEO"
     Entity="team.epm.dcm.model.DcmTemplateCalcEO"/>
-  <ViewAttribute
-    Name="CalcArgs"
-    PrecisionRule="true"
-    EntityAttrName="CalcArgs"
-    EntityUsage="DcmTemplateCalcEO"
-    AliasName="CALC_ARGS"/>
   <ViewAttribute
     Name="CalcId"
     PrecisionRule="true"
@@ -47,44 +55,39 @@
     EntityUsage="DcmTemplateCalcEO"
     AliasName="CALC_ID"/>
   <ViewAttribute
+    Name="CalcArgs"
+    PrecisionRule="true"
+    EntityAttrName="CalcArgs"
+    EntityUsage="DcmTemplateCalcEO"
+    AliasName="CALC_ARGS"/>
+  <ViewAttribute
     Name="CalcName"
+    IsNotNull="true"
     PrecisionRule="true"
     EntityAttrName="CalcName"
     EntityUsage="DcmTemplateCalcEO"
-    AliasName="CALC_NAME">
+    AliasName="CALC_NAME"
+    LOVName="LOV_CalcName">
     <Properties>
       <SchemaBasedProperties>
-        <LABEL
-          ResId="team.epm.dcm.view.DcmTemplateCalcVO.CalcName_LABEL"/>
+        <CONTROLTYPE
+          Value="choice"/>
       </SchemaBasedProperties>
     </Properties>
   </ViewAttribute>
   <ViewAttribute
     Name="CalcProcedure"
+    IsNotNull="true"
     PrecisionRule="true"
     EntityAttrName="CalcProcedure"
     EntityUsage="DcmTemplateCalcEO"
-    AliasName="CALC_PROCEDURE">
-    <Properties>
-      <SchemaBasedProperties>
-        <LABEL
-          ResId="team.epm.dcm.view.DcmTemplateCalcVO.CalcProcedure_LABEL"/>
-      </SchemaBasedProperties>
-    </Properties>
-  </ViewAttribute>
+    AliasName="CALC_PROCEDURE"/>
   <ViewAttribute
     Name="CalcSeq"
     PrecisionRule="true"
     EntityAttrName="CalcSeq"
     EntityUsage="DcmTemplateCalcEO"
-    AliasName="CALC_SEQ">
-    <Properties>
-      <SchemaBasedProperties>
-        <LABEL
-          ResId="team.epm.dcm.view.DcmTemplateCalcVO.CalcSeq_LABEL"/>
-      </SchemaBasedProperties>
-    </Properties>
-  </ViewAttribute>
+    AliasName="CALC_SEQ"/>
   <ViewAttribute
     Name="TemplateId"
     PrecisionRule="true"
@@ -95,9 +98,4 @@
     <PropertiesBundle
       PropertiesFile="ModelBundle"/>
   </ResourceBundle>
-  <ViewLinkAccessor
-    Name="DcmCalcParameterVO"
-    ViewLink="team.epm.dcm.view.viewlink.DcmCalcParameterLnk"
-    Type="oracle.jbo.RowIterator"
-    IsUpdateable="false"/>
 </ViewObject>

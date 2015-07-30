@@ -71,6 +71,9 @@
    <ViewUsage
       Name="DcmCalcParameterVO"
       ViewObjectName="team.epm.dcm.view.DcmCalcParameterVO"/>
+   <ViewUsage
+      Name="DcmTemplateCalcQueryVO"
+      ViewObjectName="team.epm.dcm.view.DcmTemplateCalcQueryVO"/>
    <ViewLinkUsage
       Name="DcmCombinationVsLnk"
       ViewLinkObjectName="team.epm.dcm.view.viewlink.DcmCombinationVsLnk"
@@ -107,6 +110,45 @@
       SrcViewUsageName="team.epm.module.DcmModule.DcmTemplateCalcVO"
       DstViewUsageName="team.epm.module.DcmModule.DcmCalcParameterVO"
       Reversed="false"/>
+   <ClientInterface>
+      <Method
+         Name="getCombinationRecordView">
+         <Return
+            Type="oracle.jbo.ViewObject"/>
+         <Parameter
+            Name="templateId"
+            Type="java.lang.String"/>
+         <Parameter
+            Name="combinationId"
+            Type="java.lang.String"/>
+      </Method>
+   </ClientInterface>
+   <ClientInterface>
+      <Method
+         Name="getCombinationRecordView">
+         <Return
+            Type="oracle.jbo.ViewObject"/>
+         <Parameter
+            Name="templateId"
+            Type="java.lang.String"/>
+         <Parameter
+            Name="combinationId"
+            Type="java.lang.String"/>
+      </Method>
+   </ClientInterface>
+   <ClientInterface>
+      <Method
+         Name="getCombinationRecordView">
+         <Return
+            Type="oracle.jbo.ViewObject"/>
+         <Parameter
+            Name="templateId"
+            Type="java.lang.String"/>
+         <Parameter
+            Name="combinationId"
+            Type="java.lang.String"/>
+      </Method>
+   </ClientInterface>
    <ClientInterface>
       <Method
          Name="getCombinationRecordView">

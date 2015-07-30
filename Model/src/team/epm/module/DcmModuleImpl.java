@@ -20,6 +20,7 @@ import oracle.jbo.server.ViewLinkImpl;
 
 import oracle.jbo.server.ViewObjectImpl;
 
+import team.epm.dcm.view.DcmCalcParameterVOImpl;
 import team.epm.dcm.view.DcmComVsViewImpl;
 import team.epm.dcm.view.DcmCombinationViewImpl;
 import team.epm.dcm.view.DcmTemplateColumnViewImpl;
@@ -328,6 +329,15 @@ public class DcmModuleImpl extends ApplicationModuleImpl implements DcmModule {
      */
     public ViewLinkImpl getDcmCalcParameterLnk() {
         return (ViewLinkImpl)findViewLink("DcmCalcParameterLnk");
+    }
+
+
+    /**
+     * Container's getter for DcmTemplateCalcQueryVO1.
+     * @return DcmTemplateCalcQueryVO1
+     */
+    public ViewObjectImpl getDcmTemplateCalcQueryVO() {
+        return (ViewObjectImpl)findViewObject("DcmTemplateCalcQueryVO");
     }
 }
 

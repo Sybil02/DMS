@@ -75,7 +75,9 @@
                   <af:commandButton text="增加" actionListener="#{bindings.CreateInsertCalc.execute}" id="cb16"/>
                   <af:commandButton text="删除" actionListener="#{bindings.DeleteCalc.execute}" id="cb17"/>
                   <af:commandButton text="保存" actionListener="#{bindings.Commit.execute}" id="cb18"/>
-                  <af:commandButton text="取消" actionListener="#{bindings.Rollback.execute}" id="cb19"/>
+                  <af:commandButton text="取消" actionListener="#{bindings.Rollback.execute}" id="cb19">
+                    <af:resetActionListener/>
+                  </af:commandButton>
                 </af:toolbar>
               </f:facet>
               <f:facet name="statusbar"/>
@@ -142,13 +144,16 @@
                       <af:commandButton text="增加" actionListener="#{bindings.CreateInsertParameter.execute}" id="cb20"/>
                       <af:commandButton text="删除" actionListener="#{bindings.DeleteParameter.execute}" id="cb21"/>
                       <af:commandButton text="保存" actionListener="#{bindings.Commit.execute}" id="cb22"/>
-                      <af:commandButton text="取消" actionListener="#{bindings.Rollback.execute}" id="cb23"/>
+                      <af:commandButton text="取消" actionListener="#{bindings.Rollback.execute}" id="cb23">
+                        <af:resetActionListener/>
+                      </af:commandButton>
                     </af:toolbar>
                   </f:facet>
               <f:facet name="statusbar"/>
               <af:table value="#{bindings.DcmCalcParameterVO.collectionModel}"
                         var="row" partialTriggers=":::pc5:t9 ::cb20 ::cb21"
                         rows="#{bindings.DcmCalcParameterVO.rangeSize}"
+                        rowSelection="single" selectionListener="#{bindings.DcmCalcParameterVO.collectionModel.makeCurrent}"
                         emptyText="#{bindings.DcmCalcParameterVO.viewable ? 'No data to display.' : 'Access Denied.'}"
                         fetchSize="#{bindings.DcmCalcParameterVO.rangeSize}"
                         rowBandingInterval="0" id="t11">
@@ -163,23 +168,22 @@
                                 maximumLength="#{bindings.DcmCalcParameterVO.hints.PName.precision}"
                                 shortDesc="#{bindings.DcmCalcParameterVO.hints.PName.tooltip}"
                                 id="it20">
-                    <f:validator binding="#{row.bindings.PName.validator}"/>
                   </af:inputText>
+                  
                 </af:column>
                 <af:column sortProperty="#{bindings.DcmCalcParameterVO.hints.ValueSetId.name}"
                            sortable="false"
                            headerText="#{bindings.DcmCalcParameterVO.hints.ValueSetId.label}"
                            id="c33">
-                  <af:inputText value="#{row.bindings.ValueSetId.inputValue}"
-                                label="#{bindings.DcmCalcParameterVO.hints.ValueSetId.label}"
-                                required="#{bindings.DcmCalcParameterVO.hints.ValueSetId.mandatory}"
-                                columns="#{bindings.DcmCalcParameterVO.hints.ValueSetId.displayWidth}"
-                                maximumLength="#{bindings.DcmCalcParameterVO.hints.ValueSetId.precision}"
-                                shortDesc="#{bindings.DcmCalcParameterVO.hints.ValueSetId.tooltip}"
-                                id="it19">
-                    <f:validator binding="#{row.bindings.ValueSetId.validator}"/>
-                  </af:inputText>
-                </af:column>
+                      <af:selectOneChoice value="#{row.bindings.ValueSetId.inputValue}"
+                                          label="#{row.bindings.ValueSetId.label}"
+                                          required="#{bindings.DcmCalcParameterVO.hints.ValueSetId.mandatory}"
+                                          shortDesc="#{bindings.DcmCalcParameterVO.hints.ValueSetId.tooltip}"
+                                          id="soc12">
+                        <f:selectItems value="#{row.bindings.ValueSetId.items}"
+                                       id="si12"/>
+                      </af:selectOneChoice>
+                    </af:column>
               </af:table>
             </af:panelCollection>
               </f:facet>
