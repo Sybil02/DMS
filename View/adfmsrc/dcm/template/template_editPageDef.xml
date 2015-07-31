@@ -49,6 +49,7 @@
           <Item Value="DataStartLine"/>
           <Item Value="Seq"/>
           <Item Value="Description"/>
+          <Item Value="TemplateLabel"/>
         </AttrNames>
       </nodeDefinition>
     </tree>

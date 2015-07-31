@@ -1205,6 +1205,7 @@ public class DcmDataDisplayBean extends TablePagination{
     private String curCalcId = "";
     //将计算程序的参数名按顺序存入key，将页面选择的参数值存到对应的value
     Map<String,String> parametersValueMap = new LinkedHashMap<String,String>();
+    //计算程序改变，查询对应参数值集源表，对应值集
     public void calcChange(ValueChangeEvent valueChangeEvent) {
         //System.out.println("change:"+valueChangeEvent.getNewValue());
         //每次改变程序，清除参数集合
@@ -1332,6 +1333,7 @@ public class DcmDataDisplayBean extends TablePagination{
             cs.setString(4, p_handle_mode);
             cs.setString(5, p_locale);
             cs.setString(6, args);
+            //获取返回值
             cs.registerOutParameter(7, Types.VARCHAR);
             cs.execute();
             if(cs.getString(7).equals("true")){
@@ -1346,7 +1348,7 @@ public class DcmDataDisplayBean extends TablePagination{
             this._logger.severe(e);
         }
     }
-
+    //参数改变，将选择的值更新到Map中
     public void paraValueChange(ValueChangeEvent valueChangeEvent) {
         RichSelectOneChoice paraSoc = (RichSelectOneChoice)valueChangeEvent.getSource();
         try{

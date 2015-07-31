@@ -229,6 +229,16 @@ public class DcmTemplateViewRowImpl extends ViewRowImpl {
             }
         }
         ,
+        TemplateLabel {
+            public Object get(DcmTemplateViewRowImpl obj) {
+                return obj.getTemplateLabel();
+            }
+
+            public void put(DcmTemplateViewRowImpl obj, Object value) {
+                obj.setTemplateLabel((String)value);
+            }
+        }
+        ,
         DcmTemplateColumnView {
             public Object get(DcmTemplateViewRowImpl obj) {
                 return obj.getDcmTemplateColumnView();
@@ -356,6 +366,7 @@ public class DcmTemplateViewRowImpl extends ViewRowImpl {
         }
     }
 
+
     public static final int ID = AttributesEnum.Id.index();
     public static final int LOCALE = AttributesEnum.Locale.index();
     public static final int NAME = AttributesEnum.Name.index();
@@ -377,6 +388,7 @@ public class DcmTemplateViewRowImpl extends ViewRowImpl {
     public static final int DATASTARTLINE = AttributesEnum.DataStartLine.index();
     public static final int COMBINATIONID = AttributesEnum.CombinationId.index();
     public static final int CATEGORYID = AttributesEnum.CategoryId.index();
+    public static final int TEMPLATELABEL = AttributesEnum.TemplateLabel.index();
     public static final int DCMTEMPLATECOLUMNVIEW = AttributesEnum.DcmTemplateColumnView.index();
     public static final int DCMTEMPLATEVALIDATIONVIEW = AttributesEnum.DcmTemplateValidationView.index();
     public static final int DCMTEMPLATECALCVO = AttributesEnum.DcmTemplateCalcVO.index();
@@ -736,6 +748,22 @@ public class DcmTemplateViewRowImpl extends ViewRowImpl {
      */
     public void setCategoryId(String value) {
         setAttributeInternal(CATEGORYID, value);
+    }
+
+    /**
+     * Gets the attribute value for TEMPLATE_LABEL using the alias name TemplateLabel.
+     * @return the TEMPLATE_LABEL
+     */
+    public String getTemplateLabel() {
+        return (String) getAttributeInternal(TEMPLATELABEL);
+    }
+
+    /**
+     * Sets <code>value</code> as attribute value for TEMPLATE_LABEL using the alias name TemplateLabel.
+     * @param value value to set the TEMPLATE_LABEL
+     */
+    public void setTemplateLabel(String value) {
+        setAttributeInternal(TEMPLATELABEL, value);
     }
 
     /**

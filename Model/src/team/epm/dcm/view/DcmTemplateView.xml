@@ -32,7 +32,8 @@
        DcmTemplate.TEMPLATE_FILE, 
        DcmTemplate.DATA_START_LINE, 
        DcmTemplate.COMBINATION_ID, 
-       DcmTemplate.CATEGORY_ID"
+       DcmTemplate.CATEGORY_ID, 
+       DcmTemplate.TEMPLATE_LABEL"
   OrderBy="DcmTemplate.SEQ"
   RowClass="team.epm.dcm.view.DcmTemplateViewRowImpl"
   ComponentClass="team.epm.dcm.view.DcmTemplateViewImpl">
@@ -557,6 +558,19 @@
           ResId="dcm.category_id"/>
         <CONTROLTYPE
           Value="choice"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="TemplateLabel"
+    PrecisionRule="true"
+    EntityAttrName="TemplateLabel"
+    EntityUsage="DcmTemplate"
+    AliasName="TEMPLATE_LABEL">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="team.epm.dcm.view.DcmTemplateView.TemplateLabel_LABEL"/>
       </SchemaBasedProperties>
     </Properties>
   </ViewAttribute>

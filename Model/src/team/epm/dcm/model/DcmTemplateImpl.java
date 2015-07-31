@@ -230,6 +230,16 @@ public class DcmTemplateImpl extends DmsEntityImpl {
                 obj.setCategoryId((String)value);
             }
         }
+        ,
+        TemplateLabel {
+            public Object get(DcmTemplateImpl obj) {
+                return obj.getTemplateLabel();
+            }
+
+            public void put(DcmTemplateImpl obj, Object value) {
+                obj.setTemplateLabel((String)value);
+            }
+        }
         ;
         private static AttributesEnum[] vals = null;
         private static final int firstIndex = 0;
@@ -280,6 +290,7 @@ public class DcmTemplateImpl extends DmsEntityImpl {
     public static final int DATASTARTLINE = AttributesEnum.DataStartLine.index();
     public static final int COMBINATIONID = AttributesEnum.CombinationId.index();
     public static final int CATEGORYID = AttributesEnum.CategoryId.index();
+    public static final int TEMPLATELABEL = AttributesEnum.TemplateLabel.index();
 
     /**
      * This is the default constructor (do not remove).
@@ -632,6 +643,22 @@ public class DcmTemplateImpl extends DmsEntityImpl {
      */
     public void setCategoryId(String value) {
         setAttributeInternal(CATEGORYID, value);
+    }
+
+    /**
+     * Gets the attribute value for TemplateLabel, using the alias name TemplateLabel.
+     * @return the TemplateLabel
+     */
+    public String getTemplateLabel() {
+        return (String)getAttributeInternal(TEMPLATELABEL);
+    }
+
+    /**
+     * Sets <code>value</code> as the attribute value for TemplateLabel.
+     * @param value value to set the TemplateLabel
+     */
+    public void setTemplateLabel(String value) {
+        setAttributeInternal(TEMPLATELABEL, value);
     }
 
     /**

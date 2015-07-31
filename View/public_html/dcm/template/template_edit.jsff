@@ -544,6 +544,18 @@
               <f:validator binding="#{row.bindings.Description.validator}"/>
             </af:inputText>
           </af:column>
+          <af:column headerText="#{bindings.DcmTemplateView.hints.TemplateLabel.label}"
+                     id="c34">
+            <af:inputText value="#{row.bindings.TemplateLabel.inputValue}"
+                          label="#{bindings.DcmTemplateView.hints.TemplateLabel.label}"
+                          required="#{bindings.DcmTemplateView.hints.TemplateLabel.mandatory}"
+                          columns="#{bindings.DcmTemplateView.hints.TemplateLabel.displayWidth}"
+                          maximumLength="#{bindings.DcmTemplateView.hints.TemplateLabel.precision}"
+                          shortDesc="#{bindings.DcmTemplateView.hints.TemplateLabel.tooltip}"
+                          id="it19">
+              <f:validator binding="#{row.bindings.TemplateLabel.validator}"/>
+            </af:inputText>
+          </af:column>
         </af:table>
       </af:panelCollection>
     </f:facet>
