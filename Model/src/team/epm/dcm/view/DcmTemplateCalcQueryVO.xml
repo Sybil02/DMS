@@ -16,7 +16,8 @@
   BindingStyle="OracleName"
   CustomQuery="false"
   PageIterMode="Full"
-  UseGlueCode="false">
+  UseGlueCode="false"
+  OrderBy="DcmTemplateCalcEO.CALC_SEQ">
   <Properties>
     <SchemaBasedProperties>
       <LABEL

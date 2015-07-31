@@ -43,6 +43,7 @@ import java.util.Map;
 
 import java.util.UUID;
 
+import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.FacesEvent;
@@ -138,8 +139,10 @@ public class DcmDataDisplayBean extends TablePagination{
     private Map filters;
     //计算程序窗口
     private RichPopup calcWnd;
-    //计算程序参数
-    List<CalcParameter> parameterList = new ArrayList<CalcParameter>(); 
+    //计算程序的参数对应的值集
+    List<CalcParameter> parameterList = new ArrayList<CalcParameter>();
+    //上一次操作的模式
+    private String lastHandleModel = "default";
     //初始化
     public DcmDataDisplayBean() {
         this.curUser =(Person)ADFContext.getCurrent().getSessionScope().get("cur_user");
@@ -256,6 +259,7 @@ public class DcmDataDisplayBean extends TablePagination{
             trans.commit();
             stat.close();
             flag = this.handleData("EDIT", curComRecordId);
+            this.lastHandleModel = "EDIT";
             if(flag){ this.queryTemplateData();}
         } catch (Exception e) {
             flag = false;
@@ -298,6 +302,7 @@ public class DcmDataDisplayBean extends TablePagination{
         if (!this.handleExcel(filePath, curComRecordId)) {
             return;
         }
+        this.lastHandleModel = this.isIncrement ? "INCREMENT" : "REPLACE" ;
         //进行数据处理（前置程序、校验和善后程序）
         if (this.handleData(this.isIncrement ? "INCREMENT" : "REPLACE",curComRecordId)) {
             String msg = DmsUtils.getMsg("dcm.inform.data_import_success");
@@ -1051,10 +1056,13 @@ public class DcmDataDisplayBean extends TablePagination{
     }
     //calcName
     private List<SelectItem> calcNameList = new ArrayList<SelectItem>();
+    //calcId对应的procedure
+    Map<String,String> calcProMap = new HashMap<String,String>();
     //初始化计算窗口，查询模板计算程序
     public void showCalcWnd(ActionEvent actionEvent) {
-        //每次打开窗口，清楚上次计算程序
+        //每次打开窗口，Clear上次计算程序
         this.calcNameList.clear();
+        this.calcProMap.clear();
         DCIteratorBinding calcIter = ADFUtils.findIterator("DcmTemplateCalcQueryVOIterator");
         ViewObject calcVo = calcIter.getViewObject();
         String whereClause = "TEMPLATE_ID ='"+this.curTempalte.getId()+"'";
@@ -1064,6 +1072,8 @@ public class DcmDataDisplayBean extends TablePagination{
         for(Row row:rows){
             String calcName = row.getAttribute("CalcName").toString();
             String calcId = row.getAttribute("CalcId").toString();
+            String calcProcedure = row.getAttribute("CalcProcedure").toString();
+            this.calcProMap.put(calcId, calcProcedure);
             SelectItem item = new SelectItem();
             item.setLabel(calcName);
             item.setValue(calcId);
@@ -1191,16 +1201,21 @@ public class DcmDataDisplayBean extends TablePagination{
     public RichPopup getCalcWnd() {
         return calcWnd;
     }
-
+    //当前计算程序的id
+    private String curCalcId = "";
+    //将计算程序的参数名按顺序存入key，将页面选择的参数值存到对应的value
+    Map<String,String> parametersValueMap = new LinkedHashMap<String,String>();
     public void calcChange(ValueChangeEvent valueChangeEvent) {
-        System.out.println("change:"+valueChangeEvent.getNewValue());
+        //System.out.println("change:"+valueChangeEvent.getNewValue());
         //每次改变程序，清除参数集合
         this.parameterList.clear();
+        this.parametersValueMap.clear();
         //key：参数名 ， value：值集源表
         Map<String,String> vsMap = new HashMap<String,String>();
         RichSelectOneChoice calcSoc = (RichSelectOneChoice)valueChangeEvent.getSource();
         //get calcId
         String calcId = valueChangeEvent.getNewValue().toString();
+        this.curCalcId = calcId ;
         //query calcParameter
         DCIteratorBinding paraIter = ADFUtils.findIterator("DcmCalcParameterQueryVOIterator");
         ViewObject paraVo = paraIter.getViewObject();
@@ -1216,6 +1231,7 @@ public class DcmDataDisplayBean extends TablePagination{
         for(Row row:rows){
             String pName = row.getAttribute("PName").toString();
             String valueSetId = row.getAttribute("ValueSetId").toString();
+            this.parametersValueMap.put(pName,"");
             StringBuffer sqlStr = new StringBuffer();
             sqlStr.append("select distinct t.source from dms_value_set t where t.code = '");
             sqlStr.append(valueSetId).append("'");
@@ -1234,9 +1250,6 @@ public class DcmDataDisplayBean extends TablePagination{
         stat.close();
         } catch (SQLException e) {
             this._logger.severe(e);
-        }
-        for(Map.Entry<String,String> entry : vsMap.entrySet()){
-            System.out.println(entry.getKey()+"~~~8~~~"+entry.getValue());
         }
         //查询参数对应的值集
         queryVS(vsMap);
@@ -1286,5 +1299,65 @@ public class DcmDataDisplayBean extends TablePagination{
 
     public List<CalcParameter> getParameterList() {
         return parameterList;
+    }
+    //获取参数，执行存储过程
+    public void executeProcedure(ActionEvent actionEvent) {
+        String calcPro = this.calcProMap.get(this.curCalcId);
+        String p_template_id = this.curTempalte.getId();
+        String p_com_record_id = this.curCombiantionRecord;
+        String p_user_id = this.curUser.getId();
+        String p_handle_mode = this.lastHandleModel;
+        String p_locale = this.curUser.getLocale();
+        String args = "";
+        try{
+        for(Map.Entry<String,String> entry : this.parametersValueMap.entrySet()){
+            //若为空则抛出异常
+            if(entry.getValue().equals("")){
+                throw new NullPointerException();
+            }
+            args = args + "#" + entry.getValue() ;
+        }
+        }catch(Exception e){
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("存在未选择参数！"));
+            return;
+        }
+        System.out.println(calcPro+"&"+p_template_id+"&"+p_com_record_id+"&"+p_user_id+"&"+p_handle_mode+"&"+p_locale);
+        System.out.println(args);
+        DBTransaction trans = (DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
+        CallableStatement cs = trans.createCallableStatement("{CALL "+calcPro+"(?,?,?,?,?,?,?)}", 0);
+        try {
+            cs.setString(1, p_template_id);
+            cs.setString(2, p_com_record_id);
+            cs.setString(3, p_user_id);
+            cs.setString(4, p_handle_mode);
+            cs.setString(5, p_locale);
+            cs.setString(6, args);
+            cs.registerOutParameter(7, Types.VARCHAR);
+            cs.execute();
+            if(cs.getString(7).equals("true")){
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("程序执行成功！"));
+                trans.commit();
+            }else{
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("程序执行失败！"));    
+                trans.rollback();
+            }
+            cs.close();
+        } catch (SQLException e) {
+            this._logger.severe(e);
+        }
+    }
+
+    public void paraValueChange(ValueChangeEvent valueChangeEvent) {
+        RichSelectOneChoice paraSoc = (RichSelectOneChoice)valueChangeEvent.getSource();
+        try{
+            String pName = paraSoc.getLabel();
+            String paraValue = paraSoc.getValue().toString();
+            //将选择的值put到对应的参数中
+            if(this.parametersValueMap.containsKey(pName)){
+                this.parametersValueMap.put(pName,paraValue);    
+            }
+        }catch(Exception e){
+            this._logger.severe("切换程序触发valueChangeEvent，导致空指针异常");    
+        }
     }
 }

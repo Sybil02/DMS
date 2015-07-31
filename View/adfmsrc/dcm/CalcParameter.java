@@ -8,8 +8,11 @@ public class CalcParameter {
     public CalcParameter() {
         super();
     }
+    //参数名称
     private String paraLabel;
+    //值集ID
     private String valueSetId;
+    //
     private String code;
     private List<SelectItem> values;
 
