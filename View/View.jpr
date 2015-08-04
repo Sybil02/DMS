@@ -626,6 +626,15 @@
                   <url path="adfmsrc/"/>
                </list>
             </hash>
+            <hash>
+               <url n="content-folder-url" path="adfmsrc/dms/workflow/"/>
+               <list n="pattern-filters">
+                  <string v="+dms/workflow/WorkflowEditBean.java"/>
+               </list>
+               <list n="url-path">
+                  <url path="adfmsrc/"/>
+               </list>
+            </hash>
          </list>
          <list n="url-path"/>
       </hash>

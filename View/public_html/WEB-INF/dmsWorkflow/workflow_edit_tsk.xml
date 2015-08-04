@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<adfc-config xmlns="http://xmlns.oracle.com/adf/controller" version="1.2">
+  <task-flow-definition id="workflow_edit_tsk">
+    <default-activity id="__1">workflowEdit</default-activity>
+    <view id="workflowEdit">
+      <page>/dms/workflow/workflowEdit.jsff</page>
+    </view>
+    <use-page-fragments/>
+  </task-flow-definition>
+</adfc-config>

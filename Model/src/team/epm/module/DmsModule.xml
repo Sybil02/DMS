@@ -92,6 +92,12 @@
   <ViewUsage
     Name="DmsApprovalFlowVO"
     ViewObjectName="team.epm.dms.view.DmsApprovalFlowVO"/>
+  <ViewUsage
+    Name="DmsWorkflowInfoVO"
+    ViewObjectName="team.epm.dms.view.DmsWorkflowInfoVO"/>
+  <ViewUsage
+    Name="DmsWorkflowStepsVO"
+    ViewObjectName="team.epm.dms.view.DmsWorkflowStepsVO"/>
   <ViewLinkUsage
     Name="DmsGroupedRoleLnk"
     ViewLinkObjectName="team.epm.dms.DmsGroupedRoleLnk"
@@ -121,6 +127,12 @@
     ViewLinkObjectName="team.epm.dms.DmsGroupGValueLnk"
     SrcViewUsageName="team.epm.module.DmsModule.DmsEnabledGroupView"
     DstViewUsageName="team.epm.module.DmsModule.DmsGroupValueView"
+    Reversed="false"/>
+  <ViewLinkUsage
+    Name="DmsWorkflowInfoStepsLnk"
+    ViewLinkObjectName="team.epm.dms.DmsWorkflowInfoStepsLnk"
+    SrcViewUsageName="team.epm.module.DmsModule.DmsWorkflowInfoVO"
+    DstViewUsageName="team.epm.module.DmsModule.DmsWorkflowStepsVO"
     Reversed="false"/>
   <ResourceBundle>
     <PropertiesBundle

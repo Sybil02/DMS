@@ -9,6 +9,7 @@ import oracle.jbo.Session;
 import oracle.jbo.ViewObject;
 import oracle.jbo.server.ApplicationModuleImpl;
 import oracle.jbo.server.ViewLinkImpl;
+
 import oracle.jbo.server.ViewObjectImpl;
 
 import team.epm.dms.view.DmsEnabledGroupViewImpl;
@@ -316,5 +317,28 @@ public class DmsModuleImpl extends ApplicationModuleImpl implements DmsModule {
      */
     public ViewObjectImpl getDmsApprovalFlowVO() {
         return (ViewObjectImpl)findViewObject("DmsApprovalFlowVO");
+    }
+    /**
+     * Container's getter for DmsWorkflowInfoVO.
+     * @return DmsWorkflowInfoVO
+     */
+    public ViewObjectImpl getDmsWorkflowInfoVO() {
+        return (ViewObjectImpl)findViewObject("DmsWorkflowInfoVO");
+    }
+
+    /**
+     * Container's getter for DmsWorkflowStepsVO.
+     * @return DmsWorkflowStepsVO
+     */
+    public ViewObjectImpl getDmsWorkflowStepsVO() {
+        return (ViewObjectImpl)findViewObject("DmsWorkflowStepsVO");
+    }
+
+    /**
+     * Container's getter for DmsWorkflowInfoStepsLnk.
+     * @return DmsWorkflowInfoStepsLnk
+     */
+    public ViewLinkImpl getDmsWorkflowInfoStepsLnk() {
+        return (ViewLinkImpl)findViewLink("DmsWorkflowInfoStepsLnk");
     }
 }

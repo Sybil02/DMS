@@ -1,0 +1,161 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.1"
+          xmlns:af="http://xmlns.oracle.com/adf/faces/rich"
+          xmlns:f="http://java.sun.com/jsf/core">
+  <af:panelStretchLayout id="psl1" topHeight="42%">
+    <f:facet name="center">
+      <af:panelGroupLayout id="pgl1">
+      <!-- 工作流步骤 -->
+        <af:panelCollection styleClass="AFStretchWidth" id="pc2">
+        <f:facet name="menus"/>
+        <f:facet name="toolbar">
+            <af:toolbar id="t3">
+              <af:commandButton text="增加" actionListener="#{bindings.StepsCreateInsert.execute}" id="cb1"/>
+              <af:commandButton text="删除" actionListener="#{bindings.StepsDelete.execute}" id="cb2"/>
+              <af:commandButton text="取消" actionListener="#{bindings.Rollback.execute}" id="cb3"/>
+              <af:commandButton text="保存" actionListener="#{bindings.Commit.execute}" id="cb4"/>
+            </af:toolbar>
+          </f:facet>
+        <f:facet name="statusbar"/>
+        <af:table value="#{bindings.DmsWorkflowStepsVO.collectionModel}"
+                  var="row" rows="#{bindings.DmsWorkflowStepsVO.rangeSize}"
+                  emptyText="#{bindings.DmsWorkflowStepsVO.viewable ? 'No data to display.' : 'Access Denied.'}"
+                  fetchSize="#{bindings.DmsWorkflowStepsVO.rangeSize}"
+                  rowBandingInterval="0" editingMode="clickToEdit"
+                  selectedRowKeys="#{bindings.DmsWorkflowStepsVO.collectionModel.selectedRow}"
+                  selectionListener="#{bindings.DmsWorkflowStepsVO.collectionModel.makeCurrent}"
+                  rowSelection="single" id="t2" partialTriggers=":::pc1:t1">
+          <af:column sortProperty="#{bindings.DmsWorkflowStepsVO.hints.StepNo.name}"
+                     sortable="false"
+                     headerText="#{bindings.DmsWorkflowStepsVO.hints.StepNo.label}"
+                     id="c6">
+            <af:inputText value="#{row.bindings.StepNo.inputValue}"
+                          label="#{bindings.DmsWorkflowStepsVO.hints.StepNo.label}"
+                          required="#{bindings.DmsWorkflowStepsVO.hints.StepNo.mandatory}"
+                          columns="#{bindings.DmsWorkflowStepsVO.hints.StepNo.displayWidth}"
+                          maximumLength="#{bindings.DmsWorkflowStepsVO.hints.StepNo.precision}"
+                          shortDesc="#{bindings.DmsWorkflowStepsVO.hints.StepNo.tooltip}"
+                          id="it5">
+              <f:validator binding="#{row.bindings.StepNo.validator}"/>
+              <af:convertNumber groupingUsed="false"
+                                pattern="#{bindings.DmsWorkflowStepsVO.hints.StepNo.format}"/>
+            </af:inputText>
+          </af:column>
+          <af:column sortProperty="#{bindings.DmsWorkflowStepsVO.hints.StepTask.name}"
+                     sortable="false"
+                     headerText="#{bindings.DmsWorkflowStepsVO.hints.StepTask.label}"
+                     id="c5">
+            <af:inputText value="#{row.bindings.StepTask.inputValue}"
+                          label="#{bindings.DmsWorkflowStepsVO.hints.StepTask.label}"
+                          required="#{bindings.DmsWorkflowStepsVO.hints.StepTask.mandatory}"
+                          columns="#{bindings.DmsWorkflowStepsVO.hints.StepTask.displayWidth}"
+                          maximumLength="#{bindings.DmsWorkflowStepsVO.hints.StepTask.precision}"
+                          shortDesc="#{bindings.DmsWorkflowStepsVO.hints.StepTask.tooltip}"
+                          id="it4">
+              <f:validator binding="#{row.bindings.StepTask.validator}"/>
+            </af:inputText>
+          </af:column>
+          <af:column sortProperty="#{bindings.DmsWorkflowStepsVO.hints.StepObject.name}"
+                     sortable="false"
+                     headerText="#{bindings.DmsWorkflowStepsVO.hints.StepObject.label}"
+                     id="c4">
+            <af:inputText value="#{row.bindings.StepObject.inputValue}"
+                          label="#{bindings.DmsWorkflowStepsVO.hints.StepObject.label}"
+                          required="#{bindings.DmsWorkflowStepsVO.hints.StepObject.mandatory}"
+                          columns="#{bindings.DmsWorkflowStepsVO.hints.StepObject.displayWidth}"
+                          maximumLength="#{bindings.DmsWorkflowStepsVO.hints.StepObject.precision}"
+                          shortDesc="#{bindings.DmsWorkflowStepsVO.hints.StepObject.tooltip}"
+                          id="it7">
+              <f:validator binding="#{row.bindings.StepObject.validator}"/>
+            </af:inputText>
+          </af:column>
+          <af:column sortProperty="#{bindings.DmsWorkflowStepsVO.hints.PreStep.name}"
+                     sortable="false"
+                     headerText="#{bindings.DmsWorkflowStepsVO.hints.PreStep.label}"
+                     id="c7">
+            <af:inputText value="#{row.bindings.PreStep.inputValue}"
+                          label="#{bindings.DmsWorkflowStepsVO.hints.PreStep.label}"
+                          required="#{bindings.DmsWorkflowStepsVO.hints.PreStep.mandatory}"
+                          columns="#{bindings.DmsWorkflowStepsVO.hints.PreStep.displayWidth}"
+                          maximumLength="#{bindings.DmsWorkflowStepsVO.hints.PreStep.precision}"
+                          shortDesc="#{bindings.DmsWorkflowStepsVO.hints.PreStep.tooltip}"
+                          id="it6">
+              <f:validator binding="#{row.bindings.PreStep.validator}"/>
+            </af:inputText>
+          </af:column>
+        </af:table>
+      </af:panelCollection>
+      </af:panelGroupLayout>
+    </f:facet>
+    <f:facet name="top">
+      <af:panelGroupLayout id="pgl2">
+      <!-- 工作流 -->
+        <af:panelCollection styleClass="AFStretchWidth" id="pc1" >
+        <f:facet name="menus"/>
+        <f:facet name="toolbar">
+            <af:toolbar id="t4">
+              <af:commandButton text="增加" actionListener="#{bindings.WorkflowCreateInsert.execute}" id="cb5"/>
+              <af:commandButton text="删除" actionListener="#{bindings.WorkflowDelete.execute}" id="cb6"/>
+              <af:commandButton text="取消" actionListener="#{bindings.Rollback.execute}" id="cb7"/>
+              <af:commandButton text="保存" actionListener="#{bindings.Commit.execute}" id="cb8"/>
+            </af:toolbar>
+          </f:facet>
+        <f:facet name="statusbar"/>
+        <af:table value="#{bindings.DmsWorkflowInfoVO.collectionModel}"
+                  var="row" rows="#{bindings.DmsWorkflowInfoVO.rangeSize}"
+                  emptyText="#{bindings.DmsWorkflowInfoVO.viewable ? 'No data to display.' : 'Access Denied.'}"
+                  fetchSize="#{bindings.DmsWorkflowInfoVO.rangeSize}"
+                  rowBandingInterval="0" editingMode="clickToEdit"
+                  selectedRowKeys="#{bindings.DmsWorkflowInfoVO.collectionModel.selectedRow}"
+                  selectionListener="#{bindings.DmsWorkflowInfoVO.collectionModel.makeCurrent}"
+                  rowSelection="single" id="t1">
+          <af:column sortProperty="#{bindings.DmsWorkflowInfoVO.hints.WfName.name}"
+                     sortable="false"
+                     headerText="#{bindings.DmsWorkflowInfoVO.hints.WfName.label}"
+                     id="c2">
+            <af:inputText value="#{row.bindings.WfName.inputValue}"
+                          label="#{bindings.DmsWorkflowInfoVO.hints.WfName.label}"
+                          required="#{bindings.DmsWorkflowInfoVO.hints.WfName.mandatory}"
+                          columns="#{bindings.DmsWorkflowInfoVO.hints.WfName.displayWidth}"
+                          maximumLength="#{bindings.DmsWorkflowInfoVO.hints.WfName.precision}"
+                          shortDesc="#{bindings.DmsWorkflowInfoVO.hints.WfName.tooltip}"
+                          id="it2">
+              <f:validator binding="#{row.bindings.WfName.validator}"/>
+            </af:inputText>
+          </af:column>
+          <af:column sortProperty="#{bindings.DmsWorkflowInfoVO.hints.WfCom.name}"
+                     sortable="false"
+                     headerText="#{bindings.DmsWorkflowInfoVO.hints.WfCom.label}"
+                     id="c3">
+            <af:inputText value="#{row.bindings.WfCom.inputValue}"
+                          label="#{bindings.DmsWorkflowInfoVO.hints.WfCom.label}"
+                          required="#{bindings.DmsWorkflowInfoVO.hints.WfCom.mandatory}"
+                          columns="#{bindings.DmsWorkflowInfoVO.hints.WfCom.displayWidth}"
+                          maximumLength="#{bindings.DmsWorkflowInfoVO.hints.WfCom.precision}"
+                          shortDesc="#{bindings.DmsWorkflowInfoVO.hints.WfCom.tooltip}"
+                          id="it3">
+              <f:validator binding="#{row.bindings.WfCom.validator}"/>
+            </af:inputText>
+          </af:column>
+          <af:column sortProperty="#{bindings.DmsWorkflowInfoVO.hints.Seq.name}"
+                     sortable="false"
+                     headerText="#{bindings.DmsWorkflowInfoVO.hints.Seq.label}"
+                     id="c1">
+            <af:inputText value="#{row.bindings.Seq.inputValue}"
+                          label="#{bindings.DmsWorkflowInfoVO.hints.Seq.label}"
+                          required="#{bindings.DmsWorkflowInfoVO.hints.Seq.mandatory}"
+                          columns="#{bindings.DmsWorkflowInfoVO.hints.Seq.displayWidth}"
+                          maximumLength="#{bindings.DmsWorkflowInfoVO.hints.Seq.precision}"
+                          shortDesc="#{bindings.DmsWorkflowInfoVO.hints.Seq.tooltip}"
+                          id="it1">
+              <f:validator binding="#{row.bindings.Seq.validator}"/>
+              <af:convertNumber groupingUsed="false"
+                                pattern="#{bindings.DmsWorkflowInfoVO.hints.Seq.format}"/>
+            </af:inputText>
+          </af:column>
+        </af:table>
+      </af:panelCollection>
+      </af:panelGroupLayout>
+    </f:facet>
+  </af:panelStretchLayout>
+</jsp:root>

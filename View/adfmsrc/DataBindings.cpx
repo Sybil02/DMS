@@ -39,6 +39,8 @@
       <page path="/odi11g/scene/scene_edit.jsff" usageId="__scene_editPageDef"/>
       <page path="/odi11g/odi11_index.jspx" usageId="__odi11_indexPageDef"/>
       <page path="/dgpt/index.jspx" usageId="__indexPageDef2"/>
+      <page path="/dms/workflow/workflowEdit.jsff"
+            usageId="__workflowEditPageDef"/>
    </pageMap>
    <pageDefinitionUsages>
       <page id="__dynamicTabShellPageDef"
@@ -73,6 +75,7 @@
       <page id="__scene_editPageDef" path="odi11g.scene.scene_editPageDef"/>
       <page id="__odi11_indexPageDef" path="odi11g.odi11_indexPageDef"/>
       <page id="__indexPageDef2" path="dgpt.indexPageDef"/>
+      <page id="__workflowEditPageDef" path="dms.workflow.workflowEditPageDef"/>
    </pageDefinitionUsages>
    <dataControlUsages>
       <BC4JDataControl id="DmsModuleDataControl" Package="team.epm.module"

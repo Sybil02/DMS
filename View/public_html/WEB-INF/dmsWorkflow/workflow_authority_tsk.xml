@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<adfc-config xmlns="http://xmlns.oracle.com/adf/controller" version="1.2">
+  <task-flow-definition id="workflow_authority_tsk">
+    <default-activity id="__1">workflowAuthority</default-activity>
+    <view id="workflowAuthority">
+      <page>/dms/workflow/workflowAuthority.jsff</page>
+    </view>
+    <use-page-fragments/>
+  </task-flow-definition>
+</adfc-config>
