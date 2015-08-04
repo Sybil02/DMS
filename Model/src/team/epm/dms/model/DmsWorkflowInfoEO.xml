@@ -161,13 +161,6 @@
     </DesignTime>
      <TransientExpression><![CDATA[adf.userSession.userData.userId]]></TransientExpression>
   </Attribute>
-  <AccessorAttribute
-    Name="DmsWorkflowStepsEO"
-    Association="team.epm.dms.model.DcmWfFkAssoc"
-    AssociationEnd="team.epm.dms.model.DcmWfFkAssoc.DmsWorkflowStepsEO"
-    AssociationOtherEnd="team.epm.dms.model.DcmWfFkAssoc.DmsWorkflowInfoEO"
-    Type="oracle.jbo.RowIterator"
-    IsUpdateable="false"/>
   <Key
     Name="DcmWfPk"
     PrimaryKey="true">

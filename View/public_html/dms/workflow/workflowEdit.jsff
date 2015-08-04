@@ -6,23 +6,22 @@
     <f:facet name="center">
       <af:panelGroupLayout id="pgl1">
       <!-- 工作流步骤 -->
-                  <af:toolbar id="t3">
+        <af:panelCollection styleClass="AFStretchWidth" id="pc2">
+        <f:facet name="menus"/>
+        <f:facet name="toolbar">
+            <af:toolbar id="t3">
               <af:commandButton text="增加" actionListener="#{bindings.StepsCreateInsert.execute}" id="cb1"/>
               <af:commandButton text="删除" actionListener="#{bindings.StepsDelete.execute}" id="cb2"/>
               <af:commandButton text="取消" actionListener="#{bindings.Rollback.execute}" id="cb3"/>
               <af:commandButton text="保存" actionListener="#{bindings.Commit.execute}" id="cb4"/>
             </af:toolbar>
-        <af:panelCollection styleClass="AFStretchWidth" id="pc2">
-        <f:facet name="menus"/>
-        <f:facet name="toolbar">
-
           </f:facet>
         <f:facet name="statusbar"/>
         <af:table value="#{bindings.DmsWorkflowStepsVO.collectionModel}"
                   var="row" rows="#{bindings.DmsWorkflowStepsVO.rangeSize}"
                   emptyText="#{bindings.DmsWorkflowStepsVO.viewable ? 'No data to display.' : 'Access Denied.'}"
                   fetchSize="#{bindings.DmsWorkflowStepsVO.rangeSize}"
-                  rowBandingInterval="0"
+                  rowBandingInterval="0" editingMode="clickToEdit"
                   selectedRowKeys="#{bindings.DmsWorkflowStepsVO.collectionModel.selectedRow}"
                   selectionListener="#{bindings.DmsWorkflowStepsVO.collectionModel.makeCurrent}"
                   rowSelection="single" id="t2" partialTriggers=":::pc1:t1">
@@ -106,7 +105,7 @@
                   var="row" rows="#{bindings.DmsWorkflowInfoVO.rangeSize}"
                   emptyText="#{bindings.DmsWorkflowInfoVO.viewable ? 'No data to display.' : 'Access Denied.'}"
                   fetchSize="#{bindings.DmsWorkflowInfoVO.rangeSize}"
-                  rowBandingInterval="0"
+                  rowBandingInterval="0" editingMode="clickToEdit"
                   selectedRowKeys="#{bindings.DmsWorkflowInfoVO.collectionModel.selectedRow}"
                   selectionListener="#{bindings.DmsWorkflowInfoVO.collectionModel.makeCurrent}"
                   rowSelection="single" id="t1">

@@ -187,13 +187,6 @@
       <Attr Name="_DisplaySize" Value="100"/>
     </DesignTime>
   </Attribute>
-  <AccessorAttribute
-    Name="DmsWorkflowInfoEO"
-    Association="team.epm.dms.model.DcmWfFkAssoc"
-    AssociationEnd="team.epm.dms.model.DcmWfFkAssoc.DmsWorkflowInfoEO"
-    AssociationOtherEnd="team.epm.dms.model.DcmWfFkAssoc.DmsWorkflowStepsEO"
-    Type="team.epm.dms.model.DmsWorkflowInfoEOImpl"
-    IsUpdateable="true"/>
   <Key
     Name="PkWfSteps"
     PrimaryKey="true">

@@ -109,16 +109,6 @@ public class DmsWorkflowInfoEOImpl extends EntityImpl {
                 obj.setUpdatedBy((String)value);
             }
         }
-        ,
-        DmsWorkflowStepsEO {
-            public Object get(DmsWorkflowInfoEOImpl obj) {
-                return obj.getDmsWorkflowStepsEO();
-            }
-
-            public void put(DmsWorkflowInfoEOImpl obj, Object value) {
-                obj.setAttributeInternal(index(), value);
-            }
-        }
         ;
         private static AttributesEnum[] vals = null;
         private static final int firstIndex = 0;
@@ -157,7 +147,6 @@ public class DmsWorkflowInfoEOImpl extends EntityImpl {
     public static final int UPDATEDAT = AttributesEnum.UpdatedAt.index();
     public static final int CREATEDBY = AttributesEnum.CreatedBy.index();
     public static final int UPDATEDBY = AttributesEnum.UpdatedBy.index();
-    public static final int DMSWORKFLOWSTEPSEO = AttributesEnum.DmsWorkflowStepsEO.index();
 
     /**
      * This is the default constructor (do not remove).
@@ -351,13 +340,6 @@ public class DmsWorkflowInfoEOImpl extends EntityImpl {
             return;
         }
         super.setAttrInvokeAccessor(index, value, attrDef);
-    }
-
-    /**
-     * @return the associated entity oracle.jbo.RowIterator.
-     */
-    public RowIterator getDmsWorkflowStepsEO() {
-        return (RowIterator)getAttributeInternal(DMSWORKFLOWSTEPSEO);
     }
 
     /**
