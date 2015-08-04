@@ -309,4 +309,12 @@ public class DmsModuleImpl extends ApplicationModuleImpl implements DmsModule {
     public ViewLinkImpl getDmsGroupGValueLnk() {
         return (ViewLinkImpl)findViewLink("DmsGroupGValueLnk");
     }
+
+    /**
+     * Container's getter for DmsApprovalFlowVO.
+     * @return DmsApprovalFlowVO
+     */
+    public ViewObjectImpl getDmsApprovalFlowVO() {
+        return (ViewObjectImpl)findViewObject("DmsApprovalFlowVO");
+    }
 }

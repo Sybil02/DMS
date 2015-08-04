@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE ViewObject SYSTEM "jbo_03_01.dtd">
+<!---->
+<ViewObject
+  xmlns="http://xmlns.oracle.com/bc4j"
+  Name="DmsApprovalFlowVO"
+  Version="11.1.1.64.93"
+  InheritPersonalization="true"
+  SelectList="DmsApprovalFlow.APPROVE_FLAG, 
+       DmsApprovalFlow.CREATED_AT, 
+       DmsApprovalFlow.CREATED_BY, 
+       DmsApprovalFlow.ENTITY_ID, 
+       DmsApprovalFlow.FINISH_BY, 
+       DmsApprovalFlow.FINISH_FLAG, 
+       DmsApprovalFlow.ID, 
+       DmsApprovalFlow.TEMPLATE_ID, 
+       DmsApprovalFlow.UPDATED_AT, 
+       DmsApprovalFlow.UPDATED_BY"
+  FromList="DMS_APPROVAL_FLOW DmsApprovalFlow"
+  BindingStyle="OracleName"
+  CustomQuery="false"
+  PageIterMode="Full"
+  UseGlueCode="false">
+  <DesignTime>
+    <Attr Name="_codeGenFlag2" Value="Access|VarAccess"/>
+  </DesignTime>
+  <Properties>
+    <SchemaBasedProperties>
+      <LABEL
+        ResId="team.epm.dms.view.DmsApprovalFlowVO_LABEL"/>
+    </SchemaBasedProperties>
+  </Properties>
+  <ViewAccessor
+    Name="DcmTemplateVO"
+    ViewObjectName="team.epm.dms.view.lov.DcmTemplateVO"
+    RowLevelBinds="true"/>
+  <ListBinding
+    Name="LOV_TemplateId"
+    ListVOName="DcmTemplateVO"
+    ListRangeSize="10"
+    NullValueFlag="none"
+    NullValueId="LOV_TemplateId_LOVUIHints_NullValueId"
+    MRUCount="0">
+    <AttrArray Name="AttrNames">
+      <Item Value="TemplateId"/>
+    </AttrArray>
+    <AttrArray Name="ListAttrNames">
+      <Item Value="Id"/>
+    </AttrArray>
+    <AttrArray Name="ListDisplayAttrNames">
+      <Item Value="Name"/>
+    </AttrArray>
+    <DisplayCriteria
+      Hint="showAndExecute"/>
+  </ListBinding>
+  <EntityUsage
+    Name="DmsApprovalFlow"
+    Entity="team.epm.dms.model.DmsApprovalFlow"/>
+  <ViewAttribute
+    Name="ApproveFlag"
+    PrecisionRule="true"
+    EntityAttrName="ApproveFlag"
+    EntityUsage="DmsApprovalFlow"
+    AliasName="APPROVE_FLAG"/>
+  <ViewAttribute
+    Name="CreatedAt"
+    IsUpdateable="false"
+    PrecisionRule="true"
+    EntityAttrName="CreatedAt"
+    EntityUsage="DmsApprovalFlow"
+    AliasName="CREATED_AT"/>
+  <ViewAttribute
+    Name="CreatedBy"
+    IsUpdateable="false"
+    PrecisionRule="true"
+    EntityAttrName="CreatedBy"
+    EntityUsage="DmsApprovalFlow"
+    AliasName="CREATED_BY"/>
+  <ViewAttribute
+    Name="EntityId"
+    IsNotNull="true"
+    PrecisionRule="true"
+    EntityAttrName="EntityId"
+    EntityUsage="DmsApprovalFlow"
+    AliasName="ENTITY_ID"/>
+  <ViewAttribute
+    Name="FinishBy"
+    PrecisionRule="true"
+    EntityAttrName="FinishBy"
+    EntityUsage="DmsApprovalFlow"
+    AliasName="FINISH_BY"/>
+  <ViewAttribute
+    Name="FinishFlag"
+    PrecisionRule="true"
+    EntityAttrName="FinishFlag"
+    EntityUsage="DmsApprovalFlow"
+    AliasName="FINISH_FLAG"/>
+  <ViewAttribute
+    Name="Id"
+    PrecisionRule="true"
+    EntityAttrName="Id"
+    EntityUsage="DmsApprovalFlow"
+    AliasName="ID"/>
+  <ViewAttribute
+    Name="TemplateId"
+    IsNotNull="true"
+    PrecisionRule="true"
+    EntityAttrName="TemplateId"
+    EntityUsage="DmsApprovalFlow"
+    AliasName="TEMPLATE_ID"
+    LOVName="LOV_TemplateId">
+    <Properties>
+      <SchemaBasedProperties>
+        <CONTROLTYPE
+          Value="input_text_lov"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="UpdatedAt"
+    IsUpdateable="false"
+    PrecisionRule="true"
+    EntityAttrName="UpdatedAt"
+    EntityUsage="DmsApprovalFlow"
+    AliasName="UPDATED_AT"/>
+  <ViewAttribute
+    Name="UpdatedBy"
+    IsUpdateable="false"
+    PrecisionRule="true"
+    EntityAttrName="UpdatedBy"
+    EntityUsage="DmsApprovalFlow"
+    AliasName="UPDATED_BY"/>
+  <ResourceBundle>
+    <PropertiesBundle
+      PropertiesFile="ModelBundle"/>
+  </ResourceBundle>
+</ViewObject>

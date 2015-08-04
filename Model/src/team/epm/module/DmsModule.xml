@@ -89,6 +89,9 @@
   <ViewUsage
     Name="DmsGroupValueView"
     ViewObjectName="team.epm.dms.view.DmsGroupValueView"/>
+  <ViewUsage
+    Name="DmsApprovalFlowVO"
+    ViewObjectName="team.epm.dms.view.DmsApprovalFlowVO"/>
   <ViewLinkUsage
     Name="DmsGroupedRoleLnk"
     ViewLinkObjectName="team.epm.dms.DmsGroupedRoleLnk"
@@ -135,71 +138,7 @@
         Name="valueSetId"
         Type="java.lang.String"/>
       <Parameter
-        Name="roleId"
-        Type="java.lang.String"/>
-    </Method>
-  </ClientInterface>
-  <ClientInterface>
-    <Method
-      Name="getDmsValueView">
-      <Return
-        Type="oracle.jbo.ViewObject"/>
-      <Parameter
-        Name="valueSetSrc"
-        Type="java.lang.String"/>
-      <Parameter
-        Name="valueSetId"
-        Type="java.lang.String"/>
-      <Parameter
-        Name="roleId"
-        Type="java.lang.String"/>
-    </Method>
-  </ClientInterface>
-  <ClientInterface>
-    <Method
-      Name="getDmsValueView">
-      <Return
-        Type="oracle.jbo.ViewObject"/>
-      <Parameter
-        Name="valueSetSrc"
-        Type="java.lang.String"/>
-      <Parameter
-        Name="valueSetId"
-        Type="java.lang.String"/>
-      <Parameter
-        Name="roleId"
-        Type="java.lang.String"/>
-    </Method>
-  </ClientInterface>
-  <ClientInterface>
-    <Method
-      Name="getDmsValueView">
-      <Return
-        Type="oracle.jbo.ViewObject"/>
-      <Parameter
-        Name="valueSetSrc"
-        Type="java.lang.String"/>
-      <Parameter
-        Name="valueSetId"
-        Type="java.lang.String"/>
-      <Parameter
-        Name="roleId"
-        Type="java.lang.String"/>
-    </Method>
-  </ClientInterface>
-  <ClientInterface>
-    <Method
-      Name="getDmsValueView">
-      <Return
-        Type="oracle.jbo.ViewObject"/>
-      <Parameter
-        Name="valueSetSrc"
-        Type="java.lang.String"/>
-      <Parameter
-        Name="valueSetId"
-        Type="java.lang.String"/>
-      <Parameter
-        Name="roleId"
+        Name="groupId"
         Type="java.lang.String"/>
     </Method>
   </ClientInterface>
