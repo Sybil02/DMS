@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE ViewLink SYSTEM "jbo_03_01.dtd">
+<!---->
+<ViewLink
+  xmlns="http://xmlns.oracle.com/bc4j"
+  Name="DmsWorkflowInfoStepsLnk"
+  Version="11.1.1.64.93"
+  InheritPersonalization="true">
+  <DesignTime>
+    <Attr Name="_isCodegen" Value="true"/>
+  </DesignTime>
+  <Properties>
+    <SchemaBasedProperties>
+      <LABEL
+        ResId="team.epm.dms.DmsWorkflowInfoStepsLnk_LABEL"/>
+    </SchemaBasedProperties>
+  </Properties>
+  <ViewLinkDefEnd
+    Name="DmsWorkflowInfoVO"
+    Cardinality="1"
+    Owner="team.epm.dms.view.DmsWorkflowInfoVO"
+    Source="true">
+    <DesignTime>
+      <Attr Name="_finderName" Value="DmsWorkflowInfoVO"/>
+      <Attr Name="_isUpdateable" Value="true"/>
+    </DesignTime>
+    <AttrArray Name="Attributes">
+      <Item Value="team.epm.dms.view.DmsWorkflowInfoVO.Id"/>
+    </AttrArray>
+  </ViewLinkDefEnd>
+  <ViewLinkDefEnd
+    Name="DmsWorkflowStepsVO"
+    Cardinality="-1"
+    Owner="team.epm.dms.view.DmsWorkflowStepsVO">
+    <DesignTime>
+      <Attr Name="_finderName" Value="DmsWorkflowStepsVO"/>
+      <Attr Name="_isUpdateable" Value="true"/>
+    </DesignTime>
+    <AttrArray Name="Attributes">
+      <Item Value="team.epm.dms.view.DmsWorkflowStepsVO.WfId"/>
+    </AttrArray>
+  </ViewLinkDefEnd>
+  <ResourceBundle>
+    <PropertiesBundle
+      PropertiesFile="ModelBundle"/>
+  </ResourceBundle>
+</ViewLink>

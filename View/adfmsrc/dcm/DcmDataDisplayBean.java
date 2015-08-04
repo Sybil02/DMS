@@ -1359,7 +1359,7 @@ public class DcmDataDisplayBean extends TablePagination{
                 this.parametersValueMap.put(pName,paraValue);    
             }
         }catch(Exception e){
-            this._logger.severe("切换程序触发valueChangeEvent，导致空指针异常");    
+            this._logger.severe("切换程序触发参数变化valueChangeEvent，导致空指针异常");    
         }
     }
 }

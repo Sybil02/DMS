@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pageDefinition xmlns="http://xmlns.oracle.com/adfm/uimodel"
+                version="11.1.1.64.93" id="workflowEditPageDef"
+                Package="dms.workflow">
+  <parameters/>
+  <executables>
+    <variableIterator id="variables"/>
+    <iterator Binds="DmsWorkflowInfoVO" RangeSize="25"
+              DataControl="DmsModuleDataControl"
+              id="DmsWorkflowInfoVOIterator"/>
+    <iterator Binds="DmsWorkflowStepsVO" RangeSize="25"
+              DataControl="DmsModuleDataControl"
+              id="DmsWorkflowStepsVOIterator"/>
+  </executables>
+  <bindings>
+    <tree IterBinding="DmsWorkflowInfoVOIterator" id="DmsWorkflowInfoVO">
+      <nodeDefinition DefName="team.epm.dms.view.DmsWorkflowInfoVO"
+                      Name="DmsWorkflowInfoVO0">
+        <AttrNames>
+          <Item Value="WfName"/>
+          <Item Value="WfCom"/>
+          <Item Value="Seq"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <tree IterBinding="DmsWorkflowStepsVOIterator" id="DmsWorkflowStepsVO">
+      <nodeDefinition DefName="team.epm.dms.view.DmsWorkflowStepsVO"
+                      Name="DmsWorkflowStepsVO0">
+        <AttrNames>
+          <Item Value="StepNo"/>
+          <Item Value="StepTask"/>
+          <Item Value="StepObject"/>
+          <Item Value="PreStep"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <action IterBinding="DmsWorkflowInfoVOIterator" id="WorkflowCreateInsert"
+            InstanceName="DmsModuleDataControl.DmsWorkflowInfoVO"
+            DataControl="DmsModuleDataControl" RequiresUpdateModel="true"
+            Action="createInsertRow"/>
+    <action IterBinding="DmsWorkflowInfoVOIterator" id="WorkflowDelete"
+            InstanceName="DmsModuleDataControl.DmsWorkflowInfoVO"
+            DataControl="DmsModuleDataControl" RequiresUpdateModel="false"
+            Action="removeCurrentRow"/>
+    <action IterBinding="DmsWorkflowStepsVOIterator" id="StepsCreateInsert"
+            InstanceName="DmsModuleDataControl.DmsWorkflowStepsVO"
+            DataControl="DmsModuleDataControl" RequiresUpdateModel="true"
+            Action="createInsertRow"/>
+    <action IterBinding="DmsWorkflowStepsVOIterator" id="StepsDelete"
+            InstanceName="DmsModuleDataControl.DmsWorkflowStepsVO"
+            DataControl="DmsModuleDataControl" RequiresUpdateModel="false"
+            Action="removeCurrentRow"/>
+    <action id="Commit" DataControl="DmsModuleDataControl"
+            RequiresUpdateModel="true" Action="commitTransaction"/>
+    <action id="Rollback" DataControl="DmsModuleDataControl"
+            RequiresUpdateModel="false" Action="rollbackTransaction"/>
+  </bindings>
+</pageDefinition>
