@@ -95,6 +95,9 @@
   <ViewUsage
     Name="DmsWorkflowStepsVO"
     ViewObjectName="team.epm.dms.view.DmsWorkflowStepsVO"/>
+  <ViewUsage
+    Name="DmsComQueryVO"
+    ViewObjectName="team.epm.dms.view.DmsComQueryVO"/>
   <ViewLinkUsage
     Name="DmsGroupedRoleLnk"
     ViewLinkObjectName="team.epm.dms.DmsGroupedRoleLnk"

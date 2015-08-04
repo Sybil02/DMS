@@ -20,7 +20,8 @@
   CustomQuery="false"
   PageIterMode="Full"
   UseGlueCode="false"
-  Where="DmsWorkflowInfoEO.LOCALE=:locale">
+  Where="DmsWorkflowInfoEO.LOCALE=:locale"
+  OrderBy="DmsWorkflowInfoEO.SEQ">
   <Properties>
     <SchemaBasedProperties>
       <LABEL
@@ -33,6 +34,28 @@
     Type="java.lang.String">
     <TransientExpression><![CDATA[adf.context.locale]]></TransientExpression>
   </Variable>
+  <ViewAccessor
+    Name="DmsComQueryVO"
+    ViewObjectName="team.epm.dms.view.DmsComQueryVO"
+    RowLevelBinds="true"/>
+  <ListBinding
+    Name="LOV_WfCom"
+    ListVOName="DmsComQueryVO"
+    ListRangeSize="-1"
+    NullValueFlag="start"
+    NullValueId="${adfBundle['oracle.javatools.resourcebundle.SystemBundle']['NULL_VALUE_RESID']}"
+    MRUCount="0">
+    <AttrArray Name="AttrNames">
+      <Item Value="WfCom"/>
+    </AttrArray>
+    <AttrArray Name="ListAttrNames">
+      <Item Value="Id"/>
+    </AttrArray>
+    <AttrArray Name="ListDisplayAttrNames">
+      <Item Value="Name"/>
+    </AttrArray>
+    <DisplayCriteria/>
+  </ListBinding>
   <EntityUsage
     Name="DmsWorkflowInfoEO"
     Entity="team.epm.dms.model.DmsWorkflowInfoEO"/>
@@ -96,11 +119,14 @@
     PrecisionRule="true"
     EntityAttrName="WfCom"
     EntityUsage="DmsWorkflowInfoEO"
-    AliasName="WF_COM">
+    AliasName="WF_COM"
+    LOVName="LOV_WfCom">
     <Properties>
       <SchemaBasedProperties>
         <LABEL
           ResId="team.epm.dms.view.DmsWorkflowInfoVO.WfCom_LABEL"/>
+        <CONTROLTYPE
+          Value="choice"/>
       </SchemaBasedProperties>
     </Properties>
   </ViewAttribute>

@@ -2,6 +2,11 @@
 <adfc-config xmlns="http://xmlns.oracle.com/adf/controller" version="1.2">
   <task-flow-definition id="workflow_edit_tsk">
     <default-activity id="__1">workflowEdit</default-activity>
+    <managed-bean id="__4">
+      <managed-bean-name id="__3">workflowEditBean</managed-bean-name>
+      <managed-bean-class id="__2">dms.workflow.WorkflowEditBean</managed-bean-class>
+      <managed-bean-scope id="__5">backingBean</managed-bean-scope>
+    </managed-bean>
     <view id="workflowEdit">
       <page>/dms/workflow/workflowEdit.jsff</page>
     </view>

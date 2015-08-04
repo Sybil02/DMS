@@ -40,36 +40,58 @@
               <af:convertNumber groupingUsed="false"
                                 pattern="#{bindings.DmsWorkflowStepsVO.hints.StepNo.format}"/>
             </af:inputText>
-          </af:column>
-          <af:column sortProperty="#{bindings.DmsWorkflowStepsVO.hints.StepTask.name}"
-                     sortable="false"
-                     headerText="#{bindings.DmsWorkflowStepsVO.hints.StepTask.label}"
-                     id="c5">
-            <af:inputText value="#{row.bindings.StepTask.inputValue}"
-                          label="#{bindings.DmsWorkflowStepsVO.hints.StepTask.label}"
-                          required="#{bindings.DmsWorkflowStepsVO.hints.StepTask.mandatory}"
-                          columns="#{bindings.DmsWorkflowStepsVO.hints.StepTask.displayWidth}"
-                          maximumLength="#{bindings.DmsWorkflowStepsVO.hints.StepTask.precision}"
-                          shortDesc="#{bindings.DmsWorkflowStepsVO.hints.StepTask.tooltip}"
-                          id="it4">
-              <f:validator binding="#{row.bindings.StepTask.validator}"/>
-            </af:inputText>
-          </af:column>
-          <af:column sortProperty="#{bindings.DmsWorkflowStepsVO.hints.StepObject.name}"
-                     sortable="false"
-                     headerText="#{bindings.DmsWorkflowStepsVO.hints.StepObject.label}"
-                     id="c4">
-            <af:inputText value="#{row.bindings.StepObject.inputValue}"
-                          label="#{bindings.DmsWorkflowStepsVO.hints.StepObject.label}"
-                          required="#{bindings.DmsWorkflowStepsVO.hints.StepObject.mandatory}"
-                          columns="#{bindings.DmsWorkflowStepsVO.hints.StepObject.displayWidth}"
-                          maximumLength="#{bindings.DmsWorkflowStepsVO.hints.StepObject.precision}"
-                          shortDesc="#{bindings.DmsWorkflowStepsVO.hints.StepObject.tooltip}"
-                          id="it7">
-              <f:validator binding="#{row.bindings.StepObject.validator}"/>
-            </af:inputText>
-          </af:column>
-          <af:column sortProperty="#{bindings.DmsWorkflowStepsVO.hints.PreStep.name}"
+              
+            </af:column>
+            <af:column headerText="#{bindings.DmsWorkflowStepsVO.hints.StepTask.label}"
+                       sortable="false"
+                       sortProperty="#{bindings.DmsWorkflowStepsVO.hints.StepTask.name}"
+                       id="c5">
+                <af:selectOneChoice id="soc2"  autoSubmit="true"
+                                    label="#{row.bindings.StepTask.label}"
+                                    required="#{bindings.DmsWorkflowStepsVO.hints.StepTask.mandatory}"
+                                    value="#{row.bindings.StepTask.inputValue}">
+                <af:selectItem label="打开模板" value="OPEN TEMPLATES" id="si2"/>
+                <af:selectItem label="ETL" value="ETL" id="si4"/>
+                <af:selectItem label="审批" value="APPROVE" id="si3"/>
+                </af:selectOneChoice>
+            </af:column>
+            <af:column headerText="#{bindings.DmsWorkflowStepsVO.hints.LabelObject.label}"
+                       sortable="false"
+                       sortProperty="#{bindings.DmsWorkflowStepsVO.hints.LabelObject.name}"
+                       id="c4">
+              <af:selectOneChoice id="soc3" autoSubmit="true"
+                                  required="#{bindings.DmsWorkflowStepsVO.hints.LabelObject.mandatory}"
+                                  label="#{row.bindings.LabelObject.label}"
+                                  value="#{row.bindings.LabelObject.inputValue}" >
+                <f:selectItems value="#{backingBeanScope.workflowEditBean.taskObjItemList}"
+                               id="si5"/>
+              </af:selectOneChoice>
+            </af:column>
+            <af:column headerText="#{bindings.DmsWorkflowStepsVO.hints.ApproveObject.label}"
+                       id="c8">
+              <af:inputText value="#{row.bindings.ApproveObject.inputValue}"
+                            label="#{bindings.DmsWorkflowStepsVO.hints.ApproveObject.label}"
+                            required="#{bindings.DmsWorkflowStepsVO.hints.ApproveObject.mandatory}"
+                            columns="#{bindings.DmsWorkflowStepsVO.hints.ApproveObject.displayWidth}"
+                            maximumLength="#{bindings.DmsWorkflowStepsVO.hints.ApproveObject.precision}"
+                            shortDesc="#{bindings.DmsWorkflowStepsVO.hints.ApproveObject.tooltip}"
+                            id="it4">
+                <f:validator binding="#{row.bindings.ApproveObject.validator}"/>
+              </af:inputText>
+            </af:column>
+            <af:column headerText="#{bindings.DmsWorkflowStepsVO.hints.EtlObject.label}"
+                       id="c9">
+              <af:selectOneChoice 
+              autoSubmit="true"
+              required="#{bindings.DmsWorkflowStepsVO.hints.EtlObject.mandatory}"
+              label="#{row.bindings.EtlObject.label}"
+              value="#{row.bindings.EtlObject.inputValue}" 
+              id="soc4">
+                <f:selectItems value="#{backingBeanScope.workflowEditBean.etlObjItemList}"
+                               id="si6"/>
+              </af:selectOneChoice>
+            </af:column>
+            <af:column sortProperty="#{bindings.DmsWorkflowStepsVO.hints.PreStep.name}"
                      sortable="false"
                      headerText="#{bindings.DmsWorkflowStepsVO.hints.PreStep.label}"
                      id="c7">
@@ -127,16 +149,14 @@
                      sortable="false"
                      headerText="#{bindings.DmsWorkflowInfoVO.hints.WfCom.label}"
                      id="c3">
-            <af:inputText value="#{row.bindings.WfCom.inputValue}"
-                          label="#{bindings.DmsWorkflowInfoVO.hints.WfCom.label}"
-                          required="#{bindings.DmsWorkflowInfoVO.hints.WfCom.mandatory}"
-                          columns="#{bindings.DmsWorkflowInfoVO.hints.WfCom.displayWidth}"
-                          maximumLength="#{bindings.DmsWorkflowInfoVO.hints.WfCom.precision}"
-                          shortDesc="#{bindings.DmsWorkflowInfoVO.hints.WfCom.tooltip}"
-                          id="it3">
-              <f:validator binding="#{row.bindings.WfCom.validator}"/>
-            </af:inputText>
-          </af:column>
+              <af:selectOneChoice value="#{row.bindings.WfCom.inputValue}"
+                                  label="#{row.bindings.WfCom.label}"
+                                  required="#{bindings.DmsWorkflowInfoVO.hints.WfCom.mandatory}"
+                                  shortDesc="#{bindings.DmsWorkflowInfoVO.hints.WfCom.tooltip}"
+                                  id="soc1">
+                <f:selectItems value="#{row.bindings.WfCom.items}" id="si1"/>
+              </af:selectOneChoice>
+            </af:column>
           <af:column sortProperty="#{bindings.DmsWorkflowInfoVO.hints.Seq.name}"
                      sortable="false"
                      headerText="#{bindings.DmsWorkflowInfoVO.hints.Seq.label}"

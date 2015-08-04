@@ -77,18 +77,6 @@
     </DesignTime>
   </Attribute>
   <Attribute
-    Name="StepObject"
-    Precision="200"
-    ColumnName="STEP_OBJECT"
-    SQLType="VARCHAR"
-    Type="java.lang.String"
-    ColumnType="VARCHAR2"
-    TableName="DMS_WORKFLOW_STEPS">
-    <DesignTime>
-      <Attr Name="_DisplaySize" Value="200"/>
-    </DesignTime>
-  </Attribute>
-  <Attribute
     Name="CreatedAt"
     IsNotNull="true"
     ColumnName="CREATED_AT"
@@ -185,6 +173,42 @@
     TableName="DMS_WORKFLOW_STEPS">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="100"/>
+    </DesignTime>
+  </Attribute>
+  <Attribute
+    Name="ApproveObject"
+    Precision="1000"
+    ColumnName="APPROVE_OBJECT"
+    SQLType="VARCHAR"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    TableName="DMS_WORKFLOW_STEPS">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="1000"/>
+    </DesignTime>
+  </Attribute>
+  <Attribute
+    Name="EtlObject"
+    Precision="1000"
+    ColumnName="ETL_OBJECT"
+    SQLType="VARCHAR"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    TableName="DMS_WORKFLOW_STEPS">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="1000"/>
+    </DesignTime>
+  </Attribute>
+  <Attribute
+    Name="LabelObject"
+    Precision="1000"
+    ColumnName="LABEL_OBJECT"
+    SQLType="VARCHAR"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    TableName="DMS_WORKFLOW_STEPS">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="1000"/>
     </DesignTime>
   </Attribute>
   <Key
@@ -310,4 +334,8 @@
       <Item Value="team.epm.dms.model.DmsWorkflowStepsEO.Locale"/>
     </AttrArray>
   </Key>
+  <ResourceBundle>
+    <PropertiesBundle
+      PropertiesFile="ModelBundle"/>
+  </ResourceBundle>
 </Entity>

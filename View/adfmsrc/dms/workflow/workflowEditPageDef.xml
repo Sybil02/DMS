@@ -29,8 +29,10 @@
         <AttrNames>
           <Item Value="StepNo"/>
           <Item Value="StepTask"/>
-          <Item Value="StepObject"/>
           <Item Value="PreStep"/>
+          <Item Value="LabelObject"/>
+          <Item Value="ApproveObject"/>
+          <Item Value="EtlObject"/>
         </AttrNames>
       </nodeDefinition>
     </tree>
