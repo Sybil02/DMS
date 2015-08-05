@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<adfc-config xmlns="http://xmlns.oracle.com/adf/controller" version="1.2">
+  <task-flow-definition id="approval_flow_tsk">
+    <default-activity id="__1">index</default-activity>
+    <view id="index">
+      <page>/dms/approvalFlow/index.jsff</page>
+    </view>
+    <view id="edit"></view>
+    <use-page-fragments/>
+  </task-flow-definition>
+</adfc-config>

@@ -312,6 +312,13 @@ public class DmsModuleImpl extends ApplicationModuleImpl implements DmsModule {
     }
 
     /**
+     * Container's getter for DmsApprovalFlowVO.
+     * @return DmsApprovalFlowVO
+     */
+    public ViewObjectImpl getDmsApprovalFlowVO() {
+        return (ViewObjectImpl)findViewObject("DmsApprovalFlowVO");
+    }
+    /**
      * Container's getter for DmsWorkflowInfoVO.
      * @return DmsWorkflowInfoVO
      */
