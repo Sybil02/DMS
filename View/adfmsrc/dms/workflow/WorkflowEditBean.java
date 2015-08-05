@@ -34,7 +34,7 @@ public class WorkflowEditBean {
     private List<SelectItem> etlObjItemList = new ArrayList<SelectItem>();
     private Person curUser;
     public WorkflowEditBean() {
-        super();
+//        super();
         this.curUser =(Person)ADFContext.getCurrent().getSessionScope().get("cur_user");
         this.initObjItem();
     }
