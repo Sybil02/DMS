@@ -66,7 +66,9 @@ public class TemplateBackingBean {
     private RichPopup validationPopup;
     //搜索
     private FilterableQueryDescriptor queryDescriptor=new DcmQueryDescriptor();
+    private FilterableQueryDescriptor queryTemplateDescriptor = new DcmQueryDescriptor();
     private RichPopup calcWnd;
+    private RichTable templateTable;
     static {
         dcmRemainAttr.add("IDX");
         dcmRemainAttr.add("COM_RECORD_ID");
@@ -326,7 +328,8 @@ public class TemplateBackingBean {
     }
 
     public void comRecordQueryListener(QueryEvent queryEvent) {
-        DcmQueryDescriptor descriptor =(DcmQueryDescriptor)queryEvent.getDescriptor();  
+        DcmQueryDescriptor descriptor =(DcmQueryDescriptor)queryEvent.getDescriptor();
+        System.out.println("sss"+descriptor.getFilterCriteria());
         if(descriptor.getFilterCriteria()!=null){
             ViewObject vo=ADFUtils.findIterator("getCombinationRecordViewIterator").getViewObject();
             vo.getViewCriteriaManager().setApplyViewCriteriaNames(null);
@@ -343,6 +346,27 @@ public class TemplateBackingBean {
             AdfFacesContext.getCurrentInstance().addPartialTarget(this.recordTable);
         }
     }
+    public void queryTempDescriptor(QueryEvent queryEvent) {
+        DcmQueryDescriptor descriptor =(DcmQueryDescriptor)queryEvent.getDescriptor();  
+        System.out.println(descriptor.getFilterCriteria());
+        if(descriptor.getFilterCriteria()!=null){
+            ViewObject vo=ADFUtils.findIterator("DcmTemplateViewIterator").getViewObject();
+            System.out.println("v0:"+vo.getName());
+            vo.getViewCriteriaManager().setApplyViewCriteriaNames(null);
+            ViewCriteria vc=vo.createViewCriteria();
+            ViewCriteriaRow vcr=vc.createViewCriteriaRow();
+            for(Object key:descriptor.getFilterCriteria().keySet()){
+                if(!ObjectUtils.toString(descriptor.getFilterCriteria().get(key)).trim().equals("")){
+                    vcr.setAttribute(key.toString(), "%"+descriptor.getFilterCriteria().get(key)+"%");             
+                }
+            }
+            vc.addRow(vcr);
+            vo.applyViewCriteria(vc);
+            System.out.println("vc:"+vc.getFetchedRowCount());
+            vo.executeQuery();
+            AdfFacesContext.getCurrentInstance().addPartialTarget(this.templateTable);
+        }
+    }
 
     public FilterableQueryDescriptor getQueryDescriptor() {
         return queryDescriptor;
@@ -357,4 +381,20 @@ public class TemplateBackingBean {
     }
 
 
+    public void setQueryTemplateDescriptor(FilterableQueryDescriptor queryTemplateDescriptor) {
+        this.queryTemplateDescriptor = queryTemplateDescriptor;
+    }
+
+    public FilterableQueryDescriptor getQueryTemplateDescriptor() {
+        return queryTemplateDescriptor;
+    }
+
+
+    public void setTemplateTable(RichTable templateTable) {
+        this.templateTable = templateTable;
+    }
+
+    public RichTable getTemplateTable() {
+        return templateTable;
+    }
 }

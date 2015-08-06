@@ -41,6 +41,7 @@
       <page path="/dgpt/index.jspx" usageId="__indexPageDef2"/>
       <page path="/dms/workflow/workflowEdit.jsff"
             usageId="__workflowEditPageDef"/>
+      <page path="/dms/approvalFlow/index.jsff" usageId="__indexPageDef3"/>
    </pageMap>
    <pageDefinitionUsages>
       <page id="__dynamicTabShellPageDef"
@@ -76,6 +77,7 @@
       <page id="__odi11_indexPageDef" path="odi11g.odi11_indexPageDef"/>
       <page id="__indexPageDef2" path="dgpt.indexPageDef"/>
       <page id="__workflowEditPageDef" path="dms.workflow.workflowEditPageDef"/>
+      <page id="__indexPageDef3" path="dms.approvalFlow.indexPageDef"/>
    </pageDefinitionUsages>
    <dataControlUsages>
       <BC4JDataControl id="DmsModuleDataControl" Package="team.epm.module"

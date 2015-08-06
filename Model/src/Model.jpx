@@ -56,6 +56,10 @@
       </DesignTime>
    </Containee>
    <Containee
+      Name="lov"
+      PackageName="team.epm.dms.view.lov"
+      ObjectType="JboPackage"/>
+   <Containee
       Name="view"
       PackageName="team.epm.dms.view"
       ObjectType="JboPackage">

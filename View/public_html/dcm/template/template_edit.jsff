@@ -292,7 +292,7 @@
       </af:panelGroupLayout>
     </f:facet>
     <f:facet name="center">
-      <af:panelCollection id="pc2">
+      <af:panelCollection id="pc2" featuresOff="wrap freeze formatMenu">
         <f:facet name="menus"/>
         <f:facet name="toolbar">
           <af:toolbar id="t4">
@@ -322,7 +322,6 @@
                                 actionListener="#{pageFlowScope.TemplateBackingBean.showValidationPopup}"/>
               <af:commandButton text="计算程序管理" id="btn4"
                                 actionListener="#{pageFlowScope.TemplateBackingBean.showCalcWnd}">
-                
               </af:commandButton>
             </af:group>
           </af:toolbar>
@@ -331,14 +330,19 @@
         <af:table value="#{bindings.DcmTemplateView.collectionModel}" var="row"
                   rows="#{bindings.DcmTemplateView.rangeSize}"
                   emptyText="#{viewBundle['dms.common.nodata']}"
-                  fetchSize="#{bindings.DcmTemplateView.rangeSize}"
+                  fetchSize="#{bindings.DcmTemplateView.rangeSize}" 
                   rowBandingInterval="0" id="t1" rowSelection="single"
                   editingMode="clickToEdit"
                   selectionListener="#{bindings.DcmTemplateView.collectionModel.makeCurrent}"
                   partialTriggers="::cb5 :::pc1:cb9"
-                  selectedRowKeys="#{bindings.DcmTemplateView.collectionModel.selectedRow}">
+                  selectedRowKeys="#{bindings.DcmTemplateView.collectionModel.selectedRow}"
+                  clientComponent="true"
+                  queryListener="#{pageFlowScope.TemplateBackingBean.queryTempDescriptor}"
+                  filterModel="#{pageFlowScope.TemplateBackingBean.queryTemplateDescriptor}"
+                  binding="#{pageFlowScope.TemplateBackingBean.templateTable}">
           <af:column sortProperty="#{bindings.DcmTemplateView.hints.Name.name}"
                      sortable="false"
+                     filterable="true" 
                      headerText="#{bindings.DcmTemplateView.hints.Name.label}"
                      id="c3">
             <af:inputText value="#{row.bindings.Name.inputValue}"
@@ -353,6 +357,7 @@
           </af:column>
           <af:column sortProperty="#{bindings.DcmTemplateView.hints.CombinationId.name}"
                      sortable="false"
+                     filterable="false"
                      headerText="#{bindings.DcmTemplateView.hints.CombinationId.label}"
                      id="c8">
             <af:selectOneChoice value="#{row.bindings.CombinationId.inputValue}"
@@ -365,7 +370,7 @@
             </af:selectOneChoice>
           </af:column>
           <af:column sortProperty="#{bindings.DcmTemplateView.hints.CategoryId.name}"
-                     sortable="false"
+                     sortable="false" 
                      headerText="#{bindings.DcmTemplateView.hints.CategoryId.label}"
                      id="c7">
             <af:selectOneChoice value="#{row.bindings.CategoryId.inputValue}"
@@ -377,7 +382,7 @@
             </af:selectOneChoice>
           </af:column>
           <af:column sortProperty="#{bindings.DcmTemplateView.hints.Readonly.name}"
-                     sortable="false"
+                     sortable="false" filterable="false"
                      headerText="#{bindings.DcmTemplateView.hints.Readonly.label}"
                      id="c1">
             <af:selectOneChoice value="#{row.bindings.Readonly.inputValue}"
@@ -389,7 +394,7 @@
             </af:selectOneChoice>
           </af:column>
           <af:column sortProperty="#{bindings.DcmTemplateView.hints.DbTable.name}"
-                     sortable="false"
+                     sortable="false" filterable="true"
                      headerText="#{bindings.DcmTemplateView.hints.DbTable.label}"
                      id="c10">
             <af:inputText value="#{row.bindings.DbTable.inputValue}"
@@ -403,7 +408,7 @@
             </af:inputText>
           </af:column>
           <af:column sortProperty="#{bindings.DcmTemplateView.hints.DbView.name}"
-                     sortable="false"
+                     sortable="false" filterable="false"
                      headerText="#{bindings.DcmTemplateView.hints.DbView.label}"
                      id="c4">
             <af:inputText value="#{row.bindings.DbView.inputValue}"
@@ -417,7 +422,7 @@
             </af:inputText>
           </af:column>
           <af:column sortProperty="#{bindings.DcmTemplateView.hints.TmpTable.name}"
-                     sortable="false"
+                     sortable="false" filterable="false"
                      headerText="#{bindings.DcmTemplateView.hints.TmpTable.label}"
                      id="c11">
             <af:inputListOfValues id="tmpTableId"
@@ -431,7 +436,7 @@
             </af:inputListOfValues>
           </af:column>
           <af:column sortProperty="#{bindings.DcmTemplateView.hints.PreProgram.name}"
-                     sortable="false"
+                     sortable="false" filterable="false"
                      headerText="#{bindings.DcmTemplateView.hints.PreProgram.label}"
                      id="c5">
             <af:inputText value="#{row.bindings.PreProgram.inputValue}"
@@ -445,7 +450,7 @@
             </af:inputText>
           </af:column>
           <af:column sortProperty="#{bindings.DcmTemplateView.hints.HandleProgram.name}"
-                     sortable="false"
+                     sortable="false" filterable="false"
                      headerText="#{bindings.DcmTemplateView.hints.HandleProgram.label}"
                      id="c6">
             <af:inputText value="#{row.bindings.HandleProgram.inputValue}"
@@ -459,7 +464,7 @@
             </af:inputText>
           </af:column>
           <af:column sortProperty="#{bindings.DcmTemplateView.hints.AfterProgram.name}"
-                     sortable="false"
+                     sortable="false" filterable="false"
                      headerText="#{bindings.DcmTemplateView.hints.AfterProgram.label}"
                      id="c13">
             <af:inputText value="#{row.bindings.AfterProgram.inputValue}"
@@ -473,7 +478,7 @@
             </af:inputText>
           </af:column>
           <af:column sortProperty="#{bindings.DcmTemplateView.hints.HandleMode.name}"
-                     sortable="false"
+                     sortable="false" filterable="false"
                      headerText="#{bindings.DcmTemplateView.hints.HandleMode.label}"
                      id="c9">
             <af:selectOneChoice value="#{row.bindings.HandleMode.inputValue}"
@@ -485,7 +490,7 @@
             </af:selectOneChoice>
           </af:column>
           <af:column sortProperty="#{bindings.DcmTemplateView.hints.TemplateFile.name}"
-                     sortable="false"
+                     sortable="false" filterable="false"
                      headerText="#{bindings.DcmTemplateView.hints.TemplateFile.label}"
                      id="c2">
             <af:inputText value="#{row.bindings.TemplateFile.inputValue}"
@@ -499,7 +504,7 @@
             </af:inputText>
           </af:column>
           <af:column sortProperty="#{bindings.DcmTemplateView.hints.DataStartLine.name}"
-                     sortable="false"
+                     sortable="false" filterable="false"
                      headerText="#{bindings.DcmTemplateView.hints.DataStartLine.label}"
                      id="c14">
             <af:inputText value="#{row.bindings.DataStartLine.inputValue}"
@@ -515,7 +520,7 @@
             </af:inputText>
           </af:column>
           <af:column sortProperty="#{bindings.DcmTemplateView.hints.Seq.name}"
-                     sortable="false"
+                     sortable="false" filterable="false"
                      headerText="#{bindings.DcmTemplateView.hints.Seq.label}"
                      id="c15">
             <af:inputText value="#{row.bindings.Seq.inputValue}"
@@ -531,7 +536,7 @@
             </af:inputText>
           </af:column>
           <af:column sortProperty="#{bindings.DcmTemplateView.hints.Description.name}"
-                     sortable="false"
+                     sortable="false" filterable="false"
                      headerText="#{bindings.DcmTemplateView.hints.Description.label}"
                      id="c12">
             <af:inputText value="#{row.bindings.Description.inputValue}"
@@ -544,7 +549,7 @@
               <f:validator binding="#{row.bindings.Description.validator}"/>
             </af:inputText>
           </af:column>
-          <af:column headerText="#{bindings.DcmTemplateView.hints.TemplateLabel.label}"
+          <af:column headerText="#{bindings.DcmTemplateView.hints.TemplateLabel.label}" filterable="false"
                      id="c34">
             <af:inputText value="#{row.bindings.TemplateLabel.inputValue}"
                           label="#{bindings.DcmTemplateView.hints.TemplateLabel.label}"

@@ -5,7 +5,9 @@
     <view id="index">
       <page>/dms/approvalFlow/index.jsff</page>
     </view>
-    <view id="edit"></view>
+    <view id="edit">
+      <page>/dms/approvalFlow/approve_edit.jsff</page>
+    </view>
     <use-page-fragments/>
   </task-flow-definition>
 </adfc-config>
