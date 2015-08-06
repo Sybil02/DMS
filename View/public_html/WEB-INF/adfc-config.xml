@@ -18,6 +18,9 @@
   <view id="dgptIndex">
     <page>/dgpt/index.jspx</page>
   </view>
+  <view id="workflowIndex">
+    <page>/workapproveflow/workflowIndex.jspx</page>
+  </view>
   <control-flow-rule id="__17">
     <from-activity-id id="__18">*</from-activity-id>
     <control-flow-case id="__20">
@@ -60,6 +63,13 @@
       <to-activity-id id="__56">dgptIndex</to-activity-id>
     </control-flow-case>
   </control-flow-rule>
+  <control-flow-rule id="__62">
+    <from-activity-id id="__61">*</from-activity-id>
+    <control-flow-case id="__65">
+      <from-outcome id="__67">GoWorkflowIndex</from-outcome>
+      <to-activity-id id="__66">workflowIndex</to-activity-id>
+    </control-flow-case>
+  </control-flow-rule>
   <managed-bean id="__1">
     <managed-bean-name id="__4">dmsTabContext</managed-bean-name>
     <managed-bean-class id="__2">dms.dynamicShell.TabContext</managed-bean-class>
@@ -94,5 +104,10 @@
     <managed-bean-name id="__52">Odi11gIndexMBean</managed-bean-name>
     <managed-bean-class id="__53">odi11g.Odi11gIndexMBean</managed-bean-class>
     <managed-bean-scope id="__51">view</managed-bean-scope>
+  </managed-bean>
+  <managed-bean id="__59">
+    <managed-bean-name id="__64">workflowLauncher</managed-bean-name>
+    <managed-bean-class id="__60">workapproveflow.WorkflowLauncher</managed-bean-class>
+    <managed-bean-scope id="__63">view</managed-bean-scope>
   </managed-bean>
 </adfc-config>

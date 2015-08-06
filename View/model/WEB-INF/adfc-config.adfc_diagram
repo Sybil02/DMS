@@ -206,4 +206,38 @@
       <property
          name="sdm:polyPoints">B50,1018.0,179.24707,1018.5,239.64355,T50</property>
    </ControlFlowCase>
+   <View
+      id="View24">
+      <property
+         name="activityId">workflowIndex</property>
+      <property
+         name="page">/workapproveflow/workflowIndex.jspx</property>
+      <property
+         name="description">&lt;html>&lt;p>&lt;b>workflowIndex&lt;/b>&lt;/p>&lt;p>Activity Type:  View&lt;/p></property>
+      <property
+         name="exceptionHandler">false</property>
+      <property
+         name="y">293.1953</property>
+      <property
+         name="x">1198.0</property>
+   </View>
+   <WildcardControlFlowRule
+      id="WildcardControlFlowRule26">
+      <property
+         name="activityId">*</property>
+      <property
+         name="y">138.19531</property>
+      <property
+         name="x">1197.0</property>
+   </WildcardControlFlowRule>
+   <ControlFlowCase
+      islink="true"
+      id="ControlFlowCase28"
+      from="WildcardControlFlowRule26"
+      to="View24">
+      <property
+         name="fromOutcome">GoWorkflowIndex</property>
+      <property
+         name="sdm:polyPoints">B50,1197.0,180.84473,1198.0,238.84473,T50</property>
+   </ControlFlowCase>
 </SDM>

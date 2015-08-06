@@ -635,6 +635,24 @@
                   <url path="adfmsrc/"/>
                </list>
             </hash>
+            <hash>
+               <url n="content-folder-url" path="adfmsrc/workapproveflow/"/>
+               <list n="pattern-filters">
+                  <string v="+workapproveflow/WorkflowLauncher.java"/>
+               </list>
+               <list n="url-path">
+                  <url path="adfmsrc/"/>
+               </list>
+            </hash>
+            <hash>
+               <url n="content-folder-url" path="adfmsrc/dms/dynamicShell/"/>
+               <list n="pattern-filters">
+                  <string v="+dms/dynamicShell/TabLauncher.java"/>
+               </list>
+               <list n="url-path">
+                  <url path="adfmsrc/"/>
+               </list>
+            </hash>
          </list>
          <list n="url-path"/>
       </hash>
