@@ -161,6 +161,22 @@
     </DesignTime>
      <TransientExpression><![CDATA[adf.userSession.userData.userId]]></TransientExpression>
   </Attribute>
+  <Attribute
+    Name="WfStatus"
+    IsNotNull="true"
+    Precision="1"
+    ColumnName="WF_STATUS"
+    SQLType="CHAR"
+    Type="java.lang.String"
+    ColumnType="CHAR"
+    TableName="DMS_WORKFLOWINFO"
+    RetrievedOnUpdate="true"
+    RetrievedOnInsert="true"
+    DefaultValue="N">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="1"/>
+    </DesignTime>
+  </Attribute>
   <Key
     Name="DcmWfPk"
     PrimaryKey="true">

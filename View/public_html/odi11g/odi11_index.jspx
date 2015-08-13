@@ -28,7 +28,7 @@
             <af:menuBar id="mb1" binding="#{MainPageMBean.menuBar}"></af:menuBar>
           </f:facet>
           <f:facet name="welcome">
-            <af:panelStretchLayout id="psl1" topHeight="0">
+            <af:panelStretchLayout id="psl1" topHeight="1px">
               <f:facet name="top">
                 <af:panelGroupLayout layout="scroll"
                                      xmlns:af="http://xmlns.oracle.com/adf/faces/rich"

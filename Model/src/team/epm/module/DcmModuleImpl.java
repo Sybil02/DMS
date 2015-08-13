@@ -24,6 +24,7 @@ import team.epm.dcm.view.DcmCalcParameterVOImpl;
 import team.epm.dcm.view.DcmComVsViewImpl;
 import team.epm.dcm.view.DcmCombinationViewImpl;
 import team.epm.dcm.view.DcmTemplateColumnViewImpl;
+import team.epm.dcm.view.DcmTemplateCombinaVOImpl;
 import team.epm.dcm.view.DcmTemplateViewImpl;
 import team.epm.dms.view.DmsEnabledRoleImpl;
 import team.epm.dms.view.DmsRoleViewImpl;
@@ -212,6 +213,7 @@ public class DcmModuleImpl extends ApplicationModuleImpl implements DcmModule {
             }
             StringBuffer sql = new StringBuffer();
             sql.append(sql_select).append(sql_from).append(sql_where).append(sql_order);
+            System.out.println(sql);
             vo = this.createViewObjectFromQueryStmt(voName, sql.toString());
         }
         return vo;
@@ -346,6 +348,14 @@ public class DcmModuleImpl extends ApplicationModuleImpl implements DcmModule {
      */
     public ViewObjectImpl getDcmCalcParameterQueryVO() {
         return (ViewObjectImpl)findViewObject("DcmCalcParameterQueryVO");
+    }
+
+    /**
+     * Container's getter for DcmTemplateCombinaVO.
+     * @return DcmTemplateCombinaVO
+     */
+    public DcmTemplateCombinaVOImpl getDcmTemplateCombinaVO() {
+        return (DcmTemplateCombinaVOImpl)findViewObject("DcmTemplateCombinaVO");
     }
 }
 

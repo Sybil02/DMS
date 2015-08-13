@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pageDefinition xmlns="http://xmlns.oracle.com/adfm/uimodel"
+                version="11.1.1.64.93" id="workflow_displayPageDef"
+                Package="workapproveflow.workflow">
+  <parameters/>
+  <executables>
+    <variableIterator id="variables"/>
+    <iterator Binds="DmsUserWorkflowVO" RangeSize="-1"
+              DataControl="DmsModuleDataControl"
+              id="DmsUserWorkflowVOIterator" Refresh="ifNeeded"/>
+  </executables>
+  <bindings>
+    <tree IterBinding="DmsUserWorkflowVOIterator" id="DmsUserWorkflowVO">
+      <nodeDefinition DefName="team.epm.dms.view.DmsUserWorkflowVO"
+                      Name="DmsUserWorkflowVO0">
+        <AttrNames>
+          <Item Value="WorkflowId"/>
+          <Item Value="WfName"/>
+          <Item Value="WfStatus"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+  </bindings>
+</pageDefinition>

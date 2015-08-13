@@ -85,7 +85,7 @@
               <af:selectOneChoice 
               autoSubmit="true"
               required="#{bindings.DmsWorkflowStepsVO.hints.EtlObject.mandatory}"
-              label="#{row.bindings.EtlObject.label}"
+              label="#{row.bindings.EtlObject.label}" 
               value="#{row.bindings.EtlObject.inputValue}" 
               id="soc4">
                 <f:selectItems value="#{backingBeanScope.workflowEditBean.etlObjItemList}"
