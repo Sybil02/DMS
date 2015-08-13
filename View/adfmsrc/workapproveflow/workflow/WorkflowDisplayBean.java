@@ -19,6 +19,8 @@ import java.util.List;
 
 import java.util.Map;
 
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
 import javax.faces.event.ValueChangeEvent;
@@ -113,6 +115,7 @@ public class WorkflowDisplayBean {
     }
     //工作流启动，初始化工作流步骤信息
     public void runWorkflow(ActionEvent actionEvent) {
+        this.runPop.cancel();
         DCIteratorBinding wfIter = ADFUtils.findIterator("DmsUserWorkflowVOIterator");
         ViewObject wfVo = wfIter.getViewObject();
         Row row = wfVo.getCurrentRow();
@@ -122,6 +125,7 @@ public class WorkflowDisplayBean {
         this.wfEngine.changeWfStatus(wfId, wfStatus);
         //初始化工作流状态
         this.wfEngine.initWfSteps(wfId,this.comSelectMap);
+        FacesContext.getCurrentInstance().addMessage(null,new FacesMessage("工作流启动完成！"));
         //通过sql直接修改表数据，需要查询VO改变迭代器数据，刷新table才有效
         wfVo.executeQuery();
         AdfFacesContext adfFacesContext = AdfFacesContext.getCurrentInstance();
