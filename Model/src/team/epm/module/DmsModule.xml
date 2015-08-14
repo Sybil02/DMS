@@ -101,6 +101,12 @@
   <ViewUsage
     Name="DmsApprovalFlowVO"
     ViewObjectName="team.epm.dms.view.DmsApprovalFlowVO"/>
+  <ViewUsage
+    Name="DmsApprovalFlowInfoVO"
+    ViewObjectName="team.epm.dms.view.DmsApprovalFlowInfoVO"/>
+  <ViewUsage
+    Name="DmsApprovalflowEntitysVO"
+    ViewObjectName="team.epm.dms.view.DmsApprovalflowEntitysVO"/>
   <ViewLinkUsage
     Name="DmsGroupedRoleLnk"
     ViewLinkObjectName="team.epm.dms.DmsGroupedRoleLnk"
@@ -132,15 +138,79 @@
     DstViewUsageName="team.epm.module.DmsModule.DmsGroupValueView"
     Reversed="false"/>
   <ViewLinkUsage
-    Name="DmsWorkflowInfoStepsLnk"
-    ViewLinkObjectName="team.epm.dms.DmsWorkflowInfoStepsLnk"
-    SrcViewUsageName="team.epm.module.DmsModule.DmsWorkflowInfoVO"
-    DstViewUsageName="team.epm.module.DmsModule.DmsWorkflowStepsVO"
+    Name="DmsApprovalflowEntitysLnk1"
+    ViewLinkObjectName="team.epm.dms.DmsApprovalflowEntitysLnk"
+    SrcViewUsageName="team.epm.module.DmsModule.DmsApprovalFlowInfoVO"
+    DstViewUsageName="team.epm.module.DmsModule.DmsApprovalflowEntitysVO"
     Reversed="false"/>
   <ResourceBundle>
     <PropertiesBundle
       PropertiesFile="ModelBundle"/>
   </ResourceBundle>
+  <ClientInterface>
+    <Method
+      Name="getDmsValueView">
+      <Return
+        Type="oracle.jbo.ViewObject"/>
+      <Parameter
+        Name="valueSetSrc"
+        Type="java.lang.String"/>
+      <Parameter
+        Name="valueSetId"
+        Type="java.lang.String"/>
+      <Parameter
+        Name="groupId"
+        Type="java.lang.String"/>
+    </Method>
+  </ClientInterface>
+  <ClientInterface>
+    <Method
+      Name="getDmsValueView">
+      <Return
+        Type="oracle.jbo.ViewObject"/>
+      <Parameter
+        Name="valueSetSrc"
+        Type="java.lang.String"/>
+      <Parameter
+        Name="valueSetId"
+        Type="java.lang.String"/>
+      <Parameter
+        Name="groupId"
+        Type="java.lang.String"/>
+    </Method>
+  </ClientInterface>
+  <ClientInterface>
+    <Method
+      Name="getDmsValueView">
+      <Return
+        Type="oracle.jbo.ViewObject"/>
+      <Parameter
+        Name="valueSetSrc"
+        Type="java.lang.String"/>
+      <Parameter
+        Name="valueSetId"
+        Type="java.lang.String"/>
+      <Parameter
+        Name="groupId"
+        Type="java.lang.String"/>
+    </Method>
+  </ClientInterface>
+  <ClientInterface>
+    <Method
+      Name="getDmsValueView">
+      <Return
+        Type="oracle.jbo.ViewObject"/>
+      <Parameter
+        Name="valueSetSrc"
+        Type="java.lang.String"/>
+      <Parameter
+        Name="valueSetId"
+        Type="java.lang.String"/>
+      <Parameter
+        Name="groupId"
+        Type="java.lang.String"/>
+    </Method>
+  </ClientInterface>
   <ClientInterface>
     <Method
       Name="getDmsValueView">

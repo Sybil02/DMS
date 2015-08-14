@@ -8,10 +8,10 @@
     <iterator Binds="DcmCombinationView" RangeSize="25"
               DataControl="DcmModuleDataControl"
               id="DcmCombinationViewIterator"/>
-    <iterator Binds="DcmComVsView" RangeSize="25"
-              DataControl="DcmModuleDataControl" id="DcmComVsViewIterator"/>
     <iterator Binds="DmsValueSetView" RangeSize="25"
               DataControl="DmsModuleDataControl" id="DmsValueSetViewIterator"/>
+    <iterator Binds="DcmComVsView" RangeSize="25"
+              DataControl="DcmModuleDataControl" id="DcmComVsViewIterator"/>
   </executables>
   <bindings>
     <tree IterBinding="DcmCombinationViewIterator" id="DcmCombinationView">
@@ -20,18 +20,6 @@
         <AttrNames>
           <Item Value="Name"/>
           <Item Value="Code"/>
-          <Item Value="UpdatedBy"/>
-          <Item Value="UpdatedAt"/>
-        </AttrNames>
-      </nodeDefinition>
-    </tree>
-    <tree IterBinding="DcmComVsViewIterator" id="DcmComVsView">
-      <nodeDefinition DefName="team.epm.dcm.view.DcmComVsView"
-                      Name="DcmComVsView0">
-        <AttrNames>
-          <Item Value="ValueSetId"/>
-          <Item Value="IsAuthority"/>
-          <Item Value="Seq"/>
           <Item Value="UpdatedBy"/>
           <Item Value="UpdatedAt"/>
         </AttrNames>
@@ -48,6 +36,17 @@
           <Item Value="Name"/>
           <Item Value="UpdatedBy"/>
           <Item Value="UpdatedAt"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <tree IterBinding="DcmComVsViewIterator" id="DcmComVsView">
+      <nodeDefinition DefName="team.epm.dcm.view.DcmComVsView"
+                      Name="DcmComVsView0">
+        <AttrNames>
+          <Item Value="ValueSetId"/>
+          <Item Value="IsAuthority"/>
+          <Item Value="Seq"/>
+          <Item Value="IsEntity"/>
         </AttrNames>
       </nodeDefinition>
     </tree>

@@ -101,6 +101,16 @@ public class DcmComVsImpl extends EntityImpl {
                 obj.setCreatedBy((String)value);
             }
         }
+        ,
+        IsEntity {
+            public Object get(DcmComVsImpl obj) {
+                return obj.getIsEntity();
+            }
+
+            public void put(DcmComVsImpl obj, Object value) {
+                obj.setIsEntity((String)value);
+            }
+        }
         ;
         private static AttributesEnum[] vals = null;
         private static final int firstIndex = 0;
@@ -128,6 +138,7 @@ public class DcmComVsImpl extends EntityImpl {
             return vals;
         }
     }
+
     public static final int COMBINATIONID = AttributesEnum.CombinationId.index();
     public static final int VALUESETID = AttributesEnum.ValueSetId.index();
     public static final int SEQ = AttributesEnum.Seq.index();
@@ -136,12 +147,24 @@ public class DcmComVsImpl extends EntityImpl {
     public static final int UPDATEDAT = AttributesEnum.UpdatedAt.index();
     public static final int UPDATEDBY = AttributesEnum.UpdatedBy.index();
     public static final int CREATEDBY = AttributesEnum.CreatedBy.index();
+    public static final int ISENTITY = AttributesEnum.IsEntity.index();
 
     /**
      * This is the default constructor (do not remove).
      */
     public DcmComVsImpl() {
     }
+
+    /**
+     * @return the definition object for this instance class.
+     */
+    public static synchronized EntityDefImpl getDefinitionObject() {
+        if (mDefinitionObject == null) {
+            mDefinitionObject = EntityDefImpl.findDefObject("team.epm.dcm.model.DcmComVs");
+        }
+        return mDefinitionObject;
+    }
+
     @Override
     protected void prepareForDML(int operation,
                                  TransactionEvent transactionEvent) {
@@ -280,6 +303,22 @@ public class DcmComVsImpl extends EntityImpl {
     }
 
     /**
+     * Gets the attribute value for IsEntity, using the alias name IsEntity.
+     * @return the IsEntity
+     */
+    public String getIsEntity() {
+        return (String)getAttributeInternal(ISENTITY);
+    }
+
+    /**
+     * Sets <code>value</code> as the attribute value for IsEntity.
+     * @param value value to set the IsEntity
+     */
+    public void setIsEntity(String value) {
+        setAttributeInternal(ISENTITY, value);
+    }
+
+    /**
      * getAttrInvokeAccessor: generated method. Do not modify.
      * @param index the index identifying the attribute
      * @param attrDef the attribute
@@ -323,13 +362,5 @@ public class DcmComVsImpl extends EntityImpl {
         return new Key(new Object[]{combinationId, valueSetId});
     }
 
-    /**
-     * @return the definition object for this instance class.
-     */
-    public static synchronized EntityDefImpl getDefinitionObject() {
-        if (mDefinitionObject == null) {
-            mDefinitionObject = EntityDefImpl.findDefObject("team.epm.dcm.model.DcmComVs");
-        }
-        return mDefinitionObject;
-    }
+
 }

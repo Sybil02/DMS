@@ -1,2 +1,178 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.1"></jsp:root>
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.1"
+          xmlns:af="http://xmlns.oracle.com/adf/faces/rich"
+          xmlns:f="http://java.sun.com/jsf/core"
+          xmlns:c="http://java.sun.com/jsp/jstl/core"
+          xmlns:h="http://java.sun.com/jsf/html">
+  <c:set var="viewBundle" value="#{adfBundle['dms_v']}"/>
+  <af:panelStretchLayout id="psl1" topHeight="42%" clientComponent="true">
+    <f:facet name="center">
+      <af:panelGroupLayout id="pgl1">
+        <!--分配审核者-->
+        <af:panelCollection styleClass="AFStretchWidth" id="pc2">
+          <f:facet name="menus"/>
+          <f:facet name="toolbar">
+            <af:toolbar id="t4">
+              <af:commandButton text="#{viewBundle.dms_new_approval}"
+                                id="af5"
+                                actionListener="#{bindings.EntitysCreateInsert.execute}"/>
+              <af:commandButton text="#{viewBundle.dms_delete_approval}"
+                                id="af6"
+                                actionListener="#{bindings.EntitysDelete.execute}"/>
+              <af:commandButton text="#{viewBundle.dms_cancel_approval}"
+                                actionListener="#{bindings.Rollback.execute}"
+                                id="af7" immediate="true"/>
+              <af:commandButton text="#{viewBundle.dms_save_approval}"
+                                actionListener="#{bindings.Commit.execute}"
+                                id="af8"/>
+            </af:toolbar>
+          </f:facet>
+          <f:facet name="statusbar"/>
+          <af:table value="#{bindings.DmsApprovalflowEntitysVO.collectionModel}"
+                    var="row"
+                    rows="#{bindings.DmsApprovalflowEntitysVO.rangeSize}"
+                    emptyText="#{bindings.DmsApprovalflowEntitysVO.viewable ? 'No data to display.' : 'Access Denied.'}"
+                    fetchSize="#{bindings.DmsApprovalflowEntitysVO.rangeSize}"
+                    rowBandingInterval="0"
+                    selectedRowKeys="#{bindings.DmsApprovalflowEntitysVO.collectionModel.selectedRow}"
+                    selectionListener="#{bindings.DmsApprovalflowEntitysVO.collectionModel.makeCurrent}"
+                    rowSelection="single" id="t2" partialTriggers="::af5 ::af6">
+            <af:column sortProperty="#{bindings.DmsApprovalflowEntitysVO.hints.Code.name}"
+                       sortable="true"
+                       headerText="#{bindings.DmsApprovalflowEntitysVO.hints.Code.label}"
+                       id="c5">
+
+              <af:selectOneChoice 
+                            value="#{row.bindings.Code.inputValue}"
+                            label="#{bindings.DmsApprovalflowEntitysVO.hints.Code.label}"
+                            required="#{bindings.DmsApprovalflowEntitysVO.hints.Code.mandatory}"
+                            shortDesc="#{bindings.DmsApprovalflowEntitysVO.hints.Code.tooltip}"
+                            id="it4">
+                <f:validator binding="#{row.bindings.Code.validator}"/>
+                <f:selectItems value="#{pageFlowScope.approvalBackingBean.approvalObjItemList}" id="si1"/>
+              </af:selectOneChoice>
+            </af:column>
+            <af:column headerText="#{bindings.DmsApprovalflowEntitysVO.hints.UserName.label}"
+                       id="c4" sortable="true">
+              <af:inputListOfValues id="userNameId"
+                                    popupTitle="Search and Select: #{bindings.DmsApprovalflowEntitysVO.hints.UserName.label}"
+                                    value="#{row.bindings.UserName.inputValue}"
+                                    model="#{row.bindings.UserName.listOfValuesModel}"
+                                    required="#{bindings.DmsApprovalflowEntitysVO.hints.UserName.mandatory}"
+                                    columns="#{bindings.DmsApprovalflowEntitysVO.hints.UserName.displayWidth}"
+                                    shortDesc="#{bindings.DmsApprovalflowEntitysVO.hints.UserName.tooltip}">
+                <f:validator binding="#{row.bindings.UserName.validator}"/>
+              </af:inputListOfValues>
+            </af:column>
+            <af:column headerText="#{bindings.DmsApprovalflowEntitysVO.hints.Seq.label}"
+                       id="c7" sortable="true">
+              <af:inputText value="#{row.bindings.Seq.inputValue}"
+                            label="#{bindings.DmsApprovalflowEntitysVO.hints.Seq.label}"
+                            required="#{bindings.DmsApprovalflowEntitysVO.hints.Seq.mandatory}"
+                            columns="#{bindings.DmsApprovalflowEntitysVO.hints.Seq.displayWidth}"
+                            maximumLength="#{bindings.DmsApprovalflowEntitysVO.hints.Seq.precision}"
+                            shortDesc="#{bindings.DmsApprovalflowEntitysVO.hints.Seq.tooltip}"
+                            id="it1">
+                <f:validator binding="#{row.bindings.Seq.validator}"/>
+                <af:convertNumber groupingUsed="false"
+                                  pattern="#{bindings.DmsApprovalflowEntitysVO.hints.Seq.format}"/>
+              </af:inputText>
+            </af:column>
+          </af:table>
+        </af:panelCollection>
+      </af:panelGroupLayout>
+    </f:facet>
+    <f:facet name="top">
+      <!--审批流设置-->
+      <af:panelCollection styleClass="AFStretchWidth" id="pc1">
+        <f:facet name="menus"/>
+        <f:facet name="toolbar">
+          <af:toolbar id="t3">
+            <af:commandButton text="#{viewBundle.dms_new_approval}"
+                              id="af1"
+                              actionListener="#{bindings.ApprovalCreateInsert.execute}"/>
+            <af:commandButton text="#{viewBundle.dms_delete_approval}"
+                              id="af2"
+                              actionListener="#{bindings.ApprovalDelete.execute}"/>
+            <af:commandButton text="#{viewBundle.dms_save_approval}"
+                              id="af3"
+                              actionListener="#{bindings.Commit.execute}"/>
+            <af:commandButton text="#{viewBundle.dms_cancel_approval}"
+                              actionListener="#{bindings.Rollback.execute}"
+                              id="af4" immediate="true"/>
+              
+            </af:toolbar>
+        </f:facet>
+        <f:facet name="statusbar"/>
+        <af:table value="#{bindings.DmsApprovalFlowInfoVO.collectionModel}"
+                  var="row" rows="#{bindings.DmsApprovalFlowInfoVO.rangeSize}"
+                  emptyText="#{bindings.DmsApprovalFlowInfoVO.viewable ? 'No data to display.' : 'Access Denied.'}"
+                  fetchSize="#{bindings.DmsApprovalFlowInfoVO.rangeSize}"
+                  rowBandingInterval="0"
+                  selectedRowKeys="#{bindings.DmsApprovalFlowInfoVO.collectionModel.selectedRow}"
+                  selectionListener="#{pageFlowScope.approvalBackingBean.makeCurrent}"
+                  rowSelection="single" id="t1" partialTriggers="::af1 ::af2">
+          <af:column sortProperty="#{bindings.DmsApprovalFlowInfoVO.hints.ApprovalName.name}"
+                     sortable="true"
+                     headerText="#{bindings.DmsApprovalFlowInfoVO.hints.ApprovalName.label}"
+                     id="c2">
+            <af:inputText value="#{row.bindings.ApprovalName.inputValue}"
+                          label="#{bindings.DmsApprovalFlowInfoVO.hints.ApprovalName.label}"
+                          required="#{bindings.DmsApprovalFlowInfoVO.hints.ApprovalName.mandatory}"
+                          columns="#{bindings.DmsApprovalFlowInfoVO.hints.ApprovalName.displayWidth}"
+                          maximumLength="#{bindings.DmsApprovalFlowInfoVO.hints.ApprovalName.precision}"
+                          shortDesc="#{bindings.DmsApprovalFlowInfoVO.hints.ApprovalName.tooltip}"
+                          id="it3">
+              <f:validator binding="#{row.bindings.ApprovalName.validator}"/>
+            </af:inputText>
+          </af:column>
+          <af:column sortProperty="#{bindings.DmsApprovalFlowInfoVO.hints.TemplateName.name}"
+                     sortable="true"
+                     headerText="#{bindings.DmsApprovalFlowInfoVO.hints.TemplateName.label}"
+                     id="c1">
+            <af:inputListOfValues id="templateNameId"
+                                  popupTitle="Search and Select: #{bindings.DmsApprovalFlowInfoVO.hints.TemplateName.label}"
+                                  value="#{row.bindings.TemplateName.inputValue}"
+                                  model="#{row.bindings.TemplateName.listOfValuesModel}"
+                                  required="#{bindings.DmsApprovalFlowInfoVO.hints.TemplateName.mandatory}"
+                                  columns="#{bindings.DmsApprovalFlowInfoVO.hints.TemplateName.displayWidth}"
+                                  shortDesc="#{bindings.DmsApprovalFlowInfoVO.hints.TemplateName.tooltip}"
+                                  valueChangeListener="#{pageFlowScope.approvalBackingBean.valueSetChange}">
+              <f:validator binding="#{row.bindings.TemplateName.validator}"/>
+            </af:inputListOfValues>
+          </af:column>
+          <af:column sortProperty="#{bindings.DmsApprovalFlowInfoVO.hints.ValueSetName.name}"
+                     sortable="true"
+                     headerText="#{bindings.DmsApprovalFlowInfoVO.hints.ValueSetName.label}"
+                     id="c6">
+            <af:inputText value="#{row.bindings.ValueSetName.inputValue}"
+                          label="#{bindings.DmsApprovalFlowInfoVO.hints.ValueSetName.label}"
+                          required="#{bindings.DmsApprovalFlowInfoVO.hints.ValueSetName.mandatory}"
+                          columns="#{bindings.DmsApprovalFlowInfoVO.hints.ValueSetName.displayWidth}"
+                          maximumLength="#{bindings.DmsApprovalFlowInfoVO.hints.ValueSetName.precision}"
+                          shortDesc="#{bindings.DmsApprovalFlowInfoVO.hints.ValueSetName.tooltip}"
+                          id="it5">
+              <f:validator binding="#{row.bindings.ValueSetName.validator}"/>
+            </af:inputText>
+          </af:column>
+          <af:column sortProperty="#{bindings.DmsApprovalFlowInfoVO.hints.Seq.name}"
+                     sortable="true"
+                     headerText="#{bindings.DmsApprovalFlowInfoVO.hints.Seq.label}"
+                     id="c3">
+            <af:inputText value="#{row.bindings.Seq.inputValue}"
+                          label="#{bindings.DmsApprovalFlowInfoVO.hints.Seq.label}"
+                          required="#{bindings.DmsApprovalFlowInfoVO.hints.Seq.mandatory}"
+                          columns="#{bindings.DmsApprovalFlowInfoVO.hints.Seq.displayWidth}"
+                          maximumLength="#{bindings.DmsApprovalFlowInfoVO.hints.Seq.precision}"
+                          shortDesc="#{bindings.DmsApprovalFlowInfoVO.hints.Seq.tooltip}"
+                          id="it2">
+              <f:validator binding="#{row.bindings.Seq.validator}"/>
+              <af:convertNumber groupingUsed="false"
+                                pattern="#{bindings.DmsApprovalFlowInfoVO.hints.Seq.format}"/>
+            </af:inputText>
+          </af:column>
+        </af:table>
+      </af:panelCollection>
+    </f:facet>
+  </af:panelStretchLayout>
+</jsp:root>

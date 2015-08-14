@@ -5,7 +5,7 @@
           xmlns:c="http://java.sun.com/jsp/jstl/core"
           xmlns:h="http://java.sun.com/jsf/html">
   <c:set var="viewBundle" value="#{adfBundle['dms_v']}"/>
-  <af:panelStretchLayout id="psl1">
+  <af:panelStretchLayout id="psl1" topHeight="49px">
     <f:facet name="bottom"/>
     <f:facet name="center">
       <af:panelCollection id="pc1">

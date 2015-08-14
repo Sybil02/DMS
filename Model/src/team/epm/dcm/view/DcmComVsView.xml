@@ -13,7 +13,8 @@
        DcmComVs.UPDATED_AT, 
        DcmComVs.UPDATED_BY, 
        DcmComVs.CREATED_BY, 
-       DcmComVs.SEQ"
+       DcmComVs.SEQ, 
+       DcmComVs.IS_ENTITY"
   FromList="DCM_COM_VS DcmComVs"
   BindingStyle="OracleName"
   CustomQuery="false"
@@ -76,6 +77,24 @@
     </AttrArray>
     <AttrArray Name="ListDisplayAttrNames">
       <Item Value="Name"/>
+    </AttrArray>
+    <DisplayCriteria/>
+  </ListBinding>
+  <ListBinding
+    Name="LOV_IsEntity"
+    ListVOName="LKP_YES_NO"
+    ListRangeSize="-1"
+    NullValueFlag="none"
+    NullValueId="LOV_IsEntity_LOVUIHints_NullValueId"
+    MRUCount="0">
+    <AttrArray Name="AttrNames">
+      <Item Value="IsEntity"/>
+    </AttrArray>
+    <AttrArray Name="ListAttrNames">
+      <Item Value="Code"/>
+    </AttrArray>
+    <AttrArray Name="ListDisplayAttrNames">
+      <Item Value="Meaning"/>
     </AttrArray>
     <DisplayCriteria/>
   </ListBinding>
@@ -182,6 +201,22 @@
     EntityAttrName="Seq"
     EntityUsage="DcmComVs"
     AliasName="SEQ"/>
+  <ViewAttribute
+    Name="IsEntity"
+    PrecisionRule="true"
+    EntityAttrName="IsEntity"
+    EntityUsage="DcmComVs"
+    AliasName="IS_ENTITY"
+    LOVName="LOV_IsEntity">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="team.epm.dcm.view.DcmComVsView.IsEntity_LABEL"/>
+        <CONTROLTYPE
+          Value="choice"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ResourceBundle>
     <PropertiesBundle
       PropertiesFile="ModelBundle"/>

@@ -23,6 +23,8 @@ import oracle.adf.share.ADFContext;
 
 import oracle.adf.share.logging.ADFLogger;
 
+import oracle.adf.view.rich.model.ListOfValuesModel;
+
 import oracle.jbo.server.DBTransaction;
 
 public class WorkflowEditBean {

@@ -44,6 +44,8 @@
       <page path="/dms/approvalFlow/index.jsff" usageId="__indexPageDef3"/>
       <page path="/workapproveflow/workflowIndex.jspx"
             usageId="__workflowIndexPageDef"/>
+      <page path="/dms/approvalFlow/approve_edit.jsff"
+            usageId="__approve_editPageDef"/>
    </pageMap>
    <pageDefinitionUsages>
       <page id="__dynamicTabShellPageDef"
@@ -82,6 +84,8 @@
       <page id="__indexPageDef3" path="dms.approvalFlow.indexPageDef"/>
       <page id="__workflowIndexPageDef"
             path="workapproveflow.workflowIndexPageDef"/>
+      <page id="__approve_editPageDef"
+            path="dms.approvalFlow.approve_editPageDef"/>
    </pageDefinitionUsages>
    <dataControlUsages>
       <BC4JDataControl id="DmsModuleDataControl" Package="team.epm.module"
