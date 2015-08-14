@@ -13,6 +13,7 @@ import oracle.jbo.server.ViewLinkImpl;
 
 import oracle.jbo.server.ViewObjectImpl;
 
+import team.epm.dms.view.DmsApproveTemplateStatusVOImpl;
 import team.epm.dms.view.DmsEnabledGroupViewImpl;
 import team.epm.dms.view.DmsEnabledRoleImpl;
 import team.epm.dms.view.DmsFunctionViewImpl;
@@ -401,5 +402,13 @@ public class DmsModuleImpl extends ApplicationModuleImpl implements DmsModule {
      */
     public ViewLinkImpl getDmsWorkflowStepsLnk() {
         return (ViewLinkImpl)findViewLink("DmsWorkflowStepsLnk");
+    }
+
+    /**
+     * Container's getter for DmsApproveTemplateStatusVO.
+     * @return DmsApproveTemplateStatusVO
+     */
+    public DmsApproveTemplateStatusVOImpl getDmsApproveTemplateStatusVO() {
+        return (DmsApproveTemplateStatusVOImpl)findViewObject("DmsApproveTemplateStatusVO");
     }
 }
