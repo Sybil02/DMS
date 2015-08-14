@@ -107,6 +107,12 @@
   <ViewUsage
     Name="DmsApprovalflowEntitysVO"
     ViewObjectName="team.epm.dms.view.DmsApprovalflowEntitysVO"/>
+  <ViewUsage
+    Name="DmsUserWorkflowVO"
+    ViewObjectName="team.epm.dms.view.DmsUserWorkflowVO"/>
+  <ViewUsage
+    Name="DmsWorkflowTemplateStatusVO"
+    ViewObjectName="team.epm.dms.view.DmsWorkflowTemplateStatusVO"/>
   <ViewLinkUsage
     Name="DmsGroupedRoleLnk"
     ViewLinkObjectName="team.epm.dms.DmsGroupedRoleLnk"

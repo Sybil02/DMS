@@ -150,6 +150,7 @@ public class DcmDataDisplayBean extends TablePagination{
         this.initTemplate();
         this.initCombination();
         this.queryTemplateData();
+        System.out.println("this is dcmBean");
     }
 
     public CollectionModel getDataModel() {
@@ -426,6 +427,8 @@ public class DcmDataDisplayBean extends TablePagination{
             DBTransaction trans =(DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
             Statement stat = trans.createStatement(1);
             try {
+                //time
+                System.out.println(sql.toString());
                 ResultSet rs = stat.executeQuery(sql.toString());
                 if (rs.next()) {
                     comRecordId = rs.getString("ID");
@@ -813,6 +816,8 @@ public class DcmDataDisplayBean extends TablePagination{
             DBTransaction dbTransaction =(DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
             Statement stat=dbTransaction.createStatement(DBTransaction.DEFAULT);
             try {
+                //time
+                System.out.println(sql.toString());
                 ResultSet rs=stat.executeQuery(sql.toString());
                 if(rs.next()){
                     String status=rs.getString("STATUS");
@@ -823,6 +828,8 @@ public class DcmDataDisplayBean extends TablePagination{
                                 .append("\" T WHERE T.CODE='")
                                 .append(h.getValue()).append("' AND T.LOCALE='")
                                 .append(ADFContext.getCurrent().getLocale()).append("'");
+                            //time
+                            System.out.println(sql0.toString());
                             ResultSet rst=stat.executeQuery(sql0.toString());
                             if(rst.next()){
                                 String enabled=rst.getString("ENABLED");
@@ -1207,7 +1214,7 @@ public class DcmDataDisplayBean extends TablePagination{
     Map<String,String> parametersValueMap = new LinkedHashMap<String,String>();
     //计算程序改变，查询对应参数值集源表，对应值集
     public void calcChange(ValueChangeEvent valueChangeEvent) {
-        //System.out.println("change:"+valueChangeEvent.getNewValue());
+        System.out.println("Calc_change:"+valueChangeEvent.getNewValue());
         //每次改变程序，清除参数集合
         this.parameterList.clear();
         this.parametersValueMap.clear();
