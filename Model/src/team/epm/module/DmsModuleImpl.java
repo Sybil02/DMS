@@ -322,13 +322,6 @@ public class DmsModuleImpl extends ApplicationModuleImpl implements DmsModule {
         return (ViewObjectImpl)findViewObject("DmsWorkflowInfoVO");
     }
 
-    /**
-     * Container's getter for DmsWorkflowStepsVO.
-     * @return DmsWorkflowStepsVO
-     */
-    public ViewObjectImpl getDmsWorkflowStepsVO() {
-        return (ViewObjectImpl)findViewObject("DmsWorkflowStepsVO");
-    }
 
     /**
      * Container's getter for DmsWorkflowInfoStepsLnk.
@@ -392,5 +385,21 @@ public class DmsModuleImpl extends ApplicationModuleImpl implements DmsModule {
      */
     public DmsWorkflowTemplateStatusVOImpl getDmsWorkflowTemplateStatusVO() {
         return (DmsWorkflowTemplateStatusVOImpl)findViewObject("DmsWorkflowTemplateStatusVO");
+    }
+
+    /**
+     * Container's getter for DmsWorkflowStepsVO.
+     * @return DmsWorkflowStepsVO
+     */
+    public DmsWorkflowStepsVOImpl getDmsWorkflowStepsVO() {
+        return (DmsWorkflowStepsVOImpl)findViewObject("DmsWorkflowStepsVO");
+    }
+
+    /**
+     * Container's getter for DmsWorkflowStepsLnk.
+     * @return DmsWorkflowStepsLnk
+     */
+    public ViewLinkImpl getDmsWorkflowStepsLnk() {
+        return (ViewLinkImpl)findViewLink("DmsWorkflowStepsLnk");
     }
 }

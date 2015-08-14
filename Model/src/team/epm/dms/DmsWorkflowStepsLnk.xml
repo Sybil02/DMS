@@ -3,7 +3,7 @@
 <!---->
 <ViewLink
   xmlns="http://xmlns.oracle.com/bc4j"
-  Name="DmsWorkflowInfoStepsLnk"
+  Name="DmsWorkflowStepsLnk"
   Version="11.1.1.64.93"
   InheritPersonalization="true">
   <DesignTime>
@@ -12,7 +12,7 @@
   <Properties>
     <SchemaBasedProperties>
       <LABEL
-        ResId="team.epm.dms.DmsWorkflowInfoStepsLnk_LABEL"/>
+        ResId="team.epm.dms.DmsWorkflowStepsLnk_LABEL"/>
     </SchemaBasedProperties>
   </Properties>
   <ViewLinkDefEnd

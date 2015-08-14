@@ -4,8 +4,6 @@ import common.ADFUtils;
 
 import common.DmsUtils;
 
-import dcm.DcmDataDisplayBean;
-
 import dms.login.Person;
 
 import java.sql.ResultSet;
@@ -15,15 +13,11 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.faces.event.ValueChangeEvent;
-
 import javax.faces.model.SelectItem;
 
 import oracle.adf.share.ADFContext;
 
 import oracle.adf.share.logging.ADFLogger;
-
-import oracle.adf.view.rich.model.ListOfValuesModel;
 
 import oracle.jbo.server.DBTransaction;
 

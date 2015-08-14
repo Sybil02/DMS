@@ -150,7 +150,7 @@
   </ResourceBundle>
   <ViewLinkAccessor
     Name="DmsWorkflowStepsVO"
-    ViewLink="team.epm.dms.DmsWorkflowInfoStepsLnk"
+    ViewLink="team.epm.dms.DmsWorkflowStepsLnk"
     Type="oracle.jbo.RowIterator"
     IsUpdateable="false"/>
 </ViewObject>
