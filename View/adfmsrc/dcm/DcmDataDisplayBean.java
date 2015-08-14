@@ -1323,7 +1323,8 @@ public class DcmDataDisplayBean extends TablePagination{
             if(entry.getValue().equals("")){
                 throw new NullPointerException();
             }
-            args = args + "#" + entry.getValue() ;
+            //args = args + "#" + entry.getValue() ;
+            args = args + "#" + entry.getKey() + ":" + entry.getValue();
         }
         }catch(Exception e){
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("存在未选择参数！"));

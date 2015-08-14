@@ -31,7 +31,7 @@
     <f:facet name="center">
       <af:panelGroupLayout id="pgl1">
         <!--styleClass="AFStretchWidth"-->
-        <af:panelCollection id="pc1" inlineStyle="width:753px;">
+        <af:panelCollection id="pc1" styleClass="AFStretchWidth">
           <f:facet name="menus"/>
           <f:facet name="toolbar">
             <af:toolbar id="t2">

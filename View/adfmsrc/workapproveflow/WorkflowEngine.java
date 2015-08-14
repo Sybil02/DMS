@@ -11,11 +11,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import java.text.ParseException;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import oracle.jbo.domain.Number;
 import oracle.adf.share.ADFContext;
 import oracle.adf.share.logging.ADFLogger;
 
@@ -24,6 +27,8 @@ import oracle.jbo.server.DBTransaction;
 
 import team.epm.dcm.view.DcmTemplateCombinaVOImpl;
 import team.epm.dcm.view.DcmTemplateCombinaVORowImpl;
+import team.epm.dms.view.DmsWorkflowTemplateStatusVOImpl;
+import team.epm.dms.view.DmsWorkflowTemplateStatusVORowImpl;
 
 public class WorkflowEngine {
     //日志
@@ -139,7 +144,7 @@ public class WorkflowEngine {
     }
 
     //启动工作流第一个步骤
-
+    
     private void startFirstStep(String wfId, String runId) {
         DBTransaction trans =
             (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
@@ -161,8 +166,12 @@ public class WorkflowEngine {
                 preStep = rs.getInt("PRE_STEP");
             }
             if (stepTask.equals("OPEN TEMPLATES")) {
-                this.openTemplates(stepObj, openCom);
-                
+                this.openTemplates(stepObj, openCom,runId,1);
+                String udSql = "UPDATE DMS_WORKFLOW_STATUS SET STEP_STATUS = 'WORKING' WHERE WF_ID = '" + wfId + "'"
+                    + " AND RUN_ID = '" + runId + "'" + " AND STEP_NO = 1 ";
+                stat.executeUpdate(udSql);
+                trans.commit();
+                stat.close();
             }
             if (stepTask.equals("ETL")) {
 
@@ -177,7 +186,7 @@ public class WorkflowEngine {
 
     //OPEN TEMPLATES
     //stepObj 模板标签  openCom打开组合
-    private void openTemplates(String stepObj, String openCom) {
+    private void openTemplates(String stepObj, String openCom,String runId,int stepNo) {
         //分割组合参数的值和列名
         Map<String, String> valuesMap = new HashMap<String, String>();
         //去掉拼接时最后一个#
@@ -191,6 +200,8 @@ public class WorkflowEngine {
         //保存所有模板，和模板对应要打开的组合ID
         Map<String, List<String>> tempComMap =
             new HashMap<String, List<String>>();
+        //保存所有模板，和模板要打开的部门编码
+        Map<String,List<String>> tempEntityMap = new HashMap<String,List<String>>();
         DBTransaction trans =
             (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
         Statement stat = trans.createStatement(DBTransaction.DEFAULT);
@@ -219,7 +230,10 @@ public class WorkflowEngine {
                 //查询每个模板在dcm_tem_entity_com中维护了的部门和部门对应的列名
                 ResultSet entityRs = stat.executeQuery(entitySql);
                 List<String> sqlList = new ArrayList<String>();
+                //部门编码
+                List<String> entityList = new ArrayList<String>();
                 while (entityRs.next()) {
+                    entityList.add(entityRs.getString("ENTITY"));
                     StringBuffer comIdSql = new StringBuffer();
                     comIdSql.append("SELECT ID FROM ").append(entry.getValue()).append(" WHERE ");
                     comIdSql.append(entityRs.getString("ENTITY_CODE")).append(" = '").append(entityRs.getString("ENTITY")).append("' AND ");
@@ -231,9 +245,11 @@ public class WorkflowEngine {
                     //去掉最后一个多出的"AND ",加空格共四位
                     String sqlStr =
                         comIdSql.substring(0, comIdSql.length() - 4);
-                    System.out.println(sqlStr);
+                    //System.out.println(sqlStr);
                     sqlList.add(sqlStr);
                 }
+                //put模板ID 和 对应要打开的部门List
+                tempEntityMap.put(entry.getKey(), entityList);
                 //根据工作流选择的组合，查询出在模板组合表中的ID
                 List<String> comIdList = new ArrayList<String>();
                 for (String sql : sqlList) {
@@ -249,6 +265,8 @@ public class WorkflowEngine {
             }
             //打开每张模板对应的组合
             this.openTempCom(tempComMap);
+            //初始化每张模板的输入状态
+            this.initTemplateStatus(runId, stepNo, tempEntityMap);
             stat.close();
         } catch (SQLException e) {
             this._logger.severe(e);
@@ -278,5 +296,22 @@ public class WorkflowEngine {
         }
         tempComVo.getApplicationModule().getTransaction().commit();
     }
-
+    //初始化模板部门数据输入状态表
+    private void initTemplateStatus(String runId,int stepNo,Map<String,List<String>> tempEntityMap){
+        DmsWorkflowTemplateStatusVOImpl vo = DmsUtils.getDmsApplicationModule().getDmsWorkflowTemplateStatusVO();
+        for(Map.Entry<String,List<String>> tempEntry : tempEntityMap.entrySet()){
+            for(String entity : tempEntry.getValue()){
+                DmsWorkflowTemplateStatusVORowImpl wtsRow = (DmsWorkflowTemplateStatusVORowImpl)vo.createRow();
+                wtsRow.setRunId(runId);
+                wtsRow.setStepNo(new Number(stepNo));
+                wtsRow.setTemplateId(tempEntry.getKey());
+                wtsRow.setEntityCode(entity);
+                wtsRow.setWriteBy("");
+                wtsRow.setWriteStatus("N");
+                wtsRow.setFinishAt(null);
+                vo.insertRow(wtsRow);
+            }
+        }
+        vo.getApplicationModule().getTransaction().commit();
+    }
 }

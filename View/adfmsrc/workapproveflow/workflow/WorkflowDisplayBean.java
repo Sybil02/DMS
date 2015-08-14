@@ -66,6 +66,11 @@ public class WorkflowDisplayBean {
         this.comSelectMap.clear();
         DCIteratorBinding wfIter = ADFUtils.findIterator("DmsUserWorkflowVOIterator");
         ViewObject wfVo = wfIter.getViewObject();
+        Row curRow = wfVo.getCurrentRow();
+        if(curRow.getAttribute("WfStatus").equals("Y")){
+            FacesContext.getCurrentInstance().addMessage(null,new FacesMessage("工作流已经启动，不能重复启动！"));
+            return;
+        }
         DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
         Statement stat=trans.createStatement(DBTransaction.DEFAULT);
         Row row = wfVo.getCurrentRow();
