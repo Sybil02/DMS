@@ -686,7 +686,7 @@
             </hash>
             <value n="programArguments" v=""/>
             <url n="targetURL" path="public_html/index.jspx"/>
-            <value n="VMName" v="client"/>
+            <value n="VMName" v="server"/>
          </hash>
       </hash>
       <list n="runConfigurationList">

@@ -30,9 +30,10 @@ public class MailSender {
         init();
     }
     
-    public MailSender(String smtpHostName, String username, String password) {
+    public MailSender(String smtpHostName, String port,String username, String password) {
         this.authenticator = new MailAuthenticator(username, password);
         this.smtpHostName = smtpHostName;
+        this.port = port;
         init();
     }
 
