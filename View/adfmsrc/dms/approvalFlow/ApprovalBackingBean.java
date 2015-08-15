@@ -94,7 +94,9 @@ public class ApprovalBackingBean {
 
     public ApprovalBackingBean() {
         curUser = (Person)ADFContext.getCurrent().getSessionScope().get("cur_user");
+        System.out.println("....................................");
        getBeforePhaseQuery();//第一次打开页面初始化
+       
     }
         public void setApprovalObjItemList(List<SelectItem> approvalObjItemList) {
             this.approvalObjItemList = approvalObjItemList;
@@ -135,11 +137,19 @@ public class ApprovalBackingBean {
         //table =valueset
         DCIteratorBinding it = ADFUtils.findIterator("DmsApprovalFlowInfoVOIterator");
         ViewObject vo = it.getViewObject();
-        Row row = vo.first();
+       // System.out.println();
+        if(vo.first().getAttribute("ValueSetId") == null){
+        
         //row.getAttribute("valueSetId");
-        String valueSetId =  it.getCurrentRow().getAttribute("ValueSetId").toString();
+   //     String valueSetId =  it.getCurrentRow().getAttribute("ValueSetId").toString();
+        
+            
+        }else{
+        //Row row = vo.first();
             //row.getAttribute("valueSetId").toString();
+        String valueSetId =  it.getCurrentRow().getAttribute("ValueSetId").toString();
         pubDome(valueSetId);
+        }
     }
     //得到动态表名查询数据
     private void pubDome(String valueSetId){
