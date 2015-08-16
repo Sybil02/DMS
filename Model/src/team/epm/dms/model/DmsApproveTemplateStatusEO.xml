@@ -206,6 +206,19 @@
     </DesignTime>
     <TransientExpression><![CDATA[adf.userSession.userData.userId]]></TransientExpression>
   </Attribute>
+  <Attribute
+    Name="ComId"
+    IsNotNull="true"
+    Precision="32"
+    ColumnName="COM_ID"
+    SQLType="VARCHAR"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    TableName="APPROVE_TEMPLATE_STATUS">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="32"/>
+    </DesignTime>
+  </Attribute>
   <Key
     Name="DmsapprovetemplatestatuseoPrimaryKey"
     PrimaryKey="true">

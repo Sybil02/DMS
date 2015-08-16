@@ -125,6 +125,17 @@ public class DmsWorkflowTemplateStatusVORowImpl extends ViewRowImpl {
                 obj.setWriteStatus((String)value);
             }
         }
+        ,
+        ComId {
+            public Object get(DmsWorkflowTemplateStatusVORowImpl obj) {
+                return obj.getComId();
+            }
+
+            public void put(DmsWorkflowTemplateStatusVORowImpl obj,
+                            Object value) {
+                obj.setComId((String)value);
+            }
+        }
         ;
         private static AttributesEnum[] vals = null;
         private static final int firstIndex = 0;
@@ -153,6 +164,7 @@ public class DmsWorkflowTemplateStatusVORowImpl extends ViewRowImpl {
             return vals;
         }
     }
+
     public static final int CREATEDAT = AttributesEnum.CreatedAt.index();
     public static final int CREATEDBY = AttributesEnum.CreatedBy.index();
     public static final int ENTITYCODE = AttributesEnum.EntityCode.index();
@@ -163,6 +175,7 @@ public class DmsWorkflowTemplateStatusVORowImpl extends ViewRowImpl {
     public static final int TEMPLATEID = AttributesEnum.TemplateId.index();
     public static final int WRITEBY = AttributesEnum.WriteBy.index();
     public static final int WRITESTATUS = AttributesEnum.WriteStatus.index();
+    public static final int COMID = AttributesEnum.ComId.index();
 
     /**
      * This is the default constructor (do not remove).
@@ -336,6 +349,22 @@ public class DmsWorkflowTemplateStatusVORowImpl extends ViewRowImpl {
      */
     public void setWriteStatus(String value) {
         setAttributeInternal(WRITESTATUS, value);
+    }
+
+    /**
+     * Gets the attribute value for COM_ID using the alias name ComId.
+     * @return the COM_ID
+     */
+    public String getComId() {
+        return (String) getAttributeInternal(COMID);
+    }
+
+    /**
+     * Sets <code>value</code> as attribute value for COM_ID using the alias name ComId.
+     * @param value value to set the COM_ID
+     */
+    public void setComId(String value) {
+        setAttributeInternal(COMID, value);
     }
 
     /**

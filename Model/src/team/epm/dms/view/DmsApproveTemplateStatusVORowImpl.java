@@ -157,6 +157,17 @@ public class DmsApproveTemplateStatusVORowImpl extends ViewRowImpl {
                 obj.setUpdatedBy((String)value);
             }
         }
+        ,
+        ComId {
+            public Object get(DmsApproveTemplateStatusVORowImpl obj) {
+                return obj.getComId();
+            }
+
+            public void put(DmsApproveTemplateStatusVORowImpl obj,
+                            Object value) {
+                obj.setComId((String)value);
+            }
+        }
         ;
         private static AttributesEnum[] vals = null;
         private static final int firstIndex = 0;
@@ -185,6 +196,7 @@ public class DmsApproveTemplateStatusVORowImpl extends ViewRowImpl {
             return vals;
         }
     }
+
     public static final int APPROVALSTATUS = AttributesEnum.ApprovalStatus.index();
     public static final int CREATEDAT = AttributesEnum.CreatedAt.index();
     public static final int CREATEDBY = AttributesEnum.CreatedBy.index();
@@ -198,6 +210,7 @@ public class DmsApproveTemplateStatusVORowImpl extends ViewRowImpl {
     public static final int TEMPLATEID = AttributesEnum.TemplateId.index();
     public static final int UPDATEDAT = AttributesEnum.UpdatedAt.index();
     public static final int UPDATEDBY = AttributesEnum.UpdatedBy.index();
+    public static final int COMID = AttributesEnum.ComId.index();
 
     /**
      * This is the default constructor (do not remove).
@@ -419,6 +432,22 @@ public class DmsApproveTemplateStatusVORowImpl extends ViewRowImpl {
      */
     public void setUpdatedBy(String value) {
         setAttributeInternal(UPDATEDBY, value);
+    }
+
+    /**
+     * Gets the attribute value for COM_ID using the alias name ComId.
+     * @return the COM_ID
+     */
+    public String getComId() {
+        return (String) getAttributeInternal(COMID);
+    }
+
+    /**
+     * Sets <code>value</code> as attribute value for COM_ID using the alias name ComId.
+     * @param value value to set the COM_ID
+     */
+    public void setComId(String value) {
+        setAttributeInternal(COMID, value);
     }
 
     /**

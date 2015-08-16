@@ -15,7 +15,8 @@
        DmsWorkflowTemplateStatusEO.STEP_NO, 
        DmsWorkflowTemplateStatusEO.TEMPLATE_ID, 
        DmsWorkflowTemplateStatusEO.WRITE_BY, 
-       DmsWorkflowTemplateStatusEO.WRITE_STATUS"
+       DmsWorkflowTemplateStatusEO.WRITE_STATUS, 
+       DmsWorkflowTemplateStatusEO.COM_ID"
   FromList="WORKFLOW_TEMPLATE_STATUS DmsWorkflowTemplateStatusEO"
   BindingStyle="OracleName"
   CustomQuery="false"
@@ -104,6 +105,13 @@
     EntityAttrName="WriteStatus"
     EntityUsage="DmsWorkflowTemplateStatusEO"
     AliasName="WRITE_STATUS"/>
+  <ViewAttribute
+    Name="ComId"
+    IsNotNull="true"
+    PrecisionRule="true"
+    EntityAttrName="ComId"
+    EntityUsage="DmsWorkflowTemplateStatusEO"
+    AliasName="COM_ID"/>
   <ResourceBundle>
     <PropertiesBundle
       PropertiesFile="ModelBundle"/>

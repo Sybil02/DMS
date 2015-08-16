@@ -150,6 +150,8 @@ public class DcmDataDisplayBean extends TablePagination{
         this.initTemplate();
         this.initCombination();
         this.queryTemplateData();
+        //判断模板是否在工作流中，是输入还是提交审批状态
+        this.isWfTemplate();
         System.out.println("this is dcmBean");
     }
 
@@ -1330,8 +1332,8 @@ public class DcmDataDisplayBean extends TablePagination{
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("存在未选择参数！"));
             return;
         }
-        System.out.println(calcPro+"&"+p_template_id+"&"+p_com_record_id+"&"+p_user_id+"&"+p_handle_mode+"&"+p_locale);
-        System.out.println(args);
+        //System.out.println(calcPro+"&"+p_template_id+"&"+p_com_record_id+"&"+p_user_id+"&"+p_handle_mode+"&"+p_locale);
+        //System.out.println(args);
         DBTransaction trans = (DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
         CallableStatement cs = trans.createCallableStatement("{CALL "+calcPro+"(?,?,?,?,?,?,?)}", 0);
         try {
@@ -1369,5 +1371,18 @@ public class DcmDataDisplayBean extends TablePagination{
         }catch(Exception e){
             this._logger.severe("切换程序触发参数变化valueChangeEvent，导致空指针异常");    
         }
+    }
+    // 数据保存后，关闭组合，提交审批
+    public void commitApprove(ActionEvent actionEvent) {
+        //this.curCombiantionRecord
+        System.out.println(this.curCombiantionRecord);
+        //判断下一步是否为审批，是否存在审批
+        //存在，改变审批状态
+        //关闭组合，锁定模板
+    }
+    
+    //判断是否在工作流中，输入，审批。
+    public void isWfTemplate(){
+        
     }
 }

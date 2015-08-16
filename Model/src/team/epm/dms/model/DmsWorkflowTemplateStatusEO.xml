@@ -153,6 +153,19 @@
     </DesignTime>
     <TransientExpression><![CDATA[java.util.UUID.randomUUID().toString().replace("-", "")]]></TransientExpression>
   </Attribute>
+  <Attribute
+    Name="ComId"
+    IsNotNull="true"
+    Precision="32"
+    ColumnName="COM_ID"
+    SQLType="VARCHAR"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    TableName="WORKFLOW_TEMPLATE_STATUS">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="32"/>
+    </DesignTime>
+  </Attribute>
   <Key
     Name="DmsworkflowtemplatestatuseoPrimaryKey"
     PrimaryKey="true">

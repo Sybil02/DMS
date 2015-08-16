@@ -75,6 +75,10 @@
               <af:commandButton text="模板计算" id="cb5"
                                 actionListener="#{viewScope.DcmDataDisplayBean.showCalcWnd}"/>
             </af:group>
+            <af:group id="g7">
+              <af:commandButton text="#{viewBundle['dms.workflow.approve']}" id="cb13"
+                                actionListener="#{viewScope.DcmDataDisplayBean.commitApprove}"/>
+            </af:group>
           </af:toolbar>
         </f:facet>
         <!-- 分页控件 -->

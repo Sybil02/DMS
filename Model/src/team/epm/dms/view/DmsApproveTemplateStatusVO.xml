@@ -18,7 +18,8 @@
        DmsApproveTemplateStatusEO.STEP_NO, 
        DmsApproveTemplateStatusEO.TEMPLATE_ID, 
        DmsApproveTemplateStatusEO.UPDATED_AT, 
-       DmsApproveTemplateStatusEO.UPDATED_BY"
+       DmsApproveTemplateStatusEO.UPDATED_BY, 
+       DmsApproveTemplateStatusEO.COM_ID"
   FromList="APPROVE_TEMPLATE_STATUS DmsApproveTemplateStatusEO"
   Where="DmsApproveTemplateStatusEO.LOCALE =: locale"
   BindingStyle="OracleName"
@@ -136,6 +137,13 @@
     EntityAttrName="UpdatedBy"
     EntityUsage="DmsApproveTemplateStatusEO"
     AliasName="UPDATED_BY"/>
+  <ViewAttribute
+    Name="ComId"
+    IsNotNull="true"
+    PrecisionRule="true"
+    EntityAttrName="ComId"
+    EntityUsage="DmsApproveTemplateStatusEO"
+    AliasName="COM_ID"/>
   <ResourceBundle>
     <PropertiesBundle
       PropertiesFile="ModelBundle"/>

@@ -19,7 +19,8 @@
   BindingStyle="OracleName"
   CustomQuery="false"
   PageIterMode="Full"
-  UseGlueCode="false">
+  UseGlueCode="false"
+  OrderBy="DcmCalcParameterEO.CREATED_AT">
   <Properties>
     <SchemaBasedProperties>
       <LABEL

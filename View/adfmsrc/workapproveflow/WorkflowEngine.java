@@ -167,6 +167,7 @@ public class WorkflowEngine {
             }
             if (stepTask.equals("OPEN TEMPLATES")) {
                 this.openTemplates(stepObj, openCom,runId,1);
+                //打开模板完成，更新步骤状态表为working
                 String udSql = "UPDATE DMS_WORKFLOW_STATUS SET STEP_STATUS = 'WORKING' WHERE WF_ID = '" + wfId + "'"
                     + " AND RUN_ID = '" + runId + "'" + " AND STEP_NO = 1 ";
                 stat.executeUpdate(udSql);
@@ -200,8 +201,8 @@ public class WorkflowEngine {
         //保存所有模板，和模板对应要打开的组合ID
         Map<String, List<String>> tempComMap =
             new HashMap<String, List<String>>();
-        //保存所有模板，和模板要打开的部门编码
-        Map<String,List<String>> tempEntityMap = new HashMap<String,List<String>>();
+        //保存所有模板，和模板要打开的部门编码,组合ID
+        Map<String,Map<String,String>> tempEntityMap = new HashMap<String,Map<String,String>>();
         DBTransaction trans =
             (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
         Statement stat = trans.createStatement(DBTransaction.DEFAULT);
@@ -229,11 +230,14 @@ public class WorkflowEngine {
                     entry.getKey() + "'";
                 //查询每个模板在dcm_tem_entity_com中维护了的部门和部门对应的列名
                 ResultSet entityRs = stat.executeQuery(entitySql);
-                List<String> sqlList = new ArrayList<String>();
-                //部门编码
-                List<String> entityList = new ArrayList<String>();
+                //存部门和该部门对应查询组合ID的sql
+                Map<String,String> sqlMap = new HashMap<String,String>();
+                //List<String> sqlList = new ArrayList<String>();
+                //部门编码,和该部门对应的组合ID
+                //List<String> entityList = new ArrayList<String>();
+                Map<String,String> entityMap = new HashMap<String,String>();
                 while (entityRs.next()) {
-                    entityList.add(entityRs.getString("ENTITY"));
+                    //entityList.add(entityRs.getString("ENTITY"));
                     StringBuffer comIdSql = new StringBuffer();
                     comIdSql.append("SELECT ID FROM ").append(entry.getValue()).append(" WHERE ");
                     comIdSql.append(entityRs.getString("ENTITY_CODE")).append(" = '").append(entityRs.getString("ENTITY")).append("' AND ");
@@ -246,21 +250,23 @@ public class WorkflowEngine {
                     String sqlStr =
                         comIdSql.substring(0, comIdSql.length() - 4);
                     //System.out.println(sqlStr);
-                    sqlList.add(sqlStr);
+                    //sqlList.add(sqlStr);
+                    sqlMap.put(entityRs.getString("ENTITY"),sqlStr);
                 }
-                //put模板ID 和 对应要打开的部门List
-                tempEntityMap.put(entry.getKey(), entityList);
                 //根据工作流选择的组合，查询出在模板组合表中的ID
                 List<String> comIdList = new ArrayList<String>();
-                for (String sql : sqlList) {
-                    ResultSet comIdRs = stat.executeQuery(sql);
+                for (Map.Entry<String,String> sqlEntry : sqlMap.entrySet()) {
+                    ResultSet comIdRs = stat.executeQuery(sqlEntry.getValue());
                     if (comIdRs.next()) {
                         String comId = comIdRs.getString("ID");
                         comIdList.add(comId);
+                        entityMap.put(sqlEntry.getKey(),comId);
                     }
                     comIdRs.close();
                 }
                 tempComMap.put(entry.getKey(), comIdList);
+                //put模板ID 和 对应要打开的部门Map
+                tempEntityMap.put(entry.getKey(), entityMap);
                 entityRs.close();
             }
             //打开每张模板对应的组合
@@ -297,15 +303,16 @@ public class WorkflowEngine {
         tempComVo.getApplicationModule().getTransaction().commit();
     }
     //初始化模板部门数据输入状态表
-    private void initTemplateStatus(String runId,int stepNo,Map<String,List<String>> tempEntityMap){
+    private void initTemplateStatus(String runId,int stepNo,Map<String,Map<String,String>> tempEntityMap){
         DmsWorkflowTemplateStatusVOImpl vo = DmsUtils.getDmsApplicationModule().getDmsWorkflowTemplateStatusVO();
-        for(Map.Entry<String,List<String>> tempEntry : tempEntityMap.entrySet()){
-            for(String entity : tempEntry.getValue()){
+        for(Map.Entry<String,Map<String,String>> tempEntry : tempEntityMap.entrySet()){
+            for(Map.Entry<String,String> entry : tempEntry.getValue().entrySet()){
                 DmsWorkflowTemplateStatusVORowImpl wtsRow = (DmsWorkflowTemplateStatusVORowImpl)vo.createRow();
                 wtsRow.setRunId(runId);
                 wtsRow.setStepNo(new Number(stepNo));
                 wtsRow.setTemplateId(tempEntry.getKey());
-                wtsRow.setEntityCode(entity);
+                wtsRow.setEntityCode(entry.getKey());
+                wtsRow.setComId(entry.getValue());
                 wtsRow.setWriteBy("");
                 wtsRow.setWriteStatus("N");
                 wtsRow.setFinishAt(null);
