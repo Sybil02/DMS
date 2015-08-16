@@ -640,6 +640,7 @@
             <hash>
                <url n="content-folder-url" path="adfmsrc/workapproveflow/"/>
                <list n="pattern-filters">
+                  <string v="+workapproveflow/ApproveflowEngine.java"/>
                   <string v="+workapproveflow/workflow/WorkflowValueSet.java"/>
                   <string v="+workapproveflow/WorkflowEngine.java"/>
                   <string v="+workapproveflow/workflow/WorkflowDisplayBean.java"/>

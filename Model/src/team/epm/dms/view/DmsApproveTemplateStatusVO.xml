@@ -21,7 +21,6 @@
        DmsApproveTemplateStatusEO.UPDATED_BY, 
        DmsApproveTemplateStatusEO.COM_ID"
   FromList="APPROVE_TEMPLATE_STATUS DmsApproveTemplateStatusEO"
-  Where="DmsApproveTemplateStatusEO.LOCALE =: locale"
   BindingStyle="OracleName"
   CustomQuery="false"
   RowClass="team.epm.dms.view.DmsApproveTemplateStatusVORowImpl"
@@ -38,12 +37,6 @@
         ResId="team.epm.dms.view.DmsApproveTemplateStatusVO_LABEL"/>
     </SchemaBasedProperties>
   </Properties>
-  <Variable
-    Name="locale"
-    Kind="where"
-    Type="java.lang.String">
-    <TransientExpression><![CDATA[adf.context.locale]]></TransientExpression>
-  </Variable>
   <EntityUsage
     Name="DmsApproveTemplateStatusEO"
     Entity="team.epm.dms.model.DmsApproveTemplateStatusEO"/>

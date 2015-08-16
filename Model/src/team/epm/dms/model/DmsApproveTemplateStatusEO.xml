@@ -71,11 +71,10 @@
   <Attribute
     Name="StepNo"
     IsNotNull="true"
-    Precision="10"
     ColumnName="STEP_NO"
     SQLType="VARCHAR"
-    Type="java.lang.String"
-    ColumnType="VARCHAR2"
+    Type="oracle.jbo.domain.Number"
+    ColumnType="NUMBER"
     TableName="APPROVE_TEMPLATE_STATUS">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="10"/>
