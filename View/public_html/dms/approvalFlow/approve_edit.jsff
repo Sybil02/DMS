@@ -36,7 +36,8 @@
                     rowBandingInterval="0"
                     selectedRowKeys="#{bindings.DmsApprovalflowEntitysVO.collectionModel.selectedRow}"
                     selectionListener="#{bindings.DmsApprovalflowEntitysVO.collectionModel.makeCurrent}"
-                    rowSelection="single" id="t2" partialTriggers="::af5 ::af6">
+                    rowSelection="single" id="t2"
+                    partialTriggers="::af5 ::af6 :::pc1:t1">
             <af:column sortProperty="#{bindings.DmsApprovalflowEntitysVO.hints.Code.name}"
                        sortable="true"
                        headerText="#{bindings.DmsApprovalflowEntitysVO.hints.Code.label}"
@@ -135,7 +136,7 @@
                           columns="#{bindings.DmsApprovalFlowInfoVO.hints.ValueSetName.displayWidth}"
                           maximumLength="#{bindings.DmsApprovalFlowInfoVO.hints.ValueSetName.precision}"
                           shortDesc="#{bindings.DmsApprovalFlowInfoVO.hints.ValueSetName.tooltip}"
-                          id="it5">
+                          id="it5" partialTriggers="templateNameId">
               <f:validator binding="#{row.bindings.ValueSetName.validator}"/>
             </af:inputText>
           </af:column>

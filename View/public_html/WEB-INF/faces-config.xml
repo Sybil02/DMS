@@ -12,4 +12,7 @@
       <supported-locale>en</supported-locale>
     </locale-config>
   </application>
+    <!--lifecycle>
+        <phase-listener>common.CheckPhaseListener</phase-listener>
+    </lifecycle-->
 </faces-config>

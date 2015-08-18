@@ -11,6 +11,8 @@ import dcm.combinantion.CombinationEO;
 
 import dcm.template.TemplateEO;
 
+import dms.dynamicShell.Tab;
+
 import dms.login.Person;
 
 import java.io.BufferedInputStream;
@@ -99,6 +101,8 @@ import team.epm.dcm.view.DcmCombinationViewRowImpl;
 import team.epm.dcm.view.DcmTemplateColumnViewRowImpl;
 import team.epm.dcm.view.DcmTemplateViewRowImpl;
 
+import workapproveflow.WorkflowEngine;
+
 public class DcmDataDisplayBean extends TablePagination{
     private CollectionModel dataModel;
     //模板信息
@@ -143,6 +147,16 @@ public class DcmDataDisplayBean extends TablePagination{
     List<CalcParameter> parameterList = new ArrayList<CalcParameter>();
     //上一次操作的模式
     private String lastHandleModel = "default";
+    // 工作流ID
+    private String curWfId;
+    //工作流运行ID
+    private String curRunId;
+    //步骤编码
+    private int stepNo;
+    //步骤任务
+    private String curStepTask;
+    //输入状态
+    private String writeStatus;
     //初始化
     public DcmDataDisplayBean() {
         this.curUser =(Person)ADFContext.getCurrent().getSessionScope().get("cur_user");
@@ -212,6 +226,7 @@ public class DcmDataDisplayBean extends TablePagination{
             }
             //已经为删除状态的数据无需做任何处理
         }
+
     }
     //数据保存操作
     public void operation_save() {
@@ -963,6 +978,11 @@ public class DcmDataDisplayBean extends TablePagination{
         this.curCombiantionRecord=this.getCurCombinationRecord();
         this.setCurCombinationRecordEditable();
         this.queryTemplateData();
+        //查询组合是否需要提交审批
+        //更改组合后，先默认赋值不能提交
+        this.writeStatus = "Y";
+        this.isWfTemplate();
+        System.out.println("sssssssssssssssssss:"+this.writeStatus);
         AdfFacesContext adfFacesContext = AdfFacesContext.getCurrentInstance();
         adfFacesContext.addPartialTarget(this.panelaCollection);
     }
@@ -1374,15 +1394,83 @@ public class DcmDataDisplayBean extends TablePagination{
     }
     // 数据保存后，关闭组合，提交审批
     public void commitApprove(ActionEvent actionEvent) {
-        //this.curCombiantionRecord
-        System.out.println(this.curCombiantionRecord);
-        //判断下一步是否为审批，是否存在审批
-        //存在，改变审批状态
-        //关闭组合，锁定模板
+        //修改输入状态表状态为已输入
+        DBTransaction trans = (DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
+        Statement stat = trans.createStatement(DBTransaction.DEFAULT);
+        StringBuffer updateWs = new StringBuffer();
+        updateWs.append("UPDATE WORKFLOW_TEMPLATE_STATUS SET WRITE_STATUS = 'Y' WHERE ");
+        updateWs.append("RUN_ID = '").append(this.curRunId).append("' ");
+        updateWs.append("AND TEMPLATE_ID = '").append(this.curTempalte.getId()).append("' ");
+        updateWs.append("AND COM_ID ='").append(this.curCombiantionRecord).append("'");
+        //关闭组合
+        StringBuffer updateCom = new StringBuffer();
+        updateCom.append("UPDATE DCM_TEMPLATE_COMBINATION SET STATUS = 'CLOSE' WHERE TEMPLATE_ID = '").append(this.curTempalte.getId()).append("' ");
+        updateCom.append("AND COM_RECORD_ID = '").append(this.curCombiantionRecord).append("'");
+        try {
+            stat.executeUpdate(updateWs.toString());
+            stat.executeUpdate(updateCom.toString());
+        } catch (SQLException e) {
+            this._logger.severe(e);
+        }
+        //判断下一步是否为审批，是否存在审批 runid,wfId,stepno
+        WorkflowEngine wfEngine = new WorkflowEngine();
+        Map<String,String> nextMap = wfEngine.queryNextStep(this.curWfId, this.curRunId, this.stepNo);
+        String stepTask = nextMap.get("STEP_TASK");
+            //存在，直接进入下一步，改变审批状态
+        if(stepTask != null && stepTask.equals("APPROVE")){
+//                StringBuffer updateAs = new StringBuffer();
+//                updateAs.append("UPDATE APPROVE_TEMPLATE_STATUS SET APPROVAL_STATUS = 'APPROVEING' WHERE ");
+//                updateAs.append("TEMPLATE_ID = '").append(this.curTempalte.getId()).append("' ");
+//                updateAs.append("AND RUN_ID = '").append(this.curRunId).append("' ");
+//                updateAs.append("AND COM_ID = '").append(this.curCombiantionRecord).append("'");
+//                
+        }
+        //检测步骤是否完成 
+        wfEngine.stepIsFinish(this.curWfId,this.curRunId, this.stepNo, this.curStepTask);
+        //刷新按钮不能点击
+        this.isEditable = false;
+        this.writeStatus = "Y";
     }
     
     //判断是否在工作流中，输入，审批。
     public void isWfTemplate(){
-        
+        DBTransaction trans = (DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
+        Statement stat = trans.createStatement(DBTransaction.DEFAULT);
+        StringBuffer sql = new StringBuffer();
+        sql.append("select t3.wf_id,t2.wf_runid,t4.STEP_TASK,t4.STEP_NO,t5.write_status from ");
+        sql.append("dcm_template t1,dms_workflowinfo t2,dms_workflow_steps t3,dms_workflow_status t4,workflow_template_status t5 ");
+        sql.append("where t2.id = t3.wf_id and t1.template_label = t3.label_object and t2.wf_runid = t4.run_id ");
+        sql.append("and t3.step_no = t4.step_no and t1.id = t5.template_id and t4.run_id = t5.run_id and t4.step_no = t5.step_no ");
+        sql.append("and t1.locale = t2.locale and t1.locale = t3.locale and t4.step_status = 'WORKING' and t2.wf_status = 'Y' ");
+        sql.append("and t1.locale = '").append(this.curUser.getLocale()).append("' ");
+        sql.append("and t1.id = '").append(this.curTempalte.getId()).append("' ");
+        sql.append("and t5.com_id = '").append(this.curCombiantionRecord).append("'");
+        ResultSet rs;
+        try {
+            rs = stat.executeQuery(sql.toString());
+            if(rs.next()){
+                this.curWfId = rs.getString("WF_ID");
+                this.curRunId = rs.getString("WF_RUNID");
+                this.stepNo = rs.getInt("STEP_NO");
+                this.writeStatus = rs.getString("WRITE_STATUS");
+                this.curStepTask = rs.getString("STEP_TASK");
+            }
+            //如果不是未输入状态，则其他情况都为Y，不可提交
+            if("N".equals(this.writeStatus)){
+                this.writeStatus = "N";
+            }else{
+                this.writeStatus = "Y";    
+            }
+        } catch (SQLException e) {
+            this._logger.severe(e);
+        }
+    }
+
+    public void setWriteStatus(String writeStatus) {
+        this.writeStatus = writeStatus;
+    }
+
+    public String getWriteStatus() {
+        return writeStatus;
     }
 }

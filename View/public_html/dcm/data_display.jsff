@@ -7,7 +7,7 @@
   <af:panelStretchLayout id="psl1" bottomHeight="0"
                          topHeight="#{viewScope.DcmDataDisplayBean.combinationId==null ? '0px':'35px'}">
     <f:facet name="top">
-      <af:panelGroupLayout layout="horizontal"
+      <af:panelGroupLayout layout="horizontal" 
                            xmlns:af="http://xmlns.oracle.com/adf/faces/rich"
                            id="pgl1" inlineStyle="padding-top:5px">
         <af:forEach items="#{viewScope.DcmDataDisplayBean.templateHeader}"
@@ -77,6 +77,7 @@
             </af:group>
             <af:group id="g7">
               <af:commandButton text="#{viewBundle['dms.workflow.approve']}" id="cb13"
+                                disabled="#{viewScope.DcmDataDisplayBean.writeStatus eq 'Y'}"
                                 actionListener="#{viewScope.DcmDataDisplayBean.commitApprove}"/>
             </af:group>
           </af:toolbar>
