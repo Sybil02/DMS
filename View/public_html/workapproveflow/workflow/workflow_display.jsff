@@ -183,13 +183,15 @@
             </af:column>
           </af:table>
         </af:panelCollection>
-        <af:panelCollection id="pc2" styleClass="AFStretchWidth">
+        <af:panelCollection id="pc2" styleClass="AFStretchWidth"
+                            partialTriggers="::pc1:t1">
           <f:facet name="menus"/>
           <f:facet name="toolbar">
             <af:toolbar id="t4">
               <af:commandButton text="#{viewBundle['dms.view.details']}" id="cb3"
                                 partialTriggers="t3"
                                 actionListener="#{viewScope.workflowDisplayBean.showDetails}"/>
+              <af:commandButton text="#{viewBundle['dms.interface.commit']}" id="cb4"/>
             </af:toolbar>
           </f:facet>
           <f:facet name="statusbar"/>

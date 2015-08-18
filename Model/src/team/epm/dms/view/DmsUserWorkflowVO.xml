@@ -32,7 +32,7 @@
     <TransientExpression><![CDATA[adf.userSession.userData.userId]]></TransientExpression>
   </Variable>
   <SQLQuery>
-    <![CDATA[SELECT T5.ID "WORKFLOW_ID", T5.WF_NAME "WF_NAME" ,T5.WF_STATUS,T5.WF_COM
+    <![CDATA[SELECT T5.ID "WORKFLOW_ID", T5.WF_NAME "WF_NAME" ,T5.WF_STATUS,T5.WF_COM,T5.WF_RUNID
   FROM DMS_USER          T1,
        DMS_USER_GROUP    T2,
        DMS_GROUP_ROLE    T3,
@@ -118,6 +118,21 @@
     ColumnType="VARCHAR2"
     AliasName="WF_COM"
     Expression="WF_COM"
+    SQLType="VARCHAR">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="32"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="WfRunid"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="32"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="WF_RUNID"
+    Expression="WF_RUNID"
     SQLType="VARCHAR">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="32"/>

@@ -18,15 +18,15 @@
   <ViewLinkDefEnd
     Name="DmsWorkflowInfoVO"
     Cardinality="1"
-    Owner="team.epm.dms.view.DmsWorkflowInfoVO"
+    Owner="team.epm.dms.view.DmsUserWorkflowVO"
     Source="true">
     <DesignTime>
       <Attr Name="_accessor" Value="true"/>
-      <Attr Name="_finderName" Value="DmsWorkflowInfoVO"/>
+      <Attr Name="_finderName" Value="DmsUserWorkflowVO"/>
       <Attr Name="_isUpdateable" Value="true"/>
     </DesignTime>
     <AttrArray Name="Attributes">
-      <Item Value="team.epm.dms.view.DmsWorkflowInfoVO.WfRunid"/>
+      <Item Value="team.epm.dms.view.DmsUserWorkflowVO.WfRunid"/>
     </AttrArray>
   </ViewLinkDefEnd>
   <ViewLinkDefEnd
