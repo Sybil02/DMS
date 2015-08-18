@@ -8,6 +8,15 @@
     <iterator Binds="DmsUserWorkflowVO" RangeSize="-1"
               DataControl="DmsModuleDataControl"
               id="DmsUserWorkflowVOIterator" Refresh="ifNeeded"/>
+    <iterator Binds="DmsWorkflowStatusVO" RangeSize="25"
+              DataControl="DmsModuleDataControl"
+              id="DmsWorkflowStatusVOIterator"/>
+    <iterator Binds="DmsWorkflowTemplateStatusVO" RangeSize="25"
+              DataControl="DmsModuleDataControl"
+              id="DmsWorkflowTemplateStatusVOIterator"/>
+    <iterator Binds="DmsApproveTemplateStatusVO" RangeSize="25"
+              DataControl="DmsModuleDataControl"
+              id="DmsApproveTemplateStatusVOIterator"/>
   </executables>
   <bindings>
     <tree IterBinding="DmsUserWorkflowVOIterator" id="DmsUserWorkflowVO">
@@ -17,6 +26,50 @@
           <Item Value="WorkflowId"/>
           <Item Value="WfName"/>
           <Item Value="WfStatus"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <tree IterBinding="DmsWorkflowStatusVOIterator" id="DmsWorkflowStatusVO">
+      <nodeDefinition DefName="team.epm.dms.view.DmsWorkflowStatusVO"
+                      Name="DmsWorkflowStatusVO0">
+        <AttrNames>
+          <Item Value="CreatedAt"/>
+          <Item Value="CreatedBy"/>
+          <Item Value="FinishAt"/>
+          <Item Value="OpenCom"/>
+          <Item Value="PreStep"/>
+          <Item Value="RunId"/>
+          <Item Value="StartAt"/>
+          <Item Value="StepNo"/>
+          <Item Value="StepObject"/>
+          <Item Value="StepStatus"/>
+          <Item Value="StepTask"/>
+          <Item Value="WfId"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <tree IterBinding="DmsWorkflowTemplateStatusVOIterator"
+          id="DmsWorkflowTemplateStatusVO">
+      <nodeDefinition DefName="team.epm.dms.view.DmsWorkflowTemplateStatusVO"
+                      Name="DmsWorkflowTemplateStatusVO0">
+        <AttrNames>
+          <Item Value="EntityCode"/>
+          <Item Value="WriteStatus"/>
+          <Item Value="FinishAt"/>
+          <Item Value="Meaning"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <tree IterBinding="DmsApproveTemplateStatusVOIterator"
+          id="DmsApproveTemplateStatusVO">
+      <nodeDefinition DefName="team.epm.dms.view.DmsApproveTemplateStatusVO"
+                      Name="DmsApproveTemplateStatusVO0">
+        <AttrNames>
+          <Item Value="Meaning"/>
+          <Item Value="Name"/>
+          <Item Value="ApprovalStatus"/>
+          <Item Value="FinishAt"/>
+          <Item Value="EntityId"/>
         </AttrNames>
       </nodeDefinition>
     </tree>

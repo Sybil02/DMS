@@ -6,23 +6,8 @@
   Name="DmsApproveTemplateStatusVO"
   Version="11.1.1.64.93"
   InheritPersonalization="true"
-  SelectList="DmsApproveTemplateStatusEO.APPROVAL_STATUS, 
-       DmsApproveTemplateStatusEO.CREATED_AT, 
-       DmsApproveTemplateStatusEO.CREATED_BY, 
-       DmsApproveTemplateStatusEO.ENTITY_ID, 
-       DmsApproveTemplateStatusEO.FINISH_AT, 
-       DmsApproveTemplateStatusEO.ID, 
-       DmsApproveTemplateStatusEO.LOCALE, 
-       DmsApproveTemplateStatusEO.PERSON_ID, 
-       DmsApproveTemplateStatusEO.RUN_ID, 
-       DmsApproveTemplateStatusEO.STEP_NO, 
-       DmsApproveTemplateStatusEO.TEMPLATE_ID, 
-       DmsApproveTemplateStatusEO.UPDATED_AT, 
-       DmsApproveTemplateStatusEO.UPDATED_BY, 
-       DmsApproveTemplateStatusEO.COM_ID"
-  FromList="APPROVE_TEMPLATE_STATUS DmsApproveTemplateStatusEO"
   BindingStyle="OracleName"
-  CustomQuery="false"
+  CustomQuery="true"
   RowClass="team.epm.dms.view.DmsApproveTemplateStatusVORowImpl"
   ComponentClass="team.epm.dms.view.DmsApproveTemplateStatusVOImpl"
   PageIterMode="Full"
@@ -30,6 +15,7 @@
   <DesignTime>
     <Attr Name="_codeGenFlag2" Value="Access|Coll|VarAccess"/>
     <Attr Name="_isCodegen" Value="true"/>
+    <Attr Name="_isExpertMode" Value="true"/>
   </DesignTime>
   <Properties>
     <SchemaBasedProperties>
@@ -37,6 +23,35 @@
         ResId="team.epm.dms.view.DmsApproveTemplateStatusVO_LABEL"/>
     </SchemaBasedProperties>
   </Properties>
+  <ViewAccessor
+    Name="DmsDimEntitysVA"
+    ViewObjectName="team.epm.dms.view.lov.DmsDimEntitysLovVo"
+    RowLevelBinds="true"/>
+  <ViewAccessor
+    Name="DmsUserVA"
+    ViewObjectName="team.epm.dms.view.lov.DmsUserLovVO"
+    RowLevelBinds="true"/>
+  <SQLQuery>
+    <![CDATA[SELECT DmsApproveTemplateStatusEO.APPROVAL_STATUS, 
+       DmsApproveTemplateStatusEO.CREATED_AT, 
+       DmsApproveTemplateStatusEO.CREATED_BY, 
+       DmsApproveTemplateStatusEO.ENTITY_ID, 
+       DimEntitys.MEANING,
+       DmsApproveTemplateStatusEO.FINISH_AT, 
+       DmsApproveTemplateStatusEO.ID, 
+       DmsApproveTemplateStatusEO.LOCALE, 
+       DmsApproveTemplateStatusEO.PERSON_ID, 
+       DmsUser.NAME,
+       DmsApproveTemplateStatusEO.RUN_ID, 
+       DmsApproveTemplateStatusEO.STEP_NO, 
+       DmsApproveTemplateStatusEO.TEMPLATE_ID, 
+       DmsApproveTemplateStatusEO.UPDATED_AT, 
+       DmsApproveTemplateStatusEO.UPDATED_BY, 
+       DmsApproveTemplateStatusEO.COM_ID
+FROM APPROVE_TEMPLATE_STATUS DmsApproveTemplateStatusEO ,DIM_ENTITYS DimEntitys,DMS_USER DmsUser
+where DmsApproveTemplateStatusEO.ENTITY_ID = DimEntitys.CODE and
+DmsApproveTemplateStatusEO.PERSON_ID = DmsUser.ID]]>
+  </SQLQuery>
   <EntityUsage
     Name="DmsApproveTemplateStatusEO"
     Entity="team.epm.dms.model.DmsApproveTemplateStatusEO"/>
@@ -69,6 +84,22 @@
     EntityUsage="DmsApproveTemplateStatusEO"
     AliasName="ENTITY_ID"/>
   <ViewAttribute
+    Name="Meaning"
+    IsUpdateable="false"
+    IsPersistent="false"
+    IsNotNull="true"
+    PrecisionRule="true"
+    Precision="80"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="MEANING"
+    Expression="MEANING"
+    SQLType="VARCHAR">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="80"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
     Name="FinishAt"
     PrecisionRule="true"
     EntityAttrName="FinishAt"
@@ -95,6 +126,21 @@
     EntityAttrName="PersonId"
     EntityUsage="DmsApproveTemplateStatusEO"
     AliasName="PERSON_ID"/>
+  <ViewAttribute
+    Name="Name"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="100"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="NAME"
+    Expression="NAME"
+    SQLType="VARCHAR">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="100"/>
+    </DesignTime>
+  </ViewAttribute>
   <ViewAttribute
     Name="RunId"
     IsNotNull="true"

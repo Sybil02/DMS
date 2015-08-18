@@ -119,6 +119,16 @@ public class DmsWorkflowInfoEOImpl extends EntityImpl {
                 obj.setWfStatus((String)value);
             }
         }
+        ,
+        WfRunid {
+            public Object get(DmsWorkflowInfoEOImpl obj) {
+                return obj.getWfRunid();
+            }
+
+            public void put(DmsWorkflowInfoEOImpl obj, Object value) {
+                obj.setWfRunid((String)value);
+            }
+        }
         ;
         private static AttributesEnum[] vals = null;
         private static final int firstIndex = 0;
@@ -158,6 +168,7 @@ public class DmsWorkflowInfoEOImpl extends EntityImpl {
     public static final int CREATEDBY = AttributesEnum.CreatedBy.index();
     public static final int UPDATEDBY = AttributesEnum.UpdatedBy.index();
     public static final int WFSTATUS = AttributesEnum.WfStatus.index();
+    public static final int WFRUNID = AttributesEnum.WfRunid.index();
 
     /**
      * This is the default constructor (do not remove).
@@ -334,6 +345,22 @@ public class DmsWorkflowInfoEOImpl extends EntityImpl {
      */
     public void setWfStatus(String value) {
         setAttributeInternal(WFSTATUS, value);
+    }
+
+    /**
+     * Gets the attribute value for WfRunid, using the alias name WfRunid.
+     * @return the WfRunid
+     */
+    public String getWfRunid() {
+        return (String)getAttributeInternal(WFRUNID);
+    }
+
+    /**
+     * Sets <code>value</code> as the attribute value for WfRunid.
+     * @param value value to set the WfRunid
+     */
+    public void setWfRunid(String value) {
+        setAttributeInternal(WFRUNID, value);
     }
 
     /**

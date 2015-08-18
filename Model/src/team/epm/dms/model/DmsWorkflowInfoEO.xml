@@ -177,6 +177,18 @@
       <Attr Name="_DisplaySize" Value="1"/>
     </DesignTime>
   </Attribute>
+  <Attribute
+    Name="WfRunid"
+    Precision="32"
+    ColumnName="WF_RUNID"
+    SQLType="VARCHAR"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    TableName="DMS_WORKFLOWINFO">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="32"/>
+    </DesignTime>
+  </Attribute>
   <Key
     Name="DcmWfPk"
     PrimaryKey="true">
@@ -265,4 +277,8 @@
       <Item Value="team.epm.dms.model.DmsWorkflowInfoEO.UpdatedBy"/>
     </AttrArray>
   </Key>
+  <ResourceBundle>
+    <PropertiesBundle
+      PropertiesFile="ModelBundle"/>
+  </ResourceBundle>
 </Entity>

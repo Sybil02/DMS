@@ -1,5 +1,6 @@
 package team.epm.dms.view;
 
+import oracle.jbo.RowSet;
 import oracle.jbo.domain.Date;
 import oracle.jbo.domain.Number;
 import oracle.jbo.server.AttributeDefImpl;
@@ -46,6 +47,17 @@ public class DmsWorkflowTemplateStatusVORowImpl extends ViewRowImpl {
             public void put(DmsWorkflowTemplateStatusVORowImpl obj,
                             Object value) {
                 obj.setEntityCode((String)value);
+            }
+        }
+        ,
+        Meaning {
+            public Object get(DmsWorkflowTemplateStatusVORowImpl obj) {
+                return obj.getMeaning();
+            }
+
+            public void put(DmsWorkflowTemplateStatusVORowImpl obj,
+                            Object value) {
+                obj.setMeaning((String)value);
             }
         }
         ,
@@ -136,6 +148,17 @@ public class DmsWorkflowTemplateStatusVORowImpl extends ViewRowImpl {
                 obj.setComId((String)value);
             }
         }
+        ,
+        DmsDimEntitysVA {
+            public Object get(DmsWorkflowTemplateStatusVORowImpl obj) {
+                return obj.getDmsDimEntitysVA();
+            }
+
+            public void put(DmsWorkflowTemplateStatusVORowImpl obj,
+                            Object value) {
+                obj.setAttributeInternal(index(), value);
+            }
+        }
         ;
         private static AttributesEnum[] vals = null;
         private static final int firstIndex = 0;
@@ -165,9 +188,11 @@ public class DmsWorkflowTemplateStatusVORowImpl extends ViewRowImpl {
         }
     }
 
+
     public static final int CREATEDAT = AttributesEnum.CreatedAt.index();
     public static final int CREATEDBY = AttributesEnum.CreatedBy.index();
     public static final int ENTITYCODE = AttributesEnum.EntityCode.index();
+    public static final int MEANING = AttributesEnum.Meaning.index();
     public static final int FINISHAT = AttributesEnum.FinishAt.index();
     public static final int ID = AttributesEnum.Id.index();
     public static final int RUNID = AttributesEnum.RunId.index();
@@ -176,6 +201,7 @@ public class DmsWorkflowTemplateStatusVORowImpl extends ViewRowImpl {
     public static final int WRITEBY = AttributesEnum.WriteBy.index();
     public static final int WRITESTATUS = AttributesEnum.WriteStatus.index();
     public static final int COMID = AttributesEnum.ComId.index();
+    public static final int DMSDIMENTITYSVA = AttributesEnum.DmsDimEntitysVA.index();
 
     /**
      * This is the default constructor (do not remove).
@@ -237,6 +263,23 @@ public class DmsWorkflowTemplateStatusVORowImpl extends ViewRowImpl {
      */
     public void setEntityCode(String value) {
         setAttributeInternal(ENTITYCODE, value);
+    }
+
+
+    /**
+     * Gets the attribute value for the calculated attribute Meaning.
+     * @return the Meaning
+     */
+    public String getMeaning() {
+        return (String) getAttributeInternal(MEANING);
+    }
+
+    /**
+     * Sets <code>value</code> as the attribute value for the calculated attribute Meaning.
+     * @param value value to set the  Meaning
+     */
+    public void setMeaning(String value) {
+        setAttributeInternal(MEANING, value);
     }
 
     /**
@@ -365,6 +408,13 @@ public class DmsWorkflowTemplateStatusVORowImpl extends ViewRowImpl {
      */
     public void setComId(String value) {
         setAttributeInternal(COMID, value);
+    }
+
+    /**
+     * Gets the view accessor <code>RowSet</code> DmsDimEntitysVA.
+     */
+    public RowSet getDmsDimEntitysVA() {
+        return (RowSet)getAttributeInternal(DMSDIMENTITYSVA);
     }
 
     /**

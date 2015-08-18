@@ -1,6 +1,8 @@
 package team.epm.dms.view;
 
+import oracle.jbo.RowSet;
 import oracle.jbo.domain.Date;
+import oracle.jbo.domain.Number;
 import oracle.jbo.server.AttributeDefImpl;
 import oracle.jbo.server.EntityImpl;
 import oracle.jbo.server.ViewRowImpl;
@@ -59,6 +61,17 @@ public class DmsApproveTemplateStatusVORowImpl extends ViewRowImpl {
             }
         }
         ,
+        Meaning {
+            public Object get(DmsApproveTemplateStatusVORowImpl obj) {
+                return obj.getMeaning();
+            }
+
+            public void put(DmsApproveTemplateStatusVORowImpl obj,
+                            Object value) {
+                obj.setMeaning((String)value);
+            }
+        }
+        ,
         FinishAt {
             public Object get(DmsApproveTemplateStatusVORowImpl obj) {
                 return obj.getFinishAt();
@@ -103,6 +116,17 @@ public class DmsApproveTemplateStatusVORowImpl extends ViewRowImpl {
             }
         }
         ,
+        Name {
+            public Object get(DmsApproveTemplateStatusVORowImpl obj) {
+                return obj.getName();
+            }
+
+            public void put(DmsApproveTemplateStatusVORowImpl obj,
+                            Object value) {
+                obj.setName((String)value);
+            }
+        }
+        ,
         RunId {
             public Object get(DmsApproveTemplateStatusVORowImpl obj) {
                 return obj.getRunId();
@@ -121,7 +145,7 @@ public class DmsApproveTemplateStatusVORowImpl extends ViewRowImpl {
 
             public void put(DmsApproveTemplateStatusVORowImpl obj,
                             Object value) {
-                obj.setStepNo((String)value);
+                obj.setStepNo((Number)value);
             }
         }
         ,
@@ -168,6 +192,28 @@ public class DmsApproveTemplateStatusVORowImpl extends ViewRowImpl {
                 obj.setComId((String)value);
             }
         }
+        ,
+        DmsDimEntitysVA {
+            public Object get(DmsApproveTemplateStatusVORowImpl obj) {
+                return obj.getDmsDimEntitysVA();
+            }
+
+            public void put(DmsApproveTemplateStatusVORowImpl obj,
+                            Object value) {
+                obj.setAttributeInternal(index(), value);
+            }
+        }
+        ,
+        DmsUserVA {
+            public Object get(DmsApproveTemplateStatusVORowImpl obj) {
+                return obj.getDmsUserVA();
+            }
+
+            public void put(DmsApproveTemplateStatusVORowImpl obj,
+                            Object value) {
+                obj.setAttributeInternal(index(), value);
+            }
+        }
         ;
         private static AttributesEnum[] vals = null;
         private static final int firstIndex = 0;
@@ -197,20 +243,25 @@ public class DmsApproveTemplateStatusVORowImpl extends ViewRowImpl {
         }
     }
 
+
     public static final int APPROVALSTATUS = AttributesEnum.ApprovalStatus.index();
     public static final int CREATEDAT = AttributesEnum.CreatedAt.index();
     public static final int CREATEDBY = AttributesEnum.CreatedBy.index();
     public static final int ENTITYID = AttributesEnum.EntityId.index();
+    public static final int MEANING = AttributesEnum.Meaning.index();
     public static final int FINISHAT = AttributesEnum.FinishAt.index();
     public static final int ID = AttributesEnum.Id.index();
     public static final int LOCALE = AttributesEnum.Locale.index();
     public static final int PERSONID = AttributesEnum.PersonId.index();
+    public static final int NAME = AttributesEnum.Name.index();
     public static final int RUNID = AttributesEnum.RunId.index();
     public static final int STEPNO = AttributesEnum.StepNo.index();
     public static final int TEMPLATEID = AttributesEnum.TemplateId.index();
     public static final int UPDATEDAT = AttributesEnum.UpdatedAt.index();
     public static final int UPDATEDBY = AttributesEnum.UpdatedBy.index();
     public static final int COMID = AttributesEnum.ComId.index();
+    public static final int DMSDIMENTITYSVA = AttributesEnum.DmsDimEntitysVA.index();
+    public static final int DMSUSERVA = AttributesEnum.DmsUserVA.index();
 
     /**
      * This is the default constructor (do not remove).
@@ -291,6 +342,22 @@ public class DmsApproveTemplateStatusVORowImpl extends ViewRowImpl {
     }
 
     /**
+     * Gets the attribute value for the calculated attribute Meaning.
+     * @return the Meaning
+     */
+    public String getMeaning() {
+        return (String) getAttributeInternal(MEANING);
+    }
+
+    /**
+     * Sets <code>value</code> as the attribute value for the calculated attribute Meaning.
+     * @param value value to set the  Meaning
+     */
+    public void setMeaning(String value) {
+        setAttributeInternal(MEANING, value);
+    }
+
+    /**
      * Gets the attribute value for FINISH_AT using the alias name FinishAt.
      * @return the FINISH_AT
      */
@@ -355,6 +422,22 @@ public class DmsApproveTemplateStatusVORowImpl extends ViewRowImpl {
     }
 
     /**
+     * Gets the attribute value for the calculated attribute Name.
+     * @return the Name
+     */
+    public String getName() {
+        return (String) getAttributeInternal(NAME);
+    }
+
+    /**
+     * Sets <code>value</code> as the attribute value for the calculated attribute Name.
+     * @param value value to set the  Name
+     */
+    public void setName(String value) {
+        setAttributeInternal(NAME, value);
+    }
+
+    /**
      * Gets the attribute value for RUN_ID using the alias name RunId.
      * @return the RUN_ID
      */
@@ -374,15 +457,15 @@ public class DmsApproveTemplateStatusVORowImpl extends ViewRowImpl {
      * Gets the attribute value for STEP_NO using the alias name StepNo.
      * @return the STEP_NO
      */
-    public String getStepNo() {
-        return (String) getAttributeInternal(STEPNO);
+    public Number getStepNo() {
+        return (Number) getAttributeInternal(STEPNO);
     }
 
     /**
      * Sets <code>value</code> as attribute value for STEP_NO using the alias name StepNo.
      * @param value value to set the STEP_NO
      */
-    public void setStepNo(String value) {
+    public void setStepNo(Number value) {
         setAttributeInternal(STEPNO, value);
     }
 
@@ -448,6 +531,20 @@ public class DmsApproveTemplateStatusVORowImpl extends ViewRowImpl {
      */
     public void setComId(String value) {
         setAttributeInternal(COMID, value);
+    }
+
+    /**
+     * Gets the view accessor <code>RowSet</code> DmsDimEntitysVA.
+     */
+    public RowSet getDmsDimEntitysVA() {
+        return (RowSet)getAttributeInternal(DMSDIMENTITYSVA);
+    }
+
+    /**
+     * Gets the view accessor <code>RowSet</code> DmsUserVA.
+     */
+    public RowSet getDmsUserVA() {
+        return (RowSet)getAttributeInternal(DMSUSERVA);
     }
 
     /**

@@ -4,6 +4,8 @@ import common.ADFUtils;
 
 import common.DmsUtils;
 
+import common.JSFUtils;
+
 import dms.login.Person;
 
 import dms.workflow.WorkflowEditBean;
@@ -54,7 +56,10 @@ public class WorkflowDisplayBean {
     //WORFKFLOW_ENGINE
     WorkflowEngine wfEngine = new WorkflowEngine();
     private RichPopup runPop;
-
+    private RichPopup tempPop;
+    private RichPopup approvePop;
+    List<SelectItem> tempItemList = new ArrayList<SelectItem>();
+   
     public WorkflowDisplayBean() {
         super();
         this.curUser =(Person)ADFContext.getCurrent().getSessionScope().get("cur_user");
@@ -107,7 +112,7 @@ public class WorkflowDisplayBean {
                 }
                 //每个值集生成一个bean，加入list中
                 WorkflowValueSet wvs = new WorkflowValueSet(entry.getKey(),null,itemList);
-                this.wfValueSetList.add(wvs);    
+                this.wfValueSetList.add(wvs);   
                 valueRs.close();
             }
             stat.close();
@@ -117,6 +122,89 @@ public class WorkflowDisplayBean {
         //显示pop
         RichPopup.PopupHints hints = new RichPopup.PopupHints();
         this.runPop.show(hints);
+    }
+   
+    public void showDetails(ActionEvent actionEvent) {
+      //   Add event code here...
+        tempItemList.clear();
+        
+        DCIteratorBinding wfsIter = ADFUtils.findIterator("DmsWorkflowStatusVOIterator");
+        ViewObject wfsVo = wfsIter.getViewObject();
+        Row curRow = wfsVo.getCurrentRow();
+       
+        String stepTask = curRow.getAttribute("StepTask").toString();
+       ;
+        if(stepTask.equals("OPEN TEMPLATES")){
+            String stepObject = curRow.getAttribute("StepObject").toString();
+            openTemp(stepObject);
+        }else if(stepTask.equals("APPROVE")){
+            String runId = curRow.getAttribute("RunId").toString();
+            String StepNo = curRow.getAttribute("StepNo").toString();
+            approveflow(runId,StepNo);
+        }else if(stepTask.equals("ETL")){
+            
+        }
+        
+    }
+    public void approveflow(String runId,String StepNo){
+        DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
+        Statement stat=trans.createStatement(DBTransaction.DEFAULT);
+        StringBuffer sql = new StringBuffer();
+        sql.append("select apptem.TEMPLATE_ID \"tempId\", temp.name \"name\" from dcm_template temp , approve_template_status apptem " +
+            "where temp.id = apptem.TEMPLATE_ID and apptem.run_id = \'");
+        sql.append(runId).append("\'");
+        sql.append(" and apptem.step_no = \'");
+        sql.append(StepNo).append("\'");
+        sql.append(" and temp.locale = apptem.locale and temp.locale= \'");
+        sql.append(curUser.getLocale()).append("\'");
+        ResultSet rs;
+
+        try {
+            rs =  stat.executeQuery(sql.toString());
+            while(rs.next()){
+                SelectItem item = new SelectItem();
+                item.setValue(rs.getString("tempId"));
+                item.setLabel(rs.getString("name"));
+                tempItemList.add(item);
+            }
+            rs.close();;
+            stat.close();
+        } catch (SQLException e) {
+            this._logger.severe(e);
+        }
+        //显示pop
+        RichPopup.PopupHints hints = new RichPopup.PopupHints();
+        this.approvePop.show(hints);
+    }
+    public void openTemp(String stepObject){
+        DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
+        Statement stat=trans.createStatement(DBTransaction.DEFAULT);
+        StringBuffer sql = new StringBuffer();
+        sql.append("select temp.id \"tempId\", temp.name \"name\" from dcm_template temp where temp.TEMPLATE_LABEL = \'");
+        sql.append(stepObject);
+        sql.append("\'");
+        sql.append(" and temp.locale= \'");
+        sql.append(curUser.getLocale()).append("\'");
+        ResultSet rs;
+
+        try {
+            rs = stat.executeQuery(sql.toString());
+           
+            while(rs.next()){
+                SelectItem item = new SelectItem();
+                item.setValue(rs.getString("tempId"));
+                item.setLabel(rs.getString("name"));
+                tempItemList.add(item);
+            }
+            rs.close();;
+            stat.close();
+        } catch (SQLException e) {
+            this._logger.severe(e);
+        }
+        
+        //显示pop
+        RichPopup.PopupHints hints = new RichPopup.PopupHints();
+        this.tempPop.show(hints);
     }
     //工作流启动，初始化工作流步骤信息
     public void runWorkflow(ActionEvent actionEvent) {
@@ -150,7 +238,49 @@ public class WorkflowDisplayBean {
             this.comSelectMap.put(valuesName, valueMap);
         }
     }
-    
+    public void valueChangeApprove(ValueChangeEvent valueChangeEvent) {
+        // Add event code here...
+        RichSelectOneChoice comSoc = (RichSelectOneChoice)valueChangeEvent.getSource();
+        String tempId = comSoc.getValue().toString();
+       // DCIteratorBinding wfsIter = ADFUtils.findIterator("DmsWorkflowStatusVOIterator");
+        DCIteratorBinding atsIter = ADFUtils.findIterator("DmsApproveTemplateStatusVOIterator");
+        StringBuffer sql = new StringBuffer();
+        sql.append("TEMPLATE_ID = \'");
+        sql.append(tempId).append("\'");
+        sql.append(" locale = \'");
+        sql.append(curUser.getLocale()).append("\'");
+        ViewObject wftsVo = atsIter.getViewObject();
+        wftsVo.setWhereClause(sql.toString());
+        wftsVo.executeQuery();
+        // 刷新表格
+        AdfFacesContext adfFace = AdfFacesContext.getCurrentInstance();
+        adfFace.addPartialTarget(JSFUtils.findComponentInRoot("t5"));
+    }
+    public void valueChangeTemp(ValueChangeEvent valueChangeEvent) {
+        // Add event code here...
+        RichSelectOneChoice comSoc = (RichSelectOneChoice)valueChangeEvent.getSource();
+        String tempId = comSoc.getValue().toString();
+        DCIteratorBinding wfsIter = ADFUtils.findIterator("DmsWorkflowStatusVOIterator");
+        DCIteratorBinding wftsIter = ADFUtils.findIterator("DmsWorkflowTemplateStatusVOIterator");
+        ViewObject wfsVo = wfsIter.getViewObject();
+        Row curRow = wfsVo.getCurrentRow();
+        String runId = curRow.getAttribute("RunId").toString();
+        String stepNo = curRow.getAttribute("StepNo").toString();
+        StringBuffer sql = new StringBuffer();
+        sql.append("RUN_ID = \'");
+        sql.append(runId).append("\'");
+        sql.append(" and TEMPLATE_ID = \'");
+        sql.append(tempId).append("\'");
+        sql.append(" and STEP_NO = \'");
+        sql.append(stepNo).append("\'");
+        ViewObject wftsVo = wftsIter.getViewObject();
+        wftsVo.setWhereClause(sql.toString());
+        wftsVo.executeQuery();
+       // 刷新表格
+        AdfFacesContext adfFace = AdfFacesContext.getCurrentInstance();
+        adfFace.addPartialTarget(JSFUtils.findComponentInRoot("t5"));
+       
+    }
     public void setWfTable(RichTable wfTable) {
         this.wfTable = wfTable;
     }
@@ -174,5 +304,35 @@ public class WorkflowDisplayBean {
     public List<WorkflowValueSet> getWfValueSetList() {
         return wfValueSetList;
     }
+
+
+
+
+
+
+    public void setTempPop(RichPopup tempPop) {
+        this.tempPop = tempPop;
+    }
+
+    public RichPopup getTempPop() {
+        return tempPop;
+    }
+
+    public void setTempItemList(List<SelectItem> tempItemList) {
+        this.tempItemList = tempItemList;
+    }
+
+    public List<SelectItem> getTempItemList() {
+        return tempItemList;
+    }
+
+    public void setApprovePop(RichPopup approvePop) {
+        this.approvePop = approvePop;
+    }
+
+    public RichPopup getApprovePop() {
+        return approvePop;
+    }
+
 
 }

@@ -411,4 +411,21 @@ public class DmsModuleImpl extends ApplicationModuleImpl implements DmsModule {
     public DmsApproveTemplateStatusVOImpl getDmsApproveTemplateStatusVO() {
         return (DmsApproveTemplateStatusVOImpl)findViewObject("DmsApproveTemplateStatusVO");
     }
+
+
+    /**
+     * Container's getter for DmsWorkflowStatusVO.
+     * @return DmsWorkflowStatusVO
+     */
+    public ViewObjectImpl getDmsWorkflowStatusVO() {
+        return (ViewObjectImpl)findViewObject("DmsWorkflowStatusVO");
+    }
+
+    /**
+     * Container's getter for DmsWorkflowStatusLnk.
+     * @return DmsWorkflowStatusLnk
+     */
+    public ViewLinkImpl getDmsWorkflowStatusLnk() {
+        return (ViewLinkImpl)findViewLink("DmsWorkflowStatusLnk");
+    }
 }

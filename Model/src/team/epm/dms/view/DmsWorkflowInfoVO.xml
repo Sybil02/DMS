@@ -14,7 +14,9 @@
        DmsWorkflowInfoEO.UPDATED_AT, 
        DmsWorkflowInfoEO.UPDATED_BY, 
        DmsWorkflowInfoEO.WF_COM, 
-       DmsWorkflowInfoEO.WF_NAME"
+       DmsWorkflowInfoEO.WF_NAME, 
+       DmsWorkflowInfoEO.WF_RUNID, 
+       DmsWorkflowInfoEO.WF_STATUS"
   FromList="DMS_WORKFLOWINFO DmsWorkflowInfoEO"
   BindingStyle="OracleName"
   CustomQuery="false"
@@ -148,9 +150,27 @@
     <PropertiesBundle
       PropertiesFile="ModelBundle"/>
   </ResourceBundle>
+  <ViewAttribute
+    Name="WfRunid"
+    PrecisionRule="true"
+    EntityAttrName="WfRunid"
+    EntityUsage="DmsWorkflowInfoEO"
+    AliasName="WF_RUNID"/>
+  <ViewAttribute
+    Name="WfStatus"
+    IsNotNull="true"
+    PrecisionRule="true"
+    EntityAttrName="WfStatus"
+    EntityUsage="DmsWorkflowInfoEO"
+    AliasName="WF_STATUS"/>
   <ViewLinkAccessor
     Name="DmsWorkflowStepsVO"
     ViewLink="team.epm.dms.DmsWorkflowStepsLnk"
+    Type="oracle.jbo.RowIterator"
+    IsUpdateable="false"/>
+  <ViewLinkAccessor
+    Name="DmsWorkflowStatusVO"
+    ViewLink="team.epm.dms.DmsWorkflowStatusLnk"
     Type="oracle.jbo.RowIterator"
     IsUpdateable="false"/>
 </ViewObject>
