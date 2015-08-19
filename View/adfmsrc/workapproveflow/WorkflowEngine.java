@@ -13,7 +13,10 @@ import java.sql.Statement;
 
 import java.text.ParseException;
 
+import java.text.SimpleDateFormat;
+
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +30,10 @@ import oracle.jbo.server.DBTransaction;
 
 import team.epm.dcm.view.DcmTemplateCombinaVOImpl;
 import team.epm.dcm.view.DcmTemplateCombinaVORowImpl;
+import team.epm.dms.view.DmsApproveTemplateStatusVOImpl;
+import team.epm.dms.view.DmsApproveTemplateStatusVORowImpl;
+import team.epm.dms.view.DmsInsertApproveStatusVOImpl;
+import team.epm.dms.view.DmsInsertApproveStatusVORowImpl;
 import team.epm.dms.view.DmsWorkflowTemplateStatusVOImpl;
 import team.epm.dms.view.DmsWorkflowTemplateStatusVORowImpl;
 
@@ -271,8 +278,10 @@ public class WorkflowEngine {
             }
             //打开每张模板对应的组合
             this.openTempCom(tempComMap);
-            //初始化每张模板的输入状态
+            //初始化每张模板的输入状态tempEntityMap<temp_id,<entity_code,com_id>>
             this.initTemplateStatus(runId, stepNo, tempEntityMap);
+            //初始化每张模板的审批状态
+            this.initApproveStatus(runId, stepNo, tempEntityMap);
             stat.close();
         } catch (SQLException e) {
             this._logger.severe(e);
@@ -321,7 +330,72 @@ public class WorkflowEngine {
         }
         vo.getApplicationModule().getTransaction().commit();
     }
-    
+    //初始化每张模板的审批状态
+    private void initApproveStatus(String runId,int stepNo,Map<String,Map<String,String>> tempEntityMap){
+        DBTransaction trans =
+            (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
+        Statement stat = trans.createStatement(DBTransaction.DEFAULT);
+        //遍历模板和对应的部门
+        try{
+        for(Map.Entry<String,Map<String,String>> tempEntry : tempEntityMap.entrySet()){
+            Map<String,List<String>> entityUserMap = new HashMap<String,List<String>>();
+            for(Map.Entry<String,String> entityEntry : tempEntry.getValue().entrySet()){
+                List<String> userList = new ArrayList<String>();
+                String tempId = tempEntry.getKey();
+                String entityCode = entityEntry.getKey();
+                StringBuffer tempSql = new StringBuffer();
+                //查询每个部门对应的审核人
+                tempSql.append("SELECT T2.CODE,T2.USER_ID,T2.SEQ FROM DMS_APPROVALFLOWINFO T1 , DMS_APPROVALFLOW_ENTITYS T2 ");
+                tempSql.append("WHERE  T1.ID = T2.APPROVAL_ID AND T1.LOCALE =T2.LOCALE ");
+                tempSql.append("AND T1.LOCALE = '").append(this.curUser.getLocale()).append("' ");
+                tempSql.append("AND T1.TEMPLATE_ID = '").append(tempId).append("' ");
+                tempSql.append("AND T2.CODE ='").append(entityCode).append("' ");
+                tempSql.append("ORDER BY T2.CODE,T2.SEQ");
+                try {
+                    ResultSet rs = stat.executeQuery(tempSql.toString());
+                    while(rs.next()){
+                        String userId = rs.getString("USER_ID");
+                        userList.add(userId);
+                        //put部门和部门审核人的List，已在sql中排序
+                        entityUserMap.put(entityCode, userList);
+                    }
+                    rs.close();
+                } catch (SQLException e) {
+                    this._logger.severe(e);
+                }
+            } 
+            DmsApproveTemplateStatusVOImpl vo = DmsUtils.getDmsApplicationModule().getDmsApproveTemplateStatusVO();
+            //遍历部门和部门审核人list，每个审核人插入一条记录
+            for(Map.Entry<String,List<String>> euEntry : entityUserMap.entrySet()){
+                for(String user : euEntry.getValue()){
+                    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+                    StringBuffer insert = new StringBuffer();
+                    insert.append("INSERT INTO APPROVE_TEMPLATE_STATUS VALUES(");
+                    insert.append("'").append(java.util.UUID.randomUUID().toString().replace("-", "")).append("',");
+                    insert.append("'").append(runId).append("',");
+                    insert.append("'").append(tempEntry.getKey()).append("',");
+                    insert.append("'").append(euEntry.getKey()).append("',");
+                    insert.append(stepNo).append(",");
+                    insert.append("'").append(user).append("',");
+                    insert.append("'").append("CLOSE").append("',");
+                    insert.append("'").append(this.curUser.getLocale()).append("',");
+                    insert.append("null").append(",");
+                    insert.append("to_date('").append(df.format(new Date())).append("','yyyy-MM-dd'),");
+                    insert.append("to_date('").append(df.format(new Date())).append("','yyyy-MM-dd'),");
+                    insert.append("'").append(this.curUser.getId()).append("',");
+                    insert.append("'").append(this.curUser.getId()).append("',");
+                    insert.append("'").append(tempEntityMap.get(tempEntry.getKey()).get(euEntry.getKey())).append("')");
+                    System.out.println(insert.toString());
+                    stat.addBatch(insert.toString());
+                }    
+            }
+            stat.executeBatch();
+        }
+            stat.close();
+        }catch(SQLException e){
+            this._logger.severe(e);
+        }
+    }
     //检测下一步
     public Map<String,String> queryNextStep(String wfId,String runId ,int stepNo){
         stepNo = stepNo + 1;
@@ -397,7 +471,7 @@ public class WorkflowEngine {
         String stepStatus = nextMap.get("STEP_STATUS");
         String openCom = nextMap.get("OPEN_COM");
         String stepObj = nextMap.get("STEP_OBJECT");
-        if(stepTask != null){
+        if(stepTask != null && stepTask != ""){
             if(stepTask.equals("ETL")){
                 //更改ETL步骤状态为进行中
                 System.out.println("更改ETL步骤状态为进行中");

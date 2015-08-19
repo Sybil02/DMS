@@ -53,6 +53,9 @@ import javax.faces.event.ValueChangeEvent;
 
 import javax.faces.model.SelectItem;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.AddressException;
+
 import oracle.adf.model.binding.DCIteratorBinding;
 import oracle.adf.model.binding.DCIteratorBindingDef;
 import oracle.adf.share.ADFContext;
@@ -101,6 +104,7 @@ import team.epm.dcm.view.DcmCombinationViewRowImpl;
 import team.epm.dcm.view.DcmTemplateColumnViewRowImpl;
 import team.epm.dcm.view.DcmTemplateViewRowImpl;
 
+import workapproveflow.ApproveflowEngine;
 import workapproveflow.WorkflowEngine;
 
 public class DcmDataDisplayBean extends TablePagination{
@@ -982,6 +986,9 @@ public class DcmDataDisplayBean extends TablePagination{
         //更改组合后，先默认赋值不能提交
         this.writeStatus = "Y";
         this.isWfTemplate();
+        if(this.writeStatus != "Y"){
+            this.isEditable = true;    
+        }
         System.out.println("sssssssssssssssssss:"+this.writeStatus);
         AdfFacesContext adfFacesContext = AdfFacesContext.getCurrentInstance();
         adfFacesContext.addPartialTarget(this.panelaCollection);
@@ -1409,6 +1416,7 @@ public class DcmDataDisplayBean extends TablePagination{
         try {
             stat.executeUpdate(updateWs.toString());
             stat.executeUpdate(updateCom.toString());
+            trans.commit();
         } catch (SQLException e) {
             this._logger.severe(e);
         }
@@ -1418,12 +1426,21 @@ public class DcmDataDisplayBean extends TablePagination{
         String stepTask = nextMap.get("STEP_TASK");
             //存在，直接进入下一步，改变审批状态
         if(stepTask != null && stepTask.equals("APPROVE")){
-//                StringBuffer updateAs = new StringBuffer();
-//                updateAs.append("UPDATE APPROVE_TEMPLATE_STATUS SET APPROVAL_STATUS = 'APPROVEING' WHERE ");
-//                updateAs.append("TEMPLATE_ID = '").append(this.curTempalte.getId()).append("' ");
-//                updateAs.append("AND RUN_ID = '").append(this.curRunId).append("' ");
-//                updateAs.append("AND COM_ID = '").append(this.curCombiantionRecord).append("'");
-//                
+            ApproveflowEngine approveEgn = new ApproveflowEngine();
+            try {
+                //打开部门审批，发送邮件 
+                approveEgn.startApproveEntity(this.curRunId, this.curTempalte.getId(), this.curCombiantionRecord);
+                //改变工作流中审批步骤状态为进行中
+                StringBuffer updateApp = new StringBuffer();
+                updateApp.append("UPDATE DMS_WORKFLOW_STATUS SET STEP_STATUS = 'WORKING' ");
+                updateApp.append("WHERE WF_ID = '").append(this.curWfId).append("' ");
+                updateApp.append("AND RUN_ID = '").append(this.curRunId).append("' ");
+                updateApp.append("AND STEP_NO =").append(this.stepNo+1);
+                stat.executeUpdate(updateApp.toString());
+                trans.commit();
+            } catch (Exception e) {
+                this._logger.severe(e);
+            } 
         }
         //检测步骤是否完成 
         wfEngine.stepIsFinish(this.curWfId,this.curRunId, this.stepNo, this.curStepTask);

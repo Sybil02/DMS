@@ -13,6 +13,7 @@ import java.sql.Statement;
 import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
 
+import oracle.adf.share.ADFContext;
 import oracle.adf.share.logging.ADFLogger;
 
 import oracle.jbo.server.DBTransaction;
@@ -24,49 +25,64 @@ public class ApproveflowEngine {
     private Person curUser;
     public ApproveflowEngine() {
         super();
+        this.curUser =
+                (Person)ADFContext.getCurrent().getSessionScope().get("cur_user"); 
     }
         //开启审批流当中一个部门，审批人
-        public void startApproveEntity(String runId,String templateId,String entityId,int stepId) throws AddressException,
+        //审批状态  未开启：CLOSE 开启：APPROVEING 通过：Y 拒绝：N 重审：R
+        public void startApproveEntity(String runId,String templateId,String comId) throws AddressException,
                                              MessagingException{
+            String userId = "";
+            String seq = "";
             DBTransaction db =
                 (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
             Statement stmt = db.createStatement(DBTransaction.DEFAULT);
+            //查询部门对应的审核人及顺序
             StringBuffer sql = new StringBuffer();
-            sql.append("select b.user_id \"uesrid\",d.mail \"mail\",b.seq \"seq\",c.APPROVAL_STATUS \"status\" " +
-                "from dms_approvalflowinfo a, dms_approvalflow_entitys b,APPROVE_TEMPLATE_STATUS c,dms_user d " +
-                "where a.id = b.approval_id and b.user_id = c.person_id and b.user_id = d.id  and a.template_id = \'");
-            sql.append(templateId);
-            sql.append("\' and b.code = \'");
-            sql.append(entityId);
-            sql.append("\' and a.locale = b.locale and a.locale = c.locale and a.locale = \'");
-            sql.append(curUser.getLocale()).append("\' order by b.seq");
+            sql.append("select distinct t2.entity_id,t2.approval_status,t2.person_id,t1.seq from ");
+            sql.append("dms_approvalflow_entitys t1,approve_template_status t2 ");
+            sql.append("where t1.code = t2.entity_id and t1.user_id = t2.person_id and t1.locale = t2.locale ");
+            sql.append("and t2.locale = '").append(this.curUser.getLocale()).append("' ");
+            sql.append("and t2.run_id = '").append(runId).append("' ");
+            sql.append("and t2.template_id = '").append(templateId).append("' ");
+            sql.append("and t2.com_id = '").append(comId).append("' ");
+            sql.append("order by t1.seq");
             try{
                 ResultSet rs = stmt.executeQuery(sql.toString());
                 while(rs.next()){
-                    if(rs.getString("status") == null||rs.getString("status").equals("R")||rs.getString("status").equals("N")){
-                        MailSender sender=new MailSender();
-                        sender.send(rs.getString("mail"), "", "");//邮箱地址、主题、消息
-                        StringBuffer sqlstatus = new StringBuffer();
-                        sqlstatus.append("update APPROVE_TEMPLATE_STATUS set APPROVAL_STATUS = \'approving");
-                        sqlstatus.append("\' where run_id = \'");
-                        sqlstatus.append(runId).append("\' and TEMPLATE_ID = \'");
-                        sqlstatus.append(templateId).append("\' and ENTITY_ID = \'");
-                        sqlstatus.append(entityId).append("\' and STEP_NO = ");
-                        sqlstatus.append(stepId);
-                        sqlstatus.append(" PERSON_ID = \'").append(rs.getString("uesrid"));
-                        sqlstatus.append("\'");
-                        stmt.executeUpdate(sqlstatus.toString());
-                        db.commit();
+                    if(rs.getString("APPROVAL_STATUS").equals("CLOSE") || rs.getString("APPROVAL_STATUS").equals("R")){
+                        userId = rs.getString("PERSON_ID");
+                        seq = rs.getString("SEQ");
                         break;
+                    }else{
+                        this._logger.severe("部门启动第一个审批人异常");    
                     }
-                    rs.close();
-                    stmt.close();
                 }
+                rs.close();
+                if(userId != ""){
+                //打开第一个审批
+                StringBuffer openSql = new StringBuffer();
+                openSql.append("UPDATE APPROVE_TEMPLATE_STATUS SET APPROVAL_STATUS = 'APPROVEING' ");
+                openSql.append("WHERE RUN_ID = '").append(runId).append("' ");
+                openSql.append("AND TEMPLATE_ID = '").append(templateId).append("' ");
+                openSql.append("AND COM_ID = '").append(comId).append("' ");
+                openSql.append("AND PERSON_ID = '").append(userId).append("' ");
+                stmt.executeUpdate(openSql.toString());
+                db.commit();
+                //发送邮件
+                StringBuffer mailSql = new StringBuffer();
+                mailSql.append("SELECT MAIL FROM DMS_USER WHERE ID = '").append(userId).append("'");
+                ResultSet mailRs = stmt.executeQuery(mailSql.toString());
+                if(mailRs.next()){
+                    MailSender sender=new MailSender(); 
+                    sender.send(mailRs.getString("MAIL"), comId + "审核", "测试邮件");//收件人地址、主题、消息
+                }
+                mailRs.close();
+                }
+                stmt.close();
             }catch (SQLException e) {
                 this._logger.severe(e);
             }
-            
-           // String sql = "select *";
         }
         //审批人审批
         public void nextApproveEntity(String runId,String templateId,String entityId,int stepId,String personId,String approvalStatus,String comdId) throws AddressException,
@@ -85,7 +101,7 @@ public class ApproveflowEngine {
       try {
             stmt.executeUpdate(sql.toString());
                      if(approvalStatus.equals("Y")){
-             startApproveEntity(runId,templateId,entityId,stepId);
+             //startApproveEntity(runId,templateId,entityId,stepId);
             }
           if(approvalStatus.equals("N")){
               StringBuffer  usql = new StringBuffer();

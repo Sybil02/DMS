@@ -361,4 +361,8 @@
       <Item Value="team.epm.dms.model.DmsApproveTemplateStatusEO.UpdatedBy"/>
     </AttrArray>
   </Key>
+  <ResourceBundle>
+    <PropertiesBundle
+      PropertiesFile="ModelBundle"/>
+  </ResourceBundle>
 </Entity>
