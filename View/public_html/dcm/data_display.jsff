@@ -80,6 +80,14 @@
                                 disabled="#{viewScope.DcmDataDisplayBean.writeStatus eq 'Y'}"
                                 actionListener="#{viewScope.DcmDataDisplayBean.commitApprove}"/>
             </af:group>
+            <af:group id="g8">
+              <af:commandButton text="#{viewBundle['dms.approve.pass']}" id="cb14"
+                                disabled="#{viewScope.DcmDataDisplayBean.approveStatus eq 'Y'}"
+                                actionListener="#{viewScope.DcmDataDisplayBean.approvePass}"/>
+              <af:commandButton text="#{viewBundle['dms.approve.jujue']}" id="cb15"
+                                disabled="#{viewScope.DcmDataDisplayBean.approveStatus eq 'Y'}"
+                                actionListener="#{viewScope.DcmDataDisplayBean.approveRefuse}"/>
+            </af:group>
           </af:toolbar>
         </f:facet>
         <!-- 分页控件 -->

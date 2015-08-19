@@ -280,8 +280,18 @@ public class WorkflowEngine {
             this.openTempCom(tempComMap);
             //初始化每张模板的输入状态tempEntityMap<temp_id,<entity_code,com_id>>
             this.initTemplateStatus(runId, stepNo, tempEntityMap);
+            //查询审批步骤
+            StringBuffer stepNoSql = new StringBuffer();
+            int approveNo = stepNo;
+            stepNoSql.append("select STEP_NO from dms_workflow_status where step_task = 'APPROVE' ");
+            stepNoSql.append("and step_no > ").append(stepNo);
+            stepNoSql.append("order by step_no");
+            ResultSet snRs = stat.executeQuery(stepNoSql.toString());
+            if(snRs.next()){
+                approveNo = snRs.getInt("STEP_NO");        
+            }
             //初始化每张模板的审批状态
-            this.initApproveStatus(runId, stepNo, tempEntityMap);
+            this.initApproveStatus(runId, approveNo, tempEntityMap);
             stat.close();
         } catch (SQLException e) {
             this._logger.severe(e);
@@ -364,7 +374,7 @@ public class WorkflowEngine {
                     this._logger.severe(e);
                 }
             } 
-            DmsApproveTemplateStatusVOImpl vo = DmsUtils.getDmsApplicationModule().getDmsApproveTemplateStatusVO();
+            //DmsApproveTemplateStatusVOImpl vo = DmsUtils.getDmsApplicationModule().getDmsApproveTemplateStatusVO();
             //遍历部门和部门审核人list，每个审核人插入一条记录
             for(Map.Entry<String,List<String>> euEntry : entityUserMap.entrySet()){
                 for(String user : euEntry.getValue()){
@@ -439,7 +449,6 @@ public class WorkflowEngine {
         sql.append("AND RUN_ID = '").append(runId).append("' ");
         sql.append("AND STEP_NO = ").append(stepNo);
         try {
-            System.out.println("ffff:"+sql.toString());
             ResultSet rs = stat.executeQuery(sql.toString());
             if(rs.next()){
                 //步骤未完成
@@ -466,24 +475,39 @@ public class WorkflowEngine {
     
     //启动下一步
     public void startNextSteps(String wfId,String runId,int stepNo){
+        DBTransaction trans = (DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
+        Statement stat = trans.createStatement(DBTransaction.DEFAULT);
         Map<String,String> nextMap = this.queryNextStep(wfId, runId, stepNo);
         String stepTask = nextMap.get("STEP_TASK");
-        String stepStatus = nextMap.get("STEP_STATUS");
+        //String stepStatus = nextMap.get("STEP_STATUS");
         String openCom = nextMap.get("OPEN_COM");
         String stepObj = nextMap.get("STEP_OBJECT");
+        try{
         if(stepTask != null && stepTask != ""){
             if(stepTask.equals("ETL")){
                 //更改ETL步骤状态为进行中
+                StringBuffer etlSql = new StringBuffer();
+                etlSql.append("UPDATE DMS_WORKFLOW_STATUS SET STEP_STATUS = 'WORKING' ");
+                etlSql.append("WHERE WF_ID = '").append(wfId).append("' ");
+                etlSql.append("AND RUN_ID = '").append(runId).append("' ");
+                etlSql.append("AND STEP_NO = ").append(stepNo+1);
+                stat.executeUpdate(etlSql.toString());
+                trans.commit();
                 System.out.println("更改ETL步骤状态为进行中");
             }else if(stepTask.equals("OPEN TEMPLATES")){
                 //打开模板，初始化模板输入状态表和审批流状态表
+                this.openTemplates(stepObj, openCom, runId, stepNo+1);
+                //更新步骤状态为WORKING
+                int i = stepNo + 1;
+                String udnSql = "UPDATE DMS_WORKFLOW_STATUS SET STEP_STATUS = 'WORKING' WHERE WF_ID = '" + wfId + "'"
+                    + " AND RUN_ID = '" + runId + "'" + " AND STEP_NO = " + i;
+                stat.executeUpdate(udnSql);
+                trans.commit();
             }else{
                 //若为审批，则不操作，打开模板步骤已经初始化审批状态表
             }
         }else{
             //更新工作流状态为完成
-            DBTransaction trans = (DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
-            Statement stat = trans.createStatement(DBTransaction.DEFAULT);
             StringBuffer wfSql = new StringBuffer();
             wfSql.append("UPDATE DMS_WORKFLOWINFO SET WF_STATUS = 'N' WHERE ID = '").append(wfId).append("'");
             try {
@@ -492,6 +516,10 @@ public class WorkflowEngine {
             } catch (SQLException e) {
                 this._logger.severe(e);
             }
+        }
+            stat.close();
+        } catch (SQLException e) {
+                this._logger.severe(e);
         }
     }
 }

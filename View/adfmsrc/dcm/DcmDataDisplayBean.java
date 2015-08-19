@@ -161,6 +161,10 @@ public class DcmDataDisplayBean extends TablePagination{
     private String curStepTask;
     //输入状态
     private String writeStatus;
+    //审批状态
+    private String approveStatus;
+    //审批步骤编码
+    private int approveStepNo = 0;
     //初始化
     public DcmDataDisplayBean() {
         this.curUser =(Person)ADFContext.getCurrent().getSessionScope().get("cur_user");
@@ -168,7 +172,7 @@ public class DcmDataDisplayBean extends TablePagination{
         this.initTemplate();
         this.initCombination();
         this.queryTemplateData();
-        //判断模板是否在工作流中，是输入还是提交审批状态
+        //判断模板是否在工作流中，是输入还是审批状态
         this.isWfTemplate();
         System.out.println("this is dcmBean");
     }
@@ -985,6 +989,7 @@ public class DcmDataDisplayBean extends TablePagination{
         //查询组合是否需要提交审批
         //更改组合后，先默认赋值不能提交
         this.writeStatus = "Y";
+        this.approveStatus = "Y";
         this.isWfTemplate();
         if(this.writeStatus != "Y"){
             this.isEditable = true;    
@@ -1449,23 +1454,49 @@ public class DcmDataDisplayBean extends TablePagination{
         this.writeStatus = "Y";
     }
     
+    //审批通过
+    public void approvePass(ActionEvent actionEvent) {
+        ApproveflowEngine approveEgn = new ApproveflowEngine();
+        approveEgn.approvePass(this.curRunId, this.curTempalte.getId(), this.curCombiantionRecord,this.curUser.getId());
+        WorkflowEngine workEngine = new WorkflowEngine();
+        //检测步骤是否完成 
+        workEngine.stepIsFinish(this.curWfId,this.curRunId, this.approveStepNo, "ETL");
+        this.approveStatus = "Y";
+    }
+
+    //审批拒绝
+    public void approveRefuse(ActionEvent actionEvent) {
+        ApproveflowEngine approveEgn = new ApproveflowEngine();
+        approveEgn.approveRefuse(this.curRunId, this.curTempalte.getId(), this.curCombiantionRecord,this.curUser.getId());
+        WorkflowEngine workEngine = new WorkflowEngine();
+        //检测步骤是否完成 
+        workEngine.stepIsFinish(this.curWfId,this.curRunId, this.approveStepNo, "ETL");
+        this.approveStatus = "Y";
+    }
+    
     //判断是否在工作流中，输入，审批。
     public void isWfTemplate(){
+        //默认不可点击
+        this.writeStatus = "Y";
+        this.approveStatus = "Y";
         DBTransaction trans = (DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
         Statement stat = trans.createStatement(DBTransaction.DEFAULT);
+        //判断是否在工作流中，获取工作流信息
         StringBuffer sql = new StringBuffer();
-        sql.append("select t3.wf_id,t2.wf_runid,t4.STEP_TASK,t4.STEP_NO,t5.write_status from ");
+        sql.append("select t3.wf_id,t2.wf_runid,t4.step_status,t4.STEP_TASK,t4.STEP_NO,t5.write_status from ");
         sql.append("dcm_template t1,dms_workflowinfo t2,dms_workflow_steps t3,dms_workflow_status t4,workflow_template_status t5 ");
         sql.append("where t2.id = t3.wf_id and t1.template_label = t3.label_object and t2.wf_runid = t4.run_id ");
         sql.append("and t3.step_no = t4.step_no and t1.id = t5.template_id and t4.run_id = t5.run_id and t4.step_no = t5.step_no ");
-        sql.append("and t1.locale = t2.locale and t1.locale = t3.locale and t4.step_status = 'WORKING' and t2.wf_status = 'Y' ");
+        sql.append("and t1.locale = t2.locale and t1.locale = t3.locale and t2.wf_status = 'Y' ");
         sql.append("and t1.locale = '").append(this.curUser.getLocale()).append("' ");
         sql.append("and t1.id = '").append(this.curTempalte.getId()).append("' ");
         sql.append("and t5.com_id = '").append(this.curCombiantionRecord).append("'");
         ResultSet rs;
         try {
             rs = stat.executeQuery(sql.toString());
+            String stepStatus = "";
             if(rs.next()){
+                stepStatus = rs.getString("STEP_STATUS");
                 this.curWfId = rs.getString("WF_ID");
                 this.curRunId = rs.getString("WF_RUNID");
                 this.stepNo = rs.getInt("STEP_NO");
@@ -1473,10 +1504,27 @@ public class DcmDataDisplayBean extends TablePagination{
                 this.curStepTask = rs.getString("STEP_TASK");
             }
             //如果不是未输入状态，则其他情况都为Y，不可提交
-            if("N".equals(this.writeStatus)){
+            if("N".equals(this.writeStatus) && "WORKING".equals(stepStatus)){
                 this.writeStatus = "N";
             }else{
                 this.writeStatus = "Y";    
+            }
+            //不为空则在工作流中，判断是否有审批，获取审批信息
+            if(this.curRunId != null && this.curWfId != null){
+                StringBuffer approveSql = new StringBuffer();
+                approveSql.append("SELECT APPROVAL_STATUS,STEP_NO FROM APPROVE_TEMPLATE_STATUS WHERE ");
+                approveSql.append("RUN_ID = '").append(this.curRunId).append("' ");
+                approveSql.append("AND TEMPLATE_ID = '").append(this.curTempalte.getId()).append("' ");
+                approveSql.append("AND PERSON_ID = '").append(this.curUser.getId()).append("' ");
+                approveSql.append("AND COM_ID = '").append(this.curCombiantionRecord).append("'");
+                ResultSet aRs = stat.executeQuery(approveSql.toString());
+                if(aRs.next()){
+                    String appStatus = aRs.getString("APPROVAL_STATUS");
+                    this.approveStepNo = aRs.getInt("STEP_NO");
+                    if(appStatus.endsWith("APPROVEING")){
+                        this.approveStatus = "N";    
+                    }
+                }
             }
         } catch (SQLException e) {
             this._logger.severe(e);
@@ -1489,5 +1537,13 @@ public class DcmDataDisplayBean extends TablePagination{
 
     public String getWriteStatus() {
         return writeStatus;
+    }
+
+    public void setApproveStatus(String approveStatus) {
+        this.approveStatus = approveStatus;
+    }
+
+    public String getApproveStatus() {
+        return approveStatus;
     }
 }
