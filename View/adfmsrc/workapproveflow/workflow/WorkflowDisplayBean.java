@@ -67,8 +67,6 @@ public class WorkflowDisplayBean {
     private RichPopup tempPop;
     private RichPopup approvePop;
     private RichPopup runInterPop;
-    boolean isflag = true;
-    boolean isflagtwo = true;
     List<SelectItem> tempItemList = new ArrayList<SelectItem>();
    
     public WorkflowDisplayBean() {
@@ -144,16 +142,20 @@ public class WorkflowDisplayBean {
         Row curRow = wfsVo.getCurrentRow();
        
         String stepTask = curRow.getAttribute("StepTask").toString();
-       ;
+        String StepStatus = curRow.getAttribute("StepStatus").toString();
         if(stepTask.equals("OPEN TEMPLATES")){
             String stepObject = curRow.getAttribute("StepObject").toString();
             openTemp(stepObject);
-        }else if(stepTask.equals("APPROVE")){
+        }else if(stepTask.equals("APPROVE")&&StepStatus.equals("WORKING")){
             String runId = curRow.getAttribute("RunId").toString();
             String StepNo = curRow.getAttribute("StepNo").toString();
             approveflow(runId,StepNo);
         }else if(stepTask.equals("ETL")){
-            
+            FacesContext.getCurrentInstance().addMessage(null,new FacesMessage("该列为接口，不能被查看！"));
+            return;
+        }else{
+            FacesContext.getCurrentInstance().addMessage(null,new FacesMessage("不能查看该列详情！"));
+            return;
         }
         
     }
@@ -220,8 +222,22 @@ public class WorkflowDisplayBean {
     //执行接口
     public void execInterface(ActionEvent actionEvent) {
         // Add event code here...
+        DCIteratorBinding wfsIter = ADFUtils.findIterator("DmsWorkflowStatusVOIterator");
+        ViewObject wfsVo = wfsIter.getViewObject();
+        Row curRow = wfsVo.getCurrentRow();
+        
+        String stepTask = curRow.getAttribute("StepTask").toString();
+        String stepStatus = curRow.getAttribute("StepStatus").toString();
+        if(stepTask.equals("ETL")&&stepStatus.equals("WORKING")){
         RichPopup.PopupHints hints = new RichPopup.PopupHints();
         this.runInterPop.show(hints);
+        }else if(stepTask.equals("OPEN TEMPLATES")||stepTask.equals("APPROVE")){
+            FacesContext.getCurrentInstance().addMessage(null,new FacesMessage("该列不是接口，请选择合适列！"));
+            return;
+        }else{
+            FacesContext.getCurrentInstance().addMessage(null,new FacesMessage("该接口未开启，不能执行！"));
+            return;
+        }
         
     }
     //工作流启动，初始化工作流步骤信息
@@ -299,28 +315,7 @@ public class WorkflowDisplayBean {
         adfFace.addPartialTarget(JSFUtils.findComponentInRoot("t5"));
        
     }
-    public void makeCurrent(SelectionEvent selectionEvent) {
-        // Add event code here...
-        isflag = true;
-        isflagtwo = true;
-        RichTable rt = (RichTable)selectionEvent.getSource();
-        CollectionModel cm = (CollectionModel)rt.getValue();
-        JUCtrlHierBinding tableBinding = (JUCtrlHierBinding)cm.getWrappedData();
-        DCIteratorBinding iter = tableBinding.getDCIteratorBinding();
-        
-        JUCtrlHierNodeBinding selectedRowData = (JUCtrlHierNodeBinding)rt.getSelectedRowData();
-        Key rowKey = selectedRowData.getRowKey();
-        iter.setCurrentRowWithKey(rowKey.toStringFormat(true));
-        Row row = selectedRowData.getRow();
-        String StepTask = row.getAttribute("StepTask").toString();
-        String StepStatus = row.getAttribute("StepStatus").toString();
-        if(StepTask.equals("ETL")&&StepStatus.equals("WORKING")){
-           isflag = false;
-        }else if(StepTask.equals("OPEN TEMPLATES")||StepTask.equals("APPROVE")&&StepStatus.equals("WORKING")){
-            isflagtwo = false;
-        }
-        
-    }
+
     public void setWfTable(RichTable wfTable) {
         this.wfTable = wfTable;
     }
@@ -384,19 +379,4 @@ public class WorkflowDisplayBean {
     }
 
 
-    public void setIsflag(boolean isflag) {
-        this.isflag = isflag;
-    }
-
-    public boolean isIsflag() {
-        return isflag;
-    }
-
-    public void setIsflagtwo(boolean isflagtwo) {
-        this.isflagtwo = isflagtwo;
-    }
-
-    public boolean isIsflagtwo() {
-        return isflagtwo;
-    }
 }
