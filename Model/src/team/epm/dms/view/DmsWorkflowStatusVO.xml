@@ -22,7 +22,8 @@
   BindingStyle="OracleName"
   CustomQuery="false"
   PageIterMode="Full"
-  UseGlueCode="false">
+  UseGlueCode="false"
+  OrderBy="DmsWorkflowStatusEO.STEP_NO">
   <Properties>
     <SchemaBasedProperties>
       <LABEL
