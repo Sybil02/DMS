@@ -6,18 +6,21 @@
   <c:set var="viewBundle" value="#{adfBundle['dms_v']}"/>
   <af:panelStretchLayout id="psl1" topHeight="0px">
     <f:facet name="top">
-    <!--Popup-->
+      <!--Popup-->
       <af:panelGroupLayout layout="scroll"
                            xmlns:af="http://xmlns.oracle.com/adf/faces/rich"
                            id="pgl4">
+                           <!--审批详情Popup-->
         <af:popup id="p3" autoCancel="disabled"
                   binding="#{viewScope.workflowDisplayBean.approvePop}">
           <af:panelWindow id="pw3">
             <af:panelGroupLayout id="pgl8">
               <af:panelGroupLayout id="pgl10" inlineStyle="height:85px;">
-                <af:selectOneChoice label="#{viewBundle['dms.select.temp']}" id="soc2"
+                <af:selectOneChoice label="#{viewBundle['dms.select.temp']}"
+                                    id="soc2"
                                     valueChangeListener="#{viewScope.workflowDisplayBean.valueChangeApprove}">
-                  <f:selectItems value="#{viewScope.workflowDisplayBean.tempItemList}" id="si2"/>
+                  <f:selectItems value="#{viewScope.workflowDisplayBean.tempItemList}"
+                                 id="si2"/>
                 </af:selectOneChoice>
               </af:panelGroupLayout>
               <af:panelGroupLayout id="pgl9">
@@ -53,7 +56,8 @@
                                sortable="true"
                                headerText="#{bindings.DmsApproveTemplateStatusVO.hints.ApprovalStatus.label}"
                                id="c20">
-                      <af:outputText value="#{row.ApprovalStatus eq &quot;N&quot; ? &quot;拒绝&quot;:(row.ApprovalStatus eq &quot;Y&quot; ? &quot;通过&quot;:(row.ApprovalStatus eq &quot;CLOSE&quot; ? &quot;未开启&quot;:&quot;审批中&quot;))}" id="ot20"/>
+                      <af:outputText value='#{row.ApprovalStatus eq "N" ? "拒绝":(row.ApprovalStatus eq "Y" ? "通过":(row.ApprovalStatus eq "CLOSE" ? "未开启":"审批中"))}'
+                                     id="ot20"/>
                     </af:column>
                     <af:column sortProperty="#{bindings.DmsApproveTemplateStatusVO.hints.FinishAt.name}"
                                sortable="true"
@@ -69,17 +73,18 @@
             </af:panelGroupLayout>
           </af:panelWindow>
         </af:popup>
+                            <!--输入详情Popup-->
         <af:popup id="p2" binding="#{viewScope.workflowDisplayBean.tempPop}"
                   autoCancel="disabled">
           <af:panelWindow id="pw2">
             <af:panelGroupLayout id="pgl5">
               <af:panelGroupLayout id="pgl7" inlineStyle="height:98px;">
-                  <af:selectOneChoice label="#{viewBundle['dms.select.temp']}"
-                                    autoSubmit="true"
-                                    id="soc1"
-                                      valueChangeListener="#{viewScope.workflowDisplayBean.valueChangeTemp}">
-                    <f:selectItems value="#{viewScope.workflowDisplayBean.tempItemList}" id="si1"/>
-                  </af:selectOneChoice>
+                <af:selectOneChoice label="#{viewBundle['dms.select.temp']}"
+                                    autoSubmit="true" id="soc1"
+                                    valueChangeListener="#{viewScope.workflowDisplayBean.valueChangeTemp}">
+                  <f:selectItems value="#{viewScope.workflowDisplayBean.tempItemList}"
+                                 id="si1"/>
+                </af:selectOneChoice>
               </af:panelGroupLayout>
               <af:panelGroupLayout id="pgl6">
                 <af:panelCollection id="pc3">
@@ -105,7 +110,8 @@
                                sortable="true"
                                headerText="#{bindings.DmsWorkflowTemplateStatusVO.hints.WriteStatus.label}"
                                id="c16">
-                      <af:outputText value="#{row.WriteStatus == 'Y'||'R' ? '完成':'未完成'}" id="ot17"/>
+                      <af:outputText value="#{row.WriteStatus == 'Y'||'N' ? '完成':'未完成'}"
+                                     id="ot17"/>
                     </af:column>
                     <af:column sortProperty="#{bindings.DmsWorkflowTemplateStatusVO.hints.FinishAt.name}"
                                sortable="true"
@@ -121,6 +127,7 @@
             </af:panelGroupLayout>
           </af:panelWindow>
         </af:popup>
+                    <!--启动工作流Popup-->
         <af:popup id="p1" autoCancel="disabled"
                   binding="#{viewScope.workflowDisplayBean.runPop}">
           <af:panelWindow title="#{viewBundle['dms.workflow.runpopup']}"
@@ -143,20 +150,16 @@
             </af:panelGroupLayout>
           </af:panelWindow>
         </af:popup>
-        <af:popup id="p4"
-                  binding="#{viewScope.workflowDisplayBean.runInterPop}"
+                    <!--执行接口Popup-->
+        <af:popup id="p4" binding="#{viewScope.workflowDisplayBean.runInterPop}"
                   autoCancel="disabled" childCreation="deferred">
           <af:panelWindow id="pw4">
-          
-            
-          
             <af:panelGroupLayout id="pgl11">
-            <!--ETL-->
-
-             <af:panelCollection id="epc1">
-                  <f:facet name="menus"/>
-                  <f:facet name="toolbar"/>
-                  <f:facet name="statusbar"/>
+              <!--ETL-->
+              <af:panelCollection id="epc1">
+                <f:facet name="menus"/>
+                <f:facet name="toolbar"/>
+                <f:facet name="statusbar"/>
                 <af:table value="#{bindings.Odi11ScaneVO.collectionModel}"
                           var="row" rows="#{bindings.Odi11ScaneVO.rangeSize}"
                           emptyText="#{bindings.Odi11ScaneVO.viewable ? 'No data to display.' : 'Access Denied.'}"
@@ -172,13 +175,13 @@
                   </af:column>
                   <af:column id="c15" width="106">
                     <af:panelGroupLayout id="pgl12">
-                      <af:commandLink text="#{viewBundle['odi11g.scene.execute']}" 
-                      id="cl1"
-                      actionListener="#{viewScope.workflowOdiBean.showExcutePopup}"/>
+                      <af:commandLink text="#{viewBundle['odi11g.scene.execute']}"
+                                      id="cl1"
+                                      actionListener="#{viewScope.workflowOdiBean.showExcutePopup}"/>
                       <af:spacer width="10" height="10" id="s1"/>
-                      <af:commandLink text="#{viewBundle['odi11g.scene.status']}" 
-                      id="cl2"
-                      actionListener="#{viewScope.workflowOdiBean.showStatusPopup}"/>
+                      <af:commandLink text="#{viewBundle['odi11g.scene.status']}"
+                                      id="cl2"
+                                      actionListener="#{viewScope.workflowOdiBean.showStatusPopup}"/>
                     </af:panelGroupLayout>
                   </af:column>
                   <af:column sortProperty="#{bindings.Odi11ScaneVO.hints.UpdatedAt.name}"
@@ -200,6 +203,7 @@
             </af:panelGroupLayout>
           </af:panelWindow>
         </af:popup>
+                <!--接口参数Popup-->
         <af:popup id="popup1" autoCancel="disabled" childCreation="deferred"
                   binding="#{viewScope.workflowOdiBean.popup}">
           <af:panelWindow id="panelWindow1" modal="true"
@@ -256,6 +260,7 @@
             </af:panelCollection>
           </af:panelWindow>
         </af:popup>
+                       <!--接口运行状态Popup--> 
         <af:popup id="popup2" autoCancel="disabled" childCreation="deferred"
                   binding="#{viewScope.workflowOdiBean.statusPopup}">
           <af:panelWindow id="panelWindow2"
@@ -339,12 +344,11 @@
                     </af:column>
                   </af:table>
                 </af:panelCollection>
-                
               </f:facet>
-              
             </af:panelStretchLayout>
           </af:panelWindow>
         </af:popup>
+              <!--异常信息Popup-->      
         <af:popup id="popup3" autoCancel="disabled" childCreation="deferred"
                   binding="#{viewScope.workflowOdiBean.exceptionPopup}">
           <af:panelWindow id="panelWindow3"
@@ -378,7 +382,6 @@
                     </af:column>
                   </af:table>
                 </af:panelCollection>
-                
               </f:facet>
             </af:panelStretchLayout>
           </af:panelWindow>
@@ -386,150 +389,113 @@
       </af:panelGroupLayout>
     </f:facet>
     <f:facet name="center">
-      <af:panelGroupLayout id="pgl1">
-        <!--styleClass="AFStretchWidth"-->
-        <af:panelCollection id="pc1" styleClass="AFStretchWidth">
-          <f:facet name="menus"/>
-          <f:facet name="toolbar">
-            <af:toolbar id="t2">
-              <af:commandButton text="#{viewBundle['dms.workflow.run']}" id="cb1"
-                                actionListener="#{viewScope.workflowDisplayBean.showRunPop}"
-                                partialTriggers="t1"/>
-            </af:toolbar>
-          </f:facet>
-          <f:facet name="statusbar"/>
-          <af:table value="#{bindings.DmsUserWorkflowVO.collectionModel}"
-                    var="row" rows="#{bindings.DmsUserWorkflowVO.rangeSize}"
-                    emptyText="#{bindings.DmsUserWorkflowVO.viewable ? 'No data to display.' : 'Access Denied.'}"
-                    fetchSize="#{bindings.DmsUserWorkflowVO.rangeSize}"
-                    rowBandingInterval="0"
-                    selectedRowKeys="#{bindings.DmsUserWorkflowVO.collectionModel.selectedRow}"
-                    selectionListener="#{bindings.DmsUserWorkflowVO.collectionModel.makeCurrent}"
-                    rowSelection="single" id="t1"
-                    binding="#{viewScope.workflowDisplayBean.wfTable}"
-                    >
-            <af:column sortProperty="#{bindings.DmsUserWorkflowVO.hints.WfName.name}"
-                       sortable="false"
-                       headerText="#{bindings.DmsUserWorkflowVO.hints.WfName.label}"
-                       id="c2">
-              <af:outputText value="#{row.WfName}" id="ot1"/>
-            </af:column>
-            <af:column headerText="#{bindings.DmsUserWorkflowVO.hints.WfStatus.label}"
-                       id="c1">
-              <af:outputText value="#{row.WfStatus}" id="ot2"/>
-            </af:column>
-          </af:table>
-        </af:panelCollection>
-        <af:panelCollection id="pc2" styleClass="AFStretchWidth"
-                            partialTriggers="::pc1:t1">
-          <f:facet name="menus"/>
-          <f:facet name="toolbar">
-            <af:toolbar id="t4">
-              <af:commandButton text="#{viewBundle['dms.view.details']}" id="cb3"
-                                partialTriggers="t3"
-                                actionListener="#{viewScope.workflowDisplayBean.showDetails}"
-                                disabled="#{viewScope.workflowDisplayBean.isflagtwo}"/>
-              <af:commandButton text="#{viewBundle['dms.interface.commit']}" id="cb4"
-                                actionListener="#{viewScope.workflowDisplayBean.execInterface}"
-                                disabled="#{viewScope.workflowDisplayBean.isflag}"/>
-            </af:toolbar>
-          </f:facet>
-          <f:facet name="statusbar"/>
-          <af:table value="#{bindings.DmsWorkflowStatusVO.collectionModel}"
-                    var="row" rows="#{bindings.DmsWorkflowStatusVO.rangeSize}"
-                    emptyText="#{bindings.DmsWorkflowStatusVO.viewable ? 'No data to display.' : 'Access Denied.'}"
-                    fetchSize="#{bindings.DmsWorkflowStatusVO.rangeSize}"
-                    rowBandingInterval="0"
-                    selectedRowKeys="#{bindings.DmsWorkflowStatusVO.collectionModel.selectedRow}"
-                    selectionListener="#{viewScope.workflowDisplayBean.makeCurrent}"
-                    rowSelection="single" id="t3">
-            <af:column sortProperty="#{bindings.DmsWorkflowStatusVO.hints.CreatedAt.name}"
-                       sortable="true"
-                       headerText="#{bindings.DmsWorkflowStatusVO.hints.CreatedAt.label}"
-                       id="c11">
-              <af:outputText value="#{row.CreatedAt}" id="ot5">
-                <af:convertDateTime pattern="#{bindings.DmsWorkflowStatusVO.hints.CreatedAt.format}"/>
-              </af:outputText>
-            </af:column>
-            <af:column sortProperty="#{bindings.DmsWorkflowStatusVO.hints.CreatedBy.name}"
-                       sortable="true"
-                       headerText="#{bindings.DmsWorkflowStatusVO.hints.CreatedBy.label}"
-                       id="c9">
-              <af:outputText value="#{row.CreatedBy}" id="ot4"/>
-            </af:column>
-            <af:column sortProperty="#{bindings.DmsWorkflowStatusVO.hints.FinishAt.name}"
-                       sortable="true"
-                       headerText="#{bindings.DmsWorkflowStatusVO.hints.FinishAt.label}"
-                       id="c3">
-              <af:outputText value="#{row.FinishAt}" id="ot12">
-                <af:convertDateTime pattern="#{bindings.DmsWorkflowStatusVO.hints.FinishAt.format}"/>
-              </af:outputText>
-            </af:column>
-            <af:column sortProperty="#{bindings.DmsWorkflowStatusVO.hints.OpenCom.name}"
-                       sortable="true"
-                       headerText="#{bindings.DmsWorkflowStatusVO.hints.OpenCom.label}"
-                       id="c13">
-              <af:outputText value="#{row.OpenCom}" id="ot3"/>
-            </af:column>
-            <af:column sortProperty="#{bindings.DmsWorkflowStatusVO.hints.PreStep.name}"
-                       sortable="true"
-                       headerText="#{bindings.DmsWorkflowStatusVO.hints.PreStep.label}"
-                       id="c14">
-              <af:outputText value="#{row.PreStep}" id="ot6">
-                <af:convertNumber groupingUsed="false"
-                                  pattern="#{bindings.DmsWorkflowStatusVO.hints.PreStep.format}"/>
-              </af:outputText>
-            </af:column>
-            <af:column sortProperty="#{bindings.DmsWorkflowStatusVO.hints.RunId.name}"
-                       sortable="true"
-                       headerText="#{bindings.DmsWorkflowStatusVO.hints.RunId.label}"
-                       id="c5">
-              <af:outputText value="#{row.RunId}" id="ot11"/>
-            </af:column>
-            <af:column sortProperty="#{bindings.DmsWorkflowStatusVO.hints.StartAt.name}"
-                       sortable="true"
-                       headerText="#{bindings.DmsWorkflowStatusVO.hints.StartAt.label}"
-                       id="c7">
-              <af:outputText value="#{row.StartAt}" id="ot7">
-                <af:convertDateTime pattern="#{bindings.DmsWorkflowStatusVO.hints.StartAt.format}"/>
-              </af:outputText>
-            </af:column>
-            <af:column sortProperty="#{bindings.DmsWorkflowStatusVO.hints.StepNo.name}"
-                       sortable="true"
-                       headerText="#{bindings.DmsWorkflowStatusVO.hints.StepNo.label}"
-                       id="c8">
-              <af:outputText value="#{row.StepNo}" id="ot14">
-                <af:convertNumber groupingUsed="false"
-                                  pattern="#{bindings.DmsWorkflowStatusVO.hints.StepNo.format}"/>
-              </af:outputText>
-            </af:column>
-            <af:column sortProperty="#{bindings.DmsWorkflowStatusVO.hints.StepObject.name}"
-                       sortable="true"
-                       headerText="#{bindings.DmsWorkflowStatusVO.hints.StepObject.label}"
-                       id="c6">
-              <af:outputText value="#{row.StepObject}" id="ot9"/>
-            </af:column>
-            <af:column sortProperty="#{bindings.DmsWorkflowStatusVO.hints.StepStatus.name}"
-                       sortable="true"
-                       headerText="#{bindings.DmsWorkflowStatusVO.hints.StepStatus.label}"
-                       id="c4">
-              <af:outputText value="#{row.StepStatus}" id="ot8"/>
-            </af:column>
-            <af:column sortProperty="#{bindings.DmsWorkflowStatusVO.hints.StepTask.name}"
-                       sortable="true"
-                       headerText="#{bindings.DmsWorkflowStatusVO.hints.StepTask.label}"
-                       id="c12">
-              <af:outputText value="#{row.StepTask}" id="ot13"/>
-            </af:column>
-            <af:column sortProperty="#{bindings.DmsWorkflowStatusVO.hints.WfId.name}"
-                       sortable="true"
-                       headerText="#{bindings.DmsWorkflowStatusVO.hints.WfId.label}"
-                       id="c10">
-              <af:outputText value="#{row.WfId}" id="ot10"/>
-            </af:column>
-          </af:table>
-        </af:panelCollection>
-      </af:panelGroupLayout>
+      <af:panelSplitter id="ps1" orientation="vertical" splitterPosition="221">
+        <f:facet name="first">
+          <af:panelCollection id="pc1" styleClass="AFStretchWidth">
+            <f:facet name="menus"/>
+            <f:facet name="toolbar">
+              <af:toolbar id="t2">
+                <af:commandButton text="#{viewBundle['dms.workflow.run']}"
+                                  id="cb1"
+                                  actionListener="#{viewScope.workflowDisplayBean.showRunPop}"
+                                  partialTriggers="t1"/>
+              </af:toolbar>
+            </f:facet>
+            <f:facet name="statusbar"/>
+            <af:table value="#{bindings.DmsUserWorkflowVO.collectionModel}"
+                      var="row" rows="#{bindings.DmsUserWorkflowVO.rangeSize}"
+                      emptyText="#{bindings.DmsUserWorkflowVO.viewable ? 'No data to display.' : 'Access Denied.'}"
+                      fetchSize="#{bindings.DmsUserWorkflowVO.rangeSize}"
+                      rowBandingInterval="0"
+                      selectedRowKeys="#{bindings.DmsUserWorkflowVO.collectionModel.selectedRow}"
+                      selectionListener="#{bindings.DmsUserWorkflowVO.collectionModel.makeCurrent}"
+                      rowSelection="single" id="t1"
+                      binding="#{viewScope.workflowDisplayBean.wfTable}">
+              <af:column sortProperty="#{bindings.DmsUserWorkflowVO.hints.WfName.name}"
+                         sortable="false"
+                         headerText="#{bindings.DmsUserWorkflowVO.hints.WfName.label}"
+                         id="c2">
+                <af:outputText value="#{row.WfName}" id="ot1"/>
+              </af:column>
+              <af:column headerText="#{bindings.DmsUserWorkflowVO.hints.WfStatus.label}"
+                         id="c1">
+                <af:outputText value="#{row.WfStatus}" id="ot2"/>
+              </af:column>
+            </af:table>
+          </af:panelCollection>
+        </f:facet>
+        <f:facet name="second">
+          <af:panelCollection id="pc2" styleClass="AFStretchWidth"
+                              partialTriggers="::pc1:t1">
+            <f:facet name="menus"/>
+            <f:facet name="toolbar">
+              <af:toolbar id="t4">
+                <af:commandButton text="#{viewBundle['dms.view.details']}"
+                                  id="cb3" partialTriggers="t3"
+                                  actionListener="#{viewScope.workflowDisplayBean.showDetails}"
+                                  disabled="#{viewScope.workflowDisplayBean.isflagtwo}"/>
+                <af:commandButton text="#{viewBundle['dms.interface.commit']}"
+                                  id="cb4"
+                                  actionListener="#{viewScope.workflowDisplayBean.execInterface}"
+                                  disabled="#{viewScope.workflowDisplayBean.isflag}"/>
+              </af:toolbar>
+            </f:facet>
+            <f:facet name="statusbar"/>
+            <af:table value="#{bindings.DmsWorkflowStatusVO.collectionModel}"
+                      var="row" rows="#{bindings.DmsWorkflowStatusVO.rangeSize}"
+                      emptyText="#{bindings.DmsWorkflowStatusVO.viewable ? 'No data to display.' : 'Access Denied.'}"
+                      fetchSize="#{bindings.DmsWorkflowStatusVO.rangeSize}"
+                      rowBandingInterval="0"
+                      selectedRowKeys="#{bindings.DmsWorkflowStatusVO.collectionModel.selectedRow}"
+                      selectionListener="#{bindings.DmsWorkflowStatusVO.collectionModel.makeCurrent}"
+                      rowSelection="single" id="t3">
+              <af:column sortProperty="#{bindings.DmsWorkflowStatusVO.hints.StepNo.name}"
+                         sortable="true"
+                         headerText="#{bindings.DmsWorkflowStatusVO.hints.StepNo.label}"
+                         id="c8">
+                <af:outputText value="#{row.StepNo}" id="ot14">
+                  <af:convertNumber groupingUsed="false"
+                                    pattern="#{bindings.DmsWorkflowStatusVO.hints.StepNo.format}"/>
+                </af:outputText>
+              </af:column>
+              <af:column sortProperty="#{bindings.DmsWorkflowStatusVO.hints.StepTask.name}"
+                         sortable="true"
+                         headerText="#{bindings.DmsWorkflowStatusVO.hints.StepTask.label}"
+                         id="c12">
+                <af:outputText value="#{row.StepTask}" id="ot13"/>
+              </af:column>
+              <af:column sortProperty="#{bindings.DmsWorkflowStatusVO.hints.StepObject.name}"
+                         sortable="true"
+                         headerText="#{bindings.DmsWorkflowStatusVO.hints.StepObject.label}"
+                         id="c6">
+                <af:outputText value="#{row.StepObject}" id="ot9"/>
+              </af:column>
+              <af:column sortProperty="#{bindings.DmsWorkflowStatusVO.hints.StepStatus.name}"
+                         sortable="true"
+                         headerText="#{bindings.DmsWorkflowStatusVO.hints.StepStatus.label}"
+                         id="c4">
+                <af:outputText value="#{row.StepStatus}" id="ot8"/>
+              </af:column>
+              <af:column sortProperty="#{bindings.DmsWorkflowStatusVO.hints.StartAt.name}"
+                         sortable="true"
+                         headerText="#{bindings.DmsWorkflowStatusVO.hints.StartAt.label}"
+                         id="c7">
+                <af:outputText value="#{row.StartAt}" id="ot7">
+                  <af:convertDateTime pattern="#{bindings.DmsWorkflowStatusVO.hints.StartAt.format}"/>
+                </af:outputText>
+              </af:column>
+              <af:column sortProperty="#{bindings.DmsWorkflowStatusVO.hints.FinishAt.name}"
+                         sortable="true"
+                         headerText="#{bindings.DmsWorkflowStatusVO.hints.FinishAt.label}"
+                         id="c3">
+                <af:outputText value="#{row.FinishAt}" id="ot12">
+                  <af:convertDateTime pattern="#{bindings.DmsWorkflowStatusVO.hints.FinishAt.format}"/>
+                </af:outputText>
+              </af:column>
+            </af:table>
+          </af:panelCollection>
+        </f:facet>
+      </af:panelSplitter>
     </f:facet>
   </af:panelStretchLayout>
 </jsp:root>

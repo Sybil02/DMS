@@ -41,6 +41,7 @@ import odi11g.webservice.type.SessionStatusType;
 import odi11g.webservice.type.VariableType;
 import odi11g.webservice.ws.RequestPortType;
 
+import oracle.adf.model.binding.DCIteratorBinding;
 import oracle.adf.share.ADFContext;
 import oracle.adf.share.logging.ADFLogger;
 import oracle.adf.view.rich.component.rich.RichPopup;
@@ -60,6 +61,8 @@ import oracle.jbo.server.DBTransaction;
 import org.apache.commons.lang.ObjectUtils;
 import org.apache.myfaces.trinidad.event.SelectionEvent;
 import org.apache.myfaces.trinidad.model.RowKeySet;
+
+import workapproveflow.WorkflowEngine;
 
 public class WorkflowOdiBean {
     private Odi11gCatTreeModel model;
@@ -167,13 +170,7 @@ public class WorkflowOdiBean {
             StringBuffer sql = new StringBuffer();
             sql.append("SELECT T.CODE,T.MEANING FROM \"").append(source).append("\" T").append("  WHERE T.LOCALE='").append(ADFContext.getCurrent().getLocale()).append("'");
             if (isAuth) {
-                sql.append("  AND EXISTS (SELECT 1 FROM DMS_USER_VALUE_V V")
-                    .append("  WHERE V.USER_ID = '")
-                    .append(((Person)ADFContext.getCurrent().getSessionScope().get("cur_user")).getId())
-                    .append("'")
-                    .append("  AND V.VALUE_SET_ID='")
-                    .append(valueSetId).append("'")
-                    .append("  AND V.VALUE_ID = T.CODE)");
+                sql.append("  AND EXISTS (SELECT 1 FROM DMS_USER_VALUE_V V").append("  WHERE V.USER_ID = '").append(((Person)ADFContext.getCurrent().getSessionScope().get("cur_user")).getId()).append("'").append("  AND V.VALUE_SET_ID='").append(valueSetId).append("'").append("  AND V.VALUE_ID = T.CODE)");
             }
             sql.append(" AND T.ENABLED='Y'  ORDER BY T.IDX");
             ViewObject vo =
@@ -359,38 +356,38 @@ public class WorkflowOdiBean {
             vo.findByKey(new Key(new Object[] { sceneId, ADFContext.getCurrent().getLocale().toString() }),
                          1);
         if (rows.length > 0) {
-            try{
-            Row sceneRow = rows[0];
-            RequestPortType requestPortType =
-                this.getRequestPortType(sceneRow);
-            OdiCredentialType odiCredentialType =
-                this.getOdiCredentialType(sceneRow);
-            OdiGetSessionsStatusRequest odiGetSessionsStatusRequest =
-                new OdiGetSessionsStatusRequest();
-            odiGetSessionsStatusRequest.setCredentials(odiCredentialType);
-            odiGetSessionsStatusRequest.getSessionIds().add(Long.parseLong(execRow.getAttribute("SessionNum").toString()));
-            OdiGetSessionsStatusResponse odiGetSessionsStatusResponse =
-                requestPortType.getSessionStatus(odiGetSessionsStatusRequest);
-            List<SessionStatusType> statuses =
-                odiGetSessionsStatusResponse.getSessionStatusResponse();
-            if (statuses.size() > 0) {
-                status = statuses.get(0).getSessionStatus();
-                String msg =
-                    ObjectUtils.toString(statuses.get(0).getSessionMessage());
-                execRow.setAttribute("ExecStatus", status);
-                execRow.setAttribute("LogText",
-                                     msg.length() <= 512 ? msg : (msg.substring(0,
-                                                                                512)+"......"));
-                if(this.hasException(ObjectUtils.toString(execRow.getAttribute("SessionNum")))){
-                    execRow.setAttribute("HasException", "Y");
+            try {
+                Row sceneRow = rows[0];
+                RequestPortType requestPortType =
+                    this.getRequestPortType(sceneRow);
+                OdiCredentialType odiCredentialType =
+                    this.getOdiCredentialType(sceneRow);
+                OdiGetSessionsStatusRequest odiGetSessionsStatusRequest =
+                    new OdiGetSessionsStatusRequest();
+                odiGetSessionsStatusRequest.setCredentials(odiCredentialType);
+                odiGetSessionsStatusRequest.getSessionIds().add(Long.parseLong(execRow.getAttribute("SessionNum").toString()));
+                OdiGetSessionsStatusResponse odiGetSessionsStatusResponse =
+                    requestPortType.getSessionStatus(odiGetSessionsStatusRequest);
+                List<SessionStatusType> statuses =
+                    odiGetSessionsStatusResponse.getSessionStatusResponse();
+                if (statuses.size() > 0) {
+                    status = statuses.get(0).getSessionStatus();
+                    String msg =
+                        ObjectUtils.toString(statuses.get(0).getSessionMessage());
+                    execRow.setAttribute("ExecStatus", status);
+                    execRow.setAttribute("LogText",
+                                         msg.length() <= 512 ? msg : (msg.substring(0,
+                                                                                    512) +
+                                                                      "......"));
+                    if (this.hasException(ObjectUtils.toString(execRow.getAttribute("SessionNum")))) {
+                        execRow.setAttribute("HasException", "Y");
+                    }
+                    vo.getApplicationModule().getTransaction().commit();
+
                 }
-                vo.getApplicationModule().getTransaction().commit();
-                
-            }
-            }
-            catch(Exception ex){
-                if(ex.getMessage().contains("ODI-1701")){
-                    execRow.remove();   
+            } catch (Exception ex) {
+                if (ex.getMessage().contains("ODI-1701")) {
+                    execRow.remove();
                     vo.getApplicationModule().getTransaction().commit();
                 }
                 this._logger.severe(ex);
@@ -398,20 +395,25 @@ public class WorkflowOdiBean {
         }
         return status;
     }
-    private boolean hasException(String sessionNum){
-        boolean flag=false;
-        String sql="select 1 from ODI11_SCENE_LOG t where t.session_num='"+sessionNum+"'";
-        Statement stmt=DmsUtils.getOdi11gApplicationModule().getDBTransaction().createStatement(1);
+
+    private boolean hasException(String sessionNum) {
+        boolean flag = false;
+        String sql =
+            "select 1 from ODI11_SCENE_LOG t where t.session_num='" + sessionNum +
+            "'";
+        Statement stmt =
+            DmsUtils.getOdi11gApplicationModule().getDBTransaction().createStatement(1);
         try {
-            ResultSet rs=stmt.executeQuery(sql);
-            if(rs.next()){
-                flag=true;
+            ResultSet rs = stmt.executeQuery(sql);
+            if (rs.next()) {
+                flag = true;
             }
         } catch (SQLException e) {
             this._logger.severe(e);
         }
         return flag;
     }
+
     private void refreshStatus(String sceneId) throws MalformedURLException {
         ViewObject sceneVo =
             ADFUtils.findIterator("Odi11ScaneVOIterator").getViewObject();
@@ -436,6 +438,41 @@ public class WorkflowOdiBean {
     }
 
     public void execute(ActionEvent actionEvent) throws MalformedURLException {
+        //**************************测试************************************
+        //查询运行ID
+        DCIteratorBinding wfIter =
+            ADFUtils.findIterator("DmsUserWorkflowVOIterator");
+        Row wfRow = wfIter.getCurrentRow();
+        String runId = wfRow.getAttribute("WfRunid").toString();
+        //获取步骤信息
+        DCIteratorBinding stepIter =
+            ADFUtils.findIterator("DmsWorkflowStatusVOIterator");
+        Row curRow = stepIter.getCurrentRow();
+        String stepTask = curRow.getAttribute("StepTask").toString();
+        String wfId = curRow.getAttribute("WfId").toString();
+        String stepNo = curRow.getAttribute("StepNo").toString();
+        //执行成功，改变步骤状态
+        StringBuffer ueSql = new StringBuffer();
+        ueSql.append("UPDATE DMS_WORKFLOW_STATUS SET STEP_STATUS = 'Y' ");
+        ueSql.append("WHERE RUN_ID = '").append(runId).append("' ");
+        ueSql.append("AND STEP_NO = ").append(stepNo);
+        if ("ETL".equals(stepTask)) {
+            DBTransaction trans =
+                (DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
+            Statement stat = trans.createStatement(DBTransaction.DEFAULT);
+            try {
+                stat.executeUpdate(ueSql.toString());
+                trans.commit();
+                stat.close();
+            } catch (SQLException e) {
+                this._logger.severe(e);
+            }
+        }
+        //启动下一步
+        WorkflowEngine wfEngine = new WorkflowEngine();
+        wfEngine.startNextSteps(wfId, runId,Integer.valueOf(stepNo));
+        return;
+        //*****************************************************************
         ViewObject sceneVo =
             ADFUtils.findIterator("Odi11ScaneVOIterator").getViewObject();
         Row[] rows =
@@ -491,7 +528,7 @@ public class WorkflowOdiBean {
     }
 
     public void showExceptionData(ActionEvent actionEvent) {
-        RichPopup.PopupHints hint=new RichPopup.PopupHints();
+        RichPopup.PopupHints hint = new RichPopup.PopupHints();
         this.exceptionPopup.show(hint);
     }
 

@@ -259,11 +259,33 @@ public class ApproveflowEngine {
         wsSql.append("WHERE RUN_ID = '").append(runId).append("' ");
         wsSql.append("AND TEMPLATE_ID = '").append(templateId).append("' ");
         wsSql.append("AND COM_ID = '").append(comId).append("'");
+        //查询模板输入步骤编码
+        int stepNo = 0;
+        StringBuffer snSql = new StringBuffer();
+        snSql.append("SELECT DISTINCT STEP_NO FROM WORKFLOW_TEMPLATE_STATUS WHERE ");
+        snSql.append("RUN_ID = '").append(runId).append("' ");
+        snSql.append("AND TEMPLATE_ID = '").append(templateId).append("'");
+        try {
+            ResultSet rs = stat.executeQuery(snSql.toString());
+            if(rs.next()){
+                stepNo = rs.getInt("STEP_NO");        
+            }
+            rs.close();
+        } catch (SQLException e) {
+            this._logger.severe(e);
+        }
+        //修改工作流状态表输入步骤状态
+        StringBuffer stepSql = new StringBuffer();
+        stepSql.append("UPDATE DMS_WORKFLOW_STATUS SET STEP_STATUS = 'WORKING' ");
+        stepSql.append("WHERE RUN_ID = '").append(runId).append("' ");
+        stepSql.append("AND STEP_NO = ").append(stepNo);
         try {
             stat.executeUpdate(uaSql.toString());
             stat.executeUpdate(comSql.toString());
             stat.executeUpdate(wsSql.toString());
+            stat.executeUpdate(stepSql.toString());
             trans.commit();
+            stat.close();
         } catch (SQLException e) {
             this._logger.severe(e);
         }

@@ -67,7 +67,7 @@ public class WorkflowDisplayBean {
     private RichPopup tempPop;
     private RichPopup approvePop;
     private RichPopup runInterPop;
-    boolean isflag = true;
+    boolean isflag = false;
     boolean isflagtwo = true;
     List<SelectItem> tempItemList = new ArrayList<SelectItem>();
    
