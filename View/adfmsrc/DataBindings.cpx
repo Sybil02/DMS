@@ -48,6 +48,8 @@
             usageId="__approve_editPageDef"/>
       <page path="/workapproveflow/workflow/workflow_display.jsff"
             usageId="__workflow_displayPageDef"/>
+      <page path="/dms/workflow/workflowAuthority.jsff"
+            usageId="__workflowAuthorityPageDef"/>
    </pageMap>
    <pageDefinitionUsages>
       <page id="__dynamicTabShellPageDef"
@@ -90,7 +92,8 @@
             path="dms.approvalFlow.approve_editPageDef"/>
       <page id="__workflow_displayPageDef"
             path="workapproveflow.workflow.workflow_displayPageDef"/>
-
+      <page id="__workflowAuthorityPageDef"
+            path="dms.workflow.workflowAuthorityPageDef"/>
    </pageDefinitionUsages>
    <dataControlUsages>
       <BC4JDataControl id="DmsModuleDataControl" Package="team.epm.module"

@@ -37,12 +37,20 @@ import oracle.adf.view.rich.component.rich.data.RichTable;
 import oracle.adf.view.rich.component.rich.input.RichSelectOneChoice;
 import oracle.adf.view.rich.context.AdfFacesContext;
 
+import oracle.jbo.Key;
 import oracle.jbo.Row;
 import oracle.jbo.ViewObject;
 
 import oracle.jbo.server.DBTransaction;
 
+import oracle.jbo.uicli.binding.JUCtrlHierBinding;
+import oracle.jbo.uicli.binding.JUCtrlHierNodeBinding;
+
+import org.apache.myfaces.trinidad.event.SelectionEvent;
+
 import workapproveflow.WorkflowEngine;
+
+import org.apache.myfaces.trinidad.model.CollectionModel;
 
 public class WorkflowDisplayBean {
 
@@ -58,6 +66,9 @@ public class WorkflowDisplayBean {
     private RichPopup runPop;
     private RichPopup tempPop;
     private RichPopup approvePop;
+    private RichPopup runInterPop;
+    boolean isflag = true;
+    boolean isflagtwo = true;
     List<SelectItem> tempItemList = new ArrayList<SelectItem>();
    
     public WorkflowDisplayBean() {
@@ -206,6 +217,13 @@ public class WorkflowDisplayBean {
         RichPopup.PopupHints hints = new RichPopup.PopupHints();
         this.tempPop.show(hints);
     }
+    //执行接口
+    public void execInterface(ActionEvent actionEvent) {
+        // Add event code here...
+        RichPopup.PopupHints hints = new RichPopup.PopupHints();
+        this.runInterPop.show(hints);
+        
+    }
     //工作流启动，初始化工作流步骤信息
     public void runWorkflow(ActionEvent actionEvent) {
         this.runPop.cancel();
@@ -281,6 +299,28 @@ public class WorkflowDisplayBean {
         adfFace.addPartialTarget(JSFUtils.findComponentInRoot("t5"));
        
     }
+    public void makeCurrent(SelectionEvent selectionEvent) {
+        // Add event code here...
+        isflag = true;
+        isflagtwo = true;
+        RichTable rt = (RichTable)selectionEvent.getSource();
+        CollectionModel cm = (CollectionModel)rt.getValue();
+        JUCtrlHierBinding tableBinding = (JUCtrlHierBinding)cm.getWrappedData();
+        DCIteratorBinding iter = tableBinding.getDCIteratorBinding();
+        
+        JUCtrlHierNodeBinding selectedRowData = (JUCtrlHierNodeBinding)rt.getSelectedRowData();
+        Key rowKey = selectedRowData.getRowKey();
+        iter.setCurrentRowWithKey(rowKey.toStringFormat(true));
+        Row row = selectedRowData.getRow();
+        String StepTask = row.getAttribute("StepTask").toString();
+        String StepStatus = row.getAttribute("StepStatus").toString();
+        if(StepTask.equals("ETL")&&StepStatus.equals("WORKING")){
+           isflag = false;
+        }else if(StepTask.equals("OPEN TEMPLATES")||StepTask.equals("APPROVE")&&StepStatus.equals("WORKING")){
+            isflagtwo = false;
+        }
+        
+    }
     public void setWfTable(RichTable wfTable) {
         this.wfTable = wfTable;
     }
@@ -335,4 +375,28 @@ public class WorkflowDisplayBean {
     }
 
 
+    public void setRunInterPop(RichPopup runInterPop) {
+        this.runInterPop = runInterPop;
+    }
+
+    public RichPopup getRunInterPop() {
+        return runInterPop;
+    }
+
+
+    public void setIsflag(boolean isflag) {
+        this.isflag = isflag;
+    }
+
+    public boolean isIsflag() {
+        return isflag;
+    }
+
+    public void setIsflagtwo(boolean isflagtwo) {
+        this.isflagtwo = isflagtwo;
+    }
+
+    public boolean isIsflagtwo() {
+        return isflagtwo;
+    }
 }

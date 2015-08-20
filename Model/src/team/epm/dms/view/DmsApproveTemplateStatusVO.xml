@@ -61,7 +61,14 @@ DmsApproveTemplateStatusEO.PERSON_ID = DmsUser.ID]]>
     PrecisionRule="true"
     EntityAttrName="ApprovalStatus"
     EntityUsage="DmsApproveTemplateStatusEO"
-    AliasName="APPROVAL_STATUS"/>
+    AliasName="APPROVAL_STATUS">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="team.epm.dms.view.DmsApproveTemplateStatusVO.ApprovalStatus_LABEL"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewAttribute
     Name="CreatedAt"
     IsNotNull="true"
@@ -98,13 +105,26 @@ DmsApproveTemplateStatusEO.PERSON_ID = DmsUser.ID]]>
     <DesignTime>
       <Attr Name="_DisplaySize" Value="80"/>
     </DesignTime>
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="team.epm.dms.view.DmsApproveTemplateStatusVO.Meaning_LABEL"/>
+      </SchemaBasedProperties>
+    </Properties>
   </ViewAttribute>
   <ViewAttribute
     Name="FinishAt"
     PrecisionRule="true"
     EntityAttrName="FinishAt"
     EntityUsage="DmsApproveTemplateStatusEO"
-    AliasName="FINISH_AT"/>
+    AliasName="FINISH_AT">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="team.epm.dms.view.DmsApproveTemplateStatusVO.FinishAt_LABEL"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewAttribute
     Name="Id"
     IsNotNull="true"
@@ -140,6 +160,12 @@ DmsApproveTemplateStatusEO.PERSON_ID = DmsUser.ID]]>
     <DesignTime>
       <Attr Name="_DisplaySize" Value="100"/>
     </DesignTime>
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="team.epm.dms.view.DmsApproveTemplateStatusVO.Name_LABEL"/>
+      </SchemaBasedProperties>
+    </Properties>
   </ViewAttribute>
   <ViewAttribute
     Name="RunId"

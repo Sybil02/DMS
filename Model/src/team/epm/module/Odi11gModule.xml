@@ -57,6 +57,9 @@
   <ViewUsage
     Name="Odi11SceneLogView"
     ViewObjectName="team.epm.odi11g.view.Odi11SceneLogView"/>
+  <ViewUsage
+    Name="Odi11ScaneVO"
+    ViewObjectName="team.epm.odi11g.view.Odi11ScaneVO"/>
   <ViewLinkUsage
     Name="Odi11gRoleSceneLnk"
     ViewLinkObjectName="team.epm.odi11g.Odi11gRoleSceneLnk"

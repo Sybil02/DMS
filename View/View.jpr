@@ -631,6 +631,7 @@
             <hash>
                <url n="content-folder-url" path="adfmsrc/dms/workflow/"/>
                <list n="pattern-filters">
+                  <string v="+dms/workflow/WorkflowAuthorityBean.java"/>
                   <string v="+dms/workflow/WorkflowEditBean.java"/>
                </list>
                <list n="url-path">
@@ -640,6 +641,7 @@
             <hash>
                <url n="content-folder-url" path="adfmsrc/workapproveflow/"/>
                <list n="pattern-filters">
+                  <string v="+workapproveflow/workflow/WorkflowOdiBean.java"/>
                   <string v="+workapproveflow/ApproveflowEngine.java"/>
                   <string v="+workapproveflow/workflow/WorkflowValueSet.java"/>
                   <string v="+workapproveflow/WorkflowEngine.java"/>
@@ -679,10 +681,7 @@
             <value n="JavaScriptRunConfigurationStopOnException" v="false"/>
             <value n="JavaScriptRunConfigurationTransferErrors" v="true"/>
             <value n="name" v="Default"/>
-            <hash n="oracle.adfdt.controller.adfc.source.runner.JsfJspRunnerLaunchSettings">
-               <value n="delegateRunTarget" v="/WEB-INF/adfc-config.xml"/>
-               <value n="viewActivityId" v="index"/>
-            </hash>
+            <hash n="oracle.adfdt.controller.adfc.source.runner.JsfJspRunnerLaunchSettings"/>
             <hash n="oracle.jdevimpl.runner.debug.DebugConfiguration">
                <value n="remoteParameter:jpda:jdi_attach_method:" v=""/>
                <value n="remoteParameter:jpdaListen:localAddress" v=""/>

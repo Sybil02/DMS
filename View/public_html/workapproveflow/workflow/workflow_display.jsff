@@ -34,7 +34,9 @@
                             selectedRowKeys="#{bindings.DmsApproveTemplateStatusVO.collectionModel.selectedRow}"
                             selectionListener="#{bindings.DmsApproveTemplateStatusVO.collectionModel.makeCurrent}"
                             rowSelection="single" id="t6"
-                            partialTriggers=":::soc2">
+                            partialTriggers=":::soc2"
+                            columnStretching="&lt;default> (none)"
+                            styleClass="AFStretchWidth">
                     <af:column headerText="#{bindings.DmsApproveTemplateStatusVO.hints.Meaning.label}"
                                id="c23"
                                sortProperty="#{bindings.DmsApproveTemplateStatusVO.hints.Meaning.name}"
@@ -51,7 +53,7 @@
                                sortable="true"
                                headerText="#{bindings.DmsApproveTemplateStatusVO.hints.ApprovalStatus.label}"
                                id="c20">
-                      <af:outputText value="#{row.ApprovalStatus}" id="ot20"/>
+                      <af:outputText value="#{row.ApprovalStatus eq &quot;N&quot; ? &quot;拒绝&quot;:(row.ApprovalStatus eq &quot;Y&quot; ? &quot;通过&quot;:(row.ApprovalStatus eq &quot;CLOSE&quot; ? &quot;未开启&quot;:&quot;审批中&quot;))}" id="ot20"/>
                     </af:column>
                     <af:column sortProperty="#{bindings.DmsApproveTemplateStatusVO.hints.FinishAt.name}"
                                sortable="true"
@@ -93,13 +95,8 @@
                             selectedRowKeys="#{bindings.DmsWorkflowTemplateStatusVO.collectionModel.selectedRow}"
                             selectionListener="#{bindings.DmsWorkflowTemplateStatusVO.collectionModel.makeCurrent}"
                             rowSelection="single" id="t5"
-                            partialTriggers=":::soc1">
-                    <af:column sortProperty="#{bindings.DmsWorkflowTemplateStatusVO.hints.EntityCode.name}"
-                               sortable="true"
-                               headerText="#{bindings.DmsWorkflowTemplateStatusVO.hints.EntityCode.label}"
-                               id="c15">
-                      <af:outputText value="#{row.EntityCode}" id="ot16"/>
-                    </af:column>
+                            partialTriggers=":::soc1"
+                            styleClass="AFStretchWidth">
                     <af:column headerText="#{bindings.DmsWorkflowTemplateStatusVO.hints.Meaning.label}"
                                id="c22">
                       <af:outputText value="#{row.Meaning}" id="ot18"/>
@@ -108,7 +105,7 @@
                                sortable="true"
                                headerText="#{bindings.DmsWorkflowTemplateStatusVO.hints.WriteStatus.label}"
                                id="c16">
-                      <af:outputText value="#{row.WriteStatus}" id="ot17"/>
+                      <af:outputText value="#{row.WriteStatus == 'Y'||'R' ? '完成':'未完成'}" id="ot17"/>
                     </af:column>
                     <af:column sortProperty="#{bindings.DmsWorkflowTemplateStatusVO.hints.FinishAt.name}"
                                sortable="true"
@@ -144,6 +141,246 @@
               <af:commandButton text="#{viewBundle['dcm.common.ok']}" id="cb2"
                                 actionListener="#{viewScope.workflowDisplayBean.runWorkflow}"/>
             </af:panelGroupLayout>
+          </af:panelWindow>
+        </af:popup>
+        <af:popup id="p4"
+                  binding="#{viewScope.workflowDisplayBean.runInterPop}"
+                  autoCancel="disabled" childCreation="deferred">
+          <af:panelWindow id="pw4">
+          
+            
+          
+            <af:panelGroupLayout id="pgl11">
+            <!--ETL-->
+
+             <af:panelCollection id="epc1">
+                  <f:facet name="menus"/>
+                  <f:facet name="toolbar"/>
+                  <f:facet name="statusbar"/>
+                <af:table value="#{bindings.Odi11ScaneVO.collectionModel}"
+                          var="row" rows="#{bindings.Odi11ScaneVO.rangeSize}"
+                          emptyText="#{bindings.Odi11ScaneVO.viewable ? 'No data to display.' : 'Access Denied.'}"
+                          fetchSize="#{bindings.Odi11ScaneVO.rangeSize}"
+                          rowBandingInterval="0"
+                          selectionListener="#{bindings.Odi11ScaneVO.collectionModel.makeCurrent}"
+                          rowSelection="multiple" id="t7">
+                  <af:column sortProperty="#{bindings.Odi11ScaneVO.hints.SceneAlias.name}"
+                             sortable="false"
+                             headerText="#{bindings.Odi11ScaneVO.hints.SceneAlias.label}"
+                             id="c18" width="104">
+                    <af:outputText value="#{row.SceneAlias}" id="ot25"/>
+                  </af:column>
+                  <af:column id="c15" width="106">
+                    <af:panelGroupLayout id="pgl12">
+                      <af:commandLink text="#{viewBundle['odi11g.scene.execute']}" 
+                      id="cl1"
+                      actionListener="#{viewScope.workflowOdiBean.showExcutePopup}"/>
+                      <af:spacer width="10" height="10" id="s1"/>
+                      <af:commandLink text="#{viewBundle['odi11g.scene.status']}" 
+                      id="cl2"
+                      actionListener="#{viewScope.workflowOdiBean.showStatusPopup}"/>
+                    </af:panelGroupLayout>
+                  </af:column>
+                  <af:column sortProperty="#{bindings.Odi11ScaneVO.hints.UpdatedAt.name}"
+                             sortable="false"
+                             headerText="#{bindings.Odi11ScaneVO.hints.UpdatedAt.label}"
+                             id="c25" width="105">
+                    <af:outputText value="#{row.UpdatedAt}" id="ot16">
+                      <af:convertDateTime pattern="#{bindings.Odi11ScaneVO.hints.UpdatedAt.format}"/>
+                    </af:outputText>
+                  </af:column>
+                  <af:column sortProperty="#{bindings.Odi11ScaneVO.hints.UpdatedBy.name}"
+                             sortable="false"
+                             headerText="#{bindings.Odi11ScaneVO.hints.UpdatedBy.label}"
+                             id="c19" width="105">
+                    <af:outputText value="#{row.UpdatedBy}" id="ot23"/>
+                  </af:column>
+                </af:table>
+              </af:panelCollection>
+            </af:panelGroupLayout>
+          </af:panelWindow>
+        </af:popup>
+        <af:popup id="popup1" autoCancel="disabled" childCreation="deferred"
+                  binding="#{viewScope.workflowOdiBean.popup}">
+          <af:panelWindow id="panelWindow1" modal="true"
+                          title="#{viewBundle['odi11g.scene.execute_param']}">
+            <af:panelCollection id="panelCollection1">
+              <f:facet name="menus"/>
+              <f:facet name="toolbar">
+                <af:toolbar id="toolbar1">
+                  <af:commandButton text="#{viewBundle['odi11g.scene.execute']}"
+                                    id="commandButton1"
+                                    actionListener="#{viewScope.workflowOdiBean.execute}"/>
+                </af:toolbar>
+              </f:facet>
+              <f:facet name="statusbar"/>
+              <af:table value="#{bindings.Odi11SceneParamExView.collectionModel}"
+                        var="row"
+                        rows="#{bindings.Odi11SceneParamExView.rangeSize}"
+                        emptyText="#{viewBundle['dms.common.nodata']}"
+                        fetchSize="#{bindings.Odi11SceneParamExView.rangeSize}"
+                        rowBandingInterval="0"
+                        selectedRowKeys="#{bindings.Odi11SceneParamExView.collectionModel.selectedRow}"
+                        selectionListener="#{bindings.Odi11SceneParamExView.collectionModel.makeCurrent}"
+                        rowSelection="single" id="table1"
+                        binding="#{viewScope.Odi11gIndexMBean.paramTable}">
+                <af:column sortProperty="#{bindings.Odi11SceneParamExView.hints.PAlias.name}"
+                           sortable="false"
+                           headerText="#{bindings.Odi11SceneParamExView.hints.PAlias.label}"
+                           id="column1">
+                  <af:inputText value="#{row.bindings.PAlias.inputValue}"
+                                label="#{bindings.Odi11SceneParamExView.hints.PAlias.label}"
+                                required="#{bindings.Odi11SceneParamExView.hints.PAlias.mandatory}"
+                                columns="#{bindings.Odi11SceneParamExView.hints.PAlias.displayWidth}"
+                                maximumLength="#{bindings.Odi11SceneParamExView.hints.PAlias.precision}"
+                                shortDesc="#{bindings.Odi11SceneParamExView.hints.PAlias.tooltip}"
+                                id="it3">
+                    <f:validator binding="#{row.bindings.PAlias.validator}"/>
+                  </af:inputText>
+                </af:column>
+                <af:column headerText="#{bindings.Odi11SceneParamExView.hints.value.label}"
+                           id="column2">
+                  <af:selectOneChoice value="#{row.bindings.value.inputValue}"
+                                      rendered="#{row.bindings.ValueSetId.inputValue ne null}"
+                                      label="#{bindings.Odi11SceneParamExView.hints.value.label}"
+                                      id="selectOneChoice1">
+                    <f:selectItems value="#{viewScope.workflowOdiBean.valueList[row.bindings.ValueSetId.inputValue]}"
+                                   id="selectItems1"/>
+                  </af:selectOneChoice>
+                  <af:inputText label="#{bindings.Odi11SceneParamExView.hints.value.label}"
+                                id="it1"
+                                rendered="#{row.bindings.ValueSetId.inputValue eq null}"
+                                value="#{row.bindings.value.inputValue}"/>
+                </af:column>
+              </af:table>
+            </af:panelCollection>
+          </af:panelWindow>
+        </af:popup>
+        <af:popup id="popup2" autoCancel="disabled" childCreation="deferred"
+                  binding="#{viewScope.workflowOdiBean.statusPopup}">
+          <af:panelWindow id="panelWindow2"
+                          title="#{viewBundle['odi11g.scene.status']}"
+                          modal="true">
+            <af:panelStretchLayout id="psl2"
+                                   inlineStyle="width:950px;height:450px">
+              <f:facet name="center">
+                <af:panelCollection id="panelCollection2">
+                  <f:facet name="menus"/>
+                  <f:facet name="toolbar">
+                    <af:toolbar id="toolbar2">
+                      <af:commandButton text="#{viewBundle['dms.common.refresh']}"
+                                        id="commandButton2" partialSubmit="true"
+                                        actionListener="#{viewScope.workflowOdiBean.refreshSceneStatus}"/>
+                    </af:toolbar>
+                  </f:facet>
+                  <f:facet name="statusbar"/>
+                  <af:table value="#{bindings.Odi11SceneExecView.collectionModel}"
+                            var="row"
+                            rows="#{bindings.Odi11SceneExecView.rangeSize}"
+                            emptyText="#{viewBundle['dms.common.nodata']}"
+                            fetchSize="#{bindings.Odi11SceneExecView.rangeSize}"
+                            rowBandingInterval="0"
+                            selectedRowKeys="#{bindings.Odi11SceneExecView.collectionModel.selectedRow}"
+                            selectionListener="#{bindings.Odi11SceneExecView.collectionModel.makeCurrent}"
+                            rowSelection="single" id="table2"
+                            partialTriggers="::commandButton2">
+                    <af:column sortProperty="#{bindings.Odi11SceneExecView.hints.Params.name}"
+                               sortable="false"
+                               headerText="#{bindings.Odi11SceneExecView.hints.Params.label}"
+                               id="column3">
+                      <af:outputText value="#{row.Params}" id="outputText1"/>
+                    </af:column>
+                    <af:column sortProperty="#{bindings.Odi11SceneExecView.hints.ExecStatus.name}"
+                               sortable="false"
+                               headerText="#{bindings.Odi11SceneExecView.hints.ExecStatus.label}"
+                               id="column4">
+                      <af:group id="g1">
+                        <af:selectOneChoice value="#{row.bindings.ExecStatus.inputValue}"
+                                            label="#{row.bindings.ExecStatus.label}"
+                                            required="#{bindings.Odi11SceneExecView.hints.ExecStatus.mandatory}"
+                                            shortDesc="#{bindings.Odi11SceneExecView.hints.ExecStatus.tooltip}"
+                                            id="soc3" readOnly="true">
+                          <f:selectItems value="#{row.bindings.ExecStatus.items}"
+                                         id="si3"/>
+                        </af:selectOneChoice>
+                        <af:commandLink text="#{viewBundle['odi11g.scene.exception_data']}"
+                                        inlineStyle="margin-left:5px;color:red"
+                                        rendered="#{row.bindings.HasException.inputValue eq 'Y'}"
+                                        id="cl3" partialSubmit="true"
+                                        actionListener="#{viewScope.workflowOdiBean.showExceptionData}"/>
+                      </af:group>
+                    </af:column>
+                    <af:column sortProperty="#{bindings.Odi11SceneExecView.hints.LogText.name}"
+                               sortable="false"
+                               headerText="#{bindings.Odi11SceneExecView.hints.LogText.label}"
+                               id="column5" noWrap="false" width="450">
+                      <af:outputText value="#{row.LogText}" id="outputText2"/>
+                    </af:column>
+                    <af:column sortProperty="#{bindings.Odi11SceneExecView.hints.UpdatedAt.name}"
+                               sortable="false"
+                               headerText="#{bindings.Odi11SceneExecView.hints.UpdatedAt.label}"
+                               id="column6" noWrap="true">
+                      <af:outputText value="#{row.UpdatedAt}" id="outputText3">
+                        <af:convertDateTime pattern="#{bindings.Odi11SceneExecView.hints.UpdatedAt.format}"/>
+                      </af:outputText>
+                    </af:column>
+                    <af:column sortProperty="#{bindings.Odi11SceneExecView.hints.UpdatedBy.name}"
+                               sortable="false"
+                               headerText="#{bindings.Odi11SceneExecView.hints.UpdatedBy.label}"
+                               id="column7">
+                      <af:selectOneChoice value="#{row.bindings.UpdatedBy.inputValue}"
+                                          label="#{row.bindings.UpdatedBy.label}"
+                                          required="#{bindings.Odi11SceneExecView.hints.UpdatedBy.mandatory}"
+                                          shortDesc="#{bindings.Odi11SceneExecView.hints.UpdatedBy.tooltip}"
+                                          id="selectOneChoice2" readOnly="true">
+                        <f:selectItems value="#{row.bindings.UpdatedBy.items}"
+                                       id="selectItems2"/>
+                      </af:selectOneChoice>
+                    </af:column>
+                  </af:table>
+                </af:panelCollection>
+                
+              </f:facet>
+              
+            </af:panelStretchLayout>
+          </af:panelWindow>
+        </af:popup>
+        <af:popup id="popup3" autoCancel="disabled" childCreation="deferred"
+                  binding="#{viewScope.workflowOdiBean.exceptionPopup}">
+          <af:panelWindow id="panelWindow3"
+                          title="#{viewBundle['odi11g.scene.exception_data']}"
+                          modal="true">
+            <af:panelStretchLayout id="psl3"
+                                   inlineStyle="width:600px;height:400px;">
+              <f:facet name="center">
+                <af:panelCollection id="panelCollection3">
+                  <f:facet name="menus"/>
+                  <f:facet name="toolbar"/>
+                  <f:facet name="statusbar"/>
+                  <af:table value="#{bindings.Odi11SceneLogView.collectionModel}"
+                            var="row"
+                            rows="#{bindings.Odi11SceneLogView.rangeSize}"
+                            emptyText="#{viewBundle['dms.common.nodata']}"
+                            fetchSize="#{bindings.Odi11SceneLogView.rangeSize}"
+                            rowBandingInterval="0"
+                            filterModel="#{bindings.Odi11SceneLogViewQuery.queryDescriptor}"
+                            queryListener="#{bindings.Odi11SceneLogViewQuery.processQuery}"
+                            filterVisible="false" varStatus="vs"
+                            selectedRowKeys="#{bindings.Odi11SceneLogView.collectionModel.selectedRow}"
+                            selectionListener="#{bindings.Odi11SceneLogView.collectionModel.makeCurrent}"
+                            rowSelection="single" id="table3"
+                            columnStretching="column:c12">
+                    <af:column sortProperty="#{bindings.Odi11SceneLogView.hints.Msg.name}"
+                               filterable="true" sortable="false"
+                               headerText="#{bindings.Odi11SceneLogView.hints.Msg.label}"
+                               id="column8" noWrap="false">
+                      <af:outputText value="#{row.Msg}" id="outputText4"/>
+                    </af:column>
+                  </af:table>
+                </af:panelCollection>
+                
+              </f:facet>
+            </af:panelStretchLayout>
           </af:panelWindow>
         </af:popup>
       </af:panelGroupLayout>
@@ -190,8 +427,11 @@
             <af:toolbar id="t4">
               <af:commandButton text="#{viewBundle['dms.view.details']}" id="cb3"
                                 partialTriggers="t3"
-                                actionListener="#{viewScope.workflowDisplayBean.showDetails}"/>
-              <af:commandButton text="#{viewBundle['dms.interface.commit']}" id="cb4"/>
+                                actionListener="#{viewScope.workflowDisplayBean.showDetails}"
+                                disabled="#{viewScope.workflowDisplayBean.isflagtwo}"/>
+              <af:commandButton text="#{viewBundle['dms.interface.commit']}" id="cb4"
+                                actionListener="#{viewScope.workflowDisplayBean.execInterface}"
+                                disabled="#{viewScope.workflowDisplayBean.isflag}"/>
             </af:toolbar>
           </f:facet>
           <f:facet name="statusbar"/>
@@ -201,7 +441,7 @@
                     fetchSize="#{bindings.DmsWorkflowStatusVO.rangeSize}"
                     rowBandingInterval="0"
                     selectedRowKeys="#{bindings.DmsWorkflowStatusVO.collectionModel.selectedRow}"
-                    selectionListener="#{bindings.DmsWorkflowStatusVO.collectionModel.makeCurrent}"
+                    selectionListener="#{viewScope.workflowDisplayBean.makeCurrent}"
                     rowSelection="single" id="t3">
             <af:column sortProperty="#{bindings.DmsWorkflowStatusVO.hints.CreatedAt.name}"
                        sortable="true"

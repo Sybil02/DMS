@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pageDefinition xmlns="http://xmlns.oracle.com/adfm/uimodel"
+                version="11.1.1.64.93" id="workflowAuthorityPageDef"
+                Package="dms.workflow">
+  <parameters/>
+  <executables>
+    <variableIterator id="variables"/>
+    <iterator Binds="DmsEnabledRole" RangeSize="25"
+              DataControl="DmsModuleDataControl" id="DmsEnabledRoleIterator"/>
+    <iterator Binds="DmsRoleWorkflowVO" RangeSize="25"
+              DataControl="DmsModuleDataControl"
+              id="DmsRoleWorkflowVOIterator"/>
+    <iterator Binds="DmsSetWorkflowInfoVO" RangeSize="25"
+              DataControl="DmsModuleDataControl"
+              id="DmsSetWorkflowInfoVOIterator"/>
+  </executables>
+  <bindings>
+    <list ListOperMode="navigation" IterBinding="DmsEnabledRoleIterator"
+          ListIter="DmsEnabledRoleIterator" id="RoleName" DTSupportsMRU="true">
+      <AttrNames>
+        <Item Value="RoleName"/>
+      </AttrNames>
+    </list>
+    <tree IterBinding="DmsRoleWorkflowVOIterator" id="DmsRoleWorkflowVO">
+      <nodeDefinition DefName="team.epm.dms.view.DmsRoleWorkflowVO"
+                      Name="DmsRoleWorkflowVO0">
+        <AttrNames>
+          <Item Value="CreatedAt"/>
+          <Item Value="CreatedBy"/>
+          <Item Value="Id"/>
+          <Item Value="RoleId"/>
+          <Item Value="UpdatedAt"/>
+          <Item Value="UpdatedBy"/>
+          <Item Value="WorkflowId"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <action id="Rollback" DataControl="DmsModuleDataControl"
+            RequiresUpdateModel="false" Action="rollbackTransaction"/>
+    <action id="Commit" DataControl="DmsModuleDataControl"
+            RequiresUpdateModel="true" Action="commitTransaction"/>
+    <tree IterBinding="DmsSetWorkflowInfoVOIterator" id="DmsSetWorkflowInfoVO">
+      <nodeDefinition DefName="team.epm.dms.view.DmsSetWorkflowInfoVO"
+                      Name="DmsSetWorkflowInfoVO0">
+        <AttrNames>
+          <Item Value="WfName"/>
+          <Item Value="WfStatus"/>
+          <Item Value="UpdatedAt"/>
+          <Item Value="UpdatedBy"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+  </bindings>
+</pageDefinition>

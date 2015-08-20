@@ -17,6 +17,22 @@
     <iterator Binds="DmsApproveTemplateStatusVO" RangeSize="25"
               DataControl="DmsModuleDataControl"
               id="DmsApproveTemplateStatusVOIterator"/>
+    <iterator Binds="Odi11AuthedSceneView" RangeSize="25"
+              DataControl="Odi11gModuleDataControl"
+              id="Odi11AuthedSceneViewIterator"/>
+    <iterator Binds="Odi11SceneLogView" RangeSize="25"
+              DataControl="Odi11gModuleDataControl"
+              id="Odi11SceneLogViewIterator"/>
+    <iterator Binds="Odi11SceneExecView" RangeSize="25"
+              DataControl="Odi11gModuleDataControl"
+              id="Odi11SceneExecViewIterator"/>
+    <iterator Binds="Odi11SceneParamExView" RangeSize="25"
+              DataControl="Odi11gModuleDataControl"
+              id="Odi11SceneParamExViewIterator"/>
+    <searchRegion id="Odi11SceneLogViewQuery" Binds="Odi11SceneLogViewIterator"
+                  Customizer="oracle.jbo.uicli.binding.JUSearchBindingCustomizer"/>
+    <iterator Binds="Odi11ScaneVO" RangeSize="25"
+              DataControl="Odi11gModuleDataControl" id="Odi11ScaneVOIterator"/>
   </executables>
   <bindings>
     <tree IterBinding="DmsUserWorkflowVOIterator" id="DmsUserWorkflowVO">
@@ -70,6 +86,122 @@
           <Item Value="ApprovalStatus"/>
           <Item Value="FinishAt"/>
           <Item Value="EntityId"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <tree IterBinding="Odi11SceneLogViewIterator" id="Odi11SceneLogView">
+      <nodeDefinition DefName="team.epm.odi11g.view.Odi11SceneLogView"
+                      Name="Odi11SceneLogView0">
+        <AttrNames>
+          <Item Value="Id"/>
+          <Item Value="SessionNum"/>
+          <Item Value="Msg"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <tree IterBinding="Odi11SceneExecViewIterator" id="Odi11SceneExecView">
+      <nodeDefinition DefName="team.epm.odi11g.view.Odi11SceneExecView"
+                      Name="Odi11SceneExecView0">
+        <AttrNames>
+          <Item Value="Id"/>
+          <Item Value="SceneId"/>
+          <Item Value="Params"/>
+          <Item Value="ExecStatus"/>
+          <Item Value="SessionNum"/>
+          <Item Value="LogText"/>
+          <Item Value="CreatedAt"/>
+          <Item Value="UpdatedAt"/>
+          <Item Value="UpdatedBy"/>
+          <Item Value="CreatedBy"/>
+          <Item Value="HasException"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <tree IterBinding="Odi11SceneParamExViewIterator"
+          id="Odi11SceneParamExView">
+      <nodeDefinition DefName="team.epm.odi11g.view.Odi11SceneParamExView"
+                      Name="Odi11SceneParamExView0">
+        <AttrNames>
+          <Item Value="SceneId"/>
+          <Item Value="PAlias"/>
+          <Item Value="PName"/>
+          <Item Value="ValueSetId"/>
+          <Item Value="value"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <attributeValues IterBinding="Odi11AuthedSceneViewIterator" id="AgentId">
+      <AttrNames>
+        <Item Value="AgentId"/>
+      </AttrNames>
+    </attributeValues>
+    <attributeValues IterBinding="Odi11AuthedSceneViewIterator" id="CatId">
+      <AttrNames>
+        <Item Value="CatId"/>
+      </AttrNames>
+    </attributeValues>
+    <attributeValues IterBinding="Odi11AuthedSceneViewIterator" id="CreatedAt">
+      <AttrNames>
+        <Item Value="CreatedAt"/>
+      </AttrNames>
+    </attributeValues>
+    <attributeValues IterBinding="Odi11AuthedSceneViewIterator" id="CreatedBy">
+      <AttrNames>
+        <Item Value="CreatedBy"/>
+      </AttrNames>
+    </attributeValues>
+    <attributeValues IterBinding="Odi11AuthedSceneViewIterator" id="Id">
+      <AttrNames>
+        <Item Value="Id"/>
+      </AttrNames>
+    </attributeValues>
+    <attributeValues IterBinding="Odi11AuthedSceneViewIterator" id="Locale">
+      <AttrNames>
+        <Item Value="Locale"/>
+      </AttrNames>
+    </attributeValues>
+    <attributeValues IterBinding="Odi11AuthedSceneViewIterator" id="SceneAlias">
+      <AttrNames>
+        <Item Value="SceneAlias"/>
+      </AttrNames>
+    </attributeValues>
+    <attributeValues IterBinding="Odi11AuthedSceneViewIterator"
+                     id="SceneContext">
+      <AttrNames>
+        <Item Value="SceneContext"/>
+      </AttrNames>
+    </attributeValues>
+    <attributeValues IterBinding="Odi11AuthedSceneViewIterator" id="SceneName">
+      <AttrNames>
+        <Item Value="SceneName"/>
+      </AttrNames>
+    </attributeValues>
+    <attributeValues IterBinding="Odi11AuthedSceneViewIterator"
+                     id="SceneVersion">
+      <AttrNames>
+        <Item Value="SceneVersion"/>
+      </AttrNames>
+    </attributeValues>
+    <attributeValues IterBinding="Odi11AuthedSceneViewIterator" id="UpdatedAt">
+      <AttrNames>
+        <Item Value="UpdatedAt"/>
+      </AttrNames>
+    </attributeValues>
+    <list IterBinding="Odi11AuthedSceneViewIterator" StaticList="false"
+          Uses="LOV_UpdatedBy" id="UpdatedBy" DTSupportsMRU="false"/>
+    <attributeValues IterBinding="Odi11AuthedSceneViewIterator" id="WorkrepId">
+      <AttrNames>
+        <Item Value="WorkrepId"/>
+      </AttrNames>
+    </attributeValues>
+    <tree IterBinding="Odi11ScaneVOIterator" id="Odi11ScaneVO">
+      <nodeDefinition DefName="team.epm.odi11g.view.Odi11ScaneVO"
+                      Name="Odi11ScaneVO0">
+        <AttrNames>
+          <Item Value="SceneAlias"/>
+          <Item Value="SceneName"/>
+          <Item Value="UpdatedAt"/>
+          <Item Value="UpdatedBy"/>
         </AttrNames>
       </nodeDefinition>
     </tree>

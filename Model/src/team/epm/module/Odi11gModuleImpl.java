@@ -158,4 +158,12 @@ public class Odi11gModuleImpl extends ApplicationModuleImpl {
     public ViewLinkImpl getOdi11gStatusLogLnk() {
         return (ViewLinkImpl)findViewLink("Odi11gStatusLogLnk");
     }
+
+    /**
+     * Container's getter for Odi11ScaneVO1.
+     * @return Odi11ScaneVO1
+     */
+    public ViewObjectImpl getOdi11ScaneVO() {
+        return (ViewObjectImpl)findViewObject("Odi11ScaneVO");
+    }
 }

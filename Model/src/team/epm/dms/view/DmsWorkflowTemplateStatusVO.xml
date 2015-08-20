@@ -82,13 +82,26 @@ where DmsWorkflowTemplateStatusEO.ENTITY_CODE = DimEntitys.CODE]]>
     <DesignTime>
       <Attr Name="_DisplaySize" Value="80"/>
     </DesignTime>
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="team.epm.dms.view.DmsWorkflowTemplateStatusVO.Meaning_LABEL"/>
+      </SchemaBasedProperties>
+    </Properties>
   </ViewAttribute>
   <ViewAttribute
     Name="FinishAt"
     PrecisionRule="true"
     EntityAttrName="FinishAt"
     EntityUsage="DmsWorkflowTemplateStatusEO"
-    AliasName="FINISH_AT"/>
+    AliasName="FINISH_AT">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="team.epm.dms.view.DmsWorkflowTemplateStatusVO.FinishAt_LABEL"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewAttribute
     Name="Id"
     IsNotNull="true"
@@ -129,7 +142,14 @@ where DmsWorkflowTemplateStatusEO.ENTITY_CODE = DimEntitys.CODE]]>
     PrecisionRule="true"
     EntityAttrName="WriteStatus"
     EntityUsage="DmsWorkflowTemplateStatusEO"
-    AliasName="WRITE_STATUS"/>
+    AliasName="WRITE_STATUS">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="team.epm.dms.view.DmsWorkflowTemplateStatusVO.WriteStatus_LABEL"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewAttribute
     Name="ComId"
     IsNotNull="true"
