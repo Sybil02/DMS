@@ -132,11 +132,9 @@ public class WorkflowDisplayBean {
         RichPopup.PopupHints hints = new RichPopup.PopupHints();
         this.runPop.show(hints);
     }
-   
     public void showDetails(ActionEvent actionEvent) {
       //   Add event code here...
         tempItemList.clear();
-        
         DCIteratorBinding wfsIter = ADFUtils.findIterator("DmsWorkflowStatusVOIterator");
         ViewObject wfsVo = wfsIter.getViewObject();
         Row curRow = wfsVo.getCurrentRow();

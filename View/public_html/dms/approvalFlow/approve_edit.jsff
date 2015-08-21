@@ -20,8 +20,8 @@
                                 id="af6"
                                 actionListener="#{bindings.EntitysDelete.execute}"/>
               <af:commandButton text="#{viewBundle.dms_cancel_approval}"
-                                actionListener="#{bindings.Rollback.execute}"
-                                id="af7" immediate="true"/>
+                                id="af7" immediate="true"
+                                actionListener="#{bindings.Rollback.execute}"/>
               <af:commandButton text="#{viewBundle.dms_save_approval}"
                                 actionListener="#{bindings.Commit.execute}"
                                 id="af8"/>
@@ -61,8 +61,10 @@
                                     model="#{row.bindings.UserName.listOfValuesModel}"
                                     required="#{bindings.DmsApprovalflowEntitysVO.hints.UserName.mandatory}"
                                     columns="#{bindings.DmsApprovalflowEntitysVO.hints.UserName.displayWidth}"
-                                    shortDesc="#{bindings.DmsApprovalflowEntitysVO.hints.UserName.tooltip}">
+                                    shortDesc="#{bindings.DmsApprovalflowEntitysVO.hints.UserName.tooltip}"
+                                    autoSubmit="true">
                 <f:validator binding="#{row.bindings.UserName.validator}"/>
+                <af:autoSuggestBehavior suggestedItems="#{row.bindings.UserName.suggestedItems}"/>
               </af:inputListOfValues>
             </af:column>
             <af:column headerText="#{bindings.DmsApprovalflowEntitysVO.hints.Seq.label}"
@@ -110,7 +112,8 @@
                   rowBandingInterval="0"
                   selectedRowKeys="#{bindings.DmsApprovalFlowInfoVO.collectionModel.selectedRow}"
                   selectionListener="#{pageFlowScope.approvalBackingBean.makeCurrent}"
-                  rowSelection="single" id="t1" partialTriggers="::af1 ::af2">
+                  rowSelection="single" id="t1"
+                  partialTriggers="::af1 ::af2">
           <af:column sortProperty="#{bindings.DmsApprovalFlowInfoVO.hints.TemplateName.name}"
                      sortable="true"
                      headerText="#{bindings.DmsApprovalFlowInfoVO.hints.TemplateName.label}"
@@ -122,8 +125,10 @@
                                   required="#{bindings.DmsApprovalFlowInfoVO.hints.TemplateName.mandatory}"
                                   columns="#{bindings.DmsApprovalFlowInfoVO.hints.TemplateName.displayWidth}"
                                   shortDesc="#{bindings.DmsApprovalFlowInfoVO.hints.TemplateName.tooltip}"
-                                  valueChangeListener="#{pageFlowScope.approvalBackingBean.valueSetChange}">
+                                  valueChangeListener="#{pageFlowScope.approvalBackingBean.valueSetChange}"
+                                  autoSubmit="true">
               <f:validator binding="#{row.bindings.TemplateName.validator}"/>
+              <af:autoSuggestBehavior suggestedItems="#{row.bindings.TemplateName.suggestedItems}"/>
             </af:inputListOfValues>
           </af:column>
           <af:column sortProperty="#{bindings.DmsApprovalFlowInfoVO.hints.ValueSetName.name}"

@@ -1,97 +1,36 @@
 package dms.approvalFlow;
 
 import common.ADFUtils;
-
 import common.DmsUtils;
-
 import common.JSFUtils;
-
-import dcm.DcmDataTableModel;
-
-import dcm.DcmQueryDescriptor;
-
-import dcm.template.TemplateBackingBean;
-
 import dms.login.Person;
-
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
-
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-
-import java.util.Map;
-
-import java.util.Set;
-
 import javax.faces.context.FacesContext;
-import javax.faces.event.ActionEvent;
-
-import javax.faces.event.PhaseEvent;
 import javax.faces.event.ValueChangeEvent;
 
 import javax.faces.model.SelectItem;
-
-
-import oracle.adf.model.BindingContext;
-import oracle.adf.model.binding.DCBindingContainer;
 import oracle.adf.model.binding.DCIteratorBinding;
-import oracle.adf.model.binding.DCIteratorBindingDef;
 import oracle.adf.share.ADFContext;
 import oracle.adf.share.logging.ADFLogger;
-import oracle.adf.view.rich.component.rich.RichPopup;
-import oracle.adf.view.rich.component.rich.data.RichColumn;
 import oracle.adf.view.rich.component.rich.data.RichTable;
-
-import oracle.adf.view.rich.component.rich.input.RichInputListOfValues;
-import oracle.adf.view.rich.component.rich.input.RichInputText;
-import oracle.adf.view.rich.component.rich.input.RichSelectOneChoice;
-import oracle.adf.view.rich.component.rich.nav.RichCommandButton;
-import oracle.adf.view.rich.component.rich.output.RichOutputText;
 import oracle.adf.view.rich.context.AdfFacesContext;
-
-import oracle.adf.view.rich.event.QueryEvent;
-
-import oracle.adf.view.rich.event.ReturnPopupEvent;
-import oracle.adf.view.rich.model.FilterableQueryDescriptor;
-
-import oracle.adf.view.rich.model.ListOfValuesModel;
-
-
-import oracle.binding.BindingContainer;
-
-import oracle.jbo.ApplicationModule;
 import oracle.jbo.Key;
 import oracle.jbo.Row;
-import oracle.jbo.RowSetIterator;
-import oracle.jbo.ViewCriteria;
-import oracle.jbo.ViewCriteriaRow;
 import oracle.jbo.ViewObject;
 import oracle.jbo.server.DBTransaction;
-import oracle.jbo.server.ViewRowImpl;
-
 import oracle.jbo.uicli.binding.JUCtrlHierBinding;
-
 import oracle.jbo.uicli.binding.JUCtrlHierNodeBinding;
-
-import org.apache.commons.lang.ObjectUtils;
-
 import org.apache.myfaces.trinidad.event.SelectionEvent;
-
 import org.apache.myfaces.trinidad.model.CollectionModel;
-
-import utils.system;
-
 public class ApprovalBackingBean {
     private static ADFLogger logger =
         ADFLogger.createADFLogger(ApprovalBackingBean.class);
     private Person curUser;
     private String sources;
     private List<SelectItem> approvalObjItemList = new ArrayList<SelectItem>();
-
     public ApprovalBackingBean() {
         curUser = (Person)ADFContext.getCurrent().getSessionScope().get("cur_user");
         System.out.println("....................................");
@@ -101,7 +40,6 @@ public class ApprovalBackingBean {
         public void setApprovalObjItemList(List<SelectItem> approvalObjItemList) {
             this.approvalObjItemList = approvalObjItemList;
         }
-
         public List<SelectItem> getApprovalObjItemList() {
             return approvalObjItemList;
         }
@@ -114,7 +52,6 @@ public class ApprovalBackingBean {
         CollectionModel cm = (CollectionModel)rt.getValue();
         JUCtrlHierBinding tableBinding = (JUCtrlHierBinding)cm.getWrappedData();
         DCIteratorBinding iter = tableBinding.getDCIteratorBinding();
-        
         JUCtrlHierNodeBinding selectedRowData = (JUCtrlHierNodeBinding)rt.getSelectedRowData();
         Key rowKey = selectedRowData.getRowKey();
         iter.setCurrentRowWithKey(rowKey.toStringFormat(true));
@@ -140,13 +77,8 @@ public class ApprovalBackingBean {
        // System.out.println();
         if(vo.first().getAttribute("ValueSetId") == null){
         
-        //row.getAttribute("valueSetId");
-   //     String valueSetId =  it.getCurrentRow().getAttribute("ValueSetId").toString();
-        
             
         }else{
-        //Row row = vo.first();
-            //row.getAttribute("valueSetId").toString();
         String valueSetId =  it.getCurrentRow().getAttribute("ValueSetId").toString();
         pubDome(valueSetId);
         }
@@ -189,7 +121,8 @@ public class ApprovalBackingBean {
         }
     }
 
-}
 
+
+}
 
 
