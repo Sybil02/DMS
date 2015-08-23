@@ -471,7 +471,9 @@ public class WorkflowOdiBean {
         //启动下一步
         WorkflowEngine wfEngine = new WorkflowEngine();
         wfEngine.startNextSteps(wfId, runId,Integer.valueOf(stepNo));
-        return;
+        if(true){
+            return;            
+        }
         //*****************************************************************
         ViewObject sceneVo =
             ADFUtils.findIterator("Odi11ScaneVOIterator").getViewObject();

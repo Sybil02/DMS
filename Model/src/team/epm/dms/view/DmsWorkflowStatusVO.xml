@@ -52,7 +52,14 @@
     PrecisionRule="true"
     EntityAttrName="FinishAt"
     EntityUsage="DmsWorkflowStatusEO"
-    AliasName="FINISH_AT"/>
+    AliasName="FINISH_AT">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="team.epm.dms.view.DmsWorkflowStatusVO.FinishAt_LABEL"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewAttribute
     Name="OpenCom"
     PrecisionRule="true"
@@ -77,34 +84,69 @@
     PrecisionRule="true"
     EntityAttrName="StartAt"
     EntityUsage="DmsWorkflowStatusEO"
-    AliasName="START_AT"/>
+    AliasName="START_AT">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="team.epm.dms.view.DmsWorkflowStatusVO.StartAt_LABEL"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewAttribute
     Name="StepNo"
     IsNotNull="true"
     PrecisionRule="true"
     EntityAttrName="StepNo"
     EntityUsage="DmsWorkflowStatusEO"
-    AliasName="STEP_NO"/>
+    AliasName="STEP_NO">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="team.epm.dms.view.DmsWorkflowStatusVO.StepNo_LABEL"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewAttribute
     Name="StepObject"
     PrecisionRule="true"
     EntityAttrName="StepObject"
     EntityUsage="DmsWorkflowStatusEO"
-    AliasName="STEP_OBJECT"/>
+    AliasName="STEP_OBJECT">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="team.epm.dms.view.DmsWorkflowStatusVO.StepObject_LABEL"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewAttribute
     Name="StepStatus"
     IsNotNull="true"
     PrecisionRule="true"
     EntityAttrName="StepStatus"
     EntityUsage="DmsWorkflowStatusEO"
-    AliasName="STEP_STATUS"/>
+    AliasName="STEP_STATUS">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="team.epm.dms.view.DmsWorkflowStatusVO.StepStatus_LABEL"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewAttribute
     Name="StepTask"
     IsNotNull="true"
     PrecisionRule="true"
     EntityAttrName="StepTask"
     EntityUsage="DmsWorkflowStatusEO"
-    AliasName="STEP_TASK"/>
+    AliasName="STEP_TASK">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="team.epm.dms.view.DmsWorkflowStatusVO.StepTask_LABEL"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewAttribute
     Name="WfId"
     IsNotNull="true"

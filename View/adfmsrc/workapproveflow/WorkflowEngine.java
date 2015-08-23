@@ -390,6 +390,7 @@ public class WorkflowEngine {
                 }    
             }
             stat.executeBatch();
+            trans.commit();
         }
             stat.close();
         }catch(SQLException e){

@@ -107,6 +107,12 @@
     <DesignTime>
       <Attr Name="_DisplaySize" Value="1"/>
     </DesignTime>
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="team.epm.dms.view.DmsUserWorkflowVO.WfStatus_LABEL"/>
+      </SchemaBasedProperties>
+    </Properties>
   </ViewAttribute>
   <ViewAttribute
     Name="WfCom"
@@ -138,6 +144,11 @@
       <Attr Name="_DisplaySize" Value="32"/>
     </DesignTime>
   </ViewAttribute>
+  <ViewLinkAccessor
+    Name="DmsWorkflowStatusVO"
+    ViewLink="team.epm.dms.DmsWorkflowStatusLnk"
+    Type="oracle.jbo.RowIterator"
+    IsUpdateable="false"/>
   <ResourceBundle>
     <PropertiesBundle
       PropertiesFile="ModelBundle"/>
