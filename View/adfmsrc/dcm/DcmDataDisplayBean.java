@@ -706,6 +706,8 @@ public class DcmDataDisplayBean extends TablePagination{
             ResultSet crs = cstat.executeQuery();
             if(crs.next()){
                 this.setTotalCount(crs.getInt(1));
+            }else{
+                this.setTotalCount(0);    
             }
             crs.close();
             cstat.close();
@@ -733,6 +735,7 @@ public class DcmDataDisplayBean extends TablePagination{
                 data.add(row);
             }
             rs.close();
+            stat.close();
         } catch (SQLException e) {
             JSFUtils.addFacesErrorMessage(DmsUtils.getMsg("dcm.query_data_error"));
             this._logger.severe(e);
@@ -985,6 +988,8 @@ public class DcmDataDisplayBean extends TablePagination{
         }
         this.curCombiantionRecord=this.getCurCombinationRecord();
         this.setCurCombinationRecordEditable();
+        this.setCurPage(1);
+        
         this.queryTemplateData();
         //查询组合是否需要提交审批
         //更改组合后，先默认赋值不能提交
@@ -994,7 +999,6 @@ public class DcmDataDisplayBean extends TablePagination{
         if(this.writeStatus != "Y"){
             this.isEditable = true;    
         }
-        System.out.println("sssssssssssssssssss:"+this.writeStatus);
         AdfFacesContext adfFacesContext = AdfFacesContext.getCurrentInstance();
         adfFacesContext.addPartialTarget(this.panelaCollection);
     }

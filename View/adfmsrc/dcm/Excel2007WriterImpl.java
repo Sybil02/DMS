@@ -48,10 +48,17 @@ public class Excel2007WriterImpl extends AbstractExcel2007Writer {
                     if(obj instanceof java.sql.Date){
                         SimpleDateFormatter format=new SimpleDateFormatter("yyyy-MM-dd hh:mm:ss");
                         obj=format.format((java.sql.Date)obj);
+                        createCell(colInx,(String)obj);
+                    }else if(col.getDataType().equals("NUMBER")){
+                        if(obj != null){
+                            createCell(colInx,Double.parseDouble(obj.toString()));        
+                        }else{
+                            createCell(colInx,(String)obj);   
+                        }
                     }else{
                         obj=ObjectUtils.toString(obj);
+                        createCell(colInx,(String)obj);
                     }
-                    createCell(colInx,(String)obj);
                     ++colInx;
                 }
                 ++n;

@@ -37,7 +37,6 @@
           <f:attribute name="brandingTitle" value="#{viewBundle['dms.title']}"/>
           <f:attribute name="globalAreaSplitterPosition" value="0"/>
           <f:attribute name="navSplitterPosition" value="200"/>
-          <f:attribute name="navSplitterDisabled" value="true"/>
         </af:pageTemplate>
       </af:form>
     </af:document>

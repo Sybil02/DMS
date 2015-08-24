@@ -34,6 +34,9 @@ public abstract class TablePagination {
         if(totalCount>0){
             this.totalCount = totalCount;
             this.totalPage=(Integer)((this.totalCount+this.pageSize-1)/this.pageSize);
+        }else{
+            this.totalCount = 0;
+            this.totalPage = 0;
         }
     }
     public int getStartPoint(){
