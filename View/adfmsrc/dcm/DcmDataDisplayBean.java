@@ -1385,11 +1385,14 @@ public class DcmDataDisplayBean extends TablePagination{
             if(cs.getString(7).equals("true")){
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("程序执行成功！"));
                 trans.commit();
+                //刷新数据
+                this.queryTemplateData();
             }else{
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("程序执行失败！"));    
                 trans.rollback();
             }
             cs.close();
+            
         } catch (SQLException e) {
             this._logger.severe(e);
         }
