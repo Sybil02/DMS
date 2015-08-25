@@ -1464,6 +1464,7 @@ public class DcmDataDisplayBean extends TablePagination{
     //审批通过
     public void approvePass(ActionEvent actionEvent) {
         ApproveflowEngine approveEgn = new ApproveflowEngine();
+        //审批通过
         approveEgn.approvePass(this.curRunId, this.curTempalte.getId(), this.curCombiantionRecord,this.curUser.getId());
         WorkflowEngine workEngine = new WorkflowEngine();
         //检测步骤是否完成 

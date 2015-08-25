@@ -111,64 +111,6 @@ public class ApproveflowEngine {
             this._logger.severe(e);
         }
     }
-    //审批人审批
-
-//    public void nextApproveEntity(String runId, String templateId,
-//                                  String entityId, int stepId, String personId,
-//                                  String approvalStatus,
-//                                  String comdId) throws AddressException,
-//                                                        MessagingException {
-//        DBTransaction db =
-//            (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
-//        Statement stmt = db.createStatement(DBTransaction.DEFAULT);
-//        StringBuffer sql = new StringBuffer();
-//        sql.append("update APPROVE_TEMPLATE_STATUS set APPROVAL_STATUS = \'");
-//        sql.append(approvalStatus).append("\' where run_id = \'");
-//        sql.append(runId).append("\' and TEMPLATE_ID = \'");
-//        sql.append(templateId).append("\' and ENTITY_ID = \'");
-//        sql.append("\' and STEP_NO = ");
-//        sql.append(stepId);
-//        sql.append(" person_id = \'").append(personId).append("\'");
-//        try {
-//            stmt.executeUpdate(sql.toString());
-//            if (approvalStatus.equals("Y")) {
-//                //startApproveEntity(runId,templateId,entityId,stepId);
-//            }
-//            if (approvalStatus.equals("N")) {
-//                StringBuffer usql = new StringBuffer();
-//                usql.append("select c.user_id \"userId\" from dms_approvalflow_entitys c where c.seq <( select b.seq  from dms_approvalflowinfo a, dms_approvalflow_entitys b where a.template_Id = \'");
-//                usql.append(templateId).append("\' a.id = b.APPROVAL_ID and a.locale = b.locale and a.locale = \'");
-//                usql.append(curUser.getLocale()).append("\' ");
-//                usql.append("and b.user_id = \'");
-//                usql.append(personId).append("\')");
-//                usql.append(" and c.locale = \'");
-//                usql.append(curUser.getLocale()).append("\' ");
-//                ResultSet rs = stmt.executeQuery(sql.toString());
-//                while (rs.next()) { //修改审批状态
-//                    StringBuffer sqltemp = new StringBuffer();
-//                    sqltemp.append("update APPROVE_TEMPLATE_STATUS t set APPROVAL_STATUS = 'R' where run_id = \'");
-//                    sqltemp.append(runId).append("\' and TEMPLATE_ID = \'");
-//                    sqltemp.append(templateId).append("\' and ENTITY_ID = \'");
-//                    sqltemp.append("\' and STEP_NO = ");
-//                    sqltemp.append(stepId);
-//                    sqltemp.append(" and person_id = \'");
-//                    sqltemp.append(rs.getString("userId")).append("\'");
-//                    stmt.executeUpdate(sqltemp.toString());
-//                }
-//                //打开组合，dcm_template_combi ，template_id，com_id 修改状态为OPEN
-//                StringBuffer sqlcomb = new StringBuffer();
-//                sqlcomb.append("update dcm_template_combination d set d.status = \'OPEN\' where TEMPLATE_ID = \'");
-//                sqlcomb.append(templateId).append("\'");
-//                sqlcomb.append(" and COM_RECORD_ID = \'");
-//                sqlcomb.append(comdId).append("\'");
-//                stmt.executeUpdate(sqlcomb.toString());
-//
-//
-//            }
-//        } catch (SQLException e) {
-//            this._logger.severe(e);
-//        }
-//    }
     
     //启动下一个审批人
     public void nextApproveUser(String runId, String templateId, String comId){
@@ -204,6 +146,7 @@ public class ApproveflowEngine {
                 this.sendMail(nextUserId, comId, "你是下一个审批人！");
             }else{
                 //不存在下一个审批人，部门审批结束。
+                //检查父节点是否全部审批通过，全部通过则启动下一个个步骤，否则不操作
                 
             }
             stat.close();

@@ -1,5 +1,6 @@
 package workapproveflow;
 
+import common.ADFUtils;
 import common.DmsUtils;
 
 import dms.login.Person;
@@ -16,6 +17,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 
 import oracle.jbo.domain.Number;
 import oracle.adf.share.ADFContext;
@@ -169,14 +173,19 @@ public class WorkflowEngine {
                     + " AND RUN_ID = '" + runId + "'" + " AND STEP_NO = 1 ";
                 stat.executeUpdate(udSql);
                 trans.commit();
-                stat.close();
             }
             if (stepTask.equals("ETL")) {
-
+                //更新ETL步骤为开始
+                String ueSql = "UPDATE DMS_WORKFLOW_STATUS SET STEP_STATUS = 'WORKING' WHERE WF_ID = '" + wfId + "'"
+                    + " AND RUN_ID = '" + runId + "'" + " AND STEP_NO = 1 ";
+                stat.executeUpdate(ueSql);
+                trans.commit();
             }
             if (stepTask.equals("APPROVE")) {
-
+                //提示没有审批对象
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("第一步不能为审批，找不到审批对象，请检查工作流配置！"));
             }
+            stat.close();
         } catch (SQLException e) {
             this._logger.severe(e);
         }
