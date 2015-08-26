@@ -191,9 +191,9 @@ public class WorkflowEngine {
         }
     }
 
-    //OPEN TEMPLATES
+    //打开模板，打开所有组合
     //stepObj 模板标签  openCom打开组合
-    private void openTemplates(String stepObj, String openCom,String runId,int stepNo) {
+    public void openTemplates(String stepObj, String openCom,String runId,int stepNo) {
         //分割组合参数的值和列名
         Map<String, String> valuesMap = new HashMap<String, String>();
         //去掉拼接时最后一个#
@@ -238,9 +238,7 @@ public class WorkflowEngine {
                 ResultSet entityRs = stat.executeQuery(entitySql);
                 //存部门和该部门对应查询组合ID的sql
                 Map<String,String> sqlMap = new HashMap<String,String>();
-                //List<String> sqlList = new ArrayList<String>();
                 //部门编码,和该部门对应的组合ID
-                //List<String> entityList = new ArrayList<String>();
                 Map<String,String> entityMap = new HashMap<String,String>();
                 while (entityRs.next()) {
                     //entityList.add(entityRs.getString("ENTITY"));
@@ -296,7 +294,109 @@ public class WorkflowEngine {
             this._logger.severe(e);
         }
     }
-
+    
+    //打开模板，不打开组合
+    public void onlyOpenTemplates(String stepObj, String openCom,String runId,int stepNo){
+        //分割组合参数的值和列名
+        Map<String, String> valuesMap = new HashMap<String, String>();
+        //去掉拼接时最后一个#
+        openCom = openCom.substring(0, openCom.length() - 1);
+        String[] str = openCom.split("#");
+        for (int i = 0; i < str.length; i++) {
+            String[] s = str[i].split(":");
+            //s[0]:列名，s[1]：值
+            valuesMap.put(s[0], s[1]);
+        }
+        //保存所有模板，和模板对应要打开的组合ID
+        Map<String, List<String>> tempComMap =
+            new HashMap<String, List<String>>();
+        //保存所有模板，和模板要打开的部门编码,组合ID
+        Map<String,Map<String,String>> tempEntityMap = new HashMap<String,Map<String,String>>();
+        DBTransaction trans =
+            (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
+        Statement stat = trans.createStatement(DBTransaction.DEFAULT);
+        //tempMap<template_id,com_id>
+        Map<String, String> tempMap = new HashMap<String, String>();
+        //query templates
+        String tempSql =
+            "SELECT T.ID,D.CODE FROM DCM_TEMPLATE T,DCM_COMBINATION D WHERE T.COMBINATION_ID = D.ID AND T.LOCALE = D.LOCALE AND T.LOCALE = '" +
+            this.curUser.getLocale() + "'" + " AND T.TEMPLATE_LABEL = '" +
+            stepObj + "'";
+        ResultSet tempRs;
+        try {
+            tempRs = stat.executeQuery(tempSql);
+            while (tempRs.next()) {
+                String tempId = tempRs.getString("ID");
+                //每个模板对应的组合ID的源表
+                String comSource = tempRs.getString("CODE");
+                tempMap.put(tempId, comSource);
+            }
+            tempRs.close();
+            //获得每个模板要打开的组合ID
+            for (Map.Entry<String, String> entry : tempMap.entrySet()) {
+                String entitySql =
+                    "SELECT ENTITY,ENTITY_CODE FROM DCM_TEM_ENTITY_COM WHERE DCM_TEMPLATE_ID = '" +
+                    entry.getKey() + "'";
+                //查询每个模板在dcm_tem_entity_com中维护了的部门和部门对应的列名
+                ResultSet entityRs = stat.executeQuery(entitySql);
+                //存部门和该部门对应查询组合ID的sql
+                Map<String,String> sqlMap = new HashMap<String,String>();
+                //部门编码,和该部门对应的组合ID
+                Map<String,String> entityMap = new HashMap<String,String>();
+                while (entityRs.next()) {
+                    //entityList.add(entityRs.getString("ENTITY"));
+                    StringBuffer comIdSql = new StringBuffer();
+                    comIdSql.append("SELECT ID FROM ").append(entry.getValue()).append(" WHERE ");
+                    comIdSql.append(entityRs.getString("ENTITY_CODE")).append(" = '").append(entityRs.getString("ENTITY")).append("' AND ");
+                    //拼接工作流要打开的组合的值
+                    for (Map.Entry<String, String> vEntry :
+                         valuesMap.entrySet()) {
+                        comIdSql.append(vEntry.getKey()).append("= '").append(vEntry.getValue()).append("' AND ");
+                    }
+                    //去掉最后一个多出的"AND ",加空格共四位
+                    String sqlStr =
+                        comIdSql.substring(0, comIdSql.length() - 4);
+                    sqlMap.put(entityRs.getString("ENTITY"),sqlStr);
+                }
+                //根据工作流选择的组合，查询出在模板组合表中的ID
+                List<String> comIdList = new ArrayList<String>();
+                for (Map.Entry<String,String> sqlEntry : sqlMap.entrySet()) {
+                    ResultSet comIdRs = stat.executeQuery(sqlEntry.getValue());
+                    if (comIdRs.next()) {
+                        String comId = comIdRs.getString("ID");
+                        comIdList.add(comId);
+                        entityMap.put(sqlEntry.getKey(),comId);
+                    }
+                    comIdRs.close();
+                }
+                tempComMap.put(entry.getKey(), comIdList);
+                //put模板ID 和 对应要打开的部门Map
+                tempEntityMap.put(entry.getKey(), entityMap);
+                entityRs.close();
+            }
+            //打开每张模板对应的组合
+            //this.openTempCom(tempComMap);
+            //初始化每张模板的输入状态tempEntityMap<temp_id,<entity_code,com_id>>
+            this.initTemplateStatus(runId, stepNo, tempEntityMap);
+            //查询审批步骤
+            StringBuffer stepNoSql = new StringBuffer();
+            int approveNo = stepNo;
+            stepNoSql.append("select STEP_NO from dms_workflow_status where step_task = 'APPROVE' ");
+            stepNoSql.append("and step_no > ").append(stepNo);
+            stepNoSql.append("order by step_no");
+            ResultSet snRs = stat.executeQuery(stepNoSql.toString());
+            if(snRs.next()){
+                approveNo = snRs.getInt("STEP_NO");        
+            }
+            //初始化每张模板的审批状态
+            this.initApproveStatus(runId, approveNo, tempEntityMap);
+            stat.close();
+        } catch (SQLException e) {
+            this._logger.severe(e);
+        }    
+    }
+    
+    //打开模板组合 tempComMap<模板ID，List<组合ID>>
     private void openTempCom(Map<String,List<String>> tempComMap){
         DcmTemplateCombinaVOImpl tempComVo =DmsUtils.getDcmApplicationModule().getDcmTemplateCombinaVO();
         for(Map.Entry<String,List<String>> tempEntry : tempComMap.entrySet()){
@@ -320,6 +420,59 @@ public class WorkflowEngine {
         }
         tempComVo.getApplicationModule().getTransaction().commit();
     }
+    
+    //打开所有步骤中子部门对应的所有模板输入状态
+    public void openComByChild(String wfId,String runId ,String templateId,String comId , int stepNo){
+        DBTransaction trans =
+            (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
+        Statement stat = trans.createStatement(DBTransaction.DEFAULT);
+        //查询部门的父节点下的所有子部门
+        List<String> childList = new ArrayList<String>();
+        StringBuffer pSql = new StringBuffer();
+        pSql.append("select ENTITY from dcm_entity_parent d where d.parent = ( ");
+        pSql.append("select distinct parent from approve_template_status t1 , dcm_entity_parent t2 ");
+        pSql.append("where t1.entity_id = t2.entity and t1.template_id = '").append(templateId).append("' ");
+        pSql.append("and t1.com_id = '").append(comId).append("')");
+        try {
+            ResultSet rs = stat.executeQuery(pSql.toString());
+            while(rs.next()){
+                childList.add(rs.getString("ENTITY"));        
+            }
+            rs.close();
+            //查询模板状态表中所有子部门对应的模板，组合ID
+            StringBuffer comSql = new StringBuffer();
+            comSql.append("select template_id,com_id from workflow_template_status ");
+            comSql.append("where run_id = '").append(runId).append("' ");
+            comSql.append("and step_no = ").append(stepNo);
+            comSql.append(" and entity_code in (");
+            for(String etStr : childList){
+                comSql.append("'").append(etStr).append("',");    
+            }
+            comSql.append("'')");
+            ResultSet comRs = stat.executeQuery(comSql.toString());
+            Map<String,List<String>> tempComMap = new HashMap<String,List<String>>();
+            List<String> comList ;
+            while(comRs.next()){
+                String temp_Id = comRs.getString("TEMPLATE_ID");
+                String com_Id = comRs.getString("COM_ID");
+                if(tempComMap.containsKey(temp_Id)){
+                    comList = tempComMap.get(temp_Id);
+                    comList.add(com_Id);
+                }else{
+                    comList = new ArrayList<String>();
+                    comList.add(com_Id);
+                }
+                tempComMap.put(temp_Id, comList);
+            }
+            comRs.close();
+            stat.close();
+            //打开子部门对应的模板组合
+            this.openTempCom(tempComMap);
+        } catch (SQLException e) {
+            this._logger.severe(e);
+        }
+    }
+    
     //初始化模板部门数据输入状态表
     private void initTemplateStatus(String runId,int stepNo,Map<String,Map<String,String>> tempEntityMap){
         DmsWorkflowTemplateStatusVOImpl vo = DmsUtils.getDmsApplicationModule().getDmsWorkflowTemplateStatusVO();

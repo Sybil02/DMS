@@ -1465,7 +1465,7 @@ public class DcmDataDisplayBean extends TablePagination{
     public void approvePass(ActionEvent actionEvent) {
         ApproveflowEngine approveEgn = new ApproveflowEngine();
         //审批通过
-        approveEgn.approvePass(this.curRunId, this.curTempalte.getId(), this.curCombiantionRecord,this.curUser.getId());
+        approveEgn.approvePass(this.curWfId,this.curRunId, this.curTempalte.getId(), this.curCombiantionRecord,this.curUser.getId(),this.approveStepNo);
         WorkflowEngine workEngine = new WorkflowEngine();
         //检测步骤是否完成 
         workEngine.stepIsFinish(this.curWfId,this.curRunId, this.approveStepNo, "ETL");
@@ -1525,6 +1525,7 @@ public class DcmDataDisplayBean extends TablePagination{
                 approveSql.append("AND TEMPLATE_ID = '").append(this.curTempalte.getId()).append("' ");
                 approveSql.append("AND PERSON_ID = '").append(this.curUser.getId()).append("' ");
                 approveSql.append("AND COM_ID = '").append(this.curCombiantionRecord).append("'");
+                //System.out.println("@@@@@@@@@@@@@@@@@@@"+approveSql);
                 ResultSet aRs = stat.executeQuery(approveSql.toString());
                 if(aRs.next()){
                     String appStatus = aRs.getString("APPROVAL_STATUS");
