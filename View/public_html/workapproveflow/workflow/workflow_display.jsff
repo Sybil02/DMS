@@ -399,6 +399,9 @@
                                   id="cb1"
                                   actionListener="#{viewScope.workflowDisplayBean.showRunPop}"
                                   partialTriggers="t1"/>
+                <af:commandButton text="#{viewBundle['dcm.combination_record_close']}" id="cb5"
+                                  actionListener="#{viewScope.workflowDisplayBean.closeWorkflow}"
+                                  partialTriggers="t1"/>
               </af:toolbar>
             </f:facet>
             <f:facet name="statusbar"/>
