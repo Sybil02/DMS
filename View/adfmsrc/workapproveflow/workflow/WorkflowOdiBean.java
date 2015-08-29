@@ -439,41 +439,41 @@ public class WorkflowOdiBean {
 
     public void execute(ActionEvent actionEvent) throws MalformedURLException {
         //**************************测试************************************
-        //查询运行ID
-        DCIteratorBinding wfIter =
-            ADFUtils.findIterator("DmsUserWorkflowVOIterator");
-        Row wfRow = wfIter.getCurrentRow();
-        String runId = wfRow.getAttribute("WfRunid").toString();
-        //获取步骤信息
-        DCIteratorBinding stepIter =
-            ADFUtils.findIterator("DmsWorkflowStatusVOIterator");
-        Row curRow = stepIter.getCurrentRow();
-        String stepTask = curRow.getAttribute("StepTask").toString();
-        String wfId = curRow.getAttribute("WfId").toString();
-        String stepNo = curRow.getAttribute("StepNo").toString();
-        //执行成功，改变步骤状态
-        StringBuffer ueSql = new StringBuffer();
-        ueSql.append("UPDATE DMS_WORKFLOW_STATUS SET STEP_STATUS = 'Y' ");
-        ueSql.append("WHERE RUN_ID = '").append(runId).append("' ");
-        ueSql.append("AND STEP_NO = ").append(stepNo);
-        if ("ETL".equals(stepTask)) {
-            DBTransaction trans =
-                (DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
-            Statement stat = trans.createStatement(DBTransaction.DEFAULT);
-            try {
-                stat.executeUpdate(ueSql.toString());
-                trans.commit();
-                stat.close();
-            } catch (SQLException e) {
-                this._logger.severe(e);
-            }
-        }
-        //启动下一步
-        WorkflowEngine wfEngine = new WorkflowEngine();
-        wfEngine.startNextSteps(wfId, runId,Integer.valueOf(stepNo));
-        if(true){
-            return;            
-        }
+//        //查询运行ID
+//        DCIteratorBinding wfIter =
+//            ADFUtils.findIterator("DmsUserWorkflowVOIterator");
+//        Row wfRow = wfIter.getCurrentRow();
+//        String runId = wfRow.getAttribute("WfRunid").toString();
+//        //获取步骤信息
+//        DCIteratorBinding stepIter =
+//            ADFUtils.findIterator("DmsWorkflowStatusVOIterator");
+//        Row curRow = stepIter.getCurrentRow();
+//        String stepTask = curRow.getAttribute("StepTask").toString();
+//        String wfId = curRow.getAttribute("WfId").toString();
+//        String stepNo = curRow.getAttribute("StepNo").toString();
+//        //执行成功，改变步骤状态
+//        StringBuffer ueSql = new StringBuffer();
+//        ueSql.append("UPDATE DMS_WORKFLOW_STATUS SET STEP_STATUS = 'Y' ");
+//        ueSql.append("WHERE RUN_ID = '").append(runId).append("' ");
+//        ueSql.append("AND STEP_NO = ").append(stepNo);
+//        if ("ETL".equals(stepTask)) {
+//            DBTransaction trans =
+//                (DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
+//            Statement stat = trans.createStatement(DBTransaction.DEFAULT);
+//            try {
+//                stat.executeUpdate(ueSql.toString());
+//                trans.commit();
+//                stat.close();
+//            } catch (SQLException e) {
+//                this._logger.severe(e);
+//            }
+//        }
+//        //启动下一步
+//        WorkflowEngine wfEngine = new WorkflowEngine();
+//        wfEngine.startNextSteps(wfId, runId,Integer.valueOf(stepNo));
+//        if(true){
+//            return;            
+//        }
         //*****************************************************************
         ViewObject sceneVo =
             ADFUtils.findIterator("Odi11ScaneVOIterator").getViewObject();

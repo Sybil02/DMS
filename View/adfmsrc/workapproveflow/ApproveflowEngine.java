@@ -10,6 +10,15 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import java.util.Map;
+
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
+
 import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
 
@@ -75,15 +84,6 @@ public class ApproveflowEngine {
                 db.commit();
                 //发送邮件
                 this.sendMail(userId, comId, "这是一封测试邮件！");
-//                StringBuffer mailSql = new StringBuffer();
-//                mailSql.append("SELECT MAIL FROM DMS_USER WHERE ID = '").append(userId).append("'");
-//                ResultSet mailRs = stmt.executeQuery(mailSql.toString());
-//                if (mailRs.next()) {
-//                    MailSender sender = new MailSender();
-//                    sender.send(mailRs.getString("MAIL"), comId + "审核",
-//                                "测试邮件"); //收件人地址、主题、消息
-//                }
-//                mailRs.close();
             }
             stmt.close();
         } catch (SQLException e) {
@@ -113,7 +113,7 @@ public class ApproveflowEngine {
     }
     
     //启动下一个审批人
-    public void nextApproveUser(String runId, String templateId, String comId){
+    public void nextApproveUser(String wfId,String runId, String templateId, String comId,int stepNo){
         DBTransaction trans =
             (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
         Statement stat = trans.createStatement(DBTransaction.DEFAULT);
@@ -147,7 +147,45 @@ public class ApproveflowEngine {
             }else{
                 //不存在下一个审批人，部门审批结束。
                 //检查父节点是否全部审批通过，全部通过则启动下一个个步骤，否则不操作
-                
+                if(this.checkParentApprove(runId, templateId, comId,stepNo)){
+                    //检测下一个步骤
+                    Map<String,String> nextMap = new HashMap<String,String>();
+                    WorkflowEngine wfEngine = new WorkflowEngine();
+                    nextMap = wfEngine.queryNextStep(wfId, runId, stepNo);
+                    //所有子部门审批通过，打开下一个步骤中所有子部门    
+                    String stepTask = nextMap.get("STEP_TASK");
+                    String openCom = nextMap.get("OPEN_COM");
+                    String stepObj = nextMap.get("STEP_OBJECT");
+                    if("ETL".equals(stepTask)){
+                        //改变ETL执行状态表
+                    }else if("OPEN TEMPLATES".equals(stepTask)){
+                        //查询是否已经初始化，否则执行初始化
+                        String stepStatus = "";
+                        String stepSql = "SELECT STEP_STATUS FROM DMS_WORKFLOW_STATUS T " + "WHERE T.WF_ID = '" + wfId + "' AND T.RUN_ID = '"
+                            + runId + "' AND STEP_NO = " + (stepNo+1);
+                        ResultSet statusRs = stat.executeQuery(stepSql);
+                        if(statusRs.next()){
+                            stepStatus = statusRs.getString("STEP_STATUS");  
+                        }
+                        if("N".equals(stepStatus)){
+                            //打开模板，初始化模板输入状态表和审批流状态表
+                            wfEngine.onlyOpenTemplates(stepObj, openCom, runId, stepNo+1);
+                            //更新步骤状态为WORKING
+                            int i = stepNo + 1;
+                            String udnSql = "UPDATE DMS_WORKFLOW_STATUS SET STEP_STATUS = 'WORKING' WHERE WF_ID = '" + wfId + "'"
+                                + " AND RUN_ID = '" + runId + "'" + " AND STEP_NO = " + i;
+                            stat.executeUpdate(udnSql);
+                            trans.commit();    
+                        }
+                        //打开父节点下所有部门的组合
+                        wfEngine.openComByChild(wfId, runId,templateId,comId, stepNo+1);
+                    }else{
+                        //审批
+                        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("审批步骤的下一步不能为审批，请重新配置工作流！"));
+                    }
+                }else{
+                    //未完成，不操作
+                }
             }
             stat.close();
         } catch (SQLException e) {
@@ -156,8 +194,8 @@ public class ApproveflowEngine {
     }
     
     //审批通过
-    public void approvePass(String runId, String templateId, String comId,
-                            String userId) {
+    public void approvePass(String wfId,String runId, String templateId, String comId,
+                            String userId,int stepNo) {
         DBTransaction trans =
             (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
         Statement stat = trans.createStatement(DBTransaction.DEFAULT);
@@ -176,7 +214,7 @@ public class ApproveflowEngine {
             this._logger.severe(e);
         }
         //启动下一个审批人
-        this.nextApproveUser(runId, templateId, comId);
+        this.nextApproveUser(wfId,runId, templateId, comId,stepNo);
     }
     
     //审批拒绝
@@ -232,5 +270,51 @@ public class ApproveflowEngine {
         } catch (SQLException e) {
             this._logger.severe(e);
         }
+    }
+    
+    //检查父节点下所有部门是否全部通过
+    public boolean checkParentApprove(String runId, String templateId, String comId,int stepNo){
+        boolean flag = false;
+        DBTransaction trans =
+            (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
+        Statement stat = trans.createStatement(DBTransaction.DEFAULT);
+        //查询部门的父节点下的所有子部门
+        List<String> childList = new ArrayList<String>();
+        StringBuffer pSql = new StringBuffer();
+        pSql.append("select ENTITY from dcm_entity_parent d where d.parent = ( ");
+        pSql.append("select distinct parent from approve_template_status t1 , dcm_entity_parent t2 ");
+        pSql.append("where t1.entity_id = t2.entity and t1.template_id = '").append(templateId).append("' ");
+        pSql.append("and t1.com_id = '").append(comId).append("')");
+        try {
+            ResultSet rs = stat.executeQuery(pSql.toString());
+            while(rs.next()){
+                childList.add(rs.getString("ENTITY"));        
+            }
+            rs.close();
+            //检查审批流状态表中所有子部门是否完成审批
+            StringBuffer eSql = new StringBuffer();
+            eSql.append("select 1 from approve_template_status t where t.approval_status <> 'Y' ");
+            eSql.append("and t.template_id = '").append(templateId).append("' ");
+            eSql.append("and t.run_id = '").append(runId).append("' ");
+            eSql.append("and t.step_no = ").append(stepNo).append(" ");
+            eSql.append("and t.entity_id in (");
+            for(String entityCode : childList){
+                eSql.append("'").append(entityCode).append("',");
+            }
+            eSql.append("'')");
+            ResultSet statusRs = stat.executeQuery(eSql.toString());
+            if(statusRs.next()){
+                //未审批完     
+                flag = false;
+            }else{
+                //父节点审批完成
+                flag = true;
+            }
+            statusRs.close();
+            stat.close();
+        } catch (SQLException e) {
+            this._logger.severe(e);
+        }
+        return flag;
     }
 }
