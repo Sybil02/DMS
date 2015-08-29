@@ -256,6 +256,25 @@ public class WorkflowDisplayBean {
         AdfFacesContext adfFacesContext = AdfFacesContext.getCurrentInstance();
         adfFacesContext.addPartialTarget(this.wfTable);
     }
+    
+    public void closeWorkflow(ActionEvent actionEvent) {
+        // 关闭工作流
+        DCIteratorBinding wfIter = ADFUtils.findIterator("DmsUserWorkflowVOIterator");
+        ViewObject wfVo = wfIter.getViewObject();
+        Row row = wfVo.getCurrentRow();
+        String wfId = row.getAttribute("WorkflowId").toString();
+        String wfStatus = row.getAttribute("WfStatus").toString();
+        if("N".equals(wfStatus)){
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("工作流未启动！"));  
+            return;
+        }
+        //改变工作流状态
+        this.wfEngine.changeWfStatus(wfId, wfStatus); 
+        //通过sql直接修改表数据，需要查询VO改变迭代器数据，刷新table才有效
+        wfVo.executeQuery();
+        AdfFacesContext adfFacesContext = AdfFacesContext.getCurrentInstance();
+        adfFacesContext.addPartialTarget(this.wfTable);
+    }
 
     public void vsValueChange(ValueChangeEvent valueChangeEvent) {
         RichSelectOneChoice comSoc = (RichSelectOneChoice)valueChangeEvent.getSource();
@@ -274,7 +293,6 @@ public class WorkflowDisplayBean {
         // Add event code here...
         RichSelectOneChoice comSoc = (RichSelectOneChoice)valueChangeEvent.getSource();
         String tempId = comSoc.getValue().toString();
-       // DCIteratorBinding wfsIter = ADFUtils.findIterator("DmsWorkflowStatusVOIterator");
         DCIteratorBinding atsIter = ADFUtils.findIterator("DmsApproveTemplateStatusVOIterator");
         StringBuffer sql = new StringBuffer();
         sql.append("TEMPLATE_ID = \'");
@@ -375,6 +393,4 @@ public class WorkflowDisplayBean {
     public RichPopup getRunInterPop() {
         return runInterPop;
     }
-
-
 }

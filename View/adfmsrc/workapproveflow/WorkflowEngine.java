@@ -47,7 +47,6 @@ public class WorkflowEngine {
 
     public void changeWfStatus(String wfId, String wfStatus) {
         try {
-            System.out.println(wfId + ":" + wfStatus);
             DBTransaction trans =
                 (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
             String newStatus = "Y";
