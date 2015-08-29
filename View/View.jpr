@@ -562,6 +562,9 @@
             <hash>
                <url n="content-folder-url" path="adfmsrc/dcm/"/>
                <list n="pattern-filters">
+                  <string v="+dcm/DemoLOVBean.java"/>
+                  <string v="+dcm/DemoComboboxLOVBean.java"/>
+                  <string v="+dcm/SuggestItem.java"/>
                   <string v="+dcm/CalcParameter.java"/>
                   <string v="+dcm/Excel2003WriterImpl.java"/>
                   <string v="+dcm/Excel2007WriterImpl.java"/>
@@ -867,6 +870,10 @@
          </hash>
          <hash>
             <value n="id" v="TopLink"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <url n="id" protocol="file" path="/D:/adf_121300_1008_source/Adf_121300_1008_source.zip.library"/>
             <value n="isJDK" v="false"/>
          </hash>
          <hash>
@@ -1197,6 +1204,10 @@
             <value n="isJDK" v="false"/>
          </hash>
          <hash>
+            <url n="id" protocol="file" path="/D:/adf_121300_1008_source/Adf_121300_1008_source.zip.library"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
             <value n="id" v="Oracle XML Parser v2"/>
             <value n="isJDK" v="false"/>
          </hash>
@@ -1241,6 +1252,23 @@
       <hash n="contextConnectionMap">
          <value n="&lt;none>" v="DMSConn"/>
       </hash>
+   </hash>
+   <hash n="oracle.jdevimpl.webapp.jsp.JspVeProjectSettings">
+      <list n="filters">
+         <string v="trinidad"/>
+      </list>
+      <list n="servlet_listeners">
+         <string v="com.sun.faces.config.ConfigureListener"/>
+      </list>
+      <list n="servlet_listeners_unselected">
+         <string v="oracle.adf.mbean.share.connection.ADFConnectionLifeCycleCallBack"/>
+         <string v="oracle.adf.mbean.share.config.ADFConfigLifeCycleCallBack"/>
+         <string v="oracle.bc4j.mbean.BC4JConfigLifeCycleCallBack"/>
+      </list>
+      <list n="servlets">
+         <string v="Faces Servlet"/>
+         <string v="resources"/>
+      </list>
    </hash>
    <hash n="oracle.jdevimpl.webapp.jsp.libraries.model.ProjectTagLibraries">
       <list n="tag-libraries">

@@ -37,6 +37,7 @@ import java.sql.Types;
 import java.text.SimpleDateFormat;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -56,6 +57,7 @@ import javax.faces.model.SelectItem;
 import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
 
+import oracle.adf.controller.v2.context.PageLifecycleContext;
 import oracle.adf.model.binding.DCIteratorBinding;
 import oracle.adf.model.binding.DCIteratorBindingDef;
 import oracle.adf.share.ADFContext;
@@ -69,7 +71,13 @@ import oracle.adf.view.rich.component.rich.output.RichPanelCollection;
 import oracle.adf.view.rich.context.AdfFacesContext;
 
 import oracle.adf.view.rich.event.QueryEvent;
+import oracle.adf.view.rich.model.AutoSuggestUIHints;
 import oracle.adf.view.rich.model.FilterableQueryDescriptor;
+
+import oracle.adf.view.rich.model.ListOfValuesModel;
+
+import oracle.adf.view.rich.model.QueryModel;
+import oracle.adf.view.rich.model.TableModel;
 
 import oracle.jbo.ApplicationModule;
 import oracle.jbo.Key;
@@ -100,6 +108,9 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import org.hexj.excelhandler.reader.ExcelReaderUtil;
 
+import org.python.parser.ast.Attribute;
+import org.python.parser.ast.Str;
+
 import team.epm.dcm.view.DcmCombinationViewRowImpl;
 import team.epm.dcm.view.DcmTemplateColumnViewRowImpl;
 import team.epm.dcm.view.DcmTemplateViewRowImpl;
@@ -122,7 +133,7 @@ public class DcmDataDisplayBean extends TablePagination{
     //组合信息
     private List<ComHeader> templateHeader = new ArrayList<ComHeader>();
     //值集信息
-    private Map valueSet=new HashMap();
+    private List valueSet=new ArrayList();
     //是否可编辑
     private boolean isEditable=true;
     //当前组合是否可编辑
@@ -167,6 +178,7 @@ public class DcmDataDisplayBean extends TablePagination{
     private int approveStepNo = 0;
     //初始化
     public DcmDataDisplayBean() {
+        System.out.println("+++++++++++++++++++++++++++");
         this.curUser =(Person)ADFContext.getCurrent().getSessionScope().get("cur_user");
         this.dataModel = new DcmDataTableModel();
         this.initTemplate();
@@ -180,6 +192,8 @@ public class DcmDataDisplayBean extends TablePagination{
     public CollectionModel getDataModel() {
         return this.dataModel;
     }
+    
+     
     //值发生改变时更改数据的状态为更新
     public void valueChangeListener(ValueChangeEvent valueChangeEvent) {
         Map rowData = (Map)this.dataModel.getRowData();
@@ -631,12 +645,17 @@ public class DcmDataDisplayBean extends TablePagination{
         }
     }
     //初始化模板和模板列信息
-
+    private List<ComboboxLOVBean> _comboboxLOVBeanList; 
+    
     private void initTemplate() {
+   
+        setComboboxLOVBeanList(new ArrayList()); 
+        
         String curTemplateId = (String)ADFContext.getCurrent().getPageFlowScope().get("curTemplateId");
         ViewObject templateView =DmsUtils.getDcmApplicationModule().getDcmTemplateView();
         templateView.executeQuery();
         Row[] rows=templateView.findByKey(new Key(new Object[]{curTemplateId,ADFContext.getCurrent().getLocale().toString()}), 1);
+
         if(rows.length>0){
             this.curTempalte=new TemplateEO((DcmTemplateViewRowImpl)rows[0]); 
             //只读模板
@@ -654,17 +673,31 @@ public class DcmDataDisplayBean extends TablePagination{
             templateView.setCurrentRow(rows[0]);
             DcmTemplateViewRowImpl row=(DcmTemplateViewRowImpl)rows[0];
             RowIterator itr=row.getDcmTemplateColumnView();
+            List<String> listData = new ArrayList<String>(); //把list放在下拉框模板中 
+       
             while(itr.hasNext()){
                 Row colRow = itr.next();
-                ColumnDef colDef = new ColumnDef((DcmTemplateColumnViewRowImpl)colRow);
+                ColumnDef colDef = new ColumnDef((DcmTemplateColumnViewRowImpl)colRow);  
                 this.colsdef.add(colDef);
                 //获取值列表
-                if(colDef.getValueSetId()!=null&&this.valueSet.get(colDef.getValueSetId())==null){
-                    this.valueSet.put(colDef.getValueSetId(), 
-                                      this.fetchValueList(colDef.getValueSetId()));            
-                }
+               
+                if(colDef.getValueSetId()!=null) {
+                    
+                    List<SelectItem>  tem = this.fetchValueList(colDef.getValueSetId()); 
+                    valueSet.add(tem);
+                    List<ComboboxLOVBean.Attribute> list = new ArrayList<ComboboxLOVBean.Attribute>();
+                    list.add(new ComboboxLOVBean.Attribute(colDef.getColumnLabel(),"name"));
+                    
+                    ComboboxLOVBean bean = new ComboboxLOVBean(tem, list);
+                    _comboboxLOVBeanList.add(bean);  
+                }else {
+                    this.valueSet.add(null); 
+                    ComboboxLOVBean bean = new ComboboxLOVBean(null, null);
+                    _comboboxLOVBeanList.add(bean);
+                } 
             }
-            ((DcmDataTableModel)this.dataModel).setColsdef(this.colsdef);
+            ((DcmDataTableModel)this.dataModel).setColsdef(this.colsdef);  
+
         }else{
             this._logger.severe(DmsUtils.getMsg("dcm.template_not_found"));
             throw new RuntimeException(DmsUtils.getMsg("dcm.template_not_found")+":tempateId:"+curTemplateId);
@@ -673,7 +706,7 @@ public class DcmDataDisplayBean extends TablePagination{
     //获取值列表
     private List<SelectItem> fetchValueList(String vsId){
         List<SelectItem> list=new ArrayList<SelectItem>();
-        list.add(new SelectItem());
+        list.add(new SelectItem("",""));
         Row[] vsRows=DmsUtils.getDmsApplicationModule().getDmsValueSetView()
             .findByKey(new Key(new Object[]{vsId,ADFContext.getCurrent().getLocale().toString()}), 1);
         if(vsRows.length>0){
@@ -685,7 +718,7 @@ public class DcmDataDisplayBean extends TablePagination{
             try {
                 ResultSet rs = stmt.executeQuery(sql.toString());
                 while(rs.next()){
-                    SelectItem itm=new SelectItem();
+                    SelectItem itm=new SelectItem(); 
                     itm.setLabel(rs.getString("MEANING"));
                     itm.setValue(rs.getString("MEANING"));
                     list.add(itm);
@@ -1143,7 +1176,7 @@ public class DcmDataDisplayBean extends TablePagination{
         this.queryTemplateData();
     }
 
-    public Map getValueSet() {
+    public List getValueSet() {
         return valueSet;
     }
 
@@ -1554,5 +1587,36 @@ public class DcmDataDisplayBean extends TablePagination{
 
     public String getApproveStatus() {
         return approveStatus;
+    }
+
+
+    public List suggestMethod(FacesContext facesContext,
+                              AutoSuggestUIHints autoSuggestUIHints) {
+        
+        int colIndex = autoSuggestUIHints.getMaxSuggestedItems();
+        String key = autoSuggestUIHints.getSubmittedValue(); 
+        List<SelectItem> valueSet = (List)this.valueSet.get(colIndex); 
+        List<SelectItem> res = new ArrayList<SelectItem>();
+        
+        for(int i = valueSet.size()-1; i>=0; i-- ) {
+             
+            if( valueSet.get(i).getValue().toString().contains(key)) { 
+                res.add(valueSet.get(i));
+            } 
+        }
+              
+        autoSuggestUIHints.setMaxSuggestedItems(15);
+        
+        return res;
+    }
+  
+
+    public void setComboboxLOVBeanList(List< ComboboxLOVBean> _comboboxLOVBeanList) {
+        this._comboboxLOVBeanList = _comboboxLOVBeanList;
+    }
+
+    public List<ComboboxLOVBean> getComboboxLOVBeanList() { 
+        System.out.println("121212");
+        return _comboboxLOVBeanList;
     }
 }
