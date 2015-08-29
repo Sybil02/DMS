@@ -2,7 +2,8 @@
 <jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.1"
           xmlns:af="http://xmlns.oracle.com/adf/faces/rich"
           xmlns:f="http://java.sun.com/jsf/core"
-          xmlns:c="http://java.sun.com/jsp/jstl/core">
+          xmlns:c="http://java.sun.com/jsp/jstl/core"
+          xmlns:h="http://java.sun.com/jsf/html">
   <c:set var="viewBundle" value="#{adfBundle['dms_v']}"/>
   <af:panelStretchLayout id="pgl2" topHeight="0">
     <f:facet name="top">
@@ -23,20 +24,27 @@
                     var="row" rows="#{bindings.DcmUnAssignedTemplate.rangeSize}"
                     emptyText="#{viewBundle['dms.common.nodata']}"
                     fetchSize="#{bindings.DcmUnAssignedTemplate.rangeSize}"
+                    filterVisible="true"
+                    filterModel="#{bindings.DcmRoleTemplateViewQuery.queryDescriptor}"
                     rowBandingInterval="0"
                     selectionListener="#{bindings.DcmUnAssignedTemplate.collectionModel.makeCurrent}"
                     rowSelection="multiple" id="t2"
                     binding="#{TemplateAuthorityBean.unassignedTemplateTable}">
             <af:column sortProperty="#{bindings.DcmUnAssignedTemplate.hints.Name.name}"
                        sortable="false"
+                       filterable="true"
                        headerText="#{bindings.DcmUnAssignedTemplate.hints.Name.label}"
-                       id="c7">
+                       id="c7" width="250">
               <af:outputText value="#{row.Name}" id="ot1"/>
-            </af:column>
+                <f:facet name="filter">
+                    <af:inputText label="Label 1" id="it1"
+                     valueChangeListener="#{TemplateAuthorityBean.filterAddModuleName}"/>
+                </f:facet>
+              </af:column>
             <af:column sortProperty="#{bindings.DcmUnAssignedTemplate.hints.UpdatedAt.name}"
                        sortable="false"
                        headerText="#{bindings.DcmUnAssignedTemplate.hints.UpdatedAt.label}"
-                       id="c6">
+                       id="c6" width="93">
               <af:outputText value="#{row.UpdatedAt}" id="ot4">
                 <af:convertDateTime pattern="#{bindings.DcmUnAssignedTemplate.hints.UpdatedAt.format}"/>
               </af:outputText>
@@ -44,7 +52,7 @@
             <af:column sortProperty="#{bindings.DcmUnAssignedTemplate.hints.UpdatedBy.name}"
                        sortable="false"
                        headerText="#{bindings.DcmUnAssignedTemplate.hints.UpdatedBy.label}"
-                       id="c5">
+                       id="c5" width="200">
               <af:selectOneChoice value="#{row.bindings.UpdatedBy.inputValue}"
                                   label="#{row.bindings.UpdatedBy.label}"
                                   required="#{bindings.DcmUnAssignedTemplate.hints.UpdatedBy.mandatory}"
@@ -61,92 +69,104 @@
       </af:popup>
     </f:facet>
     <f:facet name="center">
-      <af:panelCollection id="pc2">
-        <f:facet name="toolbar">
-          <af:toolbar id="t7">
-            <af:group id="g1">
-            <af:selectOneChoice value="#{bindings.RoleName.inputValue}"
-                                label="#{bindings.RoleName.label}"
-                                required="#{bindings.RoleName.hints.mandatory}"
-                                shortDesc="#{bindings.RoleName.hints.tooltip}"
-                                id="soc1" autoSubmit="true"
-                                valueChangeListener="#{TemplateAuthorityBean.roleChangeListener}">
-              <f:selectItems value="#{bindings.RoleName.items}" id="si1"/>
-            </af:selectOneChoice>
-            </af:group>
-            <af:group id="g2">
-              <af:commandButton text="#{viewBundle['dms.common.add']}" id="cb1"
-                                actionListener="#{TemplateAuthorityBean.showAddPopup}"/>
-              <af:commandButton text="#{viewBundle['dcm.common.delete']}" id="cb2"
-                                actionListener="#{TemplateAuthorityBean.removeAuthority}"/>
-              <af:commandButton actionListener="#{bindings.Commit.execute}"
-                                text="#{viewBundle['dms.common.save']}"
-                                id="cb3"/>
-              <af:commandButton actionListener="#{bindings.Rollback.execute}"
-                                text="#{viewBundle['dms.common.cancel']}"
-                                immediate="true" id="cb4">
-                <af:resetActionListener/>
-              </af:commandButton>
-            </af:group>
-          </af:toolbar>
-        </f:facet>
-        <af:table value="#{bindings.DcmRoleTemplateView.collectionModel}"
-                  var="row" rows="#{bindings.DcmRoleTemplateView.rangeSize}"
-                  emptyText="#{viewBundle['dms.common.nodata']}"
-                  fetchSize="#{bindings.DcmRoleTemplateView.rangeSize}"
-                  rowBandingInterval="0"
-                  filterModel="#{bindings.DcmRoleTemplateView1Query.queryDescriptor}"
-                  queryListener="#{bindings.DcmRoleTemplateView1Query.processQuery}"
-                  selectionListener="#{bindings.DcmRoleTemplateView.collectionModel.makeCurrent}"
-                  rowSelection="multiple" id="t1"
-                  binding="#{TemplateAuthorityBean.assignedtemplateTable}">
-          <af:column sortProperty="#{bindings.DcmRoleTemplateView.hints.TemplateId.name}"
-                     sortable="false"
-                     filterable="true"
-                     headerText="#{bindings.DcmRoleTemplateView.hints.TemplateId.label}"
-                     id="c3">
-            <af:selectOneChoice value="#{row.bindings.TemplateId.inputValue}"
-                                label="#{row.bindings.TemplateId.label}"
-                                required="#{bindings.DcmRoleTemplateView.hints.TemplateId.mandatory}"
-                                shortDesc="#{bindings.DcmRoleTemplateView.hints.TemplateId.tooltip}"
-                                id="soc4" readOnly="true">
-              <f:selectItems value="#{row.bindings.TemplateId.items}" id="si4"/>
-            </af:selectOneChoice>
-          </af:column>
-          <af:column sortProperty="#{bindings.DcmRoleTemplateView.hints.ReadOnly.name}"
-                     sortable="false"
-                     headerText="#{bindings.DcmRoleTemplateView.hints.ReadOnly.label}" 
-                     id="c1">
-            <af:selectOneChoice value="#{row.bindings.ReadOnly.inputValue}"
-                                label="#{row.bindings.ReadOnly.label}"
-                                required="#{bindings.DcmRoleTemplateView.hints.ReadOnly.mandatory}"
-                                shortDesc="#{bindings.DcmRoleTemplateView.hints.ReadOnly.tooltip}"
-                                id="soc5">
-              <f:selectItems value="#{row.bindings.ReadOnly.items}" id="si5"/>
-            </af:selectOneChoice>
-          </af:column>
-          <af:column sortProperty="#{bindings.DcmRoleTemplateView.hints.UpdatedAt.name}"
-                     sortable="true"
-                     headerText="#{bindings.DcmRoleTemplateView.hints.UpdatedAt.label}"
-                     id="c4">
-            <af:outputText value="#{row.UpdatedAt}" id="ot2">
-              <af:convertDateTime pattern="#{bindings.DcmRoleTemplateView.hints.UpdatedAt.format}"/>
-            </af:outputText>
-          </af:column>
-          <af:column sortProperty="#{bindings.DcmRoleTemplateView.hints.UpdatedBy.name}"
-                     sortable="true"
-                     headerText="#{bindings.DcmRoleTemplateView.hints.UpdatedBy.label}"
-                     id="c2">
-            <af:selectOneChoice value="#{row.bindings.UpdatedBy.inputValue}"
-                                label="#{row.bindings.UpdatedBy.label}"
-                                required="#{bindings.DcmRoleTemplateView.hints.UpdatedBy.mandatory}"
-                                shortDesc="#{bindings.DcmRoleTemplateView.hints.UpdatedBy.tooltip}"
-                                id="soc2" readOnly="true">
-              <f:selectItems value="#{row.bindings.UpdatedBy.items}" id="si2"/>
-            </af:selectOneChoice>
-          </af:column>
-        </af:table>
-      </af:panelCollection>
+      <af:panelGroupLayout layout="vertical"
+                           xmlns:af="http://xmlns.oracle.com/adf/faces/rich"
+                           id="pgl1">
+        <af:panelCollection id="pc2" inlineStyle="height:620px; width:590px;">
+          <f:facet name="toolbar">
+            <af:toolbar id="t7">
+              <af:group id="g1">
+                <af:selectOneChoice value="#{bindings.RoleName.inputValue}"
+                                    label="#{bindings.RoleName.label}"
+                                    required="#{bindings.RoleName.hints.mandatory}"
+                                    shortDesc="#{bindings.RoleName.hints.tooltip}"
+                                    id="soc1" autoSubmit="true"
+                                    valueChangeListener="#{TemplateAuthorityBean.roleChangeListener}">
+                  <f:selectItems value="#{bindings.RoleName.items}" id="si1"/>
+                </af:selectOneChoice>
+              </af:group>
+              <af:group id="g2">
+                <af:commandButton text="#{viewBundle['dms.common.add']}"
+                                  id="cb1"
+                                  actionListener="#{TemplateAuthorityBean.showAddPopup}"/>
+                <af:commandButton text="#{viewBundle['dcm.common.delete']}"
+                                  id="cb2"
+                                  actionListener="#{TemplateAuthorityBean.removeAuthority}"/>
+                <af:commandButton actionListener="#{bindings.Commit.execute}"
+                                  text="#{viewBundle['dms.common.save']}"
+                                  id="cb3"/>
+                <af:commandButton actionListener="#{bindings.Rollback.execute}"
+                                  text="#{viewBundle['dms.common.cancel']}"
+                                  immediate="true" id="cb4">
+                  <af:resetActionListener/>
+                </af:commandButton>
+              </af:group>
+            </af:toolbar>
+          </f:facet>
+          <af:table value="#{bindings.DcmRoleTemplateView.collectionModel}"
+                    var="row" rows="#{bindings.DcmRoleTemplateView.rangeSize}"
+                    emptyText="#{viewBundle['dms.common.nodata']}"
+                    fetchSize="#{bindings.DcmRoleTemplateView.rangeSize}"
+                    rowBandingInterval="0"
+                    filterVisible="true"
+                    filterModel="#{bindings.DcmRoleTemplateViewQuery.queryDescriptor}"
+                    selectionListener="#{bindings.DcmRoleTemplateView.collectionModel.makeCurrent}"
+                    rowSelection="multiple" id="t1"
+                    binding="#{TemplateAuthorityBean.assignedtemplateTable}" >
+            <af:column sortProperty="#{bindings.DcmRoleTemplateView.hints.TemplateId.name}"
+                       sortable="false" filterable="true"
+                       width="250"
+                       headerText="#{bindings.DcmRoleTemplateView.hints.TemplateId.label}"
+                       id="c3">
+              <af:selectOneChoice value="#{row.bindings.TemplateId.inputValue}"
+                                  label="#{row.bindings.TemplateId.label}"
+                                  required="#{bindings.DcmRoleTemplateView.hints.TemplateId.mandatory}"
+                                  shortDesc="#{bindings.DcmRoleTemplateView.hints.TemplateId.tooltip}"
+                                  id="soc4" readOnly="true">
+                <f:selectItems value="#{row.bindings.TemplateId.items}"
+                               id="si4"/>
+              </af:selectOneChoice>
+              <f:facet name="filter">
+                <af:inputText label="Label 1" id="it1"
+                              valueChangeListener="#{TemplateAuthorityBean.filterModuleName}"/>
+              </f:facet>
+            </af:column>
+            <af:column sortProperty="#{bindings.DcmRoleTemplateView.hints.ReadOnly.name}"
+                       sortable="false"
+                       headerText="#{bindings.DcmRoleTemplateView.hints.ReadOnly.label}"
+                       id="c1">
+              <af:selectOneChoice value="#{row.bindings.ReadOnly.inputValue}"
+                                  label="#{row.bindings.ReadOnly.label}"
+                                  required="#{bindings.DcmRoleTemplateView.hints.ReadOnly.mandatory}"
+                                  shortDesc="#{bindings.DcmRoleTemplateView.hints.ReadOnly.tooltip}"
+                                  id="soc5">
+                <f:selectItems value="#{row.bindings.ReadOnly.items}" id="si5"/>
+              </af:selectOneChoice>
+            </af:column>
+            <af:column sortProperty="#{bindings.DcmRoleTemplateView.hints.UpdatedAt.name}"
+                       sortable="true"
+                       headerText="#{bindings.DcmRoleTemplateView.hints.UpdatedAt.label}"
+                       id="c4">
+              <af:outputText value="#{row.UpdatedAt}" id="ot2">
+                <af:convertDateTime pattern="#{bindings.DcmRoleTemplateView.hints.UpdatedAt.format}"/>
+              </af:outputText>
+            </af:column>
+            <af:column sortProperty="#{bindings.DcmRoleTemplateView.hints.UpdatedBy.name}"
+                       sortable="true"
+                       headerText="#{bindings.DcmRoleTemplateView.hints.UpdatedBy.label}"
+                       id="c2">
+              <af:selectOneChoice value="#{row.bindings.UpdatedBy.inputValue}"
+                                  label="#{row.bindings.UpdatedBy.label}"
+                                  required="#{bindings.DcmRoleTemplateView.hints.UpdatedBy.mandatory}"
+                                  shortDesc="#{bindings.DcmRoleTemplateView.hints.UpdatedBy.tooltip}"
+                                  id="soc2" readOnly="true">
+                <f:selectItems value="#{row.bindings.UpdatedBy.items}"
+                               id="si2"/>
+              </af:selectOneChoice>
+            </af:column>
+          </af:table>
+        </af:panelCollection> 
+      </af:panelGroupLayout>
     </f:facet>
   </af:panelStretchLayout>
 </jsp:root>

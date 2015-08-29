@@ -2,6 +2,9 @@ package dcm.template;
 
 import common.ADFUtils;
 
+import common.JSFUtils;
+
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -9,16 +12,24 @@ import javax.faces.event.ActionEvent;
 
 import javax.faces.event.ValueChangeEvent;
 
+import javax.faces.model.SelectItem;
+
 import oracle.adf.view.rich.component.rich.RichPopup;
 import oracle.adf.view.rich.component.rich.data.RichTable;
 
 import oracle.adf.view.rich.context.AdfFacesContext;
+
+import oracle.adfinternal.view.faces.model.binding.FacesCtrlListBinding;
 
 import oracle.jbo.Key;
 import oracle.jbo.Row;
 import oracle.jbo.RowSetIterator;
 import oracle.jbo.ViewObject;
 
+import oracle.jbo.uicli.binding.JUCtrlValueBinding;
+
+import org.apache.myfaces.trinidad.model.CollectionModel;
+import oracle.jbo.uicli.binding.JUCtrlValueBinding.*;
 public class TemplateAuthorityBean {
     private RichTable assignedtemplateTable;
     private RichTable unassignedTemplateTable;
@@ -111,5 +122,35 @@ public class TemplateAuthorityBean {
 
     public void roleChangeListener(ValueChangeEvent valueChangeEvent) {
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.assignedtemplateTable);    
+    }
+
+
+    public void filterModuleName(ValueChangeEvent valueChangeEvent) {
+        
+        String filterVal = (String) valueChangeEvent.getNewValue();
+        FacesCtrlListBinding roleName = (FacesCtrlListBinding) JSFUtils.resolveExpression("#{bindings.RoleName}");
+       
+        ViewObject vo = (ViewObject) ADFUtils.findIterator("DcmRoleTemplateViewIterator").getViewObject();
+
+        
+        vo.setWhereClause("exists (select 1  from dcm_template " + 
+                                  "where dcm_template.id = DcmRoleTemplate.Template_Id " + 
+                                  "and dcm_template.name like '%"+filterVal+"%')");
+       
+        
+        vo.executeQuery(); 
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.assignedtemplateTable);    
+        
+    }
+
+    public void filterAddModuleName(ValueChangeEvent valueChangeEvent) {
+   
+        String filterVal = (String) valueChangeEvent.getNewValue();
+        ViewObject vo = (ViewObject) ADFUtils.findIterator("DcmUnAssignedTemplateIterator").getViewObject();
+
+        vo.setWhereClause("QRSLT.name like '%" + filterVal + "%'");
+         
+        vo.executeQuery(); 
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.unassignedTemplateTable);  
     }
 }

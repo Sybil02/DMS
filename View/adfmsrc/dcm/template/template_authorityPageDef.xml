@@ -15,7 +15,7 @@
               id="DcmUnAssignedTemplateIterator"/>
     <searchRegion Binds="DcmRoleTemplateViewIterator" Criteria=""
                   Customizer="oracle.jbo.uicli.binding.JUSearchBindingCustomizer"
-                  id="DcmRoleTemplateView1Query"/>
+                  id="DcmRoleTemplateViewQuery"/>
   </executables>
   <bindings>
     <list ListOperMode="navigation" IterBinding="DmsEnabledRoleIterator"
@@ -50,5 +50,7 @@
         </AttrNames>
       </nodeDefinition>
     </tree>
+    <list IterBinding="DcmRoleTemplateViewIterator" StaticList="false"
+          Uses="LOV_TemplateId" id="TemplateId" DTSupportsMRU="true"/>
   </bindings>
 </pageDefinition>
