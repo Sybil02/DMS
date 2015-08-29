@@ -28,7 +28,8 @@ import oracle.adf.view.rich.event.LaunchPopupEvent;
  import oracle.adf.view.rich.event.LaunchPopupListener;
  import oracle.adf.view.rich.model.AttributeCriterion;
  import oracle.adf.view.rich.model.AttributeDescriptor;
- import oracle.adf.view.rich.model.ColumnDescriptor;
+import oracle.adf.view.rich.model.AutoSuggestUIHints;
+import oracle.adf.view.rich.model.ColumnDescriptor;
  import oracle.adf.view.rich.model.ConjunctionCriterion;
  import oracle.adf.view.rich.model.Criterion;
  import oracle.adf.view.rich.model.ListOfValuesModel;
@@ -43,11 +44,13 @@ import oracle.adf.view.rich.event.LaunchPopupEvent;
 
  public class ComboboxLOVBean
  {
+     
      public ComboboxLOVBean(List<SelectItem> list, List<Attribute> attrName )
      {
          this(list, attrName, 0);
          
      }
+     //第三个参数是第几个列参数是作为搜索，选择的列
    public ComboboxLOVBean(List<SelectItem> list, List<Attribute> attrName, int valCol)
    { 
        setAttributes(attrName == null? new ArrayList<Attribute>():attrName);
@@ -58,10 +61,11 @@ import oracle.adf.view.rich.event.LaunchPopupEvent;
         if(list != null)
             for (SelectItem item : list)
             {
-              FileData data = new FileData(item.getValue().toString(), item.getValue().toString());
+              FileData data = new FileData(item.getValue().toString(), item.getLabel().toString());
                
-              _values.add(data); 
+              _values.add(data);  
             }
+        
         _filteredList.addAll(_values);
     } 
 
@@ -70,14 +74,18 @@ import oracle.adf.view.rich.event.LaunchPopupEvent;
    //验证程序提示显示的列名
    private String _label;
    
-   public void setName(String name)
-   {
-     _name = name;
+   public void setName(Object name)
+   { 
+
+       System.out.println("设置了name的值");
+      _name = name.toString();
    }
 
    public String getName()
-   {
-     return _name;
+   { 
+
+       System.out.println("得到了name的值");
+      return _name;
    }
     
      public void setLabel(String label)
@@ -282,6 +290,16 @@ import oracle.adf.view.rich.event.LaunchPopupEvent;
 
     public List<Attribute> getAttributes() {
         return _attributes;
+    } 
+
+    public void setMapItem(Map<String, Object> mapItem) {
+        this.mapItem = mapItem;
+    }
+
+    public Map<String, Object> getMapItem() {
+        if( mapItem == null)
+            mapItem = new HashMap();
+        return mapItem;
     }
 
     // In the real case, LOV is using ListBinding, and the MRU support is inside
@@ -579,7 +597,7 @@ import oracle.adf.view.rich.event.LaunchPopupEvent;
         //query的方法是在这里过滤的
      public void performQuery(QueryDescriptor qd)
      { 
-         System.out.println("perform  dddddd");
+         //System.out.println("perform  dddddd");
        AttributeCriterion criterion = (AttributeCriterion) qd.getConjunctionCriterion().getCriterionList().get(0);
        String ename = (String) criterion.getValues().get(0);
        _bean.filterList(ename, _bean._filteredList);
@@ -608,20 +626,21 @@ import oracle.adf.view.rich.event.LaunchPopupEvent;
        FileData rowData = _getRowData(value);
        if(rowData != null)
        {
-         _bean.setName(rowData.getName());
+         _bean.setName(rowData);
          _bean._addToRecentValuesList(rowData, _bean._recentValues);
        }
      }
      
      @Override
      public Object getValueFromSelection(Object selectedRow)
-     {
+     { 
+        
        FileData rowData = _getRowData(selectedRow);
        if(rowData != null)
        {
          return rowData.getName();
        }
-       return null;
+         return null;
      }
      
      private FileData _getRowData(Object selectedRow)
@@ -824,14 +843,12 @@ import oracle.adf.view.rich.event.LaunchPopupEvent;
        }
     
      public QueryDescriptor create(String name, QueryDescriptor qdBase)
-     {
-         System.out.println("23232323create"); 
+     { 
        return null;
      }
 
      public void delete(QueryDescriptor qd)
-     { 
-         System.out.println("23232323");
+     {  
      }
 
      public List<AttributeDescriptor> getAttributes()
@@ -840,22 +857,22 @@ import oracle.adf.view.rich.event.LaunchPopupEvent;
      }
 
      public List<QueryDescriptor> getSystemQueries()
-     { System.out.println("23232323getSystemQueries");
+     {  
        return null;
      }
 
      public List<QueryDescriptor> getUserQueries()
-     { System.out.println("23232323getUserQueries");
+     {  
        return null;
      }
 
      public void reset(QueryDescriptor qd)
      {  
-         System.out.println("23232323reset");
+        
      }
 
      public void setCurrentDescriptor(QueryDescriptor qd)
-     {System.out.println("23232323setCurrentDescriptor");
+     { 
      }
 
      public void update(QueryDescriptor qd, Map<String, Object> uiHints)
@@ -1038,8 +1055,8 @@ import oracle.adf.view.rich.event.LaunchPopupEvent;
        
        if(_values == null)
        {
-         _values = new ArrayList<Object>();
-         _values.add("A");
+         _values = new ArrayList<Object>();//可以设置搜索框的值
+        // _values.add("A");
        }
      }
 
@@ -1215,9 +1232,10 @@ import oracle.adf.view.rich.event.LaunchPopupEvent;
 
    public class FileData
    {
-     private String name; 
+     private String name;  
      private String rowId;
-
+    
+     
      FileData(String rowId, String name)
      { 
         this.rowId = rowId;
@@ -1239,8 +1257,9 @@ import oracle.adf.view.rich.event.LaunchPopupEvent;
         }
 
         public String getName() {
+
             return name;
-        }
+        } 
     }
 
 //   public class DemoLOVPopupListener implements LaunchPopupListener
@@ -1299,4 +1318,28 @@ import oracle.adf.view.rich.event.LaunchPopupEvent;
             return value;
         }
     }
+  
+   private Map<String,Object> mapItem;  //用户映射外键
+     
+   public List suggestMethod(FacesContext facesContext,
+                               AutoSuggestUIHints autoSuggestUIHints) {
+         
+          
+         String key = autoSuggestUIHints.getSubmittedValue();  
+         System.out.println("valueSet 的大小是 :" + _values.size());
+         List<SelectItem> res = new ArrayList<SelectItem>();
+         
+         for(int i = _values.size()-1; i>=0; i-- ) {
+             
+             FileData data = (FileData)_values.get(i);
+             if( data.getName().contains(key)) { 
+                 SelectItem item = new SelectItem();
+                 item.setValue(data.getName());
+                 item.setLabel(data.getName());
+                 res.add(item);
+             }
+         }
+         return res;
+     }
+ 
  }
