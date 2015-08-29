@@ -159,6 +159,7 @@
                             />
                 <af:inputComboboxListOfValues label="#{attr.columnLabel}"
                               id="inputComboboxListOfValues1"
+                              value="#{row[attr.dbTableCol]}" 
                               valueChangeListener="#{viewScope.DcmDataDisplayBean.valueChangeListener}"
                               validator="#{viewScope.DcmDataDisplayBean.comboboxLOVBeanList[vs.index%999].validate}"
                               autoSubmit="true"
@@ -166,7 +167,7 @@
                               model="#{viewScope.DcmDataDisplayBean.comboboxLOVBeanList[vs.index%999].listOfValuesModel}"
                               popupTitle="#{attr.columnLabel}  列表"
                               >
-                 <af:autoSuggestBehavior suggestItems="#{viewScope.DcmDataDisplayBean.suggestMethod}" 
+                 <af:autoSuggestBehavior suggestItems="#{viewScope.DcmDataDisplayBean.comboboxLOVBeanList[vs.index%999].suggestMethod}" 
                                         maxSuggestedItems="#{vs.index}"/>  
               </af:inputComboboxListOfValues>
               
