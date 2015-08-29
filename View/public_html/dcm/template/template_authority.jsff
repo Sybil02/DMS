@@ -95,11 +95,14 @@
                   emptyText="#{viewBundle['dms.common.nodata']}"
                   fetchSize="#{bindings.DcmRoleTemplateView.rangeSize}"
                   rowBandingInterval="0"
+                  filterModel="#{bindings.DcmRoleTemplateView1Query.queryDescriptor}"
+                  queryListener="#{bindings.DcmRoleTemplateView1Query.processQuery}"
                   selectionListener="#{bindings.DcmRoleTemplateView.collectionModel.makeCurrent}"
                   rowSelection="multiple" id="t1"
                   binding="#{TemplateAuthorityBean.assignedtemplateTable}">
           <af:column sortProperty="#{bindings.DcmRoleTemplateView.hints.TemplateId.name}"
                      sortable="false"
+                     filterable="true"
                      headerText="#{bindings.DcmRoleTemplateView.hints.TemplateId.label}"
                      id="c3">
             <af:selectOneChoice value="#{row.bindings.TemplateId.inputValue}"
@@ -112,7 +115,7 @@
           </af:column>
           <af:column sortProperty="#{bindings.DcmRoleTemplateView.hints.ReadOnly.name}"
                      sortable="false"
-                     headerText="#{bindings.DcmRoleTemplateView.hints.ReadOnly.label}"
+                     headerText="#{bindings.DcmRoleTemplateView.hints.ReadOnly.label}" 
                      id="c1">
             <af:selectOneChoice value="#{row.bindings.ReadOnly.inputValue}"
                                 label="#{row.bindings.ReadOnly.label}"
@@ -123,7 +126,7 @@
             </af:selectOneChoice>
           </af:column>
           <af:column sortProperty="#{bindings.DcmRoleTemplateView.hints.UpdatedAt.name}"
-                     sortable="false"
+                     sortable="true"
                      headerText="#{bindings.DcmRoleTemplateView.hints.UpdatedAt.label}"
                      id="c4">
             <af:outputText value="#{row.UpdatedAt}" id="ot2">
@@ -131,7 +134,7 @@
             </af:outputText>
           </af:column>
           <af:column sortProperty="#{bindings.DcmRoleTemplateView.hints.UpdatedBy.name}"
-                     sortable="false"
+                     sortable="true"
                      headerText="#{bindings.DcmRoleTemplateView.hints.UpdatedBy.label}"
                      id="c2">
             <af:selectOneChoice value="#{row.bindings.UpdatedBy.inputValue}"

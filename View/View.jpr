@@ -877,6 +877,10 @@
             <value n="isJDK" v="false"/>
          </hash>
          <hash>
+            <url n="id" path="../../../../../Users/Administrator/AppData/Roaming/JDeveloper/system11.1.1.7.40.64.93/o.jdeveloper/Adf_121300_1008_source.zip.library"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
             <value n="id" v="Oracle XML Parser v2"/>
             <value n="isJDK" v="false"/>
          </hash>
@@ -906,10 +910,6 @@
          </hash>
          <hash>
             <value n="id" v="BC4J Oracle Domains"/>
-            <value n="isJDK" v="false"/>
-         </hash>
-         <hash>
-            <url n="id" protocol="file" path="/C:/Users/Administrator/AppData/Roaming/JDeveloper/system11.1.1.7.40.64.93/o.jdeveloper/Adf_121300_1008_source.zip.library"/>
             <value n="isJDK" v="false"/>
          </hash>
       </list>
@@ -1208,6 +1208,10 @@
             <value n="isJDK" v="false"/>
          </hash>
          <hash>
+            <url n="id" path="../../../../../Users/Administrator/AppData/Roaming/JDeveloper/system11.1.1.7.40.64.93/o.jdeveloper/Adf_121300_1008_source.zip.library"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
             <value n="id" v="Oracle XML Parser v2"/>
             <value n="isJDK" v="false"/>
          </hash>
@@ -1237,10 +1241,6 @@
          </hash>
          <hash>
             <value n="id" v="BC4J Oracle Domains"/>
-            <value n="isJDK" v="false"/>
-         </hash>
-         <hash>
-            <url n="id" protocol="file" path="/C:/Users/Administrator/AppData/Roaming/JDeveloper/system11.1.1.7.40.64.93/o.jdeveloper/Adf_121300_1008_source.zip.library"/>
             <value n="isJDK" v="false"/>
          </hash>
       </list>
