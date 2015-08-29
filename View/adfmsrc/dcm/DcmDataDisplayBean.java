@@ -177,8 +177,7 @@ public class DcmDataDisplayBean extends TablePagination{
     //审批步骤编码
     private int approveStepNo = 0;
     //初始化
-    public DcmDataDisplayBean() {
-        System.out.println("+++++++++++++++++++++++++++");
+    public DcmDataDisplayBean() { 
         this.curUser =(Person)ADFContext.getCurrent().getSessionScope().get("cur_user");
         this.dataModel = new DcmDataTableModel();
         this.initTemplate();
@@ -705,6 +704,7 @@ public class DcmDataDisplayBean extends TablePagination{
     }
     //获取值列表
     private List<SelectItem> fetchValueList(String vsId){
+        
         List<SelectItem> list=new ArrayList<SelectItem>();
         list.add(new SelectItem("",""));
         Row[] vsRows=DmsUtils.getDmsApplicationModule().getDmsValueSetView()
@@ -1587,35 +1587,13 @@ public class DcmDataDisplayBean extends TablePagination{
     public String getApproveStatus() {
         return approveStatus;
     }
-
-
-    public List suggestMethod(FacesContext facesContext,
-                              AutoSuggestUIHints autoSuggestUIHints) {
-        
-        int colIndex = autoSuggestUIHints.getMaxSuggestedItems();
-        String key = autoSuggestUIHints.getSubmittedValue(); 
-        List<SelectItem> valueSet = (List)this.valueSet.get(colIndex); 
-        List<SelectItem> res = new ArrayList<SelectItem>();
-        
-        for(int i = valueSet.size()-1; i>=0; i-- ) {
-             
-            if( valueSet.get(i).getValue().toString().contains(key)) { 
-                res.add(valueSet.get(i));
-            } 
-        }
-              
-        autoSuggestUIHints.setMaxSuggestedItems(15);
-        
-        return res;
-    }
-  
+ 
 
     public void setComboboxLOVBeanList(List< ComboboxLOVBean> _comboboxLOVBeanList) {
         this._comboboxLOVBeanList = _comboboxLOVBeanList;
     }
 
-    public List<ComboboxLOVBean> getComboboxLOVBeanList() { 
-        System.out.println("121212");
+    public List<ComboboxLOVBean> getComboboxLOVBeanList() {  
         return _comboboxLOVBeanList;
     }
 }
