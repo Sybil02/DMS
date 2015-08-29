@@ -44,6 +44,7 @@
                <f:facet name="menus"/>
                <f:facet name="toolbar">
                   <af:toolbar id="t1">
+                    
                      <af:group id="g1">
                         <af:selectOneChoice value="#{bindings.GroupName.inputValue}"
                                             label="#{bindings.GroupName.label}"
@@ -54,6 +55,7 @@
                            <f:selectItems value="#{bindings.GroupName.items}"
                                           id="si1"/>
                         </af:selectOneChoice>
+                        <af:outputLabel value="#{viewBundle['dms.value.name']}" id="ol1"/>
                         <af:inputComboboxListOfValues label="#{attr.columnLabel}"
                                                       id="imlov1"
                                                       valueChangeListener="#{viewScope.ValueSetAuthorityBean.valuesetChangeListener}"
@@ -65,6 +67,7 @@
                            <af:autoSuggestBehavior suggestItems="#{viewScope.ValueSetAuthorityBean.comboboxLOVBean.suggestMethod}"/>
                         </af:inputComboboxListOfValues>
                      </af:group>
+                     
                      <af:group id="g2">
                         <af:commandButton text="#{viewBundle['dms.common.add']}"
                                           id="cb1"
