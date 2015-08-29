@@ -36,11 +36,8 @@
             </af:panelWindow>
          </af:popup>
       </f:facet>
-      <f:facet name="center">
-         <af:panelGroupLayout layout="scroll"
-                              xmlns:af="http://xmlns.oracle.com/adf/faces/rich"
-                              id="pgl1">
-            <af:panelCollection id="pc1" inlineStyle="width:1151px;">
+      <f:facet name="center"> 
+            <af:panelCollection id="pc1" >
                <f:facet name="menus"/>
                <f:facet name="toolbar">
                   <af:toolbar id="t1">
@@ -89,7 +86,7 @@
                          selectionListener="#{bindings.DmsGroupValueView.collectionModel.makeCurrent}"
                          rowSelection="multiple" id="t2"
                          binding="#{viewScope.ValueSetAuthorityBean.assignedValueTable}"
-                         width="786">
+                         >
                   <af:column sortProperty="#{bindings.DmsGroupValueView.hints.ValueId.name}"
                              sortable="false"
                              filterable="true" 
@@ -120,10 +117,7 @@
                      </af:outputText>
                   </af:column>
                </af:table>
-            </af:panelCollection>
-            
-            
-         </af:panelGroupLayout>
+            </af:panelCollection> 
       </f:facet>
    </af:panelStretchLayout>
 </jsp:root>

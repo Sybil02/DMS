@@ -69,10 +69,8 @@
       </af:popup>
     </f:facet>
     <f:facet name="center">
-      <af:panelGroupLayout layout="vertical"
-                           xmlns:af="http://xmlns.oracle.com/adf/faces/rich"
-                           id="pgl1">
-        <af:panelCollection id="pc2" inlineStyle="height:620px; width:590px;">
+ 
+        <af:panelCollection id="pc2"  >
           <f:facet name="toolbar">
             <af:toolbar id="t7">
               <af:group id="g1">
@@ -115,7 +113,7 @@
                     binding="#{TemplateAuthorityBean.assignedtemplateTable}" >
             <af:column sortProperty="#{bindings.DcmRoleTemplateView.hints.TemplateId.name}"
                        sortable="false" filterable="true"
-                       width="250"
+                       width="270"
                        headerText="#{bindings.DcmRoleTemplateView.hints.TemplateId.label}"
                        id="c3">
               <af:selectOneChoice value="#{row.bindings.TemplateId.inputValue}"
@@ -134,7 +132,7 @@
             <af:column sortProperty="#{bindings.DcmRoleTemplateView.hints.ReadOnly.name}"
                        sortable="false"
                        headerText="#{bindings.DcmRoleTemplateView.hints.ReadOnly.label}"
-                       id="c1">
+                       id="c1" width="120">
               <af:selectOneChoice value="#{row.bindings.ReadOnly.inputValue}"
                                   label="#{row.bindings.ReadOnly.label}"
                                   required="#{bindings.DcmRoleTemplateView.hints.ReadOnly.mandatory}"
@@ -146,7 +144,7 @@
             <af:column sortProperty="#{bindings.DcmRoleTemplateView.hints.UpdatedAt.name}"
                        sortable="true"
                        headerText="#{bindings.DcmRoleTemplateView.hints.UpdatedAt.label}"
-                       id="c4">
+                       id="c4" width="129">
               <af:outputText value="#{row.UpdatedAt}" id="ot2">
                 <af:convertDateTime pattern="#{bindings.DcmRoleTemplateView.hints.UpdatedAt.format}"/>
               </af:outputText>
@@ -154,7 +152,7 @@
             <af:column sortProperty="#{bindings.DcmRoleTemplateView.hints.UpdatedBy.name}"
                        sortable="true"
                        headerText="#{bindings.DcmRoleTemplateView.hints.UpdatedBy.label}"
-                       id="c2">
+                       id="c2" width="111">
               <af:selectOneChoice value="#{row.bindings.UpdatedBy.inputValue}"
                                   label="#{row.bindings.UpdatedBy.label}"
                                   required="#{bindings.DcmRoleTemplateView.hints.UpdatedBy.mandatory}"
@@ -165,8 +163,7 @@
               </af:selectOneChoice>
             </af:column>
           </af:table>
-        </af:panelCollection> 
-      </af:panelGroupLayout>
+        </af:panelCollection>  
     </f:facet>
   </af:panelStretchLayout>
 </jsp:root>
