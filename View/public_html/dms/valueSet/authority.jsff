@@ -37,75 +37,90 @@
          </af:popup>
       </f:facet>
       <f:facet name="center">
-         <af:panelCollection id="pc1">
-            <f:facet name="menus"/>
-            <f:facet name="toolbar">
-               <af:toolbar id="t1">
-                  <af:group id="g1">
-                     <af:selectOneChoice value="#{bindings.GroupName.inputValue}"
-                                         label="#{bindings.GroupName.label}"
-                                         required="#{bindings.GroupName.hints.mandatory}"
-                                         shortDesc="#{bindings.GroupName.hints.tooltip}"
-                                         id="soc1" autoSubmit="true"
-                                         valueChangeListener="#{viewScope.ValueSetAuthorityBean.groupChangeListener}">
-                        <f:selectItems value="#{bindings.GroupName.items}"
-                                       id="si1"/>
+         <af:panelGroupLayout layout="scroll"
+                              xmlns:af="http://xmlns.oracle.com/adf/faces/rich"
+                              id="pgl1">
+            <af:panelCollection id="pc1" inlineStyle="width:1151px;">
+               <f:facet name="menus"/>
+               <f:facet name="toolbar">
+                  <af:toolbar id="t1">
+                     <af:group id="g1">
+                        <af:selectOneChoice value="#{bindings.GroupName.inputValue}"
+                                            label="#{bindings.GroupName.label}"
+                                            required="#{bindings.GroupName.hints.mandatory}"
+                                            shortDesc="#{bindings.GroupName.hints.tooltip}"
+                                            id="soc1" autoSubmit="true"
+                                            valueChangeListener="#{viewScope.ValueSetAuthorityBean.groupChangeListener}">
+                           <f:selectItems value="#{bindings.GroupName.items}"
+                                          id="si1"/>
+                        </af:selectOneChoice>
+                        <af:inputComboboxListOfValues label="#{attr.columnLabel}"
+                                                      id="imlov1"
+                                                      valueChangeListener="#{viewScope.ValueSetAuthorityBean.valuesetChangeListener}"
+                                                      validator="#{viewScope.ValueSetAuthorityBean.comboboxLOVBean.validate}"
+                                                      autoSubmit="true"
+                                                      value="#{bindings.Name.name}"
+                                                      model="#{viewScope.ValueSetAuthorityBean.comboboxLOVBean.listOfValuesModel}"
+                                                      popupTitle="#{bindings.Name.label}  列表">
+                           <af:autoSuggestBehavior suggestItems="#{viewScope.ValueSetAuthorityBean.comboboxLOVBean.suggestMethod}"/>
+                        </af:inputComboboxListOfValues>
+                     </af:group>
+                     <af:group id="g2">
+                        <af:commandButton text="#{viewBundle['dms.common.add']}"
+                                          id="cb1"
+                                          actionListener="#{viewScope.ValueSetAuthorityBean.add_value}"/>
+                        <af:commandButton text="#{viewBundle['dcm.common.delete']}"
+                                          id="cb2"
+                                          actionListener="#{viewScope.ValueSetAuthorityBean.remove_value}"/>
+                     </af:group>
+                  </af:toolbar>
+               </f:facet>
+               <f:facet name="statusbar"/>
+               <af:table value="#{bindings.DmsGroupValueView.collectionModel}"
+                         var="row"
+                         rows="#{bindings.DmsGroupValueView.rangeSize}"
+                         emptyText="#{viewBundle['dms.common.nodata']}"
+                         fetchSize="#{bindings.DmsGroupValueView.rangeSize}"
+                         rowBandingInterval="0" filterVisible="true"
+                         filterModel="#{bindings.DmsGroupValueView.queryDescriptor}"
+                         selectionListener="#{bindings.DmsGroupValueView.collectionModel.makeCurrent}"
+                         rowSelection="multiple" id="t2"
+                         binding="#{viewScope.ValueSetAuthorityBean.assignedValueTable}"
+                         width="786">
+                  <af:column sortProperty="#{bindings.DmsGroupValueView.hints.ValueId.name}"
+                             sortable="false"
+                             filterable="true" 
+                             headerText="#{bindings.DmsGroupValueView.hints.ValueId.label}"
+                             id="c1">
+                     <af:outputText value="#{viewScope.ValueSetAuthorityBean.valueMap[row.ValueId]}"
+                                    id="ot1"/>
+                  </af:column>
+                  <af:column sortProperty="#{bindings.DmsGroupValueView.hints.UpdatedBy.name}"
+                             sortable="false"
+                             headerText="#{bindings.DmsGroupValueView.hints.UpdatedBy.label}"
+                             id="c2">
+                     <af:selectOneChoice value="#{row.bindings.UpdatedBy.inputValue}"
+                                         label="#{row.bindings.UpdatedBy.label}"
+                                         required="#{bindings.DmsGroupValueView.hints.UpdatedBy.mandatory}"
+                                         shortDesc="#{bindings.DmsGroupValueView.hints.UpdatedBy.tooltip}"
+                                         id="soc3" readOnly="true">
+                        <f:selectItems value="#{row.bindings.UpdatedBy.items}"
+                                       id="si3"/>
                      </af:selectOneChoice>
-                     <af:selectOneChoice value="#{bindings.Name.inputValue}"
-                                         label="#{bindings.Name.label}"
-                                         required="#{bindings.Name.hints.mandatory}"
-                                         shortDesc="#{bindings.Name.hints.tooltip}"
-                                         id="soc2" autoSubmit="true"
-                                         valueChangeListener="#{viewScope.ValueSetAuthorityBean.valuesetChangeListener}">
-                        <f:selectItems value="#{bindings.Name.items}" id="si2"/>
-                     </af:selectOneChoice>
-                  </af:group>
-                  <af:group id="g2">
-                     <af:commandButton text="#{viewBundle['dms.common.add']}" id="cb1"
-                                       actionListener="#{viewScope.ValueSetAuthorityBean.add_value}"/>
-                     <af:commandButton  text="#{viewBundle['dcm.common.delete']}" id="cb2"
-                                       actionListener="#{viewScope.ValueSetAuthorityBean.remove_value}"/>
-                  </af:group>
-               </af:toolbar>
-            </f:facet>
-            <f:facet name="statusbar"/>
-            <af:table value="#{bindings.DmsGroupValueView.collectionModel}"
-                      var="row" rows="#{bindings.DmsGroupValueView.rangeSize}"
-                      emptyText="#{viewBundle['dms.common.nodata']}"
-                      fetchSize="#{bindings.DmsGroupValueView.rangeSize}"
-                      rowBandingInterval="0"
-                      selectionListener="#{bindings.DmsGroupValueView.collectionModel.makeCurrent}"
-                      rowSelection="multiple" id="t2"
-                      binding="#{viewScope.ValueSetAuthorityBean.assignedValueTable}">
-               <af:column sortProperty="#{bindings.DmsGroupValueView.hints.ValueId.name}"
-                          sortable="false"
-                          headerText="#{bindings.DmsGroupValueView.hints.ValueId.label}"
-                          id="c1">
-                  <af:outputText value="#{viewScope.ValueSetAuthorityBean.valueMap[row.ValueId]}" id="ot1"/>
-               </af:column>
-               <af:column sortProperty="#{bindings.DmsGroupValueView.hints.UpdatedBy.name}"
-                          sortable="false"
-                          headerText="#{bindings.DmsGroupValueView.hints.UpdatedBy.label}"
-                          id="c2">
-                  <af:selectOneChoice value="#{row.bindings.UpdatedBy.inputValue}"
-                                      label="#{row.bindings.UpdatedBy.label}"
-                                      required="#{bindings.DmsGroupValueView.hints.UpdatedBy.mandatory}"
-                                      shortDesc="#{bindings.DmsGroupValueView.hints.UpdatedBy.tooltip}"
-                                      id="soc3" readOnly="true">
-                     <f:selectItems value="#{row.bindings.UpdatedBy.items}"
-                                    id="si3"/>
-                  </af:selectOneChoice>
-               </af:column>
-               <af:column sortProperty="#{bindings.DmsGroupValueView.hints.UpdatedAt.name}"
-                          sortable="false"
-                          headerText="#{bindings.DmsGroupValueView.hints.UpdatedAt.label}"
-                          id="c3">
-                  <af:outputText value="#{row.UpdatedAt}" id="ot3">
-                     <af:convertDateTime pattern="#{bindings.DmsGroupValueView.hints.UpdatedAt.format}"/>
-                  </af:outputText>
-               </af:column>
-            </af:table>
-         </af:panelCollection>
+                  </af:column>
+                  <af:column sortProperty="#{bindings.DmsGroupValueView.hints.UpdatedAt.name}"
+                             sortable="false"
+                             headerText="#{bindings.DmsGroupValueView.hints.UpdatedAt.label}"
+                             id="c3">
+                     <af:outputText value="#{row.UpdatedAt}" id="ot3">
+                        <af:convertDateTime pattern="#{bindings.DmsGroupValueView.hints.UpdatedAt.format}"/>
+                     </af:outputText>
+                  </af:column>
+               </af:table>
+            </af:panelCollection>
+            
+            
+         </af:panelGroupLayout>
       </f:facet>
    </af:panelStretchLayout>
 </jsp:root>

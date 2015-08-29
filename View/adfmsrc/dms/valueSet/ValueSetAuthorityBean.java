@@ -5,6 +5,8 @@ import common.DmsUtils;
 
 import common.JSFUtils;
 
+import dcm.ComboboxLOVBean;
+
 import dms.login.Person;
 
 import java.sql.ResultSet;
@@ -15,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 
@@ -25,6 +28,7 @@ import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 
 import oracle.adf.model.BindingContext;
+import oracle.adf.model.binding.DCBindingContainer;
 import oracle.adf.model.binding.DCIteratorBinding;
 import oracle.adf.share.ADFContext;
 import oracle.adf.share.logging.ADFLogger;
@@ -32,6 +36,8 @@ import oracle.adf.view.rich.component.rich.RichPopup;
 import oracle.adf.view.rich.component.rich.data.RichTable;
 import oracle.adf.view.rich.component.rich.input.RichSelectManyShuttle;
 import oracle.adf.view.rich.context.AdfFacesContext;
+
+import oracle.adfinternal.view.faces.model.binding.FacesCtrlListBinding;
 
 import oracle.binding.BindingContainer;
 
@@ -61,7 +67,31 @@ public class ValueSetAuthorityBean {
     private RichTable assignedValueTable;
     private RichPopup popup;
     private RichTable unassignedValueTable;
-
+    private ComboboxLOVBean comboboxLOVBean;//搜索查找框，集值的 
+     
+    
+    public ValueSetAuthorityBean() {
+        DCBindingContainer bindings = (DCBindingContainer)BindingContext.getCurrent().getCurrentBindingsEntry();
+        
+        //System.out.println(bindings.get("Names"));
+        List<SelectItem> data = (List)JSFUtils.resolveExpression("#{bindings.Name.items}");
+    
+        String label = (String)JSFUtils.resolveExpression("#{bindings.Name.label}");
+        
+        List<ComboboxLOVBean.Attribute> attrs = new ArrayList<ComboboxLOVBean.Attribute>();
+        attrs.add(new ComboboxLOVBean.Attribute(label ,"name"));
+        for(SelectItem item : data) {
+            System.out.println(item.getLabel()+"   "+item.getValue());
+        }
+       ComboboxLOVBean comboboxBean = new ComboboxLOVBean(data, attrs);
+        
+       setComboboxLOVBean( comboboxBean );  
+       
+       for(int i = 0; i < data.size(); i++)
+            comboboxBean.getMapItem().put(data.get(i).getLabel(), i);
+       
+    }
+    
     public void setAssignedValueTable(RichTable assignedValueTable) {
         this.assignedValueTable = assignedValueTable;
     }
@@ -75,9 +105,37 @@ public class ValueSetAuthorityBean {
     }
 
     public void valuesetChangeListener(ValueChangeEvent valueChangeEvent) {
-        Row row=ADFUtils.findIterator("DmsValueSetViewIterator").getRowSetIterator().getRowAtRangeIndex((Integer)valueChangeEvent.getNewValue());
-        this.refreshValueMap(row);
+        
+        String setMap = valueChangeEvent.getNewValue().toString(); 
+        
+        FacesCtrlListBinding name =  (FacesCtrlListBinding) JSFUtils.resolveExpression("#{bindings.Name}");
+        Integer rowid = (Integer) getComboboxLOVBean().getMapItem().get(setMap); 
+        if(rowid == null)
+            return ;
+        
+        name.setInputValue(rowid);
+        
+        Row row=ADFUtils.findIterator("DmsValueSetViewIterator").getRowSetIterator().getRowAtRangeIndex( rowid );
+        this.refreshValueMap(row); 
+        
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.assignedValueTable);
+        ADFUtils.findIterator("DmsGroupValueViewIterator").getViewObject().executeQuery();
+        return ;
+//        
+//        ADFUtils.findIterator("getDmsValueViewIterator").getViewObject().executeQuery();
+//        FacesCtrlListBinding name =  (FacesCtrlListBinding) JSFUtils.resolveExpression("#{bindings.Name}");
+//         System.out.println(name.getInputValue()+"              ][]][[[[[");
+//            
+//        name.setInputValue(3);
+//        ADFUtils.findIterator("getDmsValueViewIterator").getViewObject().executeQuery();
+//        System.out.println(name.getInputValue()+"              ][]][[ddd[[[");
+//        //Row row = ADFUtils.findIterator("DmsValueSetViewIterator").getRowSetIterator().getRowAtRangeIndex((Integer)valueChangeEvent.getNewValue());
+//        
+//        
+//        
+//
+//        
+//        AdfFacesContext.getCurrentInstance().addPartialTarget(this.assignedValueTable);
     }
 
     public void setValueMap(Map valueMap) {
@@ -91,7 +149,7 @@ public class ValueSetAuthorityBean {
         return valueMap;
     }
     private void refreshValueMap(Row row){
-        this.valueMap=new HashMap();
+        this.valueMap = new HashMap();
         ViewObject valueSetVo=ADFUtils.findIterator("DmsValueSetViewIterator").getViewObject();
         if(row==null){
             row=valueSetVo.getCurrentRow();
@@ -189,5 +247,13 @@ public class ValueSetAuthorityBean {
 
     public RowKeySet getSelectedRows() {
         return selectedRows;
+    }
+
+    public void setComboboxLOVBean(ComboboxLOVBean comboboxLOVBean) {
+        this.comboboxLOVBean = comboboxLOVBean;
+    }
+
+    public ComboboxLOVBean getComboboxLOVBean() {
+        return comboboxLOVBean;
     }
 }
