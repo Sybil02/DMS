@@ -533,7 +533,7 @@ import oracle.adf.view.rich.model.ColumnDescriptor;
      {
        _bean = bean;
        _attributes = attr;
-       tableModel = new TableModelImpl(_bean.getListModel(), _attributes);
+      
      }
 
      /**
@@ -569,6 +569,8 @@ import oracle.adf.view.rich.model.ColumnDescriptor;
      @Override
      public TableModel getTableModel()
      {
+         if(tableModel == null)
+              tableModel = new TableModelImpl(_bean.getListModel(), _attributes);
          return tableModel;
      }
      
@@ -1105,7 +1107,8 @@ import oracle.adf.view.rich.model.ColumnDescriptor;
      @Override
      public List<ColumnDescriptor> getColumnDescriptors()
      {
-         
+       if(_attributes == null) return new ArrayList<ColumnDescriptor>();
+      
        if (_descriptors == null)
        {
          _descriptors = new ArrayList<ColumnDescriptor>(_attributes.size());
