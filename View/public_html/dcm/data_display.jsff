@@ -3,7 +3,7 @@
           xmlns:af="http://xmlns.oracle.com/adf/faces/rich"
           xmlns:f="http://java.sun.com/jsf/core"
           xmlns:c="http://java.sun.com/jsp/jstl/core">
-  <c:set var="viewBundle" value="#{adfBundle['dms_v']}"/>
+  <c:set var="viewBundle" value="#{adfBundle['dms_v']}"/> 
   <af:panelStretchLayout id="psl1" bottomHeight="0"
                          topHeight="#{viewScope.DcmDataDisplayBean.combinationId==null ? '0px':'35px'}">
     <f:facet name="top">
@@ -384,18 +384,18 @@
         </af:popup>
         <!-- 计算程序 -->
         <af:popup id="p5" autoCancel="disabled" binding="#{viewScope.DcmDataDisplayBean.calcWnd}">
-          <af:panelWindow title="运行计算程序" id="pw5" >
+          <af:panelWindow title="#{viewBundle['dms.cal.run']}" id="pw5" >
             <af:panelStretchLayout id="psl3" inlineStyle="width:400px;height:200px">
               <f:facet name="top">
                 <af:panelGroupLayout id="pgl5" layout="horizontal">
-                  <af:selectOneChoice label="计算程序" id="soc3"
+                  <af:selectOneChoice label="#{viewBundle['dms.cal.proc']}" id="soc3"
                    autoSubmit="true"
                    valueChangeListener="#{viewScope.DcmDataDisplayBean.calcChange}">
                     <f:selectItems value="#{viewScope.DcmDataDisplayBean.calcNameList}"
                                    id="si3"/>
                   </af:selectOneChoice>
                   <af:spacer width="15px" id="s5"/>
-                  <af:commandButton text="运行" id="cb12"
+                  <af:commandButton text="#{viewBundle['dms.run']}" id="cb12"
                                     actionListener="#{viewScope.DcmDataDisplayBean.executeProcedure}"/>
                 </af:panelGroupLayout>
               </f:facet>
@@ -418,4 +418,6 @@
       </af:panelGroupLayout>
     </f:facet>
   </af:panelStretchLayout>
+  
+  <!--oracle-jdev-comment:preferred-managed-bean-name:DcmDataDisplayBean-->
 </jsp:root>
