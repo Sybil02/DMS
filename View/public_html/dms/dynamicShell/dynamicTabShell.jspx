@@ -83,13 +83,12 @@
         <attribute>
           <attribute-name>dirtyTabPopupTitle</attribute-name>
           <attribute-class>java.lang.String</attribute-class>
-          <default-value>Current Tab is Dirty</default-value>
+          <default-value>当前模板未保存</default-value>
         </attribute>
         <attribute>
           <attribute-name>dirtyTabPopupText</attribute-name>
           <attribute-class>java.lang.String</attribute-class>
-          <default-value>The current tab is dirty, would you like to close it
-                         anyway?</default-value>
+          <default-value>当前模板未保存，是否关闭模板？</default-value>
         </attribute>
         <attribute>
           <attribute-name>logoImagePath</attribute-name>

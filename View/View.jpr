@@ -673,7 +673,11 @@
          <hash n="Copy of Default">
             <value n="custom" v="false"/>
             <value n="name" v="Copy of Default"/>
-            <url n="targetURL" path="src/common/MailTest.java"/>
+            <hash n="oracle.adfdt.controller.adfc.source.runner.JsfJspRunnerLaunchSettings">
+               <value n="delegateRunTarget" v="/WEB-INF/adfc-config.xml"/>
+               <value n="viewActivityId" v="dcmIndex"/>
+            </hash>
+            <url n="targetURL" path="public_html/index.jspx"/>
          </hash>
          <hash n="Default">
             <value n="custom" v="false"/>
@@ -690,7 +694,7 @@
                <value n="remoteParameter:jpdaListen:localAddress" v=""/>
             </hash>
             <value n="programArguments" v=""/>
-            <url n="targetURL" path="public_html/index.jspx"/>
+            <url n="targetURL" path="public_html/dcm/index.jspx"/>
             <value n="VMName" v="server"/>
          </hash>
       </hash>

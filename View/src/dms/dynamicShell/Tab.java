@@ -81,4 +81,10 @@ public class Tab implements Serializable {
         this._index = index;
         this._taskflowId = id;
     }
+    
+    Tab() {
+        setActive(false);
+        _index = -1;
+    }
+    
 }

@@ -10,8 +10,9 @@ import common.TablePagination;
 import dcm.combinantion.CombinationEO;
 
 import dcm.template.TemplateEO;
+ 
 
-import dms.dynamicShell.Tab;
+import dms.dynamicShell.TabContext;
 
 import dms.login.Person;
 
@@ -48,16 +49,13 @@ import java.util.UUID;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import javax.faces.event.ActionEvent;
-import javax.faces.event.FacesEvent;
+import javax.faces.event.ActionEvent; 
 import javax.faces.event.ValueChangeEvent;
 
 import javax.faces.model.SelectItem;
 
-import javax.mail.MessagingException;
-import javax.mail.internet.AddressException;
-
-import oracle.adf.controller.v2.context.PageLifecycleContext;
+import oracle.adf.controller.ControllerContext;
+import oracle.adf.controller.ViewPortContext;
 import oracle.adf.model.binding.DCIteratorBinding;
 import oracle.adf.model.binding.DCIteratorBindingDef;
 import oracle.adf.share.ADFContext;
@@ -70,6 +68,7 @@ import oracle.adf.view.rich.component.rich.input.RichSelectOneChoice;
 import oracle.adf.view.rich.component.rich.output.RichPanelCollection;
 import oracle.adf.view.rich.context.AdfFacesContext;
 
+import oracle.adf.view.rich.context.DirtyPageHandler;
 import oracle.adf.view.rich.event.QueryEvent;
 import oracle.adf.view.rich.model.AutoSuggestUIHints;
 import oracle.adf.view.rich.model.FilterableQueryDescriptor;
@@ -78,6 +77,8 @@ import oracle.adf.view.rich.model.ListOfValuesModel;
 
 import oracle.adf.view.rich.model.QueryModel;
 import oracle.adf.view.rich.model.TableModel;
+
+ 
 
 import oracle.jbo.ApplicationModule;
 import oracle.jbo.Key;
@@ -177,6 +178,8 @@ public class DcmDataDisplayBean extends TablePagination{
     //审批步骤编码
     private int approveStepNo = 0;
     //初始化
+    private TabContext dmsTabContext;
+    
     public DcmDataDisplayBean() { 
         this.curUser =(Person)ADFContext.getCurrent().getSessionScope().get("cur_user");
         this.dataModel = new DcmDataTableModel();
@@ -228,6 +231,8 @@ public class DcmDataDisplayBean extends TablePagination{
         }
         newRow.put("OPERATION", DcmDataTableModel.OPERATE_CREATE);
         modelData.add(0, newRow);
+        
+        this.makeDirty(true);//调用这个方法会使得页面处于未保存状态，删除会提示
     }
     //删除数据行操作
     public void operation_delete() {
@@ -239,11 +244,13 @@ public class DcmDataDisplayBean extends TablePagination{
             //若为新增操作则直接从数据集删除数据
             if (DcmDataTableModel.OPERATE_CREATE.equals(rowData.get("OPERATION"))) {
                 modelData.remove(rowData);
+                this.makeDirty(true);//调用这个方法会使得页面处于未保存状态，删除会提示
             } 
             //若为更新或数据未修改则直接将数据集数据标记为删除
             else if (DcmDataTableModel.OPERATE_UPDATE.equals(rowData.get("OPERATION")) ||
                        null == rowData.get("OPERATION")) {
                 rowData.put("OPERATION", DcmDataTableModel.OPERATE_DELETE);
+                this.makeDirty(true);//调用这个方法会使得页面处于未保存状态，删除会提示
             }
             //已经为删除状态的数据无需做任何处理
         }
@@ -300,6 +307,8 @@ public class DcmDataDisplayBean extends TablePagination{
             flag = this.handleData("EDIT", curComRecordId);
             this.lastHandleModel = "EDIT";
             if(flag){ this.queryTemplateData();}
+            this.makeDirty(false);//调用这个方法会使得页面处于未保存状态，删除会提示
+            
         } catch (Exception e) {
             flag = false;
             if (e.getMessage().length() > 2048) {
@@ -316,6 +325,7 @@ public class DcmDataDisplayBean extends TablePagination{
     //数据重置则直接刷新数据
     public void operation_reset() {
         this.queryTemplateData();
+        this.makeDirty(false);//调用这个方法会使得页面处于未保存状态，删除会提示
     }
     //数据导入操作
     public void operation_import(ActionEvent actionEvent) throws SQLException {
@@ -651,6 +661,8 @@ public class DcmDataDisplayBean extends TablePagination{
         setComboboxLOVBeanList(new ArrayList()); 
         
         String curTemplateId = (String)ADFContext.getCurrent().getPageFlowScope().get("curTemplateId");
+        dmsTabContext = (TabContext)ADFContext.getCurrent().getPageFlowScope().get("dmsTabContext");
+        
         ViewObject templateView =DmsUtils.getDcmApplicationModule().getDcmTemplateView();
         templateView.executeQuery();
         Row[] rows=templateView.findByKey(new Key(new Object[]{curTemplateId,ADFContext.getCurrent().getLocale().toString()}), 1);
@@ -1558,7 +1570,7 @@ public class DcmDataDisplayBean extends TablePagination{
                 approveSql.append("AND TEMPLATE_ID = '").append(this.curTempalte.getId()).append("' ");
                 approveSql.append("AND PERSON_ID = '").append(this.curUser.getId()).append("' ");
                 approveSql.append("AND COM_ID = '").append(this.curCombiantionRecord).append("'");
-                //System.out.println("@@@@@@@@@@@@@@@@@@@"+approveSql);
+               
                 ResultSet aRs = stat.executeQuery(approveSql.toString());
                 if(aRs.next()){
                     String appStatus = aRs.getString("APPROVAL_STATUS");
@@ -1572,7 +1584,7 @@ public class DcmDataDisplayBean extends TablePagination{
             this._logger.severe(e);
         }
     }
-
+    
     public void setWriteStatus(String writeStatus) {
         this.writeStatus = writeStatus;
     }
@@ -1597,4 +1609,11 @@ public class DcmDataDisplayBean extends TablePagination{
     public List<ComboboxLOVBean> getComboboxLOVBeanList() {  
         return _comboboxLOVBeanList;
     }
+    
+    //手动添加页面是否为dirty
+    public void makeDirty(boolean isdiry) { 
+      
+        dmsTabContext.markCurrentTabDirty(isdiry);
+        
+    } 
 }

@@ -10,6 +10,11 @@
       <value>#{pageFlowScope.curTemplateId}</value>
       <class>java.lang.String</class>
     </input-parameter-definition>
+    <input-parameter-definition id="__6">
+      <name id="__3">dmsTabContext</name>
+      <value>#{pageFlowScope.dmsTabContext}</value>
+      <class>dms.dynamicShell.TabContext</class>
+    </input-parameter-definition>
     <managed-bean id="__44">
         <managed-bean-name id="__41">DcmDataDisplayBean</managed-bean-name>
         <managed-bean-class id="__43">dcm.DcmDataDisplayBean</managed-bean-class>
