@@ -128,6 +128,13 @@
             </af:group>
           </af:toolbar>
         </f:facet>
+        <af:popup id="p6"
+                  binding="#{viewScope.DcmDataDisplayBean.sortTipPopup}">
+          <af:dialog id="d1" title="#{viewBundle['dms.tip']}"
+                     dialogListener="#{viewScope.DcmDataDisplayBean.sortTipDialogListener}">
+            <af:outputLabel value="#{viewBundle['dms.sort.tip']}" id="ol1"/>
+          </af:dialog>
+        </af:popup>
         <af:table var="row" rowBandingInterval="0" id="t1"
                   value="#{viewScope.DcmDataDisplayBean.dataModel}"
                   scrollPolicy="page"
@@ -139,7 +146,8 @@
                   emptyText="#{viewBundle['dms.common.nodata']}"
                   filterModel="#{viewScope.DcmDataDisplayBean.queryDescriptor}"
                   filterVisible="false"
-                  queryListener="#{viewScope.DcmDataDisplayBean.queryListener}">
+                  queryListener="#{viewScope.DcmDataDisplayBean.queryListener}"
+                  binding="#{viewScope.DcmDataDisplayBean.displayTable}">
           <af:forEach items="#{viewScope.DcmDataDisplayBean.dataModel.colsdef}"
                       var="attr" varStatus="vs">
                       
@@ -147,8 +155,8 @@
                        sortProperty="#{attr.dbTableCol}"
                        id="column${vs.key}"
                        visible="#{attr.visible eq 'Y'}"
-                       inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
-                                    #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
+                       inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:#BDE894;' : ''}
+                                    #{'CREATE' eq row['OPERATION'] ? 'background-color:#FF9393;' : ''}
                                     #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}"
                        filterable="#{attr.dataType ne 'DATE'}">
                     

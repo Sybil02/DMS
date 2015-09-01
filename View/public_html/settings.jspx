@@ -8,7 +8,34 @@
   <jsp:directive.page contentType="text/html;charset=UTF-8"/>
   <f:view locale="#{sessionScope.cur_user.locale}"
           beforePhase="#{MainPageMBean.initMenuBar}">
-    <af:document id="d1" title="#{viewBundle['dms.title.setting']}">
+    <af:document id="d1" title="#{viewBundle['dms.title.setting']}" uncommittedDataWarning="on">
+      <af:resource type="javascript">
+ 
+        function expandNode(event){  
+     
+         var _tree = AdfPage.PAGE.findComponentByAbsoluteId('pt1:tr1'); 
+         rwKeySet = _tree.getSelectedRowKeys();   
+         
+            var firstRowKey; 
+            for(rowKey in rwKeySet){ 
+            firstRowKey = rowKey; 
+            // we are interested in the first hit, so break out here 
+            break; 
+            } 
+            if (_tree.isPathExpanded(firstRowKey)){ 
+            _tree.setDisclosedRowKey(firstRowKey,false); 
+            }
+            else{ 
+            _tree.setDisclosedRowKey(firstRowKey,true); 
+            }
+            
+            AdfCustomEvent.queue(_tree,
+                            "selectListenerr",
+                            {},
+                            true);
+         } 
+     
+      </af:resource>
       <af:form id="f1">
         <af:pageTemplate viewId="/dms/dynamicShell/dynamicTabShell.jspx"
                          value="#{bindings.pageTemplateBinding}" id="pt1">
@@ -17,7 +44,9 @@
                      selectionListener="#{viewScope.MenuBean.selectMenu}"
                      rowSelection="single">
               <f:facet name="nodeStamp">
-                <af:outputLabel value="#{node.label}"/>
+                <af:outputLabel value="#{node.label}">
+                     <af:clientListener method="expandNode"  type="click"/>  
+                </af:outputLabel>
               </f:facet>
             </af:tree>
           </f:facet>

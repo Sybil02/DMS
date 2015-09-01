@@ -69,6 +69,7 @@ import oracle.adf.view.rich.component.rich.output.RichPanelCollection;
 import oracle.adf.view.rich.context.AdfFacesContext;
 
 import oracle.adf.view.rich.context.DirtyPageHandler;
+import oracle.adf.view.rich.event.DialogEvent;
 import oracle.adf.view.rich.event.QueryEvent;
 import oracle.adf.view.rich.model.AutoSuggestUIHints;
 import oracle.adf.view.rich.model.FilterableQueryDescriptor;
@@ -78,7 +79,8 @@ import oracle.adf.view.rich.model.ListOfValuesModel;
 import oracle.adf.view.rich.model.QueryModel;
 import oracle.adf.view.rich.model.TableModel;
 
- 
+
+import oracle.adfinternal.view.faces.context.AdfFacesContextImpl;
 
 import oracle.jbo.ApplicationModule;
 import oracle.jbo.Key;
@@ -99,6 +101,8 @@ import org.apache.myfaces.trinidad.model.RowKeySet;
 import org.apache.myfaces.trinidad.model.SortCriterion;
 import org.apache.myfaces.trinidad.model.UploadedFile;
 
+import org.apache.myfaces.trinidad.render.ExtendedRenderKitService;
+import org.apache.myfaces.trinidad.util.Service;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -179,7 +183,9 @@ public class DcmDataDisplayBean extends TablePagination{
     private int approveStepNo = 0;
     //初始化
     private TabContext dmsTabContext;
-    
+    private RichPopup sortTipPopup;
+    private RichTable displayTable;
+
     public DcmDataDisplayBean() { 
         this.curUser =(Person)ADFContext.getCurrent().getSessionScope().get("cur_user");
         this.dataModel = new DcmDataTableModel();
@@ -207,6 +213,7 @@ public class DcmDataDisplayBean extends TablePagination{
         }
         if (null == rowData.get("OPERATION")) {
             rowData.put("OPERATION", DcmDataTableModel.OPERATE_UPDATE);
+            this.makeDirty(true);
         }
     }
     //行选中时设置当前选中行
@@ -307,7 +314,7 @@ public class DcmDataDisplayBean extends TablePagination{
             flag = this.handleData("EDIT", curComRecordId);
             this.lastHandleModel = "EDIT";
             if(flag){ this.queryTemplateData();}
-            this.makeDirty(false);//调用这个方法会使得页面处于未保存状态，删除会提示
+             
             
         } catch (Exception e) {
             flag = false;
@@ -786,6 +793,7 @@ public class DcmDataDisplayBean extends TablePagination{
             this._logger.severe(e);
         }
         this.dataModel.setWrappedData(data);
+        makeDirty(false); //调用这个方法会使得页面处于未保存状态，删除会提示
     }
     //获取数据查询语句
     private String getQuerySql() {
@@ -1172,11 +1180,31 @@ public class DcmDataDisplayBean extends TablePagination{
         RichPopup.PopupHints hint = new RichPopup.PopupHints();
         this.calcWnd.show(hint);
     }
-
+    
+    private List<SortCriterion> saveSortCriterions;
+    
     public void sortListener(SortEvent sortEvent) {
-        this.sortCriterions=sortEvent.getSortCriteria();
-        this.queryTemplateData();
+        
+        this.saveSortCriterions = sortEvent.getSortCriteria();
+        TabContext tabContext = TabContext.getCurrentInstance();
+        
+        //如果当前页面不是dirty的话就直接刷新页面
+        if(!tabContext.getTabs().get(tabContext.getSelectedTabIndex()).isDirty())
+        {
+            sortTipDialogListener(null);
+            return ;
+         }
+        
+        FacesContext context = FacesContext.getCurrentInstance();
+        
+        StringBuffer toSend = new StringBuffer();
+        toSend.append("var popup = AdfPage.PAGE.findComponent('").append(sortTipPopup.getClientId(context)).append("'); ").append("if (!popup.isPopupVisible()) { ").append("var hints = {}; ").append("popup.show(hints);}");
+        
+        ExtendedRenderKitService service = 
+              Service.getRenderKitService(context, ExtendedRenderKitService.class);
+            service.addScript(context, toSend.toString());
     }
+    
     public FilterableQueryDescriptor getQueryDescriptor(){
         return this.queryDescriptor;
     }
@@ -1615,5 +1643,27 @@ public class DcmDataDisplayBean extends TablePagination{
       
         dmsTabContext.markCurrentTabDirty(isdiry);
         
-    } 
+    }
+
+    public void setSortTipPopup(RichPopup sortTipPopup) {
+        this.sortTipPopup = sortTipPopup;
+    }
+
+    public RichPopup getSortTipPopup() {
+        return sortTipPopup;
+    }
+
+    public void sortTipDialogListener(DialogEvent dialogEvent) {
+         
+        this.sortCriterions = this.saveSortCriterions;
+        this.queryTemplateData(); 
+    }
+
+    public void setDisplayTable(RichTable displayTable) {
+        this.displayTable = displayTable;
+    }
+
+    public RichTable getDisplayTable() {
+        return displayTable;
+    }
 }
