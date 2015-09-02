@@ -169,6 +169,7 @@
                 <af:inputComboboxListOfValues label="#{attr.columnLabel}"
                               id="inputComboboxListOfValues1"
                               value="#{row[attr.dbTableCol]}" 
+                              readOnly="#{(viewScope.DcmDataDisplayBean.isEditable and (attr.readonly eq 'N')) eq false}"
                               valueChangeListener="#{viewScope.DcmDataDisplayBean.valueChangeListener}"
                               validator="#{viewScope.DcmDataDisplayBean.comboboxLOVBeanList[vs.index%999].validate}"
                               autoSubmit="true"
