@@ -1,16 +1,14 @@
 package dcm;
 
+
 import common.ADFUtils;
 import common.DmsUtils;
-
 import common.JSFUtils;
-
 import common.TablePagination;
 
 import dcm.combinantion.CombinationEO;
 
 import dcm.template.TemplateEO;
- 
 
 import dms.dynamicShell.TabContext;
 
@@ -26,61 +24,39 @@ import java.io.InputStream;
 
 import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
-
 import java.sql.ResultSet;
-
 import java.sql.SQLException;
-
 import java.sql.Statement;
-
 import java.sql.Types;
 
 import java.text.SimpleDateFormat;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
 import java.util.UUID;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import javax.faces.event.ActionEvent; 
+import javax.faces.event.ActionEvent;
 import javax.faces.event.ValueChangeEvent;
-
 import javax.faces.model.SelectItem;
 
-import oracle.adf.controller.ControllerContext;
-import oracle.adf.controller.ViewPortContext;
 import oracle.adf.model.binding.DCIteratorBinding;
-import oracle.adf.model.binding.DCIteratorBindingDef;
 import oracle.adf.share.ADFContext;
 import oracle.adf.share.logging.ADFLogger;
 import oracle.adf.view.rich.component.rich.RichPopup;
 import oracle.adf.view.rich.component.rich.data.RichTable;
 import oracle.adf.view.rich.component.rich.input.RichInputFile;
 import oracle.adf.view.rich.component.rich.input.RichSelectOneChoice;
-
 import oracle.adf.view.rich.component.rich.output.RichPanelCollection;
 import oracle.adf.view.rich.context.AdfFacesContext;
-
-import oracle.adf.view.rich.context.DirtyPageHandler;
 import oracle.adf.view.rich.event.DialogEvent;
 import oracle.adf.view.rich.event.QueryEvent;
-import oracle.adf.view.rich.model.AutoSuggestUIHints;
 import oracle.adf.view.rich.model.FilterableQueryDescriptor;
-
-import oracle.adf.view.rich.model.ListOfValuesModel;
-
-import oracle.adf.view.rich.model.QueryModel;
-import oracle.adf.view.rich.model.TableModel;
-
-
-import oracle.adfinternal.view.faces.context.AdfFacesContextImpl;
 
 import oracle.jbo.ApplicationModule;
 import oracle.jbo.Key;
@@ -89,7 +65,6 @@ import oracle.jbo.RowIterator;
 import oracle.jbo.ViewCriteria;
 import oracle.jbo.ViewCriteriaRow;
 import oracle.jbo.ViewObject;
-
 import oracle.jbo.jbotester.load.SimpleDateFormatter;
 import oracle.jbo.server.DBTransaction;
 
@@ -100,21 +75,16 @@ import org.apache.myfaces.trinidad.model.CollectionModel;
 import org.apache.myfaces.trinidad.model.RowKeySet;
 import org.apache.myfaces.trinidad.model.SortCriterion;
 import org.apache.myfaces.trinidad.model.UploadedFile;
-
 import org.apache.myfaces.trinidad.render.ExtendedRenderKitService;
 import org.apache.myfaces.trinidad.util.Service;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import org.hexj.excelhandler.reader.ExcelReaderUtil;
-
-import org.python.parser.ast.Attribute;
-import org.python.parser.ast.Str;
 
 import team.epm.dcm.view.DcmCombinationViewRowImpl;
 import team.epm.dcm.view.DcmTemplateColumnViewRowImpl;
@@ -122,6 +92,7 @@ import team.epm.dcm.view.DcmTemplateViewRowImpl;
 
 import workapproveflow.ApproveflowEngine;
 import workapproveflow.WorkflowEngine;
+
 
 public class DcmDataDisplayBean extends TablePagination{
     private CollectionModel dataModel;
@@ -823,17 +794,9 @@ public class DcmDataDisplayBean extends TablePagination{
                         sql_where.append(" AND \"").append(key).append("\" IS NULL");
                     }else{
                         sql_where.append(" AND UPPER(\"").append(key).append("\") LIKE UPPER('");
-                        if(fv.startsWith("%")){
-                            sql_where.append("%");
-                            fv=fv.substring(1);
-                        }
-                        if(fv.endsWith("%")){
-                            fv=fv.substring(0,fv.lastIndexOf("%"));
-                            sql_where.append(fv);
-                            sql_where.append("%");
-                        }else{
-                            sql_where.append(fv);
-                        } 
+                        fv = fv.replace(' ', '%');
+                        sql_where.append("%" + fv + "%");
+                        
                         sql_where.append("')");
                     }
                 }
@@ -1640,7 +1603,10 @@ public class DcmDataDisplayBean extends TablePagination{
     
     //手动添加页面是否为dirty
     public void makeDirty(boolean isdiry) { 
-      
+        
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        ExtendedRenderKitService service = Service.getRenderKitService(facesContext, ExtendedRenderKitService.class);
+        service.addScript(facesContext, "isdirty = " + isdiry + ";");
         dmsTabContext.markCurrentTabDirty(isdiry);
         
     }
