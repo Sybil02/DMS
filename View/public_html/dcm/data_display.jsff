@@ -6,7 +6,7 @@
   <c:set var="viewBundle" value="#{adfBundle['dms_v']}"/> 
   <af:panelStretchLayout id="psl1" bottomHeight="0"
                          topHeight="#{viewScope.DcmDataDisplayBean.combinationId==null ? '0px':'35px'}">
-    <f:facet name="top">
+    <f:facet name="top"> 
       <af:panelGroupLayout layout="horizontal" 
                            xmlns:af="http://xmlns.oracle.com/adf/faces/rich"
                            id="pgl1" inlineStyle="padding-top:5px">
@@ -141,6 +141,7 @@
                   selectionListener="#{viewScope.DcmDataDisplayBean.rowSelectionListener}"
                   selectedRowKeys="#{viewScope.DcmDataDisplayBean.dataModel.selectedRows}"
                   rowSelection="multiple" editingMode="clickToEdit"
+                  shortDesc="#{viewBundle['dms.multiple_key_search']}"
                   fetchSize="50"
                   sortListener="#{viewScope.DcmDataDisplayBean.sortListener}"
                   emptyText="#{viewBundle['dms.common.nodata']}"
@@ -173,8 +174,7 @@
                               autoSubmit="true"
                               rendered="#{attr.valueSetId ne null  }"
                               model="#{viewScope.DcmDataDisplayBean.comboboxLOVBeanList[vs.index%999].listOfValuesModel}"
-                              popupTitle="#{attr.columnLabel}  列表"
-                              >
+                              > 
                  <af:autoSuggestBehavior suggestItems="#{viewScope.DcmDataDisplayBean.comboboxLOVBeanList[vs.index%999].suggestMethod}" 
                                         maxSuggestedItems="#{vs.index}"/>  
               </af:inputComboboxListOfValues>

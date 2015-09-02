@@ -11,27 +11,44 @@
           beforePhase="#{MainPageMBean.initMenuBar}">
   <af:document id="d1" title="#{viewBundle['dcm.index.title']}"
                  uncommittedDataWarning="on"> 
-
+    
+    <!-- 重写 AdfPage.PAGE.setDataDirty 的方法，在页面加载时就执行 -->
+  <af:clientListener method="overrideSetDataDirtyForPage()" type="load"/>
+  
   <af:resource type="javascript">
+  
+  var isdirty = false;  //根据后台tabs是否为dirty在后代添加代码设置这个变量的值
+  
+  function overrideSetDataDirtyForPage() {
  
+    AdfPage.PAGE.setDataDirty = function(value) {
+ 
+        if(value == true)
+            AdfDhtmlPage.prototype.setDataDirty(true);
+        else
+            AdfDhtmlPage.prototype.setDataDirty(isdirty);
+    }
+}
+    //弹出子菜单的方法，并且发送给后台，是节点而不是菜单则打开节点任务流界面
     function expandNode(event){  
- 
+
      var _tree = AdfPage.PAGE.findComponentByAbsoluteId('pt1:tr1'); 
      rwKeySet = _tree.getSelectedRowKeys();   
-     
+            
         var firstRowKey; 
         for(rowKey in rwKeySet){ 
         firstRowKey = rowKey; 
         // we are interested in the first hit, so break out here 
         break; 
-        } 
+        }   
+        
+        
         if (_tree.isPathExpanded(firstRowKey)){ 
         _tree.setDisclosedRowKey(firstRowKey,false); 
         }
         else{ 
         _tree.setDisclosedRowKey(firstRowKey,true); 
-        }
-        
+        } 
         AdfCustomEvent.queue(_tree,
                         "selectListenerr",
                         {},
