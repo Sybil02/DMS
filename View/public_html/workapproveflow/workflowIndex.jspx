@@ -29,12 +29,15 @@
             <af:menuBar id="mb1" binding="#{MainPageMBean.menuBar}">
             </af:menuBar>
           </f:facet>
-          <f:facet name="welcome"/>
+          <f:facet name="welcome">
+            <af:region value="#{bindings.workflow_display_tsk1.regionModel}"
+                       id="r1"/>
+          </f:facet>
           <f:facet name="innerToolbar">
           </f:facet>
           <f:attribute name="brandingTitle" value="#{viewBundle['dms.title']}"/>
           <f:attribute name="globalAreaSplitterPosition" value="0"/>
-          <f:attribute name="navSplitterPosition" value="200"/>
+          <f:attribute name="navSplitterPosition" value="0"/>
           <f:attribute name="navSplitterDisabled" value="true"/>
         </af:pageTemplate>
       </af:form>

@@ -1169,6 +1169,7 @@ public class DcmDataDisplayBean extends TablePagination{
     }
     
     public FilterableQueryDescriptor getQueryDescriptor(){
+ 
         return this.queryDescriptor;
     }
 
@@ -1194,6 +1195,8 @@ public class DcmDataDisplayBean extends TablePagination{
     }
 
     public void refreshPage(ActionEvent event) {
+        queryDescriptor.getFilterCriteria().clear();
+        this.queryTemplateData();
     }
 
     public void gotoPage(ValueChangeEvent event) {
