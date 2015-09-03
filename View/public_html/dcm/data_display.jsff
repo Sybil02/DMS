@@ -117,7 +117,8 @@
                             actionListener="#{viewScope.DcmDataDisplayBean.lastPage}"/>
             </af:group>
             <af:group id="g4">
-              <af:commandImageLink id="cil5" icon="/images/refresh.gif"/>
+              <af:commandImageLink id="cil5" icon="/images/refresh.gif"
+                            actionListener="#{viewScope.DcmDataDisplayBean.refreshPage}"/>
             </af:group>
             <af:group id="g5">
               <af:outputText value="#{af:formatString3(viewBundle['dms.common.pagenation.seg03'],
@@ -156,7 +157,7 @@
                        sortProperty="#{attr.dbTableCol}"
                        id="column${vs.key}"
                        visible="#{attr.visible eq 'Y'}"
-                       inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:#BDE894;' : ''}
+                       inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:#68DB96;' : ''}
                                     #{'CREATE' eq row['OPERATION'] ? 'background-color:#FF9393;' : ''}
                                     #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}"
                        filterable="#{attr.dataType ne 'DATE'}">
@@ -177,7 +178,7 @@
                               model="#{viewScope.DcmDataDisplayBean.comboboxLOVBeanList[vs.index%999].listOfValuesModel}"
                               > 
                  <af:autoSuggestBehavior suggestItems="#{viewScope.DcmDataDisplayBean.comboboxLOVBeanList[vs.index%999].suggestMethod}" 
-                                        maxSuggestedItems="#{vs.index}"/>  
+                                        maxSuggestedItems="-1"/>  
               </af:inputComboboxListOfValues>
               
   
