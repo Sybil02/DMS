@@ -3,10 +3,10 @@
           xmlns:af="http://xmlns.oracle.com/adf/faces/rich"
           xmlns:f="http://java.sun.com/jsf/core"
           xmlns:c="http://java.sun.com/jsp/jstl/core">
-  <c:set var="viewBundle" value="#{adfBundle['dms_v']}"/>
+  <c:set var="viewBundle" value="#{adfBundle['dms_v']}"/> 
   <af:panelStretchLayout id="psl1" bottomHeight="0"
                          topHeight="#{viewScope.DcmDataDisplayBean.combinationId==null ? '0px':'35px'}">
-    <f:facet name="top">
+    <f:facet name="top"> 
       <af:panelGroupLayout layout="horizontal" 
                            xmlns:af="http://xmlns.oracle.com/adf/faces/rich"
                            id="pgl1" inlineStyle="padding-top:5px">
@@ -134,18 +134,27 @@
             </af:group>
           </af:toolbar>
         </f:facet>
+        <af:popup id="p6"
+                  binding="#{viewScope.DcmDataDisplayBean.sortTipPopup}">
+          <af:dialog id="d1" title="#{viewBundle['dms.tip']}"
+                     dialogListener="#{viewScope.DcmDataDisplayBean.sortTipDialogListener}">
+            <af:outputLabel value="#{viewBundle['dms.sort.tip']}" id="ol1"/>
+          </af:dialog>
+        </af:popup>
         <af:table var="row" rowBandingInterval="0" id="t1"
                   value="#{viewScope.DcmDataDisplayBean.dataModel}"
                   scrollPolicy="page"
                   selectionListener="#{viewScope.DcmDataDisplayBean.rowSelectionListener}"
                   selectedRowKeys="#{viewScope.DcmDataDisplayBean.dataModel.selectedRows}"
                   rowSelection="multiple" editingMode="clickToEdit"
+                  shortDesc="#{viewBundle['dms.multiple_key_search']}"
                   fetchSize="50"
                   sortListener="#{viewScope.DcmDataDisplayBean.sortListener}"
                   emptyText="#{viewBundle['dms.common.nodata']}"
                   filterModel="#{viewScope.DcmDataDisplayBean.queryDescriptor}"
                   filterVisible="false"
-                  queryListener="#{viewScope.DcmDataDisplayBean.queryListener}">
+                  queryListener="#{viewScope.DcmDataDisplayBean.queryListener}"
+                  binding="#{viewScope.DcmDataDisplayBean.displayTable}">
           <af:forEach items="#{viewScope.DcmDataDisplayBean.dataModel.colsdef}"
                       var="attr" varStatus="vs">
                       
@@ -153,8 +162,8 @@
                        sortProperty="#{attr.dbTableCol}"
                        id="column${vs.key}"
                        visible="#{attr.visible eq 'Y'}"
-                       inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
-                                    #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
+                       inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:#BDE894;' : ''}
+                                    #{'CREATE' eq row['OPERATION'] ? 'background-color:#FF9393;' : ''}
                                     #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}"
                        filterable="#{attr.dataType ne 'DATE'}">
                     
@@ -166,13 +175,13 @@
                 <af:inputComboboxListOfValues label="#{attr.columnLabel}"
                               id="inputComboboxListOfValues1"
                               value="#{row[attr.dbTableCol]}" 
+                              readOnly="#{(viewScope.DcmDataDisplayBean.isEditable and (attr.readonly eq 'N')) eq false}"
                               valueChangeListener="#{viewScope.DcmDataDisplayBean.valueChangeListener}"
                               validator="#{viewScope.DcmDataDisplayBean.comboboxLOVBeanList[vs.index%999].validate}"
                               autoSubmit="true"
                               rendered="#{attr.valueSetId ne null  }"
                               model="#{viewScope.DcmDataDisplayBean.comboboxLOVBeanList[vs.index%999].listOfValuesModel}"
-                              popupTitle="#{attr.columnLabel}  列表"
-                              >
+                              > 
                  <af:autoSuggestBehavior suggestItems="#{viewScope.DcmDataDisplayBean.comboboxLOVBeanList[vs.index%999].suggestMethod}" 
                                         maxSuggestedItems="#{vs.index}"/>  
               </af:inputComboboxListOfValues>
@@ -390,18 +399,18 @@
         </af:popup>
         <!-- 计算程序 -->
         <af:popup id="p5" autoCancel="disabled" binding="#{viewScope.DcmDataDisplayBean.calcWnd}">
-          <af:panelWindow title="运行计算程序" id="pw5" >
+          <af:panelWindow title="#{viewBundle['dms.cal.run']}" id="pw5" >
             <af:panelStretchLayout id="psl3" inlineStyle="width:400px;height:200px">
               <f:facet name="top">
                 <af:panelGroupLayout id="pgl5" layout="horizontal">
-                  <af:selectOneChoice label="计算程序" id="soc3"
+                  <af:selectOneChoice label="#{viewBundle['dms.cal.proc']}" id="soc3"
                    autoSubmit="true"
                    valueChangeListener="#{viewScope.DcmDataDisplayBean.calcChange}">
                     <f:selectItems value="#{viewScope.DcmDataDisplayBean.calcNameList}"
                                    id="si3"/>
                   </af:selectOneChoice>
                   <af:spacer width="15px" id="s5"/>
-                  <af:commandButton text="运行" id="cb12"
+                  <af:commandButton text="#{viewBundle['dms.run']}" id="cb12"
                                     actionListener="#{viewScope.DcmDataDisplayBean.executeProcedure}"/>
                 </af:panelGroupLayout>
               </f:facet>
@@ -424,4 +433,6 @@
       </af:panelGroupLayout>
     </f:facet>
   </af:panelStretchLayout>
+  
+  <!--oracle-jdev-comment:preferred-managed-bean-name:DcmDataDisplayBean-->
 </jsp:root>

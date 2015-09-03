@@ -22,6 +22,7 @@ import oracle.adf.view.rich.component.rich.layout.RichPanelStretchLayout;
 import oracle.adf.view.rich.component.rich.nav.RichCommandNavigationItem;
 import oracle.adf.view.rich.component.rich.nav.RichNavigationPane;
 import oracle.adf.view.rich.context.AdfFacesContext;
+import oracle.adf.view.rich.context.DirtyPageHandler;
 import oracle.adf.view.rich.event.DialogEvent;
 import oracle.adf.view.rich.event.DialogEvent.Outcome;
 
@@ -60,7 +61,9 @@ public final class TabContext implements Serializable {
         }
         return tabContext;
     }
+    
 
+    
     public void setMainContent(String taskflowId) throws TabContext.TabContentAreaDirtyException {
         setMainContent(taskflowId, null);
     }
@@ -98,13 +101,46 @@ public final class TabContext implements Serializable {
     public void addOrSelectTab(String localizedName, String taskflowId,
                                Map<String, Object> parameters) throws TabContext.TabOverflowException {
         int index = getFirstTabIndex(taskflowId);
-        if (index != -1) {
+   
+        if (index != -1) { //如果已经页面是那个页面，而且是处于活跃状态
             setSelectedTabIndex(index);
-        } else {
+        } else { //如果没有这个页面，则新增页面
+ 
             addTab(localizedName, taskflowId, parameters);
         }
     }
-
+    
+    private Tab _saveTab = new Tab();  //用来缓存页面，方便没有确定呢关闭页面前不一定会展示这个页面
+    
+    public void saveTab(String localizedName, String taskflowId,
+                        Map<String, Object> parameters) {
+          
+        _saveTab.setTaskflowId(TaskFlowId.parse(taskflowId));
+        _saveTab.setTitle(localizedName);
+        _saveTab.setParameters(parameters);
+        _saveTab.setActive(true);
+    } 
+    
+    public void  addSaveTab( ) throws TabContext.TabOverflowException {
+        if (this._tabTracker.getNumRendered() == 15) {
+            throw new TabOverflowException();
+        }
+        
+        int index = _findNextAvailable();
+        Tab tab = getTabs().get(index);
+        tab.setTitle(_saveTab.getTitle());
+        tab.setActive(true);
+        tab.setTaskflowId(_saveTab.getTaskflowId());
+        tab.setParameters(_saveTab.getParameters());
+        
+        this._tabTracker.setNumRendered(this._tabTracker.getNumRendered() + 1);
+        this._tabTracker.setNextRenderedLoc(this._tabTracker.getNextRenderedLoc() +
+                                            1);
+        setSelectedTabIndex(index);
+        _saveTab.setActive(false);
+    }
+    
+    
     public void addTab(String localizedName,
                        String taskflowId) throws TabContext.TabOverflowException {
         addTab(localizedName, taskflowId, null);
@@ -115,8 +151,9 @@ public final class TabContext implements Serializable {
         if (this._tabTracker.getNumRendered() == 15) {
             throw new TabOverflowException();
         }
-        int index = _findNextAvailable();
 
+        int index = _findNextAvailable();
+        
         Tab tab = (Tab)getTabs().get(index);
         tab.setTitle(localizedName);
         tab.setActive(true);
@@ -140,7 +177,7 @@ public final class TabContext implements Serializable {
     }
 
     public void removeCurrentTab() {
-        removeTab(getSelectedTabIndex());
+        removeTab(getSelectedTabIndex()); 
     }
 
     public void removeTab(int index) {
@@ -268,12 +305,21 @@ public final class TabContext implements Serializable {
     }
 
     public void handleDirtyTabDialog(DialogEvent ev) {
+   
         if (ev.getOutcome().equals(DialogEvent.Outcome.yes)) {
             _removeTab(getSelectedTabIndex(), true);
-        }
+            
+            try{
+                addSaveTab();
+            }catch(Exception e) {
+                e.printStackTrace();
+            }
+        }else
+            _saveTab.setActive(false);
     }
 
     public TabContext() {
+       
         Tabs tabTracker = null;
         String viewId =
             ControllerContext.getInstance().getCurrentRootViewPort().getViewId();
@@ -305,20 +351,20 @@ public final class TabContext implements Serializable {
 
     private void _removeTab(int index, boolean force) {
         List tabs = getTabs();
-
+        
         Tab tab = (Tab)tabs.get(index);
 
         if ((tab.isDirty()) && (!force)) {
             _showDialog(getTabDirtyPopup());
             return;
         }
-
+        //把这个tab里面的东西清空
         tab.setTaskflowId(__BLANK);
         tab.setParameters(null);
         tab.setTitle("");
         tab.setActive(false);
         this._tabTracker.setNumRendered(this._tabTracker.getNumRendered() - 1);
-
+        //如果删除的是当前行，那么就要选择另一个页面作为显示页面了，如果删除的话那么页面就不会跳转到其他页面当前页面就空了
         if (this._tabTracker.getSelectedTabIndex() == index) {
             this._tabTracker.setSelectedTabIndex(-1);
             if (this._tabTracker.getNumRendered() > 0) {

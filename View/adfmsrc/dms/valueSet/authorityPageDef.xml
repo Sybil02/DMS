@@ -15,6 +15,9 @@
               id="DmsEnabledGroupViewIterator"/>
     <iterator id="DmsGroupValueViewIterator" Binds="DmsGroupValueView"
               DataControl="DmsModuleDataControl" RangeSize="25"/>
+    <searchRegion Binds="DmsGroupValueViewIterator" Criteria=""
+                  Customizer="oracle.jbo.uicli.binding.JUSearchBindingCustomizer"
+                  id="DmsGroupValueView1Query"/>
   </executables>
   <bindings>
     <list ListOperMode="navigation" IterBinding="DmsValueSetViewIterator"
@@ -57,5 +60,12 @@
         <Item Value="Name"/>
       </AttrNames>
     </list>
+    <tree IterBinding="DmsGroupValueViewIterator" id="DmsGroupValueView1">
+      <nodeDefinition DefName="team.epm.dms.view.DmsGroupValueView"
+                      Name="DmsGroupValueView10">
+        <AttrNames>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
   </bindings>
 </pageDefinition>

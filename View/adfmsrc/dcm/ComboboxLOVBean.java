@@ -53,19 +53,16 @@ import oracle.adf.view.rich.model.ColumnDescriptor;
      //第三个参数是第几个列参数是作为搜索，选择的列
    public ComboboxLOVBean(List<SelectItem> list, List<Attribute> attrName, int valCol)
    { 
-       setAttributes(attrName == null? new ArrayList<Attribute>():attrName);
-       
-       if(attrName != null)
+       setAttributes(attrName);
+       if(attrName != null )
           setLabel(attrName.get(valCol).getLabel()); 
        
         if(list != null)
             for (SelectItem item : list)
             {
               FileData data = new FileData(item.getValue().toString(), item.getLabel().toString());
-               
               _values.add(data);  
-            }
-        
+            }  
         _filteredList.addAll(_values);
     } 
 
@@ -75,16 +72,12 @@ import oracle.adf.view.rich.model.ColumnDescriptor;
    private String _label;
    
    public void setName(Object name)
-   { 
-
-       System.out.println("设置了name的值");
+   {  
       _name = name.toString();
    }
 
    public String getName()
    { 
-
-       System.out.println("得到了name的值");
       return _name;
    }
     
@@ -125,8 +118,7 @@ import oracle.adf.view.rich.model.ColumnDescriptor;
        FileData rowData = _getRowData(value);
        if(rowData != null)
        {
-         this.setName(rowData.getName());
-         //this._addToRecentValuesList(rowData, this._recentValues);
+         this.setName(rowData.getName()); 
        }
        else
          this.setName(value.toString());
@@ -198,6 +190,7 @@ import oracle.adf.view.rich.model.ColumnDescriptor;
 
    public List getValues()
    {
+       System.out.println("getValueaaa");
      return _values;
    }
 
@@ -534,11 +527,13 @@ import oracle.adf.view.rich.model.ColumnDescriptor;
      extends ListOfValuesModel
    {
      private List<Attribute> _attributes;
+     private TableModel tableModel;
      
      public ListOfValuesModelImpl(ComboboxLOVBean bean, List<Attribute> attr)
      {
        _bean = bean;
        _attributes = attr;
+      
      }
 
      /**
@@ -574,8 +569,9 @@ import oracle.adf.view.rich.model.ColumnDescriptor;
      @Override
      public TableModel getTableModel()
      {
-     return new TableModelImpl(_bean.getListModel(), _attributes);
-         
+         if(tableModel == null)
+              tableModel = new TableModelImpl(_bean.getListModel(), _attributes);
+         return tableModel;
      }
      
      @Override
@@ -596,8 +592,7 @@ import oracle.adf.view.rich.model.ColumnDescriptor;
      }
         //query的方法是在这里过滤的
      public void performQuery(QueryDescriptor qd)
-     { 
-         //System.out.println("perform  dddddd");
+     {  
        AttributeCriterion criterion = (AttributeCriterion) qd.getConjunctionCriterion().getCriterionList().get(0);
        String ename = (String) criterion.getValues().get(0);
        _bean.filterList(ename, _bean._filteredList);
@@ -674,9 +669,7 @@ import oracle.adf.view.rich.model.ColumnDescriptor;
      }
 
      public QueryDescriptor getQueryDescriptor()
-     {
-       if(_queryDescriptor == null)
-         _queryDescriptor = new QueryDescriptorImpl(_attributes);
+     { 
        //return _queryDescriptor;
         return null;
      }
@@ -1114,6 +1107,8 @@ import oracle.adf.view.rich.model.ColumnDescriptor;
      @Override
      public List<ColumnDescriptor> getColumnDescriptors()
      {
+       if(_attributes == null) return new ArrayList<ColumnDescriptor>();
+      
        if (_descriptors == null)
        {
          _descriptors = new ArrayList<ColumnDescriptor>(_attributes.size());
@@ -1138,7 +1133,7 @@ import oracle.adf.view.rich.model.ColumnDescriptor;
        {
          return null;
        }
-
+        //表头列名设置
        @Override
        public String getLabel()
        {
@@ -1325,8 +1320,7 @@ import oracle.adf.view.rich.model.ColumnDescriptor;
                                AutoSuggestUIHints autoSuggestUIHints) {
          
           
-         String key = autoSuggestUIHints.getSubmittedValue();  
-         System.out.println("valueSet 的大小是 :" + _values.size());
+         String key = autoSuggestUIHints.getSubmittedValue();   
          List<SelectItem> res = new ArrayList<SelectItem>();
          
          for(int i = _values.size()-1; i>=0; i-- ) {

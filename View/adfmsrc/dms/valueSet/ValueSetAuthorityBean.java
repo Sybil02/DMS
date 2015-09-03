@@ -7,6 +7,8 @@ import common.JSFUtils;
 
 import dcm.ComboboxLOVBean;
 
+import dcm.DcmQueryDescriptor;
+
 import dms.login.Person;
 
 import java.sql.ResultSet;
@@ -34,9 +36,13 @@ import oracle.adf.share.ADFContext;
 import oracle.adf.share.logging.ADFLogger;
 import oracle.adf.view.rich.component.rich.RichPopup;
 import oracle.adf.view.rich.component.rich.data.RichTable;
+import oracle.adf.view.rich.component.rich.input.RichInputText;
 import oracle.adf.view.rich.component.rich.input.RichSelectManyShuttle;
 import oracle.adf.view.rich.context.AdfFacesContext;
 
+import oracle.adf.view.rich.model.FilterableQueryDescriptor;
+
+import oracle.adfinternal.view.faces.context.AdfFacesContextImpl;
 import oracle.adfinternal.view.faces.model.binding.FacesCtrlListBinding;
 
 import oracle.binding.BindingContainer;
@@ -67,7 +73,8 @@ public class ValueSetAuthorityBean {
     private RichTable assignedValueTable;
     private RichPopup popup;
     private RichTable unassignedValueTable;
-    private ComboboxLOVBean comboboxLOVBean;//搜索查找框，集值的 
+    private ComboboxLOVBean comboboxLOVBean;
+    private RichInputText filterValueInput; //搜索查找框，集值的
      
     
     public ValueSetAuthorityBean() {
@@ -183,7 +190,12 @@ public class ValueSetAuthorityBean {
     }
 
     public void add_value(ActionEvent actionEvent) {
-        ADFUtils.findIterator("getDmsValueViewIterator").getViewObject().executeQuery();
+        //更新未选值集的显示问题，如果没有设置，值集仍然处于筛选状态
+        ViewObject vo = ADFUtils.findIterator("getDmsValueViewIterator").getViewObject(); 
+        vo.setWhereClause("MEANING like '%'");
+        vo.executeQuery(); 
+        //清空弹出框的值集过滤框的内容
+        filterValueInput.setValue("");
         RichPopup.PopupHints hint=new RichPopup.PopupHints();
         this.popup.show(hint);
     }
@@ -255,5 +267,48 @@ public class ValueSetAuthorityBean {
 
     public ComboboxLOVBean getComboboxLOVBean() {
         return comboboxLOVBean;
+    }
+    
+    //过滤值集权限表中的值的方法
+    public void filterValueSetItem(ValueChangeEvent valueChangeEvent) {
+        
+        String filter = (String)valueChangeEvent.getNewValue();
+        
+        ViewObject vo = ADFUtils.findIterator("DmsGroupValueViewIterator").getViewObject();
+ 
+        
+        vo.executeQuery(); 
+        
+        Row row = vo.first();
+        
+        while(row != null) { 
+           
+             if(!valueMap.get(row.getAttribute("ValueId")).toString().contains(filter))
+                vo.removeCurrentRowAndRetain();
+             else
+                vo.next();
+            
+           row = vo.getCurrentRow(); 
+       }
+    }
+
+    public void unassignedValueChangeListener(ValueChangeEvent valueChangeEvent) {
+        String filter = (String)valueChangeEvent.getNewValue();
+        
+        ViewObject vo = ADFUtils.findIterator("getDmsValueViewIterator").getViewObject();
+          
+        vo.setWhereClause("MEANING like '%" + filter + "%'");
+        vo.executeQuery(); 
+            
+             
+        AdfFacesContext.getCurrentInstance().addPartialTarget(unassignedValueTable);
+    }
+
+    public void setFilterValueInput(RichInputText filterValueInput) {
+        this.filterValueInput = filterValueInput;
+    }
+
+    public RichInputText getFilterValueInput() {
+        return filterValueInput;
     }
 }

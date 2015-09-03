@@ -8,7 +8,8 @@
   <jsp:directive.page contentType="text/html;charset=UTF-8"/>
   <f:view locale="#{sessionScope.cur_user.locale}"
           beforePhase="#{MainPageMBean.initMenuBar}">
-    <af:document id="d1" title="#{viewBundle['mainpage.title']}">
+    <af:document id="d1" title="#{viewBundle['mainpage.title']}"
+                 uncommittedDataWarning="on">
       <af:form id="f1">
         <af:pageTemplate viewId="/dms/dynamicShell/dynamicTabShell.jspx"
                          value="#{bindings.pageTemplateBinding}" id="pt1">
