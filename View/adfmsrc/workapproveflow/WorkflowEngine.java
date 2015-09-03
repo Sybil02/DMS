@@ -179,6 +179,27 @@ public class WorkflowEngine {
                     + " AND RUN_ID = '" + runId + "'" + " AND STEP_NO = 1 ";
                 stat.executeUpdate(ueSql);
                 trans.commit();
+                //逃过ETL
+                int stepNo = 1 ;
+                while(true){
+                    Map<String,String> nextMap = this.queryNextStep(wfId, runId, stepNo);   
+                    if("OPEN TEMPLATES".equals(nextMap.get("STEP_TASK"))){
+                        this.openTemplates(nextMap.get("STEP_OBJECT"), openCom,runId,stepNo+1);
+                        //打开模板完成，更新步骤状态表为working
+                        String udSql = "UPDATE DMS_WORKFLOW_STATUS SET STEP_STATUS = 'WORKING' WHERE WF_ID = '" + wfId + "'"
+                            + " AND RUN_ID = '" + runId + "'" + " AND STEP_NO = " + (stepNo + 1);
+                        stat.executeUpdate(udSql);
+                        trans.commit();       
+                        break;
+                    }else if("ETL".equals(nextMap.get("STEP_TASK"))){
+                        //更新ETL步骤为开始
+                        String ueSql0 = "UPDATE DMS_WORKFLOW_STATUS SET STEP_STATUS = 'WORKING' WHERE WF_ID = '" + wfId + "'"
+                            + " AND RUN_ID = '" + runId + "'" + " AND STEP_NO = " + (stepNo + 1);
+                        stat.executeUpdate(ueSql0);
+                        trans.commit();    
+                        stepNo = stepNo + 1;
+                    }
+                }
             }
             if (stepTask.equals("APPROVE")) {
                 //提示没有审批对象
@@ -706,7 +727,7 @@ public class WorkflowEngine {
         DBTransaction trans = (DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
         Statement stat = trans.createStatement(DBTransaction.DEFAULT);
         StringBuffer sql = new StringBuffer();
-        System.out.println("type:"+stepTask);
+        //System.out.println("type:"+stepTask);
         if(stepTask.equals("OPEN TEMPLATES")){
             sql.append("SELECT 1 FROM WORKFLOW_TEMPLATE_STATUS WHERE WRITE_STATUS = 'N' ");
         }else{
@@ -735,22 +756,82 @@ public class WorkflowEngine {
             this._logger.severe(e);
         }
         if(isFinish){
-            this.startNextSteps(wfId,runId, stepNo);    
+            //this.startNextSteps(wfId,runId, stepNo);    
         }
     }
     
     //启动下一步
-    public void startNextSteps(String wfId,String runId,int stepNo){
-        DBTransaction trans = (DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
+//    public void startNextSteps(String wfId,String runId,int stepNo){
+//        DBTransaction trans = (DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
+//        Statement stat = trans.createStatement(DBTransaction.DEFAULT);
+//        Map<String,String> nextMap = this.queryNextStep(wfId, runId, stepNo);
+//        String stepTask = nextMap.get("STEP_TASK");
+//        String openCom = nextMap.get("OPEN_COM");
+//        String stepObj = nextMap.get("STEP_OBJECT");
+//        try{
+//        if(stepTask != null && stepTask != ""){
+//            if(stepTask.equals("ETL")){
+//                //更改ETL步骤状态为进行中
+//                StringBuffer etlSql = new StringBuffer();
+//                etlSql.append("UPDATE DMS_WORKFLOW_STATUS SET STEP_STATUS = 'WORKING' ");
+//                etlSql.append("WHERE WF_ID = '").append(wfId).append("' ");
+//                etlSql.append("AND RUN_ID = '").append(runId).append("' ");
+//                etlSql.append("AND STEP_NO = ").append(stepNo+1);
+//                stat.executeUpdate(etlSql.toString());
+//                trans.commit();
+//                //System.out.println("更改ETL步骤状态为进行中");
+//            }else if(stepTask.equals("OPEN TEMPLATES")){
+//                //打开模板，初始化模板输入状态表和审批流状态表
+//                this.openTemplates(stepObj, openCom, runId, stepNo+1);
+//                //更新步骤状态为WORKING
+//                int i = stepNo + 1;
+//                String udnSql = "UPDATE DMS_WORKFLOW_STATUS SET STEP_STATUS = 'WORKING' WHERE WF_ID = '" + wfId + "'"
+//                    + " AND RUN_ID = '" + runId + "'" + " AND STEP_NO = " + i;
+//                stat.executeUpdate(udnSql);
+//                trans.commit();
+//            }else{
+//                //若为审批，则不操作，打开模板步骤已经初始化审批状态表
+//            }
+//        }else{
+//            //更新工作流状态为完成
+//            StringBuffer wfSql = new StringBuffer();
+//            wfSql.append("UPDATE DMS_WORKFLOWINFO SET WF_STATUS = 'N' WHERE ID = '").append(wfId).append("'");
+//            try {
+//                stat.executeUpdate(wfSql.toString());
+//                trans.commit();
+//            } catch (SQLException e) {
+//                this._logger.severe(e);
+//            }
+//        }
+//            stat.close();
+//        } catch (SQLException e) {
+//                this._logger.severe(e);
+//        }
+//    }
+    
+    public void startNext(String wfId,String runId,String templateId,String comId ,int stepNo,String lastTask){
+        //检查父节点是否完成输入或审批
+        if(lastTask.equals("OPEN TEMPLATES")){
+            if(!this.checkParent(runId, templateId, comId, stepNo)){
+                return;    
+            }    
+        }else{
+            ApproveflowEngine afe = new ApproveflowEngine();
+            if(!afe.checkParentApprove(runId, templateId, comId, stepNo)){
+                return;
+            }    
+        }
+        DBTransaction trans =
+            (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
         Statement stat = trans.createStatement(DBTransaction.DEFAULT);
-        Map<String,String> nextMap = this.queryNextStep(wfId, runId, stepNo);
-        String stepTask = nextMap.get("STEP_TASK");
-        String openCom = nextMap.get("OPEN_COM");
-        String stepObj = nextMap.get("STEP_OBJECT");
         try{
-        if(stepTask != null && stepTask != ""){
-            if(stepTask.equals("ETL")){
-                //更改ETL步骤状态为进行中
+        while(true){
+            Map<String,String> nextMap = this.queryNextStep(wfId, runId, stepNo);  
+            String nextTask = nextMap.get("STEP_TASK");
+            String stepObj = nextMap.get("STEP_OBJECT");
+            String openCom = nextMap.get("OPEN_COM");
+            if("ETL".equals(nextTask)){
+                //跟新ETL步骤状态，发送邮件
                 StringBuffer etlSql = new StringBuffer();
                 etlSql.append("UPDATE DMS_WORKFLOW_STATUS SET STEP_STATUS = 'WORKING' ");
                 etlSql.append("WHERE WF_ID = '").append(wfId).append("' ");
@@ -758,33 +839,302 @@ public class WorkflowEngine {
                 etlSql.append("AND STEP_NO = ").append(stepNo+1);
                 stat.executeUpdate(etlSql.toString());
                 trans.commit();
-                System.out.println("更改ETL步骤状态为进行中");
-            }else if(stepTask.equals("OPEN TEMPLATES")){
-                //打开模板，初始化模板输入状态表和审批流状态表
-                this.openTemplates(stepObj, openCom, runId, stepNo+1);
-                //更新步骤状态为WORKING
-                int i = stepNo + 1;
-                String udnSql = "UPDATE DMS_WORKFLOW_STATUS SET STEP_STATUS = 'WORKING' WHERE WF_ID = '" + wfId + "'"
-                    + " AND RUN_ID = '" + runId + "'" + " AND STEP_NO = " + i;
-                stat.executeUpdate(udnSql);
+                //继续执行下一步
+                stepNo = stepNo + 1 ;
+            }else if("OPEN TEMPLATES".equals(nextTask)){
+                //父节点完成，打开下一个步骤父节点子部门
+                //查询是否已经初始化，否则执行初始化
+                String stepStatus = "";
+                String stepSql = "SELECT STEP_STATUS FROM DMS_WORKFLOW_STATUS T " + "WHERE T.WF_ID = '" + wfId + "' AND T.RUN_ID = '"
+                    + runId + "' AND STEP_NO = " + (stepNo+1);
+                ResultSet statusRs = stat.executeQuery(stepSql);
+                if(statusRs.next()){
+                    stepStatus = statusRs.getString("STEP_STATUS");  
+                }
+                if("N".equals(stepStatus)){
+                    //打开模板，初始化模板输入状态表和审批流状态表
+                    this.onlyOpenTemplates(stepObj, openCom, runId, stepNo+1);
+                    //更新步骤状态为WORKING
+                    int i = stepNo + 1;
+                    String udnSql = "UPDATE DMS_WORKFLOW_STATUS SET STEP_STATUS = 'WORKING' WHERE WF_ID = '" + wfId + "'"
+                        + " AND RUN_ID = '" + runId + "'" + " AND STEP_NO = " + i;
+                    stat.executeUpdate(udnSql);
+                    trans.commit();    
+                }
+                statusRs.close();
+                //打开父节点下所有部门的组合
+                this.openComByChild(wfId, runId,templateId,comId, stepNo+1);
+                break;
+            }else if("APPROVE".equals(nextTask)){
+                if(lastTask.equals("APPROVE")){
+                    //若上一步为审批，则下一步没有审批对象，直接跳过
+                    continue;    
+                }
+                ApproveflowEngine approveEgn = new ApproveflowEngine();
+                //打开部门审批，发送邮件 
+                approveEgn.startApproveEntity(runId, templateId, comId);
+                //改变工作流中审批步骤状态为进行中
+                StringBuffer updateApp = new StringBuffer();
+                updateApp.append("UPDATE DMS_WORKFLOW_STATUS SET STEP_STATUS = 'WORKING' ");
+                updateApp.append("WHERE WF_ID = '").append(wfId).append("' ");
+                updateApp.append("AND RUN_ID = '").append(runId).append("' ");
+                updateApp.append("AND STEP_NO =").append(stepNo+1);
+                stat.executeUpdate(updateApp.toString());
                 trans.commit();
+                break;
             }else{
-                //若为审批，则不操作，打开模板步骤已经初始化审批状态表
+                break;    
             }
-        }else{
-            //更新工作流状态为完成
-            StringBuffer wfSql = new StringBuffer();
-            wfSql.append("UPDATE DMS_WORKFLOWINFO SET WF_STATUS = 'N' WHERE ID = '").append(wfId).append("'");
-            try {
-                stat.executeUpdate(wfSql.toString());
+        }
+        stat.close();
+        }catch(Exception e){
+            this._logger.severe(e);    
+        }
+    }
+    
+    public List<String> getChildEntity(String templateId , String comId){
+        DBTransaction trans =
+            (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
+        Statement stat = trans.createStatement(DBTransaction.DEFAULT);
+        //查询部门的父节点下的所有子部门
+        List<String> childList = new ArrayList<String>();
+        StringBuffer pSql = new StringBuffer();
+        pSql.append("select ENTITY from dcm_entity_parent d where d.parent = ( ");
+        pSql.append("select distinct parent from approve_template_status t1 , dcm_entity_parent t2 ");
+        pSql.append("where t1.entity_id = t2.entity and t1.template_id = '").append(templateId).append("' ");
+        pSql.append("and t1.com_id = '").append(comId).append("')");
+        try{
+            ResultSet rs = stat.executeQuery(pSql.toString());
+            while(rs.next()){
+                childList.add(rs.getString("ENTITY"));        
+            }
+            rs.close();
+        }catch(Exception e){
+            this._logger.severe(e);    
+        }
+        return childList;
+    }
+    
+    public boolean checkParent(String runId, String templateId, String comId,int stepNo){
+        boolean flag = false;
+        DBTransaction trans =
+            (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
+        Statement stat = trans.createStatement(DBTransaction.DEFAULT);
+        //查询部门的父节点下的所有子部门
+        List<String> childList = this.getChildEntity(templateId, comId);
+        try {
+            //检查输入状态表中所有子部门是否完成输入
+            StringBuffer eSql = new StringBuffer();
+            eSql.append("select 1 from workflow_template_status t where t.write_status = 'N' ");
+            eSql.append("and t.template_id = '").append(templateId).append("' ");
+            eSql.append("and t.run_id = '").append(runId).append("' ");
+            eSql.append("and t.step_no = ").append(stepNo).append(" ");
+            eSql.append("and t.entity_id in (");
+            for(String entityCode : childList){
+                eSql.append("'").append(entityCode).append("',");
+            }
+            eSql.append("'')");
+            ResultSet statusRs = stat.executeQuery(eSql.toString());
+            if(statusRs.next()){
+                //未完成    
+                flag = false;
+            }else{
+                //父节点完成
+                flag = true;
+            }
+            statusRs.close();
+            stat.close();
+        } catch (SQLException e) {
+            this._logger.severe(e);
+        }
+        return flag;
+    }
+    
+    //回退到父节点上一个输入审批状态
+    public void retreat(String wfId,String runId,int stepNo,String templateId,String comId){
+        DBTransaction trans =
+            (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
+        Statement stat = trans.createStatement(DBTransaction.DEFAULT);
+        List<Map<String,String>> stepList = new ArrayList<Map<String,String>>();
+        //查询前面的审批步骤
+        StringBuffer aSql = new StringBuffer();
+        aSql.append("select step_no from dms_workflow_status t ");
+        aSql.append("where t.wf_id = '").append(wfId).append("' ");
+        aSql.append("and t.run_id = '").append(runId).append("' ");
+        aSql.append("and t.step_task = 'APPROVE' ").append("and t.step_no < ").append(stepNo);
+        aSql.append(" order by t.step_no desc ");
+        try {
+            int first = 0;
+            int second = 0;
+            ResultSet aRs = stat.executeQuery(aSql.toString());
+            StringBuffer bSql = new StringBuffer();
+            bSql.append("select step_no,step_task,step_status,open_com,step_object from dms_workflow_status t ");
+            bSql.append("where t.wf_id = '").append(wfId).append("' ");
+            bSql.append("and t.run_id = '").append(runId).append("' ");
+            bSql.append("and t.step_no <= ").append(stepNo);
+            if(aRs.next()){
+                //存在上个审批步骤
+                first = aRs.getInt("STEP_NO");        
+            }
+            if(aRs.next()){
+                //存在上上个审批步骤
+                second = aRs.getInt("STEP_NO");    
+                bSql.append(" and t.step_no > ").append(second);
+            }
+            aRs.close();
+            bSql.append(" order by t.step_no asc ");
+            //查询需要回退处理的步骤信息
+            ResultSet bRs = stat.executeQuery(bSql.toString());
+            while(bRs.next()){
+                Map<String,String> stepMap = new HashMap<String,String>();
+                stepMap.put("STEP_NO", bRs.getString("STEP_NO"));
+                stepMap.put("STEP_TASK", bRs.getString("STEP_TASK"));
+                stepMap.put("STEP_STATUS", bRs.getString("STEP_STATUS"));
+                stepMap.put("OPEN_COM", bRs.getString("OPEN_COM"));
+                stepMap.put("STEP_OBJECT", bRs.getString("STEP_OBJECT"));
+                stepList.add(stepMap);
+            }
+            bRs.close();
+            stat.close();
+            this.retreatStep(wfId, runId,templateId, comId, stepList);
+        } catch (SQLException e) {
+            this._logger.severe(e);
+        }
+        //处理上上个到当前步骤之间的状态
+        this.retreatStep(wfId, runId, templateId, comId, stepList);
+    }
+    
+    //回退到父节点在工作流中的起点位置
+    public void retreatStarted(String wfId,String runId,int stepNo,String templateId,String comId){
+        DBTransaction trans =
+            (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
+        Statement stat = trans.createStatement(DBTransaction.DEFAULT);
+        List<Map<String,String>> stepList = new ArrayList<Map<String,String>>();
+        StringBuffer bSql = new StringBuffer();
+        bSql.append("select step_no,step_task,step_status,open_com,step_object from dms_workflow_status t ");
+        bSql.append("where t.wf_id = '").append(wfId).append("' ");
+        bSql.append("and t.run_id = '").append(runId).append("' ");
+        bSql.append("and t.step_no <= ").append(stepNo);
+        bSql.append(" order by t.step_no asc ");
+        //查询需要回退处理的步骤信息
+        try{
+        ResultSet bRs = stat.executeQuery(bSql.toString());
+        while(bRs.next()){
+            Map<String,String> stepMap = new HashMap<String,String>();
+            stepMap.put("STEP_NO", bRs.getString("STEP_NO"));
+            stepMap.put("STEP_TASK", bRs.getString("STEP_TASK"));
+            stepMap.put("STEP_STATUS", bRs.getString("STEP_STATUS"));
+            stepMap.put("OPEN_COM", bRs.getString("OPEN_COM"));
+            stepMap.put("STEP_OBJECT", bRs.getString("STEP_OBJECT"));
+            stepList.add(stepMap);
+        }
+        bRs.close();
+        stat.close();
+        this.retreatStep(wfId, runId, templateId, comId, stepList);
+        }catch(Exception e){
+            this._logger.severe(e);    
+        }
+    }
+    
+    //更改步骤状态，回退步骤
+    public void retreatStep(String wfId,String runId,String templateId ,String comId,List<Map<String,String>> stepList){
+        DBTransaction trans =
+            (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
+        Statement stat = trans.createStatement(DBTransaction.DEFAULT);
+        //查询所有子部门
+        List<String> childList = this.getChildEntity(templateId, comId);
+        try{
+        boolean isFirst = true;
+        for(Map<String,String> stepMap : stepList){
+            String stepTask = stepMap.get("STEP_TASK");
+            int stepNo = Integer.parseInt(stepMap.get("STEP_NO"));
+            if("ETL".equals(stepTask)){
+                continue;
+            }else if("APPROVE".equals(stepTask)){
+                //更改子部门的所有模板审批状态为未审批
+                StringBuffer wspSql = new StringBuffer();
+                wspSql.append("update approve_template_status t set t.approval_status = 'CLOSE' ");
+                wspSql.append("where t.run_id = '").append(runId).append("' ");
+                wspSql.append("and t.step_no = ").append(stepNo);
+                wspSql.append("and t.entity_id in (");
+                for(String entityCode : childList){
+                    wspSql.append("'").append(entityCode).append("',");
+                }
+                wspSql.append("'')");
+                stat.executeUpdate(wspSql.toString());
+                //更改步骤状态为working
+                String uSql = "update dms_workflow_status t set t.step_status = 'WORKING' " + "where t.wf_id = '" + wfId + 
+                              "' and t.run_id = '" + runId + "' and t.step_no =" + stepNo;
+                stat.executeUpdate(uSql);
                 trans.commit();
-            } catch (SQLException e) {
-                this._logger.severe(e);
+            }else if("OPEN TEMPLATES".equals(stepTask)){
+                //修改输入状态表为未输入
+                StringBuffer wsrSql = new StringBuffer();
+                wsrSql.append("update workflow_template_status t set t.write_status = 'N' ");
+                wsrSql.append("where t.run_id = '").append(runId).append("' ");
+                wsrSql.append("and t.step_no = ").append(stepNo);
+                wsrSql.append("and t.entity_code in (");
+                for(String entityCode : childList){
+                    wsrSql.append("'").append(entityCode).append("',");
+                }
+                wsrSql.append("'')");
+                stat.executeUpdate(wsrSql.toString());
+                //更改步骤状态为working
+                String uSql = "update dms_workflow_status t set t.step_status = 'WORKING' " + "where t.wf_id = '" + wfId + 
+                              "' and t.run_id = '" + runId + "' and t.step_no =" + stepNo;
+                stat.executeUpdate(uSql);
+                trans.commit();
+                //最前的开模板步骤，打开组合
+                if(isFirst){
+                    //最前的打开模板步骤打开组合
+                    this.changeComStatus(runId, stepNo, childList, "OPEN");
+                    isFirst = false ;
+                }else{
+                    //其他的打开模板步骤关闭组合
+                    this.changeComStatus(runId, stepNo, childList, "CLOSE");
+                }
             }
         }
             stat.close();
-        } catch (SQLException e) {
-                this._logger.severe(e);
+        }catch(Exception e){
+            this._logger.severe(e);    
+        }
+    }
+    
+    //通过部门改变父节点下所有子部门和模板对应的组合状态
+    public void changeComStatus(String runId,int stepNo,List<String> childList,String status){
+        DBTransaction trans =
+            (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
+        Statement stat = trans.createStatement(DBTransaction.DEFAULT);
+        //查询所有模板和对应的组合
+        StringBuffer comSql = new StringBuffer();
+        comSql.append("select template_id,com_id from workflow_template_status t ");
+        comSql.append("where t.run_id = '").append(runId).append("' ");
+        comSql.append("and t.step_no = ").append(stepNo);
+        comSql.append("and t.entity_code in (");
+        for(String entityCode : childList){
+            comSql.append("'").append(entityCode).append("',");
+        }
+        comSql.append("'')");
+        try{
+        ResultSet comRs = stat.executeQuery(comSql.toString());
+        DBTransaction trans1 =
+            (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
+        Statement stat1 = trans.createStatement(DBTransaction.DEFAULT);
+        while(comRs.next()){
+            String temp_Id = comRs.getString("TEMPLATE_ID");
+            String com_Id = comRs.getString("COM_ID");
+            String upSql = "UPDATE DCM_TEMPLATE_COMBINATION T SET T.STATUS = '" + status + "' WHERE T.TEMPLATE_ID = '" + temp_Id
+                + "' AND T.COM_RECORD_ID = '" + com_Id + "'";
+            stat1.addBatch(upSql);
+        }
+            stat1.executeBatch();
+            trans1.commit();
+            comRs.close();
+            stat1.close();
+            stat.close();
+        }catch(Exception e){
+            this._logger.severe(e);
         }
     }
 }

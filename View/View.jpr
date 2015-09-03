@@ -684,7 +684,10 @@
             <value n="JavaScriptRunConfigurationStopOnException" v="false"/>
             <value n="JavaScriptRunConfigurationTransferErrors" v="true"/>
             <value n="name" v="Default"/>
-            <hash n="oracle.adfdt.controller.adfc.source.runner.JsfJspRunnerLaunchSettings"/>
+            <hash n="oracle.adfdt.controller.adfc.source.runner.JsfJspRunnerLaunchSettings">
+               <value n="delegateRunTarget" v="/WEB-INF/adfc-config.xml"/>
+               <value n="viewActivityId" v="index"/>
+            </hash>
             <hash n="oracle.jdevimpl.runner.debug.DebugConfiguration">
                <value n="remoteParameter:jpda:jdi_attach_method:" v=""/>
                <value n="remoteParameter:jpdaListen:localAddress" v=""/>
@@ -870,11 +873,11 @@
             <value n="isJDK" v="false"/>
          </hash>
          <hash>
-            <url n="id" protocol="file" path="/D:/adf_121300_1008_source/Adf_121300_1008_source.zip.library"/>
+            <url n="id" path="../../adf_121300_1008_source/Adf_121300_1008_source.zip.library"/>
             <value n="isJDK" v="false"/>
          </hash>
          <hash>
-            <url n="id" path="../../../../../Users/Administrator/AppData/Roaming/JDeveloper/system11.1.1.7.40.64.93/o.jdeveloper/Adf_121300_1008_source.zip.library"/>
+            <url n="id" protocol="file" path="/Users/Administrator/AppData/Roaming/JDeveloper/system11.1.1.7.40.64.93/o.jdeveloper/Adf_121300_1008_source.zip.library"/>
             <value n="isJDK" v="false"/>
          </hash>
          <hash>
@@ -1201,11 +1204,11 @@
             <value n="isJDK" v="false"/>
          </hash>
          <hash>
-            <url n="id" protocol="file" path="/D:/adf_121300_1008_source/Adf_121300_1008_source.zip.library"/>
+            <url n="id" path="../../adf_121300_1008_source/Adf_121300_1008_source.zip.library"/>
             <value n="isJDK" v="false"/>
          </hash>
          <hash>
-            <url n="id" path="../../../../../Users/Administrator/AppData/Roaming/JDeveloper/system11.1.1.7.40.64.93/o.jdeveloper/Adf_121300_1008_source.zip.library"/>
+            <url n="id" protocol="file" path="/Users/Administrator/AppData/Roaming/JDeveloper/system11.1.1.7.40.64.93/o.jdeveloper/Adf_121300_1008_source.zip.library"/>
             <value n="isJDK" v="false"/>
          </hash>
          <hash>
