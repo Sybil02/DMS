@@ -1471,8 +1471,8 @@ public class DcmDataDisplayBean extends TablePagination{
         } catch (SQLException e) {
             this._logger.severe(e);
         }
-        //判断下一步是否为审批，是否存在审批 runid,wfId,stepno
         WorkflowEngine wfEngine = new WorkflowEngine();
+        //判断下一步是否为审批，是否存在审批 runid,wfId,stepno
         Map<String,String> nextMap = wfEngine.queryNextStep(this.curWfId, this.curRunId, this.stepNo);
         String stepTask = nextMap.get("STEP_TASK");
             //存在，直接进入下一步，改变审批状态
@@ -1492,6 +1492,9 @@ public class DcmDataDisplayBean extends TablePagination{
             } catch (Exception e) {
                 this._logger.severe(e);
             } 
+        }else{
+            //下一步不是审批，进行父节点判断是否开始下一步
+            wfEngine.startNext(this.curWfId, this.curRunId, this.curTempalte.getId(), this.curCombiantionRecord, stepNo, this.curStepTask);
         }
         //检测步骤是否完成 
         wfEngine.stepIsFinish(this.curWfId,this.curRunId, this.stepNo, this.curStepTask);
@@ -1507,7 +1510,7 @@ public class DcmDataDisplayBean extends TablePagination{
         approveEgn.approvePass(this.curWfId,this.curRunId, this.curTempalte.getId(), this.curCombiantionRecord,this.curUser.getId(),this.approveStepNo);
         WorkflowEngine workEngine = new WorkflowEngine();
         //检测步骤是否完成 
-        workEngine.stepIsFinish(this.curWfId,this.curRunId, this.approveStepNo, "ETL");
+        workEngine.stepIsFinish(this.curWfId,this.curRunId, this.approveStepNo, "APPROVE");
         this.approveStatus = "Y";
     }
 
@@ -1517,7 +1520,7 @@ public class DcmDataDisplayBean extends TablePagination{
         approveEgn.approveRefuse(this.curRunId, this.curTempalte.getId(), this.curCombiantionRecord,this.curUser.getId());
         WorkflowEngine workEngine = new WorkflowEngine();
         //检测步骤是否完成 
-        workEngine.stepIsFinish(this.curWfId,this.curRunId, this.approveStepNo, "ETL");
+        workEngine.stepIsFinish(this.curWfId,this.curRunId, this.approveStepNo, "APPROVE");
         this.approveStatus = "Y";
     }
     
@@ -1604,6 +1607,16 @@ public class DcmDataDisplayBean extends TablePagination{
         return _comboboxLOVBeanList;
     }
     
+    //回退到父节点上一个输入审批状态
+    public void retreat(ActionEvent actionEvent) {
+        WorkflowEngine wfEngine = new WorkflowEngine();
+        wfEngine.retreat(this.curWfId,this.curRunId, this.approveStepNo, this.curTempalte.getId(), this.curCombiantionRecord);
+    }
+    //回退到父节点在工作流中的起点位置
+    public void retreatStarted(ActionEvent actionEvent) {
+        WorkflowEngine wfEngine = new WorkflowEngine();
+        wfEngine.retreatStarted(this.curWfId,this.curRunId, this.approveStepNo, this.curTempalte.getId(), this.curCombiantionRecord);
+    }
     //手动添加页面是否为dirty
     public void makeDirty(boolean isdiry) { 
         

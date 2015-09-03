@@ -88,6 +88,12 @@
                                 disabled="#{viewScope.DcmDataDisplayBean.approveStatus eq 'Y'}"
                                 actionListener="#{viewScope.DcmDataDisplayBean.approveRefuse}"/>
             </af:group>
+            <af:group id="g9">
+              <af:commandButton text="#{viewBundle['dms.workflow.back']}" id="cb16"
+                                actionListener="#{viewScope.DcmDataDisplayBean.retreat}"/>
+              <af:commandButton text="#{viewBundle['dms.workflow.restart']}" id="cb17"
+                                actionListener="#{viewScope.DcmDataDisplayBean.retreatStarted}"/>
+            </af:group>
           </af:toolbar>
         </f:facet>
         <!-- 分页控件 -->
