@@ -15,10 +15,6 @@
              value="#{bindings.pageTemplateBinding}" id="pt1">
           <f:facet name="navigation">
             <af:group id="g1">
-              <af:panelList id="pl1">
-                <af:commandLink text="工作流"
-                                actionListener="#{viewScope.workflowLauncher.workflowAction}" id="cl1"/>
-              </af:panelList>
             </af:group>
           </f:facet>
           <f:facet name="globalLinks"/>

@@ -9,7 +9,7 @@ public class WorkflowLauncher extends TabLauncher{
         super();
     }
 
-    public void workflowAction(ActionEvent actionEvent) {
-        _launchActivity("工作流", "/WEB-INF/workApproveflow/workflow_display_tsk.xml#workflow_display_tsk", false);
-    }
+//    public void workflowAction(ActionEvent actionEvent) {
+//        _launchActivity("工作流", "/WEB-INF/workApproveflow/workflow_display_tsk.xml#workflow_display_tsk", false);
+//    }
 }

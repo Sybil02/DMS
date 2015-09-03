@@ -13,7 +13,7 @@
       <property
          name="description">&lt;html>&lt;p>&lt;b>workflow_display&lt;/b> (Default Activity)&lt;/p>&lt;p>Activity Type:  View&lt;/p></property>
       <property
-         name="thumbnailExpanded">true</property>
+         name="thumbnailExpanded">false</property>
       <property
          name="exceptionHandler">false</property>
       <property

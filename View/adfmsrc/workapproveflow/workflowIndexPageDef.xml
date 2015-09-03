@@ -9,6 +9,10 @@
           id="pageTemplateBinding" Refresh="ifNeeded"/>
     <iterator id="DmsMenuTreeViewIterator" Binds="DmsMenuTreeView"
               DataControl="DmsModuleDataControl" RangeSize="25"/>
+    <taskFlow id="workflow_display_tsk1"
+              taskFlowId="/WEB-INF/workApproveflow/workflow_display_tsk.xml#workflow_display_tsk"
+              activation="deferred"
+              xmlns="http://xmlns.oracle.com/adf/controller/binding"/>
   </executables>
   <bindings>
   </bindings>

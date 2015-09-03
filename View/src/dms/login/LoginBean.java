@@ -75,7 +75,7 @@ public class LoginBean {
             String pwd = row.getPwd();
             try {
                 String encypt_pwd =DigestUtils.digestSHA1(ObjectUtils.toString(this.account).trim() +ObjectUtils.toString(this.password).trim());
-                if (!pwd.equals(encypt_pwd)) {
+                if (pwd.equals(encypt_pwd)) {
                     //登陆成功
                     this.initUserPreference(row);
                     ExternalContext ectx =FacesContext.getCurrentInstance().getExternalContext();
