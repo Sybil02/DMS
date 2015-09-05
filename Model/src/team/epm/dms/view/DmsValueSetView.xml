@@ -22,7 +22,8 @@
   UseGlueCode="false"
   Where="DmsValueSet.LOCALE=:locale"
   ComponentClass="team.epm.dms.view.DmsValueSetViewImpl"
-  RowClass="team.epm.dms.view.DmsValueSetViewRowImpl">
+  RowClass="team.epm.dms.view.DmsValueSetViewRowImpl"
+  OrderBy="DmsValueSet.NAME">
   <DesignTime>
     <Attr Name="_codeGenFlag2" Value="Access|Coll|VarAccess"/>
     <Attr Name="_isCodegen" Value="true"/>

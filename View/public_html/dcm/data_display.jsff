@@ -422,6 +422,7 @@
                     <af:spacer height="5px" id="s4"/>
                     <af:selectOneChoice label="#{calcParameter.paraLabel}" id="soc4"
                                         autoSubmit="true"
+                                        binding="#{viewScope.DcmDataDisplayBean.paraSocMap[calcParameter.paraLabel]}"
                                         valueChangeListener="#{viewScope.DcmDataDisplayBean.paraValueChange}" >
                       <f:selectItems value="#{calcParameter.values}" id="si4"/>
                     </af:selectOneChoice>
@@ -429,6 +430,14 @@
                 </af:panelGroupLayout>
               </f:facet>
             </af:panelStretchLayout>
+          </af:panelWindow>
+        </af:popup>
+        <af:popup id="p7" binding="#{viewScope.DcmDataDisplayBean.calcErrPop}">
+          <af:panelWindow id="pw6" contentWidth="400" contentHeight="80"
+                          title="#{viewBundle['dms.calc.errmsg']}">
+            <af:inputText id="it3" rows="7" columns="100"
+                          value="#{viewScope.DcmDataDisplayBean.calcErrMsg}"
+                          readOnly="true"/>
           </af:panelWindow>
         </af:popup>
       </af:panelGroupLayout>

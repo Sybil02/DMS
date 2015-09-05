@@ -24,10 +24,10 @@
     AdfPage.PAGE.setDataDirty = function(value) {
  
         if(value == true)
-            AdfDhtmlPage.prototype.setDataDirty(true);
+           AdfDhtmlPage.prototype.setDataDirty(true);
         else
             AdfDhtmlPage.prototype.setDataDirty(isdirty);
-    }
+   }
 }
     //弹出子菜单的方法，并且发送给后台，是节点而不是菜单则打开节点任务流界面
     function expandNode(event){  

@@ -151,45 +151,6 @@ public class ApproveflowEngine {
                 //检查父节点是否全部审批通过，全部通过则启动下一个个步骤，否则不操作
                 WorkflowEngine wfEngine = new WorkflowEngine();
                 wfEngine.startNext(wfId, runId, templateId, comId, stepNo, "APPROVE");
-//                if(this.checkParentApprove(runId, templateId, comId,stepNo)){
-//                    //检测下一个步骤
-//                    Map<String,String> nextMap = new HashMap<String,String>();
-//                    WorkflowEngine wfEngine = new WorkflowEngine();
-//                    nextMap = wfEngine.queryNextStep(wfId, runId, stepNo);
-//                    //所有子部门审批通过，打开下一个步骤中所有子部门    
-//                    String stepTask = nextMap.get("STEP_TASK");
-//                    String openCom = nextMap.get("OPEN_COM");
-//                    String stepObj = nextMap.get("STEP_OBJECT");
-//                    if("ETL".equals(stepTask)){
-//                        //改变ETL执行状态表
-//                    }else if("OPEN TEMPLATES".equals(stepTask)){
-//                        //查询是否已经初始化，否则执行初始化
-//                        String stepStatus = "";
-//                        String stepSql = "SELECT STEP_STATUS FROM DMS_WORKFLOW_STATUS T " + "WHERE T.WF_ID = '" + wfId + "' AND T.RUN_ID = '"
-//                            + runId + "' AND STEP_NO = " + (stepNo+1);
-//                        ResultSet statusRs = stat.executeQuery(stepSql);
-//                        if(statusRs.next()){
-//                            stepStatus = statusRs.getString("STEP_STATUS");  
-//                        }
-//                        if("N".equals(stepStatus)){
-//                            //打开模板，初始化模板输入状态表和审批流状态表
-//                            wfEngine.onlyOpenTemplates(stepObj, openCom, runId, stepNo+1);
-//                            //更新步骤状态为WORKING
-//                            int i = stepNo + 1;
-//                            String udnSql = "UPDATE DMS_WORKFLOW_STATUS SET STEP_STATUS = 'WORKING' WHERE WF_ID = '" + wfId + "'"
-//                                + " AND RUN_ID = '" + runId + "'" + " AND STEP_NO = " + i;
-//                            stat.executeUpdate(udnSql);
-//                            trans.commit();    
-//                        }
-//                        //打开父节点下所有部门的组合
-//                        wfEngine.openComByChild(wfId, runId,templateId,comId, stepNo+1);
-//                    }else{
-//                        //审批
-//                        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("审批步骤的下一步不能为审批，请重新配置工作流！"));
-//                    }
-//                }else{
-//                    //未完成，不操作
-//                }
             }
             stat.close();
         } catch (SQLException e) {
@@ -298,7 +259,7 @@ public class ApproveflowEngine {
             //检查审批流状态表中所有子部门是否完成审批
             StringBuffer eSql = new StringBuffer();
             eSql.append("select 1 from approve_template_status t where t.approval_status <> 'Y' ");
-            eSql.append("and t.template_id = '").append(templateId).append("' ");
+            //eSql.append("and t.template_id = '").append(templateId).append("' ");
             eSql.append("and t.run_id = '").append(runId).append("' ");
             eSql.append("and t.step_no = ").append(stepNo).append(" ");
             eSql.append("and t.entity_id in (");

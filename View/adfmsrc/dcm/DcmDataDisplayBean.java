@@ -136,6 +136,8 @@ public class DcmDataDisplayBean extends TablePagination{
     private RichPopup calcWnd;
     //计算程序的参数对应的值集
     List<CalcParameter> parameterList = new ArrayList<CalcParameter>();
+    //计算程序参数选择控件
+    private Map<String,RichSelectOneChoice> paraSocMap = new HashMap<String,RichSelectOneChoice>();
     //上一次操作的模式
     private String lastHandleModel = "default";
     // 工作流ID
@@ -156,6 +158,8 @@ public class DcmDataDisplayBean extends TablePagination{
     private TabContext dmsTabContext;
     private RichPopup sortTipPopup;
     private RichTable displayTable;
+    private RichPopup calcErrPop;
+    private String calcErrMsg;
 
     public DcmDataDisplayBean() { 
         this.curUser =(Person)ADFContext.getCurrent().getSessionScope().get("cur_user");
@@ -1140,6 +1144,14 @@ public class DcmDataDisplayBean extends TablePagination{
             item.setValue(calcId);
             calcNameList.add(item);
         }
+        //设置默认值
+        if(calcNameList.size() > 0){
+            RichSelectOneChoice soc3 = (RichSelectOneChoice)JSFUtils.findComponentInRoot("soc3");
+            soc3.setValue(calcNameList.get(0).getValue());
+            //调用valueChange方法触发参数改变
+            ValueChangeEvent vce = new ValueChangeEvent(soc3,null,calcNameList.get(0).getValue());
+            this.calcChange(vce);
+        }
         RichPopup.PopupHints hint = new RichPopup.PopupHints();
         this.calcWnd.show(hint);
     }
@@ -1195,7 +1207,9 @@ public class DcmDataDisplayBean extends TablePagination{
     }
 
     public void refreshPage(ActionEvent event) {
-        queryDescriptor.getFilterCriteria().clear();
+        if(queryDescriptor.getFilterCriteria() != null){
+            queryDescriptor.getFilterCriteria().clear();       
+        }
         this.queryTemplateData();
     }
 
@@ -1292,6 +1306,12 @@ public class DcmDataDisplayBean extends TablePagination{
     //计算程序改变，查询对应参数值集源表，对应值集
     public void calcChange(ValueChangeEvent valueChangeEvent) {
         System.out.println("Calc_change:"+valueChangeEvent.getNewValue());
+        //
+        if(this.parameterList != null){
+            for(Map.Entry<String,RichSelectOneChoice> entry : paraSocMap.entrySet()){
+                entry.getValue().setValue(null);
+            }    
+        }
         //每次改变程序，清除参数集合
         this.parameterList.clear();
         this.parametersValueMap.clear();
@@ -1410,6 +1430,7 @@ public class DcmDataDisplayBean extends TablePagination{
         //System.out.println(calcPro+"&"+p_template_id+"&"+p_com_record_id+"&"+p_user_id+"&"+p_handle_mode+"&"+p_locale);
         //System.out.println(args);
         DBTransaction trans = (DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
+        System.out.println("calc.............:"+calcPro);
         CallableStatement cs = trans.createCallableStatement("{CALL "+calcPro+"(?,?,?,?,?,?,?)}", 0);
         try {
             cs.setString(1, p_template_id);
@@ -1431,8 +1452,14 @@ public class DcmDataDisplayBean extends TablePagination{
                 trans.rollback();
             }
             cs.close();
-            
         } catch (SQLException e) {
+            if(e.toString().length() <= 200){
+                this.setCalcErrMsg(e.toString());        
+            }else{
+                this.setCalcErrMsg(e.toString().substring(0,200)+"......");    
+            }
+            RichPopup.PopupHints hint = new RichPopup.PopupHints();
+            this.calcErrPop.show(hint);
             this._logger.severe(e);
         }
     }
@@ -1567,7 +1594,6 @@ public class DcmDataDisplayBean extends TablePagination{
                 approveSql.append("AND TEMPLATE_ID = '").append(this.curTempalte.getId()).append("' ");
                 approveSql.append("AND PERSON_ID = '").append(this.curUser.getId()).append("' ");
                 approveSql.append("AND COM_ID = '").append(this.curCombiantionRecord).append("'");
-               
                 ResultSet aRs = stat.executeQuery(approveSql.toString());
                 if(aRs.next()){
                     String appStatus = aRs.getString("APPROVAL_STATUS");
@@ -1647,5 +1673,29 @@ public class DcmDataDisplayBean extends TablePagination{
 
     public RichTable getDisplayTable() {
         return displayTable;
+    }
+
+    public void setCalcErrPop(RichPopup calcErrPop) {
+        this.calcErrPop = calcErrPop;
+    }
+
+    public RichPopup getCalcErrPop() {
+        return calcErrPop;
+    }
+
+    public void setCalcErrMsg(String calcErrMsg) {
+        this.calcErrMsg = calcErrMsg;
+    }
+
+    public String getCalcErrMsg() {
+        return calcErrMsg;
+    }
+
+    public void setParaSocMap(Map<String, RichSelectOneChoice> paraSocMap) {
+        this.paraSocMap = paraSocMap;
+    }
+
+    public Map<String, RichSelectOneChoice> getParaSocMap() {
+        return paraSocMap;
     }
 }
