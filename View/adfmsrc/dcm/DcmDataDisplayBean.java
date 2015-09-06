@@ -169,7 +169,6 @@ public class DcmDataDisplayBean extends TablePagination{
         this.queryTemplateData();
         //判断模板是否在工作流中，是输入还是审批状态
         this.isWfTemplate();
-        System.out.println("this is dcmBean");
     }
 
     public CollectionModel getDataModel() {
@@ -458,7 +457,6 @@ public class DcmDataDisplayBean extends TablePagination{
             Statement stat = trans.createStatement(1);
             try {
                 //time
-                System.out.println(sql.toString());
                 ResultSet rs = stat.executeQuery(sql.toString());
                 if (rs.next()) {
                     comRecordId = rs.getString("ID");
@@ -865,7 +863,6 @@ public class DcmDataDisplayBean extends TablePagination{
             Statement stat=dbTransaction.createStatement(DBTransaction.DEFAULT);
             try {
                 //time
-                System.out.println(sql.toString());
                 ResultSet rs=stat.executeQuery(sql.toString());
                 if(rs.next()){
                     String status=rs.getString("STATUS");
@@ -877,7 +874,6 @@ public class DcmDataDisplayBean extends TablePagination{
                                 .append(h.getValue()).append("' AND T.LOCALE='")
                                 .append(ADFContext.getCurrent().getLocale()).append("'");
                             //time
-                            System.out.println(sql0.toString());
                             ResultSet rst=stat.executeQuery(sql0.toString());
                             if(rst.next()){
                                 String enabled=rst.getString("ENABLED");
@@ -1305,8 +1301,7 @@ public class DcmDataDisplayBean extends TablePagination{
     Map<String,String> parametersValueMap = new LinkedHashMap<String,String>();
     //计算程序改变，查询对应参数值集源表，对应值集
     public void calcChange(ValueChangeEvent valueChangeEvent) {
-        System.out.println("Calc_change:"+valueChangeEvent.getNewValue());
-        //
+        //清除计算程序弹出款里的遗留参数
         if(this.parameterList != null){
             for(Map.Entry<String,RichSelectOneChoice> entry : paraSocMap.entrySet()){
                 entry.getValue().setValue(null);
@@ -1328,7 +1323,7 @@ public class DcmDataDisplayBean extends TablePagination{
         paraVo.setWhereClause(whereClause);
         paraVo.executeQuery();
         Row[] rows = paraIter.getAllRowsInRange();
-        System.out.println(calcId+":size:"+rows.length);
+        //System.out.println(calcId+":size:"+rows.length);
         //获得事务
         DBTransaction dbTransaction =(DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
         Statement stat=dbTransaction.createStatement(DBTransaction.DEFAULT);
@@ -1343,11 +1338,11 @@ public class DcmDataDisplayBean extends TablePagination{
             ResultSet rs;
             //值集对应的表源
             String source = "";
-                System.out.println("sql:"+sqlStr.toString());
+                //System.out.println("sql:"+sqlStr.toString());
                 rs = stat.executeQuery(sqlStr.toString());
                 if(rs.next()){
                     source = rs.getString("SOURCE");
-                    System.out.println("table:"+source);
+                    //System.out.println("table:"+source);
                 }
                 rs.close();
                 vsMap.put(pName, source);
@@ -1408,6 +1403,10 @@ public class DcmDataDisplayBean extends TablePagination{
     //获取参数，执行存储过程
     public void executeProcedure(ActionEvent actionEvent) {
         String calcPro = this.calcProMap.get(this.curCalcId);
+        if(calcPro == null){
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("模板没有计算程序！"));  
+            return;
+        }
         String p_template_id = this.curTempalte.getId();
         String p_com_record_id = this.curCombiantionRecord;
         String p_user_id = this.curUser.getId();
@@ -1430,7 +1429,6 @@ public class DcmDataDisplayBean extends TablePagination{
         //System.out.println(calcPro+"&"+p_template_id+"&"+p_com_record_id+"&"+p_user_id+"&"+p_handle_mode+"&"+p_locale);
         //System.out.println(args);
         DBTransaction trans = (DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
-        System.out.println("calc.............:"+calcPro);
         CallableStatement cs = trans.createCallableStatement("{CALL "+calcPro+"(?,?,?,?,?,?,?)}", 0);
         try {
             cs.setString(1, p_template_id);

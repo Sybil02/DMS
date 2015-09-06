@@ -422,7 +422,7 @@
               </af:column>
               <af:column headerText="#{bindings.DmsUserWorkflowVO.hints.WfStatus.label}"
                          id="c1">
-                <af:outputText value="#{row.WfStatus}" id="ot2"/>
+                <af:outputText value="#{row.WfStatus eq 'Y' ? '已启动':'已关闭'}" id="ot2"/>
               </af:column>
             </af:table>
           </af:panelCollection>
@@ -475,7 +475,7 @@
                          sortable="true"
                          headerText="#{bindings.DmsWorkflowStatusVO.hints.StepStatus.label}"
                          id="c4">
-                <af:outputText value="#{row.StepStatus}" id="ot8"/>
+                <af:outputText value="#{row.StepStatus eq 'N' ? '未开始':(row.StepStatus eq 'Y' ? '完成':'工作中')}" id="ot8"/>
               </af:column>
               <af:column sortProperty="#{bindings.DmsWorkflowStatusVO.hints.StartAt.name}"
                          sortable="true"
