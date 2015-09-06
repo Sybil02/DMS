@@ -121,6 +121,7 @@ public final class TabContext implements Serializable {
         _saveTab.setActive(true);
     } 
     
+    //把缓存的页面显示出来
     public void  addSaveTab( ) throws TabContext.TabOverflowException {
         if (this._tabTracker.getNumRendered() == 15) {
             throw new TabOverflowException();
@@ -310,7 +311,9 @@ public final class TabContext implements Serializable {
             _removeTab(getSelectedTabIndex(), true);
             
             try{
-                addSaveTab();
+                //如果存在缓存页面，那么就把缓存页面显示出来，如果没有，则不显示
+                if(_saveTab.isActive())
+                     addSaveTab();
             }catch(Exception e) {
                 e.printStackTrace();
             }
