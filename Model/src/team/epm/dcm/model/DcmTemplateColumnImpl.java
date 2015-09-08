@@ -170,6 +170,26 @@ public class DcmTemplateColumnImpl extends DmsEntityImpl {
                 obj.setValueSetId((String)value);
             }
         }
+        ,
+        RollingMonth {
+            public Object get(DcmTemplateColumnImpl obj) {
+                return obj.getRollingMonth();
+            }
+
+            public void put(DcmTemplateColumnImpl obj, Object value) {
+                obj.setRollingMonth((Number)value);
+            }
+        }
+        ,
+        RollingAttr {
+            public Object get(DcmTemplateColumnImpl obj) {
+                return obj.getRollingAttr();
+            }
+
+            public void put(DcmTemplateColumnImpl obj, Object value) {
+                obj.setRollingAttr((String)value);
+            }
+        }
         ;
         private static AttributesEnum[] vals = null;
         private static final int firstIndex = 0;
@@ -198,6 +218,7 @@ public class DcmTemplateColumnImpl extends DmsEntityImpl {
         }
     }
 
+
     public static final int ID = AttributesEnum.Id.index();
     public static final int LOCALE = AttributesEnum.Locale.index();
     public static final int COLUMNLABEL = AttributesEnum.ColumnLabel.index();
@@ -213,12 +234,15 @@ public class DcmTemplateColumnImpl extends DmsEntityImpl {
     public static final int SEQ = AttributesEnum.Seq.index();
     public static final int TEMPLATEID = AttributesEnum.TemplateId.index();
     public static final int VALUESETID = AttributesEnum.ValueSetId.index();
+    public static final int ROLLINGMONTH = AttributesEnum.RollingMonth.index();
+    public static final int ROLLINGATTR = AttributesEnum.RollingAttr.index();
 
     /**
      * This is the default constructor (do not remove).
      */
     public DcmTemplateColumnImpl() {
     }
+
 
     /**
      * @return the definition object for this instance class.
@@ -468,6 +492,38 @@ public class DcmTemplateColumnImpl extends DmsEntityImpl {
      */
     public void setValueSetId(String value) {
         setAttributeInternal(VALUESETID, value);
+    }
+
+    /**
+     * Gets the attribute value for RollingAttr, using the alias name RollingAttr.
+     * @return the RollingAttr
+     */
+    public String getRollingAttr() {
+        return (String)getAttributeInternal(ROLLINGATTR);
+    }
+
+    /**
+     * Sets <code>value</code> as the attribute value for RollingAttr.
+     * @param value value to set the RollingAttr
+     */
+    public void setRollingAttr(String value) {
+        setAttributeInternal(ROLLINGATTR, value);
+    }
+
+    /**
+     * Gets the attribute value for RollingMonth, using the alias name RollingMonth.
+     * @return the RollingMonth
+     */
+    public Number getRollingMonth() {
+        return (Number)getAttributeInternal(ROLLINGMONTH);
+    }
+
+    /**
+     * Sets <code>value</code> as the attribute value for RollingMonth.
+     * @param value value to set the RollingMonth
+     */
+    public void setRollingMonth(Number value) {
+        setAttributeInternal(ROLLINGMONTH, value);
     }
 
     /**

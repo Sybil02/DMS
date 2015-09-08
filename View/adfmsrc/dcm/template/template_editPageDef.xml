@@ -66,6 +66,8 @@
           <Item Value="Readonly"/>
           <Item Value="Visible"/>
           <Item Value="ValueSetId"/>
+          <Item Value="RollingMonth"/>
+          <Item Value="RollingAttr"/>
         </AttrNames>
       </nodeDefinition>
     </tree>

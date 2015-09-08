@@ -5,7 +5,7 @@ import common.ADFUtils;
 import common.DmsUtils;
 import common.JSFUtils;
 import common.TablePagination;
-
+import oracle.jbo.domain.Number;
 import dcm.combinantion.CombinationEO;
 
 import dcm.template.TemplateEO;
@@ -160,6 +160,8 @@ public class DcmDataDisplayBean extends TablePagination{
     private RichTable displayTable;
     private RichPopup calcErrPop;
     private String calcErrMsg;
+    private boolean isRolling = true;
+    private Number rollingMonth; 
 
     public DcmDataDisplayBean() { 
         this.curUser =(Person)ADFContext.getCurrent().getSessionScope().get("cur_user");
@@ -848,6 +850,8 @@ public class DcmDataDisplayBean extends TablePagination{
             }
             this.curCombiantionRecord=this.getCurCombinationRecord();
             this.setCurCombinationRecordEditable();
+            //初始化滚动预算
+            this.setReadonlyByRolling();
         }
     }
     private void setCurCombinationRecordEditable(){
@@ -1015,6 +1019,8 @@ public class DcmDataDisplayBean extends TablePagination{
         if(this.writeStatus != "Y"){
             this.isEditable = true;    
         }
+        //设置滚动预算
+        this.setReadonlyByRolling();
         AdfFacesContext adfFacesContext = AdfFacesContext.getCurrentInstance();
         adfFacesContext.addPartialTarget(this.panelaCollection);
     }
@@ -1606,6 +1612,37 @@ public class DcmDataDisplayBean extends TablePagination{
         }
     }
     
+    public void setReadonlyByRolling(){
+        this.isRolling = false;
+        this.rollingMonth = new Number(-1);
+        DBTransaction trans = (DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
+        Statement stat = trans.createStatement(DBTransaction.DEFAULT);
+        //查询滚动预算配置
+        String rSql = "SELECT YEAR,SCENARIO,VERSION,MONTH FROM DCM_ROLLING_COM";
+        try {
+            ResultSet rs = stat.executeQuery(rSql);
+            if(rs.next()){
+                this.rollingMonth = new Number(rs.getInt("MONTH"));
+                int i=0;
+                for(ComHeader hd:this.templateHeader){
+                    String code = hd.getCode();
+                    String value = hd.getValue();
+                    if(code.equals("YEARS")&&rs.getString("YEAR").equals(value))
+                        i++;
+                    if(code.equals("SCENARIO")&&rs.getString("SCENARIO").equals(value))
+                        i++;
+                    if(code.equals("VERSION")&&rs.getString("VERSION").equals(value))
+                        i++;
+                }
+                if(i==3){
+                    this.isRolling = true;    
+                }
+            }
+        } catch (SQLException e) {
+            this._logger.severe(e);
+        }
+    }
+    
     public void setWriteStatus(String writeStatus) {
         this.writeStatus = writeStatus;
     }
@@ -1696,4 +1733,21 @@ public class DcmDataDisplayBean extends TablePagination{
     public Map<String, RichSelectOneChoice> getParaSocMap() {
         return paraSocMap;
     }
+
+    public void setIsRolling(boolean isRolling) {
+        this.isRolling = isRolling;
+    }
+
+    public boolean isIsRolling() {
+        return isRolling;
+    }
+
+    public void setRollingMonth(Number rollingMonth) {
+        this.rollingMonth = rollingMonth;
+    }
+
+    public Number getRollingMonth() {
+        return rollingMonth;
+    }
+    
 }

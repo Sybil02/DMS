@@ -338,6 +338,16 @@ public class DcmTemplateViewRowImpl extends ViewRowImpl {
                 obj.setAttributeInternal(index(), value);
             }
         }
+        ,
+        LST_MONTH {
+            public Object get(DcmTemplateViewRowImpl obj) {
+                return obj.getLST_MONTH();
+            }
+
+            public void put(DcmTemplateViewRowImpl obj, Object value) {
+                obj.setAttributeInternal(index(), value);
+            }
+        }
         ;
         private static AttributesEnum[] vals = null;
         private static final int firstIndex = 0;
@@ -399,6 +409,7 @@ public class DcmTemplateViewRowImpl extends ViewRowImpl {
     public static final int LKP_COM = AttributesEnum.LKP_COM.index();
     public static final int LKP_IMPORT_MODE = AttributesEnum.LKP_IMPORT_MODE.index();
     public static final int LKP_TMP_TABLE = AttributesEnum.LKP_TMP_TABLE.index();
+    public static final int LST_MONTH = AttributesEnum.LST_MONTH.index();
 
     /**
      * This is the default constructor (do not remove).
@@ -766,6 +777,7 @@ public class DcmTemplateViewRowImpl extends ViewRowImpl {
         setAttributeInternal(TEMPLATELABEL, value);
     }
 
+
     /**
      * Gets the associated <code>RowIterator</code> using master-detail link DcmTemplateColumnView.
      */
@@ -834,6 +846,13 @@ public class DcmTemplateViewRowImpl extends ViewRowImpl {
      */
     public RowSet getLKP_TMP_TABLE() {
         return (RowSet)getAttributeInternal(LKP_TMP_TABLE);
+    }
+
+    /**
+     * Gets the view accessor <code>RowSet</code> LST_MONTH.
+     */
+    public RowSet getLST_MONTH() {
+        return (RowSet)getAttributeInternal(LST_MONTH);
     }
 
     /**

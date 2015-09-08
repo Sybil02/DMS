@@ -241,6 +241,29 @@
       <Attr Name="_DisplaySize" Value="32"/>
     </DesignTime>
   </Attribute>
+  <Attribute
+    Name="RollingMonth"
+    ColumnName="ROLLING_MONTH"
+    SQLType="NUMERIC"
+    Type="oracle.jbo.domain.Number"
+    ColumnType="NUMBER"
+    TableName="DCM_TEMPLATE_COLUMN">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="22"/>
+    </DesignTime>
+  </Attribute>
+  <Attribute
+    Name="RollingAttr"
+    Precision="200"
+    ColumnName="ROLLING_ATTR"
+    SQLType="VARCHAR"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    TableName="DCM_TEMPLATE_COLUMN">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="200"/>
+    </DesignTime>
+  </Attribute>
   <Key
     Name="PkDcmTemplateColumn"
     PrimaryKey="true">

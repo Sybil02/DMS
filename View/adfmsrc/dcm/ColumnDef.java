@@ -22,6 +22,8 @@ public class ColumnDef {
         this.seq=row.getSeq();
         this.templateId=row.getTemplateId();
         this.valueSetId=row.getValueSetId();
+        this.rollingMonth=row.getRollingMonth();
+        this.rollingAttr=row.getRollingAttr();
     }
     private String id;
     private String locale;
@@ -38,6 +40,9 @@ public class ColumnDef {
     private Number seq;
     private String templateId;
     private String valueSetId;
+    private Number rollingMonth;
+    private String rollingAttr;
+    
 
     public void setId(String id) {
         this.id = id;
@@ -157,5 +162,21 @@ public class ColumnDef {
 
     public String getValueSetId() {
         return valueSetId;
+    }
+
+    public void setRollingMonth(Number rollingMonth) {
+        this.rollingMonth = rollingMonth;
+    }
+
+    public Number getRollingMonth() {
+        return rollingMonth;
+    }
+
+    public void setRollingAttr(String rollingAttr) {
+        this.rollingAttr = rollingAttr;
+    }
+
+    public String getRollingAttr() {
+        return rollingAttr;
     }
 }

@@ -698,6 +698,29 @@
               <f:selectItems value="#{row.bindings.Visible.items}" id="si6"/>
             </af:selectOneChoice>
           </af:column>
+          <af:column headerText="#{bindings.DcmTemplateColumnView.hints.RollingMonth.label}"
+                     id="c35">
+            <af:selectOneChoice value="#{row.bindings.RollingMonth.inputValue}"
+                                label="#{row.bindings.RollingMonth.label}"
+                                required="#{bindings.DcmTemplateColumnView.hints.RollingMonth.mandatory}"
+                                shortDesc="#{bindings.DcmTemplateColumnView.hints.RollingMonth.tooltip}"
+                                id="soc13">
+              <f:selectItems value="#{row.bindings.RollingMonth.items}"
+                             id="si13"/>
+            </af:selectOneChoice>
+          </af:column>
+          <af:column headerText="#{bindings.DcmTemplateColumnView.hints.RollingAttr.label}"
+                     id="c36">
+            <af:inputText value="#{row.bindings.RollingAttr.inputValue}"
+                          label="#{bindings.DcmTemplateColumnView.hints.RollingAttr.label}"
+                          required="#{bindings.DcmTemplateColumnView.hints.RollingAttr.mandatory}"
+                          columns="#{bindings.DcmTemplateColumnView.hints.RollingAttr.displayWidth}"
+                          maximumLength="#{bindings.DcmTemplateColumnView.hints.RollingAttr.precision}"
+                          shortDesc="#{bindings.DcmTemplateColumnView.hints.RollingAttr.tooltip}"
+                          id="it21">
+              <f:validator binding="#{row.bindings.RollingAttr.validator}"/>
+            </af:inputText>
+          </af:column>
         </af:table>
       </af:panelCollection>
     </f:facet>

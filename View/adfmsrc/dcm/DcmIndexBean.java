@@ -40,78 +40,7 @@ public class DcmIndexBean {
         }
         return this.model;
     }
-//    private RowKeySet rowKeySet = null;
-//    public void selectListener(SelectionEvent selectionEvent) {
-//     
-//        
-//        RichTree tree = (RichTree)selectionEvent.getSource();
-//        RowKeySet set = tree.getSelectedRowKeys();
-//        for(Object obj : set) {
-//            System.out.println(obj);
-//        }
-//        if(rowKeySet != null)
-//        {
-//            tree.setSelectedRowKeys(rowKeySet); 
-//            tree.setActiveRowKey(rowKeySet);
-//            System.out.println("[[[[[[[[[[[[[[[[[[[[[[[[  ");
-//        }
-//        rowKeySet = set;
-//        
-//        System.out.println("tree = " + tree + "          "+tree.getId());
-//        
-//        RowKeySet rks = selectionEvent.getAddedSet();
-//        if (rks != null) {
-//            int setSize = rks.size();
-//            if (setSize == 0) {
-//                return;
-//            }
-//            Object rowKey = null;
-//            TemplateTreeItem rowData = null;
-//            rowKey = rks.iterator().next();
-//            tree.setRowKey(rowKey);
-//            rowData = (TemplateTreeItem)tree.getRowData();
-//            try {
-//                TabContext tabContext = TabContext.getCurrentInstance();
-//                
-//                if( tabContext.getSelectedTabIndex()!=-1 && TemplateTreeItem.TYPE_TEMPLATE.equals(rowData.getType())){
-//                    tabContext.removeCurrentTab();
-//                    
-//                    Map params=new HashMap();
-//                    params.put("curTemplateId", rowData.getId());
-//                    params.put("dmsTabContext", TabContext.getCurrentInstance());
-//                    
-//                    //如果页面数据搜集页面要增加页面的话要先删除页面,不管是否确定删除页面后面的方法会导致新的页面出现
-//                    //所以是不行的，必须等到成功删除才会弹出新的页面，因此先把tab内容保存一下，确定删除就增加保存的tab
-//                    //如果不删除页面就删除保存了的tab
-//                    
-//                    if(tabContext.isTagSetDirty())
-//                     { 
-//                        tabContext.saveTab(rowData.getLabel(), "/WEB-INF/dcmData/data_display_tsk.xml#data_display_tsk",params);
-//                    }else {
-//                        TabContext.getCurrentInstance().addTab(rowData.getLabel(), "/WEB-INF/dcmData/data_display_tsk.xml#data_display_tsk",params);
-//                        
-//                    }
-//                    
-//                }
-//                else if(TemplateTreeItem.TYPE_TEMPLATE.equals(rowData.getType())){
-//                    Map params=new HashMap();
-//                    params.put("curTemplateId", rowData.getId());
-//                    params.put("dmsTabContext", TabContext.getCurrentInstance());
-//                    TabContext.getCurrentInstance().addTab(rowData.getLabel(), "/WEB-INF/dcmData/data_display_tsk.xml#data_display_tsk",params);
-//                    
-//                } 
-//                
-//            } catch (TabContext.TabOverflowException e) {
-//                _logger.severe(e);
-//            }
-//        }
-//    } 
-//    public void focusListener(FocusEvent focusEvent) {
-//        System.out.println("focusListenereeeee");
-//        
-//    }
-    
-    
+
     //用于让dcm/index.jspx页面的js代码调用下面这个方法，用于打开tab页面
     public void treeSelectListener(ClientEvent clientEvent) {
       

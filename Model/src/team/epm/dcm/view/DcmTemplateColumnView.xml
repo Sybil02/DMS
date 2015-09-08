@@ -20,7 +20,9 @@
        DcmTemplateColumn.VISIBLE, 
        DcmTemplateColumn.SEQ, 
        DcmTemplateColumn.TEMPLATE_ID, 
-       DcmTemplateColumn.VALUE_SET_ID"
+       DcmTemplateColumn.VALUE_SET_ID, 
+       DcmTemplateColumn.ROLLING_MONTH, 
+       DcmTemplateColumn.ROLLING_ATTR"
   FromList="DCM_TEMPLATE_COLUMN DcmTemplateColumn"
   BindingStyle="OracleName"
   CustomQuery="false"
@@ -97,6 +99,21 @@
     Name="LST_VS"
     ViewObjectName="team.epm.dms.view.DmsValueSetView"
     RowLevelBinds="true"/>
+  <ViewAccessor
+    Name="LST_MONTH"
+    ViewObjectName="team.epm.dms.view.DmsLookupView">
+    <ViewCriteriaUsage
+      Name="DmsLookupViewCriteria"
+      FullName="team.epm.dms.view.DmsLookupView.DmsLookupViewCriteria"/>
+    <ParameterMap>
+      <PIMap Variable="locale">
+        <TransientExpression><![CDATA[this.Locale]]></TransientExpression>
+      </PIMap>
+      <PIMap Variable="lookupType">
+        <TransientExpression><![CDATA["ROLLING_MONTH"]]></TransientExpression>
+      </PIMap>
+    </ParameterMap>
+  </ViewAccessor>
   <ListBinding
     Name="LOV_Locale"
     ListVOName="LKP_LANG"
@@ -238,6 +255,24 @@
     </AttrArray>
     <AttrArray Name="ListDisplayAttrNames">
       <Item Value="Name"/>
+    </AttrArray>
+    <DisplayCriteria/>
+  </ListBinding>
+  <ListBinding
+    Name="LOV_RollingMonth"
+    ListVOName="LST_MONTH"
+    ListRangeSize="-1"
+    NullValueFlag="start"
+    NullValueId="${adfBundle['oracle.javatools.resourcebundle.SystemBundle']['NULL_VALUE_RESID']}"
+    MRUCount="0">
+    <AttrArray Name="AttrNames">
+      <Item Value="RollingMonth"/>
+    </AttrArray>
+    <AttrArray Name="ListAttrNames">
+      <Item Value="Code"/>
+    </AttrArray>
+    <AttrArray Name="ListDisplayAttrNames">
+      <Item Value="Meaning"/>
     </AttrArray>
     <DisplayCriteria/>
   </ListBinding>
@@ -435,6 +470,35 @@
       <SchemaBasedProperties>
         <CONTROLTYPE
           Value="choice"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="RollingMonth"
+    PrecisionRule="true"
+    EntityAttrName="RollingMonth"
+    EntityUsage="DcmTemplateColumn"
+    AliasName="ROLLING_MONTH"
+    LOVName="LOV_RollingMonth">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="team.epm.dcm.view.DcmTemplateColumnView.RollingMonth_LABEL"/>
+        <CONTROLTYPE
+          Value="choice"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="RollingAttr"
+    PrecisionRule="true"
+    EntityAttrName="RollingAttr"
+    EntityUsage="DcmTemplateColumn"
+    AliasName="ROLLING_ATTR">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="team.epm.dcm.view.DcmTemplateColumnView.RollingAttr_LABEL"/>
       </SchemaBasedProperties>
     </Properties>
   </ViewAttribute>

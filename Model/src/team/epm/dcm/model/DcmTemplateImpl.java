@@ -661,6 +661,7 @@ public class DcmTemplateImpl extends DmsEntityImpl {
         setAttributeInternal(TEMPLATELABEL, value);
     }
 
+
     /**
      * getAttrInvokeAccessor: generated method. Do not modify.
      * @param index the index identifying the attribute

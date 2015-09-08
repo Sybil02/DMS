@@ -169,6 +169,26 @@ public class DcmTemplateColumnViewRowImpl extends ViewRowImpl {
             }
         }
         ,
+        RollingMonth {
+            public Object get(DcmTemplateColumnViewRowImpl obj) {
+                return obj.getRollingMonth();
+            }
+
+            public void put(DcmTemplateColumnViewRowImpl obj, Object value) {
+                obj.setRollingMonth((Number)value);
+            }
+        }
+        ,
+        RollingAttr {
+            public Object get(DcmTemplateColumnViewRowImpl obj) {
+                return obj.getRollingAttr();
+            }
+
+            public void put(DcmTemplateColumnViewRowImpl obj, Object value) {
+                obj.setRollingAttr((String)value);
+            }
+        }
+        ,
         LKP_YES_NO {
             public Object get(DcmTemplateColumnViewRowImpl obj) {
                 return obj.getLKP_YES_NO();
@@ -212,6 +232,16 @@ public class DcmTemplateColumnViewRowImpl extends ViewRowImpl {
         LST_VS {
             public Object get(DcmTemplateColumnViewRowImpl obj) {
                 return obj.getLST_VS();
+            }
+
+            public void put(DcmTemplateColumnViewRowImpl obj, Object value) {
+                obj.setAttributeInternal(index(), value);
+            }
+        }
+        ,
+        LST_MONTH {
+            public Object get(DcmTemplateColumnViewRowImpl obj) {
+                return obj.getLST_MONTH();
             }
 
             public void put(DcmTemplateColumnViewRowImpl obj, Object value) {
@@ -263,11 +293,14 @@ public class DcmTemplateColumnViewRowImpl extends ViewRowImpl {
     public static final int SEQ = AttributesEnum.Seq.index();
     public static final int TEMPLATEID = AttributesEnum.TemplateId.index();
     public static final int VALUESETID = AttributesEnum.ValueSetId.index();
+    public static final int ROLLINGMONTH = AttributesEnum.RollingMonth.index();
+    public static final int ROLLINGATTR = AttributesEnum.RollingAttr.index();
     public static final int LKP_YES_NO = AttributesEnum.LKP_YES_NO.index();
     public static final int LST_USER = AttributesEnum.LST_USER.index();
     public static final int LKP_LANG = AttributesEnum.LKP_LANG.index();
     public static final int LKP_DATA_TYPE = AttributesEnum.LKP_DATA_TYPE.index();
     public static final int LST_VS = AttributesEnum.LST_VS.index();
+    public static final int LST_MONTH = AttributesEnum.LST_MONTH.index();
 
     /**
      * This is the default constructor (do not remove).
@@ -525,6 +558,38 @@ public class DcmTemplateColumnViewRowImpl extends ViewRowImpl {
     }
 
     /**
+     * Gets the attribute value for ROLLING_MONTH using the alias name RollingMonth.
+     * @return the ROLLING_MONTH
+     */
+    public Number getRollingMonth() {
+        return (Number) getAttributeInternal(ROLLINGMONTH);
+    }
+
+    /**
+     * Sets <code>value</code> as attribute value for ROLLING_MONTH using the alias name RollingMonth.
+     * @param value value to set the ROLLING_MONTH
+     */
+    public void setRollingMonth(Number value) {
+        setAttributeInternal(ROLLINGMONTH, value);
+    }
+
+    /**
+     * Gets the attribute value for ROLLING_ATTR using the alias name RollingAttr.
+     * @return the ROLLING_ATTR
+     */
+    public String getRollingAttr() {
+        return (String) getAttributeInternal(ROLLINGATTR);
+    }
+
+    /**
+     * Sets <code>value</code> as attribute value for ROLLING_ATTR using the alias name RollingAttr.
+     * @param value value to set the ROLLING_ATTR
+     */
+    public void setRollingAttr(String value) {
+        setAttributeInternal(ROLLINGATTR, value);
+    }
+
+    /**
      * Gets the view accessor <code>RowSet</code> LKP_YES_NO.
      */
     public RowSet getLKP_YES_NO() {
@@ -557,6 +622,13 @@ public class DcmTemplateColumnViewRowImpl extends ViewRowImpl {
      */
     public RowSet getLST_VS() {
         return (RowSet)getAttributeInternal(LST_VS);
+    }
+
+    /**
+     * Gets the view accessor <code>RowSet</code> LST_MONTH.
+     */
+    public RowSet getLST_MONTH() {
+        return (RowSet)getAttributeInternal(LST_MONTH);
     }
 
     /**
