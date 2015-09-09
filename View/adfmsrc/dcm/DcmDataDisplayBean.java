@@ -1614,14 +1614,13 @@ public class DcmDataDisplayBean extends TablePagination{
     
     public void setReadonlyByRolling(){
         this.isRolling = false;
-        this.rollingMonth = new Number(-1);
         DBTransaction trans = (DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
         Statement stat = trans.createStatement(DBTransaction.DEFAULT);
         //查询滚动预算配置
         String rSql = "SELECT YEAR,SCENARIO,VERSION,MONTH FROM DCM_ROLLING_COM";
         try {
             ResultSet rs = stat.executeQuery(rSql);
-            if(rs.next()){
+            while(rs.next()){
                 this.rollingMonth = new Number(rs.getInt("MONTH"));
                 int i=0;
                 for(ComHeader hd:this.templateHeader){
@@ -1635,9 +1634,12 @@ public class DcmDataDisplayBean extends TablePagination{
                         i++;
                 }
                 if(i==3){
-                    this.isRolling = true;    
+                    this.isRolling = true; 
+                    break;
                 }
             }
+            rs.close();
+            stat.close();
         } catch (SQLException e) {
             this._logger.severe(e);
         }
