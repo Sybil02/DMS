@@ -153,6 +153,7 @@
               <af:table value="#{bindings.DcmCalcParameterVO.collectionModel}"
                         var="row" partialTriggers=":::pc5:t9 ::cb20 ::cb21"
                         rows="#{bindings.DcmCalcParameterVO.rangeSize}"
+                        editingMode="clickToEdit"
                         rowSelection="single" selectionListener="#{bindings.DcmCalcParameterVO.collectionModel.makeCurrent}"
                         emptyText="#{bindings.DcmCalcParameterVO.viewable ? 'No data to display.' : 'Access Denied.'}"
                         fetchSize="#{bindings.DcmCalcParameterVO.rangeSize}"
@@ -184,7 +185,21 @@
                                        id="si12"/>
                       </af:selectOneChoice>
                     </af:column>
-              </af:table>
+                    <af:column headerText="#{bindings.DcmCalcParameterVO.hints.Seq.label}"
+                               id="c37">
+                      <af:inputText value="#{row.bindings.Seq.inputValue}"
+                                    label="#{bindings.DcmCalcParameterVO.hints.Seq.label}"
+                                    required="#{bindings.DcmCalcParameterVO.hints.Seq.mandatory}"
+                                    columns="#{bindings.DcmCalcParameterVO.hints.Seq.displayWidth}"
+                                    maximumLength="#{bindings.DcmCalcParameterVO.hints.Seq.precision}"
+                                    shortDesc="#{bindings.DcmCalcParameterVO.hints.Seq.tooltip}"
+                                    id="it22">
+                        <f:validator binding="#{row.bindings.Seq.validator}"/>
+                        <af:convertNumber groupingUsed="false"
+                                          pattern="#{bindings.DcmCalcParameterVO.hints.Seq.format}"/>
+                      </af:inputText>
+                    </af:column>
+                  </af:table>
             </af:panelCollection>
               </f:facet>
             </af:panelStretchLayout>
@@ -560,6 +575,16 @@
                           id="it19">
               <f:validator binding="#{row.bindings.TemplateLabel.validator}"/>
             </af:inputText>
+          </af:column>
+          <af:column headerText="#{bindings.DcmTemplateView.hints.IsRolling.label}"
+                     id="c38">
+            <af:selectOneChoice value="#{row.bindings.IsRolling.inputValue}"
+                                label="#{row.bindings.IsRolling.label}"
+                                required="#{bindings.DcmTemplateView.hints.IsRolling.mandatory}"
+                                shortDesc="#{bindings.DcmTemplateView.hints.IsRolling.tooltip}"
+                                id="soc14">
+              <f:selectItems value="#{row.bindings.IsRolling.items}" id="si14"/>
+            </af:selectOneChoice>
           </af:column>
         </af:table>
       </af:panelCollection>

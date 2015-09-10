@@ -164,6 +164,7 @@ public class DcmDataDisplayBean extends TablePagination{
     private String calcErrMsg;
     private boolean isRolling = true;
     private Number rollingMonth; 
+    private int calcHeight;
 
     public DcmDataDisplayBean() { 
         this.curUser =(Person)ADFContext.getCurrent().getSessionScope().get("cur_user");
@@ -1319,12 +1320,13 @@ public class DcmDataDisplayBean extends TablePagination{
                 entry.getValue().setValue(null);
             }    
         }
+        paraSocMap.clear();
         //每次改变程序，清除参数集合
         this.parameterList.clear();
         this.parametersValueMap.clear();
         //key：参数名 ， value：值集源表
-        Map<String,String> vsMap = new HashMap<String,String>();
-        RichSelectOneChoice calcSoc = (RichSelectOneChoice)valueChangeEvent.getSource();
+        Map<String,String> vsMap = new LinkedHashMap<String,String>();
+        //RichSelectOneChoice calcSoc = (RichSelectOneChoice)valueChangeEvent.getSource();
         //get calcId
         String calcId = valueChangeEvent.getNewValue().toString();
         this.curCalcId = calcId ;
@@ -1334,8 +1336,8 @@ public class DcmDataDisplayBean extends TablePagination{
         String whereClause = "CALC_ID = '" + calcId + "'";
         paraVo.setWhereClause(whereClause);
         paraVo.executeQuery();
+        paraVo.setWhereClause(null);
         Row[] rows = paraIter.getAllRowsInRange();
-        //System.out.println(calcId+":size:"+rows.length);
         //获得事务
         DBTransaction dbTransaction =(DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
         Statement stat=dbTransaction.createStatement(DBTransaction.DEFAULT);
@@ -1350,11 +1352,9 @@ public class DcmDataDisplayBean extends TablePagination{
             ResultSet rs;
             //值集对应的表源
             String source = "";
-                //System.out.println("sql:"+sqlStr.toString());
                 rs = stat.executeQuery(sqlStr.toString());
                 if(rs.next()){
                     source = rs.getString("SOURCE");
-                    //System.out.println("table:"+source);
                 }
                 rs.close();
                 vsMap.put(pName, source);
@@ -1400,6 +1400,7 @@ public class DcmDataDisplayBean extends TablePagination{
             parameterList.add(calcpara);
         }
             stat.close();
+            this.calcHeight = parameterList.size();
         }catch(Exception e){
             this._logger.severe(e);
         }
@@ -1452,7 +1453,7 @@ public class DcmDataDisplayBean extends TablePagination{
             //获取返回值
             cs.registerOutParameter(7, Types.VARCHAR);
             cs.execute();
-            if(cs.getString(7).equals("true")){
+            if("true".equals(cs.getString(7))){
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("程序执行成功！"));
                 trans.commit();
                 //刷新数据
@@ -1757,5 +1758,12 @@ public class DcmDataDisplayBean extends TablePagination{
     public Number getRollingMonth() {
         return rollingMonth;
     }
-    
+
+    public void setCalcHeight(int calcHeight) {
+        this.calcHeight = calcHeight;
+    }
+
+    public int getCalcHeight() {
+        return calcHeight;
+    }
 }
