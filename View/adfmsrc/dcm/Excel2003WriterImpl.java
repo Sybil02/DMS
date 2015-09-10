@@ -14,6 +14,7 @@ import java.sql.SQLException;
 
 import java.util.List;
 
+import oracle.jbo.jbotester.load.SimpleDateFormatter;
 import oracle.jbo.server.DBTransaction;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -53,7 +54,17 @@ public class Excel2003WriterImpl {
             for (ColumnDef col : this.colsdef) {
                 Cell cell = row.createCell(colInx);
                 ++colInx;
-                cell.setCellValue(rs.getString(col.getDbTableCol()));
+                if(rs.getObject(col.getDbTableCol()) instanceof java.sql.Date){
+                    SimpleDateFormatter format=new SimpleDateFormatter("yyyy-MM-dd hh:mm:ss");
+                    Object obj=format.format((java.sql.Date)rs.getObject(col.getDbTableCol()));
+                    cell.setCellValue((String)obj);
+                }else if(col.getDataType().equals("NUMBER")){
+                    cell.setCellType(Cell.CELL_TYPE_NUMERIC);
+                    if(rs.getString(col.getDbTableCol())!=null)
+                    cell.setCellValue(Double.valueOf(rs.getString(col.getDbTableCol())));   
+                }else{
+                    cell.setCellValue(rs.getString(col.getDbTableCol()));
+                }
             }
             ++n;
         }

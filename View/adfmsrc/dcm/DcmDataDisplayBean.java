@@ -29,6 +29,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
 
+import java.text.DecimalFormat;
+
 import java.text.SimpleDateFormat;
 
 import java.util.ArrayList;
@@ -105,7 +107,7 @@ public class DcmDataDisplayBean extends TablePagination{
     //是否增量导入
     private boolean isIncrement = true;
     //是否是2007及以上格式
-    private boolean isXlsx = true;
+    private boolean isXlsx = false;
     //组合信息
     private List<ComHeader> templateHeader = new ArrayList<ComHeader>();
     //值集信息
@@ -556,7 +558,6 @@ public class DcmDataDisplayBean extends TablePagination{
     }
     //数据导出
     public void operation_export(FacesContext facesContext,java.io.OutputStream outputStream) {
-        this.dataExportWnd.cancel();
         String type = this.isXlsx ? "xlsx" : "xls";
         try {
             if ("xls".equals(type)) {
@@ -576,6 +577,7 @@ public class DcmDataDisplayBean extends TablePagination{
         } catch (Exception e) {
             this._logger.severe(e);
         }
+        this.dataImportWnd.cancel();
     }
     //下载模板
     public void operation_download(FacesContext facesContext,java.io.OutputStream outputStream) {
@@ -743,6 +745,7 @@ public class DcmDataDisplayBean extends TablePagination{
         }
         String sql =this.getPaginationSql(this.getQuerySql());
         PreparedStatement stat =dbTransaction.createPreparedStatement(sql, -1);
+        DecimalFormat dfm = new DecimalFormat("#.0000");
         ResultSet rs = null;
         try {
             rs = stat.executeQuery();
@@ -753,6 +756,9 @@ public class DcmDataDisplayBean extends TablePagination{
                     if(obj instanceof java.sql.Date){
                         SimpleDateFormatter format=new SimpleDateFormatter("yyyy-MM-dd hh:mm:ss");
                         obj=format.format((java.sql.Date)obj);
+                    }else if(col.getDataType().equals("NUMBER")){
+                        if(obj!=null)
+                        obj = dfm.format(Double.valueOf(obj.toString()));
                     }else{
                         obj=ObjectUtils.toString(obj);
                     }

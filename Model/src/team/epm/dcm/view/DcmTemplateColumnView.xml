@@ -498,7 +498,7 @@
     <Properties>
       <SchemaBasedProperties>
         <LABEL
-          ResId="team.epm.dcm.view.DcmTemplateColumnView.RollingAttr_LABEL"/>
+          ResId="_U5B57_U6BB5_U5C5E_U6027"/>
       </SchemaBasedProperties>
     </Properties>
   </ViewAttribute>

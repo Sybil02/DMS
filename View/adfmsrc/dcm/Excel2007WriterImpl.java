@@ -5,6 +5,8 @@ import common.DmsUtils;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
+import java.text.DecimalFormat;
+
 import java.util.List;
 
 import oracle.adf.share.logging.ADFLogger;
@@ -43,6 +45,7 @@ public class Excel2007WriterImpl extends AbstractExcel2007Writer {
             while (rs.next()) {
                 int colInx = 0;
                 insertRow(n);
+                DecimalFormat dfm = new DecimalFormat("#.0000");
                 for (ColumnDef col : this.colsdef) {
                     Object obj=rs.getObject(col.getDbTableCol());
                     if(obj instanceof java.sql.Date){
@@ -51,9 +54,10 @@ public class Excel2007WriterImpl extends AbstractExcel2007Writer {
                         createCell(colInx,(String)obj);
                     }else if(col.getDataType().equals("NUMBER")){
                         if(obj != null){
+                            obj = dfm.format(Double.valueOf(obj.toString()));
                             createCell(colInx,Double.parseDouble(obj.toString()));        
                         }else{
-                            createCell(colInx,(String)obj);   
+                            createCell(colInx,Double.valueOf(0));
                         }
                     }else{
                         obj=ObjectUtils.toString(obj);

@@ -338,11 +338,12 @@
                 <af:gridCell marginStart="5px" marginEnd="5px" width="auto"
                              id="gc9">
                   <af:selectBooleanRadio text="#{viewBundle['dcm.export.03format']}"
-                                         id="sbr3" group="excelFormat1"
-                                         simple="true"/>
+                                         id="sbr3" group="excelFormat1" 
+                                         value="false"
+                                         simple="true" autoSubmit="true"/>
                   <af:selectBooleanRadio text="#{viewBundle['dcm.export.07format']}"
                                          id="sbr4" group="excelFormat1"
-                                         simple="true" autoSubmit="true"
+                                         simple="true" autoSubmit="true" selected="true"
                                          value="#{viewScope.DcmDataDisplayBean.isXlsx}"/>
                 </af:gridCell>
               </af:gridRow>
