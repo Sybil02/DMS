@@ -140,6 +140,18 @@
     </DesignTime>
     <TransientExpression>adf.userSession.userData.userId</TransientExpression>
   </Attribute>
+  <Attribute
+    Name="Seq"
+    IsNotNull="true"
+    ColumnName="SEQ"
+    SQLType="NUMERIC"
+    Type="oracle.jbo.domain.Number"
+    ColumnType="NUMBER"
+    TableName="CALC_PARAMETER">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="22"/>
+    </DesignTime>
+  </Attribute>
   <Key
     Name="DcmcalcparametereoPrimaryKey"
     PrimaryKey="true">

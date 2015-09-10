@@ -40,4 +40,6 @@ public class DcmCalcParameterEOImpl extends DmsEntityImpl {
         }
         return mDefinitionObject;
     }
+
+
 }

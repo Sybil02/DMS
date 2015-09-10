@@ -240,6 +240,16 @@ public class DcmTemplateImpl extends DmsEntityImpl {
                 obj.setTemplateLabel((String)value);
             }
         }
+        ,
+        IsRolling {
+            public Object get(DcmTemplateImpl obj) {
+                return obj.getIsRolling();
+            }
+
+            public void put(DcmTemplateImpl obj, Object value) {
+                obj.setIsRolling((String)value);
+            }
+        }
         ;
         private static AttributesEnum[] vals = null;
         private static final int firstIndex = 0;
@@ -291,6 +301,7 @@ public class DcmTemplateImpl extends DmsEntityImpl {
     public static final int COMBINATIONID = AttributesEnum.CombinationId.index();
     public static final int CATEGORYID = AttributesEnum.CategoryId.index();
     public static final int TEMPLATELABEL = AttributesEnum.TemplateLabel.index();
+    public static final int ISROLLING = AttributesEnum.IsRolling.index();
 
     /**
      * This is the default constructor (do not remove).
@@ -661,6 +672,22 @@ public class DcmTemplateImpl extends DmsEntityImpl {
         setAttributeInternal(TEMPLATELABEL, value);
     }
 
+
+    /**
+     * Gets the attribute value for IsRolling, using the alias name IsRolling.
+     * @return the IsRolling
+     */
+    public String getIsRolling() {
+        return (String)getAttributeInternal(ISROLLING);
+    }
+
+    /**
+     * Sets <code>value</code> as the attribute value for IsRolling.
+     * @param value value to set the IsRolling
+     */
+    public void setIsRolling(String value) {
+        setAttributeInternal(ISROLLING, value);
+    }
 
     /**
      * getAttrInvokeAccessor: generated method. Do not modify.

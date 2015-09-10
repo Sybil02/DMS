@@ -20,7 +20,7 @@
   CustomQuery="false"
   PageIterMode="Full"
   UseGlueCode="false"
-  OrderBy="DcmCalcParameterEO.CREATED_AT">
+  OrderBy="DcmCalcParameterEO.SEQ">
   <Properties>
     <SchemaBasedProperties>
       <LABEL

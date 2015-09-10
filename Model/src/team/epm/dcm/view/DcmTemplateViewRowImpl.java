@@ -239,6 +239,16 @@ public class DcmTemplateViewRowImpl extends ViewRowImpl {
             }
         }
         ,
+        IsRolling {
+            public Object get(DcmTemplateViewRowImpl obj) {
+                return obj.getIsRolling();
+            }
+
+            public void put(DcmTemplateViewRowImpl obj, Object value) {
+                obj.setIsRolling((String)value);
+            }
+        }
+        ,
         DcmTemplateColumnView {
             public Object get(DcmTemplateViewRowImpl obj) {
                 return obj.getDcmTemplateColumnView();
@@ -338,16 +348,6 @@ public class DcmTemplateViewRowImpl extends ViewRowImpl {
                 obj.setAttributeInternal(index(), value);
             }
         }
-        ,
-        LST_MONTH {
-            public Object get(DcmTemplateViewRowImpl obj) {
-                return obj.getLST_MONTH();
-            }
-
-            public void put(DcmTemplateViewRowImpl obj, Object value) {
-                obj.setAttributeInternal(index(), value);
-            }
-        }
         ;
         private static AttributesEnum[] vals = null;
         private static final int firstIndex = 0;
@@ -377,6 +377,9 @@ public class DcmTemplateViewRowImpl extends ViewRowImpl {
     }
 
 
+    //public static final int LST_MONTH = AttributesEnum.LST_MONTH.index();
+
+
     public static final int ID = AttributesEnum.Id.index();
     public static final int LOCALE = AttributesEnum.Locale.index();
     public static final int NAME = AttributesEnum.Name.index();
@@ -399,6 +402,7 @@ public class DcmTemplateViewRowImpl extends ViewRowImpl {
     public static final int COMBINATIONID = AttributesEnum.CombinationId.index();
     public static final int CATEGORYID = AttributesEnum.CategoryId.index();
     public static final int TEMPLATELABEL = AttributesEnum.TemplateLabel.index();
+    public static final int ISROLLING = AttributesEnum.IsRolling.index();
     public static final int DCMTEMPLATECOLUMNVIEW = AttributesEnum.DcmTemplateColumnView.index();
     public static final int DCMTEMPLATEVALIDATIONVIEW = AttributesEnum.DcmTemplateValidationView.index();
     public static final int DCMTEMPLATECALCVO = AttributesEnum.DcmTemplateCalcVO.index();
@@ -409,7 +413,6 @@ public class DcmTemplateViewRowImpl extends ViewRowImpl {
     public static final int LKP_COM = AttributesEnum.LKP_COM.index();
     public static final int LKP_IMPORT_MODE = AttributesEnum.LKP_IMPORT_MODE.index();
     public static final int LKP_TMP_TABLE = AttributesEnum.LKP_TMP_TABLE.index();
-    public static final int LST_MONTH = AttributesEnum.LST_MONTH.index();
 
     /**
      * This is the default constructor (do not remove).
@@ -779,6 +782,22 @@ public class DcmTemplateViewRowImpl extends ViewRowImpl {
 
 
     /**
+     * Gets the attribute value for IS_ROLLING using the alias name IsRolling.
+     * @return the IS_ROLLING
+     */
+    public String getIsRolling() {
+        return (String) getAttributeInternal(ISROLLING);
+    }
+
+    /**
+     * Sets <code>value</code> as attribute value for IS_ROLLING using the alias name IsRolling.
+     * @param value value to set the IS_ROLLING
+     */
+    public void setIsRolling(String value) {
+        setAttributeInternal(ISROLLING, value);
+    }
+
+    /**
      * Gets the associated <code>RowIterator</code> using master-detail link DcmTemplateColumnView.
      */
     public RowIterator getDcmTemplateColumnView() {
@@ -851,9 +870,9 @@ public class DcmTemplateViewRowImpl extends ViewRowImpl {
     /**
      * Gets the view accessor <code>RowSet</code> LST_MONTH.
      */
-    public RowSet getLST_MONTH() {
-        return (RowSet)getAttributeInternal(LST_MONTH);
-    }
+//    public RowSet getLST_MONTH() {
+//        return (RowSet)getAttributeInternal(LST_MONTH);
+//    }
 
     /**
      * getAttrInvokeAccessor: generated method. Do not modify.

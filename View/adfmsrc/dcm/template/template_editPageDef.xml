@@ -50,6 +50,7 @@
           <Item Value="Seq"/>
           <Item Value="Description"/>
           <Item Value="TemplateLabel"/>
+          <Item Value="IsRolling"/>
         </AttrNames>
       </nodeDefinition>
     </tree>
@@ -130,6 +131,7 @@
         <AttrNames>
           <Item Value="PName"/>
           <Item Value="ValueSetId"/>
+          <Item Value="Seq"/>
         </AttrNames>
       </nodeDefinition>
     </tree>

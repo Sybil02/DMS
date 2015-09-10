@@ -406,7 +406,7 @@
         <!-- 计算程序 -->
         <af:popup id="p5" autoCancel="disabled" binding="#{viewScope.DcmDataDisplayBean.calcWnd}">
           <af:panelWindow title="#{viewBundle['dms.cal.run']}" id="pw5" >
-            <af:panelStretchLayout id="psl3" inlineStyle="width:400px;height:200px">
+            <af:panelStretchLayout id="psl3" inlineStyle="width:400px;height:250px">
               <f:facet name="top">
                 <af:panelGroupLayout id="pgl5" layout="horizontal">
                   <af:selectOneChoice label="#{viewBundle['dms.cal.proc']}" id="soc3"
@@ -421,7 +421,7 @@
                 </af:panelGroupLayout>
               </f:facet>
               <f:facet name="center">
-                <af:panelGroupLayout id="pgl6" layout="vertical"
+                <af:panelGroupLayout id="pgl6" layout="vertical"  
                                      partialTriggers="soc3">
                     <af:forEach items="#{viewScope.DcmDataDisplayBean.parameterList}" var="calcParameter">
                     <af:spacer height="5px" id="s4"/>
