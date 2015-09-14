@@ -602,6 +602,8 @@
     LOVName="LOV_IsRolling">
     <Properties>
       <SchemaBasedProperties>
+        <LABEL
+          ResId="team.epm.dcm.view.DcmTemplateView.IsRolling_LABEL"/>
         <CONTROLTYPE
           Value="choice"/>
       </SchemaBasedProperties>

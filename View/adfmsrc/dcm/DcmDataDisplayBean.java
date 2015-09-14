@@ -164,7 +164,7 @@ public class DcmDataDisplayBean extends TablePagination{
     private String calcErrMsg;
     private boolean isRolling = true;
     private Number rollingMonth; 
-    private int calcHeight;
+    private boolean hasCalc = true;
 
     public DcmDataDisplayBean() { 
         this.curUser =(Person)ADFContext.getCurrent().getSessionScope().get("cur_user");
@@ -174,12 +174,28 @@ public class DcmDataDisplayBean extends TablePagination{
         this.queryTemplateData();
         //判断模板是否在工作流中，是输入还是审批状态
         this.isWfTemplate();
+        this.disableCalcBtn();
     }
 
     public CollectionModel getDataModel() {
         return this.dataModel;
     }
     
+    public void disableCalcBtn(){
+        DBTransaction trans = (DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
+        Statement stat = trans.createStatement(DBTransaction.DEFAULT);
+        String cSql = "SELECT 1 FROM DCM_TEMPLATE_CALC T WHERE T.TEMPLATE_ID = '" + this.curTempalte.getId() + "'";
+        try {
+            ResultSet rs = stat.executeQuery(cSql);
+            if(rs.next()){
+                this.hasCalc = false ; 
+            }
+            rs.close();
+            stat.close();
+        } catch (SQLException e) {
+            this._logger.severe(e);
+        }
+    }
      
     //值发生改变时更改数据的状态为更新
     public void valueChangeListener(ValueChangeEvent valueChangeEvent) {
@@ -759,7 +775,8 @@ public class DcmDataDisplayBean extends TablePagination{
                         obj=format.format((java.sql.Date)obj);
                     }else if(col.getDataType().equals("NUMBER")){
                         if(obj!=null)
-                        obj = dfm.format(Double.valueOf(obj.toString()));
+                        //obj = dfm.format(Double.valueOf(obj.toString()));
+                        obj=ObjectUtils.toString(obj);
                     }else{
                         obj=ObjectUtils.toString(obj);
                     }
@@ -1400,7 +1417,6 @@ public class DcmDataDisplayBean extends TablePagination{
             parameterList.add(calcpara);
         }
             stat.close();
-            this.calcHeight = parameterList.size();
         }catch(Exception e){
             this._logger.severe(e);
         }
@@ -1759,11 +1775,11 @@ public class DcmDataDisplayBean extends TablePagination{
         return rollingMonth;
     }
 
-    public void setCalcHeight(int calcHeight) {
-        this.calcHeight = calcHeight;
+    public void setHasCalc(boolean hasCalc) {
+        this.hasCalc = hasCalc;
     }
 
-    public int getCalcHeight() {
-        return calcHeight;
+    public boolean isHasCalc() {
+        return hasCalc;
     }
 }
