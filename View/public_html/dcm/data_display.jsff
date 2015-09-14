@@ -174,7 +174,7 @@
                              and viewScope.DcmDataDisplayBean.rollingMonth >= attr.rollingMonth)}"
                             valueChangeListener="#{viewScope.DcmDataDisplayBean.valueChangeListener}"
                             rendered="#{attr.valueSetId eq null}"
-                            />k
+                            />
                 <af:inputComboboxListOfValues label="#{attr.columnLabel}"
                               id="inputComboboxListOfValues1"
                               value="#{row[attr.dbTableCol]}" 
