@@ -79,7 +79,7 @@
               </af:commandButton>
             </af:group>
             <af:group id="g6">
-              <af:commandButton text="模板计算" id="cb5"
+              <af:commandButton text="模板计算" id="cb5" disabled="#{viewScope.DcmDataDisplayBean.hasCalc}"
                                 actionListener="#{viewScope.DcmDataDisplayBean.showCalcWnd}"/>
             </af:group>
             <af:group id="g7">
@@ -442,7 +442,7 @@
                                    id="si3"/>
                   </af:selectOneChoice>
                   <af:spacer width="15px" id="s5"/>
-                  <af:commandButton text="#{viewBundle['dms.run']}" id="cb12"
+                  <af:commandButton text="#{viewBundle['dms.run']}" id="cb12" 
                                     actionListener="#{viewScope.DcmDataDisplayBean.executeProcedure}"/>
                 </af:panelGroupLayout>
               </f:facet>

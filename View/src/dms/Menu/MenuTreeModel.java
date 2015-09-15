@@ -47,7 +47,7 @@ public class MenuTreeModel extends ChildPropertyTreeModel {
 
     private List<MenuItem> getChildMenuItem(String pid) {
         Person curUser = (Person)ADFContext.getCurrent().getSessionScope().get("cur_user");
-        this.vo.setNamedWhereClauseParam("locale", curUser.getLocale());
+        //this.vo.setNamedWhereClauseParam("locale", curUser.getLocale());
         this.vo.setNamedWhereClauseParam("p_id", pid);
         vo.executeQuery();
         List<MenuItem> items = new ArrayList<MenuItem>();                   

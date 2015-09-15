@@ -688,16 +688,13 @@
             <value n="JavaScriptRunConfigurationStopOnException" v="false"/>
             <value n="JavaScriptRunConfigurationTransferErrors" v="true"/>
             <value n="name" v="Default"/>
-            <hash n="oracle.adfdt.controller.adfc.source.runner.JsfJspRunnerLaunchSettings">
-               <value n="delegateRunTarget" v="/WEB-INF/adfc-config.xml"/>
-               <value n="viewActivityId" v="index"/>
-            </hash>
+            <hash n="oracle.adfdt.controller.adfc.source.runner.JsfJspRunnerLaunchSettings"/>
             <hash n="oracle.jdevimpl.runner.debug.DebugConfiguration">
                <value n="remoteParameter:jpda:jdi_attach_method:" v=""/>
                <value n="remoteParameter:jpdaListen:localAddress" v=""/>
             </hash>
             <value n="programArguments" v=""/>
-            <url n="targetURL" path="public_html/index.jspx"/>
+            <url n="targetURL" path="public_html/dcm/index.jspx"/>
             <value n="VMName" v="server"/>
          </hash>
       </hash>
@@ -914,6 +911,10 @@
          </hash>
          <hash>
             <value n="id" v="BC4J Oracle Domains"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Trinidad Runtime 11"/>
             <value n="isJDK" v="false"/>
          </hash>
       </list>
@@ -1247,6 +1248,10 @@
             <value n="id" v="BC4J Oracle Domains"/>
             <value n="isJDK" v="false"/>
          </hash>
+         <hash>
+            <value n="id" v="Trinidad Runtime 11"/>
+            <value n="isJDK" v="false"/>
+         </hash>
       </list>
    </hash>
    <hash n="oracle.jdevimpl.config.JProjectPaths">
@@ -1397,6 +1402,28 @@
             <value n="tldURL" v="@oracle.home@../oracle_common/modules/oracle.adf.view_11.1.1/dvt-faces.jar!/META-INF/bi.tld"/>
             <value n="URI" v="http://xmlns.oracle.com/dss/adf/faces"/>
             <value n="version" v="1.1"/>
+         </hash>
+         <hash>
+            <hash n="baseLibrary">
+               <value n="name" v="Trinidad HTML Components"/>
+               <value n="version" v="1.2"/>
+            </hash>
+            <value n="jspVersion" v="1.2"/>
+            <value n="name" v="Trinidad HTML Components"/>
+            <value n="tldURL" v="@oracle.home@../oracle_common/modules/oracle.adf.view_11.1.1/trinidad-impl.jar!/META-INF/trh.tld"/>
+            <value n="URI" v="http://myfaces.apache.org/trinidad/html"/>
+            <value n="version" v="1.2"/>
+         </hash>
+         <hash>
+            <hash n="baseLibrary">
+               <value n="name" v="Trinidad Components"/>
+               <value n="version" v="1.2"/>
+            </hash>
+            <value n="jspVersion" v="1.2"/>
+            <value n="name" v="Trinidad Components"/>
+            <value n="tldURL" v="@oracle.home@../oracle_common/modules/oracle.adf.view_11.1.1/trinidad-impl.jar!/META-INF/tr.tld"/>
+            <value n="URI" v="http://myfaces.apache.org/trinidad"/>
+            <value n="version" v="1.2"/>
          </hash>
       </list>
    </hash>

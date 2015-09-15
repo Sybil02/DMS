@@ -43,7 +43,7 @@ public class MainPageMBean {
             Map authoriedFunction = (Map)ADFContext.getCurrent().getSessionScope().get("authoriedFunction");
             ViewObjectImpl view =
                 (ViewObjectImpl)ADFUtils.findIterator("DmsMenuTreeViewIterator").getViewObject();
-            view.setNamedWhereClauseParam("locale",curUser.getLocale());
+            //view.setNamedWhereClauseParam("locale",curUser.getLocale());
             view.setNamedWhereClauseParam("p_id",null);
             view.executeQuery();
             this.menuBar.getChildren().clear();
