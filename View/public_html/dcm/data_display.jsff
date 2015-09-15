@@ -1,9 +1,15 @@
 <?xml version='1.0' encoding='UTF-8'?>
+
 <jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.1"
           xmlns:af="http://xmlns.oracle.com/adf/faces/rich"
-          xmlns:f="http://java.sun.com/jsf/core"
-          xmlns:c="http://java.sun.com/jsp/jstl/core">
-  <c:set var="viewBundle" value="#{adfBundle['dms_v']}"/> 
+          xmlns:f="http://java.sun.com/jsf/core" 
+          xmlns:c="http://java.sun.com/jsp/jstl/core"
+          xmlns:th="http://myfaces.apache.org/trinidad/html">
+ 
+  
+
+  <c:set var="viewBundle" value="#{adfBundle['dms_v']}"/>
+
   <af:panelStretchLayout id="psl1" bottomHeight="0"
                          topHeight="#{viewScope.DcmDataDisplayBean.combinationId==null ? '0px':'35px'}">
     <f:facet name="top"> 
@@ -54,14 +60,15 @@
                                 id="cb10"
                                 partialTriggers="::pgl1"
                                 disabled="#{viewScope.DcmDataDisplayBean.isEditable eq false}">
-                <af:showPopupBehavior popupId="::p2" alignId=""/>
+              <af:showPopupBehavior popupId="::p2" alignId=""/>
               </af:commandButton>
               <af:commandButton text="#{viewBundle['dcm.import_error']}"
                                 id="cb8"
                                 actionListener="#{viewScope.DcmDataDisplayBean.showErrors}"
-                                partialSubmit="true"></af:commandButton>
+                                partialSubmit="true">
+                                </af:commandButton>
               <af:commandButton text="#{viewBundle['dcm.action.export']}"
-                                id="cb6">
+                                id="cb4522">
                 <af:showPopupBehavior popupId="::p3" alignId=""/>
               </af:commandButton>
             </af:group>
@@ -316,14 +323,14 @@
                 <af:gridCell halign="center" width="auto" id="gc5"
                              columnSpan="2">
                   <af:commandButton text="#{viewBundle['dcm.action.import']}"
-                                    id="cb9" inlineStyle="margin-top:5px"
+                                    id="cb9" 
                                     actionListener="#{viewScope.DcmDataDisplayBean.operation_import}"/>
                 </af:gridCell>
               </af:gridRow>
             </af:panelGridLayout>
           </af:panelWindow>
         </af:popup>
-        <af:popup id="p3" autoCancel="disabled" childCreation="deferred"
+        <af:popup id="p3"  autoCancel="disabled" childCreation="deferred"
                   binding="#{viewScope.DcmDataDisplayBean.dataExportWnd}">
           <af:panelWindow id="pw3"
                           title="#{viewBundle['dcm.template.data_export']}"
@@ -351,15 +358,34 @@
                           id="gr5">
                 <af:gridCell marginStart="5px" width="auto" columnSpan="2"
                              halign="center" id="gc8"
-                             inlineStyle="margin-top:5px">
+                              >  
+                   <th:script id="javascript1">
+                     //点击导出按钮会关闭导出框并且下载xml文件
+                           function clickexport(event) {
+                             var source=event.getSource();
+                             var button = source.findComponent("cb11"); 
+                             var popup = source.findComponent("p3");
+                             
+                             popup.cancel();
+                             AdfActionEvent.queue(button, true);
+                          }
+                     
+                     </th:script> 
+                  <af:commandButton text="#{viewBundle['dcm.action.export']}" id="cb55"
+                    partialSubmit="true"
+                      >
+                    <af:clientListener type="click" method="clickexport"/> 
+                    </af:commandButton>
+                    
                   <af:commandButton text="#{viewBundle['dcm.action.export']}"
-                                    id="cb11">
+                                    id="cb11" visible="false"   
+                                     >
                     <af:fileDownloadActionListener contentType="application/vnd.ms-excel"
                                                    method="#{viewScope.DcmDataDisplayBean.operation_export}"
                                                    filename="#{viewScope.DcmDataDisplayBean.exportDataExcelName}"/>
                   </af:commandButton>
                 </af:gridCell>
-              </af:gridRow>
+              </af:gridRow> 
             </af:panelGridLayout>
           </af:panelWindow>
         </af:popup>
