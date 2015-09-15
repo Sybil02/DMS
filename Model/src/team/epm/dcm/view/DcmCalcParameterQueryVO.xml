@@ -20,13 +20,20 @@
   CustomQuery="false"
   PageIterMode="Full"
   UseGlueCode="false"
-  OrderBy="DcmCalcParameterEO.SEQ">
+  OrderBy="DcmCalcParameterEO.SEQ"
+  Where="DcmCalcParameterEO.LOCALE =: locale">
   <Properties>
     <SchemaBasedProperties>
       <LABEL
         ResId="team.epm.dcm.view.DcmCalcParameterQueryVO_LABEL"/>
     </SchemaBasedProperties>
   </Properties>
+  <Variable
+    Name="locale"
+    Kind="where"
+    Type="java.lang.String">
+    <TransientExpression><![CDATA[adf.context.locale]]></TransientExpression>
+  </Variable>
   <EntityUsage
     Name="DcmCalcParameterEO"
     Entity="team.epm.dcm.model.DcmCalcParameterEO"/>

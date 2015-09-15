@@ -12,6 +12,8 @@ import java.sql.ResultSet;
 
 import java.sql.SQLException;
 
+import java.text.DecimalFormat;
+
 import java.util.List;
 
 import oracle.jbo.jbotester.load.SimpleDateFormatter;
@@ -48,6 +50,8 @@ public class Excel2003WriterImpl {
             headerRow.createCell(i).setCellValue(this.colsdef.get(i).getColumnLabel());
         }
         int n = (int)this.curTempalte.getDataStartLine().getValue() - 1;
+        DecimalFormat dfm = new DecimalFormat();
+        dfm.setMaximumFractionDigits(4);
         while (rs.next()) {
             int colInx = 0;
             org.apache.poi.ss.usermodel.Row row = sheet.createRow(n);
@@ -61,7 +65,7 @@ public class Excel2003WriterImpl {
                 }else if(col.getDataType().equals("NUMBER")){
                     cell.setCellType(Cell.CELL_TYPE_NUMERIC);
                     if(rs.getString(col.getDbTableCol())!=null)
-                    cell.setCellValue(Double.valueOf(rs.getString(col.getDbTableCol())));   
+                    cell.setCellValue(Double.valueOf(dfm.format(Double.valueOf(rs.getString(col.getDbTableCol())))));   
                 }else{
                     cell.setCellValue(rs.getString(col.getDbTableCol()));
                 }

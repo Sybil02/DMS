@@ -114,7 +114,7 @@ public class DcmDataDisplayBean extends TablePagination{
     //是否增量导入
     private boolean isIncrement = true;
     //是否是2007及以上格式
-    private boolean isXlsx = false;
+    private boolean isXlsx = true;
     //组合信息
     private List<ComHeader> templateHeader = new ArrayList<ComHeader>();
     //值集信息
@@ -774,7 +774,8 @@ public class DcmDataDisplayBean extends TablePagination{
         }
         String sql =this.getPaginationSql(this.getQuerySql());
         PreparedStatement stat =dbTransaction.createPreparedStatement(sql, -1);
-        DecimalFormat dfm = new DecimalFormat("#.0000");
+        DecimalFormat dfm = new DecimalFormat();
+        dfm.setMaximumFractionDigits(4);
         ResultSet rs = null;
         try {
             rs = stat.executeQuery();
@@ -787,7 +788,7 @@ public class DcmDataDisplayBean extends TablePagination{
                         obj=format.format((java.sql.Date)obj);
                     }else if(col.getDataType().equals("NUMBER")){
                         if(obj!=null)
-                        //obj = dfm.format(Double.valueOf(obj.toString()));
+                        obj = dfm.format(Double.valueOf(obj.toString()));
                         obj=ObjectUtils.toString(obj);
                     }else{
                         obj=ObjectUtils.toString(obj);

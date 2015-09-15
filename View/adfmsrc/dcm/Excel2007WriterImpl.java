@@ -42,10 +42,11 @@ public class Excel2007WriterImpl extends AbstractExcel2007Writer {
             }
             endRow();
             int n =dataStartLine  - 1;
+            DecimalFormat dfm = new DecimalFormat();
+            dfm.setMaximumFractionDigits(4);
             while (rs.next()) {
                 int colInx = 0;
                 insertRow(n);
-                DecimalFormat dfm = new DecimalFormat("#.0000");
                 for (ColumnDef col : this.colsdef) {
                     Object obj=rs.getObject(col.getDbTableCol());
                     if(obj instanceof java.sql.Date){
@@ -54,7 +55,7 @@ public class Excel2007WriterImpl extends AbstractExcel2007Writer {
                         createCell(colInx,(String)obj);
                     }else if(col.getDataType().equals("NUMBER")){
                         if(obj != null){
-                            //obj = dfm.format(Double.valueOf(obj.toString()));
+                            obj = dfm.format(Double.valueOf(obj.toString()));
                             createCell(colInx,Double.parseDouble(obj.toString()));        
                         }else{
                             createCell(colInx,Double.valueOf(0));
