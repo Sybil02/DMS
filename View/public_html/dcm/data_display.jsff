@@ -68,8 +68,8 @@
                                 partialSubmit="true">
                                 </af:commandButton>
               <af:commandButton text="#{viewBundle['dcm.action.export']}"
-                                id="cb4522">
-                <af:showPopupBehavior popupId="::p3" alignId=""/>
+                                id="cb4522"
+                                actionListener="#{viewScope.DcmDataDisplayBean.validateExport}"> 
               </af:commandButton>
             </af:group>
             <af:group id="grp3">

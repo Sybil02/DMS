@@ -5,6 +5,9 @@ import common.ADFUtils;
 import common.DmsUtils;
 import common.JSFUtils;
 import common.TablePagination;
+
+import oracle.adf.view.rich.component.rich.nav.RichCommandButton;
+
 import oracle.jbo.domain.Number;
 import dcm.combinantion.CombinationEO;
 
@@ -42,8 +45,10 @@ import java.util.Map;
 import java.util.UUID;
 
 import javax.faces.application.FacesMessage;
+import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import javax.faces.event.ActionListener;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 
@@ -59,8 +64,10 @@ import oracle.adf.view.rich.context.AdfFacesContext;
 import oracle.adf.view.rich.event.DialogEvent;
 import oracle.adf.view.rich.event.QueryEvent;
 import oracle.adf.view.rich.model.FilterableQueryDescriptor;
+ 
 
 import oracle.jbo.ApplicationModule;
+import oracle.jbo.HiddenDefException;
 import oracle.jbo.Key;
 import oracle.jbo.Row;
 import oracle.jbo.RowIterator;
@@ -165,6 +172,9 @@ public class DcmDataDisplayBean extends TablePagination{
     private boolean isRolling = true;
     private Number rollingMonth; 
     private int calcHeight;
+    private RichCommandButton export;
+    private RichCommandButton exportDownload;
+    private RichCommandButton exportButton;
 
     public DcmDataDisplayBean() { 
         this.curUser =(Person)ADFContext.getCurrent().getSessionScope().get("cur_user");
@@ -473,17 +483,16 @@ public class DcmDataDisplayBean extends TablePagination{
         }
         return comRecordId;
     }
+     
     
     //获取当前组合的文本信息用于拼接文件名
     private String getCurComRecordText() {
-        String text = "";
+        String text = ""; 
+        
         if (this.curCombiantion!=null) {
             for (ComHeader header : this.templateHeader) {
-                    for (SelectItem item : header.getValues()) {
-                        if (header.getValue().equals(item.getValue())) {
-                            text += "_"+item.getLabel();
-                        }
-                    }
+                if(header.getValue() != null)
+                text += "_" + header.getValue();
             }
         }
         return text;
@@ -558,7 +567,8 @@ public class DcmDataDisplayBean extends TablePagination{
         return (new File(fileName)).getAbsolutePath();
     }
     //数据导出
-    public void operation_export(FacesContext facesContext,java.io.OutputStream outputStream) {
+    public void operation_export(FacesContext facesContext,java.io.OutputStream outputStream) { 
+ 
         String type = this.isXlsx ? "xlsx" : "xls";
         try {
             if ("xls".equals(type)) {
@@ -578,7 +588,7 @@ public class DcmDataDisplayBean extends TablePagination{
         } catch (Exception e) {
             this._logger.severe(e);
         }
-        this.dataImportWnd.cancel();
+  
     }
     //下载模板
     public void operation_download(FacesContext facesContext,java.io.OutputStream outputStream) {
@@ -1066,11 +1076,13 @@ public class DcmDataDisplayBean extends TablePagination{
     //获取导出数据时的文件名
 
     public String getExportDataExcelName() {
+
         if (this.isXlsx) {
             return this.curTempalte.getName() + this.getCurComRecordText() + ".xlsx";
         } else {
             return this.curTempalte.getName() + this.getCurComRecordText() + ".xls";
         }
+        
     }
     //获取模板文件名
 
@@ -1764,6 +1776,19 @@ public class DcmDataDisplayBean extends TablePagination{
     }
 
     public int getCalcHeight() {
+ 
         return calcHeight;
+    }
+    
+    //检验是否存在组合，如果存在组合但没有选择组合，那么无法导出数据
+    public void validateExport(ActionEvent actionEvent) {
+          
+         if(templateHeader.size() > 0 && curCombiantionRecord == null) { 
+         
+             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("请先选择组合"));
+             
+         }else { 
+             dataExportWnd.show(new RichPopup.PopupHints());
+         }
     }
 }
