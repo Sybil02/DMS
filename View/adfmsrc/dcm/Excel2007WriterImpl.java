@@ -2,6 +2,8 @@ package dcm;
 
 import common.DmsUtils;
 
+import common.ReplaceSpecialChar;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
@@ -17,6 +19,8 @@ import oracle.jbo.server.DBTransaction;
 import org.apache.commons.lang.ObjectUtils;
 
 import org.hexj.excelhandler.writer.AbstractExcel2007Writer;
+
+import org.omg.Security.ReplaceSecurityServices;
 
 public class Excel2007WriterImpl extends AbstractExcel2007Writer {
     private static ADFLogger logger=ADFLogger.createADFLogger(Excel2007WriterImpl.class);
@@ -45,6 +49,7 @@ public class Excel2007WriterImpl extends AbstractExcel2007Writer {
             DecimalFormat dfm = new DecimalFormat();
             dfm.setMaximumFractionDigits(4);
             dfm.setGroupingUsed(false);
+            ReplaceSpecialChar rsc = new ReplaceSpecialChar();
             while (rs.next()) {
                 int colInx = 0;
                 insertRow(n);
@@ -63,6 +68,7 @@ public class Excel2007WriterImpl extends AbstractExcel2007Writer {
                         }
                     }else{
                         obj=ObjectUtils.toString(obj);
+                        obj = rsc.encodeString(obj.toString());
                         createCell(colInx,(String)obj);
                     }
                     ++colInx;
