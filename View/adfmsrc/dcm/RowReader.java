@@ -4,6 +4,7 @@ import java.sql.PreparedStatement;
 
 import java.sql.SQLException;
 
+import java.util.List;
 import java.util.TreeMap;
 
 import oracle.adf.share.logging.ADFLogger;
@@ -24,10 +25,11 @@ public class RowReader implements IRowReader {
     private int n = 0;
     private static final int batchSize = 5000;
     private String templateName;
+    private List<ColumnDef> colsdef;
     private static ADFLogger logger=ADFLogger.createADFLogger(RowReader.class);
     public RowReader(DBTransaction trans, int startLine, String templateId,
                      String combinationRecord, String temptable,
-                     int columnSize, String operator,String templateName) {
+                     int columnSize, String operator,String templateName,List<ColumnDef> colsdef) {
         this.startLine = startLine;
         this.templateId = templateId;
         this.combinationRecord = combinationRecord;
@@ -36,6 +38,7 @@ public class RowReader implements IRowReader {
         this.operator = operator;
         this.trans = trans;
         this.templateName=templateName;
+        this.colsdef = colsdef;
         this.prepareSqlStatement();
     }
 
@@ -65,12 +68,18 @@ public class RowReader implements IRowReader {
                 this.stmt.setString(1, sheetName);
                 this.stmt.setInt(2, curRow + 1);
                 for (int i = 0; i < this.columnSize; i++) {
+                    ColumnDef col = this.colsdef.get(i);
                     String tmpstr = rowlist.get(i);
                     if (null == tmpstr || "".equals(tmpstr.trim())) {
                         this.stmt.setString(i + 3, "");
                     } else {
                         isEpty = false;
-                        this.stmt.setString(i + 3, tmpstr.trim());
+                        //去掉number中的0,POI读取EXCEL里的数字为浮点型，实际值会带上.0
+                        if(col.getDataType().equals("NUMBER")&&tmpstr.equals("0.0")){
+                            this.stmt.setString(i + 3, "");
+                        }else{
+                            this.stmt.setString(i + 3, tmpstr.trim());        
+                        }
                     }
                 }
                 if (!isEpty) {

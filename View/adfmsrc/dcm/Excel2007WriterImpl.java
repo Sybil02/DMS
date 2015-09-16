@@ -44,6 +44,7 @@ public class Excel2007WriterImpl extends AbstractExcel2007Writer {
             int n =dataStartLine  - 1;
             DecimalFormat dfm = new DecimalFormat();
             dfm.setMaximumFractionDigits(4);
+            dfm.setGroupingUsed(false);
             while (rs.next()) {
                 int colInx = 0;
                 insertRow(n);
