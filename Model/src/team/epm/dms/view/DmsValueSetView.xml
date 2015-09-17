@@ -14,7 +14,8 @@
        DmsValueSet.CREATED_AT, 
        DmsValueSet.UPDATED_AT, 
        DmsValueSet.UPDATED_BY, 
-       DmsValueSet.CREATED_BY"
+       DmsValueSet.CREATED_BY, 
+       DmsValueSet.DEFAULT_CODE"
   FromList="DMS_VALUE_SET DmsValueSet"
   BindingStyle="OracleName"
   CustomQuery="false"
@@ -206,6 +207,19 @@
     SQLType="VARCHAR">
     <TransientExpression><![CDATA[Id]]></TransientExpression>
   </ViewAttribute>
+  <ViewAttribute
+    Name="DefaultCode"
+    PrecisionRule="true"
+    EntityAttrName="DefaultCode"
+    EntityUsage="DmsValueSet"
+    AliasName="DEFAULT_CODE">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="team.epm.dms.view.DmsValueSetView.DefaultCode_LABEL"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewCriteria
     Name="DmsValueSetViewCriteria"
     ViewObjectName="team.epm.dms.view.DmsValueSetView"
@@ -235,4 +249,8 @@
     ViewLink="team.epm.dms.DmsValuesetGValueLnk"
     Type="oracle.jbo.RowIterator"
     IsUpdateable="false"/>
+  <ResourceBundle>
+    <PropertiesBundle
+      PropertiesFile="ModelBundle"/>
+  </ResourceBundle>
 </ViewObject>

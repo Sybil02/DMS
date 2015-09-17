@@ -162,7 +162,12 @@ public class ValueSetAuthorityBean {
             row=valueSetVo.getCurrentRow();
         }
         if(row!=null){
-            String valueSetSrc=row.getAttribute("Source").toString().toUpperCase();
+            String valueSetSrc = (String)row.getAttribute("Source");
+            if( valueSetSrc == null)
+                return ;
+            
+            valueSetSrc = valueSetSrc.toUpperCase();
+            
             String sql="select t.code,t.meaning from \""+valueSetSrc+"\" t where t.locale='"+person.getLocale()+"'";
             DBTransaction trans = (DBTransaction)valueSetVo.getApplicationModule().getTransaction();
             Statement stmt=trans.createStatement(DBTransaction.DEFAULT);

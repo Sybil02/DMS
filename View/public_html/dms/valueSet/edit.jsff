@@ -11,6 +11,7 @@
           <f:facet name="menus"/>
           <f:facet name="toolbar">
             <af:toolbar id="t2">
+
               <af:commandButton
                                 text="#{viewBundle['dms.common.new']}"
                                 id="cb1" partialTriggers="t1"
@@ -44,7 +45,7 @@
             <af:column sortProperty="#{bindings.DmsValueSetView.hints.Name.name}"
                        filterable="true" sortable="true"
                        headerText="#{bindings.DmsValueSetView.hints.Name.label}"
-                       id="c3" width="105">
+                       id="c3" width="110">
             <af:inputText value="#{row.bindings.Name.inputValue}" simple="true"
                           required="#{bindings.DmsValueSetView.hints.Name.mandatory}"
                           columns="#{bindings.DmsValueSetView.hints.Name.displayWidth}"
@@ -57,9 +58,10 @@
             <af:column sortProperty="#{bindings.DmsValueSetView.hints.Source.name}"
                        filterable="false" sortable="true"
                        headerText="#{bindings.DmsValueSetView.hints.Source.label}"
-                       id="c4" width="106">
+                       id="c4" width="110">
             <af:inputText value="#{row.bindings.Source.inputValue}"
                           simple="true"
+                          valueChangeListener="#{viewScope.ValueSetEditBean.valueSourceChange}"
                           required="#{bindings.DmsValueSetView.hints.Source.mandatory}"
                           columns="#{bindings.DmsValueSetView.hints.Source.displayWidth}"
                           maximumLength="#{bindings.DmsValueSetView.hints.Source.precision}"
@@ -69,7 +71,7 @@
             </af:inputText>
             </af:column>
           <af:column headerText="#{bindings.DmsValueSetView.hints.Code.label}"
-                     id="c6">
+                     id="c6" width="106">
             <af:inputText value="#{row.bindings.Code.inputValue}"
                           label="#{bindings.DmsValueSetView.hints.Code.label}"
                           required="#{bindings.DmsValueSetView.hints.Code.mandatory}"
@@ -83,28 +85,35 @@
           <af:column sortProperty="#{bindings.DmsValueSetView.hints.UpdatedAt.name}"
                        filterable="false" sortable="true"
                        headerText="#{bindings.DmsValueSetView.hints.UpdatedAt.label}"
-                       id="c2" width="104">
+                       id="c2" width="109">
               <af:outputText value="#{row.UpdatedAt}" id="ot2">
                 <af:convertDateTime pattern="#{bindings.DmsValueSetView.hints.UpdatedAt.format}"/>
               </af:outputText>
             </af:column>
-            <af:column sortProperty="#{bindings.DmsValueSetView.hints.UpdatedBy.name}"
-                       filterable="false" sortable="true"
-                       headerText="#{bindings.DmsValueSetView.hints.UpdatedBy.label}"
-                       id="c1"
-                       width="97">
-              <af:selectOneChoice value="#{row.bindings.UpdatedBy.inputValue}"
-                                  label="#{row.bindings.UpdatedBy.label}"
-                                  required="#{bindings.DmsValueSetView.hints.UpdatedBy.mandatory}"
-                                  shortDesc="#{bindings.DmsValueSetView.hints.UpdatedBy.tooltip}"
-                                  id="soc1"
-                                  readOnly="true">
-                <f:selectItems value="#{row.bindings.UpdatedBy.items}"
-                               id="si1"/>
-              </af:selectOneChoice>
-            </af:column>
-          </af:table>
+          <af:column headerText="#{bindings.DmsValueSetView.hints.DefaultCode.label}" 
+                     id="c1" width="105">
+            
+            <af:selectOneChoice  id="soc1" value="#{row.bindings.DefaultCode.inputValue}"
+                          label="#{bindings.DmsValueSetView.hints.DefaultCode.label}" >
+                 <f:selectItems value="#{viewScope.ValueSetEditBean.valCodeSelectMap[row.Code]}" id="si1"/>
+            </af:selectOneChoice>
+ 
+            <!--<af:inputText value="#{row.bindings.DefaultCode.inputValue}"
+                          label="#{bindings.DmsValueSetView.hints.DefaultCode.label}"
+                          required="#{bindings.DmsValueSetView.hints.DefaultCode.mandatory}"
+                          columns="#{bindings.DmsValueSetView.hints.DefaultCode.displayWidth}"
+                          maximumLength="#{bindings.DmsValueSetView.hints.DefaultCode.precision}"
+                          shortDesc="#{bindings.DmsValueSetView.hints.DefaultCode.tooltip}"
+                          id="it3">
+              <f:validator binding="#{row.bindings.DefaultCode.validator}"/>
+            </af:inputText>-->
+            
+   
+          </af:column>
+        </af:table>
+
         </af:panelCollection>
+        
     </f:facet>
   </af:panelStretchLayout>
 </jsp:root>

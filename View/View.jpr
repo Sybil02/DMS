@@ -884,10 +884,6 @@
             <value n="isJDK" v="false"/>
          </hash>
          <hash>
-            <url n="id" protocol="file" path="/D:/adf_121300_1008_source/Adf_121300_1008_source.zip.library"/>
-            <value n="isJDK" v="false"/>
-         </hash>
-         <hash>
             <value n="id" v="Oracle XML Parser v2"/>
             <value n="isJDK" v="false"/>
          </hash>
@@ -917,6 +913,10 @@
          </hash>
          <hash>
             <value n="id" v="BC4J Oracle Domains"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <url n="id" protocol="file" path="/D:/adf_121300_1008_source/Adf_121300_1008_source.zip.library"/>
             <value n="isJDK" v="false"/>
          </hash>
       </list>
@@ -1215,10 +1215,6 @@
             <value n="isJDK" v="false"/>
          </hash>
          <hash>
-            <url n="id" protocol="file" path="/D:/adf_121300_1008_source/Adf_121300_1008_source.zip.library"/>
-            <value n="isJDK" v="false"/>
-         </hash>
-         <hash>
             <value n="id" v="Oracle XML Parser v2"/>
             <value n="isJDK" v="false"/>
          </hash>
@@ -1250,6 +1246,10 @@
             <value n="id" v="BC4J Oracle Domains"/>
             <value n="isJDK" v="false"/>
          </hash>
+         <hash>
+            <url n="id" protocol="file" path="/D:/adf_121300_1008_source/Adf_121300_1008_source.zip.library"/>
+            <value n="isJDK" v="false"/>
+         </hash>
       </list>
    </hash>
    <hash n="oracle.jdevimpl.config.JProjectPaths">
@@ -1266,6 +1266,7 @@
       </list>
       <list n="servlet_listeners">
          <string v="com.sun.faces.config.ConfigureListener"/>
+         <string v="org.apache.myfaces.trinidadinternal.webapp.TrinidadListenerImpl"/>
       </list>
       <list n="servlet_listeners_unselected">
          <string v="oracle.adf.mbean.share.connection.ADFConnectionLifeCycleCallBack"/>

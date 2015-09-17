@@ -118,6 +118,16 @@ public class DmsValueSetViewRowImpl extends ViewRowImpl {
             }
         }
         ,
+        DefaultCode {
+            public Object get(DmsValueSetViewRowImpl obj) {
+                return obj.getDefaultCode();
+            }
+
+            public void put(DmsValueSetViewRowImpl obj, Object value) {
+                obj.setDefaultCode((String)value);
+            }
+        }
+        ,
         DmsGroupValueView {
             public Object get(DmsValueSetViewRowImpl obj) {
                 return obj.getDmsGroupValueView();
@@ -186,6 +196,7 @@ public class DmsValueSetViewRowImpl extends ViewRowImpl {
     public static final int UPDATEDBY = AttributesEnum.UpdatedBy.index();
     public static final int CREATEDBY = AttributesEnum.CreatedBy.index();
     public static final int VALUESETID = AttributesEnum.ValueSetId.index();
+    public static final int DEFAULTCODE = AttributesEnum.DefaultCode.index();
     public static final int DMSGROUPVALUEVIEW = AttributesEnum.DmsGroupValueView.index();
     public static final int LKP_LANG = AttributesEnum.LKP_LANG.index();
     public static final int LSV_USER = AttributesEnum.LSV_USER.index();
@@ -364,6 +375,22 @@ public class DmsValueSetViewRowImpl extends ViewRowImpl {
         setAttributeInternal(VALUESETID, value);
     }
 
+
+    /**
+     * Gets the attribute value for DEFAULT_CODE using the alias name DefaultCode.
+     * @return the DEFAULT_CODE
+     */
+    public String getDefaultCode() {
+        return (String) getAttributeInternal(DEFAULTCODE);
+    }
+
+    /**
+     * Sets <code>value</code> as attribute value for DEFAULT_CODE using the alias name DefaultCode.
+     * @param value value to set the DEFAULT_CODE
+     */
+    public void setDefaultCode(String value) {
+        setAttributeInternal(DEFAULTCODE, value);
+    }
 
     /**
      * Gets the associated <code>RowIterator</code> using master-detail link DmsGroupValueView.
