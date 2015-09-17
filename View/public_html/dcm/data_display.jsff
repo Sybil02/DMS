@@ -157,6 +157,7 @@
         <af:table var="row" rowBandingInterval="0" id="table1"
                   value="#{viewScope.DcmDataDisplayBean.dataModel}"
                   scrollPolicy="page"
+                  selectedRowKeys="#{viewScope.DcmDataDisplayBean.dataModel.selectedRows}"
                   selectionListener="#{viewScope.DcmDataDisplayBean.rowSelectionListener}" 
                   rowSelection="multiple" editingMode="clickToEdit"
                   shortDesc="#{viewBundle['dms.multiple_key_search']}"
@@ -194,13 +195,13 @@
                               or (viewScope.DcmDataDisplayBean.isRolling eq true and viewScope.DcmDataDisplayBean.rollingMonth ne null
                               and viewScope.DcmDataDisplayBean.rollingMonth >= attr.rollingMonth)}"
                               valueChangeListener="#{viewScope.DcmDataDisplayBean.valueChangeListener}"
-                              validator="#{viewScope.DcmDataDisplayBean.comboboxLOVBeanList[vs.index%999].validate}"
+                              validator="#{viewScope.DcmDataDisplayBean.comboboxLOVBeanList[vs.index+0].validate}"
                               autoSubmit="true"
                               rendered="#{attr.valueSetId ne null  }"
-                              model="#{viewScope.DcmDataDisplayBean.comboboxLOVBeanList[vs.index%999].listOfValuesModel}"
+                              model="#{viewScope.DcmDataDisplayBean.comboboxLOVBeanList[vs.index+0].listOfValuesModel}"
                               > 
-                 <af:autoSuggestBehavior suggestItems="#{viewScope.DcmDataDisplayBean.comboboxLOVBeanList[vs.index%999].suggestMethod}" 
-                                        maxSuggestedItems="-1"/>  
+                 <af:autoSuggestBehavior suggestItems="#{viewScope.DcmDataDisplayBean.comboboxLOVBeanList[vs.index].suggestMethod}" 
+                                         maxSuggestedItems="-1"/>  
               </af:inputComboboxListOfValues>
               
   
