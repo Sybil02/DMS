@@ -8,6 +8,8 @@ import common.TablePagination;
 
 import oracle.adf.view.rich.component.rich.nav.RichCommandButton;
 
+import oracle.adf.view.rich.component.rich.output.RichProgressIndicator;
+
 import oracle.jbo.domain.Number;
 import dcm.combinantion.CombinationEO;
 
@@ -55,6 +57,7 @@ import javax.faces.model.SelectItem;
 import oracle.adf.model.binding.DCIteratorBinding;
 import oracle.adf.share.ADFContext;
 import oracle.adf.share.logging.ADFLogger;
+import oracle.adf.view.rich.component.rich.RichPoll;
 import oracle.adf.view.rich.component.rich.RichPopup;
 import oracle.adf.view.rich.component.rich.data.RichTable;
 import oracle.adf.view.rich.component.rich.input.RichInputFile;
@@ -78,8 +81,10 @@ import oracle.jbo.jbotester.load.SimpleDateFormatter;
 import oracle.jbo.server.DBTransaction;
 
 import org.apache.commons.lang.ObjectUtils;
+import org.apache.myfaces.trinidad.event.PollEvent;
 import org.apache.myfaces.trinidad.event.SelectionEvent;
 import org.apache.myfaces.trinidad.event.SortEvent;
+import org.apache.myfaces.trinidad.model.BoundedRangeModel;
 import org.apache.myfaces.trinidad.model.CollectionModel;
 import org.apache.myfaces.trinidad.model.RowKeySet;
 import org.apache.myfaces.trinidad.model.SortCriterion;
@@ -171,12 +176,12 @@ public class DcmDataDisplayBean extends TablePagination{
     private String calcErrMsg;
     private boolean isRolling = true;
     private Number rollingMonth; 
-
-    private RichCommandButton export;
-    private RichCommandButton exportDownload;
-    private RichCommandButton exportButton;
+ 
+  
 
     private boolean hasCalc = true;
+    private RichProgressIndicator exportProIndicator;
+    private RichCommandButton exportButton;
 
     public DcmDataDisplayBean() { 
         this.curUser =(Person)ADFContext.getCurrent().getSessionScope().get("cur_user");
@@ -586,7 +591,9 @@ public class DcmDataDisplayBean extends TablePagination{
     }
     //数据导出
     public void operation_export(FacesContext facesContext,java.io.OutputStream outputStream) { 
- 
+        
+        isProcess = 1;
+        
         String type = this.isXlsx ? "xlsx" : "xls";
         try {
             if ("xls".equals(type)) {
@@ -605,8 +612,11 @@ public class DcmDataDisplayBean extends TablePagination{
             outputStream.flush();
         } catch (Exception e) {
             this._logger.severe(e);
+        }finally{
+            
+            isProcess = 0;
         }
-  
+         
     }
     //下载模板
     public void operation_download(FacesContext facesContext,java.io.OutputStream outputStream) {
@@ -1804,8 +1814,111 @@ public class DcmDataDisplayBean extends TablePagination{
          
              FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("请先选择组合"));
              
-         }else { 
+         }else {
+             //打开的导出框的时候应该是能重置进度款，定时器的状态。（360浏览器不大兼容所以需要到）
+             if(exportProcessPoll != null && exportProIndicator !=null)
+             {
+                exportProIndicator.setVisible(false);
+                exportProcessPoll.setInterval(-1);
+
+
+                exportButton.setVisible(true);
+                AdfFacesContext.getCurrentInstance().addPartialTarget(exportButton);
+
+                AdfFacesContext.getCurrentInstance().addPartialTarget(exportProIndicator);
+                AdfFacesContext.getCurrentInstance().addPartialTarget(exportProcessPoll);
+             }
              dataExportWnd.show(new RichPopup.PopupHints());
+
+             AdfFacesContext.getCurrentInstance().addPartialTarget(dataExportWnd);
          }
     }
-}
+    //判断是否在导出当中 0：正在导出 1：导出成功 -1：没有导出
+    int isProcess = -1;
+    
+     
+    /* 
+     * 定时器执行的方法，在导出的时候是无法执行定时器的，但是导出之后就会执行，因此一般只会执行一次
+     * 执行一次之后就重置状态，关闭导出框，关闭定时器，隐藏进度条
+     * */    
+    public void getExportPollProcess(PollEvent pollEvent) {
+          
+        
+        if (isProcess == 1) {
+ 
+            exportProcessPoll.setInterval( -1 );
+            dataExportWnd.cancel(); 
+            isProcess = -1;
+            exportProIndicator.setVisible(false);
+
+            AdfFacesContext.getCurrentInstance().addPartialTarget(exportButton);
+            AdfFacesContext.getCurrentInstance().addPartialTarget(exportProIndicator);
+            AdfFacesContext.getCurrentInstance().addPartialTarget(exportProcessPoll);
+            AdfFacesContext.getCurrentInstance().addPartialTarget(dataExportWnd);
+        }else{
+                
+        }
+        
+    }
+    
+    private RangeModel rangeModel;
+    //进度条
+    public  RangeModel getRangeModel() {
+        if( rangeModel != null)
+            return rangeModel;
+        
+        rangeModel = new RangeModel();
+        
+        return rangeModel;
+    }
+
+    public void setExportProIndicator(RichProgressIndicator exportProIndicator) {
+        this.exportProIndicator = exportProIndicator;
+    }
+
+    public RichProgressIndicator getExportProIndicator() {
+        return exportProIndicator;
+    }
+
+    public void setExportButton(RichCommandButton exportButton) {
+        this.exportButton = exportButton;
+    }
+
+    public RichCommandButton getExportButton() {
+        return exportButton;
+    }
+
+
+    public class RangeModel extends BoundedRangeModel {
+        
+        long maxinum = -1;
+        long value = -1;
+        
+        public long getMaximum() {
+            return maxinum;
+        }
+
+        public long getValue() {
+            return value;
+        }
+        
+        public void setMaximum(long maxinum) {
+            this.maxinum = maxinum;
+        }
+        
+        public void setValue(long value) {
+            this.value = value;
+        }
+        
+    }
+    private RichPoll exportProcessPoll;
+    
+    public void setExportProcessPoll(RichPoll exportProcessPoll) {
+        this.exportProcessPoll = exportProcessPoll;
+    }
+
+    public RichPoll getExportProcessPoll() {
+        return exportProcessPoll;
+    }
+    
+    }

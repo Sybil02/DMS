@@ -538,6 +538,7 @@
             <hash>
                <url n="content-folder-url" path="adfmsrc/dms/valueSet/"/>
                <list n="pattern-filters">
+                  <string v="+dms/valueSet/ValueSetEditBean.java"/>
                   <string v="+dms/valueSet/ColumnDescriporImpl.java"/>
                   <string v="+dms/valueSet/DmsValuesetTableModel.java"/>
                   <string v="+dms/valueSet/DmsValueSetVLModel.java"/>
@@ -562,6 +563,8 @@
             <hash>
                <url n="content-folder-url" path="adfmsrc/dcm/"/>
                <list n="pattern-filters">
+                  <string v="+dcm/aaaa.java"/>
+                  <string v="+dcm/ProcessIndicator.java"/>
                   <string v="+dcm/DemoLOVBean.java"/>
                   <string v="+dcm/DemoComboboxLOVBean.java"/>
                   <string v="+dcm/SuggestItem.java"/>
@@ -694,7 +697,7 @@
                <value n="remoteParameter:jpdaListen:localAddress" v=""/>
             </hash>
             <value n="programArguments" v=""/>
-            <url n="targetURL" path="public_html/dcm/index.jspx"/>
+            <url n="targetURL" path="public_html/index.jspx"/>
             <value n="VMName" v="server"/>
          </hash>
       </hash>
@@ -874,11 +877,11 @@
             <value n="isJDK" v="false"/>
          </hash>
          <hash>
-            <url n="id" path="../../adf_121300_1008_source/Adf_121300_1008_source.zip.library"/>
+            <value n="id" v="Trinidad Runtime 11"/>
             <value n="isJDK" v="false"/>
          </hash>
          <hash>
-            <url n="id" protocol="file" path="/Users/Administrator/AppData/Roaming/JDeveloper/system11.1.1.7.40.64.93/o.jdeveloper/Adf_121300_1008_source.zip.library"/>
+            <url n="id" protocol="file" path="/D:/adf_121300_1008_source/Adf_121300_1008_source.zip.library"/>
             <value n="isJDK" v="false"/>
          </hash>
          <hash>
@@ -911,10 +914,6 @@
          </hash>
          <hash>
             <value n="id" v="BC4J Oracle Domains"/>
-            <value n="isJDK" v="false"/>
-         </hash>
-         <hash>
-            <value n="id" v="Trinidad Runtime 11"/>
             <value n="isJDK" v="false"/>
          </hash>
       </list>
@@ -1209,11 +1208,11 @@
             <value n="isJDK" v="false"/>
          </hash>
          <hash>
-            <url n="id" path="../../adf_121300_1008_source/Adf_121300_1008_source.zip.library"/>
+            <value n="id" v="Trinidad Runtime 11"/>
             <value n="isJDK" v="false"/>
          </hash>
          <hash>
-            <url n="id" protocol="file" path="/Users/Administrator/AppData/Roaming/JDeveloper/system11.1.1.7.40.64.93/o.jdeveloper/Adf_121300_1008_source.zip.library"/>
+            <url n="id" protocol="file" path="/D:/adf_121300_1008_source/Adf_121300_1008_source.zip.library"/>
             <value n="isJDK" v="false"/>
          </hash>
          <hash>
@@ -1246,10 +1245,6 @@
          </hash>
          <hash>
             <value n="id" v="BC4J Oracle Domains"/>
-            <value n="isJDK" v="false"/>
-         </hash>
-         <hash>
-            <value n="id" v="Trinidad Runtime 11"/>
             <value n="isJDK" v="false"/>
          </hash>
       </list>

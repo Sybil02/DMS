@@ -4,7 +4,8 @@
           xmlns:af="http://xmlns.oracle.com/adf/faces/rich"
           xmlns:f="http://java.sun.com/jsf/core" 
           xmlns:c="http://java.sun.com/jsp/jstl/core"
-          xmlns:th="http://myfaces.apache.org/trinidad/html">
+          xmlns:th="http://myfaces.apache.org/trinidad/html"
+          xmlns:tr="http://myfaces.apache.org/trinidad">
  
   
 
@@ -105,7 +106,7 @@
         </f:facet>
         <!-- 分页控件 -->
         <f:facet name="statusbar">
-          <af:toolbar id="t4" partialTriggers="t1">
+          <af:toolbar id="t4" partialTriggers="table1" clientComponent="true">
             <af:group id="g1">
               <af:commandImageLink id="cil1" icon="/images/page-first.gif"
                                    actionListener="#{viewScope.DcmDataDisplayBean.firstPage}"/>
@@ -134,11 +135,15 @@
                             actionListener="#{viewScope.DcmDataDisplayBean.refreshPage}"/>
             </af:group>
             <af:group id="g5">
+            
               <af:outputText value="#{af:formatString3(viewBundle['dms.common.pagenation.seg03'],
                                     viewScope.DcmDataDisplayBean.startPoint+1,
                                     viewScope.DcmDataDisplayBean.endPoint,
-                                    viewScope.DcmDataDisplayBean.totalCount)}"
-                             id="ot4"/>
+                                    viewScope.DcmDataDisplayBean.totalCount)}" 
+                             id="ot4"
+                             clientComponent="true"
+                             shortDesc="#{viewScope.DcmDataDisplayBean.totalCount}"
+                             description="上面的描述是选择的数量"/> 
             </af:group>
           </af:toolbar>
         </f:facet>
@@ -149,14 +154,14 @@
             <af:outputLabel value="#{viewBundle['dms.sort.tip']}" id="ol1"/>
           </af:dialog>
         </af:popup>
-        <af:table var="row" rowBandingInterval="0" id="t1"
+        <af:table var="row" rowBandingInterval="0" id="table1"
                   value="#{viewScope.DcmDataDisplayBean.dataModel}"
                   scrollPolicy="page"
-                  selectionListener="#{viewScope.DcmDataDisplayBean.rowSelectionListener}"
-                  selectedRowKeys="#{viewScope.DcmDataDisplayBean.dataModel.selectedRows}"
+                  selectionListener="#{viewScope.DcmDataDisplayBean.rowSelectionListener}" 
                   rowSelection="multiple" editingMode="clickToEdit"
                   shortDesc="#{viewBundle['dms.multiple_key_search']}"
-                  fetchSize="50"
+                  fetchSize="50" 
+                  clientComponent="true"
                   sortListener="#{viewScope.DcmDataDisplayBean.sortListener}"
                   emptyText="#{viewBundle['dms.common.nodata']}"
                   filterModel="#{viewScope.DcmDataDisplayBean.queryDescriptor}"
@@ -220,7 +225,7 @@
                           emptyText="#{viewBundle['dms.common.nodata']}"
                           fetchSize="#{bindings.DcmErrorView.rangeSize}"
                           rowBandingInterval="0" filterVisible="false"
-                          varStatus="vs"
+                          varStatus="vs"  
                           selectedRowKeys="#{bindings.DcmErrorView.collectionModel.selectedRow}"
                           selectionListener="#{bindings.DcmErrorView.collectionModel.makeCurrent}"
                           rowSelection="single" id="t3"
@@ -272,6 +277,7 @@
                       <f:selectItems value="#{row.bindings.CreatedBy.items}"
                                      id="si1"/>
                     </af:selectOneChoice>
+                    
                   </af:column>
                 </af:table>
               </f:facet>
@@ -330,8 +336,8 @@
             </af:panelGridLayout>
           </af:panelWindow>
         </af:popup>
-        <af:popup id="p3"  autoCancel="disabled" childCreation="deferred"
-                  binding="#{viewScope.DcmDataDisplayBean.dataExportWnd}">
+        <af:popup id="p3"    childCreation="deferred"
+                  binding="#{viewScope.DcmDataDisplayBean.dataExportWnd}"> 
           <af:panelWindow id="pw3"
                           title="#{viewBundle['dcm.template.data_export']}"
                           modal="true">
@@ -344,6 +350,7 @@
                 </af:gridCell>
                 <af:gridCell marginStart="5px" marginEnd="5px" width="auto"
                              id="gc9">
+
                   <af:selectBooleanRadio text="#{viewBundle['dcm.export.03format']}"
                                          id="sbr3" group="excelFormat1" 
                                          value="false"
@@ -352,38 +359,76 @@
                                          id="sbr4" group="excelFormat1"
                                          simple="true" autoSubmit="true" selected="true"
                                          value="#{viewScope.DcmDataDisplayBean.isXlsx}"/>
+
+
+
                 </af:gridCell>
               </af:gridRow>
               <af:gridRow marginTop="5px" marginBottom="5px" height="auto"
                           id="gr5">
                 <af:gridCell marginStart="5px" width="auto" columnSpan="2"
                              halign="center" id="gc8"
-                              >  
-                   <th:script id="javascript1">
+                              >
+                  
+                  <th:script id="javascript1">
                      //点击导出按钮会关闭导出框并且下载xml文件
-                           function clickexport(event) {
-                             var source=event.getSource();
-                             var button = source.findComponent("cb11"); 
-                             var popup = source.findComponent("p3");
+                           function clickexport(event) { 
+                           
+                            var source=event.getSource();
+                            var regionId = source.getClientId();
+                            var end = regionId.lastIndexOf(':');
+                            var prefix = regionId.substr(0, end);
+                            //上面是求出region的前缀，以便获取单选框和得到条数判断是否能在2003的环境下导出
+                            var select2003 = AdfPage.PAGE.findComponentByAbsoluteId(prefix + ":sbr3");
+                            
+                            var countOutput = AdfPage.PAGE.findComponentByAbsoluteId(prefix  + ":pc1:ot4");
+                            
+                            
+                            if(select2003.getValue() == true &amp;&amp; countOutput.getShortDesc() > 60000) {
+                                alert('超过60000条数据以上请选择2007');
+                                return ;
+                            } 
                              
-                             popup.cancel();
-                             AdfActionEvent.queue(button, true);
-                          }
-                     
-                     </th:script> 
-                  <af:commandButton text="#{viewBundle['dcm.action.export']}" id="cb55"
-                    partialSubmit="true"
-                      >
-                    <af:clientListener type="click" method="clickexport"/> 
-                    </af:commandButton>
-                    
+                             var poll = source.findComponent("p8");
+                             var progressIndicator = source.findComponent("pi1"); 
+                             var exportButton = source.findComponent("cb55");  
+                             //执行定时器
+                             poll.setInterval(500);
+                             //隐藏导出按钮
+                             exportButton.setVisible('false')
+                             //显示进度条
+                             progressIndicator.setVisible('true');
+                             //启动导出过程
+                             var button = source.findComponent("cb11");
+                             AdfActionEvent.queue(button, true); 
+                          } 
+                           
+                     </th:script>
+                  <af:poll id="p8" interval="-1" 
+                           binding="#{viewScope.DcmDataDisplayBean.exportProcessPoll}" 
+                           pollListener="#{viewScope.DcmDataDisplayBean.getExportPollProcess}" 
+                           timeout="10000000"/>
+                  <af:commandButton text="#{viewBundle['dcm.action.export']}" id="cb55" partialSubmit="true"
+                                    clientComponent="true"
+                                    binding="#{viewScope.DcmDataDisplayBean.exportButton}"
+                                    partialTriggers="p8 pi1 cb55">
+                    <af:clientListener method="clickexport" type="click"/>
+                  </af:commandButton>
+                 
+                      <af:progressIndicator id="pi1" clientComponent="true"
+                                            visible="false"
+                                            binding="#{viewScope.DcmDataDisplayBean.exportProIndicator}"
+                                            value="#{viewScope.DcmDataDisplayBean.rangeModel}"/> 
                   <af:commandButton text="#{viewBundle['dcm.action.export']}"
-                                    id="cb11" visible="false"   
-                                     >
+                                    clientComponent="true"
+                                    id="cb11" visible="false"> 
+
                     <af:fileDownloadActionListener contentType="application/vnd.ms-excel"
                                                    method="#{viewScope.DcmDataDisplayBean.operation_export}"
                                                    filename="#{viewScope.DcmDataDisplayBean.exportDataExcelName}"/>
+                                                   
                   </af:commandButton>
+                  
                 </af:gridCell>
               </af:gridRow> 
             </af:panelGridLayout>
