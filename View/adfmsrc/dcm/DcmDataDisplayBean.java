@@ -119,7 +119,7 @@ public class DcmDataDisplayBean extends TablePagination{
     //是否增量导入
     private boolean isIncrement = true;
     //是否是2007及以上格式
-    private boolean isXlsx = false;
+    private boolean isXlsx = true;
     //组合信息
     private List<ComHeader> templateHeader = new ArrayList<ComHeader>();
     //值集信息
@@ -232,6 +232,7 @@ public class DcmDataDisplayBean extends TablePagination{
     public void rowSelectionListener(SelectionEvent selectionEvent) {
         RichTable table = (RichTable)selectionEvent.getSource();
         RowKeySet rks = selectionEvent.getAddedSet();
+        System.out.println("sssssssssssssssssssssssssssssss:"+rks.size());
         if (rks != null) {
             int setSize = rks.size();
             if (setSize == 0) {
@@ -258,6 +259,7 @@ public class DcmDataDisplayBean extends TablePagination{
         List<Map> modelData = (List<Map>)this.dataModel.getWrappedData();
         RowKeySet keySet =
             ((DcmDataTableModel)this.dataModel).getSelectedRows();
+        System.out.println("keysettttttttttttttttttttttttt:"+keySet.size());
         for (Object key : keySet) {
             Map rowData = (Map)this.dataModel.getRowData(key);
             //若为新增操作则直接从数据集删除数据
@@ -527,7 +529,7 @@ public class DcmDataDisplayBean extends TablePagination{
         //清空已有零时表数据
         this.clearTmpTableAndErrTable(curComRecordId);
         RowReader reader =new RowReader(trans, (int)this.curTempalte.getDataStartLine().getValue(), this.curTempalte.getId(),combinationRecord, this.curTempalte.getTmpTable(),
-                          this.colsdef.size(), this.curUser.getId(),this.curTempalte.getName());
+                          this.colsdef.size(), this.curUser.getId(),this.curTempalte.getName(),this.colsdef);
         try {
             ExcelReaderUtil.readExcel(reader, fileName, true);
             reader.close();
@@ -784,7 +786,9 @@ public class DcmDataDisplayBean extends TablePagination{
         }
         String sql =this.getPaginationSql(this.getQuerySql());
         PreparedStatement stat =dbTransaction.createPreparedStatement(sql, -1);
-        DecimalFormat dfm = new DecimalFormat("#.0000");
+        DecimalFormat dfm = new DecimalFormat();
+        dfm.setMaximumFractionDigits(4);
+        dfm.setGroupingUsed(false);
         ResultSet rs = null;
         try {
             rs = stat.executeQuery();
@@ -797,7 +801,7 @@ public class DcmDataDisplayBean extends TablePagination{
                         obj=format.format((java.sql.Date)obj);
                     }else if(col.getDataType().equals("NUMBER")){
                         if(obj!=null)
-                        //obj = dfm.format(Double.valueOf(obj.toString()));
+                        obj = dfm.format(Double.valueOf(obj.toString()));
                         obj=ObjectUtils.toString(obj);
                     }else{
                         obj=ObjectUtils.toString(obj);
