@@ -2,6 +2,8 @@ package dms.valueSet;
 
 import common.ADFUtils;
 
+import common.JSFUtils;
+
 import java.sql.ResultSet;
 import java.sql.Statement;
 
@@ -15,6 +17,8 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
+
+import oracle.adfinternal.view.faces.model.binding.FacesCtrlListBinding;
 
 import oracle.jbo.Row;
 import oracle.jbo.ViewObject;
@@ -50,7 +54,7 @@ public class ValueSetEditBean {
             String code = row.getAttribute("Code").toString();
             
             List<SelectItem> items = new ArrayList<SelectItem>();
-
+            items.add(new SelectItem(null, ""));
             Statement stmt = db.createStatement(DBTransaction.DEFAULT);
             String sql = "select code,meaning from " + source;
             ResultSet rs = null;
@@ -74,7 +78,7 @@ public class ValueSetEditBean {
                 }
             } 
             
-            valCodeSelectMap.put(code, items);
+            valCodeSelectMap.put(source, items);
             row = vo.next();
         }
 
@@ -96,36 +100,39 @@ public class ValueSetEditBean {
     public void valueSourceChange(ValueChangeEvent valueChangeEvent) {
         String nvalue = (String)valueChangeEvent.getNewValue();
         String ovalue = (String)valueChangeEvent.getOldValue();
-        
-        if(ovalue != null)
-         valCodeSelectMap.remove(ovalue);
-        
 
-        
-        if(nvalue == null)
+        if(ovalue == null)
             return ;
         
         if( nvalue.equals(ovalue) ){
             return ;
         } 
+        List<SelectItem> test = valCodeSelectMap.remove(ovalue);
+        
+        if(nvalue == null)
+            return ;
+ 
         ViewObject vo =
             ADFUtils.findIterator("DmsValueSetViewIterator").getViewObject();
         DBTransaction db =
             (DBTransaction)vo.getApplicationModule().getTransaction();
 
         Statement stmt = db.createStatement(DBTransaction.DEFAULT);
-
+        System.out.println("table   " + nvalue);
         String sql = "select code,meaning from " + nvalue;
         ResultSet rs = null;
 
         try {
             rs = stmt.executeQuery(sql);
             List<SelectItem> items = new ArrayList<SelectItem>();
-
+            items.add(new SelectItem(null, ""));
+            
             while (rs.next()) {
-
+                
                 String mcode = rs.getString("code").toString();
                 String meaning = rs.getString("meaning").toString();
+                System.out.println(mcode+"    "+meaning);
+                
                 items.add(new SelectItem(mcode, meaning));
             }
             valCodeSelectMap.put(nvalue, items);

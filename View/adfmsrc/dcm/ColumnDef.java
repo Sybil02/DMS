@@ -1,5 +1,7 @@
 package dcm;
 
+import oracle.adf.view.rich.model.ListOfValuesModel;
+
 import oracle.jbo.domain.Date;
 import oracle.jbo.domain.Number;
 
@@ -24,7 +26,9 @@ public class ColumnDef {
         this.valueSetId=row.getValueSetId();
         this.rollingMonth=row.getRollingMonth();
         this.rollingAttr=row.getRollingAttr();
-    }
+        
+    } 
+    private ListOfValuesModel model;
     private String id;
     private String locale;
     private String columnLabel;
@@ -42,8 +46,9 @@ public class ColumnDef {
     private String valueSetId;
     private Number rollingMonth;
     private String rollingAttr;
+    private int countNum = 0;
     
-
+    
     public void setId(String id) {
         this.id = id;
     }
@@ -178,5 +183,21 @@ public class ColumnDef {
 
     public String getRollingAttr() {
         return rollingAttr;
+    }
+
+    public void setCountNum(int countNum) {
+        this.countNum = countNum;
+    }
+
+    public int getCountNum() {
+        return countNum;
+    }
+
+    public void setModel(ListOfValuesModel model) {
+        this.model = model;
+    }
+
+    public ListOfValuesModel getModel() {
+        return model;
     }
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <adfc-config xmlns="http://xmlns.oracle.com/adf/controller" version="1.2">
   <task-flow-definition id="user_info_tsk">
-    <default-activity id="__1">user_info</default-activity>
+    <default-activity id="__12">user_info</default-activity>
     <transaction id="__3">
       <new-transaction/>
     </transaction>

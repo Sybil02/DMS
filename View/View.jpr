@@ -23,6 +23,7 @@
       <value n="oracle.bm.migration.project.MigratorRegistryProjectUpgradeAdapter" v="11.1.1.1.0"/>
       <value n="oracle.ide.model.Project" v="11.1.1.1.0"/>
       <value n="oracle.ide.model.ResourcePathsMigrator" v="11.1.1.1.0"/>
+      <value n="oracle.ideimpl.model.TechnologyScopeUpdateMigrator" v="11.1.2.0.0.4"/>
       <value n="oracle.jbo.dt.jclient.migrator.JCProjectMigrator" v="11.1.1.1.0"/>
       <value n="oracle.jbo.dt.jdevx.deployment.JbdProjectMigrator" v="11.1.1.1.0"/>
       <value n="oracle.jbo.dt.jdevx.ui.appnav.APProjectMigrator" v="11.1.1.0.1.5"/>
@@ -58,6 +59,7 @@
       <string v="oracle.toplink.workbench.addin/toplinkContentSet"/>
       <string v="oracle.tip.tools.ide.fabric.addin.SCAContentSetProvider/sca-content"/>
       <string v="oracle.bpm.fusion.repository.BPMProjectSettings/bpmProjectsProcessesContentSet"/>
+      <string v="oracle.mds.internal.dt.ide.MDSADFLibVirtualNodeCSProvider/mdsLibVirtualNodeContentSet"/>
    </list>
    <value n="defaultPackage" v=""/>
    <hash n="oracle.adfdtinternal.model.ide.settings.ADFMSettings">
@@ -69,6 +71,9 @@
             <url path="adfmsrc/"/>
          </list>
       </hash>
+   </hash>
+   <hash n="oracle.adfdtinternal.view.rich.setting.ADFViewSettings">
+      <value n="ENABLE_ADF_WEBAPP_LIB_SUPPORT" v="true"/>
    </hash>
    <hash n="oracle.bm.commonIde.data.project.ModelerProjectSettings">
       <hash n="modelersContentSet">
@@ -96,12 +101,20 @@
    </hash>
    <hash n="oracle.ide.model.TechnologyScopeConfiguration">
       <list n="technologyScope">
+         <string v="ADFm"/>
+         <string v="Database"/>
+         <string v="JAVASCRIPT"/>
          <string v="Java"/>
          <string v="JSP"/>
          <string v="JSF"/>
          <string v="ADF_FACES"/>
          <string v="ADFc"/>
          <string v="HTML"/>
+         <string v="SQLJ"/>
+         <string v="TRINIDAD"/>
+         <string v="TopLink"/>
+         <string v="WSDL"/>
+         <string v="WSPolicy"/>
          <string v="XML"/>
          <string v="WebServices"/>
       </list>
@@ -563,6 +576,9 @@
             <hash>
                <url n="content-folder-url" path="adfmsrc/dcm/"/>
                <list n="pattern-filters">
+                  <string v="+dcm/sss.java"/>
+                  <string v="+dcm/MyList.java"/>
+                  <string v="+dcm/ssss.java"/>
                   <string v="+dcm/aaaa.java"/>
                   <string v="+dcm/ProcessIndicator.java"/>
                   <string v="+dcm/DemoLOVBean.java"/>
@@ -691,10 +707,7 @@
             <value n="JavaScriptRunConfigurationStopOnException" v="false"/>
             <value n="JavaScriptRunConfigurationTransferErrors" v="true"/>
             <value n="name" v="Default"/>
-            <hash n="oracle.adfdt.controller.adfc.source.runner.JsfJspRunnerLaunchSettings">
-               <value n="delegateRunTarget" v="/WEB-INF/adfc-config.xml"/>
-               <value n="viewActivityId" v="index"/>
-            </hash>
+            <hash n="oracle.adfdt.controller.adfc.source.runner.JsfJspRunnerLaunchSettings"/>
             <hash n="oracle.jdevimpl.runner.debug.DebugConfiguration">
                <value n="remoteParameter:jpda:jdi_attach_method:" v=""/>
                <value n="remoteParameter:jpdaListen:localAddress" v=""/>
@@ -916,7 +929,11 @@
             <value n="isJDK" v="false"/>
          </hash>
          <hash>
-            <url n="id" protocol="file" path="/D:/adf_121300_1008_source/Adf_121300_1008_source.zip.library"/>
+            <value n="id" v="Oracle.adf.view_11.1.1"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <url n="id" path="../../../../../Users/xin/AppData/Roaming/JDeveloper/system11.1.1.7.40.64.93/o.jdeveloper/Adf_121300_1008_source.zip.library"/>
             <value n="isJDK" v="false"/>
          </hash>
       </list>
@@ -1037,6 +1054,15 @@
                <value n="deployedByDefault" v="true"/>
                <value n="description" v="Xmlbeans-2.3.0.jar"/>
                <value n="id" v="Xmlbeans-2.3.0.jar"/>
+               <value n="locked" v="true"/>
+            </hash>
+            <hash>
+               <list n="classPath">
+                  <url path="../../../../../Oracle/Middleware11.1.2.4/oracle_common/modules/oracle.adf.view_11.1.1/"/>
+               </list>
+               <value n="deployedByDefault" v="true"/>
+               <value n="description" v="Oracle.adf.view_11.1.1"/>
+               <value n="id" v="Oracle.adf.view_11.1.1"/>
                <value n="locked" v="true"/>
             </hash>
          </list>
@@ -1247,7 +1273,11 @@
             <value n="isJDK" v="false"/>
          </hash>
          <hash>
-            <url n="id" protocol="file" path="/D:/adf_121300_1008_source/Adf_121300_1008_source.zip.library"/>
+            <value n="id" v="Oracle.adf.view_11.1.1"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <url n="id" path="../../../../../Users/xin/AppData/Roaming/JDeveloper/system11.1.1.7.40.64.93/o.jdeveloper/Adf_121300_1008_source.zip.library"/>
             <value n="isJDK" v="false"/>
          </hash>
       </list>

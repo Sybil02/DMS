@@ -20,6 +20,7 @@
           <Item Value="UpdatedAt"/>
           <Item Value="UpdatedBy"/>
           <Item Value="Code"/>
+          <Item Value="DefaultCode"/>
         </AttrNames>
       </nodeDefinition>
     </tree>
@@ -33,6 +34,11 @@
     <attributeValues IterBinding="DmsValueSetViewIterator" id="Source">
       <AttrNames>
         <Item Value="Source"/>
+      </AttrNames>
+    </attributeValues>
+    <attributeValues IterBinding="DmsValueSetViewIterator" id="DefaultCode">
+      <AttrNames>
+        <Item Value="DefaultCode"/>
       </AttrNames>
     </attributeValues>
     <action id="Rollback" RequiresUpdateModel="false"

@@ -19,6 +19,8 @@ import java.util.Map;
 
 import java.util.Random;
 
+import javax.el.ValueExpression;
+
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
@@ -32,6 +34,7 @@ import javax.servlet.http.HttpSession;
 
 import oracle.adf.controller.ControllerContext;
 
+import oracle.adf.controller.TaskFlowId;
 import oracle.adf.share.ADFContext;
 import oracle.adf.share.logging.ADFLogger;
 
@@ -41,8 +44,13 @@ import oracle.adf.view.rich.component.rich.input.RichInputText;
 import oracle.jbo.ApplicationModule;
 import oracle.jbo.Row;
 import oracle.jbo.ViewObject;
+ 
 
 import org.apache.commons.lang.ObjectUtils;
+
+import org.apache.myfaces.trinidad.render.ExtendedRenderKitService;
+
+import org.apache.myfaces.trinidad.util.Service;
 
 import team.epm.dms.view.DmsUserViewImpl;
 import team.epm.dms.view.DmsUserViewRowImpl;
@@ -60,8 +68,10 @@ public class LoginBean {
     private RichInputText acc;
     private RichInputText mail;
     private RichPopup popup;
+    
 
     public LoginBean() {
+ 
     }
 
     public void login() {
@@ -74,11 +84,25 @@ public class LoginBean {
         } else {
             String pwd = row.getPwd();
             try {
-                String encypt_pwd =DigestUtils.digestSHA1(ObjectUtils.toString(this.account).trim() +ObjectUtils.toString(this.password).trim());
-                if (pwd.equals(encypt_pwd)) {
+                String org_pwd = ObjectUtils.toString(this.password).trim();
+                String encypt_pwd = DigestUtils.digestSHA1(ObjectUtils.toString(this.account).trim() +ObjectUtils.toString(this.password).trim());
+                 
+                //如果密码是空，而且输入的时候密码为空则进入界面，强制要求修改密码
+                if(pwd == null && org_pwd.equals("")) {
+                    this.initUserPreference(row);
+                    String taskFlowId = "/WEB-INF/dmsUser/user_info_tsk.xml#user_info_tsk";
+                    //把第一个要展示的页面放在session里面
+                    ADFContext.getCurrent().getSessionScope().put("first_index", taskFlowId);
+                    
+                    FacesContext facesContext = FacesContext.getCurrentInstance();  
+                    ExternalContext ectx = facesContext.getExternalContext();
+                    ectx.redirect(ControllerContext.getInstance().getGlobalViewActivityURL("index"));
+                }
+                else if (pwd.equals(encypt_pwd)) {
                     //登陆成功
                     this.initUserPreference(row);
                     ExternalContext ectx =FacesContext.getCurrentInstance().getExternalContext();
+                   
                     ectx.redirect(ControllerContext.getInstance().getGlobalViewActivityURL("index"));
                 } else {
                     this.msg =DmsUtils.getMsg("login.username_password_error");
@@ -167,7 +191,6 @@ public class LoginBean {
                     String newPwd=DmsUtils.getRandomString(8);
                     try {
                         row.setPwd(DigestUtils.digestSHA1(row.getAcc() +newPwd));
-                        
                         this.sendMail(row.getMail(), 
                                       DmsUtils.getMsg("login.password_reset"), 
                                       DmsUtils.getMsg("login.pwd_reset_msg")+newPwd);
@@ -211,5 +234,30 @@ public class LoginBean {
 
     public RichPopup getPopup() {
         return popup;
+    }
+
+    public TaskFlowId getDynamicTaskFlowId() {
+        
+        Object first_index = ADFContext.getCurrent().getSessionScope().get("first_index");
+        ADFContext.getCurrent().getSessionScope().remove("first_index");
+        
+        String script = (String)ADFContext.getCurrent().getSessionScope().get("first_index_alert");
+        ADFContext.getCurrent().getSessionScope().remove("first_index");
+        
+        if(first_index != null)
+        {
+            ADFContext.getCurrent().getSessionScope().remove("first_index");
+            
+            if(script != null) {
+                FacesContext facesContext = FacesContext.getCurrentInstance();
+                ExtendedRenderKitService service = 
+                  Service.getRenderKitService(facesContext, ExtendedRenderKitService.class);
+                service.addScript(facesContext,  script);
+            }
+            
+            return TaskFlowId.parse(first_index.toString());
+        }
+        else
+            return TaskFlowId.parse("/WEB-INF/blank.xml#blank");
     }
 }
