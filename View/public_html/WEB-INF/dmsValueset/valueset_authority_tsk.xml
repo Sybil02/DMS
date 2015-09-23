@@ -12,6 +12,17 @@
       <managed-bean-name id="__6">ValueSetAuthorityBean</managed-bean-name>
       <managed-bean-class id="__5">dms.valueSet.ValueSetAuthorityBean</managed-bean-class>
       <managed-bean-scope id="__4">view</managed-bean-scope>
+    </managed-bean> 
+    
+       <managed-bean id="__10">
+      <managed-bean-name id="__8">GroupNameComboboxBean</managed-bean-name>
+      <managed-bean-class id="__9">dcm.GroupNameComboboxBean</managed-bean-class>
+      <managed-bean-scope id="__11">view</managed-bean-scope>
+    </managed-bean>
+    <managed-bean id="__14">
+      <managed-bean-name id="__12">RoleNameComboboxBean</managed-bean-name>
+      <managed-bean-class id="__13">dcm.RoleNameComboboxBean</managed-bean-class>
+      <managed-bean-scope id="__15">view</managed-bean-scope>
     </managed-bean>
     <view id="authority">
       <page>/dms/valueSet/authority.jsff</page>

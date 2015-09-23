@@ -69,14 +69,20 @@
         <f:facet name="toolbar">
           <af:toolbar id="t1">
             <af:group id="g1">
-              <af:selectOneChoice value="#{bindings.Name.inputValue}"
-                                  label="#{bindings.Name.label}"
-                                  required="#{bindings.Name.hints.mandatory}"
-                                  shortDesc="#{bindings.Name.hints.tooltip}"
-                                  id="soc1" autoSubmit="true"
-                                  valueChangeListener="#{backingBeanScope.RoleGroupBean.groupChangeListener}">
-                <f:selectItems value="#{bindings.Name.items}" id="si1"/>
-              </af:selectOneChoice>
+ 
+                <af:inputComboboxListOfValues label="#{bindings.GroupName.label}"
+                                              id="imlo2"
+                                              valueChangeListener="#{backingBeanScope.RoleGroupBean.groupChangeListener}"
+                                              validator="#{viewScope.GroupNameComboboxBean.groupNameLov.validate}"
+                                            
+                                              value="#{bindings.GroupName.name}"
+                                              model="#{viewScope.GroupNameComboboxBean.groupNameLov.listOfValuesModel}"
+                                              popupTitle="#{bindings.GroupName.label}  列表"
+                                              partialTriggers="t2"
+                                              autoSubmit="true">
+                   <af:autoSuggestBehavior suggestItems="#{viewScope.GroupNameComboboxBean.groupNameLov.suggestMethod}"/>
+                </af:inputComboboxListOfValues>
+              
             </af:group>
             <af:group id="g2">
               <af:commandButton text="#{viewBundle['dms.common.add']}"

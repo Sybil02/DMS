@@ -121,6 +121,8 @@ public class TemplateAuthorityBean {
     }
 
     public void roleChangeListener(ValueChangeEvent valueChangeEvent) {
+        FacesCtrlListBinding roleName =  (FacesCtrlListBinding) JSFUtils.resolveExpression("#{bindings.RoleName}");
+        roleName.setInputValue(valueChangeEvent.getNewValue());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.assignedtemplateTable);    
     }
 

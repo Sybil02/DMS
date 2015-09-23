@@ -4,6 +4,8 @@ import common.ADFUtils;
 
 import common.DmsUtils;
 
+import common.JSFUtils;
+
 import java.util.Iterator;
 import java.util.List;
 
@@ -15,6 +17,8 @@ import oracle.adf.view.rich.component.rich.RichPopup;
 import oracle.adf.view.rich.component.rich.data.RichTable;
 
 import oracle.adf.view.rich.context.AdfFacesContext;
+
+import oracle.adfinternal.view.faces.model.binding.FacesCtrlListBinding;
 
 import oracle.jbo.Key;
 import oracle.jbo.Row;
@@ -33,6 +37,8 @@ public class UserGroupBean {
     }
 
     public void groupChangeListener(ValueChangeEvent valueChangeEvent) {
+        FacesCtrlListBinding groupName = (FacesCtrlListBinding)JSFUtils.resolveExpression("#{bindings.GroupName}");
+        groupName.setInputValue(valueChangeEvent.getNewValue());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.groupedUserTable);
     }
 

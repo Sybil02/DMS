@@ -2,6 +2,8 @@ package dms.workflow;
 
 import common.ADFUtils;
 
+import common.JSFUtils;
+
 import java.util.Iterator;
 import java.util.List;
 
@@ -13,6 +15,8 @@ import oracle.adf.view.rich.component.rich.RichPopup;
 import oracle.adf.view.rich.component.rich.data.RichTable;
 
 import oracle.adf.view.rich.context.AdfFacesContext;
+
+import oracle.adfinternal.view.faces.model.binding.FacesCtrlListBinding;
 
 import oracle.jbo.Key;
 import oracle.jbo.Row;
@@ -102,6 +106,9 @@ import oracle.jbo.ViewObject;
     }
 
     public void roleChangeListener(ValueChangeEvent valueChangeEvent) {
+        FacesCtrlListBinding roleName =  (FacesCtrlListBinding) JSFUtils.resolveExpression("#{bindings.RoleName}");
+        roleName.setInputValue(valueChangeEvent.getNewValue());
+        
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.assignedworkflowTable);    
     }
 

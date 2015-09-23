@@ -13,6 +13,11 @@
       <managed-bean-class id="__6">dcm.template.TemplateAuthorityBean</managed-bean-class>
       <managed-bean-scope id="__4">request</managed-bean-scope>
     </managed-bean>
+    <managed-bean id="__11">
+      <managed-bean-name id="__10">RoleNameComboboxBean</managed-bean-name>
+      <managed-bean-class id="__8">dcm.RoleNameComboboxBean</managed-bean-class>
+      <managed-bean-scope id="__9">view</managed-bean-scope>
+    </managed-bean>
     <view id="template_authority">
       <page>/dcm/template/template_authority.jsff</page>
     </view>

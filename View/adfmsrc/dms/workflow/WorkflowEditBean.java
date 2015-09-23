@@ -44,14 +44,14 @@ public class WorkflowEditBean {
     }
 
     private void initObjItem() {
-        System.out.println("sssssssssssssssssssss");
+       // System.out.println("sssssssssssssssssssss");
         DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
         Statement state = trans.createStatement(DBTransaction.DEFAULT);
         try {
                 //查询模板标签
                String sql = "select distinct template_label from dcm_template where template_label is not null and locale = '" 
                             +this.curUser.getLocale() + "'";
-               System.out.println(sql);
+              // System.out.println(sql);
                ResultSet rs = state.executeQuery(sql);
                while(rs.next()){
                     SelectItem item = new SelectItem();

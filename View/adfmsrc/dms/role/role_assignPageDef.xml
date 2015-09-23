@@ -21,7 +21,7 @@
   </executables>
   <bindings>
     <list ListOperMode="navigation" IterBinding="DmsEnabledGroupViewIterator"
-          ListIter="DmsEnabledGroupViewIterator" id="Name" DTSupportsMRU="true">
+          ListIter="DmsEnabledGroupViewIterator" id="GroupName" DTSupportsMRU="true">
       <AttrNames>
         <Item Value="Name"/>
       </AttrNames>

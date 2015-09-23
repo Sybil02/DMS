@@ -13,6 +13,11 @@
       <managed-bean-class id="__5">odi11g.scene.SceneAuthorityBean</managed-bean-class>
       <managed-bean-scope id="__6">backingBean</managed-bean-scope>
     </managed-bean>
+    <managed-bean id="__11">
+      <managed-bean-name id="__9">RoleNameComboboxBean</managed-bean-name>
+      <managed-bean-class id="__10">dcm.RoleNameComboboxBean</managed-bean-class>
+      <managed-bean-scope id="__8">view</managed-bean-scope>
+    </managed-bean>
     <view id="scene_authority">
       <page>/odi11g/scene/scene_authority.jsff</page>
     </view>
