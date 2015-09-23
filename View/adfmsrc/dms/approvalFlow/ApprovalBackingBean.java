@@ -33,7 +33,7 @@ public class ApprovalBackingBean {
     private List<SelectItem> approvalObjItemList = new ArrayList<SelectItem>();
     public ApprovalBackingBean() {
         curUser = (Person)ADFContext.getCurrent().getSessionScope().get("cur_user");
-        System.out.println("....................................");
+       // System.out.println("....................................");
        getBeforePhaseQuery();//第一次打开页面初始化
        
     }

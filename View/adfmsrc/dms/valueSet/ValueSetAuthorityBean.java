@@ -74,42 +74,16 @@ public class ValueSetAuthorityBean {
     private Person person = (Person)ADFContext.getCurrent().getSessionScope().get("cur_user");
     private RichTable assignedValueTable;
     private RichPopup popup;
-    private RichTable unassignedValueTable;
-    private ComboboxLOVBean groupNameLov;
+    private RichTable unassignedValueTable; 
     private ComboboxLOVBean nameLov;
     private RichInputText filterValueInput; //搜索查找框，集值的
      
     
     public ValueSetAuthorityBean() {
- 
-        groupNameLov = createComboboxBean("GroupName");
-        
-        nameLov = createComboboxBean("Name");
-        
-       
+        nameLov = ComboboxLOVBean.createByBinding("Name");
     }
     
-    //根据绑定的名字的items获取ComboboxBean
-    private ComboboxLOVBean createComboboxBean(String name) {
- 
-        //System.out.println(bindings.get("Names"));
-        List<SelectItem> data = (List)JSFUtils.resolveExpression("#{bindings." + name +".items}");
-        
-        String label = (String)JSFUtils.resolveExpression("#{bindings." + name + ".label}");
-        
-        List<ComboboxLOVBean.Attribute> attrs = new ArrayList<ComboboxLOVBean.Attribute>();
-        attrs.add(new ComboboxLOVBean.Attribute(label ,"name"));
-//        for(SelectItem item : data) {
-//            System.out.println(item.getLabel()+"   "+item.getValue());
-//        }
-        ComboboxLOVBean comboboxBean = new ComboboxLOVBean(data, attrs);
-  
-        
-        for(int i = 0; i < data.size(); i++)
-            comboboxBean.getMapItem().put(data.get(i).getLabel(), i);
-        
-        return comboboxBean;
-    }
+
     
     public void setAssignedValueTable(RichTable assignedValueTable) {
         this.assignedValueTable = assignedValueTable;
@@ -120,14 +94,13 @@ public class ValueSetAuthorityBean {
     }
 
     public void groupChangeListener(ValueChangeEvent valueChangeEvent) {
-        System.out.println(valueChangeEvent.getNewValue());
-        
+ 
         FacesCtrlListBinding groupName = (FacesCtrlListBinding)JSFUtils.resolveExpression("#{bindings.GroupName}");
         groupName.setInputValue(valueChangeEvent.getNewValue());
-        
-        ADFUtils.findIterator("DmsGroupValueViewIterator").getViewObject().executeQuery();
+ 
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.assignedValueTable);
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.unassignedValueTable);
+         
         
     }
 
@@ -140,12 +113,13 @@ public class ValueSetAuthorityBean {
         if(rowid == null)
             return ;
         
-        name.setInputValue(rowid);
+        name.setInputValue(setMap);
+        System.out.println("row id == " + rowid);
         
-        Row row=ADFUtils.findIterator("DmsValueSetViewIterator").getRowSetIterator().getRowAtRangeIndex( rowid );
-        this.refreshValueMap(row); 
-
-        ADFUtils.findIterator("DmsGroupValueViewIterator").getViewObject().executeQuery();
+        Row row = ADFUtils.findIterator("DmsValueSetViewIterator").getRowSetIterator().getRowAtRangeIndex( rowid );
+        this.refreshValueMap(row);  
+        
+        //ADFUtils.findIterator("DmsGroupValueViewIterator").getViewObject().executeQuery();
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.assignedValueTable);
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.unassignedValueTable);
     }
@@ -168,6 +142,7 @@ public class ValueSetAuthorityBean {
         }
         if(row!=null){
             String valueSetSrc = (String)row.getAttribute("Source");
+            System.out.println("sdfsdf  "+valueSetSrc);
             if( valueSetSrc == null)
                 return ;
             
@@ -202,13 +177,13 @@ public class ValueSetAuthorityBean {
     public void add_value(ActionEvent actionEvent) {
         //更新未选值集的显示问题，如果没有设置，值集仍然处于筛选状态
         try{
-        ViewObject vo = ADFUtils.findIterator("getDmsValueViewIterator").getViewObject(); 
-        vo.setWhereClause("MEANING like '%'");
-        vo.executeQuery(); 
-        //清空弹出框的值集过滤框的内容
-        filterValueInput.setValue("");
-        RichPopup.PopupHints hint=new RichPopup.PopupHints();
-        this.popup.show(hint);
+            ViewObject vo = ADFUtils.findIterator("getDmsValueViewIterator").getViewObject(); 
+            vo.setWhereClause("MEANING like '%'");
+            vo.executeQuery(); 
+            //清空弹出框的值集过滤框的内容
+            filterValueInput.setValue("");
+            RichPopup.PopupHints hint=new RichPopup.PopupHints();
+            this.popup.show(hint);
         }catch (Exception e) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("值集源出错"));
             e.printStackTrace();
@@ -246,12 +221,17 @@ public class ValueSetAuthorityBean {
             while (itr.hasNext()) {
                 List key = (List)itr.next();
                 Row valueRow = rowSetIterator.getRow((Key)key.get(0));
+                
+                if(valueRow == null)
+                    continue;
+                
                 Row row = groupValueVo.createRow();
                 row.setAttribute("GroupId", groupId);
                 row.setAttribute("ValueSetId", valueSetId);
                 row.setAttribute("ValueId", valueRow.getAttribute("CODE"));
                 groupValueVo.insertRow(row);
             }
+            
             groupValueVo.getApplicationModule().getTransaction().commit();
             ADFUtils.findIterator("getDmsValueViewIterator").getViewObject().executeQuery();
             ADFUtils.findIterator("DmsGroupValueViewIterator").getViewObject().executeQuery();
@@ -318,15 +298,7 @@ public class ValueSetAuthorityBean {
 
     public RichInputText getFilterValueInput() {
         return filterValueInput;
-    }
-
-    public void setGroupNameLov(ComboboxLOVBean groupNameLov) {
-        this.groupNameLov = groupNameLov;
-    }
-
-    public ComboboxLOVBean getGroupNameLov() {
-        return groupNameLov;
-    }
+    } 
 
     public void setNameLov(ComboboxLOVBean nameLov) {
         this.nameLov = nameLov;

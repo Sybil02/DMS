@@ -27,9 +27,10 @@
               <af:commandButton
                                 text="#{viewBundle['dms.common.save']}"
                                 id="cb3" partialTriggers="t1"
-                                actionListener="#{bindings.Commit.execute}"/>
+                                actionListener="#{bindings.Commit.execute}"/> 
             </af:toolbar>
           </f:facet>
+          <!-- selectionListener="#{bindings.DmsValueSetView.collectionModel.makeCurrent}" -->
           <f:facet name="statusbar"/>
           <af:table value="#{bindings.DmsValueSetView.collectionModel}" var="row"
                     rows="#{bindings.DmsValueSetView.rangeSize}"
@@ -37,14 +38,16 @@
                     fetchSize="#{bindings.DmsValueSetView.rangeSize}"
                     rowBandingInterval="0"
                     filterModel="#{bindings.DmsValueSetViewQuery.queryDescriptor}"
-                    queryListener="#{bindings.DmsValueSetViewQuery.processQuery}"
+                    queryListener="#{viewScope.ValueSetEditBean.tableQueryListener}"
                     filterVisible="false" varStatus="vs"
-                    selectedRowKeys="#{bindings.DmsValueSetView.collectionModel.selectedRow}"
-                    selectionListener="#{bindings.DmsValueSetView.collectionModel.makeCurrent}"
-                    rowSelection="single" id="t1" editingMode="clickToEdit">
+                    selectedRowKeys="#{bindings.DmsValueSetView.collectionModel.selectedRow}" 
+                    selectionListener="#{viewScope.ValueSetEditBean.selectListener}"
+                    rowSelection="single" id="t1" editingMode="clickToEdit"
+                    partialTriggers="::cb1">
             <af:column sortProperty="#{bindings.DmsValueSetView.hints.Name.name}"
                        filterable="true" sortable="true"
                        headerText="#{bindings.DmsValueSetView.hints.Name.label}"
+                       
                        id="c3" width="110">
             <af:inputText value="#{row.bindings.Name.inputValue}" simple="true"
                           required="#{bindings.DmsValueSetView.hints.Name.mandatory}"
@@ -56,7 +59,8 @@
             </af:inputText>
           </af:column>
             <af:column sortProperty="#{bindings.DmsValueSetView.hints.Source.name}"
-                       filterable="false" sortable="true"
+                       sortable="true"
+                       filterable="true"
                        headerText="#{bindings.DmsValueSetView.hints.Source.label}"
                        id="c4" width="110">
             <af:inputText value="#{row.bindings.Source.inputValue}"
@@ -92,21 +96,11 @@
             </af:column>
           <af:column headerText="#{bindings.DmsValueSetView.hints.DefaultCode.label}" 
                      id="c1" width="105">
-            
+                     
             <af:selectOneChoice  id="soc1" value="#{row.bindings.DefaultCode.inputValue}"
                           label="#{bindings.DmsValueSetView.hints.DefaultCode.label}" >
-                 <f:selectItems value="#{viewScope.ValueSetEditBean.valCodeSelectMap[row.Code]}" id="si1"/>
-            </af:selectOneChoice>
- 
-            <!--<af:inputText value="#{row.bindings.DefaultCode.inputValue}"
-                          label="#{bindings.DmsValueSetView.hints.DefaultCode.label}"
-                          required="#{bindings.DmsValueSetView.hints.DefaultCode.mandatory}"
-                          columns="#{bindings.DmsValueSetView.hints.DefaultCode.displayWidth}"
-                          maximumLength="#{bindings.DmsValueSetView.hints.DefaultCode.precision}"
-                          shortDesc="#{bindings.DmsValueSetView.hints.DefaultCode.tooltip}"
-                          id="it3">
-              <f:validator binding="#{row.bindings.DefaultCode.validator}"/>
-            </af:inputText>-->
+                 <f:selectItems value="#{viewScope.ValueSetEditBean.valCodeSelectMap[row.Source]}" id="si1"/>
+            </af:selectOneChoice> 
             
    
           </af:column>

@@ -40,7 +40,8 @@
        t1.is_entity,
        t2.name,
        t2.source,
-       t2.code
+       t2.code,
+       t2.default_code
   from dcm_com_vs t1, dms_value_set t2
  where t1.value_set_id = t2.id
 and t2.locale=:locale
@@ -224,6 +225,21 @@ order by t1.seq]]>
     SQLType="VARCHAR">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="30"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="DefaultCode"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="100"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="DEFAULT_CODE"
+    Expression="DEFAULT_CODE"
+    SQLType="VARCHAR">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="100"/>
     </DesignTime>
   </ViewAttribute>
   <ResourceBundle>

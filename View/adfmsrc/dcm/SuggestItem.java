@@ -21,8 +21,8 @@ class SuggestItem{
         
         public List suggestMethod(FacesContext facesContext,
                                      AutoSuggestUIHints autoSuggestUIHints) {
-            System.out.println(autoSuggestUIHints.getSubmittedValue());
-            System.out.println(autoSuggestUIHints.getMaxSuggestedItems());
+           // System.out.println(autoSuggestUIHints.getSubmittedValue());
+           // System.out.println(autoSuggestUIHints.getMaxSuggestedItems());
             
             SelectItem item = new SelectItem("1","一号","一号描述");
             List<SelectItem> items = new ArrayList<SelectItem>();
