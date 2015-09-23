@@ -257,13 +257,20 @@ public class DmsModuleImpl extends ApplicationModuleImpl implements DmsModule {
 
     
     public ViewObject getDmsValueView(String valueSetSrc,String valueSetId,String groupId){
-        String voName="DmsVs"+valueSetSrc;
+       
+        String voName="DmsVs"+valueSetSrc+groupId;
+        
+ 
         ViewObject vo=this.getApplicationModule().findViewObject(voName);
-        if(vo==null&&valueSetSrc!=null){
+        
+        if(vo == null && valueSetSrc != null){
             String sql="select t.code,t.meaning from \""+valueSetSrc.toUpperCase()+"\" t where t.locale='"
                 +ADFContext.getCurrent().getLocale()+"' and not exists(select 1 from dms_group_value v where v.group_id='"+groupId+"' and v.value_id=t.code and v.value_set_id='"+valueSetId+"') order by t.idx";
+            
+            
             vo=this.getApplicationModule().createViewObjectFromQueryStmt(voName, sql);
         }
+     
         return vo;
     }
 

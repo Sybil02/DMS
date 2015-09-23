@@ -329,7 +329,7 @@ public class TemplateBackingBean {
 
     public void comRecordQueryListener(QueryEvent queryEvent) {
         DcmQueryDescriptor descriptor =(DcmQueryDescriptor)queryEvent.getDescriptor();
-        System.out.println("sss"+descriptor.getFilterCriteria());
+       // System.out.println("sss"+descriptor.getFilterCriteria());
         if(descriptor.getFilterCriteria()!=null){
             ViewObject vo=ADFUtils.findIterator("getCombinationRecordViewIterator").getViewObject();
             vo.getViewCriteriaManager().setApplyViewCriteriaNames(null);
@@ -348,10 +348,10 @@ public class TemplateBackingBean {
     }
     public void queryTempDescriptor(QueryEvent queryEvent) {
         DcmQueryDescriptor descriptor =(DcmQueryDescriptor)queryEvent.getDescriptor();  
-        System.out.println(descriptor.getFilterCriteria());
+       // System.out.println(descriptor.getFilterCriteria());
         if(descriptor.getFilterCriteria()!=null){
             ViewObject vo=ADFUtils.findIterator("DcmTemplateViewIterator").getViewObject();
-            System.out.println("v0:"+vo.getName());
+           // System.out.println("v0:"+vo.getName());
             vo.getViewCriteriaManager().setApplyViewCriteriaNames(null);
             ViewCriteria vc=vo.createViewCriteria();
             ViewCriteriaRow vcr=vc.createViewCriteriaRow();
@@ -362,7 +362,7 @@ public class TemplateBackingBean {
             }
             vc.addRow(vcr);
             vo.applyViewCriteria(vc);
-            System.out.println("vc:"+vc.getFetchedRowCount());
+            //System.out.println("vc:"+vc.getFetchedRowCount());
             vo.executeQuery();
             AdfFacesContext.getCurrentInstance().addPartialTarget(this.templateTable);
         }
