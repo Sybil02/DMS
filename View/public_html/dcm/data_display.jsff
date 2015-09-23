@@ -5,9 +5,7 @@
           xmlns:f="http://java.sun.com/jsf/core" 
           xmlns:c="http://java.sun.com/jsp/jstl/core"
           xmlns:th="http://myfaces.apache.org/trinidad/html"
-          xmlns:tr="http://myfaces.apache.org/trinidad">
- 
-  
+           >
 
   <c:set var="viewBundle" value="#{adfBundle['dms_v']}"/>
 
@@ -195,7 +193,7 @@
                               or (viewScope.DcmDataDisplayBean.isRolling eq true and viewScope.DcmDataDisplayBean.rollingMonth ne null
                               and viewScope.DcmDataDisplayBean.rollingMonth >= attr.rollingMonth)}"
                               valueChangeListener="#{viewScope.DcmDataDisplayBean.valueChangeListener}"
-                              validator="#{viewScope.DcmDataDisplayBean.comboboxLOVBeanList[vs.index+0].validate}"
+                              validator="#{viewScope.DcmDataDisplayBean.comboboxLOVBeanList[vs.index%999].validate}"
                               autoSubmit="true"
                               rendered="#{attr.valueSetId ne null  }"
                               model="#{viewScope.DcmDataDisplayBean.comboboxLOVBeanList[vs.index+0].listOfValuesModel}"
@@ -203,7 +201,6 @@
                  <af:autoSuggestBehavior suggestItems="#{viewScope.DcmDataDisplayBean.comboboxLOVBeanList[vs.index].suggestMethod}" 
                                          maxSuggestedItems="-1"/>  
               </af:inputComboboxListOfValues>
-              
   
             </af:column>
             
@@ -216,29 +213,39 @@
       <af:panelGroupLayout layout="scroll"
                            xmlns:af="http://xmlns.oracle.com/adf/faces/rich"
                            id="pgl2">
-        <af:popup id="p1" binding="#{viewScope.DcmDataDisplayBean.errorWindow}">
+        <af:popup id="p1" binding="#{viewScope.DcmDataDisplayBean.errorWindow}" autoCancel="disabled">
           <af:panelWindow id="pw1" title="#{viewBundle['dcm.import_error']}">
+            <af:panelGroupLayout id="pgl7">
+              <af:commandButton text="导出" id="cb6" partialSubmit="true">
+                <af:exportCollectionActionListener exportedId="pc1:table1"
+                                                   type="excelHTML"
+                                                   filename="#{viewScope.DcmDataDisplayBean.viewScope.DcmDataDisplayBean.exportErrExcelName}"
+                                                   title="导出"/>
+              </af:commandButton>
+            </af:panelGroupLayout>
             <af:panelStretchLayout id="psl2"
                                    inlineStyle="width:1000px;height:400px">
               <f:facet name="center">
+         
                 <af:table value="#{bindings.DcmErrorView.collectionModel}"
                           var="row" rows="#{bindings.DcmErrorView.rangeSize}"
                           emptyText="#{viewBundle['dms.common.nodata']}"
                           fetchSize="#{bindings.DcmErrorView.rangeSize}"
                           rowBandingInterval="0" filterVisible="false"
-                          varStatus="vs"  
+                          varStatus="vs"
                           selectedRowKeys="#{bindings.DcmErrorView.collectionModel.selectedRow}"
                           selectionListener="#{bindings.DcmErrorView.collectionModel.makeCurrent}"
                           rowSelection="single" id="t3"
                           columnStretching="column:c1">
                   <af:column sortProperty="#{bindings.DcmErrorView.hints.SheetName.name}"
-                             filterable="true" sortable="true"
+                             filterable="true" 
                              headerText="#{bindings.DcmErrorView.hints.SheetName.label}"
                              id="c2">
+
                     <af:outputText value="#{row.SheetName}" id="ot1"/>
                   </af:column>
                   <af:column sortProperty="#{bindings.DcmErrorView.hints.RowNum.name}"
-                             filterable="true" sortable="true"
+                             filterable="true"  
                              headerText="#{bindings.DcmErrorView.hints.RowNum.label}"
                              id="c3">
                     <af:outputText value="#{row.RowNum}" id="ot2">
@@ -247,7 +254,7 @@
                     </af:outputText>
                   </af:column>
                   <af:column sortProperty="#{bindings.DcmErrorView.hints.Msg.name}"
-                             filterable="true" sortable="true"
+                             filterable="true" 
                              headerText="#{bindings.DcmErrorView.hints.Msg.label}"
                              id="c1">
                     <af:inputText value="#{row.bindings.Msg.inputValue}"
@@ -257,7 +264,7 @@
                                   id="it1" rows="1"/>
                   </af:column>
                   <af:column sortProperty="#{bindings.DcmErrorView.hints.Level.name}"
-                             filterable="true" sortable="true"
+                             filterable="true"  
                              headerText="#{bindings.DcmErrorView.hints.Level.label}"
                              id="c4">
                     <af:outputText value="#{row.Level}" id="ot3"/>

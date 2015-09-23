@@ -64,7 +64,8 @@ public class Excel2007WriterImpl extends AbstractExcel2007Writer {
                             obj = dfm.format(Double.valueOf(obj.toString()));
                             createCell(colInx,Double.parseDouble(obj.toString()));        
                         }else{
-                            createCell(colInx,Double.valueOf(0));
+                            //createCell(colInx,Double.valueOf(0));
+                            createCell(colInx,ObjectUtils.toString(obj));
                         }
                     }else{
                         obj=ObjectUtils.toString(obj);

@@ -1,5 +1,7 @@
 package dcm;
 
+import common.ReplaceSpecialChar;
+
 import java.sql.PreparedStatement;
 
 import java.sql.SQLException;
@@ -62,6 +64,7 @@ public class RowReader implements IRowReader {
 
     public void getRows(int sheetIndex, String sheetName, int curRow,
                         TreeMap<Integer, String> rowlist) {
+        ReplaceSpecialChar rsc = new ReplaceSpecialChar();
         if (curRow >= this.startLine - 1&&sheetName.startsWith(this.templateName)) {
             boolean isEpty = true;
             try {
@@ -78,7 +81,7 @@ public class RowReader implements IRowReader {
                         if(col.getDataType().equals("NUMBER")&&tmpstr.equals("0.0")){
                             this.stmt.setString(i + 3, "");
                         }else{
-                            this.stmt.setString(i + 3, tmpstr.trim());        
+                            this.stmt.setString(i + 3, rsc.decodeString(tmpstr.trim()));        
                         }
                     }
                 }

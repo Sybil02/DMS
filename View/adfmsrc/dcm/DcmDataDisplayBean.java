@@ -10,6 +10,8 @@ import oracle.adf.view.rich.component.rich.nav.RichCommandButton;
 
 import oracle.adf.view.rich.component.rich.output.RichProgressIndicator;
 
+import oracle.adf.view.rich.event.LaunchPopupEvent;
+
 import oracle.jbo.domain.Number;
 import dcm.combinantion.CombinationEO;
 
@@ -232,7 +234,7 @@ public class DcmDataDisplayBean extends TablePagination{
     public void rowSelectionListener(SelectionEvent selectionEvent) {
         RichTable table = (RichTable)selectionEvent.getSource();
         RowKeySet rks = selectionEvent.getAddedSet();
-        System.out.println("sssssssssssssssssssssssssssssss:"+rks.size());
+ 
         if (rks != null) {
             int setSize = rks.size();
             if (setSize == 0) {
@@ -259,7 +261,7 @@ public class DcmDataDisplayBean extends TablePagination{
         List<Map> modelData = (List<Map>)this.dataModel.getWrappedData();
         RowKeySet keySet =
             ((DcmDataTableModel)this.dataModel).getSelectedRows();
-        System.out.println("keysettttttttttttttttttttttttt:"+keySet.size());
+        
         for (Object key : keySet) {
             Map rowData = (Map)this.dataModel.getRowData(key);
             //若为新增操作则直接从数据集删除数据
@@ -516,8 +518,11 @@ public class DcmDataDisplayBean extends TablePagination{
         
         if (this.curCombiantion!=null) {
             for (ComHeader header : this.templateHeader) {
-                if(header.getValue() != null)
-                text += "_" + header.getValue();
+                    for (SelectItem item : header.getValues()) {
+                        if (header.getValue().equals(item.getValue())) {
+                            text += "_"+item.getLabel();
+                        }
+                    }
             }
         }
         return text;
@@ -528,7 +533,7 @@ public class DcmDataDisplayBean extends TablePagination{
         String combinationRecord = ObjectUtils.toString(curComRecordId);
         //清空已有零时表数据
         this.clearTmpTableAndErrTable(curComRecordId);
-        RowReader reader =new RowReader(trans, (int)this.curTempalte.getDataStartLine().getValue(), this.curTempalte.getId(),combinationRecord, this.curTempalte.getTmpTable(),
+        RowReader reader = new RowReader(trans, (int)this.curTempalte.getDataStartLine().getValue(), this.curTempalte.getId(),combinationRecord, this.curTempalte.getTmpTable(),
                           this.colsdef.size(), this.curUser.getId(),this.curTempalte.getName(),this.colsdef);
         try {
             ExcelReaderUtil.readExcel(reader, fileName, true);
@@ -721,7 +726,7 @@ public class DcmDataDisplayBean extends TablePagination{
                     
                     List<SelectItem>  tem = this.fetchValueList(colDef.getValueSetId()); 
                     valueSet.add(tem);
-                    List<ComboboxLOVBean.Attribute> list = new ArrayList<ComboboxLOVBean.Attribute>();
+                List<ComboboxLOVBean.Attribute> list = new ArrayList<ComboboxLOVBean.Attribute>();
                     list.add(new ComboboxLOVBean.Attribute(colDef.getColumnLabel(),"name"));
                     
                     ComboboxLOVBean bean = new ComboboxLOVBean(tem, list);
@@ -730,7 +735,7 @@ public class DcmDataDisplayBean extends TablePagination{
                     this.valueSet.add(null); 
                     ComboboxLOVBean bean = new ComboboxLOVBean(null, null);
                     _comboboxLOVBeanList.add(bean);
-                } 
+                }
             }
             ((DcmDataTableModel)this.dataModel).setColsdef(this.colsdef);  
 
@@ -766,6 +771,7 @@ public class DcmDataDisplayBean extends TablePagination{
         }
         return list;
     }
+    
     //查询数据
     private void queryTemplateData() {
         List<Map> data = new ArrayList<Map>();
@@ -894,8 +900,20 @@ public class DcmDataDisplayBean extends TablePagination{
                 header.setSrcTable((String)row.getAttribute("Source"));
                 header.setValueSetId((String)row.getAttribute("ValueSetId"));
                 header.setCode((String)row.getAttribute("Code"));
+                header.setDefaultCode((String)row.getAttribute("DefaultCode"));
+                
+                //下面的初始化已经将defaultCode的meaning变成了code
                 this.initHeaderValueList(header);
-                this.setDefaultHeaderValue(header);
+                
+                //设置默认值
+                this.setDefaultHeaderValue(header); 
+                
+                //如果某个值集存在默认值，那么就设置默认值
+                if(row.getAttribute("DefaultCode") != null) { 
+                    //defaultCode已经不是meaning而是code了(this.initHeaderValueList(header);)
+                    header.setValue(header.getDefaultCode()); 
+                    
+                }    
                 this.templateHeader.add(header);
             }
             this.curCombiantionRecord=this.getCurCombinationRecord();
@@ -976,15 +994,22 @@ public class DcmDataDisplayBean extends TablePagination{
             ResultSet rs = stat.executeQuery();
             while (rs.next()) {
                 SelectItem item = new SelectItem();
+                String meaning = rs.getString("MEANING");
+                
                 item.setLabel(rs.getString("MEANING"));
                 item.setValue(rs.getString("CODE"));
                 values.add(item);
+                //在这个位置查找默认值的code
+                if (meaning.equals(header.getDefaultCode()))
+                    header.setDefaultCode(rs.getString("CODE"));
+                
             }
         } catch (SQLException e) {
             this._logger.severe(e);
         }   
         header.setValues(values);
     }
+    
     private void setDefaultHeaderValue(ComHeader header){
         DBTransaction dbTransaction =(DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
         StringBuffer sql = new StringBuffer();
@@ -1106,6 +1131,18 @@ public class DcmDataDisplayBean extends TablePagination{
     public boolean isIsXlsx() {
         return isXlsx;
     }
+
+
+    /**
+     * 获取导出错误信息的文件名
+     * @return
+     */
+    public String getExportErrExcelName() {
+         
+        return this.curTempalte.getName() + this.getCurComRecordText() +"_错误信息"+ ".xls";
+  
+    }
+    
     //获取导出数据时的文件名
 
     public String getExportDataExcelName() {
@@ -1846,15 +1883,14 @@ public class DcmDataDisplayBean extends TablePagination{
      * 执行一次之后就重置状态，关闭导出框，关闭定时器，隐藏进度条
      * */    
     public void getExportPollProcess(PollEvent pollEvent) {
-          
-        
-        if (isProcess == 1) {
+           
+        if (isProcess == 0) {
  
             exportProcessPoll.setInterval( -1 );
             dataExportWnd.cancel(); 
             isProcess = -1;
             exportProIndicator.setVisible(false);
-
+            //System.out.println("kdlkjfaklsdjfalskdf");
             AdfFacesContext.getCurrentInstance().addPartialTarget(exportButton);
             AdfFacesContext.getCurrentInstance().addPartialTarget(exportProIndicator);
             AdfFacesContext.getCurrentInstance().addPartialTarget(exportProcessPoll);
@@ -1865,9 +1901,9 @@ public class DcmDataDisplayBean extends TablePagination{
         
     }
     
-    private RangeModel rangeModel;
+    private BoundedRangeModel rangeModel;
     //进度条
-    public  RangeModel getRangeModel() {
+    public  BoundedRangeModel getRangeModel() {
         if( rangeModel != null)
             return rangeModel;
         
@@ -1891,30 +1927,7 @@ public class DcmDataDisplayBean extends TablePagination{
     public RichCommandButton getExportButton() {
         return exportButton;
     }
-
-
-    public class RangeModel extends BoundedRangeModel {
-        
-        long maxinum = -1;
-        long value = -1;
-        
-        public long getMaximum() {
-            return maxinum;
-        }
-
-        public long getValue() {
-            return value;
-        }
-        
-        public void setMaximum(long maxinum) {
-            this.maxinum = maxinum;
-        }
-        
-        public void setValue(long value) {
-            this.value = value;
-        }
-        
-    }
+ 
     private RichPoll exportProcessPoll;
     
     public void setExportProcessPoll(RichPoll exportProcessPoll) {
@@ -1924,5 +1937,5 @@ public class DcmDataDisplayBean extends TablePagination{
     public RichPoll getExportProcessPoll() {
         return exportProcessPoll;
     }
-    
-    }
+ 
+}
