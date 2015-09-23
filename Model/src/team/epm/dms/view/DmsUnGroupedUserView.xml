@@ -82,7 +82,7 @@
     <DisplayCriteria/>
   </ListBinding>
   <SQLQuery>
-    <![CDATA[SELECT T.*
+    <![CDATA[SELECT T.ID, T.ACC, T.PWD, T.LOCK_FLAG, T.RETRY_COUNT, T.LOCK_TIME, T.UPDATED_AT, T.CREATED_AT, T.CREATED_BY, T.UPDATED_BY, T.NAME, T.SEX, T.MAIL, T.LOCALE, T.PHONE, T.OTHER_INFO, T.COM_RECORD_ID
   FROM DMS_USER T
  WHERE T.ENABLE_FLAG = 'Y'
    AND NOT EXISTS
@@ -153,21 +153,6 @@
     ColumnType="VARCHAR2"
     AliasName="LOCK_FLAG"
     Expression="LOCK_FLAG"
-    SQLType="VARCHAR">
-    <DesignTime>
-      <Attr Name="_DisplaySize" Value="10"/>
-    </DesignTime>
-  </ViewAttribute>
-  <ViewAttribute
-    Name="EnableFlag"
-    IsUpdateable="false"
-    IsPersistent="false"
-    PrecisionRule="true"
-    Precision="10"
-    Type="java.lang.String"
-    ColumnType="VARCHAR2"
-    AliasName="ENABLE_FLAG"
-    Expression="ENABLE_FLAG"
     SQLType="VARCHAR">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="10"/>
@@ -383,6 +368,21 @@
     SQLType="VARCHAR">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="1000"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="ComRecordId"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="32"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="COM_RECORD_ID"
+    Expression="COM_RECORD_ID"
+    SQLType="VARCHAR">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="32"/>
     </DesignTime>
   </ViewAttribute>
   <ResourceBundle>
