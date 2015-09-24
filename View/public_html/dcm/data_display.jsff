@@ -216,11 +216,11 @@
         <af:popup id="p1" binding="#{viewScope.DcmDataDisplayBean.errorWindow}" autoCancel="disabled">
           <af:panelWindow id="pw1" title="#{viewBundle['dcm.import_error']}">
             <af:panelGroupLayout id="pgl7">
-              <af:commandButton text="导出" id="cb6" partialSubmit="true">
+              <af:commandButton text="#{viewBundle['dcm.action.export']}" id="cb6" partialSubmit="true">
                 <af:exportCollectionActionListener exportedId="pc1:table1"
                                                    type="excelHTML"
-                                                   filename="#{viewScope.DcmDataDisplayBean.viewScope.DcmDataDisplayBean.exportErrExcelName}"
-                                                   title="导出"/>
+                                                   filename="#{viewScope.DcmDataDisplayBean.exportErrExcelName}"
+                                                   title="#{viewBundle['dcm.action.export']}"/>
               </af:commandButton>
             </af:panelGroupLayout>
             <af:panelStretchLayout id="psl2"

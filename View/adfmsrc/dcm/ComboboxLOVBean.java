@@ -1,7 +1,9 @@
  /** Copyright (c) 2008, 2010, Oracle and/or its affiliates. All rights reserved. */
  package dcm;
 
- import java.text.ParseException;
+import common.JSFUtils;
+
+import java.text.ParseException;
  import java.text.SimpleDateFormat;
 
  import java.util.ArrayList;
@@ -190,7 +192,7 @@ import oracle.adf.view.rich.model.ColumnDescriptor;
 
    public List getValues()
    {
-       System.out.println("getValueaaa");
+      // System.out.println("getValueaaa");
      return _values;
    }
 
@@ -1335,5 +1337,28 @@ import oracle.adf.view.rich.model.ColumnDescriptor;
          }
          return res;
      }
- 
- }
+    
+     //根据绑定的名字的items获取ComboboxBean
+      static public ComboboxLOVBean createByBinding(String name) {
+      
+          //System.out.println(bindings.get("Names"));
+          List<SelectItem> data = (List)JSFUtils.resolveExpression("#{bindings." + name +".items}");
+          
+          String label = (String)JSFUtils.resolveExpression("#{bindings." + name + ".label}");
+          
+          List<ComboboxLOVBean.Attribute> attrs = new ArrayList<ComboboxLOVBean.Attribute>();
+          attrs.add(new ComboboxLOVBean.Attribute(label ,"name"));
+      //        for(SelectItem item : data) {
+      //            System.out.println(item.getLabel()+"   "+item.getValue());
+      //        }
+          ComboboxLOVBean comboboxBean = new ComboboxLOVBean(data, attrs);
+      
+          if(data == null) 
+          {//System.out.println("!!!!!!!!  "+name);
+             return null;}
+          for(int i = 0; i < data.size(); i++)
+              comboboxBean.getMapItem().put(data.get(i).getLabel(), i);
+          
+          return comboboxBean;
+      }  
+}
