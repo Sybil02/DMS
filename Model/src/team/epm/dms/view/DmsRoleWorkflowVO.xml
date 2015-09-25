@@ -6,9 +6,9 @@
   Name="DmsRoleWorkflowVO"
   Version="11.1.1.64.93"
   InheritPersonalization="true"
-  SelectList="DmsRoleWorkflowEO.CREATED_AT, 
+  SelectList="DmsRoleWorkflowEO.ID, 
+       DmsRoleWorkflowEO.CREATED_AT, 
        DmsRoleWorkflowEO.CREATED_BY, 
-       DmsRoleWorkflowEO.ID, 
        DmsRoleWorkflowEO.ROLE_ID, 
        DmsRoleWorkflowEO.UPDATED_AT, 
        DmsRoleWorkflowEO.UPDATED_BY, 
@@ -24,9 +24,20 @@
         ResId="team.epm.dms.view.DmsRoleWorkflowVO_LABEL"/>
     </SchemaBasedProperties>
   </Properties>
+  <ViewAccessor
+    Name="DmsWorkflowInfoVO1"
+    ViewObjectName="team.epm.dms.view.DmsWorkflowInfoVO"
+    RowLevelBinds="true"/>
   <EntityUsage
     Name="DmsRoleWorkflowEO"
     Entity="team.epm.dms.model.DmsRoleWorkflowEO"/>
+  <ViewAttribute
+    Name="Id"
+    IsNotNull="true"
+    PrecisionRule="true"
+    EntityAttrName="Id"
+    EntityUsage="DmsRoleWorkflowEO"
+    AliasName="ID"/>
   <ViewAttribute
     Name="CreatedAt"
     IsNotNull="true"
@@ -41,13 +52,6 @@
     EntityAttrName="CreatedBy"
     EntityUsage="DmsRoleWorkflowEO"
     AliasName="CREATED_BY"/>
-  <ViewAttribute
-    Name="Id"
-    IsNotNull="true"
-    PrecisionRule="true"
-    EntityAttrName="Id"
-    EntityUsage="DmsRoleWorkflowEO"
-    AliasName="ID"/>
   <ViewAttribute
     Name="RoleId"
     IsNotNull="true"
@@ -68,6 +72,8 @@
           ResId="team.epm.dms.view.DmsRoleWorkflowVO.UpdatedAt_FMT_FORMATTER"/>
         <FMT_FORMAT
           ResId="team.epm.dms.view.DmsRoleWorkflowVO.UpdatedAt_FMT_FORMAT"/>
+        <LABEL
+          ResId="team.epm.dms.view.DmsRoleWorkflowVO.UpdatedAt_LABEL"/>
       </SchemaBasedProperties>
     </Properties>
   </ViewAttribute>
@@ -77,14 +83,28 @@
     PrecisionRule="true"
     EntityAttrName="UpdatedBy"
     EntityUsage="DmsRoleWorkflowEO"
-    AliasName="UPDATED_BY"/>
+    AliasName="UPDATED_BY">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="team.epm.dms.view.DmsRoleWorkflowVO.UpdatedBy_LABEL"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewAttribute
     Name="WorkflowId"
     IsNotNull="true"
     PrecisionRule="true"
     EntityAttrName="WorkflowId"
     EntityUsage="DmsRoleWorkflowEO"
-    AliasName="WORKFLOW_ID"/>
+    AliasName="WORKFLOW_ID">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="team.epm.dms.view.DmsRoleWorkflowVO.WorkflowId_LABEL"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ResourceBundle>
     <PropertiesBundle
       PropertiesFile="ModelBundle"/>
