@@ -1328,7 +1328,7 @@ import oracle.adf.view.rich.model.ColumnDescriptor;
          for(int i = _values.size()-1; i>=0; i-- ) {
              
              FileData data = (FileData)_values.get(i);
-             if( data.getName().contains(key)) { 
+             if( data.getName().toUpperCase().contains(key.toUpperCase())) { 
                  SelectItem item = new SelectItem();
                  item.setValue(data.getName());
                  item.setLabel(data.getName());
