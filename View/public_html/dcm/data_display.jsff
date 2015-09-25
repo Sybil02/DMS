@@ -4,6 +4,7 @@
           xmlns:f="http://java.sun.com/jsf/core"
           xmlns:c="http://java.sun.com/jsp/jstl/core"
           xmlns:th="http://myfaces.apache.org/trinidad/html">
+
   <c:set var="viewBundle" value="#{adfBundle['dms_v']}"/>
   <af:panelStretchLayout id="psl1" bottomHeight="0"
                          topHeight="#{viewScope.DcmDataDisplayBean.combinationId==null ? '0px':'35px'}">
@@ -101,7 +102,7 @@
         </f:facet>
         <!-- 分页控件 -->
         <f:facet name="statusbar">
-          <af:toolbar id="t4" partialTriggers="t1">
+          <af:toolbar id="t4" partialTriggers="table1" clientComponent="true">
             <af:group id="g1">
               <af:commandImageLink id="cil1" icon="/images/page-first.gif"
                                    actionListener="#{viewScope.DcmDataDisplayBean.firstPage}"/>
@@ -128,11 +129,15 @@
                                    actionListener="#{viewScope.DcmDataDisplayBean.refreshPage}"/>
             </af:group>
             <af:group id="g5">
+            
               <af:outputText value="#{af:formatString3(viewBundle['dms.common.pagenation.seg03'],
                                     viewScope.DcmDataDisplayBean.startPoint+1,
                                     viewScope.DcmDataDisplayBean.endPoint,
-                                    viewScope.DcmDataDisplayBean.totalCount)}"
-                             id="ot4"/>
+                                    viewScope.DcmDataDisplayBean.totalCount)}" 
+                             id="ot4"
+                             clientComponent="true"
+                             shortDesc="#{viewScope.DcmDataDisplayBean.totalCount}"
+                             description="上面的描述是选择的数量"/> 
             </af:group>
           </af:toolbar>
         </f:facet>
@@ -146,11 +151,12 @@
         <af:table var="row" rowBandingInterval="0" id="t1"
                   value="#{viewScope.DcmDataDisplayBean.dataModel}"
                   scrollPolicy="page"
-                  selectionListener="#{viewScope.DcmDataDisplayBean.rowSelectionListener}"
                   selectedRowKeys="#{viewScope.DcmDataDisplayBean.dataModel.selectedRows}"
+                  selectionListener="#{viewScope.DcmDataDisplayBean.rowSelectionListener}" 
                   rowSelection="multiple" editingMode="clickToEdit"
                   shortDesc="#{viewBundle['dms.multiple_key_search']}"
-                  fetchSize="50"
+                  fetchSize="50" 
+                  clientComponent="true"
                   sortListener="#{viewScope.DcmDataDisplayBean.sortListener}"
                   emptyText="#{viewBundle['dms.common.nodata']}"
                   filterModel="#{viewScope.DcmDataDisplayBean.queryDescriptor}"
@@ -174,10 +180,14 @@
                             rendered="#{attr.valueSetId eq null}"/>
               <af:panelGroupLayout id="pgl7">
                 <af:inputText value="#{row[attr.dbTableCol]}" label="#{attr.columnLabel}" columns="8" valueChangeListener="#{viewScope.DcmDataDisplayBean.valueChangeListener}"
+                              readOnly="#{((viewScope.DcmDataDisplayBean.isEditable and (attr.readonly eq 'N')) eq false)
+                              or (viewScope.DcmDataDisplayBean.isRolling eq true and viewScope.DcmDataDisplayBean.rollingMonth ne null
+                              and viewScope.DcmDataDisplayBean.rollingMonth >= attr.rollingMonth)}"
                               rendered="#{attr.valueSetId ne null}" autoSubmit="true" 
                               id="ipt${vs.index}">
                   <af:autoSuggestBehavior suggestItems="#{viewScope.DcmDataDisplayBean.comboboxLOVBeanList[vs.index%999].suggestMethod}"
                                           maxSuggestedItems="-1"/>
+                  <f:validator binding="#{viewScope.DcmDataDisplayBean.comboboxLOVBeanList[vs.index%999]}"/>
                 </af:inputText>
                 <af:image id="it${vs.index}" source="/images/page-next.gif"
                           rendered="#{attr.valueSetId ne null}"
@@ -238,7 +248,7 @@
           <af:selectOneListbox id="sol1" autoSubmit="true"
                                size="#{viewScope.DcmDataDisplayBean.svlSize > 8 ? 10:(viewScope.DcmDataDisplayBean.svlSize)}" 
                                binding="#{viewScope.DcmDataDisplayBean.richSoc}"
-                               clientComponent="true" partialTriggers="t1">
+                               clientComponent="true" >
             <f:selectItems value="#{viewScope.DcmDataDisplayBean.socValueList}"
                            id="si2"/>
             <af:clientListener method="selectedVal" type="click"/>
@@ -251,11 +261,20 @@
       <af:panelGroupLayout layout="scroll"
                            xmlns:af="http://xmlns.oracle.com/adf/faces/rich"
                            id="pgl2">
-        <af:popup id="p1" binding="#{viewScope.DcmDataDisplayBean.errorWindow}">
+        <af:popup id="p1" binding="#{viewScope.DcmDataDisplayBean.errorWindow}" autoCancel="disabled">
           <af:panelWindow id="pw1" title="#{viewBundle['dcm.import_error']}">
+            <af:panelGroupLayout id="pgl71">
+              <af:commandButton text="#{viewBundle['dcm.action.export']}" id="cb6" partialSubmit="true">
+                <af:exportCollectionActionListener exportedId="t3"
+                                                   type="excelHTML"
+                                                   filename="#{viewScope.DcmDataDisplayBean.exportErrExcelName}"
+                                                   title="#{viewBundle['dcm.action.export']}"/>
+              </af:commandButton>
+            </af:panelGroupLayout>
             <af:panelStretchLayout id="psl2"
                                    inlineStyle="width:1000px;height:400px">
               <f:facet name="center">
+         
                 <af:table value="#{bindings.DcmErrorView.collectionModel}"
                           var="row" rows="#{bindings.DcmErrorView.rangeSize}"
                           emptyText="#{viewBundle['dms.common.nodata']}"
@@ -267,13 +286,14 @@
                           rowSelection="single" id="t3"
                           columnStretching="column:c1">
                   <af:column sortProperty="#{bindings.DcmErrorView.hints.SheetName.name}"
-                             filterable="true" sortable="true"
+                             filterable="true" 
                              headerText="#{bindings.DcmErrorView.hints.SheetName.label}"
                              id="c2">
+
                     <af:outputText value="#{row.SheetName}" id="ot1"/>
                   </af:column>
                   <af:column sortProperty="#{bindings.DcmErrorView.hints.RowNum.name}"
-                             filterable="true" sortable="true"
+                             filterable="true"  
                              headerText="#{bindings.DcmErrorView.hints.RowNum.label}"
                              id="c3">
                     <af:outputText value="#{row.RowNum}" id="ot2">
@@ -282,7 +302,7 @@
                     </af:outputText>
                   </af:column>
                   <af:column sortProperty="#{bindings.DcmErrorView.hints.Msg.name}"
-                             filterable="true" sortable="true"
+                             filterable="true" 
                              headerText="#{bindings.DcmErrorView.hints.Msg.label}"
                              id="c1">
                     <af:inputText value="#{row.bindings.Msg.inputValue}"
@@ -292,7 +312,7 @@
                                   id="it1" rows="1"/>
                   </af:column>
                   <af:column sortProperty="#{bindings.DcmErrorView.hints.Level.name}"
-                             filterable="true" sortable="true"
+                             filterable="true"  
                              headerText="#{bindings.DcmErrorView.hints.Level.label}"
                              id="c4">
                     <af:outputText value="#{row.Level}" id="ot3"/>
@@ -313,6 +333,7 @@
                       <f:selectItems value="#{row.bindings.CreatedBy.items}"
                                      id="si1"/>
                     </af:selectOneChoice>
+                    
                   </af:column>
                 </af:table>
               </f:facet>
@@ -371,8 +392,9 @@
             </af:panelGridLayout>
           </af:panelWindow>
         </af:popup>
-        <af:popup id="p3" autoCancel="disabled" childCreation="deferred"
-                  binding="#{viewScope.DcmDataDisplayBean.dataExportWnd}">
+        <af:popup id="p3"    childCreation="deferred"
+                  binding="#{viewScope.DcmDataDisplayBean.dataExportWnd}"> 
+
           <af:panelWindow id="pw3"
                           title="#{viewBundle['dcm.template.data_export']}"
                           modal="true">
@@ -385,6 +407,7 @@
                 </af:gridCell>
                 <af:gridCell marginStart="5px" marginEnd="5px" width="auto"
                              id="gc9">
+
                   <af:selectBooleanRadio text="#{viewBundle['dcm.export.03format']}"
                                          id="sbr3" group="excelFormat1"
                                          value="false" simple="true"
@@ -394,33 +417,75 @@
                                          simple="true" autoSubmit="true"
                                          selected="true"
                                          value="#{viewScope.DcmDataDisplayBean.isXlsx}"/>
+
+
+
                 </af:gridCell>
               </af:gridRow>
               <af:gridRow marginTop="5px" marginBottom="5px" height="auto"
                           id="gr5">
                 <af:gridCell marginStart="5px" width="auto" columnSpan="2"
-                             halign="center" id="gc8">
+                             halign="center" id="gc8"
+                              >
+                  
                   <th:script id="javascript1">
-                    //点击导出按钮会关闭导出框并且下载xml文件
-                    function clickexport(event) {
-                        var source = event.getSource();
-                        var button = source.findComponent("cb11");
-                        var popup = source.findComponent("p3");
-
-                        popup.cancel();
-                        AdfActionEvent.queue(button, true);
-                    }
-                  </th:script>
-                  <af:commandButton text="#{viewBundle['dcm.action.export']}"
-                                    id="cb55" partialSubmit="true">
-                    <af:clientListener type="click" method="clickexport"/>
+                     //点击导出按钮会关闭导出框并且下载xml文件
+                           function clickexport(event) { 
+                           
+                            var source=event.getSource();
+                            var regionId = source.getClientId();
+                            var end = regionId.lastIndexOf(':');
+                            var prefix = regionId.substr(0, end);
+                            //上面是求出region的前缀，以便获取单选框和得到条数判断是否能在2003的环境下导出
+                            var select2003 = AdfPage.PAGE.findComponentByAbsoluteId(prefix + ":sbr3");
+                            
+                            var countOutput = AdfPage.PAGE.findComponentByAbsoluteId(prefix  + ":pc1:ot4");
+                            
+                            
+                            if(select2003.getValue() == true &amp;&amp; countOutput.getShortDesc() > 60000) {
+                                alert('超过60000条数据以上请选择2007');
+                                return ;
+                            } 
+                             
+                             var poll = source.findComponent("p8");
+                             var progressIndicator = source.findComponent("pi1"); 
+                             var exportButton = source.findComponent("cb55");  
+                             //执行定时器
+                             poll.setInterval(500);
+                             //隐藏导出按钮
+                             exportButton.setVisible('false')
+                             //显示进度条
+                             progressIndicator.setVisible('true');
+                             //启动导出过程
+                             var button = source.findComponent("cb11");
+                             AdfActionEvent.queue(button, true); 
+                          } 
+                           
+                     </th:script>
+                  <af:poll id="p8" interval="-1" 
+                           binding="#{viewScope.DcmDataDisplayBean.exportProcessPoll}" 
+                           pollListener="#{viewScope.DcmDataDisplayBean.getExportPollProcess}" 
+                           timeout="10000000"/>
+                  <af:commandButton text="#{viewBundle['dcm.action.export']}" id="cb55" partialSubmit="true"
+                                    clientComponent="true"
+                                    binding="#{viewScope.DcmDataDisplayBean.exportButton}"
+                                    partialTriggers="p8 pi1 cb55">
+                    <af:clientListener method="clickexport" type="click"/>
                   </af:commandButton>
+                 
+                      <af:progressIndicator id="pi1" clientComponent="true"
+                                            visible="false"
+                                            binding="#{viewScope.DcmDataDisplayBean.exportProIndicator}"
+                                            value="#{viewScope.DcmDataDisplayBean.rangeModel}"/> 
                   <af:commandButton text="#{viewBundle['dcm.action.export']}"
-                                    id="cb11" visible="false">
+                                    clientComponent="true"
+                                    id="cb11" visible="false"> 
                     <af:fileDownloadActionListener contentType="application/vnd.ms-excel"
                                                    method="#{viewScope.DcmDataDisplayBean.operation_export}"
                                                    filename="#{viewScope.DcmDataDisplayBean.exportDataExcelName}"/>
+                                                   
                   </af:commandButton>
+                  
                 </af:gridCell>
               </af:gridRow>
             </af:panelGridLayout>

@@ -10,6 +10,9 @@ import oracle.adf.view.rich.component.rich.input.RichSelectOneListbox;
 import oracle.adf.view.rich.component.rich.nav.RichCommandButton;
 
 import oracle.adf.view.rich.render.ClientEvent;
+import oracle.adf.view.rich.component.rich.output.RichProgressIndicator;
+
+import oracle.adf.view.rich.event.LaunchPopupEvent;
 
 import oracle.jbo.domain.Number;
 import dcm.combinantion.CombinationEO;
@@ -58,6 +61,7 @@ import javax.faces.model.SelectItem;
 import oracle.adf.model.binding.DCIteratorBinding;
 import oracle.adf.share.ADFContext;
 import oracle.adf.share.logging.ADFLogger;
+import oracle.adf.view.rich.component.rich.RichPoll;
 import oracle.adf.view.rich.component.rich.RichPopup;
 import oracle.adf.view.rich.component.rich.data.RichTable;
 import oracle.adf.view.rich.component.rich.input.RichInputFile;
@@ -81,8 +85,10 @@ import oracle.jbo.jbotester.load.SimpleDateFormatter;
 import oracle.jbo.server.DBTransaction;
 
 import org.apache.commons.lang.ObjectUtils;
+import org.apache.myfaces.trinidad.event.PollEvent;
 import org.apache.myfaces.trinidad.event.SelectionEvent;
 import org.apache.myfaces.trinidad.event.SortEvent;
+import org.apache.myfaces.trinidad.model.BoundedRangeModel;
 import org.apache.myfaces.trinidad.model.CollectionModel;
 import org.apache.myfaces.trinidad.model.RowKeySet;
 import org.apache.myfaces.trinidad.model.SortCriterion;
@@ -174,14 +180,17 @@ public class DcmDataDisplayBean extends TablePagination{
     private String calcErrMsg;
     private boolean isRolling = true;
     private Number rollingMonth; 
-
-    private RichCommandButton export;
-    private RichCommandButton exportDownload;
-    private RichCommandButton exportButton;
+ 
+  
 
     private boolean hasCalc = true;
+
     private RichSelectOneListbox richSoc;
     private RichPopup slcPop;
+
+    private RichProgressIndicator exportProIndicator;
+    private RichCommandButton exportButton;
+
 
     public DcmDataDisplayBean() { 
         this.curUser =(Person)ADFContext.getCurrent().getSessionScope().get("cur_user");
@@ -519,7 +528,7 @@ public class DcmDataDisplayBean extends TablePagination{
                         text += "_"+item.getLabel();
                     }
                 }
-            }
+        }
         }
         return text;
     }
@@ -529,7 +538,7 @@ public class DcmDataDisplayBean extends TablePagination{
         String combinationRecord = ObjectUtils.toString(curComRecordId);
         //清空已有零时表数据
         this.clearTmpTableAndErrTable(curComRecordId);
-        RowReader reader =new RowReader(trans, (int)this.curTempalte.getDataStartLine().getValue(), this.curTempalte.getId(),combinationRecord, this.curTempalte.getTmpTable(),
+        RowReader reader = new RowReader(trans, (int)this.curTempalte.getDataStartLine().getValue(), this.curTempalte.getId(),combinationRecord, this.curTempalte.getTmpTable(),
                           this.colsdef.size(), this.curUser.getId(),this.curTempalte.getName(),this.colsdef);
         try {
             ExcelReaderUtil.readExcel(reader, fileName, true);
@@ -594,7 +603,9 @@ public class DcmDataDisplayBean extends TablePagination{
     }
     //数据导出
     public void operation_export(FacesContext facesContext,java.io.OutputStream outputStream) { 
- 
+        
+        isProcess = 1;
+        
         String type = this.isXlsx ? "xlsx" : "xls";
         try {
             if ("xls".equals(type)) {
@@ -614,8 +625,10 @@ public class DcmDataDisplayBean extends TablePagination{
             outputStream.flush();
         } catch (Exception e) {
             this._logger.severe(e);
+        }finally{  
+            isProcess = 0;
         }
-  
+         
     }
     //下载模板
     public void operation_download(FacesContext facesContext,java.io.OutputStream outputStream) {
@@ -721,7 +734,7 @@ public class DcmDataDisplayBean extends TablePagination{
                     List<SelectItem>  tem = this.fetchValueList(colDef.getValueSetId()); 
                     socValue.add(tem);
                     valueSet.add(tem);
-                    List<ComboboxLOVBean.Attribute> list = new ArrayList<ComboboxLOVBean.Attribute>();
+                List<ComboboxLOVBean.Attribute> list = new ArrayList<ComboboxLOVBean.Attribute>();
                     list.add(new ComboboxLOVBean.Attribute(colDef.getColumnLabel(),"name"));
                     
                     ComboboxLOVBean bean = new ComboboxLOVBean(tem, list);
@@ -750,8 +763,15 @@ public class DcmDataDisplayBean extends TablePagination{
         if(vsRows.length>0){
             String vsCode=(String)vsRows[0].getAttribute("Source");
             StringBuffer sql=new StringBuffer();
-            sql.append("SELECT T.CODE, T.MEANING FROM \"").append(vsCode)
-            .append("\" T WHERE T.LOCALE = '").append(ADFContext.getCurrent().getLocale()).append("'  ORDER BY T.IDX ");
+            sql.append("SELECT V.CODE, V.MEANING FROM \"").append(vsCode)
+            .append("\" V WHERE V.LOCALE = '").append(ADFContext.getCurrent().getLocale()).append("'")
+//            .append(" AND EXISTS(SELECT 1 FROM ")
+//            .append(" DMS_USER_VALUE_V T")
+//            .append(" WHERE T.USER_ID = '").append(this.curUser.getId()).append("'")
+//            .append(" AND T.VALUE_SET_ID = '").append(vsId).append("'")
+//            .append(" AND T.VALUE_ID=V.CODE)")
+            .append("ORDER BY V.IDX ");
+            System.out.println(sql);
             Statement stmt= DmsUtils.getDmsApplicationModule().getDBTransaction().createStatement(DBTransaction.DEFAULT);
             try {
                 ResultSet rs = stmt.executeQuery(sql.toString());
@@ -767,6 +787,7 @@ public class DcmDataDisplayBean extends TablePagination{
         }
         return list;
     }
+    
     //查询数据
     private void queryTemplateData() {
         List<Map> data = new ArrayList<Map>();
@@ -895,8 +916,20 @@ public class DcmDataDisplayBean extends TablePagination{
                 header.setSrcTable((String)row.getAttribute("Source"));
                 header.setValueSetId((String)row.getAttribute("ValueSetId"));
                 header.setCode((String)row.getAttribute("Code"));
+                header.setDefaultCode((String)row.getAttribute("DefaultCode"));
+                
+                //下面的初始化已经将defaultCode的meaning变成了code
                 this.initHeaderValueList(header);
-                this.setDefaultHeaderValue(header);
+                
+                //设置默认值
+                this.setDefaultHeaderValue(header); 
+                
+                //如果某个值集存在默认值，那么就设置默认值
+                if(row.getAttribute("DefaultCode") != null) { 
+                    //defaultCode已经不是meaning而是code了(this.initHeaderValueList(header);)
+                    header.setValue(header.getDefaultCode()); 
+                    
+                }    
                 this.templateHeader.add(header);
             }
             this.curCombiantionRecord=this.getCurCombinationRecord();
@@ -977,15 +1010,22 @@ public class DcmDataDisplayBean extends TablePagination{
             ResultSet rs = stat.executeQuery();
             while (rs.next()) {
                 SelectItem item = new SelectItem();
+                String meaning = rs.getString("MEANING");
+                
                 item.setLabel(rs.getString("MEANING"));
                 item.setValue(rs.getString("CODE"));
                 values.add(item);
+                //在这个位置查找默认值的code
+                if (meaning.equals(header.getDefaultCode()))
+                    header.setDefaultCode(rs.getString("CODE"));
+                
             }
         } catch (SQLException e) {
             this._logger.severe(e);
         }   
         header.setValues(values);
     }
+    
     private void setDefaultHeaderValue(ComHeader header){
         DBTransaction dbTransaction =(DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
         StringBuffer sql = new StringBuffer();
@@ -1107,6 +1147,18 @@ public class DcmDataDisplayBean extends TablePagination{
     public boolean isIsXlsx() {
         return isXlsx;
     }
+
+
+    /**
+     * 获取导出错误信息的文件名
+     * @return
+     */
+    public String getExportErrExcelName() {
+         
+        return this.curTempalte.getName() + this.getCurComRecordText() +"_错误信息"+ ".xls";
+  
+    }
+    
     //获取导出数据时的文件名
 
     public String getExportDataExcelName() {
@@ -1131,6 +1183,7 @@ public class DcmDataDisplayBean extends TablePagination{
     public void showErrors(ActionEvent actionEvent) {
         this.showErrorPop();
     }
+    
     //显示错误信息窗口
     private void showErrorPop() {
         ViewObject vo =ADFUtils.findIterator("DcmErrorViewIterator").getViewObject();
@@ -1819,8 +1872,23 @@ public class DcmDataDisplayBean extends TablePagination{
          
              FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("请先选择组合"));
              
-         }else { 
+         }else {
+             //打开的导出框的时候应该是能重置进度款，定时器的状态。（360浏览器不大兼容所以需要到）
+             if(exportProcessPoll != null && exportProIndicator !=null)
+             {
+                exportProIndicator.setVisible(false);
+                exportProcessPoll.setInterval(-1);
+
+
+                exportButton.setVisible(true);
+                AdfFacesContext.getCurrentInstance().addPartialTarget(exportButton);
+
+                AdfFacesContext.getCurrentInstance().addPartialTarget(exportProIndicator);
+                AdfFacesContext.getCurrentInstance().addPartialTarget(exportProcessPoll);
+             }
              dataExportWnd.show(new RichPopup.PopupHints());
+
+             AdfFacesContext.getCurrentInstance().addPartialTarget(dataExportWnd);
          }
     }
     
@@ -1875,5 +1943,69 @@ public class DcmDataDisplayBean extends TablePagination{
 //        AdfFacesContext.getCurrentInstance().addPartialTarget(this.displayTable);
 //        
 //    }
+
+    //判断是否在导出当中 0：正在导出 1：导出成功 -1：没有导出
+    int isProcess = -1;
+    
+     
+    /* 
+     * 定时器执行的方法，在导出的时候是无法执行定时器的，但是导出之后就会执行，因此一般只会执行一次
+     * 执行一次之后就重置状态，关闭导出框，关闭定时器，隐藏进度条
+     * */    
+    public void getExportPollProcess(PollEvent pollEvent) {
+           
+        if (isProcess == 0) {
+ 
+            exportProcessPoll.setInterval( -1 );
+            dataExportWnd.cancel(); 
+            isProcess = -1;
+            exportProIndicator.setVisible(false);
+            AdfFacesContext.getCurrentInstance().addPartialTarget(exportButton);
+            AdfFacesContext.getCurrentInstance().addPartialTarget(exportProIndicator);
+            AdfFacesContext.getCurrentInstance().addPartialTarget(exportProcessPoll);
+            AdfFacesContext.getCurrentInstance().addPartialTarget(dataExportWnd);
+        }else{
+                
+        }
+        
+    }
+    
+    private BoundedRangeModel rangeModel;
+    //进度条
+    public  BoundedRangeModel getRangeModel() {
+        if( rangeModel != null)
+            return rangeModel;
+        
+        rangeModel = new RangeModel();
+        
+        return rangeModel;
+    }
+
+    public void setExportProIndicator(RichProgressIndicator exportProIndicator) {
+        this.exportProIndicator = exportProIndicator;
+    }
+
+    public RichProgressIndicator getExportProIndicator() {
+        return exportProIndicator;
+    }
+
+    public void setExportButton(RichCommandButton exportButton) {
+        this.exportButton = exportButton;
+    }
+
+    public RichCommandButton getExportButton() {
+        return exportButton;
+    }
+ 
+    private RichPoll exportProcessPoll;
+    
+    public void setExportProcessPoll(RichPoll exportProcessPoll) {
+        this.exportProcessPoll = exportProcessPoll;
+    }
+
+    public RichPoll getExportProcessPoll() {
+        return exportProcessPoll;
+    }
+ 
 }
 
