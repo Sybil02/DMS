@@ -78,11 +78,11 @@ public class RowReader implements IRowReader {
                     } else {
                         isEpty = false;
                         //去掉number中的0,POI读取EXCEL里的数字为浮点型，实际值会带上.0
-                        if(col.getDataType().equals("NUMBER")&&tmpstr.equals("0.0")){
-                            this.stmt.setString(i + 3, "");
-                        }else{
+//                        if(col.getDataType().equals("NUMBER")&&tmpstr.equals("0.0")){
+//                            this.stmt.setString(i + 3, "");
+//                        }else{
                             this.stmt.setString(i + 3, rsc.decodeString(tmpstr.trim()));        
-                        }
+//                        }
                     }
                 }
                 if (!isEpty) {

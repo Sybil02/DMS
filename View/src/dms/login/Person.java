@@ -10,7 +10,8 @@ public class Person implements Serializable {
     private String locale;
     private String id;
     private String mail;
-
+    private String pwd;
+    
     public Person(DmsUserViewRowImpl row) {
         this.updateUser(row);
     }
@@ -21,6 +22,7 @@ public class Person implements Serializable {
         this.acc=row.getAcc();
         this.id=row.getId();
         this.mail=row.getMail();
+        this.pwd = row.getPwd();
     }
 
     public void setName(String name) {
@@ -61,5 +63,13 @@ public class Person implements Serializable {
 
     public String getMail() {
         return mail;
+    }
+
+    public void setPwd(String password) {
+        this.pwd = password;
+    }
+
+    public String getPwd() {
+        return pwd;
     }
 }

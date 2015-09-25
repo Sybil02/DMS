@@ -21,6 +21,10 @@
             </af:menuBar>
           </f:facet>
           <f:facet name="welcome">
+            <af:group id="g1">
+              <af:region value="#{bindings.dynamicRegion1.regionModel}"
+                         id="r1"/> 
+            </af:group>
           </f:facet>
           <f:facet name="innerToolbar"/>
           <f:attribute name="brandingTitle" value="#{viewBundle['dms.title']}"/>

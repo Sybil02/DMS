@@ -2,6 +2,7 @@ package dms.login;
 
 import com.bea.security.utils.DigestUtils;
 
+import common.ADFUtils;
 import common.DmsUtils;
 
 import common.JSFUtils;
@@ -260,4 +261,5 @@ public class LoginBean {
         else
             return TaskFlowId.parse("/WEB-INF/blank.xml#blank");
     }
+ 
 }

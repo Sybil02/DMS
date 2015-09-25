@@ -142,7 +142,6 @@ public class ValueSetAuthorityBean {
         }
         if(row!=null){
             String valueSetSrc = (String)row.getAttribute("Source");
-            System.out.println("sdfsdf  "+valueSetSrc);
             if( valueSetSrc == null)
                 return ;
             

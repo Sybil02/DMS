@@ -106,55 +106,25 @@
                   var="row" rows="#{bindings.DmsRoleWorkflowVO.rangeSize}"
                   emptyText="#{bindings.DmsRoleWorkflowVO.viewable ? 'No data to display.' : 'Access Denied.'}"
                   fetchSize="#{bindings.DmsRoleWorkflowVO.rangeSize}"
-                  rowBandingInterval="0"
-                  selectionListener="#{bindings.DmsRoleWorkflowVO.collectionModel.makeCurrent}"
-                  rowSelection="multiple" id="t1" partialTriggers="::soc1"
-                  binding="#{workflowAuthorityBean.assignedworkflowTable}">
-          <af:column sortProperty="#{bindings.DmsRoleWorkflowVO.hints.CreatedAt.name}"
-                     sortable="false"
-                     headerText="#{bindings.DmsRoleWorkflowVO.hints.CreatedAt.label}"
-                     id="c2">
-            <af:outputText value="#{row.CreatedAt}" id="ot7">
-              <af:convertDateTime pattern="#{bindings.DmsRoleWorkflowVO.hints.CreatedAt.format}"/>
-            </af:outputText>
-          </af:column>
-          <af:column sortProperty="#{bindings.DmsRoleWorkflowVO.hints.CreatedBy.name}"
-                     sortable="false"
-                     headerText="#{bindings.DmsRoleWorkflowVO.hints.CreatedBy.label}"
-                     id="c1">
-            <af:outputText value="#{row.CreatedBy}" id="ot5"/>
-          </af:column>
-          <af:column sortProperty="#{bindings.DmsRoleWorkflowVO.hints.Id.name}"
-                     sortable="false"
-                     headerText="#{bindings.DmsRoleWorkflowVO.hints.Id.label}"
-                     id="c9">
-            <af:outputText value="#{row.Id}" id="ot8"/>
-          </af:column>
-          <af:column sortProperty="#{bindings.DmsRoleWorkflowVO.hints.RoleId.name}"
-                     sortable="false"
-                     headerText="#{bindings.DmsRoleWorkflowVO.hints.RoleId.label}"
-                     id="c8">
-            <af:outputText value="#{row.RoleId}" id="ot6"/>
+                  rowBandingInterval="0" id="t1">
+          <af:column headerText="#{bindings.DmsRoleWorkflowVO.hints.WorkflowId.label}"
+                     id="c1" width="204">
+            <af:selectOneChoice value="#{row.bindings.WorkflowId.inputValue}"
+                                label="#{row.bindings.WorkflowId.label}"
+                                readOnly="true"
+                                required="#{bindings.DmsRoleWorkflowVO.hints.WorkflowId.mandatory}"
+                                shortDesc="#{bindings.DmsRoleWorkflowVO.hints.WorkflowId.tooltip}"
+                                id="soc2">
+              <f:selectItems value="#{row.bindings.WorkflowId.items}" id="si1"/>
+            </af:selectOneChoice>
           </af:column>
           <af:column sortProperty="#{bindings.DmsRoleWorkflowVO.hints.UpdatedAt.name}"
                      sortable="false"
                      headerText="#{bindings.DmsRoleWorkflowVO.hints.UpdatedAt.label}"
-                     id="c10">
-            <af:outputText value="#{row.UpdatedAt}" id="ot9">
+                     id="c4" width="200">
+            <af:outputText value="#{row.UpdatedAt}" id="ot6">
               <af:convertDateTime pattern="#{bindings.DmsRoleWorkflowVO.hints.UpdatedAt.format}"/>
             </af:outputText>
-          </af:column>
-          <af:column sortProperty="#{bindings.DmsRoleWorkflowVO.hints.UpdatedBy.name}"
-                     sortable="false"
-                     headerText="#{bindings.DmsRoleWorkflowVO.hints.UpdatedBy.label}"
-                     id="c3">
-            <af:outputText value="#{row.UpdatedBy}" id="ot10"/>
-          </af:column>
-          <af:column sortProperty="#{bindings.DmsRoleWorkflowVO.hints.WorkflowId.name}"
-                     sortable="false"
-                     headerText="#{bindings.DmsRoleWorkflowVO.hints.WorkflowId.label}"
-                     id="c4">
-            <af:outputText value="#{row.WorkflowId}" id="ot11"/>
           </af:column>
         </af:table>
       </af:panelCollection>

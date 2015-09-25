@@ -754,8 +754,15 @@ public class DcmDataDisplayBean extends TablePagination{
         if(vsRows.length>0){
             String vsCode=(String)vsRows[0].getAttribute("Source");
             StringBuffer sql=new StringBuffer();
-            sql.append("SELECT T.CODE, T.MEANING FROM \"").append(vsCode)
-            .append("\" T WHERE T.LOCALE = '").append(ADFContext.getCurrent().getLocale()).append("'  ORDER BY T.IDX ");
+            sql.append("SELECT V.CODE, V.MEANING FROM \"").append(vsCode)
+            .append("\" V WHERE V.LOCALE = '").append(ADFContext.getCurrent().getLocale()).append("'")
+            .append(" AND EXISTS(SELECT 1 FROM ")
+            .append(" DMS_USER_VALUE_V T")
+            .append(" WHERE T.USER_ID = '").append(this.curUser.getId()).append("'")
+            .append(" AND T.VALUE_SET_ID = '").append(vsId).append("'")
+            .append(" AND T.VALUE_ID=V.CODE)")
+            .append("ORDER BY V.IDX ");
+            System.out.println(sql);
             Statement stmt= DmsUtils.getDmsApplicationModule().getDBTransaction().createStatement(DBTransaction.DEFAULT);
             try {
                 ResultSet rs = stmt.executeQuery(sql.toString());
@@ -1167,6 +1174,7 @@ public class DcmDataDisplayBean extends TablePagination{
     public void showErrors(ActionEvent actionEvent) {
         this.showErrorPop();
     }
+    
     //显示错误信息窗口
     private void showErrorPop() {
         ViewObject vo =ADFUtils.findIterator("DcmErrorViewIterator").getViewObject();

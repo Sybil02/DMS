@@ -13,17 +13,17 @@ import org.apache.myfaces.trinidad.event.SelectionEvent;
 import org.apache.myfaces.trinidad.model.RowKeySet;
 
 public class MenuBean {
-    private MenuTreeModel model;
+    private StaticMenuTreeModel model;
     private static ADFLogger _logger =
         ADFLogger.createADFLogger(MenuBean.class);
 
-    public void setModel(MenuTreeModel model) {
+    public void setModel(StaticMenuTreeModel model) {
         this.model = model;
     }
 
-    public MenuTreeModel getModel() {
+    public StaticMenuTreeModel getModel() {
         if (null == this.model) {
-            model = new MenuTreeModel();
+            model = new StaticMenuTreeModel();
         }
         return model;
     }

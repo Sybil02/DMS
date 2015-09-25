@@ -9,6 +9,13 @@
           id="pageTemplateBinding" Refresh="ifNeeded"/>
     <iterator id="DmsMenuTreeViewIterator" Binds="DmsMenuTreeView"
               DataControl="DmsModuleDataControl" RangeSize="25"/>
+    <taskFlow id="user_info_tsk1"
+              taskFlowId="/WEB-INF/dmsUser/user_info_tsk.xml#user_info_tsk"
+              activation="deferred"
+              xmlns="http://xmlns.oracle.com/adf/controller/binding"/>
+    <taskFlow id="dynamicRegion1" taskFlowId="${LoginBean.dynamicTaskFlowId}"
+              activation="deferred"
+              xmlns="http://xmlns.oracle.com/adf/controller/binding"/>
   </executables>
   <bindings/>
 </pageDefinition>

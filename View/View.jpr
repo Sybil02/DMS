@@ -576,6 +576,8 @@
             <hash>
                <url n="content-folder-url" path="adfmsrc/dcm/"/>
                <list n="pattern-filters">
+                  <string v="+dcm/XMLEncoder.java"/>
+                  <string v="+dcm/AbstractExcel2007Writer.java"/>
                   <string v="+dcm/GroupNameCombobox.java"/>
                   <string v="+dcm/sss.java"/>
                   <string v="+dcm/MyList.java"/>
@@ -898,6 +900,22 @@
             <value n="isJDK" v="false"/>
          </hash>
          <hash>
+            <value n="id" v="Oracle.adf.view_11.1.1"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <url n="id" path="../../../../../Users/xin/AppData/Roaming/JDeveloper/system11.1.1.7.40.64.93/o.jdeveloper/Adf_121300_1008_source.zip.library"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="source"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Src"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
             <value n="id" v="Oracle XML Parser v2"/>
             <value n="isJDK" v="false"/>
          </hash>
@@ -927,18 +945,6 @@
          </hash>
          <hash>
             <value n="id" v="BC4J Oracle Domains"/>
-            <value n="isJDK" v="false"/>
-         </hash>
-         <hash>
-            <value n="id" v="Oracle.adf.view_11.1.1"/>
-            <value n="isJDK" v="false"/>
-         </hash>
-         <hash>
-            <url n="id" path="../../../../../Users/xin/AppData/Roaming/JDeveloper/system11.1.1.7.40.64.93/o.jdeveloper/Adf_121300_1008_source.zip.library"/>
-            <value n="isJDK" v="false"/>
-         </hash>
-         <hash>
-            <value n="id" v="source"/>
             <value n="isJDK" v="false"/>
          </hash>
       </list>
@@ -1075,6 +1081,13 @@
                <value n="id" v="source"/>
                <list n="sourcePath">
                   <url protocol="jar" path="file:/D:/adf_121300_1008_source.zip!/"/>
+               </list>
+            </hash>
+            <hash>
+               <value n="description" v="Src"/>
+               <value n="id" v="Src"/>
+               <list n="sourcePath">
+                  <url protocol="file" path="/D:/ExcelHandler-master/src/"/>
                </list>
             </hash>
          </list>
@@ -1253,6 +1266,22 @@
             <value n="isJDK" v="false"/>
          </hash>
          <hash>
+            <value n="id" v="Oracle.adf.view_11.1.1"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <url n="id" path="../../../../../Users/xin/AppData/Roaming/JDeveloper/system11.1.1.7.40.64.93/o.jdeveloper/Adf_121300_1008_source.zip.library"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="source"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Src"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
             <value n="id" v="Oracle XML Parser v2"/>
             <value n="isJDK" v="false"/>
          </hash>
@@ -1282,18 +1311,6 @@
          </hash>
          <hash>
             <value n="id" v="BC4J Oracle Domains"/>
-            <value n="isJDK" v="false"/>
-         </hash>
-         <hash>
-            <value n="id" v="Oracle.adf.view_11.1.1"/>
-            <value n="isJDK" v="false"/>
-         </hash>
-         <hash>
-            <url n="id" path="../../../../../Users/xin/AppData/Roaming/JDeveloper/system11.1.1.7.40.64.93/o.jdeveloper/Adf_121300_1008_source.zip.library"/>
-            <value n="isJDK" v="false"/>
-         </hash>
-         <hash>
-            <value n="id" v="source"/>
             <value n="isJDK" v="false"/>
          </hash>
       </list>

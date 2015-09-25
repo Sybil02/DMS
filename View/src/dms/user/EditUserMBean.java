@@ -5,13 +5,19 @@ import com.bea.security.utils.DigestUtils;
 import common.ADFUtils;
 import common.DmsUtils;
 
+import dms.login.Person;
+
 import javax.faces.event.ActionEvent;
 
+import oracle.adf.share.ADFContext;
 import oracle.adf.share.logging.ADFLogger;
 import oracle.adf.view.rich.component.rich.RichPopup;
 import oracle.adf.view.rich.component.rich.input.RichInputText;
 
 import oracle.adf.view.rich.component.rich.output.RichOutputLabel;
+
+import oracle.adf.view.rich.context.AdfFacesContext;
+import oracle.adf.view.rich.render.ClientEvent;
 
 import oracle.jbo.ViewObject;
 
@@ -27,7 +33,8 @@ public class EditUserMBean {
     private RichOutputLabel msg;
     private RichPopup popup;
 
-    public EditUserMBean() {
+    public EditUserMBean() { 
+        
     }
 
     public void setNewPwd(RichInputText newPwd) {
@@ -79,7 +86,7 @@ public class EditUserMBean {
         }
     }
 
-    public void setPopup(RichPopup popup) {
+    public void setPopup(RichPopup popup) { 
         this.popup = popup;
     }
 
@@ -97,5 +104,20 @@ public class EditUserMBean {
         this.msg.setValue("");
         RichPopup.PopupHints hints = new RichPopup.PopupHints();
         this.popup.show(hints);
+    }
+    
+    //判断这个用户是否设置了密码，如果没有设置，则自动弹出对话框
+    public void isPwdSet(ClientEvent clientEvent) {
+        Person person = (Person)ADFContext.getCurrent().getSessionScope().get("cur_user");
+  
+        if(person.getPwd() == null) {
+            this.pwd.setValue("");
+            this.newPwd.setValue("密码为空，请设置密码");
+            RichPopup.PopupHints hints = new RichPopup.PopupHints();
+            this.popup.show(hints);
+            
+            AdfFacesContext.getCurrentInstance().addPartialTarget(popup);
+        }
+            
     }
 }

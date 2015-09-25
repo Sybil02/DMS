@@ -72,6 +72,7 @@
                                                       id="imlo2"
                                                       validator="#{viewScope.GroupNameComboboxBean.groupNameLov.validate}" 
                                                       value="#{bindings.GroupName.name}"
+                                                      autoSubmit="true"
                                                       model="#{viewScope.GroupNameComboboxBean.groupNameLov.listOfValuesModel}"
                                                       popupTitle="#{bindings.GroupName.label}  列表"
                                                       valueChangeListener="#{viewScope.ValueSetAuthorityBean.groupChangeListener}">
