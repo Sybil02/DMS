@@ -64,15 +64,18 @@
       <af:panelCollection id="pc1">
         <f:facet name="menus"/>
         <f:facet name="toolbar">
-          <af:toolbar id="t2">
-            <af:selectOneChoice value="#{bindings.RoleName.inputValue}"
-                                label="#{bindings.RoleName.label}"
-                                required="#{bindings.RoleName.hints.mandatory}"
-                                shortDesc="#{bindings.RoleName.hints.tooltip}"
-                                id="soc1" autoSubmit="true"
-                                valueChangeListener="#{backingBeanScope.FunctionAuthorityBean.roleChangeListener}">
-              <f:selectItems value="#{bindings.RoleName.items}" id="si1"/>
-            </af:selectOneChoice>
+          <af:toolbar id="t2"> 
+             <af:inputComboboxListOfValues label="#{bindings.RoleName.label}"
+                                          id="soc1" 
+                                          autoSubmit="true"
+                                          validator="#{viewScope.RoleNameComboboxBean.roleNameLov.validate}" 
+                                          value="#{bindings.RoleName.attributeValue}"
+                                          model="#{viewScope.RoleNameComboboxBean.roleNameLov.listOfValuesModel}"
+                                          popupTitle="#{bindings.RoleName.label}  列表"
+                                          valueChangeListener="#{backingBeanScope.FunctionAuthorityBean.roleChangeListener}">
+               <af:autoSuggestBehavior suggestItems="#{viewScope.RoleNameComboboxBean.roleNameLov.suggestMethod}"/>
+            </af:inputComboboxListOfValues> 
+                        
             <af:commandButton text="#{viewBundle['dms.common.add']}" id="cb1"
                               actionListener="#{backingBeanScope.FunctionAuthorityBean.showPopup}"/>
             <af:commandButton text="#{viewBundle['dcm.common.delete']}" id="cb2"

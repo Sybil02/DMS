@@ -13,6 +13,11 @@
       <managed-bean-class id="__4">dms.role.RoleGroupBean</managed-bean-class>
       <managed-bean-scope id="__5">backingBean</managed-bean-scope>
     </managed-bean>
+    <managed-bean id="__11">
+      <managed-bean-name id="__10">GroupNameComboboxBean</managed-bean-name>
+      <managed-bean-class id="__9">dcm.GroupNameComboboxBean</managed-bean-class>
+      <managed-bean-scope id="__8">view</managed-bean-scope>
+    </managed-bean>
     <view id="role_assign">
       <page>/dms/role/role_assign.jsff</page>
     </view>

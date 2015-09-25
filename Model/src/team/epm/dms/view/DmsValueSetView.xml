@@ -14,16 +14,17 @@
        DmsValueSet.CREATED_AT, 
        DmsValueSet.UPDATED_AT, 
        DmsValueSet.UPDATED_BY, 
-       DmsValueSet.CREATED_BY"
+       DmsValueSet.CREATED_BY, 
+       DmsValueSet.DEFAULT_CODE"
   FromList="DMS_VALUE_SET DmsValueSet"
   BindingStyle="OracleName"
   CustomQuery="false"
   PageIterMode="Full"
   UseGlueCode="false"
   Where="DmsValueSet.LOCALE=:locale"
-  ComponentClass="team.epm.dms.view.DmsValueSetViewImpl"
+  OrderBy="DmsValueSet.NAME"
   RowClass="team.epm.dms.view.DmsValueSetViewRowImpl"
-  OrderBy="DmsValueSet.NAME">
+  ComponentClass="team.epm.dms.view.DmsValueSetViewImpl">
   <DesignTime>
     <Attr Name="_codeGenFlag2" Value="Access|Coll|VarAccess"/>
     <Attr Name="_isCodegen" Value="true"/>
@@ -206,6 +207,19 @@
     SQLType="VARCHAR">
     <TransientExpression><![CDATA[Id]]></TransientExpression>
   </ViewAttribute>
+  <ViewAttribute
+    Name="DefaultCode"
+    PrecisionRule="true"
+    EntityAttrName="DefaultCode"
+    EntityUsage="DmsValueSet"
+    AliasName="DEFAULT_CODE">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="team.epm.dms.view.DmsValueSetView.DefaultCode_LABEL"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewCriteria
     Name="DmsValueSetViewCriteria"
     ViewObjectName="team.epm.dms.view.DmsValueSetView"
@@ -235,4 +249,8 @@
     ViewLink="team.epm.dms.DmsValuesetGValueLnk"
     Type="oracle.jbo.RowIterator"
     IsUpdateable="false"/>
+  <ResourceBundle>
+    <PropertiesBundle
+      PropertiesFile="ModelBundle"/>
+  </ResourceBundle>
 </ViewObject>

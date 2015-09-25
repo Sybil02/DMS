@@ -1,3 +1,21 @@
 af|inputComboboxListOfValues::search{
     display: none;
 }
+
+
+/* progressIndicator */
+.DemoWrapper-progressIndicator af|progressIndicator {background-color: Cornsilk;}
+.DemoWrapper-progressIndicator_hover af|progressIndicator:hover {background-color: Aquamarine;}
+.DemoWrapper-progressIndicator_content af|progressIndicator::content {border: 2px solid;}
+.DemoWrapper-progressIndicator_indeterminate-running af|progressIndicator::indeterminate:running {background-color:green}
+.DemoWrapper-progressIndicator_indeterminate-finished af|progressIndicator::indeterminate:finished {background-color:yellow}
+.DemoWrapper-progressIndicator_determinate af|progressIndicator::determinate {border:1px solid}
+.DemoWrapper-progressIndicator_determinate-start-label af|progressIndicator::determinate-start-label {color:blue}
+.DemoWrapper-progressIndicator_determinate-end-label af|progressIndicator::determinate-end-label {color:green}
+.DemoWrapper-progressIndicator_determinate-filled-icon-style af|progressIndicator::determinate-filled-icon-style {background-image:none;background-color:blue;}
+.DemoWrapper-progressIndicator_determinate-empty-icon-style af|progressIndicator::determinate-empty-icon-style {background-image:none;background-color:white;}
+.DemoWrapper-progressIndicator_determinate-filled-icon-style_high-contrast af|progressIndicator::determinate-filled-icon-style {background-image:none;border: solid 2px;}
+af|progressIndicator::indeterminate:running {-tr-inhibit: background-image}
+af|progressIndicator::indeterminate:finished {-tr-inhibit: background-image}
+af|progressIndicator::indeterminate-running-icon {content:url('/images/clock_positive.gif'); height:40px; width:40px;}
+af|progressIndicator::indeterminate-finished-icon {content:url('/images/clock_positive_finished.gif.gif'); height:40px; width:40px;}

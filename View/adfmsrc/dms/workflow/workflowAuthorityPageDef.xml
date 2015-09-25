@@ -5,14 +5,14 @@
   <parameters/>
   <executables>
     <variableIterator id="variables"/>
-    <iterator Binds="DmsEnabledRole" RangeSize="25"
+    <iterator Binds="DmsEnabledRole" RangeSize="-1"
               DataControl="DmsModuleDataControl" id="DmsEnabledRoleIterator"/>
-    <iterator Binds="DmsRoleWorkflowVO" RangeSize="25"
-              DataControl="DmsModuleDataControl"
-              id="DmsRoleWorkflowVOIterator"/>
-    <iterator Binds="DmsSetWorkflowInfoVO" RangeSize="25"
+    <iterator Binds="DmsSetWorkflowInfoVO" RangeSize="-1"
               DataControl="DmsModuleDataControl"
               id="DmsSetWorkflowInfoVOIterator"/>
+    <iterator Binds="DmsRoleWorkflowVO" RangeSize="-1"
+              DataControl="DmsModuleDataControl"
+              id="DmsRoleWorkflowVOIterator"/>
   </executables>
   <bindings>
     <list ListOperMode="navigation" IterBinding="DmsEnabledRoleIterator"
@@ -21,20 +21,6 @@
         <Item Value="RoleName"/>
       </AttrNames>
     </list>
-    <tree IterBinding="DmsRoleWorkflowVOIterator" id="DmsRoleWorkflowVO">
-      <nodeDefinition DefName="team.epm.dms.view.DmsRoleWorkflowVO"
-                      Name="DmsRoleWorkflowVO0">
-        <AttrNames>
-          <Item Value="CreatedAt"/>
-          <Item Value="CreatedBy"/>
-          <Item Value="Id"/>
-          <Item Value="RoleId"/>
-          <Item Value="UpdatedAt"/>
-          <Item Value="UpdatedBy"/>
-          <Item Value="WorkflowId"/>
-        </AttrNames>
-      </nodeDefinition>
-    </tree>
     <action id="Rollback" DataControl="DmsModuleDataControl"
             RequiresUpdateModel="false" Action="rollbackTransaction"/>
     <action id="Commit" DataControl="DmsModuleDataControl"
@@ -50,5 +36,29 @@
         </AttrNames>
       </nodeDefinition>
     </tree>
+    <tree IterBinding="DmsRoleWorkflowVOIterator" id="DmsRoleWorkflowVO">
+      <nodeDefinition DefName="team.epm.dms.view.DmsRoleWorkflowVO"
+                      Name="DmsRoleWorkflowVO0">
+        <AttrNames>
+          <Item Value="Id"/>
+          <Item Value="WorkflowId" Binds="WorkflowId"/>
+          <Item Value="RoleId"/>
+          <Item Value="UpdatedAt"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <list IterBinding="DmsRoleWorkflowVOIterator" id="WorkflowId"
+          DTSupportsMRU="true" StaticList="false"
+          ListIter="DmsSetWorkflowInfoVOIterator">
+      <AttrNames>
+        <Item Value="WorkflowId"/>
+      </AttrNames>
+      <ListAttrNames>
+        <Item Value="Id"/>
+      </ListAttrNames>
+      <ListDisplayAttrNames>
+        <Item Value="WfName"/>
+      </ListDisplayAttrNames>
+    </list>
   </bindings>
 </pageDefinition>

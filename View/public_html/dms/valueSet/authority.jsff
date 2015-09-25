@@ -16,6 +16,7 @@
                         <af:panelGroupLayout id="pgl1" layout="horizontal">
                            <af:inputText label="#{viewBundle['dms.value.filterinput']}"
                                          id="it2"
+                                         
                                          binding="#{viewScope.ValueSetAuthorityBean.filterValueInput}"
                                          autoSubmit="true"
                                          valueChangeListener="#{viewScope.ValueSetAuthorityBean.unassignedValueChangeListener}"
@@ -57,7 +58,7 @@
                <f:facet name="toolbar">
                   <af:toolbar id="t1">
                      <af:group id="g1">
-                        <af:selectOneChoice value="#{bindings.GroupName.inputValue}"
+                        <!--<af:selectOneChoice value="#{bindings.GroupName.inputValue}"
                                             label="#{bindings.GroupName.label}"
                                             required="#{bindings.GroupName.hints.mandatory}"
                                             shortDesc="#{bindings.GroupName.hints.tooltip}"
@@ -65,16 +66,28 @@
                                             valueChangeListener="#{viewScope.ValueSetAuthorityBean.groupChangeListener}">
                            <f:selectItems value="#{bindings.GroupName.items}"
                                           id="si1"/>
-                        </af:selectOneChoice>
+                        </af:selectOneChoice>-->
+                        
+                        <af:inputComboboxListOfValues label="#{bindings.GroupName.label}"
+                                                      id="imlo2"
+                                                      validator="#{viewScope.GroupNameComboboxBean.groupNameLov.validate}" 
+                                                      value="#{bindings.GroupName.name}"
+                                                      autoSubmit="true"
+                                                      model="#{viewScope.GroupNameComboboxBean.groupNameLov.listOfValuesModel}"
+                                                      popupTitle="#{bindings.GroupName.label}  列表"
+                                                      valueChangeListener="#{viewScope.ValueSetAuthorityBean.groupChangeListener}">
+                           <af:autoSuggestBehavior suggestItems="#{viewScope.GroupNameComboboxBean.groupNameLov.suggestMethod}"/>
+                        </af:inputComboboxListOfValues>
+
                         <af:inputComboboxListOfValues label="  #{viewBundle['dms.value.name']}"
                                                       id="imlov1"
                                                       valueChangeListener="#{viewScope.ValueSetAuthorityBean.valuesetChangeListener}"
-                                                      validator="#{viewScope.ValueSetAuthorityBean.comboboxLOVBean.validate}"
+                                                      validator="#{viewScope.ValueSetAuthorityBean.nameLov.validate}"
                                                       autoSubmit="true"
                                                       value="#{bindings.Name.name}"
-                                                      model="#{viewScope.ValueSetAuthorityBean.comboboxLOVBean.listOfValuesModel}"
+                                                      model="#{viewScope.ValueSetAuthorityBean.nameLov.listOfValuesModel}"
                                                       popupTitle="#{bindings.Name.label}  列表">
-                           <af:autoSuggestBehavior suggestItems="#{viewScope.ValueSetAuthorityBean.comboboxLOVBean.suggestMethod}"/>
+                           <af:autoSuggestBehavior suggestItems="#{viewScope.ValueSetAuthorityBean.nameLov.suggestMethod}"/>
                         </af:inputComboboxListOfValues>
                      </af:group>
                      <af:group id="g2">
@@ -89,21 +102,20 @@
                </f:facet>
                <f:facet name="statusbar"/>
                <af:table value="#{bindings.DmsGroupValueView.collectionModel}"
-                         var="row"
+                         var="row"  
                          rows="#{bindings.DmsGroupValueView.rangeSize}"
                          emptyText="#{viewBundle['dms.common.nodata']}"
                          fetchSize="#{bindings.DmsGroupValueView.rangeSize}"
                          rowBandingInterval="0"
-                         filterModel="#{bindings.DmsGroupValueView1Query.queryDescriptor}"
-                          
+                         filterModel="#{bindings.DmsGroupValueView1Query.queryDescriptor}" 
                          filterVisible="true" 
                          selectionListener="#{bindings.DmsGroupValueView.collectionModel.makeCurrent}"
                          rowSelection="multiple" id="t2"
                          binding="#{viewScope.ValueSetAuthorityBean.assignedValueTable}">
-                  <af:column sortProperty="#{bindings.DmsGroupValueView.hints.ValueId.name}"
-                             sortable="false" filterable="true"
+                  <af:column sortProperty="#{bindings.DmsGroupValueView.hints.ValueId.name}" filterable="true"
                              headerText="#{bindings.DmsGroupValueView.hints.ValueId.label}"
-                             id="c1">
+                     
+                             id="c1" sortable="true">
                      <af:outputText value="#{viewScope.ValueSetAuthorityBean.valueMap[row.ValueId]}"
                                     id="ot1"/>
                      <f:facet name="filter">
@@ -115,8 +127,7 @@
                      </af:group>
                   </f:facet>
                   </af:column>
-                  <af:column sortProperty="#{bindings.DmsGroupValueView.hints.UpdatedBy.name}"
-                             sortable="false"
+                  <af:column sortProperty="#{bindings.DmsGroupValueView.hints.UpdatedBy.name}" 
                              headerText="#{bindings.DmsGroupValueView.hints.UpdatedBy.label}"
                              id="c2">
                      <af:selectOneChoice value="#{row.bindings.UpdatedBy.inputValue}"
@@ -128,8 +139,7 @@
                                        id="si3"/>
                      </af:selectOneChoice>
                   </af:column>
-                  <af:column sortProperty="#{bindings.DmsGroupValueView.hints.UpdatedAt.name}"
-                             sortable="false"
+                  <af:column sortProperty="#{bindings.DmsGroupValueView.hints.UpdatedAt.name}" 
                              headerText="#{bindings.DmsGroupValueView.hints.UpdatedAt.label}"
                              id="c3" width="120">
                      <af:outputText value="#{row.UpdatedAt}" id="ot3">

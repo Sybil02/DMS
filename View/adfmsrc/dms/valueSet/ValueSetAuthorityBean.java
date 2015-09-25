@@ -25,6 +25,8 @@ import java.util.List;
 
 import java.util.Map;
 
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
@@ -72,32 +74,16 @@ public class ValueSetAuthorityBean {
     private Person person = (Person)ADFContext.getCurrent().getSessionScope().get("cur_user");
     private RichTable assignedValueTable;
     private RichPopup popup;
-    private RichTable unassignedValueTable;
-    private ComboboxLOVBean comboboxLOVBean;
+    private RichTable unassignedValueTable; 
+    private ComboboxLOVBean nameLov;
     private RichInputText filterValueInput; //搜索查找框，集值的
      
     
     public ValueSetAuthorityBean() {
-        DCBindingContainer bindings = (DCBindingContainer)BindingContext.getCurrent().getCurrentBindingsEntry();
-        
-        //System.out.println(bindings.get("Names"));
-        List<SelectItem> data = (List)JSFUtils.resolveExpression("#{bindings.Name.items}");
-    
-        String label = (String)JSFUtils.resolveExpression("#{bindings.Name.label}");
-        
-        List<ComboboxLOVBean.Attribute> attrs = new ArrayList<ComboboxLOVBean.Attribute>();
-        attrs.add(new ComboboxLOVBean.Attribute(label ,"name"));
-        for(SelectItem item : data) {
-            System.out.println(item.getLabel()+"   "+item.getValue());
-        }
-       ComboboxLOVBean comboboxBean = new ComboboxLOVBean(data, attrs);
-        
-       setComboboxLOVBean( comboboxBean );  
-       
-       for(int i = 0; i < data.size(); i++)
-            comboboxBean.getMapItem().put(data.get(i).getLabel(), i);
-       
+        nameLov = ComboboxLOVBean.createByBinding("Name");
     }
+    
+
     
     public void setAssignedValueTable(RichTable assignedValueTable) {
         this.assignedValueTable = assignedValueTable;
@@ -108,7 +94,14 @@ public class ValueSetAuthorityBean {
     }
 
     public void groupChangeListener(ValueChangeEvent valueChangeEvent) {
+ 
+        FacesCtrlListBinding groupName = (FacesCtrlListBinding)JSFUtils.resolveExpression("#{bindings.GroupName}");
+        groupName.setInputValue(valueChangeEvent.getNewValue());
+ 
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.assignedValueTable);
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.unassignedValueTable);
+         
+        
     }
 
     public void valuesetChangeListener(ValueChangeEvent valueChangeEvent) {
@@ -116,33 +109,19 @@ public class ValueSetAuthorityBean {
         String setMap = valueChangeEvent.getNewValue().toString(); 
         
         FacesCtrlListBinding name =  (FacesCtrlListBinding) JSFUtils.resolveExpression("#{bindings.Name}");
-        Integer rowid = (Integer) getComboboxLOVBean().getMapItem().get(setMap); 
+        Integer rowid = (Integer) getNameLov().getMapItem().get(setMap); 
         if(rowid == null)
             return ;
         
-        name.setInputValue(rowid);
+        name.setInputValue(setMap);
+        System.out.println("row id == " + rowid);
         
-        Row row=ADFUtils.findIterator("DmsValueSetViewIterator").getRowSetIterator().getRowAtRangeIndex( rowid );
-        this.refreshValueMap(row); 
+        Row row = ADFUtils.findIterator("DmsValueSetViewIterator").getRowSetIterator().getRowAtRangeIndex( rowid );
+        this.refreshValueMap(row);  
         
+        //ADFUtils.findIterator("DmsGroupValueViewIterator").getViewObject().executeQuery();
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.assignedValueTable);
-        ADFUtils.findIterator("DmsGroupValueViewIterator").getViewObject().executeQuery();
-        return ;
-//        
-//        ADFUtils.findIterator("getDmsValueViewIterator").getViewObject().executeQuery();
-//        FacesCtrlListBinding name =  (FacesCtrlListBinding) JSFUtils.resolveExpression("#{bindings.Name}");
-//         System.out.println(name.getInputValue()+"              ][]][[[[[");
-//            
-//        name.setInputValue(3);
-//        ADFUtils.findIterator("getDmsValueViewIterator").getViewObject().executeQuery();
-//        System.out.println(name.getInputValue()+"              ][]][[ddd[[[");
-//        //Row row = ADFUtils.findIterator("DmsValueSetViewIterator").getRowSetIterator().getRowAtRangeIndex((Integer)valueChangeEvent.getNewValue());
-//        
-//        
-//        
-//
-//        
-//        AdfFacesContext.getCurrentInstance().addPartialTarget(this.assignedValueTable);
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.unassignedValueTable);
     }
 
     public void setValueMap(Map valueMap) {
@@ -162,7 +141,12 @@ public class ValueSetAuthorityBean {
             row=valueSetVo.getCurrentRow();
         }
         if(row!=null){
-            String valueSetSrc=row.getAttribute("Source").toString().toUpperCase();
+            String valueSetSrc = (String)row.getAttribute("Source");
+            if( valueSetSrc == null)
+                return ;
+            
+            valueSetSrc = valueSetSrc.toUpperCase();
+            
             String sql="select t.code,t.meaning from \""+valueSetSrc+"\" t where t.locale='"+person.getLocale()+"'";
             DBTransaction trans = (DBTransaction)valueSetVo.getApplicationModule().getTransaction();
             Statement stmt=trans.createStatement(DBTransaction.DEFAULT);
@@ -191,13 +175,18 @@ public class ValueSetAuthorityBean {
 
     public void add_value(ActionEvent actionEvent) {
         //更新未选值集的显示问题，如果没有设置，值集仍然处于筛选状态
-        ViewObject vo = ADFUtils.findIterator("getDmsValueViewIterator").getViewObject(); 
-        vo.setWhereClause("MEANING like '%'");
-        vo.executeQuery(); 
-        //清空弹出框的值集过滤框的内容
-        filterValueInput.setValue("");
-        RichPopup.PopupHints hint=new RichPopup.PopupHints();
-        this.popup.show(hint);
+        try{
+            ViewObject vo = ADFUtils.findIterator("getDmsValueViewIterator").getViewObject(); 
+            vo.setWhereClause("MEANING like '%'");
+            vo.executeQuery(); 
+            //清空弹出框的值集过滤框的内容
+            filterValueInput.setValue("");
+            RichPopup.PopupHints hint=new RichPopup.PopupHints();
+            this.popup.show(hint);
+        }catch (Exception e) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("值集源出错"));
+            e.printStackTrace();
+        }
     }
 
     public void remove_value(ActionEvent actionEvent) {
@@ -231,12 +220,17 @@ public class ValueSetAuthorityBean {
             while (itr.hasNext()) {
                 List key = (List)itr.next();
                 Row valueRow = rowSetIterator.getRow((Key)key.get(0));
+                
+                if(valueRow == null)
+                    continue;
+                
                 Row row = groupValueVo.createRow();
                 row.setAttribute("GroupId", groupId);
                 row.setAttribute("ValueSetId", valueSetId);
                 row.setAttribute("ValueId", valueRow.getAttribute("CODE"));
                 groupValueVo.insertRow(row);
             }
+            
             groupValueVo.getApplicationModule().getTransaction().commit();
             ADFUtils.findIterator("getDmsValueViewIterator").getViewObject().executeQuery();
             ADFUtils.findIterator("DmsGroupValueViewIterator").getViewObject().executeQuery();
@@ -260,14 +254,7 @@ public class ValueSetAuthorityBean {
     public RowKeySet getSelectedRows() {
         return selectedRows;
     }
-
-    public void setComboboxLOVBean(ComboboxLOVBean comboboxLOVBean) {
-        this.comboboxLOVBean = comboboxLOVBean;
-    }
-
-    public ComboboxLOVBean getComboboxLOVBean() {
-        return comboboxLOVBean;
-    }
+ 
     
     //过滤值集权限表中的值的方法
     public void filterValueSetItem(ValueChangeEvent valueChangeEvent) {
@@ -310,5 +297,13 @@ public class ValueSetAuthorityBean {
 
     public RichInputText getFilterValueInput() {
         return filterValueInput;
+    } 
+
+    public void setNameLov(ComboboxLOVBean nameLov) {
+        this.nameLov = nameLov;
+    }
+
+    public ComboboxLOVBean getNameLov() {
+        return nameLov;
     }
 }

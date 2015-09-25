@@ -2,16 +2,22 @@ package odi11g.scene;
 
 import common.ADFUtils;
 
+import common.JSFUtils;
+
 import java.util.Iterator;
 import java.util.List;
 
 import javax.faces.event.ActionEvent;
+
+import javax.faces.event.ValueChangeEvent;
 
 import oracle.adf.view.rich.component.rich.RichPopup;
 import oracle.adf.view.rich.component.rich.data.RichTable;
 import oracle.adf.view.rich.component.rich.nav.RichCommandButton;
 
 import oracle.adf.view.rich.context.AdfFacesContext;
+
+import oracle.adfinternal.view.faces.model.binding.FacesCtrlListBinding;
 
 import oracle.jbo.Key;
 import oracle.jbo.Row;
@@ -100,5 +106,11 @@ public class SceneAuthorityBean {
 
     public RichTable getAssignedScene() {
         return assignedScene;
+    }
+
+    public void roleChangeListener(ValueChangeEvent valueChangeEvent) {
+        FacesCtrlListBinding roleName =  (FacesCtrlListBinding) JSFUtils.resolveExpression("#{bindings.RoleName}");
+        roleName.setInputValue(valueChangeEvent.getNewValue());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.assignedScene);
     }
 }

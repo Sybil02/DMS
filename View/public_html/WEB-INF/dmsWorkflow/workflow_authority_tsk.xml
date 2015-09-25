@@ -7,6 +7,11 @@
       <managed-bean-class id="__3">dms.workflow.WorkflowAuthorityBean</managed-bean-class>
       <managed-bean-scope id="__5">request</managed-bean-scope>
     </managed-bean>
+    <managed-bean id="__7">
+      <managed-bean-name id="__8">RoleNameComboboxBean</managed-bean-name>
+      <managed-bean-class id="__9">dcm.RoleNameComboboxBean</managed-bean-class>
+      <managed-bean-scope id="__6">view</managed-bean-scope>
+    </managed-bean>
     <view id="workflowAuthority">
       <page>/dms/workflow/workflowAuthority.jsff</page>
     </view>

@@ -26,7 +26,7 @@
       </nodeDefinition>
     </tree>
     <list ListOperMode="navigation" IterBinding="DmsEnabledRoleIterator"
-          ListIter="DmsEnabledRoleIterator" id="RoleName" DTSupportsMRU="true">
+          ListIter="DmsEnabledRoleIterator" id="RoleName"  >
       <AttrNames>
         <Item Value="RoleName"/>
       </AttrNames>

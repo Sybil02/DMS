@@ -112,6 +112,16 @@ public class DmsValueSetImpl extends DmsEntityImpl {
                 obj.setCreatedBy((String)value);
             }
         }
+        ,
+        DefaultCode {
+            public Object get(DmsValueSetImpl obj) {
+                return obj.getDefaultCode();
+            }
+
+            public void put(DmsValueSetImpl obj, Object value) {
+                obj.setDefaultCode((String)value);
+            }
+        }
         ;
         private static AttributesEnum[] vals = null;
         private static final int firstIndex = 0;
@@ -150,6 +160,7 @@ public class DmsValueSetImpl extends DmsEntityImpl {
     public static final int UPDATEDAT = AttributesEnum.UpdatedAt.index();
     public static final int UPDATEDBY = AttributesEnum.UpdatedBy.index();
     public static final int CREATEDBY = AttributesEnum.CreatedBy.index();
+    public static final int DEFAULTCODE = AttributesEnum.DefaultCode.index();
 
     /**
      * This is the default constructor (do not remove).
@@ -294,6 +305,22 @@ public class DmsValueSetImpl extends DmsEntityImpl {
      */
     public void setCreatedBy(String value) {
         setAttributeInternal(CREATEDBY, value);
+    }
+
+    /**
+     * Gets the attribute value for DefaultCode, using the alias name DefaultCode.
+     * @return the DefaultCode
+     */
+    public String getDefaultCode() {
+        return (String)getAttributeInternal(DEFAULTCODE);
+    }
+
+    /**
+     * Sets <code>value</code> as the attribute value for DefaultCode.
+     * @param value value to set the DefaultCode
+     */
+    public void setDefaultCode(String value) {
+        setAttributeInternal(DEFAULTCODE, value);
     }
 
     /**

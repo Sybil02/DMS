@@ -4,6 +4,8 @@ import common.ADFUtils;
 import common.DmsUtils;
 
 
+import common.JSFUtils;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -20,6 +22,8 @@ import oracle.adf.view.rich.component.rich.RichPopup;
 import oracle.adf.view.rich.component.rich.data.RichTable;
 import oracle.adf.view.rich.component.rich.input.RichSelectManyShuttle;
 import oracle.adf.view.rich.context.AdfFacesContext;
+
+import oracle.adfinternal.view.faces.model.binding.FacesCtrlListBinding;
 
 import oracle.binding.BindingContainer;
 
@@ -45,7 +49,11 @@ public class RoleGroupBean {
     private RichTable selectedRoleTable;
     private RichPopup popup;
     private RichTable unSelectedRoleTable;
-
+    
+    public RoleGroupBean() {
+        
+        
+    }
     public void setSelectedRoleTable(RichTable selectedRoleTable) {
         this.selectedRoleTable = selectedRoleTable;
     }
@@ -55,6 +63,8 @@ public class RoleGroupBean {
     }
 
     public void groupChangeListener(ValueChangeEvent valueChangeEvent) {
+        FacesCtrlListBinding groupName = (FacesCtrlListBinding)JSFUtils.resolveExpression("#{bindings.GroupName}");
+        groupName.setInputValue(valueChangeEvent.getNewValue());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.selectedRoleTable);
     }
 

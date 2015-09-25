@@ -1,7 +1,9 @@
  /** Copyright (c) 2008, 2010, Oracle and/or its affiliates. All rights reserved. */
  package dcm;
 
- import java.text.ParseException;
+import common.JSFUtils;
+
+import java.text.ParseException;
  import java.text.SimpleDateFormat;
 
  import java.util.ArrayList;
@@ -18,6 +20,7 @@
 
  import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
+import javax.faces.validator.Validator;
 import javax.faces.validator.ValidatorException;
 
  import oracle.adf.view.rich.component.rich.data.RichTable;
@@ -42,7 +45,7 @@ import oracle.adf.view.rich.model.ColumnDescriptor;
  import org.apache.myfaces.trinidad.model.RowKeySet;
  import org.apache.myfaces.trinidad.model.RowKeySetImpl;
 
- public class ComboboxLOVBean
+ public class ComboboxLOVBean implements Validator
  {
      
      public ComboboxLOVBean(List<SelectItem> list, List<Attribute> attrName )
@@ -190,7 +193,7 @@ import oracle.adf.view.rich.model.ColumnDescriptor;
 
    public List getValues()
    {
-       System.out.println("getValueaaa");
+      // System.out.println("getValueaaa");
      return _values;
    }
 
@@ -1326,7 +1329,7 @@ import oracle.adf.view.rich.model.ColumnDescriptor;
          for(int i = _values.size()-1; i>=0; i-- ) {
              
              FileData data = (FileData)_values.get(i);
-             if( data.getName().contains(key)) { 
+             if( data.getName().toUpperCase().contains(key.toUpperCase())) { 
                  SelectItem item = new SelectItem();
                  item.setValue(data.getName());
                  item.setLabel(data.getName());
@@ -1335,5 +1338,28 @@ import oracle.adf.view.rich.model.ColumnDescriptor;
          }
          return res;
      }
- 
- }
+    
+     //根据绑定的名字的items获取ComboboxBean
+      static public ComboboxLOVBean createByBinding(String name) {
+      
+          //System.out.println(bindings.get("Names"));
+          List<SelectItem> data = (List)JSFUtils.resolveExpression("#{bindings." + name +".items}");
+          
+          String label = (String)JSFUtils.resolveExpression("#{bindings." + name + ".label}");
+          
+          List<ComboboxLOVBean.Attribute> attrs = new ArrayList<ComboboxLOVBean.Attribute>();
+          attrs.add(new ComboboxLOVBean.Attribute(label ,"name"));
+      //        for(SelectItem item : data) {
+      //            System.out.println(item.getLabel()+"   "+item.getValue());
+      //        }
+          ComboboxLOVBean comboboxBean = new ComboboxLOVBean(data, attrs);
+      
+          if(data == null) 
+          {//System.out.println("!!!!!!!!  "+name);
+             return null;}
+          for(int i = 0; i < data.size(); i++)
+              comboboxBean.getMapItem().put(data.get(i).getLabel(), i);
+          
+          return comboboxBean;
+      }  
+}
