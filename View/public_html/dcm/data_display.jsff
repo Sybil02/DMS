@@ -1,19 +1,14 @@
 <?xml version='1.0' encoding='UTF-8'?>
-
 <jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.1"
           xmlns:af="http://xmlns.oracle.com/adf/faces/rich"
-          xmlns:f="http://java.sun.com/jsf/core" 
+          xmlns:f="http://java.sun.com/jsf/core"
           xmlns:c="http://java.sun.com/jsp/jstl/core"
           xmlns:th="http://myfaces.apache.org/trinidad/html">
- 
-  
-
   <c:set var="viewBundle" value="#{adfBundle['dms_v']}"/>
-
   <af:panelStretchLayout id="psl1" bottomHeight="0"
                          topHeight="#{viewScope.DcmDataDisplayBean.combinationId==null ? '0px':'35px'}">
-    <f:facet name="top"> 
-      <af:panelGroupLayout layout="horizontal" 
+    <f:facet name="top">
+      <af:panelGroupLayout layout="horizontal"
                            xmlns:af="http://xmlns.oracle.com/adf/faces/rich"
                            id="pgl1" inlineStyle="padding-top:5px">
         <af:forEach items="#{viewScope.DcmDataDisplayBean.templateHeader}"
@@ -36,13 +31,12 @@
         <f:facet name="toolbar">
           <af:toolbar id="t2">
             <af:group id="grp1">
-              <af:commandButton disabled="#{viewScope.DcmDataDisplayBean.isEditable eq false}" 
+              <af:commandButton disabled="#{viewScope.DcmDataDisplayBean.isEditable eq false}"
                                 text="#{viewBundle['dcm.action.new']}" id="cb1"
                                 partialTriggers="::pgl1"
                                 action="#{viewScope.DcmDataDisplayBean.operation_new}"/>
               <af:commandButton text="#{viewBundle['dcm.action.delete']}"
-                                id="cb2"
-                                partialTriggers="::pgl1"
+                                id="cb2" partialTriggers="::pgl1"
                                 disabled="#{viewScope.DcmDataDisplayBean.isEditable eq false}"
                                 action="#{viewScope.DcmDataDisplayBean.operation_delete}"/>
               <af:commandButton text="#{viewBundle['dcm.action.save']}" id="cb3"
@@ -50,27 +44,23 @@
                                 partialTriggers="::pgl1"
                                 action="#{viewScope.DcmDataDisplayBean.operation_save}"/>
               <af:commandButton text="#{viewBundle['dcm.action.reset']}"
-                                id="cb4"
-                                partialTriggers="::pgl1"
+                                id="cb4" partialTriggers="::pgl1"
                                 disabled="#{viewScope.DcmDataDisplayBean.isEditable eq false}"
                                 action="#{viewScope.DcmDataDisplayBean.operation_reset}"/>
             </af:group>
             <af:group id="grp2">
               <af:commandButton text="#{viewBundle['dcm.action.import']}"
-                                id="cb10"
-                                partialTriggers="::pgl1"
+                                id="cb10" partialTriggers="::pgl1"
                                 disabled="#{viewScope.DcmDataDisplayBean.isEditable eq false}">
-              <af:showPopupBehavior popupId="::p2" alignId=""/>
+                <af:showPopupBehavior popupId="::p2" alignId=""/>
               </af:commandButton>
               <af:commandButton text="#{viewBundle['dcm.import_error']}"
                                 id="cb8"
                                 actionListener="#{viewScope.DcmDataDisplayBean.showErrors}"
-                                partialSubmit="true">
-                                </af:commandButton>
+                                partialSubmit="true"></af:commandButton>
               <af:commandButton text="#{viewBundle['dcm.action.export']}"
                                 id="cb4522"
-                                actionListener="#{viewScope.DcmDataDisplayBean.validateExport}"> 
-              </af:commandButton>
+                                actionListener="#{viewScope.DcmDataDisplayBean.validateExport}"></af:commandButton>
             </af:group>
             <af:group id="grp3">
               <af:commandButton text="#{viewBundle['dcm.action.template_download']}"
@@ -79,26 +69,32 @@
               </af:commandButton>
             </af:group>
             <af:group id="g6">
-              <af:commandButton text="模板计算" id="cb5" disabled="#{viewScope.DcmDataDisplayBean.hasCalc}"
+              <af:commandButton text="模板计算" id="cb5"
+                                disabled="#{viewScope.DcmDataDisplayBean.hasCalc}"
                                 actionListener="#{viewScope.DcmDataDisplayBean.showCalcWnd}"/>
             </af:group>
             <af:group id="g7">
-              <af:commandButton text="#{viewBundle['dms.workflow.approve']}" id="cb13"
+              <af:commandButton text="#{viewBundle['dms.workflow.approve']}"
+                                id="cb13"
                                 disabled="#{viewScope.DcmDataDisplayBean.writeStatus eq 'Y'}"
                                 actionListener="#{viewScope.DcmDataDisplayBean.commitApprove}"/>
             </af:group>
             <af:group id="g8">
-              <af:commandButton text="#{viewBundle['dms.approve.pass']}" id="cb14"
+              <af:commandButton text="#{viewBundle['dms.approve.pass']}"
+                                id="cb14"
                                 disabled="#{viewScope.DcmDataDisplayBean.approveStatus eq 'Y'}"
                                 actionListener="#{viewScope.DcmDataDisplayBean.approvePass}"/>
-              <af:commandButton text="#{viewBundle['dms.approve.jujue']}" id="cb15"
+              <af:commandButton text="#{viewBundle['dms.approve.jujue']}"
+                                id="cb15"
                                 disabled="#{viewScope.DcmDataDisplayBean.approveStatus eq 'Y'}"
                                 actionListener="#{viewScope.DcmDataDisplayBean.approveRefuse}"/>
             </af:group>
             <af:group id="g9">
-              <af:commandButton text="#{viewBundle['dms.workflow.back']}" id="cb16"
+              <af:commandButton text="#{viewBundle['dms.workflow.back']}"
+                                id="cb16"
                                 actionListener="#{viewScope.DcmDataDisplayBean.retreat}"/>
-              <af:commandButton text="#{viewBundle['dms.workflow.restart']}" id="cb17"
+              <af:commandButton text="#{viewBundle['dms.workflow.restart']}"
+                                id="cb17"
                                 actionListener="#{viewScope.DcmDataDisplayBean.retreatStarted}"/>
             </af:group>
           </af:toolbar>
@@ -114,10 +110,8 @@
             </af:group>
             <af:group id="g2">
               <af:outputText value="#{viewBundle['dms.common.pagenation_seg01']}"
-                             id="ot6"
-                             />
-              <af:inputText id="it2" simple="true" columns="4"
-                            autoSubmit="true"
+                             id="ot6"/>
+              <af:inputText id="it2" simple="true" columns="4" autoSubmit="true"
                             valueChangeListener="#{viewScope.DcmDataDisplayBean.gotoPage}"
                             value="#{viewScope.DcmDataDisplayBean.curPage}"/>
               <af:outputText value="#{af:formatString(viewBundle['dms.common.pagenation_seg02'],viewScope.DcmDataDisplayBean.totalPage)}"
@@ -125,13 +119,13 @@
             </af:group>
             <af:group id="g3">
               <af:commandImageLink id="cil3" icon="/images/page-next.gif"
-                            actionListener="#{viewScope.DcmDataDisplayBean.nextPage}"/>
+                                   actionListener="#{viewScope.DcmDataDisplayBean.nextPage}"/>
               <af:commandImageLink id="cil4" icon="/images/page-last.gif"
-                            actionListener="#{viewScope.DcmDataDisplayBean.lastPage}"/>
+                                   actionListener="#{viewScope.DcmDataDisplayBean.lastPage}"/>
             </af:group>
             <af:group id="g4">
               <af:commandImageLink id="cil5" icon="/images/refresh.gif"
-                            actionListener="#{viewScope.DcmDataDisplayBean.refreshPage}"/>
+                                   actionListener="#{viewScope.DcmDataDisplayBean.refreshPage}"/>
             </af:group>
             <af:group id="g5">
               <af:outputText value="#{af:formatString3(viewBundle['dms.common.pagenation.seg03'],
@@ -165,44 +159,91 @@
                   binding="#{viewScope.DcmDataDisplayBean.displayTable}">
           <af:forEach items="#{viewScope.DcmDataDisplayBean.dataModel.colsdef}"
                       var="attr" varStatus="vs">
-                      
-            <af:column sortable="true" headerText="#{attr.columnLabel}"
-                       sortProperty="#{attr.dbTableCol}"
-                       id="column${vs.key}"
+            <af:column sortable="true" headerText="#{attr.columnLabel}" width="150"
+                       sortProperty="#{attr.dbTableCol}" id="column${vs.key}"
                        visible="#{attr.visible eq 'Y'}"
                        inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:#68DB96;' : ''}
                                     #{'CREATE' eq row['OPERATION'] ? 'background-color:#FF9393;' : ''}
                                     #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}"
                        filterable="#{attr.dataType ne 'DATE'}">
-                    
-              <af:inputText value="#{row[attr.dbTableCol]}" 
+              <af:inputText value="#{row[attr.dbTableCol]}"
                             readOnly="#{((viewScope.DcmDataDisplayBean.isEditable and (attr.readonly eq 'N')) eq false)
                              or (viewScope.DcmDataDisplayBean.isRolling eq true and viewScope.DcmDataDisplayBean.rollingMonth ne null
                              and viewScope.DcmDataDisplayBean.rollingMonth >= attr.rollingMonth)}"
                             valueChangeListener="#{viewScope.DcmDataDisplayBean.valueChangeListener}"
-                            rendered="#{attr.valueSetId eq null}"
-                            />
-                <af:inputComboboxListOfValues label="#{attr.columnLabel}"
-                              id="inputComboboxListOfValues1"
-                              value="#{row[attr.dbTableCol]}" 
-                              readOnly="#{((viewScope.DcmDataDisplayBean.isEditable and (attr.readonly eq 'N')) eq false)
-                              or (viewScope.DcmDataDisplayBean.isRolling eq true and viewScope.DcmDataDisplayBean.rollingMonth ne null
-                              and viewScope.DcmDataDisplayBean.rollingMonth >= attr.rollingMonth)}"
-                              valueChangeListener="#{viewScope.DcmDataDisplayBean.valueChangeListener}"
-                              validator="#{viewScope.DcmDataDisplayBean.comboboxLOVBeanList[vs.index%999].validate}"
-                              autoSubmit="true"
-                              rendered="#{attr.valueSetId ne null  }"
-                              model="#{viewScope.DcmDataDisplayBean.comboboxLOVBeanList[vs.index%999].listOfValuesModel}"
-                              > 
-                 <af:autoSuggestBehavior suggestItems="#{viewScope.DcmDataDisplayBean.comboboxLOVBeanList[vs.index%999].suggestMethod}" 
-                                        maxSuggestedItems="-1"/>  
-              </af:inputComboboxListOfValues>
-              
-  
+                            rendered="#{attr.valueSetId eq null}"/>
+              <af:panelGroupLayout id="pgl7">
+                <af:inputText value="#{row[attr.dbTableCol]}" label="#{attr.columnLabel}" columns="8" valueChangeListener="#{viewScope.DcmDataDisplayBean.valueChangeListener}"
+                              rendered="#{attr.valueSetId ne null}" autoSubmit="true" 
+                              id="ipt${vs.index}">
+                  <af:autoSuggestBehavior suggestItems="#{viewScope.DcmDataDisplayBean.comboboxLOVBeanList[vs.index%999].suggestMethod}"
+                                          maxSuggestedItems="-1"/>
+                </af:inputText>
+                <af:image id="it${vs.index}" source="/images/page-next.gif"
+                          rendered="#{attr.valueSetId ne null}"
+                          clientComponent="true">
+                  <af:clientListener type="click" method="showPopupFromAction"/>
+                  <af:serverListener type="changeVS"
+                                     method="#{viewScope.DcmDataDisplayBean.vsc}"/>
+                </af:image>
+              </af:panelGroupLayout>
             </af:column>
-            
-          </af:forEach> 
+          </af:forEach>
         </af:table>
+        <th:script>
+        var curIptextId ;
+        var popId ;
+          function showPopupFromAction(actionEvent) {
+              actionEvent.cancel();
+              var eventSource = actionEvent.getSource();
+              var idt = eventSource.getId();
+              //获取图标的ID
+              var sid = eventSource.getClientId();
+              console.log(sid);
+              //获取inputText的ID
+              var temId = sid.replace(":it",":ipt");
+              //将当前inputText的ID给全局变量
+              curIptextId = temId ; 
+              //获取父容器的ID
+              var idx = sid.indexOf(":t1");
+              var parentId = sid.substr(0, idx);
+              //拼接动态生成的popid
+              popId = parentId + ":slc";
+              //调用后台bean中方法
+              AdfCustomEvent.queue(eventSource, "changeVS",  {colLabel:idt}, true);
+              var popup = AdfPage.PAGE.findComponentByAbsoluteId(popId);
+              popup.show( {
+                  align : AdfRichPopup.ALIGN_AFTER_START, alignId : eventSource.getClientId()
+              });
+          }
+          
+          //改变input的值
+          function selectedVal(sltEvent){
+            sltEvent.cancel();
+            var popup = AdfPage.PAGE.findComponentByAbsoluteId(popId);
+            popup.cancel();
+            //获取SelectOneListBox
+            var source = sltEvent.getSource();
+            var sv = source.getValue();
+            var items = source.getSelectItems();
+            var choiceLabel = items[sv].getLabel();
+            //获取当前inputText
+            var inputxt = AdfPage.PAGE.findComponentByAbsoluteId(curIptextId);
+            inputxt.setValue(choiceLabel);
+          }
+        </th:script>
+        <af:popup id="slc"  autoCancel="disabled" 
+                  binding="#{viewScope.DcmDataDisplayBean.slcPop}"
+                  >
+          <af:selectOneListbox id="sol1" autoSubmit="true"
+                               size="#{viewScope.DcmDataDisplayBean.svlSize > 8 ? 10:(viewScope.DcmDataDisplayBean.svlSize)}" 
+                               binding="#{viewScope.DcmDataDisplayBean.richSoc}"
+                               clientComponent="true" partialTriggers="t1">
+            <f:selectItems value="#{viewScope.DcmDataDisplayBean.socValueList}"
+                           id="si2"/>
+            <af:clientListener method="selectedVal" type="click"/>
+          </af:selectOneListbox>
+        </af:popup>
       </af:panelCollection>
     </f:facet>
     <f:facet name="start"/>
@@ -323,14 +364,14 @@
                 <af:gridCell halign="center" width="auto" id="gc5"
                              columnSpan="2">
                   <af:commandButton text="#{viewBundle['dcm.action.import']}"
-                                    id="cb9" 
+                                    id="cb9"
                                     actionListener="#{viewScope.DcmDataDisplayBean.operation_import}"/>
                 </af:gridCell>
               </af:gridRow>
             </af:panelGridLayout>
           </af:panelWindow>
         </af:popup>
-        <af:popup id="p3"  autoCancel="disabled" childCreation="deferred"
+        <af:popup id="p3" autoCancel="disabled" childCreation="deferred"
                   binding="#{viewScope.DcmDataDisplayBean.dataExportWnd}">
           <af:panelWindow id="pw3"
                           title="#{viewBundle['dcm.template.data_export']}"
@@ -345,47 +386,43 @@
                 <af:gridCell marginStart="5px" marginEnd="5px" width="auto"
                              id="gc9">
                   <af:selectBooleanRadio text="#{viewBundle['dcm.export.03format']}"
-                                         id="sbr3" group="excelFormat1" 
-                                         value="false"
-                                         simple="true" autoSubmit="true"/>
+                                         id="sbr3" group="excelFormat1"
+                                         value="false" simple="true"
+                                         autoSubmit="true"/>
                   <af:selectBooleanRadio text="#{viewBundle['dcm.export.07format']}"
                                          id="sbr4" group="excelFormat1"
-                                         simple="true" autoSubmit="true" selected="true"
+                                         simple="true" autoSubmit="true"
+                                         selected="true"
                                          value="#{viewScope.DcmDataDisplayBean.isXlsx}"/>
                 </af:gridCell>
               </af:gridRow>
               <af:gridRow marginTop="5px" marginBottom="5px" height="auto"
                           id="gr5">
                 <af:gridCell marginStart="5px" width="auto" columnSpan="2"
-                             halign="center" id="gc8"
-                              >  
-                   <th:script id="javascript1">
-                     //点击导出按钮会关闭导出框并且下载xml文件
-                           function clickexport(event) {
-                             var source=event.getSource();
-                             var button = source.findComponent("cb11"); 
-                             var popup = source.findComponent("p3");
-                             
-                             popup.cancel();
-                             AdfActionEvent.queue(button, true);
-                          }
-                     
-                     </th:script> 
-                  <af:commandButton text="#{viewBundle['dcm.action.export']}" id="cb55"
-                    partialSubmit="true"
-                      >
-                    <af:clientListener type="click" method="clickexport"/> 
-                    </af:commandButton>
-                    
+                             halign="center" id="gc8">
+                  <th:script id="javascript1">
+                    //点击导出按钮会关闭导出框并且下载xml文件
+                    function clickexport(event) {
+                        var source = event.getSource();
+                        var button = source.findComponent("cb11");
+                        var popup = source.findComponent("p3");
+
+                        popup.cancel();
+                        AdfActionEvent.queue(button, true);
+                    }
+                  </th:script>
                   <af:commandButton text="#{viewBundle['dcm.action.export']}"
-                                    id="cb11" visible="false"   
-                                     >
+                                    id="cb55" partialSubmit="true">
+                    <af:clientListener type="click" method="clickexport"/>
+                  </af:commandButton>
+                  <af:commandButton text="#{viewBundle['dcm.action.export']}"
+                                    id="cb11" visible="false">
                     <af:fileDownloadActionListener contentType="application/vnd.ms-excel"
                                                    method="#{viewScope.DcmDataDisplayBean.operation_export}"
                                                    filename="#{viewScope.DcmDataDisplayBean.exportDataExcelName}"/>
                   </af:commandButton>
                 </af:gridCell>
-              </af:gridRow> 
+              </af:gridRow>
             </af:panelGridLayout>
           </af:panelWindow>
         </af:popup>
@@ -405,8 +442,7 @@
                              id="gc29">
                   <af:selectBooleanRadio text="#{viewBundle['dcm.export.03format']}"
                                          id="sbr23" group="excelFormat"
-                                         simple="true"
-                                         />
+                                         simple="true"/>
                   <af:selectBooleanRadio text="#{viewBundle['dcm.export.07format']}"
                                          id="sbr24" group="excelFormat"
                                          simple="true" autoSubmit="true"
@@ -430,31 +466,34 @@
           </af:panelWindow>
         </af:popup>
         <!-- 计算程序 -->
-        <af:popup id="p5" autoCancel="disabled" binding="#{viewScope.DcmDataDisplayBean.calcWnd}">
-          <af:panelWindow title="#{viewBundle['dms.cal.run']}" id="pw5" >
-            <af:panelStretchLayout id="psl3" inlineStyle="width:400px;height:250px">
+        <af:popup id="p5" autoCancel="disabled"
+                  binding="#{viewScope.DcmDataDisplayBean.calcWnd}">
+          <af:panelWindow title="#{viewBundle['dms.cal.run']}" id="pw5">
+            <af:panelStretchLayout id="psl3"
+                                   inlineStyle="width:400px;height:250px">
               <f:facet name="top">
                 <af:panelGroupLayout id="pgl5" layout="horizontal">
-                  <af:selectOneChoice label="#{viewBundle['dms.cal.proc']}" id="soc3"
-                   autoSubmit="true"
-                   valueChangeListener="#{viewScope.DcmDataDisplayBean.calcChange}">
+                  <af:selectOneChoice label="#{viewBundle['dms.cal.proc']}"
+                                      id="soc3" autoSubmit="true"
+                                      valueChangeListener="#{viewScope.DcmDataDisplayBean.calcChange}">
                     <f:selectItems value="#{viewScope.DcmDataDisplayBean.calcNameList}"
                                    id="si3"/>
                   </af:selectOneChoice>
                   <af:spacer width="15px" id="s5"/>
-                  <af:commandButton text="#{viewBundle['dms.run']}" id="cb12" 
+                  <af:commandButton text="#{viewBundle['dms.run']}" id="cb12"
                                     actionListener="#{viewScope.DcmDataDisplayBean.executeProcedure}"/>
                 </af:panelGroupLayout>
               </f:facet>
               <f:facet name="center">
-                <af:panelGroupLayout id="pgl6" layout="vertical"  
+                <af:panelGroupLayout id="pgl6" layout="vertical"
                                      partialTriggers="soc3">
-                    <af:forEach items="#{viewScope.DcmDataDisplayBean.parameterList}" var="calcParameter">
+                  <af:forEach items="#{viewScope.DcmDataDisplayBean.parameterList}"
+                              var="calcParameter">
                     <af:spacer height="5px" id="s4"/>
-                    <af:selectOneChoice label="#{calcParameter.paraLabel}" id="soc4"
-                                        autoSubmit="true"
+                    <af:selectOneChoice label="#{calcParameter.paraLabel}"
+                                        id="soc4" autoSubmit="true"
                                         binding="#{viewScope.DcmDataDisplayBean.paraSocMap[calcParameter.paraLabel]}"
-                                        valueChangeListener="#{viewScope.DcmDataDisplayBean.paraValueChange}" >
+                                        valueChangeListener="#{viewScope.DcmDataDisplayBean.paraValueChange}">
                       <f:selectItems value="#{calcParameter.values}" id="si4"/>
                     </af:selectOneChoice>
                   </af:forEach>
@@ -474,6 +513,5 @@
       </af:panelGroupLayout>
     </f:facet>
   </af:panelStretchLayout>
-  
   <!--oracle-jdev-comment:preferred-managed-bean-name:DcmDataDisplayBean-->
 </jsp:root>

@@ -6,7 +6,10 @@ import common.DmsUtils;
 import common.JSFUtils;
 import common.TablePagination;
 
+import oracle.adf.view.rich.component.rich.input.RichSelectOneListbox;
 import oracle.adf.view.rich.component.rich.nav.RichCommandButton;
+
+import oracle.adf.view.rich.render.ClientEvent;
 
 import oracle.jbo.domain.Number;
 import dcm.combinantion.CombinationEO;
@@ -177,6 +180,8 @@ public class DcmDataDisplayBean extends TablePagination{
     private RichCommandButton exportButton;
 
     private boolean hasCalc = true;
+    private RichSelectOneListbox richSoc;
+    private RichPopup slcPop;
 
     public DcmDataDisplayBean() { 
         this.curUser =(Person)ADFContext.getCurrent().getSessionScope().get("cur_user");
@@ -227,7 +232,6 @@ public class DcmDataDisplayBean extends TablePagination{
     public void rowSelectionListener(SelectionEvent selectionEvent) {
         RichTable table = (RichTable)selectionEvent.getSource();
         RowKeySet rks = selectionEvent.getAddedSet();
-        System.out.println("sssssssssssssssssssssssssssssss:"+rks.size());
         if (rks != null) {
             int setSize = rks.size();
             if (setSize == 0) {
@@ -254,7 +258,6 @@ public class DcmDataDisplayBean extends TablePagination{
         List<Map> modelData = (List<Map>)this.dataModel.getWrappedData();
         RowKeySet keySet =
             ((DcmDataTableModel)this.dataModel).getSelectedRows();
-        System.out.println("keysettttttttttttttttttttttttt:"+keySet.size());
         for (Object key : keySet) {
             Map rowData = (Map)this.dataModel.getRowData(key);
             //若为新增操作则直接从数据集删除数据
@@ -511,8 +514,11 @@ public class DcmDataDisplayBean extends TablePagination{
         
         if (this.curCombiantion!=null) {
             for (ComHeader header : this.templateHeader) {
-                if(header.getValue() != null)
-                text += "_" + header.getValue();
+                for (SelectItem item : header.getValues()) {
+                    if (header.getValue().equals(item.getValue())) {
+                        text += "_"+item.getLabel();
+                    }
+                }
             }
         }
         return text;
@@ -600,9 +606,10 @@ public class DcmDataDisplayBean extends TablePagination{
                 writer.writoToFile();
             } else {
                 Excel2007WriterImpl writer=new Excel2007WriterImpl(this.getQuerySql(),
-                                                                   (int)this.curTempalte.getDataStartLine().getValue(),
-                                                                   this.colsdef);
-                writer.process(outputStream, this.curTempalte.getName());
+                                                                   this.curTempalte,
+                                                                   this.colsdef,
+                                                                   outputStream);
+                writer.writoToFile();
             }
             outputStream.flush();
         } catch (Exception e) {
@@ -670,7 +677,9 @@ public class DcmDataDisplayBean extends TablePagination{
     }
     //初始化模板和模板列信息
     private List<ComboboxLOVBean> _comboboxLOVBeanList; 
-    
+    //
+    private List<List<SelectItem>> socValue = new ArrayList<List<SelectItem>>();
+    private List<SelectItem> socValueList = new ArrayList<SelectItem>();
     private void initTemplate() {
    
         setComboboxLOVBeanList(new ArrayList()); 
@@ -710,6 +719,7 @@ public class DcmDataDisplayBean extends TablePagination{
                 if(colDef.getValueSetId()!=null) {
                     
                     List<SelectItem>  tem = this.fetchValueList(colDef.getValueSetId()); 
+                    socValue.add(tem);
                     valueSet.add(tem);
                     List<ComboboxLOVBean.Attribute> list = new ArrayList<ComboboxLOVBean.Attribute>();
                     list.add(new ComboboxLOVBean.Attribute(colDef.getColumnLabel(),"name"));
@@ -720,6 +730,7 @@ public class DcmDataDisplayBean extends TablePagination{
                     this.valueSet.add(null); 
                     ComboboxLOVBean bean = new ComboboxLOVBean(null, null);
                     _comboboxLOVBeanList.add(bean);
+                    socValue.add(new ArrayList<SelectItem>());
                 } 
             }
             ((DcmDataTableModel)this.dataModel).setColsdef(this.colsdef);  
@@ -1812,4 +1823,57 @@ public class DcmDataDisplayBean extends TablePagination{
              dataExportWnd.show(new RichPopup.PopupHints());
          }
     }
+    
+    public void setSocValueList(List<SelectItem> socValueList) {
+        this.socValueList = socValueList;
+    }
+
+    public List<SelectItem> getSocValueList() {
+        return socValueList;
+    }
+    private int svlSize = 0;
+    public void vsc(ClientEvent clientEvent) {
+        System.out.println("sterrerqwerqwerqwerqwerqwerqwewerqwer");
+        Map<String,Object> pMap = clientEvent.getParameters();
+        String colLabel = pMap.get("colLabel").toString();
+        colLabel = colLabel.substring(colLabel.length()-1, colLabel.length());
+        System.out.println(colLabel);
+        int idx = Integer.valueOf(colLabel);
+        this.setSocValueList(socValue.get(idx));
+        svlSize = socValue.get(idx).size();
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.richSoc);
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.slcPop);
+    }
+
+    public void setRichSoc(RichSelectOneListbox richSoc) {
+        this.richSoc = richSoc;
+    }
+
+    public RichSelectOneListbox getRichSoc() {
+        return richSoc;
+    }
+
+    public void setSlcPop(RichPopup slcPop) {
+        this.slcPop = slcPop;
+    }
+
+    public RichPopup getSlcPop() {
+        return slcPop;
+    }
+
+    public void setSvlSize(int svlSize) {
+        this.svlSize = svlSize;
+    }
+
+    public int getSvlSize() {
+        return svlSize;
+    }
+
+//    public void refreshTable(ClientEvent clientEvent) {
+//        // Add event code here...
+//        System.out.println("refreshTable Start.................................");
+//        AdfFacesContext.getCurrentInstance().addPartialTarget(this.displayTable);
+//        
+//    }
 }
+

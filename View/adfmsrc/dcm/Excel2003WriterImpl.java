@@ -64,10 +64,13 @@ public class Excel2003WriterImpl {
                     cell.setCellValue((String)obj);
                 }else if(col.getDataType().equals("NUMBER")){
                     cell.setCellType(Cell.CELL_TYPE_NUMERIC);
-                    if(rs.getString(col.getDbTableCol())!=null)
-                    cell.setCellValue(Double.valueOf(dfm.format(Double.valueOf(rs.getString(col.getDbTableCol())))));   
+                    if(rs.getString(col.getDbTableCol())!=null){
+                        cell.setCellValue(Double.valueOf(dfm.format(Double.valueOf(rs.getString(col.getDbTableCol()))))); 
+                    }else{
+                        cell.setCellType(Cell.CELL_TYPE_BLANK);        
+                    }
                 }else{
-                    cell.setCellValue(rs.getString(col.getDbTableCol()));
+                    cell.setCellValue(rs.getString(col.getDbTableCol())); 
                 }
             }
             ++n;
