@@ -688,16 +688,13 @@
             <value n="JavaScriptRunConfigurationStopOnException" v="false"/>
             <value n="JavaScriptRunConfigurationTransferErrors" v="true"/>
             <value n="name" v="Default"/>
-            <hash n="oracle.adfdt.controller.adfc.source.runner.JsfJspRunnerLaunchSettings">
-               <value n="delegateRunTarget" v="/WEB-INF/adfc-config.xml"/>
-               <value n="viewActivityId" v="index"/>
-            </hash>
+            <hash n="oracle.adfdt.controller.adfc.source.runner.JsfJspRunnerLaunchSettings"/>
             <hash n="oracle.jdevimpl.runner.debug.DebugConfiguration">
                <value n="remoteParameter:jpda:jdi_attach_method:" v=""/>
                <value n="remoteParameter:jpdaListen:localAddress" v=""/>
             </hash>
             <value n="programArguments" v=""/>
-            <url n="targetURL" path="public_html/index.jspx"/>
+            <url n="targetURL" path="public_html/dcm/index.jspx"/>
             <value n="VMName" v="server"/>
          </hash>
       </hash>
@@ -877,14 +874,6 @@
             <value n="isJDK" v="false"/>
          </hash>
          <hash>
-            <url n="id" path="../../adf_121300_1008_source/Adf_121300_1008_source.zip.library"/>
-            <value n="isJDK" v="false"/>
-         </hash>
-         <hash>
-            <url n="id" protocol="file" path="/Users/Administrator/AppData/Roaming/JDeveloper/system11.1.1.7.40.64.93/o.jdeveloper/Adf_121300_1008_source.zip.library"/>
-            <value n="isJDK" v="false"/>
-         </hash>
-         <hash>
             <value n="id" v="Oracle XML Parser v2"/>
             <value n="isJDK" v="false"/>
          </hash>
@@ -918,6 +907,22 @@
          </hash>
          <hash>
             <value n="id" v="Trinidad Runtime 11"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="ADF Faces Change Manager Runtime 11"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Org"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Src"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Adf_121300_1008_source.zip"/>
             <value n="isJDK" v="false"/>
          </hash>
       </list>
@@ -1039,6 +1044,27 @@
                <value n="description" v="Xmlbeans-2.3.0.jar"/>
                <value n="id" v="Xmlbeans-2.3.0.jar"/>
                <value n="locked" v="true"/>
+            </hash>
+            <hash>
+               <value n="description" v="Org"/>
+               <value n="id" v="Org"/>
+               <list n="sourcePath">
+                  <url protocol="jar" path="file:/D:/ExcelHandler-master/excelHandler.jar!/org/"/>
+               </list>
+            </hash>
+            <hash>
+               <value n="description" v="Src"/>
+               <value n="id" v="Src"/>
+               <list n="sourcePath">
+                  <url protocol="jar" path="file:/D:/ExcelHandler-master.zip!/ExcelHandler-master/src/"/>
+               </list>
+            </hash>
+            <hash>
+               <value n="description" v="Adf_121300_1008_source.zip"/>
+               <value n="id" v="Adf_121300_1008_source.zip"/>
+               <list n="sourcePath">
+                  <url protocol="jar" path="file:/D:/adf_121300_1008_source.zip!/"/>
+               </list>
             </hash>
          </list>
       </hash>
@@ -1212,14 +1238,6 @@
             <value n="isJDK" v="false"/>
          </hash>
          <hash>
-            <url n="id" path="../../adf_121300_1008_source/Adf_121300_1008_source.zip.library"/>
-            <value n="isJDK" v="false"/>
-         </hash>
-         <hash>
-            <url n="id" protocol="file" path="/Users/Administrator/AppData/Roaming/JDeveloper/system11.1.1.7.40.64.93/o.jdeveloper/Adf_121300_1008_source.zip.library"/>
-            <value n="isJDK" v="false"/>
-         </hash>
-         <hash>
             <value n="id" v="Oracle XML Parser v2"/>
             <value n="isJDK" v="false"/>
          </hash>
@@ -1253,6 +1271,22 @@
          </hash>
          <hash>
             <value n="id" v="Trinidad Runtime 11"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="ADF Faces Change Manager Runtime 11"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Org"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Src"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Adf_121300_1008_source.zip"/>
             <value n="isJDK" v="false"/>
          </hash>
       </list>
