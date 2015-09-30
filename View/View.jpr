@@ -688,13 +688,16 @@
             <value n="JavaScriptRunConfigurationStopOnException" v="false"/>
             <value n="JavaScriptRunConfigurationTransferErrors" v="true"/>
             <value n="name" v="Default"/>
-            <hash n="oracle.adfdt.controller.adfc.source.runner.JsfJspRunnerLaunchSettings"/>
+            <hash n="oracle.adfdt.controller.adfc.source.runner.JsfJspRunnerLaunchSettings">
+               <value n="delegateRunTarget" v="/WEB-INF/adfc-config.xml"/>
+               <value n="viewActivityId" v="index"/>
+            </hash>
             <hash n="oracle.jdevimpl.runner.debug.DebugConfiguration">
                <value n="remoteParameter:jpda:jdi_attach_method:" v=""/>
                <value n="remoteParameter:jpdaListen:localAddress" v=""/>
             </hash>
             <value n="programArguments" v=""/>
-            <url n="targetURL" path="public_html/dcm/index.jspx"/>
+            <url n="targetURL" path="public_html/index.jspx"/>
             <value n="VMName" v="server"/>
          </hash>
       </hash>
@@ -1061,21 +1064,21 @@
                <value n="description" v="Org"/>
                <value n="id" v="Org"/>
                <list n="sourcePath">
-                  <url protocol="jar" path="file:/D:/ExcelHandler-master/excelHandler.jar!/org/"/>
+                  <url path="../../ExcelHandler-master/excelHandler.jar" jar-entry="org/"/>
                </list>
             </hash>
             <hash>
                <value n="description" v="Src"/>
                <value n="id" v="Src"/>
                <list n="sourcePath">
-                  <url protocol="jar" path="file:/D:/ExcelHandler-master.zip!/ExcelHandler-master/src/"/>
+                  <url path="../../ExcelHandler-master.zip" jar-entry="ExcelHandler-master/src/"/>
                </list>
             </hash>
             <hash>
                <value n="description" v="Adf_121300_1008_source.zip"/>
                <value n="id" v="Adf_121300_1008_source.zip"/>
                <list n="sourcePath">
-                  <url protocol="jar" path="file:/D:/adf_121300_1008_source.zip!/"/>
+                  <url path="../../adf_121300_1008_source.zip" jar-entry=""/>
                </list>
             </hash>
          </list>

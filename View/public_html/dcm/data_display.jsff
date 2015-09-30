@@ -237,6 +237,7 @@
             var sv = source.getValue();
             var items = source.getSelectItems();
             var choiceLabel = items[sv].getLabel();
+            choiceLabel = choiceLabel.replace(/(^\s*)|(\s*$)/g, "");
             //获取当前inputText
             var inputxt = AdfPage.PAGE.findComponentByAbsoluteId(curIptextId);
             inputxt.setValue(choiceLabel);
