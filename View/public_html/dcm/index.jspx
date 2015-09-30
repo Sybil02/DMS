@@ -48,11 +48,7 @@
         }
         else{ 
         _tree.setDisclosedRowKey(firstRowKey,true); 
-        } 
-        AdfCustomEvent.queue(_tree,
-                        "selectListenerr",
-                        {},
-                        true);
+        }
      } 
      
   </af:resource>
@@ -64,17 +60,15 @@
           
             <af:tree id="tr1" var="node" value="#{viewScope.DcmIndexBean.model}"
                      rowSelection="single" 
+                     selectionListener="#{viewScope.DcmIndexBean.treeSelectListener}"
                      partialTriggers="" displayRow="selected">
 
               <f:facet name="nodeStamp">
                 <af:outputLabel value="#{node.label}">
                  <af:clientListener method="expandNode" 
                      type="click"/>  
-                </af:outputLabel>
-             
-              </f:facet>  
-                 <af:serverListener type="selectListenerr"
-                    method="#{viewScope.DcmIndexBean.treeSelectListener}"/>
+                </af:outputLabel> 
+              </f:facet>
             </af:tree>
            
           </f:facet>
