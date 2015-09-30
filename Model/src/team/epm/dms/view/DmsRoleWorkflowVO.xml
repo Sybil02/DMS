@@ -28,6 +28,24 @@
     Name="DmsWorkflowInfoVO1"
     ViewObjectName="team.epm.dms.view.DmsWorkflowInfoVO"
     RowLevelBinds="true"/>
+  <ListBinding
+    Name="LOV_WorkflowId"
+    ListVOName="DmsWorkflowInfoVO1"
+    ListRangeSize="-1"
+    NullValueFlag="start"
+    NullValueId="${adfBundle['oracle.javatools.resourcebundle.SystemBundle']['NULL_VALUE_RESID']}"
+    MRUCount="0">
+    <AttrArray Name="AttrNames">
+      <Item Value="WorkflowId"/>
+    </AttrArray>
+    <AttrArray Name="ListAttrNames">
+      <Item Value="WfName"/>
+    </AttrArray>
+    <AttrArray Name="ListDisplayAttrNames">
+      <Item Value="WfName"/>
+    </AttrArray>
+    <DisplayCriteria/>
+  </ListBinding>
   <EntityUsage
     Name="DmsRoleWorkflowEO"
     Entity="team.epm.dms.model.DmsRoleWorkflowEO"/>
@@ -97,11 +115,14 @@
     PrecisionRule="true"
     EntityAttrName="WorkflowId"
     EntityUsage="DmsRoleWorkflowEO"
-    AliasName="WORKFLOW_ID">
+    AliasName="WORKFLOW_ID"
+    LOVName="LOV_WorkflowId">
     <Properties>
       <SchemaBasedProperties>
         <LABEL
           ResId="team.epm.dms.view.DmsRoleWorkflowVO.WorkflowId_LABEL"/>
+        <CONTROLTYPE
+          Value="choice"/>
       </SchemaBasedProperties>
     </Properties>
   </ViewAttribute>

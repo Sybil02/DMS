@@ -76,6 +76,7 @@
             </af:selectOneChoice -->
              <af:inputComboboxListOfValues label="#{bindings.RoleName.label}"
                                           id="soc1" 
+                                          autoSubmit="true"
                                           validator="#{viewScope.RoleNameComboboxBean.roleNameLov.validate}" 
                                           value="#{bindings.RoleName.attributeValue}" 
                                           model="#{viewScope.RoleNameComboboxBean.roleNameLov.listOfValuesModel}"
@@ -106,7 +107,9 @@
                   var="row" rows="#{bindings.DmsRoleWorkflowVO.rangeSize}"
                   emptyText="#{bindings.DmsRoleWorkflowVO.viewable ? 'No data to display.' : 'Access Denied.'}"
                   fetchSize="#{bindings.DmsRoleWorkflowVO.rangeSize}"
-                  rowBandingInterval="0" id="t1">
+                  rowSelection="multiple"
+                  rowBandingInterval="0" id="t1"
+                  binding="#{workflowAuthorityBean.assignedworkflowTable}">
           <af:column headerText="#{bindings.DmsRoleWorkflowVO.hints.WorkflowId.label}"
                      id="c1" width="204">
             <af:selectOneChoice value="#{row.bindings.WorkflowId.inputValue}"
@@ -118,6 +121,10 @@
               <f:selectItems value="#{row.bindings.WorkflowId.items}" id="si1"/>
             </af:selectOneChoice>
           </af:column>
+          <!--af:column headerText="#{bindings.DmsRoleWorkflowVO.hints.WorkflowId.label}"
+                     id="c1">
+            <af:outputText value="#{row.WorkflowId}" id="ot5"/>
+          </af:column-->
           <af:column sortProperty="#{bindings.DmsRoleWorkflowVO.hints.UpdatedAt.name}"
                      sortable="false"
                      headerText="#{bindings.DmsRoleWorkflowVO.hints.UpdatedAt.label}"

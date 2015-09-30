@@ -2,6 +2,8 @@ package dcm;
 
 import common.DmsUtils;
 
+import common.ReplaceSpecialChar;
+
 import dcm.template.TemplateEO;
 
 import java.io.IOException;
@@ -52,6 +54,8 @@ public class Excel2007WriterImpl {
         int n = (int)this.curTempalte.getDataStartLine().getValue() - 1;
         DecimalFormat dfm = new DecimalFormat();
         dfm.setMaximumFractionDigits(4);
+        dfm.setGroupingUsed(false);
+        ReplaceSpecialChar rsc = new ReplaceSpecialChar();
         while (rs.next()) {
             int colInx = 0;
             org.apache.poi.ss.usermodel.Row row = sheet.createRow(n);
@@ -70,7 +74,7 @@ public class Excel2007WriterImpl {
                         cell.setCellType(Cell.CELL_TYPE_BLANK);        
                     }
                 }else{
-                    cell.setCellValue(rs.getString(col.getDbTableCol())); 
+                    cell.setCellValue(rsc.encodeString(rs.getString(col.getDbTableCol()))); 
                 }
             }
             ++n;

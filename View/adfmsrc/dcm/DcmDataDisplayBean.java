@@ -238,6 +238,7 @@ public class DcmDataDisplayBean extends TablePagination{
         }
     }
     //行选中时设置当前选中行
+    private Object oldRowKey;
     public void rowSelectionListener(SelectionEvent selectionEvent) {
         RichTable table = (RichTable)selectionEvent.getSource();
         RowKeySet rks = selectionEvent.getAddedSet();
@@ -248,6 +249,18 @@ public class DcmDataDisplayBean extends TablePagination{
             }
             Object rowKey = rks.iterator().next();
             table.setRowKey(rowKey);
+            if(oldRowKey != null){
+                Map oldRowData = (Map)this.dataModel.getRowData(oldRowKey);
+                oldRowData.put("VISIBLE","FALSE");
+                Map firstRowData = (Map)this.dataModel.getRowData(0);
+                firstRowData.put("VISIBLE","FALSE");
+            }else{
+                Map firstRowData = (Map)this.dataModel.getRowData(0);
+                firstRowData.put("VISIBLE","FALSE");
+            }
+            oldRowKey = rowKey;
+            Map rowData = (Map)this.dataModel.getRowData(rowKey);
+            rowData.put("VISIBLE","TRUE");
         }
     }
     //新增数据行操作
@@ -822,9 +835,14 @@ public class DcmDataDisplayBean extends TablePagination{
                         SimpleDateFormatter format=new SimpleDateFormatter("yyyy-MM-dd hh:mm:ss");
                         obj=format.format((java.sql.Date)obj);
                     }else if(col.getDataType().equals("NUMBER")){
-                        if(obj!=null)
-                        obj = dfm.format(Double.valueOf(obj.toString()));
-                        obj=ObjectUtils.toString(obj);
+                        try{
+                            if(obj!=null)
+                            obj = dfm.format(Double.valueOf(obj.toString()));
+                            obj=ObjectUtils.toString(obj);
+                        }catch(Exception e){
+                            JSFUtils.addFacesErrorMessage(DmsUtils.getMsg("dcm.format.error"));
+                            this._logger.severe(e);    
+                        }
                     }else{
                         obj=ObjectUtils.toString(obj);
                     }
@@ -840,6 +858,23 @@ public class DcmDataDisplayBean extends TablePagination{
             this._logger.severe(e);
         }
         this.dataModel.setWrappedData(data);
+        RowKeySet keySet = ((DcmDataTableModel)this.dataModel).getSelectedRows();
+        //设置选择行值集下拉框图标
+        if(keySet.size()>0){
+            //多选时只设置第一条
+            for(Object key : keySet){
+                Map rowData = (Map)this.dataModel.getRowData(key);
+                if(rowData!=null)
+                rowData.put("VISIBLE", "TRUE");
+                break;   
+            }    
+        }else{
+            //初始化数据默认显示第一条
+            if(data.size() > 0){
+                data.get(0).put("VISIBLE", "TRUE");
+            }
+        }
+
         makeDirty(false); //调用这个方法会使得页面处于未保存状态，删除会提示
     }
     //获取数据查询语句
@@ -1904,7 +1939,7 @@ public class DcmDataDisplayBean extends TablePagination{
         System.out.println("sterrerqwerqwerqwerqwerqwerqwewerqwer");
         Map<String,Object> pMap = clientEvent.getParameters();
         String colLabel = pMap.get("colLabel").toString();
-        colLabel = colLabel.substring(colLabel.length()-1, colLabel.length());
+        colLabel = colLabel.replaceAll("[^0-9]", "");
         System.out.println(colLabel);
         int idx = Integer.valueOf(colLabel);
         this.setSocValueList(socValue.get(idx));

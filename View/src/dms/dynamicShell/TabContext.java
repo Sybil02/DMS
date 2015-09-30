@@ -174,7 +174,7 @@ public final class TabContext implements Serializable {
     public void markTabDirty(int index, boolean isDirty) {
         Tab tab = (Tab)getTabs().get(index);
         tab.setDirty(isDirty);
-        _refreshTabContent();
+        //_refreshTabContent();
     }
 
     public void removeCurrentTab() {

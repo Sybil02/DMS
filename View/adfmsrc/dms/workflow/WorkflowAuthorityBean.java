@@ -108,8 +108,7 @@ import oracle.jbo.ViewObject;
     public void roleChangeListener(ValueChangeEvent valueChangeEvent) {
         FacesCtrlListBinding roleName =  (FacesCtrlListBinding) JSFUtils.resolveExpression("#{bindings.RoleName}");
         roleName.setInputValue(valueChangeEvent.getNewValue());
-        
-        AdfFacesContext.getCurrentInstance().addPartialTarget(this.assignedworkflowTable);    
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.assignedworkflowTable); 
     }
 
     public void setAssignedworkflowTable(RichTable assignedworkflowTable) {
