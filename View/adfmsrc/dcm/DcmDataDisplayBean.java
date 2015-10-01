@@ -180,7 +180,7 @@ public class DcmDataDisplayBean extends TablePagination{
     private String calcErrMsg;
     private boolean isRolling = true;
     private Number rollingMonth; 
- 
+    private boolean isEnd = true;
   
 
     private boolean hasCalc = true;
@@ -260,7 +260,7 @@ public class DcmDataDisplayBean extends TablePagination{
             }
             oldRowKey = rowKey;
             Map rowData = (Map)this.dataModel.getRowData(rowKey);
-            rowData.put("VISIBLE","TRUE");
+            rowData.put("VISIBLE","TRUE"); 
         }
     }
     //新增数据行操作
@@ -270,6 +270,7 @@ public class DcmDataDisplayBean extends TablePagination{
         for (ColumnDef col : this.colsdef) {
             newRow.put(col.getDbTableCol(), null);
         }
+        newRow.put("VISIBLE", "TRUE");
         newRow.put("OPERATION", DcmDataTableModel.OPERATE_CREATE);
         modelData.add(0, newRow);
         
@@ -1627,8 +1628,10 @@ public class DcmDataDisplayBean extends TablePagination{
         DBTransaction trans = (DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
         Statement stat = trans.createStatement(DBTransaction.DEFAULT);
         StringBuffer updateWs = new StringBuffer();
-        updateWs.append("UPDATE WORKFLOW_TEMPLATE_STATUS SET WRITE_STATUS = 'Y' WHERE ");
-        updateWs.append("RUN_ID = '").append(this.curRunId).append("' ");
+        updateWs.append("UPDATE WORKFLOW_TEMPLATE_STATUS SET WRITE_STATUS = 'Y', ");
+        updateWs.append("WRITE_BY = '").append(this.curUser.getAcc()+":"+this.curUser.getName()).append("', ");
+        updateWs.append("FINISH_AT = SYSDATE ");
+        updateWs.append("WHERE RUN_ID = '").append(this.curRunId).append("' ");
         updateWs.append("AND TEMPLATE_ID = '").append(this.curTempalte.getId()).append("' ");
         updateWs.append("AND COM_ID ='").append(this.curCombiantionRecord).append("'");
         //关闭组合
@@ -1700,6 +1703,7 @@ public class DcmDataDisplayBean extends TablePagination{
         //默认不可点击
         this.writeStatus = "Y";
         this.approveStatus = "Y";
+        this.isEnd = true;
         DBTransaction trans = (DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
         Statement stat = trans.createStatement(DBTransaction.DEFAULT);
         //判断是否在工作流中，获取工作流信息
@@ -1724,6 +1728,7 @@ public class DcmDataDisplayBean extends TablePagination{
                 this.writeStatus = rs.getString("WRITE_STATUS");
                 this.curStepTask = rs.getString("STEP_TASK");
             }
+            rs.close();
             //如果不是未输入状态，则其他情况都为Y，不可提交
             if("N".equals(this.writeStatus) && "WORKING".equals(stepStatus)){
                 this.writeStatus = "N";
@@ -1742,14 +1747,60 @@ public class DcmDataDisplayBean extends TablePagination{
                 if(aRs.next()){
                     String appStatus = aRs.getString("APPROVAL_STATUS");
                     this.approveStepNo = aRs.getInt("STEP_NO");
-                    if(appStatus.endsWith("APPROVEING")){
-                        this.approveStatus = "N";    
+                    //close状态不能回退
+                    if(appStatus.equals("Y")||appStatus.equals("APPROVEING")){
+                        this.isEnd = this.isEndNode(this.approveStepNo);        
                     }
+                    
+                    //System.out.println("retuen:"+isEnd);
+                    //审批时可以回退
+                    if(appStatus.equals("APPROVEING")){
+                        this.approveStatus = "N";   
+                        this.isEnd = false;
+                    }
+                    //System.out.println("isEnd:"+isEnd);
                 }
+                aRs.close();
             }
+            stat.close();
         } catch (SQLException e) {
             this._logger.severe(e);
         }
+    }
+    
+    //判断是否最后一个父节点
+    public boolean isEndNode(int step_no){
+        DBTransaction trans = (DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
+        Statement stat = trans.createStatement(DBTransaction.DEFAULT);
+        String nSql = "select step_no from approve_template_status t where t.run_id = '"
+            + this.curRunId + "' and t.step_no > " + step_no + " and rownum = 1 order by step_no ";
+        
+        boolean flag = true ; 
+        int nextStepNo = 0;
+        try {
+            ResultSet nRs = stat.executeQuery(nSql);
+            if(nRs.next()){
+                nextStepNo = nRs.getInt("STEP_NO");    
+            }
+            nRs.close();
+            String rSql = "select 1 from approve_template_status a where a.entity_id in "
+                + "(select ENTITY from dcm_entity_parent d where d.parent = "
+                + "(select distinct parent from approve_template_status t1, dcm_entity_parent t2 "
+                + "where t1.entity_id = t2.entity and t1.template_id = '" + this.curTempalte.getId() + "' "
+                + "and t1.com_id = '" + this.curCombiantionRecord + "')) " + "and a.run_id = '"
+                + this.curRunId + "' " + "and a.step_no = " + nextStepNo;
+            ResultSet rRs = stat.executeQuery(rSql);
+            if(rRs.next()){
+                flag = true; 
+            }else{
+                flag = false;    
+            }
+            rRs.close();
+            stat.close();
+        } catch (SQLException e) {
+            this._logger.severe(e);
+        }
+        return flag;    
     }
     
     public void setReadonlyByRolling(){
@@ -2041,6 +2092,13 @@ public class DcmDataDisplayBean extends TablePagination{
     public RichPoll getExportProcessPoll() {
         return exportProcessPoll;
     }
- 
+
+    public void setIsEnd(boolean isEnd) {
+        this.isEnd = isEnd;
+    }
+
+    public boolean isIsEnd() {
+        return isEnd;
+    }
 }
 
