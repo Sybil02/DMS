@@ -1652,7 +1652,7 @@ public class DcmDataDisplayBean extends TablePagination{
             ApproveflowEngine approveEgn = new ApproveflowEngine();
             try {
                 //打开部门审批，发送邮件 
-                approveEgn.startApproveEntity(this.curRunId, this.curTempalte.getId(), this.curCombiantionRecord,this.getCurComRecordText());
+                approveEgn.startApproveEntity(this.curRunId, this.curTempalte.getId(), this.curCombiantionRecord,this.getCurComRecordText(),this.curUser.getName());
                 //改变工作流中审批步骤状态为进行中
                 StringBuffer updateApp = new StringBuffer();
                 updateApp.append("UPDATE DMS_WORKFLOW_STATUS SET STEP_STATUS = 'WORKING' ");
@@ -1666,7 +1666,8 @@ public class DcmDataDisplayBean extends TablePagination{
             } 
         }else{
             //下一步不是审批，进行父节点判断是否开始下一步
-            wfEngine.startNext(this.curWfId, this.curRunId, this.curTempalte.getId(), this.curCombiantionRecord,this.getCurComRecordText(), stepNo, this.curStepTask);
+            wfEngine.startNext(this.curWfId, this.curRunId, this.curTempalte.getId(), this.curCombiantionRecord,
+                               this.getCurComRecordText(), stepNo, this.curStepTask,this.curUser.getName());
         }
         //检测步骤是否完成 
         wfEngine.stepIsFinish(this.curWfId,this.curRunId, this.stepNo, this.curStepTask);
@@ -1679,7 +1680,8 @@ public class DcmDataDisplayBean extends TablePagination{
     public void approvePass(ActionEvent actionEvent) {
         ApproveflowEngine approveEgn = new ApproveflowEngine();
         //审批通过
-        approveEgn.approvePass(this.curWfId,this.curRunId, this.curTempalte.getId(), this.curCombiantionRecord,this.getCurComRecordText(),this.curUser.getId(),this.approveStepNo);
+        approveEgn.approvePass(this.curWfId,this.curRunId, this.curTempalte.getId(), this.curCombiantionRecord,this.getCurComRecordText(),
+                               this.curUser.getId(),this.curUser.getName(),this.approveStepNo);
         WorkflowEngine workEngine = new WorkflowEngine();
         //检测步骤是否完成 
         workEngine.stepIsFinish(this.curWfId,this.curRunId, this.approveStepNo, "APPROVE");
@@ -1689,7 +1691,7 @@ public class DcmDataDisplayBean extends TablePagination{
     //审批拒绝
     public void approveRefuse(ActionEvent actionEvent) {
         ApproveflowEngine approveEgn = new ApproveflowEngine();
-        approveEgn.approveRefuse(this.curRunId, this.curTempalte.getId(), this.curCombiantionRecord,this.getCurComRecordText(),this.reason,this.curUser.getId());
+        approveEgn.approveRefuse(this.curRunId, this.curTempalte.getId(), this.curCombiantionRecord,this.getCurComRecordText(),this.reason,this.curUser.getName());
         WorkflowEngine workEngine = new WorkflowEngine();
         //检测步骤是否完成 
         workEngine.stepIsFinish(this.curWfId,this.curRunId, this.approveStepNo, "APPROVE");
@@ -1863,12 +1865,12 @@ public class DcmDataDisplayBean extends TablePagination{
     //回退到父节点上一个输入审批状态
     public void retreat(ActionEvent actionEvent) {
         WorkflowEngine wfEngine = new WorkflowEngine();
-        wfEngine.retreat(this.curWfId,this.curRunId, this.approveStepNo, this.curTempalte.getId(), this.curCombiantionRecord);
+        wfEngine.retreat(this.curWfId,this.curRunId, this.approveStepNo, this.curTempalte.getId(), this.curCombiantionRecord,this.curUser.getName());
     }
     //回退到父节点在工作流中的起点位置
     public void retreatStarted(ActionEvent actionEvent) {
         WorkflowEngine wfEngine = new WorkflowEngine();
-        wfEngine.retreatStarted(this.curWfId,this.curRunId, this.approveStepNo, this.curTempalte.getId(), this.curCombiantionRecord);
+        wfEngine.retreatStarted(this.curWfId,this.curRunId, this.approveStepNo, this.curTempalte.getId(), this.curCombiantionRecord,this.curUser.getName());
     }
     //手动添加页面是否为dirty
     public void makeDirty(boolean isdiry) { 

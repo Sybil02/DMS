@@ -42,7 +42,7 @@ public class ApproveflowEngine {
     //审批状态  未开启：CLOSE 开启：APPROVEING 通过：Y 
 
     public void startApproveEntity(String runId, String templateId,
-                                   String comId,String comName) throws AddressException,
+                                   String comId,String comName,String commitUser) throws AddressException,
                                                         MessagingException {
         String userId = "";
         String seq = "";
@@ -84,7 +84,7 @@ public class ApproveflowEngine {
                 stmt.executeUpdate(openSql.toString());
                 db.commit();
                 //发送邮件
-                this.sendMail(templateId,comName,userId, "APPROVE","请及时审核：","");
+                this.sendMail(templateId,comName,userId,commitUser, "工作流表单审核！","请及时审核：","");
             }
             stmt.close();
         } catch (SQLException e) {
@@ -93,7 +93,7 @@ public class ApproveflowEngine {
     }
     
     //发送邮件
-    public void sendMail(String templateId,String comName,String userId,String subject,String context,String reason){
+    public void sendMail(String templateId,String comName,String userId,String commitUser,String subject,String context,String reason){
         DBTransaction db =
             (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
         Statement stmt = db.createStatement(DBTransaction.DEFAULT);
@@ -103,9 +103,6 @@ public class ApproveflowEngine {
         //查询模板信息
         String tSql = "SELECT T.NAME FROM DCM_TEMPLATE T WHERE T.ID = '"
             + templateId + "' AND T.LOCALE = '" + this.curUser.getLocale() + "'";
-        if(subject.equals("APPROVE")){
-            subject = "表单审核";
-        }
         try{
             ResultSet tempRs = stmt.executeQuery(tSql);
             String tempName = "";
@@ -120,7 +117,7 @@ public class ApproveflowEngine {
                           + context + "<br/>" 
                           + "【" + tempName + "】 " + comName + "<br/>" 
                           + "备注:" + reason + "<br/>"
-                          + "提交人：" + mailRs.getString("NAME") + "<br/><br/><br/>"
+                          + "上一处理人：" + commitUser + "<br/><br/><br/>"
                           + "<div align='center'><p>----------------------系统邮件，请勿回复！--------------------<p/><div/>";
                 sender.send(mailRs.getString("MAIL"), "【预算系统邮件】"+subject,context); //收件人地址、主题、消息
             }
@@ -132,7 +129,8 @@ public class ApproveflowEngine {
     }
     
     //启动下一个审批人
-    public void nextApproveUser(String wfId,String runId, String templateId, String comId,String comName,int stepNo){
+    public void nextApproveUser(String wfId,String runId, String templateId, String comId,
+                                String commitUser,String comName,int stepNo){
         DBTransaction trans =
             (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
         Statement stat = trans.createStatement(DBTransaction.DEFAULT);
@@ -163,7 +161,7 @@ public class ApproveflowEngine {
                 stat.executeUpdate(nextSql.toString());
                 trans.commit();
                 //send mail to user
-                this.sendMail(templateId,comName,nextUserId, "APPROVE", "请及时审核：","");
+                this.sendMail(templateId,comName,nextUserId,commitUser,"工作流表单审核！", "请及时审核：","");
             }else{
                 //不存在下一个审批人，部门审批结束,发送邮件通知提交者。
                 String uSql = "SELECT WRITE_BY FROM WORKFLOW_TEMPLATE_STATUS T WHERE T.RUN_ID = '"
@@ -171,12 +169,12 @@ public class ApproveflowEngine {
                     + comId + "'";
                 ResultSet uRs = stat.executeQuery(uSql);
                 if(uRs.next()){
-                    this.sendMail(templateId, comName, uRs.getString("WRITE_BY"), "PASS", "审批通过！","");    
+                    this.sendMail(templateId, comName, uRs.getString("WRITE_BY"),commitUser,"审批通过！", "审批通过！","");    
                 }
                 uRs.close();
                 //检查父节点是否全部审批通过，全部通过则启动下一个个步骤，否则不操作
                 WorkflowEngine wfEngine = new WorkflowEngine();
-                wfEngine.startNext(wfId, runId, templateId, comId, comName, stepNo, "APPROVE");
+                wfEngine.startNext(wfId, runId, templateId, comId, comName, stepNo, "APPROVE",commitUser);
             }
             stat.close();
         } catch (SQLException e) {
@@ -186,7 +184,7 @@ public class ApproveflowEngine {
     
     //审批通过
     public void approvePass(String wfId,String runId, String templateId, String comId,String comName,
-                            String userId,int stepNo) {
+                            String userId,String commitUser,int stepNo) {
         DBTransaction trans =
             (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
         Statement stat = trans.createStatement(DBTransaction.DEFAULT);
@@ -206,12 +204,12 @@ public class ApproveflowEngine {
             this._logger.severe(e);
         }
         //启动下一个审批人
-        this.nextApproveUser(wfId,runId, templateId, comId,comName,stepNo);
+        this.nextApproveUser(wfId,runId, templateId, comId,commitUser,comName,stepNo);
     }
     
     //审批拒绝
     public void approveRefuse(String runId, String templateId, String comId,String comName,String reason,
-                            String userId){
+                            String commitUser){
         DBTransaction trans =
             (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
         Statement stat = trans.createStatement(DBTransaction.DEFAULT);
@@ -264,7 +262,7 @@ public class ApproveflowEngine {
             trans.commit();
             ResultSet uRs = stat.executeQuery(uSql);
             if(uRs.next()){
-                this.sendMail(templateId, comName, uRs.getString("WRITE_BY"), "REFUSE", "审批拒绝！",reason);    
+                this.sendMail(templateId, comName, uRs.getString("WRITE_BY"),commitUser, "审批拒绝！", "审批拒绝！",reason);    
             }
             uRs.close();
             stat.close();
