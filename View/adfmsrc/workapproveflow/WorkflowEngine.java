@@ -809,7 +809,7 @@ public class WorkflowEngine {
 //        }
 //    }
     
-    public void startNext(String wfId,String runId,String templateId,String comId ,int stepNo,String lastTask){
+    public void startNext(String wfId,String runId,String templateId,String comId ,String comName,int stepNo,String lastTask){
         //检查父节点是否完成输入或审批
         if(lastTask.equals("OPEN TEMPLATES")){
             if(!this.checkParent(runId, templateId, comId, stepNo)){
@@ -872,7 +872,7 @@ public class WorkflowEngine {
                 }
                 ApproveflowEngine approveEgn = new ApproveflowEngine();
                 //打开部门审批，发送邮件 
-                approveEgn.startApproveEntity(runId, templateId, comId);
+                approveEgn.startApproveEntity(runId, templateId, comId,comName);
                 //改变工作流中审批步骤状态为进行中
                 StringBuffer updateApp = new StringBuffer();
                 updateApp.append("UPDATE DMS_WORKFLOW_STATUS SET STEP_STATUS = 'WORKING' ");
@@ -1041,6 +1041,7 @@ public class WorkflowEngine {
         DBTransaction trans =
             (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
         Statement stat = trans.createStatement(DBTransaction.DEFAULT);
+        ApproveflowEngine afe = new ApproveflowEngine();
         //查询所有子部门
         List<String> childList = this.getChildEntity(templateId, comId);
         try{
@@ -1057,16 +1058,33 @@ public class WorkflowEngine {
                 wspSql.append("where t.run_id = '").append(runId).append("' ");
                 wspSql.append("and t.step_no = ").append(stepNo);
                 wspSql.append("and t.entity_id in (");
+                //查询所有模板，组合，审批人，发送邮件
+                StringBuffer tcuSql = new StringBuffer();
+                tcuSql.append("SELECT T.TEMPLATE_ID,T.COM_ID,T.PERSON_ID,T.ENTITY_ID FROM APPROVE_TEMPLATE_STATUS T WHERE ");
+                tcuSql.append("T.RUN_ID = '").append(runId).append("' ");
+                tcuSql.append("AND T.STEP_NO = ").append(stepNo);
+                tcuSql.append("AND T.ENTITY_ID IN (");
+
                 for(String entityCode : childList){
                     wspSql.append("'").append(entityCode).append("',");
+                    tcuSql.append("'").append(entityCode).append("',");
                 }
                 wspSql.append("'')");
+                tcuSql.append("'')");
                 stat.executeUpdate(wspSql.toString());
                 //更改步骤状态为working
                 String uSql = "update dms_workflow_status t set t.step_status = 'WORKING' " + "where t.wf_id = '" + wfId + 
                               "' and t.run_id = '" + runId + "' and t.step_no =" + stepNo;
                 stat.executeUpdate(uSql);
                 trans.commit();
+                ResultSet mRs = stat.executeQuery(tcuSql.toString());
+                //send mail
+                while(mRs.next()){
+                    String tid = mRs.getString("TEMPLATE_ID");
+                    String uid = mRs.getString("PERSON_ID");
+                    String entityName ="_" + this.getEntityName(mRs.getString("ENTITY_ID"));
+                    afe.sendMail(tid, entityName, uid, "RETREAT", "工作流回退，请等待表单重新提交审批！","");
+                }
             }else if("OPEN TEMPLATES".equals(stepTask)){
                 //修改输入状态表为未输入
                 StringBuffer wsrSql = new StringBuffer();
@@ -1074,24 +1092,48 @@ public class WorkflowEngine {
                 wsrSql.append("where t.run_id = '").append(runId).append("' ");
                 wsrSql.append("and t.step_no = ").append(stepNo);
                 wsrSql.append("and t.entity_code in (");
+                //查询所有模板，组合，审批人，发送邮件
+                StringBuffer tcwSql = new StringBuffer();
+                tcwSql.append("SELECT T.TEMPLATE_ID,T.COM_ID,T.WRITE_BY,T.ENTITY_CODE FROM WORKFLOW_TEMPLATE_STATUS T WHERE ");
+                tcwSql.append("T.RUN_ID = '").append(runId).append("' ");
+                tcwSql.append("AND T.STEP_NO = ").append(stepNo);
+                tcwSql.append("AND T.ENTITY_CODE IN (");
+                
                 for(String entityCode : childList){
                     wsrSql.append("'").append(entityCode).append("',");
+                    tcwSql.append("'").append(entityCode).append("',");
                 }
                 wsrSql.append("'')");
+                tcwSql.append("'')");
                 stat.executeUpdate(wsrSql.toString());
                 //更改步骤状态为working
                 String uSql = "update dms_workflow_status t set t.step_status = 'WORKING' " + "where t.wf_id = '" + wfId + 
                               "' and t.run_id = '" + runId + "' and t.step_no =" + stepNo;
                 stat.executeUpdate(uSql);
                 trans.commit();
+                ResultSet mRs = stat.executeQuery(tcwSql.toString());
                 //最前的开模板步骤，打开组合
                 if(isFirst){
                     //最前的打开模板步骤打开组合
                     this.changeComStatus(runId, stepNo, childList, "OPEN");
                     isFirst = false ;
+                    //send mail
+                    while(mRs.next()){
+                        String tid = mRs.getString("TEMPLATE_ID");
+                        String uid = mRs.getString("WRITE_BY");
+                        String entityName ="_" + this.getEntityName(mRs.getString("ENTITY_CODE"));
+                        afe.sendMail(tid, entityName, uid, "RETREAT", "工作流回退，请重新填写表单数据！","");
+                    }
                 }else{
                     //其他的打开模板步骤关闭组合
                     this.changeComStatus(runId, stepNo, childList, "CLOSE");
+                    //send mail
+                    while(mRs.next()){
+                        String tid = mRs.getString("TEMPLATE_ID");
+                        String uid = mRs.getString("WRITE_BY");
+                        String entityName ="_" + this.getEntityName(mRs.getString("ENTITY_CODE"));
+                        afe.sendMail(tid, entityName, uid, "RETREAT", "工作流回退，请等待前面表单审批通过后，再重填表单数据！","");
+                    }
                 }
             }
         }
@@ -1099,6 +1141,25 @@ public class WorkflowEngine {
         }catch(Exception e){
             this._logger.severe(e);    
         }
+    }
+    
+    public String getEntityName(String entityCode){
+        String entityName = "";
+        DBTransaction trans =
+            (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
+        Statement stat = trans.createStatement(DBTransaction.DEFAULT);
+        String eSql = "SELECT MEANING FROM DIM_ENTITYS T WHERE T.CODE = '" + entityCode + "'";
+        try {
+            ResultSet eRs = stat.executeQuery(eSql);
+            if(eRs.next()){
+                entityName = eRs.getString("MEANING");    
+            }
+            eRs.close();
+            stat.close();
+        } catch (SQLException e) {
+            this._logger.severe(e);
+        }
+        return entityName;
     }
     
     //通过部门改变父节点下所有子部门和模板对应的组合状态

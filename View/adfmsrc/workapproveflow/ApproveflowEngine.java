@@ -39,10 +39,10 @@ public class ApproveflowEngine {
                 (Person)ADFContext.getCurrent().getSessionScope().get("cur_user");
     }
     //开启审批流当中一个部门，审批人
-    //审批状态  未开启：CLOSE 开启：APPROVEING 通过：Y 拒绝：N 重审：R
+    //审批状态  未开启：CLOSE 开启：APPROVEING 通过：Y 
 
     public void startApproveEntity(String runId, String templateId,
-                                   String comId) throws AddressException,
+                                   String comId,String comName) throws AddressException,
                                                         MessagingException {
         String userId = "";
         String seq = "";
@@ -84,7 +84,7 @@ public class ApproveflowEngine {
                 stmt.executeUpdate(openSql.toString());
                 db.commit();
                 //发送邮件
-                this.sendMail(userId, comId, "这是一封测试邮件！");
+                this.sendMail(templateId,comName,userId, "APPROVE","请及时审核：","");
             }
             stmt.close();
         } catch (SQLException e) {
@@ -93,28 +93,46 @@ public class ApproveflowEngine {
     }
     
     //发送邮件
-    public void sendMail(String userId,String subject,String context){
+    public void sendMail(String templateId,String comName,String userId,String subject,String context,String reason){
         DBTransaction db =
             (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
         Statement stmt = db.createStatement(DBTransaction.DEFAULT);
         //发送邮件
         StringBuffer mailSql = new StringBuffer();
-        mailSql.append("SELECT MAIL FROM DMS_USER WHERE ID = '").append(userId).append("'");
-        try{
-        ResultSet mailRs = stmt.executeQuery(mailSql.toString());
-        if (mailRs.next()) {
-            MailSender sender = new MailSender();
-            sender.send(mailRs.getString("MAIL"), subject + "审核",context); //收件人地址、主题、消息
+        mailSql.append("SELECT NAME,MAIL FROM DMS_USER WHERE ID = '").append(userId).append("'");
+        //查询模板信息
+        String tSql = "SELECT T.NAME FROM DCM_TEMPLATE T WHERE T.ID = '"
+            + templateId + "' AND T.LOCALE = '" + this.curUser.getLocale() + "'";
+        if(subject.equals("APPROVE")){
+            subject = "表单审核";
         }
-        mailRs.close();
-        stmt.close();
+        try{
+            ResultSet tempRs = stmt.executeQuery(tSql);
+            String tempName = "";
+            if(tempRs.next()){
+                tempName = tempRs.getString("NAME");
+            }
+            tempRs.close();
+            ResultSet mailRs = stmt.executeQuery(mailSql.toString());
+            if (mailRs.next()) {
+                MailSender sender = new MailSender();
+                context = "您好！" + "<br/>"
+                          + context + "<br/>" 
+                          + "【" + tempName + "】 " + comName + "<br/>" 
+                          + "备注:" + reason + "<br/>"
+                          + "提交人：" + mailRs.getString("NAME") + "<br/><br/><br/>"
+                          + "<div align='center'><p>----------------------系统邮件，请勿回复！--------------------<p/><div/>";
+                sender.send(mailRs.getString("MAIL"), "【预算系统邮件】"+subject,context); //收件人地址、主题、消息
+            }
+            mailRs.close();
+            stmt.close();
         }catch(Exception e){
             this._logger.severe(e);
         }
     }
     
     //启动下一个审批人
-    public void nextApproveUser(String wfId,String runId, String templateId, String comId,int stepNo){
+    public void nextApproveUser(String wfId,String runId, String templateId, String comId,String comName,int stepNo){
         DBTransaction trans =
             (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
         Statement stat = trans.createStatement(DBTransaction.DEFAULT);
@@ -145,12 +163,20 @@ public class ApproveflowEngine {
                 stat.executeUpdate(nextSql.toString());
                 trans.commit();
                 //send mail to user
-                this.sendMail(nextUserId, comId, "你是下一个审批人！");
+                this.sendMail(templateId,comName,nextUserId, "APPROVE", "请及时审核：","");
             }else{
-                //不存在下一个审批人，部门审批结束。
+                //不存在下一个审批人，部门审批结束,发送邮件通知提交者。
+                String uSql = "SELECT WRITE_BY FROM WORKFLOW_TEMPLATE_STATUS T WHERE T.RUN_ID = '"
+                    + runId + "' AND T.TEMPLATE_ID = '" + templateId + "' AND T.COM_ID = '"
+                    + comId + "'";
+                ResultSet uRs = stat.executeQuery(uSql);
+                if(uRs.next()){
+                    this.sendMail(templateId, comName, uRs.getString("WRITE_BY"), "PASS", "审批通过！","");    
+                }
+                uRs.close();
                 //检查父节点是否全部审批通过，全部通过则启动下一个个步骤，否则不操作
                 WorkflowEngine wfEngine = new WorkflowEngine();
-                wfEngine.startNext(wfId, runId, templateId, comId, stepNo, "APPROVE");
+                wfEngine.startNext(wfId, runId, templateId, comId, comName, stepNo, "APPROVE");
             }
             stat.close();
         } catch (SQLException e) {
@@ -159,14 +185,15 @@ public class ApproveflowEngine {
     }
     
     //审批通过
-    public void approvePass(String wfId,String runId, String templateId, String comId,
+    public void approvePass(String wfId,String runId, String templateId, String comId,String comName,
                             String userId,int stepNo) {
         DBTransaction trans =
             (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
         Statement stat = trans.createStatement(DBTransaction.DEFAULT);
         //改变审批状态表状态
         StringBuffer uaSql = new StringBuffer();
-        uaSql.append("UPDATE APPROVE_TEMPLATE_STATUS SET APPROVAL_STATUS = 'Y' ");
+        uaSql.append("UPDATE APPROVE_TEMPLATE_STATUS SET APPROVAL_STATUS = 'Y', ");
+        uaSql.append("FINISH_AT = SYSDATE ");
         uaSql.append("WHERE RUN_ID = '").append(runId).append("' ");
         uaSql.append("AND TEMPLATE_ID = '").append(templateId).append("' ");
         uaSql.append("AND COM_ID = '").append(comId).append("' ");
@@ -179,11 +206,11 @@ public class ApproveflowEngine {
             this._logger.severe(e);
         }
         //启动下一个审批人
-        this.nextApproveUser(wfId,runId, templateId, comId,stepNo);
+        this.nextApproveUser(wfId,runId, templateId, comId,comName,stepNo);
     }
     
     //审批拒绝
-    public void approveRefuse(String runId, String templateId, String comId,
+    public void approveRefuse(String runId, String templateId, String comId,String comName,String reason,
                             String userId){
         DBTransaction trans =
             (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
@@ -225,12 +252,21 @@ public class ApproveflowEngine {
         stepSql.append("UPDATE DMS_WORKFLOW_STATUS SET STEP_STATUS = 'WORKING' ");
         stepSql.append("WHERE RUN_ID = '").append(runId).append("' ");
         stepSql.append("AND STEP_NO = ").append(stepNo);
+        //查询提交审批的人
+        String uSql = "SELECT WRITE_BY FROM WORKFLOW_TEMPLATE_STATUS T WHERE T.RUN_ID = '"
+            + runId + "' AND T.TEMPLATE_ID = '" + templateId + "' AND T.COM_ID = '"
+            + comId + "'";
         try {
             stat.executeUpdate(uaSql.toString());
             stat.executeUpdate(comSql.toString());
             stat.executeUpdate(wsSql.toString());
             stat.executeUpdate(stepSql.toString());
             trans.commit();
+            ResultSet uRs = stat.executeQuery(uSql);
+            if(uRs.next()){
+                this.sendMail(templateId, comName, uRs.getString("WRITE_BY"), "REFUSE", "审批拒绝！",reason);    
+            }
+            uRs.close();
             stat.close();
         } catch (SQLException e) {
             this._logger.severe(e);
@@ -259,7 +295,6 @@ public class ApproveflowEngine {
             //检查审批流状态表中所有子部门是否完成审批
             StringBuffer eSql = new StringBuffer();
             eSql.append("select 1 from approve_template_status t where t.approval_status <> 'Y' ");
-            //eSql.append("and t.template_id = '").append(templateId).append("' ");
             eSql.append("and t.run_id = '").append(runId).append("' ");
             eSql.append("and t.step_no = ").append(stepNo).append(" ");
             eSql.append("and t.entity_id in (");
