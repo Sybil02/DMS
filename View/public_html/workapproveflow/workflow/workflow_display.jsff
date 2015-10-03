@@ -16,8 +16,8 @@
           <af:panelWindow id="pw3">
             <af:panelGroupLayout id="pgl8">
               <af:panelGroupLayout id="pgl10" inlineStyle="height:85px;">
-                <af:selectOneChoice label="#{viewBundle['dms.select.temp']}"
-                                    id="soc2"
+                <af:selectOneChoice label="#{viewBundle['dms.select.temp']}" autoSubmit="true"
+                                    id="soc2" binding="#{viewScope.workflowDisplayBean.approveSoc}"
                                     valueChangeListener="#{viewScope.workflowDisplayBean.valueChangeApprove}">
                   <f:selectItems value="#{viewScope.workflowDisplayBean.tempItemList}"
                                  id="si2"/>
@@ -81,7 +81,8 @@
               <af:panelGroupLayout id="pgl7" inlineStyle="height:98px;">
                 <af:selectOneChoice label="#{viewBundle['dms.select.temp']}"
                                     autoSubmit="true" id="soc1"
-                                    valueChangeListener="#{viewScope.workflowDisplayBean.valueChangeTemp}">
+                                    valueChangeListener="#{viewScope.workflowDisplayBean.valueChangeTemp}"
+                                    binding="#{viewScope.workflowDisplayBean.writeSoc}">
                   <f:selectItems value="#{viewScope.workflowDisplayBean.tempItemList}"
                                  id="si1"/>
                 </af:selectOneChoice>
@@ -465,7 +466,7 @@
                          sortable="true"
                          headerText="#{bindings.DmsWorkflowStatusVO.hints.StepTask.label}"
                          id="c12" width="120">
-                <af:outputText value="#{row.StepTask}" id="ot13"/>
+                <af:outputText value="#{row.StepTask eq 'OPEN TEMPLATES' ? '填写表单':(row.StepTask eq 'APPROVE' ? '审批':'接口')}" id="ot13"/>
               </af:column>
               <af:column sortProperty="#{bindings.DmsWorkflowStatusVO.hints.StepObject.name}"
                          sortable="true"

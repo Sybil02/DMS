@@ -31,21 +31,33 @@
     </Properties>
     <TransientExpression><![CDATA[adf.context.locale]]></TransientExpression>
   </Variable>
+  <Variable
+    Name="userId"
+    Kind="where"
+    Type="java.lang.String">
+    <TransientExpression><![CDATA[adf.userSession.userData.userId]]></TransientExpression>
+  </Variable>
   <SQLQuery>
-    <![CDATA[SELECT Odi11Scene.AGENT_ID, 
-       Odi11Scene.CAT_ID, 
-       Odi11Scene.CREATED_AT, 
-       Odi11Scene.CREATED_BY, 
-       Odi11Scene.ID, 
-       Odi11Scene.LOCALE, 
-       Odi11Scene.SCENE_ALIAS, 
-       Odi11Scene.SCENE_CONTEXT, 
-       Odi11Scene.SCENE_NAME, 
-       Odi11Scene.SCENE_VERSION, 
-       Odi11Scene.UPDATED_AT, 
-       Odi11Scene.UPDATED_BY, 
-       Odi11Scene.WORKREP_ID
-FROM ODI11_SCENE Odi11Scene where locale =: locale]]>
+    <![CDATA[SELECT ODI11SCENE.AGENT_ID,
+       ODI11SCENE.CAT_ID,
+       ODI11SCENE.CREATED_AT,
+       ODI11SCENE.CREATED_BY,
+       ODI11SCENE.ID,
+       ODI11SCENE.LOCALE,
+       ODI11SCENE.SCENE_ALIAS,
+       ODI11SCENE.SCENE_CONTEXT,
+       ODI11SCENE.SCENE_NAME,
+       ODI11SCENE.SCENE_VERSION,
+       ODI11SCENE.UPDATED_AT,
+       ODI11SCENE.UPDATED_BY,
+       ODI11SCENE.WORKREP_ID
+  FROM ODI11_SCENE ODI11SCENE
+ WHERE ODI11SCENE.LOCALE = :locale
+   AND EXISTS
+ (SELECT 1
+          FROM ODI11_USER_SCENE_V V
+         WHERE V.USER_ID = :userId
+           AND V.SCENE_ID = ODI11SCENE.ID)]]>
   </SQLQuery>
   <EntityUsage
     Name="Odi11Scene"

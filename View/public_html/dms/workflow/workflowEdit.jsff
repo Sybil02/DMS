@@ -51,8 +51,8 @@
                                     label="#{row.bindings.StepTask.label}"
                                     required="#{bindings.DmsWorkflowStepsVO.hints.StepTask.mandatory}"
                                     value="#{row.bindings.StepTask.inputValue}">
-                <af:selectItem label="打开模板" value="OPEN TEMPLATES" id="si2"/>
-                <af:selectItem label="ETL" value="ETL" id="si4"/>
+                <af:selectItem label="填写表单" value="OPEN TEMPLATES" id="si2"/>
+                <af:selectItem label="接口" value="ETL" id="si4"/>
                 <af:selectItem label="审批" value="APPROVE" id="si3"/>
                 </af:selectOneChoice>
             </af:column>
@@ -68,18 +68,6 @@
                                id="si5"/>
               </af:selectOneChoice>
             </af:column>
-            <af:column headerText="#{bindings.DmsWorkflowStepsVO.hints.ApproveObject.label}"
-                       id="c8">
-              <af:inputText value="#{row.bindings.ApproveObject.inputValue}"
-                            label="#{bindings.DmsWorkflowStepsVO.hints.ApproveObject.label}"
-                            required="#{bindings.DmsWorkflowStepsVO.hints.ApproveObject.mandatory}"
-                            columns="#{bindings.DmsWorkflowStepsVO.hints.ApproveObject.displayWidth}"
-                            maximumLength="#{bindings.DmsWorkflowStepsVO.hints.ApproveObject.precision}"
-                            shortDesc="#{bindings.DmsWorkflowStepsVO.hints.ApproveObject.tooltip}"
-                            id="it4">
-                <f:validator binding="#{row.bindings.ApproveObject.validator}"/>
-              </af:inputText>
-            </af:column>
             <af:column headerText="#{bindings.DmsWorkflowStepsVO.hints.EtlObject.label}"
                        id="c9">
               <af:selectOneChoice 
@@ -92,20 +80,6 @@
                                id="si6"/>
               </af:selectOneChoice>
             </af:column>
-            <af:column sortProperty="#{bindings.DmsWorkflowStepsVO.hints.PreStep.name}"
-                     sortable="false"
-                     headerText="#{bindings.DmsWorkflowStepsVO.hints.PreStep.label}"
-                     id="c7">
-            <af:inputText value="#{row.bindings.PreStep.inputValue}"
-                          label="#{bindings.DmsWorkflowStepsVO.hints.PreStep.label}"
-                          required="#{bindings.DmsWorkflowStepsVO.hints.PreStep.mandatory}"
-                          columns="#{bindings.DmsWorkflowStepsVO.hints.PreStep.displayWidth}"
-                          maximumLength="#{bindings.DmsWorkflowStepsVO.hints.PreStep.precision}"
-                          shortDesc="#{bindings.DmsWorkflowStepsVO.hints.PreStep.tooltip}"
-                          id="it6">
-              <f:validator binding="#{row.bindings.PreStep.validator}"/>
-            </af:inputText>
-          </af:column>
         </af:table>
       </af:panelCollection>
       </af:panelGroupLayout>
