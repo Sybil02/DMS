@@ -138,7 +138,9 @@
                 <af:spacer height="5px" id="s4"/>
                 <af:selectOneChoice label="#{valueSet.valueSetName}" id="soc4"
                                     autoSubmit="true"
-                                    valueChangeListener="#{viewScope.workflowDisplayBean.vsValueChange}">
+                                    valueChangeListener="#{viewScope.workflowDisplayBean.vsValueChange}"
+                                    binding="#{valueSet.component}"
+                                    >
                   <f:selectItems value="#{valueSet.valueList}" id="si4"/>
                 </af:selectOneChoice>
               </af:forEach>

@@ -110,21 +110,11 @@
                   rowSelection="multiple"
                   rowBandingInterval="0" id="t1"
                   binding="#{workflowAuthorityBean.assignedworkflowTable}">
-          <af:column headerText="#{bindings.DmsRoleWorkflowVO.hints.WorkflowId.label}"
-                     id="c1" width="204">
-            <af:selectOneChoice value="#{row.bindings.WorkflowId.inputValue}"
-                                label="#{row.bindings.WorkflowId.label}"
-                                readOnly="true"
-                                required="#{bindings.DmsRoleWorkflowVO.hints.WorkflowId.mandatory}"
-                                shortDesc="#{bindings.DmsRoleWorkflowVO.hints.WorkflowId.tooltip}"
-                                id="soc2">
-              <f:selectItems value="#{row.bindings.WorkflowId.items}" id="si1"/>
-            </af:selectOneChoice>
+          <af:column headerText="#{bindings.DmsRoleWorkflowVO.hints.WfName.label}"
+                     id="c1" width="204"> 
+            <af:outputText value="#{row.WfName}" id="ot5"/>
           </af:column>
-          <!--af:column headerText="#{bindings.DmsRoleWorkflowVO.hints.WorkflowId.label}"
-                     id="c1">
-            <af:outputText value="#{row.WorkflowId}" id="ot5"/>
-          </af:column-->
+
           <af:column sortProperty="#{bindings.DmsRoleWorkflowVO.hints.UpdatedAt.name}"
                      sortable="false"
                      headerText="#{bindings.DmsRoleWorkflowVO.hints.UpdatedAt.label}"

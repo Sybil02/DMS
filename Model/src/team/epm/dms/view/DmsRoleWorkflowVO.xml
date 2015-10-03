@@ -12,12 +12,16 @@
        DmsRoleWorkflowEO.ROLE_ID, 
        DmsRoleWorkflowEO.UPDATED_AT, 
        DmsRoleWorkflowEO.UPDATED_BY, 
-       DmsRoleWorkflowEO.WORKFLOW_ID"
-  FromList="DMS_ROLE_WORKFLOW DmsRoleWorkflowEO"
+       DmsRoleWorkflowEO.WORKFLOW_ID, 
+       DmsWorkflowInfoEO.WF_NAME, 
+       DmsWorkflowInfoEO.ID AS ID1, 
+       DmsWorkflowInfoEO.LOCALE"
+  FromList="DMS_ROLE_WORKFLOW DmsRoleWorkflowEO, DMS_WORKFLOWINFO DmsWorkflowInfoEO"
   BindingStyle="OracleName"
   CustomQuery="false"
   PageIterMode="Full"
-  UseGlueCode="false">
+  UseGlueCode="false"
+  Where="DmsRoleWorkflowEO.WORKFLOW_ID  = DmsWorkflowInfoEO.ID">
   <Properties>
     <SchemaBasedProperties>
       <LABEL
@@ -28,27 +32,16 @@
     Name="DmsWorkflowInfoVO1"
     ViewObjectName="team.epm.dms.view.DmsWorkflowInfoVO"
     RowLevelBinds="true"/>
-  <ListBinding
-    Name="LOV_WorkflowId"
-    ListVOName="DmsWorkflowInfoVO1"
-    ListRangeSize="-1"
-    NullValueFlag="start"
-    NullValueId="${adfBundle['oracle.javatools.resourcebundle.SystemBundle']['NULL_VALUE_RESID']}"
-    MRUCount="0">
-    <AttrArray Name="AttrNames">
-      <Item Value="WorkflowId"/>
-    </AttrArray>
-    <AttrArray Name="ListAttrNames">
-      <Item Value="WfName"/>
-    </AttrArray>
-    <AttrArray Name="ListDisplayAttrNames">
-      <Item Value="WfName"/>
-    </AttrArray>
-    <DisplayCriteria/>
-  </ListBinding>
   <EntityUsage
     Name="DmsRoleWorkflowEO"
     Entity="team.epm.dms.model.DmsRoleWorkflowEO"/>
+  <EntityUsage
+    Name="DmsWorkflowInfoEO"
+    Entity="team.epm.dms.model.DmsWorkflowInfoEO"
+    SourceUsage="team.epm.dms.view.DmsRoleWorkflowVO.DmsRoleWorkflowEO"
+    ReadOnly="true"
+    Reference="true"
+    DeleteParticipant="false"/>
   <ViewAttribute
     Name="Id"
     IsNotNull="true"
@@ -115,14 +108,11 @@
     PrecisionRule="true"
     EntityAttrName="WorkflowId"
     EntityUsage="DmsRoleWorkflowEO"
-    AliasName="WORKFLOW_ID"
-    LOVName="LOV_WorkflowId">
+    AliasName="WORKFLOW_ID">
     <Properties>
       <SchemaBasedProperties>
         <LABEL
           ResId="team.epm.dms.view.DmsRoleWorkflowVO.WorkflowId_LABEL"/>
-        <CONTROLTYPE
-          Value="choice"/>
       </SchemaBasedProperties>
     </Properties>
   </ViewAttribute>
@@ -130,6 +120,35 @@
     <PropertiesBundle
       PropertiesFile="ModelBundle"/>
   </ResourceBundle>
+  <ViewAttribute
+    Name="WfName"
+    IsNotNull="true"
+    PrecisionRule="true"
+    EntityAttrName="WfName"
+    EntityUsage="DmsWorkflowInfoEO"
+    AliasName="WF_NAME"
+    IsUpdateable="false">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="team.epm.dms.view.DmsRoleWorkflowVO.WfName_LABEL"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="Id1"
+    IsNotNull="true"
+    PrecisionRule="true"
+    EntityAttrName="Id"
+    EntityUsage="DmsWorkflowInfoEO"
+    AliasName="ID1"/>
+  <ViewAttribute
+    Name="Locale"
+    IsNotNull="true"
+    PrecisionRule="true"
+    EntityAttrName="Locale"
+    EntityUsage="DmsWorkflowInfoEO"
+    AliasName="LOCALE"/>
   <ViewLinkAccessor
     Name="DmsEnabledRole"
     ViewLink="team.epm.dms.DmsRoleWorkflowLnk"

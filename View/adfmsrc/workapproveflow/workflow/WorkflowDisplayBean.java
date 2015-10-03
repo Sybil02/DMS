@@ -73,9 +73,16 @@ public class WorkflowDisplayBean {
         super();
         this.curUser =(Person)ADFContext.getCurrent().getSessionScope().get("cur_user");
     }
+    
     //show popup ,显示选择的组合
     public void showRunPop(ActionEvent actionEvent) {
-        //clear list
+        
+        //clear list 清空选择框里面的数据
+        for( WorkflowValueSet e : this.wfValueSetList) {
+            if (e.getComponent() != null)
+            e.getComponent().setValue(null);
+        }
+        
         this.wfValueSetList.clear();
         this.comSelectMap.clear();
         DCIteratorBinding wfIter = ADFUtils.findIterator("DmsUserWorkflowVOIterator");
@@ -92,7 +99,6 @@ public class WorkflowDisplayBean {
         String sql = "SELECT T1.VALUE_SET_ID,T2.NAME,T2.SOURCE,T2.CODE FROM DCM_COM_VS T1,DMS_VALUE_SET T2 "
                         + "WHERE T1.VALUE_SET_ID = T2.ID AND T2.LOCALE = '" + this.curUser.getLocale()+"' "
                         + "AND T1.COMBINATION_ID = '" + wfComId + "' ORDER BY T1.SEQ";
-
         try {
             //查询所有值集源
             ResultSet vsRs = stat.executeQuery(sql);
@@ -132,6 +138,7 @@ public class WorkflowDisplayBean {
         RichPopup.PopupHints hints = new RichPopup.PopupHints();
         this.runPop.show(hints);
     }
+    
     public void showDetails(ActionEvent actionEvent) {
       //   Add event code here...
         tempItemList.clear();
@@ -157,6 +164,7 @@ public class WorkflowDisplayBean {
         }
         
     }
+    
     public void approveflow(String runId,String StepNo){
         DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
         Statement stat=trans.createStatement(DBTransaction.DEFAULT);
@@ -306,6 +314,7 @@ public class WorkflowDisplayBean {
         AdfFacesContext adfFace = AdfFacesContext.getCurrentInstance();
         adfFace.addPartialTarget(JSFUtils.findComponentInRoot("t5"));
     }
+    
     public void valueChangeTemp(ValueChangeEvent valueChangeEvent) {
         // Add event code here...
         RichSelectOneChoice comSoc = (RichSelectOneChoice)valueChangeEvent.getSource();
@@ -355,11 +364,6 @@ public class WorkflowDisplayBean {
     public List<WorkflowValueSet> getWfValueSetList() {
         return wfValueSetList;
     }
-
-
-
-
-
 
     public void setTempPop(RichPopup tempPop) {
         this.tempPop = tempPop;

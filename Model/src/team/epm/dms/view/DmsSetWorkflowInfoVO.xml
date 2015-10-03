@@ -65,7 +65,14 @@ ORDER BY SEQ]]>
     PrecisionRule="true"
     EntityAttrName="CreatedBy"
     EntityUsage="DmsWorkflowInfoEO"
-    AliasName="CREATED_BY"/>
+    AliasName="CREATED_BY">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="team.epm.dms.view.DmsSetWorkflowInfoVO.CreatedBy_LABEL"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewAttribute
     Name="Id"
     IsNotNull="true"
@@ -112,7 +119,14 @@ ORDER BY SEQ]]>
     PrecisionRule="true"
     EntityAttrName="WfName"
     EntityUsage="DmsWorkflowInfoEO"
-    AliasName="WF_NAME"/>
+    AliasName="WF_NAME">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="team.epm.dms.view.DmsSetWorkflowInfoVO.WfName_LABEL"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewAttribute
     Name="WfRunid"
     PrecisionRule="true"
@@ -125,7 +139,14 @@ ORDER BY SEQ]]>
     PrecisionRule="true"
     EntityAttrName="WfStatus"
     EntityUsage="DmsWorkflowInfoEO"
-    AliasName="WF_STATUS"/>
+    AliasName="WF_STATUS">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="team.epm.dms.view.DmsSetWorkflowInfoVO.WfStatus_LABEL"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ResourceBundle>
     <PropertiesBundle
       PropertiesFile="ModelBundle"/>

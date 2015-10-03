@@ -41,7 +41,7 @@
                       Name="DmsRoleWorkflowVO0">
         <AttrNames>
           <Item Value="Id"/>
-          <Item Value="WorkflowId" Binds="WorkflowId"/>
+          <Item Value="WfName"/>
           <Item Value="RoleId"/>
           <Item Value="UpdatedAt"/>
         </AttrNames>
