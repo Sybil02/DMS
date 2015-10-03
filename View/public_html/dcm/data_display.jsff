@@ -88,7 +88,9 @@
               <af:commandButton text="#{viewBundle['dms.approve.jujue']}"
                                 id="cb15"
                                 disabled="#{viewScope.DcmDataDisplayBean.approveStatus eq 'Y'}"
-                                actionListener="#{viewScope.DcmDataDisplayBean.approveRefuse}"/>
+                                >
+                <af:showPopupBehavior popupId="::p9" triggerType="click"/>
+              </af:commandButton>
             </af:group>
             <af:group id="g9">
               <af:commandButton text="#{viewBundle['dms.workflow.back']}"
@@ -156,7 +158,6 @@
                   selectedRowKeys="#{viewScope.DcmDataDisplayBean.dataModel.selectedRows}"
                   selectionListener="#{viewScope.DcmDataDisplayBean.rowSelectionListener}" 
                   rowSelection="multiple" editingMode="clickToEdit"
-                  shortDesc="#{viewBundle['dms.multiple_key_search']}"
                   fetchSize="50" 
                   clientComponent="true"
                   sortListener="#{viewScope.DcmDataDisplayBean.sortListener}"
@@ -576,6 +577,16 @@
             <af:inputText id="it3" rows="7" columns="100"
                           value="#{viewScope.DcmDataDisplayBean.calcErrMsg}"
                           readOnly="true"/>
+          </af:panelWindow>
+        </af:popup>
+        <af:popup id="p9">
+          <af:panelWindow id="pw7" contentWidth="400" contentHeight="80" 
+            title="#{viewBundle['dms.wf.reason']}"  >
+            <af:inputText rows="7" columns="100" id="it4" value="#{viewScope.DcmDataDisplayBean.reason}"/>
+            <af:spacer height="5px" id="sp1"/>
+            <af:spacer width="550px" id="sp2"/>
+            <af:commandButton text="#{viewBundle['dcm.common.ok']}" id="cb18"
+                              actionListener="#{viewScope.DcmDataDisplayBean.approveRefuse}"/>
           </af:panelWindow>
         </af:popup>
       </af:panelGroupLayout>
