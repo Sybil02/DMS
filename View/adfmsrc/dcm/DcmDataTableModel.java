@@ -18,8 +18,8 @@ public class DcmDataTableModel extends CollectionModel{
     public static final String OPERATE_CREATE="CREATE";
     public static final String OPERATE_UPDATE="UPDATE";
     public static final String OPERATE_DELETE="DELETE";
-    private RowKeySet selectedRows=new RowKeySetImpl();
         
+    
     public DcmDataTableModel(){
     }
     public Object getRowKey() {
@@ -67,13 +67,5 @@ public class DcmDataTableModel extends CollectionModel{
 
     public List<ColumnDef> getColsdef() {
         return colsdef;
-    }
-
-    public void setSelectedRows(RowKeySet selectedRows) {
-        this.selectedRows = selectedRows;
-    }
-
-    public RowKeySet getSelectedRows() {
-        return selectedRows;
-    }
+    } 
 }

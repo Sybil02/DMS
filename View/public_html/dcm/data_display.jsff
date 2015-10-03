@@ -152,22 +152,31 @@
             <af:outputLabel value="#{viewBundle['dms.sort.tip']}" id="ol1"/>
           </af:dialog>
         </af:popup>
+        <th:script>
+        
+        //点击表中的行则显示下拉框小图标
+        function tableSelection(event) {
+             var table = event.getSource();
+             AdfCustomEvent.queue(table, "tableClickEvent",{}, true);    
+        }
+        
+        </th:script>
         <af:table var="row" rowBandingInterval="0" id="t1"
                   value="#{viewScope.DcmDataDisplayBean.dataModel}"
                   scrollPolicy="page"
-                  selectedRowKeys="#{viewScope.DcmDataDisplayBean.dataModel.selectedRows}"
-                  selectionListener="#{viewScope.DcmDataDisplayBean.rowSelectionListener}" 
-                  rowSelection="multiple" editingMode="clickToEdit"
-                  fetchSize="50" 
+                  rowSelection="multiple" editingMode="clickToEdit" 
                   clientComponent="true"
                   sortListener="#{viewScope.DcmDataDisplayBean.sortListener}"
                   emptyText="#{viewBundle['dms.common.nodata']}"
                   filterModel="#{viewScope.DcmDataDisplayBean.queryDescriptor}"
                   filterVisible="false"
                   queryListener="#{viewScope.DcmDataDisplayBean.queryListener}"
-                  binding="#{viewScope.DcmDataDisplayBean.displayTable}">
-          <af:forEach items="#{viewScope.DcmDataDisplayBean.dataModel.colsdef}"
+                  binding="#{viewScope.DcmDataDisplayBean.displayTable}"
+                  >
+          <af:clientListener type="mouseDown" method="tableSelection"/><af:forEach items="#{viewScope.DcmDataDisplayBean.dataModel.colsdef}"
                       var="attr" varStatus="vs">
+            <af:serverListener type="tableClickEvent"
+                               method="#{viewScope.DcmDataDisplayBean.tableClickEvent}"/>
             <af:column sortable="true" headerText="#{attr.columnLabel}" width="150"
                        sortProperty="#{attr.dbTableCol}" id="column${vs.key}"
                        visible="#{attr.visible eq 'Y'}"
@@ -180,6 +189,7 @@
                              or (viewScope.DcmDataDisplayBean.isRolling eq true and viewScope.DcmDataDisplayBean.rollingMonth ne null
                              and viewScope.DcmDataDisplayBean.rollingMonth >= attr.rollingMonth)}"
                             valueChangeListener="#{viewScope.DcmDataDisplayBean.valueChangeListener}"
+                            autoComplete="off"
                             rendered="#{attr.valueSetId eq null}"/>
               <af:panelGroupLayout id="pgl7">
                 <af:inputText value="#{row[attr.dbTableCol]}" label="#{attr.columnLabel}" columns="15" valueChangeListener="#{viewScope.DcmDataDisplayBean.valueChangeListener}"
@@ -187,14 +197,18 @@
                               or (viewScope.DcmDataDisplayBean.isRolling eq true and viewScope.DcmDataDisplayBean.rollingMonth ne null
                               and viewScope.DcmDataDisplayBean.rollingMonth >= attr.rollingMonth)}"
                               rendered="#{attr.valueSetId ne null}" autoSubmit="true" 
-                              id="ipt${vs.index}">
+                              id="ipt${vs.index}" autoComplete="off">
                   <af:autoSuggestBehavior suggestItems="#{viewScope.DcmDataDisplayBean.comboboxLOVBeanList[vs.index%999].suggestMethod}"
                                           maxSuggestedItems="-1"/>
                   <f:validator binding="#{viewScope.DcmDataDisplayBean.comboboxLOVBeanList[vs.index%999]}"/>
                 </af:inputText>
                 <af:image id="it${vs.index}" source="/images/page-next.gif"
-                          rendered="#{attr.valueSetId ne null}" visible="#{row['VISIBLE'] eq 'TRUE'}"
-                          clientComponent="true">
+                          rendered="#{(attr.valueSetId ne null) and(not ((viewScope.DcmDataDisplayBean.isEditable and (attr.readonly eq 'N')) eq false)
+                              or (viewScope.DcmDataDisplayBean.isRolling eq true and viewScope.DcmDataDisplayBean.rollingMonth ne null
+                              and viewScope.DcmDataDisplayBean.rollingMonth >= attr.rollingMonth))}" 
+                          visible="#{row['VISIBLE'] eq 'TRUE'}"
+                          clientComponent="true"
+                          inlineStyle="width:20.0px; height:20px;">
                   <af:clientListener type="click" method="showPopupFromAction"/>
                   <af:serverListener type="changeVS"
                                      method="#{viewScope.DcmDataDisplayBean.vsc}"/>
@@ -248,15 +262,18 @@
         </th:script>
         <af:popup id="slc"  autoCancel="disabled" 
                   binding="#{viewScope.DcmDataDisplayBean.slcPop}"
-                  >
+                  contentDelivery="immediate"
+                >
           <af:selectOneListbox id="sol1" autoSubmit="true"
-                               size="#{viewScope.DcmDataDisplayBean.svlSize > 8 ? 10:(viewScope.DcmDataDisplayBean.svlSize)}" 
-                               binding="#{viewScope.DcmDataDisplayBean.richSoc}"
-                               clientComponent="true" >
-            <f:selectItems value="#{viewScope.DcmDataDisplayBean.socValueList}"
-                           id="si2"/>
-            <af:clientListener method="selectedVal" type="click"/>
-          </af:selectOneListbox>
+                                 size="#{viewScope.DcmDataDisplayBean.svlSize > 8 ? 10:(viewScope.DcmDataDisplayBean.svlSize)}"
+                                 binding="#{viewScope.DcmDataDisplayBean.richSoc}"
+                                 clientComponent="true" 
+                                 contentStyle="  padding:0px 10px 1px 10px; width:110%; margin-top:-20px; margin-left:-20px; margin-bottom:-20px;"
+                                  simple="true">
+              <f:selectItems value="#{viewScope.DcmDataDisplayBean.socValueList}"
+                              id="si2"/>
+              <af:clientListener method="selectedVal" type="click"/>
+            </af:selectOneListbox>
         </af:popup>
       </af:panelCollection>
     </f:facet>
