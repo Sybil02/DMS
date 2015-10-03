@@ -149,6 +149,7 @@ public class WorkflowEngine {
         DBTransaction trans =
             (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
         Statement stat = trans.createStatement(DBTransaction.DEFAULT);
+        ApproveflowEngine afe = new ApproveflowEngine();
         //query first step
         String sql =
             "SELECT STEP_NO,STEP_TASK,OPEN_COM,STEP_OBJECT,PRE_STEP FROM DMS_WORKFLOW_STATUS WHERE STEP_NO = 1 AND WF_ID = '" +
@@ -179,10 +180,22 @@ public class WorkflowEngine {
                     + " AND RUN_ID = '" + runId + "'" + " AND STEP_NO = 1 ";
                 stat.executeUpdate(ueSql);
                 trans.commit();
+                //发送邮件提醒用户
+                String uSql = "SELECT S.SCENE_ALIAS,USER_ID FROM ODI11_USER_SCENE_V T,ODI11_SCENE S WHERE T.SCENE_ID " +
+                    "= S.ID AND S.LOCALE = 'zh_CN' AND T.SCENE_ID = '"
+                    + stepObj + "'";
+                ResultSet uRs = stat.executeQuery(uSql);
+                while(uRs.next()){
+                    afe.sendMail(uRs.getString("SCENE_ALIAS"), "", uRs.getString("USER_ID"), "工作流启动", "执行接口！", "工作流启动，请及时执行接口！", "");        
+                }
+                uRs.close();
                 //跳过ETL
                 int stepNo = 1 ;
                 while(true){
                     Map<String,String> nextMap = this.queryNextStep(wfId, runId, stepNo);   
+                    if("".equals(nextMap.get("STEP_TASK")) || nextMap.get("STEP_TASK")==null){
+                        return;        
+                    }
                     if("OPEN TEMPLATES".equals(nextMap.get("STEP_TASK"))){
                         this.openTemplates(nextMap.get("STEP_OBJECT"), openCom,runId,stepNo+1);
                         //打开模板完成，更新步骤状态表为working
@@ -198,6 +211,15 @@ public class WorkflowEngine {
                         stat.executeUpdate(ueSql0);
                         trans.commit();    
                         stepNo = stepNo + 1;
+                        //发送邮件提醒用户
+                        String uSql0 = "SELECT S.SCENE_ALIAS,USER_ID FROM ODI11_USER_SCENE_V T,ODI11_SCENE S WHERE T.SCENE_ID " +
+                            "= S.ID AND S.LOCALE = 'zh_CN' AND T.SCENE_ID = '"
+                            + stepObj + "'";
+                        ResultSet uRs0 = stat.executeQuery(uSql);
+                        while(uRs0.next()){
+                            afe.sendMail(uRs0.getString("SCENE_ALIAS"), "", uRs0.getString("USER_ID"), "工作流启动", "执行接口！", "工作流，请及时执行接口！", "");        
+                        }
+                        uRs.close();
                     }
                 }
             }
@@ -825,6 +847,7 @@ public class WorkflowEngine {
         DBTransaction trans =
             (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
         Statement stat = trans.createStatement(DBTransaction.DEFAULT);
+        ApproveflowEngine afe = new ApproveflowEngine();
         try{
         while(true){
             Map<String,String> nextMap = this.queryNextStep(wfId, runId, stepNo);  
@@ -840,6 +863,15 @@ public class WorkflowEngine {
                 etlSql.append("AND STEP_NO = ").append(stepNo+1);
                 stat.executeUpdate(etlSql.toString());
                 trans.commit();
+                //发送邮件提醒用户
+                String uSql1 = "SELECT S.SCENE_ALIAS,USER_ID FROM ODI11_USER_SCENE_V T,ODI11_SCENE S WHERE T.SCENE_ID " +
+                    "= S.ID AND S.LOCALE = 'zh_CN' AND T.SCENE_ID = '"
+                    + stepObj + "'";
+                ResultSet uRs1 = stat.executeQuery(uSql1);
+                while(uRs1.next()){
+                    afe.sendMail(uRs1.getString("SCENE_ALIAS"), comName, uRs1.getString("USER_ID"), commitUser, "执行接口！", "表单审批通过，请及时执行接口！", "");        
+                }
+                uRs1.close();
                 //继续执行下一步
                 stepNo = stepNo + 1 ;
             }else if("OPEN TEMPLATES".equals(nextTask)){

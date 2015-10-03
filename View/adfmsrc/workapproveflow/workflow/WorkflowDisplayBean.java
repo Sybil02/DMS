@@ -68,7 +68,9 @@ public class WorkflowDisplayBean {
     private RichPopup approvePop;
     private RichPopup runInterPop;
     List<SelectItem> tempItemList = new ArrayList<SelectItem>();
-   
+    private RichSelectOneChoice approveSoc;
+    private RichSelectOneChoice writeSoc;
+
     public WorkflowDisplayBean() {
         super();
         this.curUser =(Person)ADFContext.getCurrent().getSessionScope().get("cur_user");
@@ -88,6 +90,10 @@ public class WorkflowDisplayBean {
         DCIteratorBinding wfIter = ADFUtils.findIterator("DmsUserWorkflowVOIterator");
         ViewObject wfVo = wfIter.getViewObject();
         Row curRow = wfVo.getCurrentRow();
+        if(curRow == null){
+            FacesContext.getCurrentInstance().addMessage(null,new FacesMessage("请选择一个工作流！"));    
+            return;
+        }
         if(curRow.getAttribute("WfStatus").equals("Y")){
             FacesContext.getCurrentInstance().addMessage(null,new FacesMessage("工作流已经启动，不能重复启动！"));
             return;
@@ -145,13 +151,22 @@ public class WorkflowDisplayBean {
         DCIteratorBinding wfsIter = ADFUtils.findIterator("DmsWorkflowStatusVOIterator");
         ViewObject wfsVo = wfsIter.getViewObject();
         Row curRow = wfsVo.getCurrentRow();
-       
+        if(curRow == null){
+            FacesContext.getCurrentInstance().addMessage(null,new FacesMessage("请选择一个步骤！"));    
+            return;        
+        }
         String stepTask = curRow.getAttribute("StepTask").toString();
         String StepStatus = curRow.getAttribute("StepStatus").toString();
         if(stepTask.equals("OPEN TEMPLATES")){
+            if(this.writeSoc != null){
+                this.writeSoc.setValue(null);    
+            }
             String stepObject = curRow.getAttribute("StepObject").toString();
             openTemp(stepObject);
         }else if(stepTask.equals("APPROVE")&&StepStatus.equals("WORKING")){
+            if(this.approveSoc != null){
+                this.approveSoc.setValue(null);    
+            }
             String runId = curRow.getAttribute("RunId").toString();
             String StepNo = curRow.getAttribute("StepNo").toString();
             approveflow(runId,StepNo);
@@ -166,10 +181,11 @@ public class WorkflowDisplayBean {
     }
     
     public void approveflow(String runId,String StepNo){
+        tempItemList.clear();
         DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
         Statement stat=trans.createStatement(DBTransaction.DEFAULT);
         StringBuffer sql = new StringBuffer();
-        sql.append("select apptem.TEMPLATE_ID \"tempId\", temp.name \"name\" from dcm_template temp , approve_template_status apptem " +
+        sql.append("select distinct apptem.TEMPLATE_ID \"tempId\", temp.name \"name\" from dcm_template temp , approve_template_status apptem " +
             "where temp.id = apptem.TEMPLATE_ID and apptem.run_id = \'");
         sql.append(runId).append("\'");
         sql.append(" and apptem.step_no = \'");
@@ -191,15 +207,22 @@ public class WorkflowDisplayBean {
         } catch (SQLException e) {
             this._logger.severe(e);
         }
+        //默认不显示数据
+        DCIteratorBinding atsIter = ADFUtils.findIterator("DmsApproveTemplateStatusVOIterator");
+        ViewObject appVo = atsIter.getViewObject();
+        appVo.setWhereClause("1=2");
+        appVo.executeQuery();
+        appVo.setWhereClause(null);
         //显示pop
         RichPopup.PopupHints hints = new RichPopup.PopupHints();
         this.approvePop.show(hints);
     }
     public void openTemp(String stepObject){
+        tempItemList.clear();
         DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
         Statement stat=trans.createStatement(DBTransaction.DEFAULT);
         StringBuffer sql = new StringBuffer();
-        sql.append("select temp.id \"tempId\", temp.name \"name\" from dcm_template temp where temp.TEMPLATE_LABEL = \'");
+        sql.append("select distinct temp.id \"tempId\", temp.name \"name\" from dcm_template temp where temp.TEMPLATE_LABEL = \'");
         sql.append(stepObject);
         sql.append("\'");
         sql.append(" and temp.locale= \'");
@@ -220,7 +243,12 @@ public class WorkflowDisplayBean {
         } catch (SQLException e) {
             this._logger.severe(e);
         }
-        
+        //默认不显示数据
+        DCIteratorBinding wftsIter = ADFUtils.findIterator("DmsWorkflowTemplateStatusVOIterator");
+        ViewObject wftsVo = wftsIter.getViewObject();
+        wftsVo.setWhereClause("1=2");
+        wftsVo.executeQuery();
+        wftsVo.setWhereClause(null);
         //显示pop
         RichPopup.PopupHints hints = new RichPopup.PopupHints();
         this.tempPop.show(hints);
@@ -231,7 +259,10 @@ public class WorkflowDisplayBean {
         DCIteratorBinding wfsIter = ADFUtils.findIterator("DmsWorkflowStatusVOIterator");
         ViewObject wfsVo = wfsIter.getViewObject();
         Row curRow = wfsVo.getCurrentRow();
-        
+        if(curRow == null){
+            FacesContext.getCurrentInstance().addMessage(null,new FacesMessage("请选择一个接口步骤！"));    
+            return;    
+        }
         String stepTask = curRow.getAttribute("StepTask").toString();
         String stepStatus = curRow.getAttribute("StepStatus").toString();
         if(stepTask.equals("ETL")&&stepStatus.equals("WORKING")){
@@ -270,6 +301,10 @@ public class WorkflowDisplayBean {
         DCIteratorBinding wfIter = ADFUtils.findIterator("DmsUserWorkflowVOIterator");
         ViewObject wfVo = wfIter.getViewObject();
         Row row = wfVo.getCurrentRow();
+        if(row == null){
+            FacesContext.getCurrentInstance().addMessage(null,new FacesMessage("请选择一个工作流！"));    
+            return;    
+        }
         String wfId = row.getAttribute("WorkflowId").toString();
         String wfStatus = row.getAttribute("WfStatus").toString();
         if("N".equals(wfStatus)){
@@ -301,18 +336,24 @@ public class WorkflowDisplayBean {
         // Add event code here...
         RichSelectOneChoice comSoc = (RichSelectOneChoice)valueChangeEvent.getSource();
         String tempId = comSoc.getValue().toString();
+        DCIteratorBinding wfsIter = ADFUtils.findIterator("DmsWorkflowStatusVOIterator");
+        ViewObject wfsVo = wfsIter.getViewObject();
+        Row curRow = wfsVo.getCurrentRow();
+        String runId = curRow.getAttribute("RunId").toString();
+        String stepNo = curRow.getAttribute("StepNo").toString();
         DCIteratorBinding atsIter = ADFUtils.findIterator("DmsApproveTemplateStatusVOIterator");
         StringBuffer sql = new StringBuffer();
-        sql.append("TEMPLATE_ID = \'");
+        sql.append(" TEMPLATE_ID = \'");
         sql.append(tempId).append("\'");
-        sql.append(" locale = \'");
+        sql.append(" and locale = \'");
         sql.append(curUser.getLocale()).append("\'");
+        sql.append(" and RUN_ID = \'").append(runId).append("\'");
         ViewObject wftsVo = atsIter.getViewObject();
         wftsVo.setWhereClause(sql.toString());
         wftsVo.executeQuery();
         // 刷新表格
-        AdfFacesContext adfFace = AdfFacesContext.getCurrentInstance();
-        adfFace.addPartialTarget(JSFUtils.findComponentInRoot("t5"));
+//        AdfFacesContext adfFacesContext = AdfFacesContext.getCurrentInstance();
+//        adfFacesContext.addPartialTarget(JSFUtils.findComponentInRoot("t6"));
     }
     
     public void valueChangeTemp(ValueChangeEvent valueChangeEvent) {
@@ -336,8 +377,8 @@ public class WorkflowDisplayBean {
         wftsVo.setWhereClause(sql.toString());
         wftsVo.executeQuery();
        // 刷新表格
-        AdfFacesContext adfFace = AdfFacesContext.getCurrentInstance();
-        adfFace.addPartialTarget(JSFUtils.findComponentInRoot("t5"));
+//        AdfFacesContext adfFace = AdfFacesContext.getCurrentInstance();
+//        adfFace.addPartialTarget(JSFUtils.findComponentInRoot("t5"));
        
     }
 
@@ -396,5 +437,21 @@ public class WorkflowDisplayBean {
 
     public RichPopup getRunInterPop() {
         return runInterPop;
+    }
+
+    public void setApproveSoc(RichSelectOneChoice approveSoc) {
+        this.approveSoc = approveSoc;
+    }
+
+    public RichSelectOneChoice getApproveSoc() {
+        return approveSoc;
+    }
+
+    public void setWriteSoc(RichSelectOneChoice writeSoc) {
+        this.writeSoc = writeSoc;
+    }
+
+    public RichSelectOneChoice getWriteSoc() {
+        return writeSoc;
     }
 }
