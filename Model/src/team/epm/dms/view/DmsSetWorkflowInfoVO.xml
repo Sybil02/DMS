@@ -106,7 +106,14 @@ ORDER BY SEQ]]>
     PrecisionRule="true"
     EntityAttrName="UpdatedBy"
     EntityUsage="DmsWorkflowInfoEO"
-    AliasName="UPDATED_BY"/>
+    AliasName="UPDATED_BY">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="team.epm.dms.view.DmsSetWorkflowInfoVO.UpdatedBy_LABEL"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewAttribute
     Name="WfCom"
     PrecisionRule="true"

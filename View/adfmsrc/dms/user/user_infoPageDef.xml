@@ -5,12 +5,11 @@
   <executables>
     <variableIterator id="variables"/>
     <methodIterator id="DmsUserViewIterator" Binds="queryCurUser.result"
-                    DataControl="DmsModuleDataControl" RangeSize="25"
-                    BeanClass="team.epm.dms.view.DmsUserViewRowImpl"/>
+                    DataControl="DmsModuleDataControl" RangeSize="1"
+                    BeanClass="team.epm.dms.view.DmsUserViewRowImpl"
+                    Refresh="always"/>
   </executables>
-  <bindings>
-    <action IterBinding="DmsUserViewIterator" id="CreateInsert"
-            RequiresUpdateModel="false" Action="createInsertRow"/>
+  <bindings> 
     <action id="Rollback" RequiresUpdateModel="true"
             Action="rollbackTransaction" DataControl="DmsModuleDataControl"/>
     <action id="Commit" RequiresUpdateModel="true" Action="commitTransaction"
@@ -58,5 +57,13 @@
                   IsViewObjectMethod="true" DataControl="DmsModuleDataControl"
                   InstanceName="DmsModuleDataControl.DmsUserView"
                   ReturnName="data.DmsModuleDataControl.methodResults.queryCurUser_DmsModuleDataControl_DmsUserView_queryCurUser_result"/>
+    <action IterBinding="DmsUserViewIterator" id="Next"
+            InstanceName="DmsModuleDataControl.DmsUserView"
+            DataControl="DmsModuleDataControl" RequiresUpdateModel="true"
+            Action="next"/>
+    <action IterBinding="DmsUserViewIterator" id="Previous"
+            InstanceName="DmsModuleDataControl.DmsUserView"
+            DataControl="DmsModuleDataControl" RequiresUpdateModel="true"
+            Action="previous"/>
   </bindings>
 </pageDefinition>

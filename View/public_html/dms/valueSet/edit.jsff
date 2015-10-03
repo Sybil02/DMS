@@ -48,7 +48,7 @@
                        filterable="true" sortable="true"
                        headerText="#{bindings.DmsValueSetView.hints.Name.label}"
                        
-                       id="c3" width="110">
+                       id="c3" width="150">
             <af:inputText value="#{row.bindings.Name.inputValue}" simple="true"
                           required="#{bindings.DmsValueSetView.hints.Name.mandatory}"
                           columns="#{bindings.DmsValueSetView.hints.Name.displayWidth}"
@@ -62,7 +62,7 @@
                        sortable="true"
                        filterable="true"
                        headerText="#{bindings.DmsValueSetView.hints.Source.label}"
-                       id="c4" width="110">
+                       id="c4" width="160">
             <af:inputText value="#{row.bindings.Source.inputValue}"
                           simple="true"
                           valueChangeListener="#{viewScope.ValueSetEditBean.valueSourceChange}"
@@ -75,7 +75,7 @@
             </af:inputText>
             </af:column>
           <af:column headerText="#{bindings.DmsValueSetView.hints.Code.label}"
-                     id="c6" width="106">
+                     id="c6" width="130">
             <af:inputText value="#{row.bindings.Code.inputValue}"
                           label="#{bindings.DmsValueSetView.hints.Code.label}"
                           required="#{bindings.DmsValueSetView.hints.Code.mandatory}"
@@ -89,13 +89,13 @@
           <af:column sortProperty="#{bindings.DmsValueSetView.hints.UpdatedAt.name}"
                        filterable="false" sortable="true"
                        headerText="#{bindings.DmsValueSetView.hints.UpdatedAt.label}"
-                       id="c2" width="109">
+                       id="c2" width="140">
               <af:outputText value="#{row.UpdatedAt}" id="ot2">
                 <af:convertDateTime pattern="#{bindings.DmsValueSetView.hints.UpdatedAt.format}"/>
               </af:outputText>
             </af:column>
           <af:column headerText="#{bindings.DmsValueSetView.hints.DefaultCode.label}" 
-                     id="c1" width="105">
+                     id="c1" width="130">
                      
             <af:selectOneChoice  id="soc1" value="#{row.bindings.DefaultCode.inputValue}"
                           label="#{bindings.DmsValueSetView.hints.DefaultCode.label}" >

@@ -41,7 +41,7 @@
             <af:column sortProperty="#{bindings.DmsApprovalflowEntitysVO.hints.Code.name}"
                        sortable="true"
                        headerText="#{bindings.DmsApprovalflowEntitysVO.hints.Code.label}"
-                       id="c5">
+                       id="c5" width="300">
 
               <af:selectOneChoice 
                             value="#{row.bindings.Code.inputValue}"
@@ -54,7 +54,7 @@
               </af:selectOneChoice>
             </af:column>
             <af:column headerText="#{bindings.DmsApprovalflowEntitysVO.hints.UserName.label}"
-                       id="c4" sortable="true">
+                       id="c4" sortable="true" width="160">
               <af:inputListOfValues id="userNameId"
                                     popupTitle="Search and Select: #{bindings.DmsApprovalflowEntitysVO.hints.UserName.label}"
                                     value="#{row.bindings.UserName.inputValue}"
@@ -117,7 +117,7 @@
           <af:column sortProperty="#{bindings.DmsApprovalFlowInfoVO.hints.TemplateName.name}"
                      sortable="true"
                      headerText="#{bindings.DmsApprovalFlowInfoVO.hints.TemplateName.label}"
-                     id="c1">
+                     id="c1" width="320">
             <af:inputListOfValues id="templateNameId"
                                   popupTitle="Search and Select: #{bindings.DmsApprovalFlowInfoVO.hints.TemplateName.label}"
                                   value="#{row.bindings.TemplateName.inputValue}"
@@ -134,7 +134,7 @@
           <af:column sortProperty="#{bindings.DmsApprovalFlowInfoVO.hints.ValueSetName.name}"
                      sortable="true"
                      headerText="#{bindings.DmsApprovalFlowInfoVO.hints.ValueSetName.label}"
-                     id="c6">
+                     id="c6" width="180">
             <af:inputText value="#{row.bindings.ValueSetName.inputValue}"
                           label="#{bindings.DmsApprovalFlowInfoVO.hints.ValueSetName.label}"
                           required="#{bindings.DmsApprovalFlowInfoVO.hints.ValueSetName.mandatory}"

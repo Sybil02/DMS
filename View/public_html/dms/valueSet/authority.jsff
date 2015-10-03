@@ -115,7 +115,7 @@
                   <af:column sortProperty="#{bindings.DmsGroupValueView.hints.ValueId.name}" filterable="true"
                              headerText="#{bindings.DmsGroupValueView.hints.ValueId.label}"
                      
-                             id="c1" sortable="true">
+                             id="c1" sortable="true" width="140">
                      <af:outputText value="#{viewScope.ValueSetAuthorityBean.valueMap[row.ValueId]}"
                                     id="ot1"/>
                      <f:facet name="filter">
@@ -141,7 +141,7 @@
                   </af:column>
                   <af:column sortProperty="#{bindings.DmsGroupValueView.hints.UpdatedAt.name}" 
                              headerText="#{bindings.DmsGroupValueView.hints.UpdatedAt.label}"
-                             id="c3" width="120">
+                             id="c3" width="140">
                      <af:outputText value="#{row.UpdatedAt}" id="ot3">
                         <af:convertDateTime pattern="#{bindings.DmsGroupValueView.hints.UpdatedAt.format}"/>
                      </af:outputText>

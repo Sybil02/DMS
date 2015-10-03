@@ -419,11 +419,11 @@
               <af:column sortProperty="#{bindings.DmsUserWorkflowVO.hints.WfName.name}"
                          sortable="false"
                          headerText="#{bindings.DmsUserWorkflowVO.hints.WfName.label}"
-                         id="c2">
+                         id="c2" width="220">
                 <af:outputText value="#{row.WfName}" id="ot1"/>
               </af:column>
               <af:column headerText="#{bindings.DmsUserWorkflowVO.hints.WfStatus.label}"
-                         id="c1">
+                         id="c1" width="0">
                 <af:outputText value="#{row.WfStatus eq 'Y' ? '已启动':'已关闭'}" id="ot2"/>
               </af:column>
             </af:table>
@@ -464,13 +464,13 @@
               <af:column sortProperty="#{bindings.DmsWorkflowStatusVO.hints.StepTask.name}"
                          sortable="true"
                          headerText="#{bindings.DmsWorkflowStatusVO.hints.StepTask.label}"
-                         id="c12">
+                         id="c12" width="120">
                 <af:outputText value="#{row.StepTask}" id="ot13"/>
               </af:column>
               <af:column sortProperty="#{bindings.DmsWorkflowStatusVO.hints.StepObject.name}"
                          sortable="true"
                          headerText="#{bindings.DmsWorkflowStatusVO.hints.StepObject.label}"
-                         id="c6">
+                         id="c6" width="120">
                 <af:outputText value="#{row.StepObject}" id="ot9"/>
               </af:column>
               <af:column sortProperty="#{bindings.DmsWorkflowStatusVO.hints.StepStatus.name}"
@@ -482,7 +482,7 @@
               <af:column sortProperty="#{bindings.DmsWorkflowStatusVO.hints.StartAt.name}"
                          sortable="true"
                          headerText="#{bindings.DmsWorkflowStatusVO.hints.StartAt.label}"
-                         id="c7">
+                         id="c7" width="140">
                 <af:outputText value="#{row.StartAt}" id="ot7">
                   <af:convertDateTime pattern="#{bindings.DmsWorkflowStatusVO.hints.StartAt.format}"/>
                 </af:outputText>
@@ -490,7 +490,7 @@
               <af:column sortProperty="#{bindings.DmsWorkflowStatusVO.hints.FinishAt.name}"
                          sortable="true"
                          headerText="#{bindings.DmsWorkflowStatusVO.hints.FinishAt.label}"
-                         id="c3">
+                         id="c3" width="140">
                 <af:outputText value="#{row.FinishAt}" id="ot12">
                   <af:convertDateTime pattern="#{bindings.DmsWorkflowStatusVO.hints.FinishAt.format}"/>
                 </af:outputText>

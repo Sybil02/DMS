@@ -134,7 +134,7 @@
           <af:column sortProperty="#{bindings.DmsWorkflowInfoVO.hints.WfName.name}"
                      sortable="false"
                      headerText="#{bindings.DmsWorkflowInfoVO.hints.WfName.label}"
-                     id="c2">
+                     id="c2" width="215">
             <af:inputText value="#{row.bindings.WfName.inputValue}"
                           label="#{bindings.DmsWorkflowInfoVO.hints.WfName.label}"
                           required="#{bindings.DmsWorkflowInfoVO.hints.WfName.mandatory}"
@@ -148,7 +148,7 @@
           <af:column sortProperty="#{bindings.DmsWorkflowInfoVO.hints.WfCom.name}"
                      sortable="false"
                      headerText="#{bindings.DmsWorkflowInfoVO.hints.WfCom.label}"
-                     id="c3">
+                     id="c3" width="158">
               <af:selectOneChoice value="#{row.bindings.WfCom.inputValue}"
                                   label="#{row.bindings.WfCom.label}"
                                   required="#{bindings.DmsWorkflowInfoVO.hints.WfCom.mandatory}"
@@ -160,7 +160,7 @@
           <af:column sortProperty="#{bindings.DmsWorkflowInfoVO.hints.Seq.name}"
                      sortable="false"
                      headerText="#{bindings.DmsWorkflowInfoVO.hints.Seq.label}"
-                     id="c1">
+                     id="c1" width="57">
             <af:inputText value="#{row.bindings.Seq.inputValue}"
                           label="#{bindings.DmsWorkflowInfoVO.hints.Seq.label}"
                           required="#{bindings.DmsWorkflowInfoVO.hints.Seq.mandatory}"

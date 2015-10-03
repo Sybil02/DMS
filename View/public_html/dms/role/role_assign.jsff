@@ -109,13 +109,13 @@
           <af:column sortProperty="#{bindings.DmsGroupedRoleView.hints.RoleName.name}"
                      filterable="true" sortable="true"
                      headerText="#{bindings.DmsGroupedRoleView.hints.RoleName.label}"
-                     id="c1">
+                     id="c1" width="230">
             <af:outputText value="#{row.RoleName}" id="ot1"/>
           </af:column>
           <af:column sortProperty="#{bindings.DmsGroupedRoleView.hints.UpdatedAt.name}"
                      sortable="true"
                      headerText="#{bindings.DmsGroupedRoleView.hints.UpdatedAt.label}"
-                     id="c3">
+                     id="c3" width="140">
             <af:outputText value="#{row.UpdatedAt}" id="ot3">
               <af:convertDateTime pattern="#{bindings.DmsGroupedRoleView.hints.UpdatedAt.format}"/>
             </af:outputText>
@@ -123,7 +123,7 @@
           <af:column sortProperty="#{bindings.DmsGroupedRoleView.hints.UpdatedBy.name}"
                      sortable="true"
                      headerText="#{bindings.DmsGroupedRoleView.hints.UpdatedBy.label}"
-                     id="c2">
+                     id="c2" width="100">
             <af:selectOneChoice value="#{row.bindings.UpdatedBy.inputValue}"
                                 label="#{row.bindings.UpdatedBy.label}"
                                 required="#{bindings.DmsGroupedRoleView.hints.UpdatedBy.mandatory}"

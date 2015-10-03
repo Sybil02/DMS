@@ -1,5 +1,7 @@
 package dcm.template;
 
+import com.sun.faces.context.FacesContextImpl;
+
 import common.ADFUtils;
 
 import common.DmsUtils;
@@ -23,6 +25,7 @@ import java.util.Map;
 
 import java.util.Set;
 
+import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
@@ -40,6 +43,8 @@ import oracle.adf.view.rich.context.AdfFacesContext;
 import oracle.adf.view.rich.event.QueryEvent;
 
 import oracle.adf.view.rich.model.FilterableQueryDescriptor;
+
+import oracle.adfinternal.view.faces.context.AdfFacesContextImpl;
 
 import oracle.jbo.Key;
 import oracle.jbo.Row;
@@ -179,6 +184,11 @@ public class TemplateBackingBean {
         for (Object obj : this.recordTable.getSelectedRowKeys()) {
             Key key = (Key)((List)obj).get(0);
             Row row = rowSetIterator.getRow(key);
+            if(row == null) {
+                FacesContext.getCurrentInstance().addMessage(null,new FacesMessage("请先选择组合"));
+                continue;
+            }
+            
             String comRecordId = (String)row.getAttribute("ID");
             String tid = (String)row.getAttribute("TID");
             String status = (String)row.getAttribute("STATUS");
@@ -213,6 +223,11 @@ public class TemplateBackingBean {
         for (Object obj : this.recordTable.getSelectedRowKeys()) {
             Key key = (Key)((List)obj).get(0);
             Row row = rowSetIterator.getRow(key);
+            if(row == null) {
+                FacesContext.getCurrentInstance().addMessage(null,new FacesMessage("请先选择组合"));
+                continue;
+            }
+            
             String tid = (String)row.getAttribute("TID");
             String status = (String)row.getAttribute("STATUS");
             if (tid != null && "OPEN".equals(status)) {

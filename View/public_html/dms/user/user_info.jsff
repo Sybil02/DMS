@@ -167,14 +167,14 @@
           </af:gridRow>
           <af:gridRow id="gr2">
             <af:gridCell id="gc4" columnSpan="2" halign="center">
+            <af:spacer width="30" height="24" id="s3"/>
               <af:commandButton actionListener="#{bindings.Commit.execute}"
                                 text="#{viewBundle['dms.common.save']}"
                                 id="cb1"/>
-              <af:commandButton actionListener="#{bindings.Rollback.execute}"
-                                text="#{viewBundle['dms.common.rollback']}"
-                                id="cb2">
-                <af:resetActionListener/>
-              </af:commandButton>
+              <af:spacer width="30" height="10" id="s1"/>
+              <af:resetButton text="#{viewBundle['dms.common.rollback']}" id="rb1"
+                              inlineStyle="height:23px;  "/> 
+                    
             </af:gridCell>
           </af:gridRow>
         </af:panelGridLayout>

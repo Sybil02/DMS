@@ -118,7 +118,7 @@
           <af:column sortProperty="#{bindings.DmsRoleWorkflowVO.hints.UpdatedAt.name}"
                      sortable="false"
                      headerText="#{bindings.DmsRoleWorkflowVO.hints.UpdatedAt.label}"
-                     id="c4" width="200">
+                     id="c4" width="140">
             <af:outputText value="#{row.UpdatedAt}" id="ot6">
               <af:convertDateTime pattern="#{bindings.DmsRoleWorkflowVO.hints.UpdatedAt.format}"/>
             </af:outputText>
