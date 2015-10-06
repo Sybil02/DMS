@@ -185,6 +185,7 @@ public class WorkflowEngine {
                     + stepObj + "'";
                 ResultSet uRs = stat.executeQuery(uSql);
                 while(uRs.next()){
+                    afe.sendMail(uRs.getString("SCENE_ALIAS"),"", uRs.getString("USER_ID"), "工作流启动", "执行接口！", "工作流启动，请及时执行接口！", "");        
                 }
                 uRs.close();
                 //跳过ETL
