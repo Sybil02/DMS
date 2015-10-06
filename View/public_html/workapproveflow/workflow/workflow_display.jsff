@@ -399,11 +399,12 @@
             <f:facet name="toolbar">
               <af:toolbar id="t2">
                 <af:commandButton text="#{viewBundle['dms.workflow.run']}"
-                                  id="cb1"
+                                  id="cb1" partialSubmit="true"
                                   actionListener="#{viewScope.workflowDisplayBean.showRunPop}"
                                   partialTriggers="t1"/>
                 <af:commandButton text="#{viewBundle['dcm.combination_record_close']}" id="cb5"
                                   actionListener="#{viewScope.workflowDisplayBean.closeWorkflow}"
+                                  partialSubmit="true"
                                   partialTriggers="t1"/>
               </af:toolbar>
             </f:facet>
@@ -424,7 +425,7 @@
                 <af:outputText value="#{row.WfName}" id="ot1"/>
               </af:column>
               <af:column headerText="#{bindings.DmsUserWorkflowVO.hints.WfStatus.label}"
-                         id="c1" width="0">
+                         id="c1">
                 <af:outputText value="#{row.WfStatus eq 'Y' ? '已启动':'已关闭'}" id="ot2"/>
               </af:column>
             </af:table>
@@ -467,12 +468,6 @@
                          headerText="#{bindings.DmsWorkflowStatusVO.hints.StepTask.label}"
                          id="c12" width="120">
                 <af:outputText value="#{row.StepTask eq 'OPEN TEMPLATES' ? '填写表单':(row.StepTask eq 'APPROVE' ? '审批':'接口')}" id="ot13"/>
-              </af:column>
-              <af:column sortProperty="#{bindings.DmsWorkflowStatusVO.hints.StepObject.name}"
-                         sortable="true"
-                         headerText="#{bindings.DmsWorkflowStatusVO.hints.StepObject.label}"
-                         id="c6" width="120">
-                <af:outputText value="#{row.StepObject}" id="ot9"/>
               </af:column>
               <af:column sortProperty="#{bindings.DmsWorkflowStatusVO.hints.StepStatus.name}"
                          sortable="true"

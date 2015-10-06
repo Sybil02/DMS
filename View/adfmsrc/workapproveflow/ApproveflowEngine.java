@@ -103,14 +103,18 @@ public class ApproveflowEngine {
         //查询模板信息
         String tSql = "SELECT T.NAME FROM DCM_TEMPLATE T WHERE T.ID = '"
             + templateId + "' AND T.LOCALE = '" + this.curUser.getLocale() + "'";
+        String tempName = "";
         try{
             ResultSet tempRs = stmt.executeQuery(tSql);
-            String tempName = "";
             if(tempRs.next()){
                 tempName = tempRs.getString("NAME");
+            }else{
+                //tempName 为空时，templateId为传过来的ETL名称
+                tempName = templateId;    
             }
             tempRs.close();
             ResultSet mailRs = stmt.executeQuery(mailSql.toString());
+            
             if (mailRs.next()) {
                 MailSender sender = new MailSender();
                 context = "您好！" + "<br/>"

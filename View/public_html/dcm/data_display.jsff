@@ -77,7 +77,8 @@
             <af:group id="g7">
               <af:commandButton text="#{viewBundle['dms.workflow.approve']}"
                                 id="cb13"
-                                disabled="#{viewScope.DcmDataDisplayBean.writeStatus eq 'Y'}"
+                                disabled="#{viewScope.DcmDataDisplayBean.writeStatus eq 'Y'
+                                or (viewScope.DcmDataDisplayBean.isEditable eq false)}"
                                 actionListener="#{viewScope.DcmDataDisplayBean.commitApprove}"/>
             </af:group>
             <af:group id="g8">
@@ -163,7 +164,7 @@
         </th:script>
         <af:table var="row" rowBandingInterval="0" id="t1"
                   value="#{viewScope.DcmDataDisplayBean.dataModel}"
-                  scrollPolicy="page"
+                  scrollPolicy="page"  
                   rowSelection="multiple" editingMode="clickToEdit" 
                   clientComponent="true"
                   sortListener="#{viewScope.DcmDataDisplayBean.sortListener}"

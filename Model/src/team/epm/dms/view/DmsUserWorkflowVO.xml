@@ -52,7 +52,7 @@
    AND T4.WORKFLOW_ID = T5.ID
    AND T5.LOCALE =: locale
    AND T1.ID = : userid
-   ORDER BY T5.SEQ]]>
+   ORDER BY T5.WF_NAME,T5.SEQ]]>
   </SQLQuery>
   <ViewAttribute
     Name="WorkflowId"

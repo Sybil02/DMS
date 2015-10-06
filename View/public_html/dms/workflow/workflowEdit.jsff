@@ -13,7 +13,8 @@
             <af:toolbar id="t4">
               <af:commandButton text="增加" actionListener="#{bindings.StepsCreateInsert.execute}" id="cb1"/>
               <af:commandButton text="删除" actionListener="#{bindings.StepsDelete.execute}" id="cb2"/>
-              <af:commandButton text="取消" actionListener="#{bindings.Rollback.execute}" id="cb3"/>
+              <af:commandButton text="取消" actionListener="#{bindings.Rollback.execute}" id="cb3"
+                                immediate="true"/>
               <af:commandButton text="保存" actionListener="#{bindings.Commit.execute}" id="cb4"/>
             </af:toolbar>
           </f:facet>
@@ -92,8 +93,9 @@
           <af:toolbar id="t3">
             <af:commandButton text="新增" actionListener="#{bindings.WorkflowCreateInsert.execute}" id="cb5"/>
             <af:commandButton text="删除" actionListener="#{bindings.WorkflowDelete.execute}" id="cb6"/>
+            <af:commandButton text="取消" actionListener="#{bindings.Rollback.execute}" id="cb8"
+                              immediate="true"/>
             <af:commandButton text="保存" actionListener="#{bindings.Commit.execute}" id="cb7"/>
-            <af:commandButton text="取消" actionListener="#{bindings.Rollback.execute}" id="cb8"/>
           </af:toolbar>
         </f:facet>
         <f:facet name="statusbar"/>

@@ -942,8 +942,7 @@ public class DcmDataDisplayBean extends TablePagination {
                     } else if (col.getDataType().equals("NUMBER")) {
                         try {
                             if (obj != null)
-                                obj =
-dfm.format(Double.valueOf(obj.toString()));
+                                obj = dfm.format(Double.valueOf(obj.toString()));
                             obj = ObjectUtils.toString(obj);
                         } catch (Exception e) {
                             JSFUtils.addFacesErrorMessage(DmsUtils.getMsg("dcm.format.error"));
@@ -1251,9 +1250,9 @@ dfm.format(Double.valueOf(obj.toString()));
         this.writeStatus = "Y";
         this.approveStatus = "Y";
         this.isWfTemplate();
-        if (this.writeStatus != "Y") {
-            this.isEditable = true;
-        }
+//        if (this.writeStatus != "Y") {
+//            this.isEditable = true;
+//        }
         //设置滚动预算
         this.setReadonlyByRolling();
         AdfFacesContext adfFacesContext = AdfFacesContext.getCurrentInstance();
@@ -1832,7 +1831,7 @@ dfm.format(Double.valueOf(obj.toString()));
         wfEngine.stepIsFinish(this.curWfId, this.curRunId, this.stepNo,
                               this.curStepTask);
         //刷新按钮不能点击
-        this.isEditable = false;
+        this.curCombinationRecordEditable = false ; 
         this.writeStatus = "Y";
     }
 
@@ -2050,6 +2049,7 @@ dfm.format(Double.valueOf(obj.toString()));
     //回退到父节点上一个输入审批状态
 
     public void retreat(ActionEvent actionEvent) {
+        this.isEnd = true;
         WorkflowEngine wfEngine = new WorkflowEngine();
         wfEngine.retreat(this.curWfId, this.curRunId, this.approveStepNo,
                          this.curTempalte.getId(), this.curCombiantionRecord,
@@ -2058,6 +2058,7 @@ dfm.format(Double.valueOf(obj.toString()));
     //回退到父节点在工作流中的起点位置
 
     public void retreatStarted(ActionEvent actionEvent) {
+        this.isEnd = true;
         WorkflowEngine wfEngine = new WorkflowEngine();
         wfEngine.retreatStarted(this.curWfId, this.curRunId,
                                 this.approveStepNo, this.curTempalte.getId(),

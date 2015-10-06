@@ -29,7 +29,7 @@
           </f:facet>
           <f:facet name="statusbar"/>
           <af:table value="#{bindings.DmsApprovalflowEntitysVO.collectionModel}"
-                    var="row"
+                    var="row" 
                     rows="#{bindings.DmsApprovalflowEntitysVO.rangeSize}"
                     emptyText="#{bindings.DmsApprovalflowEntitysVO.viewable ? 'No data to display.' : 'Access Denied.'}"
                     fetchSize="#{bindings.DmsApprovalflowEntitysVO.rangeSize}"
