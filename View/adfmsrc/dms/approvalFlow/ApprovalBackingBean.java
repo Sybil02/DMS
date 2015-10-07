@@ -9,6 +9,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
 import javax.faces.event.ValueChangeEvent;
 
 import javax.faces.model.SelectItem;
@@ -30,7 +31,11 @@ public class ApprovalBackingBean {
         ADFLogger.createADFLogger(ApprovalBackingBean.class);
     private Person curUser;
     private String sources;
+    
+    //用来记录当前的valuesetId，如果选择的valuesetid和原来的一样，那么就不用再获取了
+    private String valueSetId;
     private List<SelectItem> approvalObjItemList = new ArrayList<SelectItem>();
+    
     public ApprovalBackingBean() {
         curUser = (Person)ADFContext.getCurrent().getSessionScope().get("cur_user");
        // System.out.println("....................................");
@@ -83,8 +88,14 @@ public class ApprovalBackingBean {
         pubDome(valueSetId);
         }
     }
+     
     //得到动态表名查询数据
     private void pubDome(String valueSetId){
+        //小优化，如果前一个valuesetId和这个一样，就不重复获取
+        if (valueSetId.equals(this.valueSetId)) {
+            return ;
+        }
+        
         DBTransaction db = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
         Statement stmt = db.createStatement(DBTransaction.DEFAULT);
         StringBuffer sql = new StringBuffer();
@@ -121,8 +132,21 @@ public class ApprovalBackingBean {
         }
     }
 
-
-
+    /*
+     * 页面 取消 按钮，取消修改回到未修改的状态，并且不会导致
+     */
+    public void rollbackTable(ActionEvent actionEvent) {
+        ViewObject vo = ADFUtils.findIterator("DmsApprovalFlowInfoVOIterator").getViewObject();
+        int index = vo.getCurrentRowIndex();
+        
+        vo.getApplicationModule().getTransaction().rollback();
+        
+        vo.setCurrentRowAtRangeIndex(index);
+        
+        Row row = vo.getCurrentRow();
+        String valueSetId = row.getAttribute("ValueSetId").toString();
+        pubDome(valueSetId);
+    }
 }
 
 

@@ -5,9 +5,6 @@
   <parameters/>
   <executables>
     <variableIterator id="variables"/>
-    <iterator Binds="DmsApprovalflowinfoVO" RangeSize="25"
-              DataControl="DmsModuleDataControl"
-              id="DmsApprovalflowinfoVOIterator"/>
     <iterator Binds="DmsApprovalflowEntitysVO" RangeSize="25"
               DataControl="DmsModuleDataControl"
               id="DmsApprovalflowEntitysVOIterator"/>

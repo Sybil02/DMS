@@ -20,6 +20,7 @@
                                 id="af6"
                                 actionListener="#{bindings.EntitysDelete.execute}"/>
               <af:commandButton text="#{viewBundle.dms_cancel_approval}"
+                            
                                 id="af7" immediate="true"
                                 actionListener="#{bindings.Rollback.execute}"/>
               <af:commandButton text="#{viewBundle.dms_save_approval}"
@@ -37,7 +38,7 @@
                     selectedRowKeys="#{bindings.DmsApprovalflowEntitysVO.collectionModel.selectedRow}"
                     selectionListener="#{bindings.DmsApprovalflowEntitysVO.collectionModel.makeCurrent}"
                     rowSelection="single" id="t2"
-                    partialTriggers="::af5 ::af6 :::pc1:t1">
+                    partialTriggers=":::pc1:t1">
             <af:column sortProperty="#{bindings.DmsApprovalflowEntitysVO.hints.Code.name}"
                        sortable="true"
                        headerText="#{bindings.DmsApprovalflowEntitysVO.hints.Code.label}"
@@ -92,15 +93,21 @@
         <f:facet name="toolbar">
           <af:toolbar id="t3">
             <af:commandButton text="#{viewBundle.dms_new_approval}"
-                              id="af1"
+                              id="af1" partialSubmit="true"
                               actionListener="#{bindings.ApprovalCreateInsert.execute}"/>
             <af:commandButton text="#{viewBundle.dms_delete_approval}"
+                              partialSubmit="true"
                               id="af2"
                               actionListener="#{bindings.ApprovalDelete.execute}"/>
             <af:commandButton text="#{viewBundle.dms_cancel_approval}"
-                              actionListener="#{bindings.Rollback.execute}"
-                              id="af4" immediate="true"/>
+                              partialSubmit="true"
+                              immediate="true"
+                              id="af4"
+                              actionListener="#{pageFlowScope.approvalBackingBean.rollbackTable}">
+            </af:commandButton>
+            
             <af:commandButton text="#{viewBundle.dms_save_approval}" id="af3"
+                              partialSubmit="true"
                               actionListener="#{bindings.Commit.execute}"/>
           </af:toolbar>
         </f:facet>
@@ -113,7 +120,7 @@
                   selectedRowKeys="#{bindings.DmsApprovalFlowInfoVO.collectionModel.selectedRow}"
                   selectionListener="#{pageFlowScope.approvalBackingBean.makeCurrent}"
                   rowSelection="single" id="t1"
-                  partialTriggers="::af1 ::af2">
+                  partialTriggers="::af1 ::af2 ::af4">
           <af:column sortProperty="#{bindings.DmsApprovalFlowInfoVO.hints.TemplateName.name}"
                      sortable="true"
                      headerText="#{bindings.DmsApprovalFlowInfoVO.hints.TemplateName.label}"
@@ -135,15 +142,11 @@
                      sortable="true"
                      headerText="#{bindings.DmsApprovalFlowInfoVO.hints.ValueSetName.label}"
                      id="c6" width="180">
-            <af:inputText value="#{row.bindings.ValueSetName.inputValue}"
-                          label="#{bindings.DmsApprovalFlowInfoVO.hints.ValueSetName.label}"
-                          required="#{bindings.DmsApprovalFlowInfoVO.hints.ValueSetName.mandatory}"
-                          columns="#{bindings.DmsApprovalFlowInfoVO.hints.ValueSetName.displayWidth}"
-                          maximumLength="#{bindings.DmsApprovalFlowInfoVO.hints.ValueSetName.precision}"
+            <af:outputText value="#{row.bindings.ValueSetName.inputValue}"
                           shortDesc="#{bindings.DmsApprovalFlowInfoVO.hints.ValueSetName.tooltip}"
                           id="it5" partialTriggers="templateNameId">
-              <f:validator binding="#{row.bindings.ValueSetName.validator}"/>
-            </af:inputText>
+
+            </af:outputText>
           </af:column>
           <af:column sortProperty="#{bindings.DmsApprovalFlowInfoVO.hints.ApprovalName.name}"
                      sortable="true"
