@@ -97,17 +97,20 @@
               <af:commandButton text="#{viewBundle['dms.workflow.back']}"
                                 id="cb16"
                                 disabled="#{viewScope.DcmDataDisplayBean.isEnd}"
-                                actionListener="#{viewScope.DcmDataDisplayBean.retreat}"/>
+                                actionListener="#{viewScope.DcmDataDisplayBean.showBackPop}">
+              </af:commandButton>
               <af:commandButton text="#{viewBundle['dms.workflow.restart']}"
                                 id="cb17"
                                 disabled="#{viewScope.DcmDataDisplayBean.isEnd}"
-                                actionListener="#{viewScope.DcmDataDisplayBean.retreatStarted}"/>
+                                >
+                <af:showPopupBehavior popupId="::p11" triggerType="click"/>
+              </af:commandButton>
             </af:group>
           </af:toolbar>
         </f:facet>
         <!-- 分页控件 -->
         <f:facet name="statusbar">
-          <af:toolbar id="t4" partialTriggers="table1" clientComponent="true">
+          <af:toolbar id="t4" partialTriggers="t1" clientComponent="true">
             <af:group id="g1">
               <af:commandImageLink id="cil1" icon="/images/page-first.gif"
                                    actionListener="#{viewScope.DcmDataDisplayBean.firstPage}"/>
@@ -605,6 +608,44 @@
             <af:spacer width="550px" id="sp2"/>
             <af:commandButton text="#{viewBundle['dcm.common.ok']}" id="cb18"
                               actionListener="#{viewScope.DcmDataDisplayBean.approveRefuse}"/>
+          </af:panelWindow>
+        </af:popup>
+        <af:popup id="p11">
+          <af:panelWindow id="pw71" contentWidth="400" contentHeight="80" 
+            title="#{viewBundle['dms.wf.reason']}"  >
+            <af:inputText rows="7" columns="100" id="it14" value="#{viewScope.DcmDataDisplayBean.reason}"/>
+            <af:spacer height="5px" id="sp11"/>
+            <af:spacer width="550px" id="sp21"/>
+            <af:commandButton text="#{viewBundle['dcm.common.ok']}" id="cb181"
+                              actionListener="#{viewScope.DcmDataDisplayBean.retreatStarted}"/>
+          </af:panelWindow>
+        </af:popup>
+        <af:popup id="p10" autoCancel="disabled"
+                  binding="#{viewScope.DcmDataDisplayBean.backStepPop}">
+          <af:panelWindow id="pw8" contentWidth="600" contentHeight="150"
+                    title="#{viewBundle['dms.workflow.back']}" >
+            <af:decorativeBox id="db1" topHeight="30px" styleClass="AFStretchWidth" >
+              <f:facet name="center">
+                <af:panelGroupLayout id="pgl9">
+                  <af:outputLabel value="#{viewBundle['dms.wf.reason']}" id="bz"/>
+                  <af:spacer id="sp_bz" height="5px" />
+                  <af:inputText value="#{viewScope.DcmDataDisplayBean.backReason}" 
+                   partialTriggers="soc2" rows="17" columns="91" id="it5"/>
+                </af:panelGroupLayout>
+              </f:facet>
+              <f:facet name="top">
+                <af:panelGroupLayout id="pgl8" layout="horizontal">
+                    <af:selectOneChoice label="#{viewBundle['dms.retreat.step']}" id="soc2"
+                                        binding="#{viewScope.DcmDataDisplayBean.backSoc}" autoSubmit="true"
+                                        valueChangeListener="#{viewScope.DcmDataDisplayBean.backSocChangeValue}">
+                    <f:selectItems value="#{viewScope.DcmDataDisplayBean.backList}" id="si5"/>
+                    </af:selectOneChoice>
+                    <af:spacer width="10px" id="spac1"/>
+                    <af:commandButton text="#{viewBundle['dcm.common.ok']}" id="cb19"
+                                      actionListener="#{viewScope.DcmDataDisplayBean.backSpecifyStep}"/>
+                </af:panelGroupLayout>
+              </f:facet>
+            </af:decorativeBox>
           </af:panelWindow>
         </af:popup>
       </af:panelGroupLayout>

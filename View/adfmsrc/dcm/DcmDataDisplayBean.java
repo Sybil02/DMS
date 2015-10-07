@@ -196,6 +196,9 @@ public class DcmDataDisplayBean extends TablePagination {
 
     private RichProgressIndicator exportProIndicator;
     private RichCommandButton exportButton;
+    private RichPopup backStepPop;
+    private String backReason;
+    private RichSelectOneChoice backSoc;
 
 
     public DcmDataDisplayBean() {
@@ -2046,24 +2049,30 @@ public class DcmDataDisplayBean extends TablePagination {
         return _comboboxLOVBeanList;
     }
 
-    //回退到父节点上一个输入审批状态
-
-    public void retreat(ActionEvent actionEvent) {
+    //回退到指定步骤
+    public void backSpecifyStep(ActionEvent actionEvent) {
         this.isEnd = true;
+        this.approveStatus = "Y";
+        int specifyStepNo = Integer.parseInt(this.backSoc.getValue().toString());
         WorkflowEngine wfEngine = new WorkflowEngine();
-        wfEngine.retreat(this.curWfId, this.curRunId, this.approveStepNo,
+        wfEngine.retreat(this.curWfId, this.curRunId, this.approveStepNo,specifyStepNo,
                          this.curTempalte.getId(), this.curCombiantionRecord,
-                         this.curUser.getName());
+                         this.curUser.getName(),this.backReason);
+        this.backStepPop.cancel();
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("回退成功！"));
     }
+    
     //回退到父节点在工作流中的起点位置
-
     public void retreatStarted(ActionEvent actionEvent) {
         this.isEnd = true;
+        this.approveStatus = "Y";
         WorkflowEngine wfEngine = new WorkflowEngine();
         wfEngine.retreatStarted(this.curWfId, this.curRunId,
                                 this.approveStepNo, this.curTempalte.getId(),
                                 this.curCombiantionRecord,
-                                this.curUser.getName());
+                                this.curUser.getName(),this.reason);
+        this.reason = "";
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("已回到初始状态！"));
     }
     //手动添加页面是否为dirty
 
@@ -2311,6 +2320,94 @@ public class DcmDataDisplayBean extends TablePagination {
     //点击表中的行则显示下拉框小图标,由js调用
     public void tableClickEvent(ClientEvent clientEvent) {
         showCurrentList();
+    }
+
+    public void setBackStepPop(RichPopup backStepPop) {
+        this.backStepPop = backStepPop;
+    }
+
+    public RichPopup getBackStepPop() {
+        return backStepPop;
+    }
+
+    public void setBackReason(String backReason) {
+        this.backReason = backReason;
+    }
+
+    public String getBackReason() {
+        return backReason;
+    }
+
+    private Map<String,List<String>> backMap = new HashMap<String,List<String>>();
+    private List<SelectItem> backList = new ArrayList<SelectItem>();
+    public void showBackPop(ActionEvent actionEvent) {
+        backMap.clear();
+        backList.clear();
+        DBTransaction trans =
+            (DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
+        Statement stat = trans.createStatement(DBTransaction.DEFAULT);
+        //查询当前审批步骤之前的填写表单步骤 
+        String backSql = "SELECT DISTINCT T.STEP_NO,D.NAME FROM WORKFLOW_TEMPLATE_STATUS T,DCM_TEMPLATE D "
+            + "WHERE T.TEMPLATE_ID = D.ID AND D.LOCALE = 'zh_CN' " + "AND T.RUN_ID = '"
+            + this.curRunId + "' AND T.STEP_NO < " + this.approveStepNo + " AND T.ENTITY_CODE IN "
+            + "(SELECT P.ENTITY FROM DCM_ENTITY_PARENT P WHERE P.PARENT = " 
+            + "(SELECT DISTINCT P1.PARENT FROM WORKFLOW_TEMPLATE_STATUS W,DCM_ENTITY_PARENT P1 "
+            + "WHERE W.ENTITY_CODE = P1.ENTITY AND W.COM_ID = '" + this.curCombiantionRecord + "')) "
+            + "ORDER BY T.STEP_NO DESC";
+
+        try {
+            ResultSet bRs = stat.executeQuery(backSql);
+            while(bRs.next()){
+                String sNo = bRs.getString("STEP_NO");
+                String tName = bRs.getString("NAME");
+                if(backMap.get(sNo) == null){
+                    List<String> tList = new ArrayList<String>();
+                    tList.add(tName);
+                    backMap.put(sNo, tList);
+                    SelectItem si = new SelectItem();
+                    si.setLabel("填写表单第"+sNo+"步");
+                    si.setValue(sNo);
+                    backList.add(si);
+                }else{
+                    backMap.get(sNo).add(tName);
+                }
+            }
+            bRs.close();
+            stat.close();
+            this.backSoc.setValue(backList.get(0).getValue());
+            ValueChangeEvent vcEvent = new ValueChangeEvent(this.backSoc,"",backList.get(0).getValue());
+            this.backSocChangeValue(vcEvent);
+            RichPopup.PopupHints hint = new RichPopup.PopupHints();
+            this.backStepPop.show(hint);
+        } catch (SQLException e) {
+            this._logger.severe(e);
+        }
+    }
+    
+    public void backSocChangeValue(ValueChangeEvent valueChangeEvent) {
+        String backNo = valueChangeEvent.getNewValue().toString();
+        this.backReason = "回退涉及到的表单 ：";
+        for(String name : backMap.get(backNo)){
+            this.backReason += "\n\t";
+            this.backReason += name;
+            this.backReason += ",\n";
+        }
+    }
+
+    public void setBackList(List<SelectItem> backList) {
+        this.backList = backList;
+    }
+
+    public List<SelectItem> getBackList() {
+        return backList;
+    }
+
+    public void setBackSoc(RichSelectOneChoice backSoc) {
+        this.backSoc = backSoc;
+    }
+
+    public RichSelectOneChoice getBackSoc() {
+        return backSoc;
     }
 }
 

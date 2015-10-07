@@ -1,6 +1,5 @@
 package workapproveflow;
 
-import common.ADFUtils;
 import common.DmsUtils;
 
 import dms.login.Person;
@@ -214,7 +213,7 @@ public class WorkflowEngine {
                         String uSql0 = "SELECT S.SCENE_ALIAS,USER_ID FROM ODI11_USER_SCENE_V T,ODI11_SCENE S WHERE T.SCENE_ID " +
                             "= S.ID AND S.LOCALE = 'zh_CN' AND T.SCENE_ID = '"
                             + stepObj + "'";
-                        ResultSet uRs0 = stat.executeQuery(uSql);
+                        ResultSet uRs0 = stat.executeQuery(uSql0);
                         while(uRs0.next()){
                             afe.sendMail(uRs0.getString("SCENE_ALIAS"),"", uRs0.getString("USER_ID"), "工作流启动", "执行接口！", "工作流，请及时执行接口！", "");        
                         }
@@ -938,37 +937,19 @@ public class WorkflowEngine {
     }
     
     //回退到父节点上一个输入审批状态
-    public void retreat(String wfId,String runId,int stepNo,String templateId,String comId,String commitUser){
+    public void retreat(String wfId,String runId,int stepNo,int backStepNo,String templateId,String comId,String commitUser,String reason){
         DBTransaction trans =
             (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
         Statement stat = trans.createStatement(DBTransaction.DEFAULT);
         List<Map<String,String>> stepList = new ArrayList<Map<String,String>>();
-        //查询前面的审批步骤
-        StringBuffer aSql = new StringBuffer();
-        aSql.append("select step_no from dms_workflow_status t ");
-        aSql.append("where t.wf_id = '").append(wfId).append("' ");
-        aSql.append("and t.run_id = '").append(runId).append("' ");
-        aSql.append("and t.step_task = 'APPROVE' ").append("and t.step_no < ").append(stepNo);
-        aSql.append(" order by t.step_no desc ");
+
         try {
-            int first = 0;
-            int second = 0;
-            ResultSet aRs = stat.executeQuery(aSql.toString());
             StringBuffer bSql = new StringBuffer();
             bSql.append("select step_no,step_task,step_status,open_com,step_object from dms_workflow_status t ");
             bSql.append("where t.wf_id = '").append(wfId).append("' ");
             bSql.append("and t.run_id = '").append(runId).append("' ");
             bSql.append("and t.step_no <= ").append(stepNo);
-            if(aRs.next()){
-                //存在上个审批步骤
-                first = aRs.getInt("STEP_NO");        
-            }
-            if(aRs.next()){
-                //存在上上个审批步骤
-                second = aRs.getInt("STEP_NO");    
-                bSql.append(" and t.step_no > ").append(second);
-            }
-            aRs.close();
+            bSql.append(" and t.step_no >= ").append(backStepNo);
             bSql.append(" order by t.step_no asc ");
             //查询需要回退处理的步骤信息
             ResultSet bRs = stat.executeQuery(bSql.toString());
@@ -983,16 +964,16 @@ public class WorkflowEngine {
             }
             bRs.close();
             stat.close();
-            this.retreatStep(wfId, runId,templateId, comId, stepList,commitUser);
+            this.retreatStep(wfId, runId,templateId, comId, stepList,commitUser,reason);
         } catch (SQLException e) {
             this._logger.severe(e);
         }
         //处理上上个到当前步骤之间的状态
-        this.retreatStep(wfId, runId, templateId, comId, stepList,commitUser);
+        this.retreatStep(wfId, runId, templateId, comId, stepList,commitUser,reason);
     }
     
     //回退到父节点在工作流中的起点位置
-    public void retreatStarted(String wfId,String runId,int stepNo,String templateId,String comId,String commitUser){
+    public void retreatStarted(String wfId,String runId,int stepNo,String templateId,String comId,String commitUser,String reason){
         DBTransaction trans =
             (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
         Statement stat = trans.createStatement(DBTransaction.DEFAULT);
@@ -1017,7 +998,7 @@ public class WorkflowEngine {
         }
         bRs.close();
         stat.close();
-        this.retreatStep(wfId, runId, templateId, comId, stepList,commitUser);
+        this.retreatStep(wfId, runId, templateId, comId, stepList,commitUser,reason);
         }catch(Exception e){
             this._logger.severe(e);    
         }
@@ -1025,7 +1006,7 @@ public class WorkflowEngine {
     
     //更改步骤状态，回退步骤
     public void retreatStep(String wfId,String runId,String templateId ,String comId,
-                            List<Map<String,String>> stepList,String commitUser){
+                            List<Map<String,String>> stepList,String commitUser,String reason){
         DBTransaction trans =
             (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
         Statement stat = trans.createStatement(DBTransaction.DEFAULT);
@@ -1071,7 +1052,7 @@ public class WorkflowEngine {
                     String tid = mRs.getString("TEMPLATE_ID");
                     String uid = mRs.getString("PERSON_ID");
                     String entityName ="_" + this.getEntityName(mRs.getString("ENTITY_ID"));
-                    afe.sendMail(tid, entityName, uid,commitUser, "工作流回退！", "工作流回退，请等待表单重新提交审批！","");
+                    afe.sendMail(tid, entityName, uid,commitUser, "工作流回退！", "工作流回退，请等待表单重新提交审批！",reason);
                 }
             }else if("OPEN TEMPLATES".equals(stepTask)){
                 //修改输入状态表为未输入
@@ -1110,7 +1091,7 @@ public class WorkflowEngine {
                         String tid = mRs.getString("TEMPLATE_ID");
                         String uid = mRs.getString("WRITE_BY");
                         String entityName ="_" + this.getEntityName(mRs.getString("ENTITY_CODE"));
-                        afe.sendMail(tid, entityName, uid,commitUser, "工作流回退！", "工作流回退，请重新填写表单数据！","");
+                        afe.sendMail(tid, entityName, uid,commitUser, "工作流回退！", "工作流回退，请重新填写表单数据！",reason);
                     }
                 }else{
                     //其他的打开模板步骤关闭组合
@@ -1120,7 +1101,7 @@ public class WorkflowEngine {
                         String tid = mRs.getString("TEMPLATE_ID");
                         String uid = mRs.getString("WRITE_BY");
                         String entityName ="_" + this.getEntityName(mRs.getString("ENTITY_CODE"));
-                        afe.sendMail(tid, entityName, uid,commitUser, "工作流回退！", "工作流回退，请等待前面表单审批通过后，再重填表单数据！","");
+                        afe.sendMail(tid, entityName, uid,commitUser, "工作流回退！", "工作流回退，请等待前面表单审批通过后，再重填表单数据！",reason);
                     }
                 }
             }
