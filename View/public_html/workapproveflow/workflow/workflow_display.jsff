@@ -149,6 +149,7 @@
             <af:spacer height="5px" id="s5"/>
             <af:panelGroupLayout id="pgl2" layout="horizontal" halign="center">
               <af:commandButton text="#{viewBundle['dcm.common.ok']}" id="cb2"
+                                partialSubmit="true"
                                 actionListener="#{viewScope.workflowDisplayBean.runWorkflow}"/>
             </af:panelGroupLayout>
           </af:panelWindow>
@@ -401,10 +402,11 @@
                 <af:commandButton text="#{viewBundle['dms.workflow.run']}"
                                   id="cb1"
                                   actionListener="#{viewScope.workflowDisplayBean.showRunPop}"
-                                  partialTriggers="t1"/>
+                                  partialSubmit="true"/>
                 <af:commandButton text="#{viewBundle['dcm.combination_record_close']}" id="cb5"
                                   actionListener="#{viewScope.workflowDisplayBean.closeWorkflow}"
-                                  partialTriggers="t1"/>
+                                  partialSubmit="true"
+                                  />
               </af:toolbar>
             </f:facet>
             <f:facet name="statusbar"/>

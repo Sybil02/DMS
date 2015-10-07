@@ -3,22 +3,15 @@ package workapproveflow.workflow;
 import common.ADFUtils;
 
 import common.DmsUtils;
-
-import common.JSFUtils;
-
 import dms.login.Person;
-
 import dms.workflow.WorkflowEditBean;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
-
 import java.util.Map;
 
 import javax.faces.application.FacesMessage;
@@ -33,24 +26,13 @@ import oracle.adf.share.ADFContext;
 import oracle.adf.share.logging.ADFLogger;
 import oracle.adf.view.rich.component.rich.RichPopup;
 import oracle.adf.view.rich.component.rich.data.RichTable;
-
 import oracle.adf.view.rich.component.rich.input.RichSelectOneChoice;
 import oracle.adf.view.rich.context.AdfFacesContext;
-
-import oracle.jbo.Key;
 import oracle.jbo.Row;
 import oracle.jbo.ViewObject;
-
 import oracle.jbo.server.DBTransaction;
 
-import oracle.jbo.uicli.binding.JUCtrlHierBinding;
-import oracle.jbo.uicli.binding.JUCtrlHierNodeBinding;
-
-import org.apache.myfaces.trinidad.event.SelectionEvent;
-
 import workapproveflow.WorkflowEngine;
-
-import org.apache.myfaces.trinidad.model.CollectionModel;
 
 public class WorkflowDisplayBean {
 
@@ -285,15 +267,20 @@ public class WorkflowDisplayBean {
         Row row = wfVo.getCurrentRow();
         String wfId = row.getAttribute("WorkflowId").toString();
         String wfStatus = row.getAttribute("WfStatus").toString();
+        
         //改变工作流状态
-        this.wfEngine.changeWfStatus(wfId, wfStatus);
-        //初始化工作流状态
-        this.wfEngine.initWfSteps(wfId,this.comSelectMap);
-        FacesContext.getCurrentInstance().addMessage(null,new FacesMessage("工作流启动完成！"));
-        //通过sql直接修改表数据，需要查询VO改变迭代器数据，刷新table才有效
-        wfVo.executeQuery();
-        AdfFacesContext adfFacesContext = AdfFacesContext.getCurrentInstance();
-        adfFacesContext.addPartialTarget(this.wfTable);
+        if (this.wfEngine.changeWfStatus(wfId, wfStatus))
+        { 
+            //界面上改变工作流状态
+            row.setAttribute("WfStatus", "Y");
+            //初始化工作流状态
+            this.wfEngine.initWfSteps(wfId,this.comSelectMap);
+            FacesContext.getCurrentInstance().addMessage(null,new FacesMessage("工作流启动完成！"));
+            AdfFacesContext.getCurrentInstance().addPartialTarget(this.wfTable);
+        }else {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("工作流启动失败！")); 
+        }
+
     }
     
     public void closeWorkflow(ActionEvent actionEvent) {
@@ -312,11 +299,13 @@ public class WorkflowDisplayBean {
             return;
         }
         //改变工作流状态
-        this.wfEngine.changeWfStatus(wfId, wfStatus); 
-        //通过sql直接修改表数据，需要查询VO改变迭代器数据，刷新table才有效
-        wfVo.executeQuery();
-        AdfFacesContext adfFacesContext = AdfFacesContext.getCurrentInstance();
-        adfFacesContext.addPartialTarget(this.wfTable);
+        if ( this.wfEngine.changeWfStatus(wfId, wfStatus) ) {
+            //界面上改变工作流状态
+            row.setAttribute("WfStatus", "N");
+            AdfFacesContext.getCurrentInstance().addPartialTarget(this.wfTable);
+        }else {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("工作流关闭失败！")); 
+        }
     }
 
     public void vsValueChange(ValueChangeEvent valueChangeEvent) {

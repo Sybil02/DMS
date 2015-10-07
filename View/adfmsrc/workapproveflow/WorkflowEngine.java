@@ -45,7 +45,7 @@ public class WorkflowEngine {
 
     //改变工作流状态
 
-    public void changeWfStatus(String wfId, String wfStatus) {
+    public boolean changeWfStatus(String wfId, String wfStatus) {
         try {
             DBTransaction trans =
                 (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
@@ -62,8 +62,10 @@ public class WorkflowEngine {
             System.out.println("row:" + i);
             trans.commit();
             state.close();
+            return true;
         } catch (SQLException e) {
             this._logger.severe(e);
+            return false;
         }
     }
 
