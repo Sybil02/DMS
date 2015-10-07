@@ -30,10 +30,20 @@ import oracle.adf.view.rich.component.rich.input.RichSelectOneChoice;
 import oracle.adf.view.rich.context.AdfFacesContext;
 import oracle.jbo.Row;
 import oracle.jbo.ViewObject;
-import oracle.jbo.server.DBTransaction;
+import oracle.jbo.server.DBTransaction; 
+
+import workapproveflow.WorkflowEngine;
+ 
+import oracle.jbo.uicli.binding.JUCtrlHierBinding;
+import oracle.jbo.uicli.binding.JUCtrlHierNodeBinding;
+
+import org.apache.myfaces.trinidad.model.CollectionModel;
 
 import workapproveflow.WorkflowEngine;
 
+import org.apache.myfaces.trinidad.model.RowKeySet;
+import org.apache.myfaces.trinidad.model.RowKeySetImpl;
+ 
 public class WorkflowDisplayBean {
 
     //日志
@@ -83,7 +93,12 @@ public class WorkflowDisplayBean {
         DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
         Statement stat=trans.createStatement(DBTransaction.DEFAULT);
         Row row = wfVo.getCurrentRow();
-        String wfComId = row.getAttribute("WfCom").toString();
+        String wfComId;
+        if("".equals(row.getAttribute("WfCom")) || row.getAttribute("WfCom") == null){
+            wfComId = "";
+        }else{
+            wfComId = row.getAttribute("WfCom").toString();    
+        }
         String sql = "SELECT T1.VALUE_SET_ID,T2.NAME,T2.SOURCE,T2.CODE FROM DCM_COM_VS T1,DMS_VALUE_SET T2 "
                         + "WHERE T1.VALUE_SET_ID = T2.ID AND T2.LOCALE = '" + this.curUser.getLocale()+"' "
                         + "AND T1.COMBINATION_ID = '" + wfComId + "' ORDER BY T1.SEQ";
@@ -262,11 +277,29 @@ public class WorkflowDisplayBean {
     //工作流启动，初始化工作流步骤信息
     public void runWorkflow(ActionEvent actionEvent) {
         this.runPop.cancel();
+        
+        for (Map.Entry<String, Map<String, String>> entry : this.comSelectMap.entrySet()) {
+            Map<String, String> map = entry.getValue();
+            for (Map.Entry<String, String> mapEntry : map.entrySet()) {
+                if(mapEntry.getValue() == ""){
+                    FacesContext.getCurrentInstance().addMessage(null,new FacesMessage("参数不能为空！"));
+                    return;
+                }
+            }
+        }
+        
         DCIteratorBinding wfIter = ADFUtils.findIterator("DmsUserWorkflowVOIterator");
         ViewObject wfVo = wfIter.getViewObject();
         Row row = wfVo.getCurrentRow();
+        
         String wfId = row.getAttribute("WorkflowId").toString();
         String wfStatus = row.getAttribute("WfStatus").toString();
+        
+        Object wfRunId = row.getAttribute("WfRunid");
+        //清除上次数据
+        if(!"".equals(wfRunId) && wfRunId != null){
+            this.clearHistoryData(wfRunId.toString());    
+        }
         
         //改变工作流状态
         if (this.wfEngine.changeWfStatus(wfId, wfStatus))
@@ -280,7 +313,25 @@ public class WorkflowDisplayBean {
         }else {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("工作流启动失败！")); 
         }
-
+ 
+    }
+    
+    //删除历史数据
+    public void clearHistoryData(String runId){
+        DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
+        Statement stat=trans.createStatement(DBTransaction.DEFAULT);
+        String detWfSteps = "DELETE FROM DMS_WORKFLOW_STATUS T WHERE T.RUN_ID = '" + runId + "'";
+        String detWfStatus = "DELETE FROM WORKFLOW_TEMPLATE_STATUS T WHERE T.RUN_ID = '" + runId + "'";
+        String detAppStatus = "DELETE FROM APPROVE_TEMPLATE_STATUS T WHERE T.RUN_ID = '" + runId + "'";
+        try {
+            stat.executeUpdate(detWfSteps);
+            stat.executeUpdate(detWfStatus);
+            stat.executeUpdate(detAppStatus);
+            trans.commit();
+            stat.close();
+        } catch (SQLException e) {
+            this._logger.severe(e);
+        }
     }
     
     public void closeWorkflow(ActionEvent actionEvent) {
@@ -299,13 +350,14 @@ public class WorkflowDisplayBean {
             return;
         }
         //改变工作流状态
+ 
         if ( this.wfEngine.changeWfStatus(wfId, wfStatus) ) {
             //界面上改变工作流状态
             row.setAttribute("WfStatus", "N");
             AdfFacesContext.getCurrentInstance().addPartialTarget(this.wfTable);
         }else {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("工作流关闭失败！")); 
-        }
+        } 
     }
 
     public void vsValueChange(ValueChangeEvent valueChangeEvent) {

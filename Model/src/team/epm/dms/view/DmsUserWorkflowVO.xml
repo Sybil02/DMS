@@ -32,8 +32,8 @@
     <TransientExpression><![CDATA[adf.userSession.userData.userId]]></TransientExpression>
   </Variable>
   <SQLQuery>
-    <![CDATA[SELECT T5.ID "WORKFLOW_ID", T5.WF_NAME "WF_NAME" ,T5.WF_STATUS,T5.WF_COM,T5.WF_RUNID
-  FROM DMS_USER          T1,
+    <![CDATA[SELECT DISTINCT T5.ID "WORKFLOW_ID", T5.WF_NAME "WF_NAME" ,T5.WF_STATUS,T5.WF_COM,T5.WF_RUNID,T5.SEQ
+       FROM DMS_USER          T1,
        DMS_USER_GROUP    T2,
        DMS_GROUP_ROLE    T3,
        DMS_ROLE_WORKFLOW T4,
@@ -52,7 +52,7 @@
    AND T4.WORKFLOW_ID = T5.ID
    AND T5.LOCALE =: locale
    AND T1.ID = : userid
-   ORDER BY T5.SEQ]]>
+   ORDER BY T5.WF_NAME,T5.SEQ]]>
   </SQLQuery>
   <ViewAttribute
     Name="WorkflowId"
@@ -142,6 +142,21 @@
     SQLType="VARCHAR">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="32"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="Seq"
+    IsUpdateable="false"
+    IsPersistent="false"
+    IsNotNull="true"
+    PrecisionRule="true"
+    Type="oracle.jbo.domain.Number"
+    ColumnType="NUMBER"
+    AliasName="SEQ"
+    Expression="SEQ"
+    SQLType="NUMERIC">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="22"/>
     </DesignTime>
   </ViewAttribute>
   <ViewLinkAccessor
