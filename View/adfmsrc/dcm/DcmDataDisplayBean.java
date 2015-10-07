@@ -278,7 +278,7 @@ public class DcmDataDisplayBean extends TablePagination {
         Map nRowData = (Map)displayTable.getRowData(nRowKey);
         if (nRowData != null)
             nRowData.put("VISIBLE", "TRUE");
-        System.out.println(oldRowKey + "   " + nRowKey);
+        //System.out.println(oldRowKey + "   " + nRowKey);
         oldRowKey = nRowKey;
     }
 
