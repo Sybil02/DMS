@@ -186,7 +186,8 @@
                        visible="#{attr.visible eq 'Y'}"
                        inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:#68DB96;' : ''}
                                     #{'CREATE' eq row['OPERATION'] ? 'background-color:#FF9393;' : ''}
-                                    #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}"
+                                    #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}
+                                    height:18px;"
                        filterable="#{attr.dataType ne 'DATE'}">
               <af:inputText value="#{row[attr.dbTableCol]}"
                             readOnly="#{((viewScope.DcmDataDisplayBean.isEditable and (attr.readonly eq 'N')) eq false)
