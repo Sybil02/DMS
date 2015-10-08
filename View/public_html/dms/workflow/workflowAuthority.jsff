@@ -91,15 +91,6 @@
                                 actionListener="#{workflowAuthorityBean.showAddPopup}"/>
               <af:commandButton text="#{viewBundle['dcm.common.delete']}" id="cb2"
                                 actionListener="#{workflowAuthorityBean.removeAuthority}"/>
-              <af:commandButton
-                                text="#{viewBundle['dms.common.save']}"
-                                id="cb3"
-                                actionListener="#{bindings.Commit.execute}"/>
-              <af:commandButton actionListener="#{bindings.Rollback.execute}"
-                                text="#{viewBundle['dms.common.cancel']}"
-                                immediate="true" id="cb4">
-                <af:resetActionListener/>
-              </af:commandButton>
             </af:group>
           </af:toolbar>
         </f:facet>

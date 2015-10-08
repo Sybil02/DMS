@@ -3,6 +3,8 @@ package workapproveflow.workflow;
 import common.ADFUtils;
 
 import common.DmsUtils;
+import common.JSFUtils;
+
 import dms.login.Person;
 import dms.workflow.WorkflowEditBean;
 import java.sql.ResultSet;
@@ -96,6 +98,9 @@ public class WorkflowDisplayBean {
         String wfComId;
         if("".equals(row.getAttribute("WfCom")) || row.getAttribute("WfCom") == null){
             wfComId = "";
+            //没有参数，直接启动
+            this.runWorkflow(actionEvent);
+            return;
         }else{
             wfComId = row.getAttribute("WfCom").toString();    
         }
@@ -154,13 +159,13 @@ public class WorkflowDisplayBean {
         }
         String stepTask = curRow.getAttribute("StepTask").toString();
         String StepStatus = curRow.getAttribute("StepStatus").toString();
-        if(stepTask.equals("OPEN TEMPLATES")){
+        if(stepTask.equals("OPEN TEMPLATES")&&(StepStatus.equals("WORKING")||StepStatus.equals("Y"))){
             if(this.writeSoc != null){
                 this.writeSoc.setValue(null);    
             }
             String stepObject = curRow.getAttribute("StepObject").toString();
             openTemp(stepObject);
-        }else if(stepTask.equals("APPROVE")&&StepStatus.equals("WORKING")){
+        }else if(stepTask.equals("APPROVE")&&(StepStatus.equals("WORKING")||StepStatus.equals("Y"))){
             if(this.approveSoc != null){
                 this.approveSoc.setValue(null);    
             }
@@ -168,7 +173,7 @@ public class WorkflowDisplayBean {
             String StepNo = curRow.getAttribute("StepNo").toString();
             approveflow(runId,StepNo);
         }else if(stepTask.equals("ETL")){
-            FacesContext.getCurrentInstance().addMessage(null,new FacesMessage("该列为接口，不能被查看！"));
+            FacesContext.getCurrentInstance().addMessage(null,new FacesMessage("该列为接口，没有详情！"));
             return;
         }else{
             FacesContext.getCurrentInstance().addMessage(null,new FacesMessage("不能查看该列详情！"));
@@ -304,12 +309,18 @@ public class WorkflowDisplayBean {
         //改变工作流状态
         if (this.wfEngine.changeWfStatus(wfId, wfStatus))
         { 
+            //生成runId
+            String runId = java.util.UUID.randomUUID().toString().replace("-", "");
             //界面上改变工作流状态
             row.setAttribute("WfStatus", "Y");
+            row.setAttribute("WfRunid", runId);
             //初始化工作流状态
-            this.wfEngine.initWfSteps(wfId,this.comSelectMap);
+            this.wfEngine.initWfSteps(wfId,runId,this.comSelectMap);
+            ViewObject vo = ADFUtils.findIterator("DmsWorkflowStatusVOIterator").getViewObject();
+            vo.executeQuery();
             FacesContext.getCurrentInstance().addMessage(null,new FacesMessage("工作流启动完成！"));
             AdfFacesContext.getCurrentInstance().addPartialTarget(this.wfTable);
+            AdfFacesContext.getCurrentInstance().addPartialTarget(JSFUtils.findComponentInRoot("t3"));
         }else {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("工作流启动失败！")); 
         }

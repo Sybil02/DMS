@@ -120,6 +120,10 @@ DmsApproveTemplateStatusEO.PERSON_ID = DmsUser.ID]]>
     AliasName="FINISH_AT">
     <Properties>
       <SchemaBasedProperties>
+        <FMT_FORMATTER
+          ResId="team.epm.dms.view.DmsApproveTemplateStatusVO.FinishAt_FMT_FORMATTER"/>
+        <FMT_FORMAT
+          ResId="team.epm.dms.view.DmsApproveTemplateStatusVO.FinishAt_FMT_FORMAT"/>
         <LABEL
           ResId="team.epm.dms.view.DmsApproveTemplateStatusVO.FinishAt_LABEL"/>
       </SchemaBasedProperties>

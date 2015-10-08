@@ -58,7 +58,6 @@ public class WorkflowEngine {
             state.setString(1, newStatus);
             state.setString(2, wfId);
             int i = state.executeUpdate();
-            System.out.println("row:" + i);
             trans.commit();
             state.close();
             return true;
@@ -70,7 +69,7 @@ public class WorkflowEngine {
 
     //初始化工作流步骤表
 
-    public void initWfSteps(String wfId,
+    public void initWfSteps(String wfId,String runId,
                             Map<String, Map<String, String>> comSelectMap) {
         StringBuffer openComPara = new StringBuffer();
         for (Map.Entry<String, Map<String, String>> entry :
@@ -93,8 +92,7 @@ public class WorkflowEngine {
             "INSERT INTO DMS_WORKFLOW_STATUS VALUES(?,?,?,?,?,NULL,NULL,SYSDATE,?,?,?,?)";
         PreparedStatement preStat =
             trans.createPreparedStatement(insertSql, 0);
-        //生成runId
-        String runId = java.util.UUID.randomUUID().toString().replace("-", "");
+        
         //更新工作流信息表，将最新启动的runId关联到工作流
         String updateSql =
             "UPDATE DMS_WORKFLOWINFO SET WF_RUNID = '" + runId + "'" +
@@ -346,7 +344,7 @@ public class WorkflowEngine {
                 }
                 if(isEntity && !openEntity){
                     //组合存在实体，但是没有打开任何实体
-                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("检测到模板没有打开任何部门，请维护完整模板要打开的部门！"));
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("检测到工作流存在未维护部门的表单，请维护完整表单要打开的部门！"));
                 }
                 if(tempFlag){
                     //存在组合，但是跟工作流组合没有任何交集  
