@@ -17,12 +17,17 @@ import oracle.adf.view.rich.component.rich.nav.RichCommandButton;
 
 import oracle.adf.view.rich.context.AdfFacesContext;
 
+
 import oracle.adfinternal.view.faces.model.binding.FacesCtrlListBinding;
 
 import oracle.jbo.Key;
 import oracle.jbo.Row;
 import oracle.jbo.RowSetIterator;
 import oracle.jbo.ViewObject;
+import oracle.jbo.uicli.binding.JUCtrlHierNodeBinding;
+
+import org.apache.myfaces.trinidad.model.CollectionModel;
+import org.apache.myfaces.trinidad.model.RowKeySet;
 
 public class SceneAuthorityBean {
     private RichPopup popup;
@@ -53,16 +58,15 @@ public class SceneAuthorityBean {
 
     public void remove(ActionEvent actionEvent) {
         if (this.assignedScene.getSelectedRowKeys() != null) {
-            Iterator itr =
-                this.assignedScene.getSelectedRowKeys().iterator();
-            RowSetIterator rowSetIterator =
-                ADFUtils.findIterator("Odi11RoleSceneViewIterator").getRowSetIterator();
-            while(itr.hasNext()){
-                List key = (List)itr.next();
-                Row row = rowSetIterator.getRow((Key)key.get(0));
-                if(row!=null){
-                    row.remove();
-                }
+            RowKeySet rowKeys = 
+                this.assignedScene.getSelectedRowKeys() ;
+            Object[] rowKeySetArray = rowKeys.toArray();   
+            CollectionModel cm = (CollectionModel)assignedScene.getValue();
+            
+            for (Object key : rowKeySetArray){
+                assignedScene.setRowKey(key);
+                 JUCtrlHierNodeBinding rowData = (JUCtrlHierNodeBinding)cm.getRowData();                           
+                rowData.getRow().remove();
             }
             ADFUtils.findIterator("Odi11RoleSceneViewIterator").getViewObject().getApplicationModule().getTransaction().commit();
             AdfFacesContext.getCurrentInstance().addPartialTarget(this.assignedScene);

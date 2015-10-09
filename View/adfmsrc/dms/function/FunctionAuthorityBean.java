@@ -27,8 +27,13 @@ import oracle.jbo.Row;
 import oracle.jbo.RowSetIterator;
 import oracle.jbo.ViewObject;
 
+import oracle.jbo.uicli.binding.JUCtrlHierNodeBinding;
+
 import org.apache.commons.lang.ObjectUtils;
 import org.apache.myfaces.trinidad.event.SelectionEvent;
+
+import org.apache.myfaces.trinidad.model.CollectionModel;
+import org.apache.myfaces.trinidad.model.RowKeySet;
 
 import team.epm.module.DmsModuleImpl;
 
@@ -64,18 +69,19 @@ public class FunctionAuthorityBean{
     }
 
     public void removeFunction(ActionEvent actionEvent) {
-        if (this.assignedFunctionTable.getSelectedRowKeys() != null) {
-            Iterator itr =
-                this.assignedFunctionTable.getSelectedRowKeys().iterator();
-            RowSetIterator rowSetIterator =
-                ADFUtils.findIterator("DmsRoleFunctionViewIterator").getRowSetIterator();
-            while(itr.hasNext()){
-                List key = (List)itr.next();
-                Row row = rowSetIterator.getRow((Key)key.get(0));
-                if(row!=null){
-                    row.remove();
+ 
+            if (this.assignedFunctionTable.getSelectedRowKeys() != null) {
+                RowKeySet rowKeys = this.assignedFunctionTable.getSelectedRowKeys();
+                Object[] rowKeySetArray = rowKeys.toArray();
+                CollectionModel cm =
+                    (CollectionModel)assignedFunctionTable.getValue();
+
+                for (Object key : rowKeySetArray) {
+                    assignedFunctionTable.setRowKey(key);
+                    JUCtrlHierNodeBinding rowData =
+                        (JUCtrlHierNodeBinding)cm.getRowData();
+                    rowData.getRow().remove();
                 }
-            }
             ADFUtils.findIterator("DmsRoleFunctionViewIterator").getViewObject().getApplicationModule().getTransaction().commit();
             AdfFacesContext.getCurrentInstance().addPartialTarget(this.assignedFunctionTable);
         }        

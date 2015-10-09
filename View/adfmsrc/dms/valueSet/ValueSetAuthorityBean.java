@@ -56,11 +56,13 @@ import oracle.jbo.Row;
 import oracle.jbo.RowSetIterator;
 import oracle.jbo.ViewObject;
 import oracle.jbo.server.DBTransaction;
+import oracle.jbo.uicli.binding.JUCtrlHierNodeBinding;
 import oracle.jbo.uicli.binding.JUCtrlListBinding;
 
 import org.apache.commons.lang.ObjectUtils;
 import org.apache.myfaces.trinidad.event.SelectionEvent;
 
+import org.apache.myfaces.trinidad.model.CollectionModel;
 import org.apache.myfaces.trinidad.model.RowKeySet;
 import org.apache.myfaces.trinidad.model.RowKeySetImpl;
 
@@ -68,23 +70,24 @@ import team.epm.dms.view.DmsGroupRoleViewImpl;
 import team.epm.module.DmsModuleImpl;
 
 public class ValueSetAuthorityBean {
-    private RowKeySet selectedRows=new RowKeySetImpl(); 
+    private RowKeySet selectedRows = new RowKeySetImpl();
     private Map valueMap;
-    private static ADFLogger logger=ADFLogger.createADFLogger(ValueSetAuthorityBean.class);
-    private Person person = (Person)ADFContext.getCurrent().getSessionScope().get("cur_user");
+    private static ADFLogger logger =
+        ADFLogger.createADFLogger(ValueSetAuthorityBean.class);
+    private Person person =
+        (Person)ADFContext.getCurrent().getSessionScope().get("cur_user");
     private RichTable assignedValueTable;
     private RichPopup popup;
-    private RichTable unassignedValueTable; 
+    private RichTable unassignedValueTable;
     private ComboboxLOVBean nameLov;
     private RichInputText filterValueInput; //搜索查找框，集值的
-     
-    
+
+
     public ValueSetAuthorityBean() {
         nameLov = ComboboxLOVBean.createByBinding("Name");
     }
-    
 
-    
+
     public void setAssignedValueTable(RichTable assignedValueTable) {
         this.assignedValueTable = assignedValueTable;
     }
@@ -94,31 +97,34 @@ public class ValueSetAuthorityBean {
     }
 
     public void groupChangeListener(ValueChangeEvent valueChangeEvent) {
- 
-        FacesCtrlListBinding groupName = (FacesCtrlListBinding)JSFUtils.resolveExpression("#{bindings.GroupName}");
+
+        FacesCtrlListBinding groupName =
+            (FacesCtrlListBinding)JSFUtils.resolveExpression("#{bindings.GroupName}");
         groupName.setInputValue(valueChangeEvent.getNewValue());
- 
+
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.assignedValueTable);
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.unassignedValueTable);
-         
-        
+
+
     }
 
     public void valuesetChangeListener(ValueChangeEvent valueChangeEvent) {
-        
-        String setMap = valueChangeEvent.getNewValue().toString(); 
-        
-        FacesCtrlListBinding name =  (FacesCtrlListBinding) JSFUtils.resolveExpression("#{bindings.Name}");
-        Integer rowid = (Integer) getNameLov().getMapItem().get(setMap); 
-        if(rowid == null)
-            return ;
-        
+
+        String setMap = valueChangeEvent.getNewValue().toString();
+
+        FacesCtrlListBinding name =
+            (FacesCtrlListBinding)JSFUtils.resolveExpression("#{bindings.Name}");
+        Integer rowid = (Integer)getNameLov().getMapItem().get(setMap);
+        if (rowid == null)
+            return;
+
         name.setInputValue(setMap);
         System.out.println("row id == " + rowid);
-        
-        Row row = ADFUtils.findIterator("DmsValueSetViewIterator").getRowSetIterator().getRowAtRangeIndex( rowid );
-        this.refreshValueMap(row);  
-        
+
+        Row row =
+            ADFUtils.findIterator("DmsValueSetViewIterator").getRowSetIterator().getRowAtRangeIndex(rowid);
+        this.refreshValueMap(row);
+
         //ADFUtils.findIterator("DmsGroupValueViewIterator").getViewObject().executeQuery();
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.assignedValueTable);
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.unassignedValueTable);
@@ -129,33 +135,38 @@ public class ValueSetAuthorityBean {
     }
 
     public Map getValueMap() {
-        if(this.valueMap==null){
+        if (this.valueMap == null) {
             this.refreshValueMap(null);
         }
         return valueMap;
     }
-    private void refreshValueMap(Row row){
+
+    private void refreshValueMap(Row row) {
         this.valueMap = new HashMap();
-        ViewObject valueSetVo=ADFUtils.findIterator("DmsValueSetViewIterator").getViewObject();
-        if(row==null){
-            row=valueSetVo.getCurrentRow();
+        ViewObject valueSetVo =
+            ADFUtils.findIterator("DmsValueSetViewIterator").getViewObject();
+        if (row == null) {
+            row = valueSetVo.getCurrentRow();
         }
-        if(row!=null){
+        if (row != null) {
             String valueSetSrc = (String)row.getAttribute("Source");
-            if( valueSetSrc == null)
-                return ;
-            
+            if (valueSetSrc == null)
+                return;
+
             valueSetSrc = valueSetSrc.toUpperCase();
-            
-            String sql="select t.code,t.meaning from \""+valueSetSrc+"\" t where t.locale='"+person.getLocale()+"'";
-            DBTransaction trans = (DBTransaction)valueSetVo.getApplicationModule().getTransaction();
-            Statement stmt=trans.createStatement(DBTransaction.DEFAULT);
+
+            String sql =
+                "select t.code,t.meaning from \"" + valueSetSrc + "\" t where t.locale='" +
+                person.getLocale() + "'";
+            DBTransaction trans =
+                (DBTransaction)valueSetVo.getApplicationModule().getTransaction();
+            Statement stmt = trans.createStatement(DBTransaction.DEFAULT);
             try {
-                ResultSet rs=stmt.executeQuery(sql);
-                while(rs.next()){
-                    String code=rs.getString("code");
-                    String meaning=rs.getString("meaning");
-                    this.valueMap.put(code,meaning);
+                ResultSet rs = stmt.executeQuery(sql);
+                while (rs.next()) {
+                    String code = rs.getString("code");
+                    String meaning = rs.getString("meaning");
+                    this.valueMap.put(code, meaning);
                 }
                 rs.close();
                 stmt.close();
@@ -175,34 +186,38 @@ public class ValueSetAuthorityBean {
 
     public void add_value(ActionEvent actionEvent) {
         //更新未选值集的显示问题，如果没有设置，值集仍然处于筛选状态
-        try{
-            ViewObject vo = ADFUtils.findIterator("getDmsValueViewIterator").getViewObject(); 
+        try {
+            ViewObject vo =
+                ADFUtils.findIterator("getDmsValueViewIterator").getViewObject();
             vo.setWhereClause("MEANING like '%'");
-            vo.executeQuery(); 
+            vo.executeQuery();
             //清空弹出框的值集过滤框的内容
             filterValueInput.setValue("");
-            RichPopup.PopupHints hint=new RichPopup.PopupHints();
+            RichPopup.PopupHints hint = new RichPopup.PopupHints();
             this.popup.show(hint);
-        }catch (Exception e) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("值集源出错"));
+        } catch (Exception e) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                                                         new FacesMessage("值集源出错"));
             e.printStackTrace();
         }
     }
 
     public void remove_value(ActionEvent actionEvent) {
+
         if (this.assignedValueTable.getSelectedRowKeys() != null) {
-            Iterator itr = this.assignedValueTable.getSelectedRowKeys().iterator();
-            RowSetIterator rowSetIterator =ADFUtils.findIterator("DmsGroupValueViewIterator").getRowSetIterator();
-            while(itr.hasNext()){
-                List key = (List)itr.next();
-                Row row = rowSetIterator.getRow((Key)key.get(0));
-                if(row!=null){
-                    row.remove();
-                }
+            RowKeySet rowKeys = this.assignedValueTable.getSelectedRowKeys();
+            Object[] rowKeySetArray = rowKeys.toArray();
+            CollectionModel cm =
+                (CollectionModel)assignedValueTable.getValue();
+
+            for (Object key : rowKeySetArray) {
+                assignedValueTable.setRowKey(key);
+                JUCtrlHierNodeBinding rowData =
+                    (JUCtrlHierNodeBinding)cm.getRowData();
+                rowData.getRow().remove();
             }
-            ADFUtils.findIterator("getDmsValueViewIterator").getViewObject()
-                .getApplicationModule().getTransaction().commit();
-            ADFUtils.findIterator("getDmsValueViewIterator").getViewObject().executeQuery();
+
+            ADFUtils.findIterator("getDmsValueViewIterator").getViewObject().getApplicationModule().getTransaction().commit();
             ADFUtils.findIterator("DmsGroupValueViewIterator").getViewObject().executeQuery();
             AdfFacesContext.getCurrentInstance().addPartialTarget(this.assignedValueTable);
         }
@@ -210,9 +225,12 @@ public class ValueSetAuthorityBean {
 
     public void add_value_authority(ActionEvent actionEvent) {
         if (this.unassignedValueTable.getSelectedRowKeys() != null) {
-            ViewObject groupValueVo =ADFUtils.findIterator("DmsGroupValueViewIterator").getViewObject();
-            String groupId =(String)ADFUtils.findIterator("DmsEnabledGroupViewIterator").getViewObject().getCurrentRow().getAttribute("Id");
-            String valueSetId=(String)ADFUtils.findIterator("DmsValueSetViewIterator").getViewObject().getCurrentRow().getAttribute("Id");            
+            ViewObject groupValueVo =
+                ADFUtils.findIterator("DmsGroupValueViewIterator").getViewObject();
+            String groupId =
+                (String)ADFUtils.findIterator("DmsEnabledGroupViewIterator").getViewObject().getCurrentRow().getAttribute("Id");
+            String valueSetId =
+                (String)ADFUtils.findIterator("DmsValueSetViewIterator").getViewObject().getCurrentRow().getAttribute("Id");
             Iterator itr =
                 this.unassignedValueTable.getSelectedRowKeys().iterator();
             RowSetIterator rowSetIterator =
@@ -220,17 +238,17 @@ public class ValueSetAuthorityBean {
             while (itr.hasNext()) {
                 List key = (List)itr.next();
                 Row valueRow = rowSetIterator.getRow((Key)key.get(0));
-                
-                if(valueRow == null)
+
+                if (valueRow == null)
                     continue;
-                
+
                 Row row = groupValueVo.createRow();
                 row.setAttribute("GroupId", groupId);
                 row.setAttribute("ValueSetId", valueSetId);
                 row.setAttribute("ValueId", valueRow.getAttribute("CODE"));
                 groupValueVo.insertRow(row);
             }
-            
+
             groupValueVo.getApplicationModule().getTransaction().commit();
             ADFUtils.findIterator("getDmsValueViewIterator").getViewObject().executeQuery();
             ADFUtils.findIterator("DmsGroupValueViewIterator").getViewObject().executeQuery();
@@ -254,40 +272,43 @@ public class ValueSetAuthorityBean {
     public RowKeySet getSelectedRows() {
         return selectedRows;
     }
- 
-    
+
+
     //过滤值集权限表中的值的方法
+
     public void filterValueSetItem(ValueChangeEvent valueChangeEvent) {
-        
+
         String filter = (String)valueChangeEvent.getNewValue();
-        
-        ViewObject vo = ADFUtils.findIterator("DmsGroupValueViewIterator").getViewObject();
- 
-        
-        vo.executeQuery(); 
-        
+
+        ViewObject vo =
+            ADFUtils.findIterator("DmsGroupValueViewIterator").getViewObject();
+
+
+        vo.executeQuery();
+
         Row row = vo.first();
-        
-        while(row != null) { 
-           
-             if(!valueMap.get(row.getAttribute("ValueId")).toString().contains(filter))
+
+        while (row != null) {
+
+            if (!valueMap.get(row.getAttribute("ValueId")).toString().contains(filter))
                 vo.removeCurrentRowAndRetain();
-             else
+            else
                 vo.next();
-            
-           row = vo.getCurrentRow(); 
-       }
+
+            row = vo.getCurrentRow();
+        }
     }
 
     public void unassignedValueChangeListener(ValueChangeEvent valueChangeEvent) {
         String filter = (String)valueChangeEvent.getNewValue();
-        
-        ViewObject vo = ADFUtils.findIterator("getDmsValueViewIterator").getViewObject();
-          
+
+        ViewObject vo =
+            ADFUtils.findIterator("getDmsValueViewIterator").getViewObject();
+
         vo.setWhereClause("MEANING like '%" + filter + "%'");
-        vo.executeQuery(); 
-            
-             
+        vo.executeQuery();
+
+
         AdfFacesContext.getCurrentInstance().addPartialTarget(unassignedValueTable);
     }
 
@@ -297,7 +318,7 @@ public class ValueSetAuthorityBean {
 
     public RichInputText getFilterValueInput() {
         return filterValueInput;
-    } 
+    }
 
     public void setNameLov(ComboboxLOVBean nameLov) {
         this.nameLov = nameLov;
