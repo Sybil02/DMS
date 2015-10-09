@@ -1813,7 +1813,7 @@ public class DcmDataDisplayBean extends TablePagination {
                                               this.curUser.getName());
                 //改变工作流中审批步骤状态为进行中
                 StringBuffer updateApp = new StringBuffer();
-                updateApp.append("UPDATE DMS_WORKFLOW_STATUS SET STEP_STATUS = 'WORKING' ");
+                updateApp.append("UPDATE DMS_WORKFLOW_STATUS SET STEP_STATUS = 'WORKING',START_AT = SYSDATE ");
                 updateApp.append("WHERE WF_ID = '").append(this.curWfId).append("' ");
                 updateApp.append("AND RUN_ID = '").append(this.curRunId).append("' ");
                 updateApp.append("AND STEP_NO =").append(this.stepNo + 1);
@@ -1854,6 +1854,7 @@ public class DcmDataDisplayBean extends TablePagination {
         workEngine.stepIsFinish(this.curWfId, this.curRunId,
                                 this.approveStepNo, "APPROVE");
         this.approveStatus = "Y";
+        this.isEnd = true;
     }
 
     //审批拒绝
@@ -1870,6 +1871,7 @@ public class DcmDataDisplayBean extends TablePagination {
                                 this.approveStepNo, "APPROVE");
         this.reason = "";
         this.approveStatus = "Y";
+        this.isEnd = true;
     }
 
     //判断是否在工作流中，输入，审批。
@@ -2390,7 +2392,7 @@ public class DcmDataDisplayBean extends TablePagination {
         for(String name : backMap.get(backNo)){
             this.backReason += "\n\t";
             this.backReason += name;
-            this.backReason += ",\n";
+            this.backReason += ",";
         }
     }
 

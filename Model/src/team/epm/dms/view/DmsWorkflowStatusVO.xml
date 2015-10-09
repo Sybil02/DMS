@@ -55,6 +55,10 @@
     AliasName="FINISH_AT">
     <Properties>
       <SchemaBasedProperties>
+        <FMT_FORMATTER
+          ResId="team.epm.dms.view.DmsWorkflowStatusVO.FinishAt_FMT_FORMATTER"/>
+        <FMT_FORMAT
+          ResId="team.epm.dms.view.DmsWorkflowStatusVO.FinishAt_FMT_FORMAT"/>
         <LABEL
           ResId="team.epm.dms.view.DmsWorkflowStatusVO.FinishAt_LABEL"/>
       </SchemaBasedProperties>
@@ -87,6 +91,10 @@
     AliasName="START_AT">
     <Properties>
       <SchemaBasedProperties>
+        <FMT_FORMATTER
+          ResId="team.epm.dms.view.DmsWorkflowStatusVO.StartAt_FMT_FORMATTER"/>
+        <FMT_FORMAT
+          ResId="team.epm.dms.view.DmsWorkflowStatusVO.StartAt_FMT_FORMAT"/>
         <LABEL
           ResId="team.epm.dms.view.DmsWorkflowStatusVO.StartAt_LABEL"/>
       </SchemaBasedProperties>

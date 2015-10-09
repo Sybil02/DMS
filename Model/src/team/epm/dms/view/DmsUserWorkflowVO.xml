@@ -94,7 +94,6 @@
   </ViewAttribute>
   <ViewAttribute
     Name="WfStatus"
-    IsUpdateable="false"
     IsPersistent="false"
     IsNotNull="true"
     PrecisionRule="true"
@@ -131,7 +130,6 @@
   </ViewAttribute>
   <ViewAttribute
     Name="WfRunid"
-    IsUpdateable="false"
     IsPersistent="false"
     PrecisionRule="true"
     Precision="32"

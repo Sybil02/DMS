@@ -92,6 +92,9 @@ import oracle.jbo.ViewObject;
             while (itr.hasNext()) {
                 List key = (List)itr.next();
                 Row workflowRow = rowSetIterator.getRow((Key)key.get(0));
+                if(workflowRow == null){
+                    return;    
+                }
                 Row row = roleWorkflowVo.createRow();
                 row.setAttribute("RoleId", roleId);
                 row.setAttribute("WorkflowId", workflowRow.getAttribute("Id").toString());
