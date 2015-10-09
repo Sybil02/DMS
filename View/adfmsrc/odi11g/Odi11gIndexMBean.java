@@ -93,11 +93,14 @@ public class Odi11gIndexMBean {
             rowKey = rks.iterator().next();
             tree.setRowKey(rowKey);
             rowData = (Odi11gCatTreeItem)tree.getRowData();
-            ViewObject vo =
-                ADFUtils.findIterator("Odi11AuthedSceneViewIterator").getViewObject();
-            vo.setNamedWhereClauseParam("catId", rowData.getId());
-            vo.executeQuery();
-            AdfFacesContext.getCurrentInstance().addPartialTarget(this.sceneTable);
+            
+            if( rowData.getChildren().size() < 1) {
+                ViewObject vo =
+                    ADFUtils.findIterator("Odi11AuthedSceneViewIterator").getViewObject();
+                vo.setNamedWhereClauseParam("catId", rowData.getId());
+                vo.executeQuery();
+                AdfFacesContext.getCurrentInstance().addPartialTarget(this.sceneTable);
+            }
         }
     }
 

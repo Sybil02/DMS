@@ -4,7 +4,10 @@ import java.util.Map;
 
 import oracle.adf.share.ADFContext;
 
+import oracle.adf.share.ADFContextManager;
+
 import oracle.jbo.Session;
+import oracle.jbo.ViewObject;
 import oracle.jbo.server.ApplicationModuleImpl;
 import oracle.jbo.server.ViewLinkImpl;
 import oracle.jbo.server.ViewObjectImpl;
@@ -22,6 +25,7 @@ public class Odi11gModuleImpl extends ApplicationModuleImpl {
      */
     public Odi11gModuleImpl() {
     }
+
     @Override
     protected void prepareSession(Session session) {
         super.prepareSession(session);
@@ -31,6 +35,7 @@ public class Odi11gModuleImpl extends ApplicationModuleImpl {
             this.getSession().getUserData().put("userId", userId);
         }
     }
+
     /**
      * Container's getter for Odi11AgentView.
      * @return Odi11AgentView
@@ -53,6 +58,77 @@ public class Odi11gModuleImpl extends ApplicationModuleImpl {
      */
     public ViewObjectImpl getOdi11SceneCatView() {
         return (ViewObjectImpl)findViewObject("Odi11SceneCatView");
+    }
+    /*
+ *
+ * SELECT Odi11SceneCat.ID,
+       Odi11SceneCat.P_ID,
+       Odi11SceneCat.CAT_NAME,
+       Odi11SceneCat.LOCALE,
+       Odi11SceneCat.IDX,
+       Odi11SceneCat.CREATED_AT,
+       Odi11SceneCat.UPDATED_AT,
+       Odi11SceneCat.UPDATED_BY,
+       Odi11SceneCat.CREATED_BY,
+       ((SELECT count(1)
+           FROM ODI11_SCENE Odi11Scene, Odi11_Role_Scene Odi11RoleScene
+          where Odi11Scene.Locale = 'zh_CN'
+            and Odi11RoleScene.Scene_Id = Odi11Scene.Id
+            and exists
+          (select 1
+                   from dms_role       DmsRole,
+                        dms_group_role DmsGroupoRole,
+                        dms_user_group DmsUserGroup
+                  where DmsRole.Id = DmsGroupoRole.Role_Id
+                    and DmsUserGroup.Group_Id = DmsGroupoRole.Group_Id
+                    and DmsRole.Locale = 'zh_CN'
+                    and DmsUserGroup.User_Id = '10000'
+                    and Odi11RoleScene.Role_Id = DmsRole.Id)
+            and Odi11Scene.Cat_Id = Odi11SceneCat.Id))
+  FROM ODI11_SCENE_CAT Odi11SceneCat
+ WHERE Odi11SceneCat.LOCALE = 'zh_CN'
+ ORDER BY Odi11SceneCat.IDX
+ *
+ */
+
+    public ViewObject getOdi11SceneAuthorityView(String locale) {
+
+        String voName = "Odi11SceneAuthorityView";
+        String userid = ADFContext.getCurrent().getSessionScope().get("userId").toString();
+        
+        ViewObject vo = findViewObject(voName);
+        //根据个人的权限加上这个用户的这个菜单项所包含的内容有什么
+        if (vo == null) {
+            String sql =
+                "SELECT Odi11SceneCat.ID, " + "       Odi11SceneCat.P_ID, " +
+                "       Odi11SceneCat.CAT_NAME, " +
+                "       Odi11SceneCat.LOCALE, " +
+                "       Odi11SceneCat.IDX, " +
+                "       Odi11SceneCat.CREATED_AT, " +
+                "       Odi11SceneCat.UPDATED_AT, " +
+                "       Odi11SceneCat.UPDATED_BY, " +
+                "       Odi11SceneCat.CREATED_BY, " +
+                "       ((SELECT count(1) " +
+                "           FROM ODI11_SCENE Odi11Scene, Odi11_Role_Scene Odi11RoleScene " +
+                "          where Odi11Scene.Locale = '" + locale + "' " +
+                "            and Odi11RoleScene.Scene_Id = Odi11Scene.Id " +
+                "            and exists " + "          (select 1 " +
+                "                   from dms_role       DmsRole, " +
+                "                        dms_group_role DmsGroupoRole, " +
+                "                        dms_user_group DmsUserGroup " +
+                "                  where DmsRole.Id = DmsGroupoRole.Role_Id " +
+                "                    and DmsUserGroup.Group_Id = DmsGroupoRole.Group_Id " +
+                "                    and DmsRole.Locale = '" + locale + "' " +
+                "                    and DmsUserGroup.User_Id = '" + userid + "' " +
+                "                    and Odi11RoleScene.Role_Id = DmsRole.Id) " +
+                "            and Odi11Scene.Cat_Id = Odi11SceneCat.Id)) Authority" +
+                "  FROM ODI11_SCENE_CAT Odi11SceneCat " +
+                " WHERE Odi11SceneCat.LOCALE = '" + locale + "' " +
+                " ORDER BY Odi11SceneCat.IDX";
+            vo = createViewObjectFromQueryStmt(voName, sql);
+        }
+
+        return vo;
     }
 
     /**
