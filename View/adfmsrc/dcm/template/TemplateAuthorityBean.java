@@ -26,10 +26,14 @@ import oracle.jbo.Row;
 import oracle.jbo.RowSetIterator;
 import oracle.jbo.ViewObject;
 
+import oracle.jbo.uicli.binding.JUCtrlHierNodeBinding;
 import oracle.jbo.uicli.binding.JUCtrlValueBinding;
 
 import org.apache.myfaces.trinidad.model.CollectionModel;
 import oracle.jbo.uicli.binding.JUCtrlValueBinding.*;
+
+import org.apache.myfaces.trinidad.model.RowKeySet;
+
 public class TemplateAuthorityBean {
     private RichTable assignedtemplateTable;
     private RichTable unassignedTemplateTable;
@@ -53,17 +57,21 @@ public class TemplateAuthorityBean {
     }
 
     public void removeAuthority(ActionEvent actionEvent) {
-        if (this.assignedtemplateTable.getSelectedRowKeys() != null) {
-            Iterator itr =
-                this.assignedtemplateTable.getSelectedRowKeys().iterator();
-            RowSetIterator rowSetIterator =
-                ADFUtils.findIterator("DcmRoleTemplateViewIterator").getRowSetIterator();
-            while(itr.hasNext()){
-                List key = (List)itr.next();
-                Row row = rowSetIterator.getRow((Key)key.get(0));
-                if(row!=null){
-                    row.remove();
-                }
+        
+            if (this.assignedtemplateTable.getSelectedRowKeys() != null) {
+                RowKeySet rowKeys = this.assignedtemplateTable.getSelectedRowKeys();
+                Object[] rowKeySetArray = rowKeys.toArray();
+                CollectionModel cm =
+                    (CollectionModel)assignedtemplateTable.getValue();
+
+            for (Object key : rowKeySetArray) {
+                assignedtemplateTable.setRowKey(key);
+                JUCtrlHierNodeBinding rowData =
+                    (JUCtrlHierNodeBinding)cm.getRowData();
+                if (rowData == null)
+                    return;
+                
+                rowData.getRow().remove();
             }
             ADFUtils.findIterator("DcmRoleTemplateViewIterator").getViewObject().getApplicationModule().getTransaction().commit();
             AdfFacesContext.getCurrentInstance().addPartialTarget(this.assignedtemplateTable);
@@ -95,6 +103,7 @@ public class TemplateAuthorityBean {
     }
 
     public void addTemplate(ActionEvent actionEvent) {
+     
         if (this.unassignedTemplateTable.getSelectedRowKeys() != null) {
             ViewObject roleTemplateVo =
                 ADFUtils.findIterator("DcmRoleTemplateViewIterator").getViewObject();
@@ -107,17 +116,20 @@ public class TemplateAuthorityBean {
             while (itr.hasNext()) {
                 List key = (List)itr.next();
                 Row templateRow = rowSetIterator.getRow((Key)key.get(0));
+                if (templateRow == null)
+                    return ;
+                
                 Row row = roleTemplateVo.createRow();
                 row.setAttribute("RoleId", roleId);
                 row.setAttribute("TemplateId", templateRow.getAttribute("Id"));
                 roleTemplateVo.insertRow(row);
             }
             roleTemplateVo.getApplicationModule().getTransaction().commit();
-            ADFUtils.findIterator("DcmRoleTemplateViewIterator").getViewObject().executeQuery();
             ADFUtils.findIterator("DcmUnAssignedTemplateIterator").getViewObject().executeQuery();
             AdfFacesContext.getCurrentInstance().addPartialTarget(this.unassignedTemplateTable);
             AdfFacesContext.getCurrentInstance().addPartialTarget(this.assignedtemplateTable);
         }
+
     }
 
     public void roleChangeListener(ValueChangeEvent valueChangeEvent) {

@@ -15,6 +15,7 @@
             <f:facet name="toolbar">
               <af:toolbar id="t3">
                 <af:commandButton text="#{viewBundle['dms.common.add']}" id="cb3"
+                                  partialSubmit="true"
                                   actionListener="#{backingBeanScope.FunctionAuthorityBean.add_function}"/>
               </af:toolbar>
             </f:facet>
@@ -77,8 +78,10 @@
             </af:inputComboboxListOfValues> 
                         
             <af:commandButton text="#{viewBundle['dms.common.add']}" id="cb1"
+                              partialSubmit="true"
                               actionListener="#{backingBeanScope.FunctionAuthorityBean.showPopup}"/>
             <af:commandButton text="#{viewBundle['dcm.common.delete']}" id="cb2"
+                              partialSubmit="true"
                               actionListener="#{backingBeanScope.FunctionAuthorityBean.removeFunction}"/>
           </af:toolbar>
         </f:facet>
@@ -88,7 +91,6 @@
                   emptyText="#{viewBundle['dms.common.nodata']}"
                   fetchSize="#{bindings.DmsRoleFunctionView.rangeSize}"
                   rowBandingInterval="0" id="t1" rowSelection="multiple"
-                  selectedRowKeys="#{bindings.DmsRoleFunctionView.collectionModel.selectedRow}"
                   binding="#{backingBeanScope.FunctionAuthorityBean.assignedFunctionTable}">
           <af:column sortProperty="#{bindings.DmsRoleFunctionView.hints.FunctionId.name}"
                      sortable="false"

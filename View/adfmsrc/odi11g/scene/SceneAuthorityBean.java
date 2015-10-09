@@ -13,10 +13,7 @@ import javax.faces.event.ValueChangeEvent;
 
 import oracle.adf.view.rich.component.rich.RichPopup;
 import oracle.adf.view.rich.component.rich.data.RichTable;
-import oracle.adf.view.rich.component.rich.nav.RichCommandButton;
-
 import oracle.adf.view.rich.context.AdfFacesContext;
-
 
 import oracle.adfinternal.view.faces.model.binding.FacesCtrlListBinding;
 
@@ -46,43 +43,55 @@ public class SceneAuthorityBean {
     }
 
     public void showAddPopup(ActionEvent actionEvent) {
-        ViewObject unroleSceneView=ADFUtils.findIterator("Odi11UnauthedSceneViewIterator").getViewObject();
-        Row roleRow=ADFUtils.findIterator("DmsEnabledRoleIterator").getViewObject().getCurrentRow();
-        if(roleRow!=null){
-            unroleSceneView.setNamedWhereClauseParam("roleId", roleRow.getAttribute("Id"));
+        ViewObject unroleSceneView =
+            ADFUtils.findIterator("Odi11UnauthedSceneViewIterator").getViewObject();
+        Row roleRow =
+            ADFUtils.findIterator("DmsEnabledRoleIterator").getViewObject().getCurrentRow();
+        if (roleRow != null) {
+            unroleSceneView.setNamedWhereClauseParam("roleId",
+                                                     roleRow.getAttribute("Id"));
             unroleSceneView.executeQuery();
-            RichPopup.PopupHints hint =new RichPopup.PopupHints();
+            RichPopup.PopupHints hint = new RichPopup.PopupHints();
             this.popup.show(hint);
         }
     }
 
     public void remove(ActionEvent actionEvent) {
         if (this.assignedScene.getSelectedRowKeys() != null) {
-            RowKeySet rowKeys = 
-                this.assignedScene.getSelectedRowKeys() ;
-            Object[] rowKeySetArray = rowKeys.toArray();   
+            RowKeySet rowKeys = this.assignedScene.getSelectedRowKeys();
+            Object[] rowKeySetArray = rowKeys.toArray();
             CollectionModel cm = (CollectionModel)assignedScene.getValue();
-            
-            for (Object key : rowKeySetArray){
+
+            for (Object key : rowKeySetArray) {
                 assignedScene.setRowKey(key);
-                 JUCtrlHierNodeBinding rowData = (JUCtrlHierNodeBinding)cm.getRowData();                           
+                JUCtrlHierNodeBinding rowData =
+                    (JUCtrlHierNodeBinding)cm.getRowData();
+                if (rowData == null)
+                    return;
+
                 rowData.getRow().remove();
             }
             ADFUtils.findIterator("Odi11RoleSceneViewIterator").getViewObject().getApplicationModule().getTransaction().commit();
             AdfFacesContext.getCurrentInstance().addPartialTarget(this.assignedScene);
-        } 
+        }
     }
 
     public void addScene(ActionEvent actionEvent) {
         if (this.unassignedScene.getSelectedRowKeys() != null) {
-            ViewObject roleSceneVo =ADFUtils.findIterator("Odi11RoleSceneViewIterator").getViewObject();
-            String roleId =(String)ADFUtils.findIterator("DmsEnabledRoleIterator").getViewObject().getCurrentRow().getAttribute("Id");
-            Iterator itr = this.unassignedScene.getSelectedRowKeys().iterator();
+            ViewObject roleSceneVo =
+                ADFUtils.findIterator("Odi11RoleSceneViewIterator").getViewObject();
+            String roleId =
+                (String)ADFUtils.findIterator("DmsEnabledRoleIterator").getViewObject().getCurrentRow().getAttribute("Id");
+            Iterator itr =
+                this.unassignedScene.getSelectedRowKeys().iterator();
             RowSetIterator rowSetIterator =
                 ADFUtils.findIterator("Odi11UnauthedSceneViewIterator").getRowSetIterator();
             while (itr.hasNext()) {
                 List key = (List)itr.next();
                 Row sceneRow = rowSetIterator.getRow((Key)key.get(0));
+                if (sceneRow == null)
+                    return;
+
                 Row row = roleSceneVo.createRow();
                 row.setAttribute("RoleId", roleId);
                 row.setAttribute("SceneId", sceneRow.getAttribute("Id"));
@@ -113,7 +122,8 @@ public class SceneAuthorityBean {
     }
 
     public void roleChangeListener(ValueChangeEvent valueChangeEvent) {
-        FacesCtrlListBinding roleName =  (FacesCtrlListBinding) JSFUtils.resolveExpression("#{bindings.RoleName}");
+        FacesCtrlListBinding roleName =
+            (FacesCtrlListBinding)JSFUtils.resolveExpression("#{bindings.RoleName}");
         roleName.setInputValue(valueChangeEvent.getNewValue());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.assignedScene);
     }

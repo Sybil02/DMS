@@ -15,16 +15,13 @@ import javax.faces.event.ValueChangeEvent;
 import oracle.adf.share.logging.ADFLogger;
 import oracle.adf.view.rich.component.rich.RichPopup;
 import oracle.adf.view.rich.component.rich.data.RichTable;
-
 import oracle.adf.view.rich.context.AdfFacesContext;
-
 import oracle.adfinternal.view.faces.model.binding.FacesCtrlListBinding;
-
 import oracle.jbo.Key;
 import oracle.jbo.Row;
-
 import oracle.jbo.RowSetIterator;
 import oracle.jbo.ViewObject;
+import org.apache.myfaces.trinidad.model.RowKeySet;
 
 public class UserGroupBean {
     private static ADFLogger logger =
@@ -37,7 +34,8 @@ public class UserGroupBean {
     }
 
     public void groupChangeListener(ValueChangeEvent valueChangeEvent) {
-        FacesCtrlListBinding groupName = (FacesCtrlListBinding)JSFUtils.resolveExpression("#{bindings.GroupName}");
+        FacesCtrlListBinding groupName =
+            (FacesCtrlListBinding)JSFUtils.resolveExpression("#{bindings.GroupName}");
         groupName.setInputValue(valueChangeEvent.getNewValue());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.groupedUserTable);
     }
@@ -65,20 +63,24 @@ public class UserGroupBean {
         }
     }
 
-    public void removeUserFromGroup(ActionEvent actionEvent) {
+
+    public void removeUserFromGroupp(ActionEvent actionEvent) {
+        RowKeySet rowKeys = this.groupedUserTable.getSelectedRowKeys();
+        Object[] rowKeySetArray = rowKeys.toArray();
         if (this.groupedUserTable.getSelectedRowKeys() != null) {
             ViewObject vo =
                 DmsUtils.getDmsApplicationModule().getDmsUserGroupView();
-            Iterator itr =
-                this.groupedUserTable.getSelectedRowKeys().iterator();
             RowSetIterator rowSetIterator =
                 ADFUtils.findIterator("DmsGroupedUserViewIterator").getRowSetIterator();
-            while(itr.hasNext()){
-                List key = (List)itr.next();
+            for (Object obj : rowKeySetArray) {
+                List key = (List)obj;
                 Row usrRow = rowSetIterator.getRow((Key)key.get(0));
-                Key k=new Key(new Object[]{usrRow.getAttribute("Id")});
-                Row[] rows=vo.findByKey(k, 1);
-                if(rows!=null&&rows.length>0){
+                if (usrRow == null)
+                    return ;
+                
+                Key k = new Key(new Object[] { usrRow.getAttribute("Id") });
+                Row[] rows = vo.findByKey(k, 1);
+                if (rows != null && rows.length > 0) {
                     rows[0].remove();
                 }
             }
@@ -87,6 +89,7 @@ public class UserGroupBean {
             AdfFacesContext.getCurrentInstance().addPartialTarget(this.groupedUserTable);
         }
     }
+
 
     public void setPopup(RichPopup popup) {
         this.popup = popup;
@@ -109,6 +112,9 @@ public class UserGroupBean {
             while (itr.hasNext()) {
                 List key = (List)itr.next();
                 Row usrRow = rowSetIterator.getRow((Key)key.get(0));
+                if (usrRow == null)
+                    return ;
+                
                 Row row = vo.createRow();
                 row.setAttribute("GroupId", groupId);
                 row.setAttribute("UserId", usrRow.getAttribute("Id"));

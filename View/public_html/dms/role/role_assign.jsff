@@ -78,7 +78,7 @@
                                               value="#{bindings.GroupName.name}"
                                               model="#{viewScope.GroupNameComboboxBean.groupNameLov.listOfValuesModel}"
                                               popupTitle="#{bindings.GroupName.label}  列表"
-                                              partialTriggers="t2"
+ 
                                               autoSubmit="true">
                    <af:autoSuggestBehavior suggestItems="#{viewScope.GroupNameComboboxBean.groupNameLov.suggestMethod}"/>
                 </af:inputComboboxListOfValues>
@@ -86,10 +86,10 @@
             </af:group>
             <af:group id="g2">
               <af:commandButton text="#{viewBundle['dms.common.add']}"
-                                id="cb1"
+                                id="cb1" partialSubmit="true"
                                 actionListener="#{backingBeanScope.RoleGroupBean.showPopup}"/>
               <af:commandButton text="#{viewBundle['dcm.common.delete']}"
-                                id="cb2"
+                                id="cb2" partialSubmit="true"
                                 actionListener="#{backingBeanScope.RoleGroupBean.removeRole}"/>
             </af:group>
           </af:toolbar>

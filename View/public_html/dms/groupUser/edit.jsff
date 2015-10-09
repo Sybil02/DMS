@@ -14,7 +14,8 @@
             <f:facet name="menus"/>
             <f:facet name="toolbar">
               <af:toolbar id="t4">
-                <af:commandButton  text="#{viewBundle['dms.common.add']}" id="cb3"
+                <af:commandButton text="#{viewBundle['dms.common.add']}" id="cb3"
+                                  partialSubmit="true"
                                   actionListener="#{backingBeanScope.UserGroupBean.addUserToGroup}"/>
               </af:toolbar>
             </f:facet>
@@ -100,10 +101,11 @@
             </af:group>
             <af:group id="g2">
               <af:commandButton text="#{viewBundle['dms.common.add']}" id="cb1"
+                                partialSubmit="true" 
                                 actionListener="#{backingBeanScope.UserGroupBean.showAddUserPopup}"/>
               <af:commandButton text="#{viewBundle['dcm.common.delete']}"
-                                id="cb2"
-                                actionListener="#{backingBeanScope.UserGroupBean.removeUserFromGroup}"/>
+                                id="cb2" partialSubmit="true"
+                                actionListener="#{backingBeanScope.UserGroupBean.removeUserFromGroupp}"/>
             </af:group>
           </af:toolbar>
         </f:facet>

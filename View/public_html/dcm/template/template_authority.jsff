@@ -16,6 +16,7 @@
             <f:facet name="toolbar">
               <af:toolbar id="t3">
                 <af:commandButton text="#{viewBundle['dms.common.add']}" id="cb5"
+                                  partialSubmit="true"
                                   actionListener="#{TemplateAuthorityBean.addTemplate}"/>
               </af:toolbar>
             </f:facet>
@@ -87,19 +88,11 @@
               </af:group>
               <af:group id="g2">
                 <af:commandButton text="#{viewBundle['dms.common.add']}"
-                                  id="cb1"
+                                  id="cb1" partialSubmit="true"
                                   actionListener="#{TemplateAuthorityBean.showAddPopup}"/>
                 <af:commandButton text="#{viewBundle['dcm.common.delete']}"
-                                  id="cb2"
+                                  id="cb2" partialSubmit="true"
                                   actionListener="#{TemplateAuthorityBean.removeAuthority}"/>
-                <af:commandButton actionListener="#{bindings.Commit.execute}"
-                                  text="#{viewBundle['dms.common.save']}"
-                                  id="cb3"/>
-                <af:commandButton actionListener="#{bindings.Rollback.execute}"
-                                  text="#{viewBundle['dms.common.cancel']}"
-                                  immediate="true" id="cb4">
-                  <af:resetActionListener/>
-                </af:commandButton>
               </af:group>
             </af:toolbar>
           </f:facet>

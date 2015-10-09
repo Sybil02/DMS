@@ -15,6 +15,7 @@
             <f:facet name="toolbar">
               <af:toolbar id="t3">
                 <af:commandButton text="#{viewBundle['dms.common.add']}" id="cb5"
+                                  partialSubmit="true"
                                   actionListener="#{workflowAuthorityBean.addWorkflow}"/>
               </af:toolbar>
             </f:facet>
@@ -88,8 +89,10 @@
             </af:group>
             <af:group id="g2">
               <af:commandButton text="#{viewBundle['dms.common.add']}" id="cb1"
+                                partialSubmit="true"
                                 actionListener="#{workflowAuthorityBean.showAddPopup}"/>
               <af:commandButton text="#{viewBundle['dcm.common.delete']}" id="cb2"
+                                partialSubmit="true"
                                 actionListener="#{workflowAuthorityBean.removeAuthority}"/>
             </af:group>
           </af:toolbar>

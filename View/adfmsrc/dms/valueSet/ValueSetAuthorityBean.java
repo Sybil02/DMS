@@ -1,13 +1,10 @@
 package dms.valueSet;
 
 import common.ADFUtils;
-import common.DmsUtils;
 
 import common.JSFUtils;
 
 import dcm.ComboboxLOVBean;
-
-import dcm.DcmQueryDescriptor;
 
 import dms.login.Person;
 
@@ -15,59 +12,36 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
-
-
 import java.util.Map;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ValueChangeEvent;
-import javax.faces.model.SelectItem;
 
-import oracle.adf.model.BindingContext;
-import oracle.adf.model.binding.DCBindingContainer;
-import oracle.adf.model.binding.DCIteratorBinding;
 import oracle.adf.share.ADFContext;
 import oracle.adf.share.logging.ADFLogger;
 import oracle.adf.view.rich.component.rich.RichPopup;
 import oracle.adf.view.rich.component.rich.data.RichTable;
 import oracle.adf.view.rich.component.rich.input.RichInputText;
-import oracle.adf.view.rich.component.rich.input.RichSelectManyShuttle;
 import oracle.adf.view.rich.context.AdfFacesContext;
 
-import oracle.adf.view.rich.model.FilterableQueryDescriptor;
-
-import oracle.adfinternal.view.faces.context.AdfFacesContextImpl;
 import oracle.adfinternal.view.faces.model.binding.FacesCtrlListBinding;
 
-import oracle.binding.BindingContainer;
-
-import oracle.jbo.ApplicationModule;
 import oracle.jbo.Key;
 import oracle.jbo.Row;
-
 import oracle.jbo.RowSetIterator;
 import oracle.jbo.ViewObject;
 import oracle.jbo.server.DBTransaction;
 import oracle.jbo.uicli.binding.JUCtrlHierNodeBinding;
-import oracle.jbo.uicli.binding.JUCtrlListBinding;
-
-import org.apache.commons.lang.ObjectUtils;
-import org.apache.myfaces.trinidad.event.SelectionEvent;
 
 import org.apache.myfaces.trinidad.model.CollectionModel;
 import org.apache.myfaces.trinidad.model.RowKeySet;
 import org.apache.myfaces.trinidad.model.RowKeySetImpl;
 
-import team.epm.dms.view.DmsGroupRoleViewImpl;
-import team.epm.module.DmsModuleImpl;
 
 public class ValueSetAuthorityBean {
     private RowKeySet selectedRows = new RowKeySetImpl();
@@ -214,6 +188,8 @@ public class ValueSetAuthorityBean {
                 assignedValueTable.setRowKey(key);
                 JUCtrlHierNodeBinding rowData =
                     (JUCtrlHierNodeBinding)cm.getRowData();
+                if (rowData == null)
+                    return;
                 rowData.getRow().remove();
             }
 

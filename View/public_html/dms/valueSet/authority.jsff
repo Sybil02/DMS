@@ -16,7 +16,6 @@
                         <af:panelGroupLayout id="pgl1" layout="horizontal">
                            <af:inputText label="#{viewBundle['dms.value.filterinput']}"
                                          id="it2"
-                                         
                                          binding="#{viewScope.ValueSetAuthorityBean.filterValueInput}"
                                          autoSubmit="true"
                                          valueChangeListener="#{viewScope.ValueSetAuthorityBean.unassignedValueChangeListener}"
@@ -24,6 +23,7 @@
                         </af:panelGroupLayout>
                         <af:spacer width="30" height="10" id="s1"/>
                         <af:commandButton text="#{viewBundle['dms.common.add']}" id="cb3"
+                                          partialSubmit="true"
                                           actionListener="#{viewScope.ValueSetAuthorityBean.add_value_authority}"/> 
                      </af:toolbar>
                   </f:facet>
@@ -93,9 +93,11 @@
                      <af:group id="g2">
                         <af:commandButton text="#{viewBundle['dms.common.add']}"
                                           id="cb1" 
+                                          partialSubmit="true"
                                           actionListener="#{viewScope.ValueSetAuthorityBean.add_value}"/>
                         <af:commandButton text="#{viewBundle['dcm.common.delete']}"
                                           id="cb2"
+                                          partialSubmit="true"
                                           actionListener="#{viewScope.ValueSetAuthorityBean.remove_value}"/>
                      </af:group>
                   </af:toolbar>

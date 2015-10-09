@@ -17,6 +17,7 @@
                 <f:facet name="toolbar">
                   <af:toolbar id="t4">
                     <af:commandButton text="#{viewBundle['dms.common.add']}" id="cb3"
+                                      partialSubmit="true"
                                       actionListener="#{backingBeanScope.SceneAuthorityBean.addScene}"/>
                   </af:toolbar>
                 </f:facet>
@@ -82,8 +83,10 @@
             </af:group>
             <af:group id="g2">
               <af:commandButton text="#{viewBundle['dms.common.add']}" id="cb1"
+                                partialSubmit="true"
                                 actionListener="#{backingBeanScope.SceneAuthorityBean.showAddPopup}"/>
               <af:commandButton text="#{viewBundle['dcm.common.delete']}" id="cb2"
+                                partialSubmit="true"
                                 actionListener="#{backingBeanScope.SceneAuthorityBean.remove}"/>
             </af:group>
           </af:toolbar>

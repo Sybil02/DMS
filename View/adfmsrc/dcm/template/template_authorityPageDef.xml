@@ -35,10 +35,6 @@
         </AttrNames>
       </nodeDefinition>
     </tree>
-    <action id="Commit" RequiresUpdateModel="true" Action="commitTransaction"
-            DataControl="DcmModuleDataControl"/>
-    <action id="Rollback" RequiresUpdateModel="false"
-            Action="rollbackTransaction" DataControl="DcmModuleDataControl"/>
     <tree IterBinding="DcmUnAssignedTemplateIterator"
           id="DcmUnAssignedTemplate">
       <nodeDefinition DefName="team.epm.dcm.view.DcmUnAssignedTemplate"
