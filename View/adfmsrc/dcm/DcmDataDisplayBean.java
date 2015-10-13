@@ -707,11 +707,10 @@ public class DcmDataDisplayBean extends TablePagination {
                                             outputStream);
                 writer.writoToFile();
             } else {
-                Excel2007WriterImpl writer =
-                    new Excel2007WriterImpl(this.getQuerySql(),
-                                            this.curTempalte, this.colsdef,
-                                            outputStream);
-                writer.writoToFile();
+                Excel2007WriterImpl writer=new Excel2007WriterImpl(this.getQuerySql(),
+                                                                   (int)this.curTempalte.getDataStartLine().getValue(),
+                                                                   this.colsdef);
+                writer.process(outputStream, this.curTempalte.getName());
             }
             outputStream.flush();
         } catch (Exception e) {

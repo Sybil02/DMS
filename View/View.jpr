@@ -562,6 +562,7 @@
             <hash>
                <url n="content-folder-url" path="adfmsrc/dcm/"/>
                <list n="pattern-filters">
+                  <string v="+dcm/AbstractExcel2007Writer.java"/>
                   <string v="+dcm/DemoLOVBean.java"/>
                   <string v="+dcm/DemoComboboxLOVBean.java"/>
                   <string v="+dcm/SuggestItem.java"/>
@@ -662,6 +663,15 @@
                </list>
                <list n="url-path">
                   <url path="adfmsrc/"/>
+               </list>
+            </hash>
+            <hash>
+               <url n="content-folder-url" path="public_html/dcm/"/>
+               <list n="pattern-filters">
+                  <string v="+dcm/AbstractExcel2007Writer.java"/>
+               </list>
+               <list n="url-path">
+                  <url path="public_html/"/>
                </list>
             </hash>
          </list>
@@ -939,6 +949,10 @@
          </hash>
          <hash>
             <value n="id" v="BC4J Oracle Domains"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <url n="id" protocol="file" path="/C:/Users/Administrator/AppData/Roaming/JDeveloper/system11.1.1.7.40.64.93/o.jdeveloper/Src.library"/>
             <value n="isJDK" v="false"/>
          </hash>
       </list>
@@ -1326,6 +1340,10 @@
          </hash>
          <hash>
             <value n="id" v="BC4J Oracle Domains"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <url n="id" protocol="file" path="/C:/Users/Administrator/AppData/Roaming/JDeveloper/system11.1.1.7.40.64.93/o.jdeveloper/Src.library"/>
             <value n="isJDK" v="false"/>
          </hash>
       </list>
