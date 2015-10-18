@@ -60,6 +60,7 @@ public class ApproveflowEngine {
         sql.append("and t2.template_id = '").append(templateId).append("' ");
         sql.append("and t2.com_id = '").append(comId).append("' ");
         sql.append("order by t1.seq");
+        //System.out.println("test:"+sql);
         try {
             ResultSet rs = stmt.executeQuery(sql.toString());
             while (rs.next()) {
@@ -70,6 +71,7 @@ public class ApproveflowEngine {
                     break;
                 } else {
                     this._logger.severe("部门启动第一个审批人异常");
+                    return;
                 }
             }
             rs.close();

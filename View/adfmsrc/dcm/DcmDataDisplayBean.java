@@ -1918,22 +1918,35 @@ public class DcmDataDisplayBean extends TablePagination {
                 approveSql.append("SELECT APPROVAL_STATUS,STEP_NO FROM APPROVE_TEMPLATE_STATUS WHERE ");
                 approveSql.append("RUN_ID = '").append(this.curRunId).append("' ");
                 approveSql.append("AND TEMPLATE_ID = '").append(this.curTempalte.getId()).append("' ");
-                approveSql.append("AND PERSON_ID = '").append(this.curUser.getId()).append("' ");
+                if(this.curUser.getId().equals("10000")){
+                //系统管理员可以获取权限，但是正在审批或未开启才能回退，审批通过了则不能回退重做
+                    approveSql.append("AND APPROVAL_STATUS <> 'Y' ");
+                }else{
+                    approveSql.append("AND PERSON_ID = '").append(this.curUser.getId()).append("' ");    
+                }  
                 approveSql.append("AND COM_ID = '").append(this.curCombiantionRecord).append("'");
                 ResultSet aRs = stat.executeQuery(approveSql.toString());
                 if (aRs.next()) {
                     String appStatus = aRs.getString("APPROVAL_STATUS");
                     this.approveStepNo = aRs.getInt("STEP_NO");
-                    //close状态不能回退
+                    //close状态可以回退
+                    if(appStatus.equals("CLOSE")){
+                        this.isEnd = false;
+                    }
+                    //审批通过判断是否是最后节点，是则可以回退
                     if (appStatus.equals("Y") ||
                         appStatus.equals("APPROVEING")) {
                         this.isEnd = this.isEndNode(this.approveStepNo);
                     }
 
-                    //System.out.println("retuen:"+isEnd);
-                    //审批时可以回退
+                    //审批时可以通过，拒绝，回退
                     if (appStatus.equals("APPROVEING")) {
-                        this.approveStatus = "N";
+                        if(this.curUser.getId().equals("10000")){
+                        //管理员不能通过，拒绝
+                            this.approveStatus = "Y";
+                        }else{
+                            this.approveStatus = "N";
+                        }
                         this.isEnd = false;
                     }
                     //System.out.println("isEnd:"+isEnd);

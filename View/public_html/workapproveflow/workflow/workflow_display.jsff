@@ -10,6 +10,22 @@
       <af:panelGroupLayout layout="scroll"
                            xmlns:af="http://xmlns.oracle.com/adf/faces/rich"
                            id="pgl4">
+      <af:popup id="p5"
+                binding="#{viewScope.workflowDisplayBean.closeWfPop}">
+          <af:panelWindow id="pw5">
+            <af:panelGroupLayout id="pgl1">
+              <af:message id="m1" messageType="warning"
+                          message="#{viewBundle['dms.close.warn']}"/>
+            </af:panelGroupLayout>
+            <af:panelGroupLayout id="pgl13" layout="horizontal">
+              <af:spacer id="sp_close_a" width="10px"/>
+              <af:commandButton text="#{viewBundle['dcm.common.ok']}" id="cb6"
+                                actionListener="#{viewScope.workflowDisplayBean.closeWorkflow}"/>
+              <af:spacer id="sp_close" width="5px"/>
+              <af:commandButton text="#{viewBundle['dms.common.cancel']}" id="cb7"/>
+            </af:panelGroupLayout>
+          </af:panelWindow>
+        </af:popup>
                            <!--审批详情Popup-->
         <af:popup id="p3" autoCancel="disabled"
                   binding="#{viewScope.workflowDisplayBean.approvePop}">
@@ -404,7 +420,7 @@
                                   actionListener="#{viewScope.workflowDisplayBean.showRunPop}"
                                   partialSubmit="true"/>
                 <af:commandButton text="#{viewBundle['dcm.combination_record_close']}" id="cb5"
-                                  actionListener="#{viewScope.workflowDisplayBean.closeWorkflow}"
+                                  actionListener="#{viewScope.workflowDisplayBean.showClosePop}"
                                   partialSubmit="true" 
                                   /> 
               </af:toolbar>

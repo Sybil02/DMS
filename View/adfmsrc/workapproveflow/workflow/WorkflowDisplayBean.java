@@ -64,6 +64,8 @@ public class WorkflowDisplayBean {
     List<SelectItem> tempItemList = new ArrayList<SelectItem>();
     private RichSelectOneChoice approveSoc;
     private RichSelectOneChoice writeSoc;
+    private RichPopup closeWfPop;
+
 
     public WorkflowDisplayBean() {
         super();
@@ -345,31 +347,43 @@ public class WorkflowDisplayBean {
         }
     }
     
-    public void closeWorkflow(ActionEvent actionEvent) {
-        // 关闭工作流
-        DCIteratorBinding wfIter = ADFUtils.findIterator("DmsUserWorkflowVOIterator");
-        ViewObject wfVo = wfIter.getViewObject();
-        Row row = wfVo.getCurrentRow();
-        if(row == null){
-            FacesContext.getCurrentInstance().addMessage(null,new FacesMessage("请选择一个工作流！"));    
-            return;    
+    
+    public void showClosePop(ActionEvent actionEvent) {
+            // 关闭工作流
+            DCIteratorBinding wfIter = ADFUtils.findIterator("DmsUserWorkflowVOIterator");
+            ViewObject wfVo = wfIter.getViewObject();
+            Row row = wfVo.getCurrentRow();
+            if(row == null){
+                FacesContext.getCurrentInstance().addMessage(null,new FacesMessage("请选择一个工作流！"));    
+                return;    
+            }
+     
+            String wfStatus = row.getAttribute("WfStatus").toString();
+            if("N".equals(wfStatus)){
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("工作流未启动！"));  
+                return;
+            }
+            RichPopup.PopupHints hints = new RichPopup.PopupHints();
+            this.closeWfPop.show(hints);
         }
-        String wfId = row.getAttribute("WorkflowId").toString();
-        String wfStatus = row.getAttribute("WfStatus").toString();
-        if("N".equals(wfStatus)){
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("工作流未启动！"));  
-            return;
+        
+        public void closeWorkflow(ActionEvent actionEvent) {
+            // 关闭工作流
+            DCIteratorBinding wfIter = ADFUtils.findIterator("DmsUserWorkflowVOIterator");
+            ViewObject wfVo = wfIter.getViewObject();
+            Row row = wfVo.getCurrentRow();
+            String wfId = row.getAttribute("WorkflowId").toString();
+            String wfStatus = row.getAttribute("WfStatus").toString();
+            //改变工作流状态
+     
+            if ( this.wfEngine.changeWfStatus(wfId, wfStatus) ) {
+                //界面上改变工作流状态
+                row.setAttribute("WfStatus", "N");
+                AdfFacesContext.getCurrentInstance().addPartialTarget(this.wfTable);
+            }else {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("工作流关闭失败！")); 
+            } 
         }
-        //改变工作流状态
- 
-        if ( this.wfEngine.changeWfStatus(wfId, wfStatus) ) {
-            //界面上改变工作流状态
-            row.setAttribute("WfStatus", "N");
-            AdfFacesContext.getCurrentInstance().addPartialTarget(this.wfTable);
-        }else {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("工作流关闭失败！")); 
-        } 
-    }
 
     public void vsValueChange(ValueChangeEvent valueChangeEvent) {
         RichSelectOneChoice comSoc = (RichSelectOneChoice)valueChangeEvent.getSource();
@@ -505,5 +519,13 @@ public class WorkflowDisplayBean {
 
     public RichSelectOneChoice getWriteSoc() {
         return writeSoc;
+    }
+
+    public void setCloseWfPop(RichPopup closeWfPop) {
+        this.closeWfPop = closeWfPop;
+    }
+
+    public RichPopup getCloseWfPop() {
+        return closeWfPop;
     }
 }

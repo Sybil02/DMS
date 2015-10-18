@@ -77,8 +77,7 @@
             <af:group id="g7">
               <af:commandButton text="#{viewBundle['dms.workflow.approve']}"
                                 id="cb13"
-                                disabled="#{viewScope.DcmDataDisplayBean.writeStatus eq 'Y'
-                                or (viewScope.DcmDataDisplayBean.isEditable eq false)}"
+                                disabled="#{viewScope.DcmDataDisplayBean.writeStatus eq 'Y'}"
                                 actionListener="#{viewScope.DcmDataDisplayBean.commitApprove}"/>
             </af:group>
             <af:group id="g8">
