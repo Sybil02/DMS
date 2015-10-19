@@ -127,7 +127,7 @@
                                sortable="true"
                                headerText="#{bindings.DmsWorkflowTemplateStatusVO.hints.WriteStatus.label}"
                                id="c16">
-                      <af:outputText value="#{row.WriteStatus == 'Y'||'N' ? '完成':'未完成'}"
+                      <af:outputText value='#{row.WriteStatus eq "N" ? "未完成":(row.WriteStatus eq "Y" ? "完成":"未开启")}'
                                      id="ot17"/>
                     </af:column>
                     <af:column sortProperty="#{bindings.DmsWorkflowTemplateStatusVO.hints.FinishAt.name}"

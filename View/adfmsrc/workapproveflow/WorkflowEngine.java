@@ -372,7 +372,7 @@ public class WorkflowEngine {
             //打开每张模板对应的组合
             this.openTempCom(tempComMap);
             //初始化每张模板的输入状态tempEntityMap<temp_id,<entity_code,com_id>>
-            this.initTemplateStatus(runId, stepNo, tempEntityMap);
+            this.initTemplateStatus(runId, stepNo, tempEntityMap,true);
             //查询审批步骤
             StringBuffer stepNoSql = new StringBuffer();
             int approveNo = stepNo;
@@ -527,7 +527,7 @@ public class WorkflowEngine {
             //打开每张模板对应的组合
             //this.openTempCom(tempComMap);
             //初始化每张模板的输入状态tempEntityMap<temp_id,<entity_code,com_id>>
-            this.initTemplateStatus(runId, stepNo, tempEntityMap);
+            this.initTemplateStatus(runId, stepNo, tempEntityMap,false);
             //查询审批步骤
             StringBuffer stepNoSql = new StringBuffer();
             int approveNo = stepNo;
@@ -569,6 +569,32 @@ public class WorkflowEngine {
             }
         }
         tempComVo.getApplicationModule().getTransaction().commit();
+    }
+    
+    //打开子部门的输入状态
+    private void openWirteStatus(Map<String,List<String>> tempComMap,String runId,int stepNo){
+        DBTransaction trans =
+            (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
+        Statement stat = trans.createStatement(DBTransaction.DEFAULT);
+        try{
+        for(Map.Entry<String,List<String>> tempEntry : tempComMap.entrySet()){
+            for(String comId : tempEntry.getValue()){
+                StringBuffer upWs = new StringBuffer();
+                upWs.append("UPDATE WORKFLOW_TEMPLATE_STATUS T SET T.WRITE_STATUS = 'N' WHERE ");
+                upWs.append("T.RUN_ID = '").append(runId).append("' ");
+                upWs.append("AND T.TEMPLATE_ID = '").append(tempEntry.getKey()).append("' ");
+                upWs.append("AND T.STEP_NO = ").append(stepNo);
+                upWs.append(" AND T.COM_ID = '").append(comId).append("' ");
+                stat.addBatch(upWs.toString());
+            }
+        }
+            stat.executeBatch();
+            trans.commit();
+            stat.close();
+        }catch(Exception e){
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("开启子部门输入系统异常！"));
+            this._logger.severe("开启子部门输入系统异常"+e);    
+        }
     }
     
     //打开所有步骤中子部门对应的所有模板输入状态
@@ -618,13 +644,15 @@ public class WorkflowEngine {
             stat.close();
             //打开子部门对应的模板组合
             this.openTempCom(tempComMap);
+            //开启模板输入状态
+            this.openWirteStatus(tempComMap,runId, stepNo);
         } catch (SQLException e) {
             this._logger.severe(e);
         }
     }
     
     //初始化模板部门数据输入状态表
-    private void initTemplateStatus(String runId,int stepNo,Map<String,Map<String,List<String>>> tempEntityMap){
+    private void initTemplateStatus(String runId,int stepNo,Map<String,Map<String,List<String>>> tempEntityMap,boolean initAll){
         DmsWorkflowTemplateStatusVOImpl vo = DmsUtils.getDmsApplicationModule().getDmsWorkflowTemplateStatusVO();
         for(Map.Entry<String,Map<String,List<String>>> tempEntry : tempEntityMap.entrySet()){
             for(Map.Entry<String,List<String>> entry : tempEntry.getValue().entrySet()){
@@ -637,7 +665,11 @@ public class WorkflowEngine {
                     wtsRow.setEntityCode(entry.getKey());
                     wtsRow.setComId(comId);
                     wtsRow.setWriteBy("");
-                    wtsRow.setWriteStatus("N");
+                    if(initAll){
+                        wtsRow.setWriteStatus("N");
+                    }else{
+                        wtsRow.setWriteStatus("CLOSE");
+                    }
                     wtsRow.setFinishAt(null);
                     vo.insertRow(wtsRow);    
                 }
@@ -753,7 +785,7 @@ public class WorkflowEngine {
         StringBuffer sql = new StringBuffer();
         //System.out.println("type:"+stepTask);
         if(stepTask.equals("OPEN TEMPLATES")){
-            sql.append("SELECT 1 FROM WORKFLOW_TEMPLATE_STATUS WHERE WRITE_STATUS = 'N' ");
+            sql.append("SELECT 1 FROM WORKFLOW_TEMPLATE_STATUS WHERE WRITE_STATUS <> 'Y' ");
         }else{
             sql.append("SELECT 1 FROM APPROVE_TEMPLATE_STATUS WHERE APPROVAL_STATUS <> 'Y' ");
         }
