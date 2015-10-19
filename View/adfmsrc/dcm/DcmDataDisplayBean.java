@@ -1786,14 +1786,27 @@ public class DcmDataDisplayBean extends TablePagination {
         updateWs.append("AND COM_ID ='").append(this.curCombiantionRecord).append("'");
         //关闭组合
         StringBuffer updateCom = new StringBuffer();
-        updateCom.append("UPDATE DCM_TEMPLATE_COMBINATION SET STATUS = 'CLOSE' WHERE TEMPLATE_ID = '").append(this.curTempalte.getId()).append("' ");
+        updateCom.append("UPDATE DCM_TEMPLATE_COMBINATION SET STATUS = 'CLOSE',UPDATED_AT = SYSDATE,UPDATED_BY = '").append(this.curUser.getId()).append("' ");
+        updateCom.append("WHERE TEMPLATE_ID = '").append(this.curTempalte.getId()).append("' ");
         updateCom.append("AND COM_RECORD_ID = '").append(this.curCombiantionRecord).append("'");
+        
         try {
-            stat.executeUpdate(updateWs.toString());
-            stat.executeUpdate(updateCom.toString());
-            trans.commit();
+            int backRow = stat.executeUpdate(updateWs.toString());
+            if(backRow == 1){
+                stat.executeUpdate(updateCom.toString());    
+            }else if(backRow > 1){
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("修改输入状态返回多条记录，请联系管理员！"));   
+                trans.rollback();
+                return;
+            }else{
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("修改输入状态失败，请联系管理员！"));   
+                trans.rollback();
+                return;    
+            }
+            //trans.commit();
         } catch (SQLException e) {
-            this._logger.severe(e);
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("提交审批系统异常，请联系管理员！"));
+            this._logger.severe("提交审批系统异常，请联系管理员！"+e);
         }
         WorkflowEngine wfEngine = new WorkflowEngine();
         //判断下一步是否为审批，是否存在审批 runid,wfId,stepno
@@ -1816,7 +1829,12 @@ public class DcmDataDisplayBean extends TablePagination {
                 updateApp.append("WHERE WF_ID = '").append(this.curWfId).append("' ");
                 updateApp.append("AND RUN_ID = '").append(this.curRunId).append("' ");
                 updateApp.append("AND STEP_NO =").append(this.stepNo + 1);
-                stat.executeUpdate(updateApp.toString());
+                int backRow2 = stat.executeUpdate(updateApp.toString());
+                if(backRow2 == 0){
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("更新步骤状态失败，请联系管理员！"));   
+                    trans.rollback();
+                    return;
+                }
                 trans.commit();
             } catch (Exception e) {
                 this._logger.severe(e);
@@ -2315,7 +2333,7 @@ public class DcmDataDisplayBean extends TablePagination {
         this.isEnd = isEnd;
     }
 
-    public boolean isIsEnd() {
+    public boolean getIsEnd() {
         return isEnd;
     }
 

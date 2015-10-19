@@ -64,14 +64,15 @@ public class ApproveflowEngine {
         try {
             ResultSet rs = stmt.executeQuery(sql.toString());
             while (rs.next()) {
+                //R重审，此版本未完善
                 if (rs.getString("APPROVAL_STATUS").equals("CLOSE") ||
                     rs.getString("APPROVAL_STATUS").equals("R")) {
                     userId = rs.getString("PERSON_ID");
                     seq = rs.getString("SEQ");
                     break;
                 } else {
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("部门启动第一个审批人异常！"));
                     this._logger.severe("部门启动第一个审批人异常");
-                    return;
                 }
             }
             rs.close();
@@ -83,14 +84,18 @@ public class ApproveflowEngine {
                 openSql.append("AND TEMPLATE_ID = '").append(templateId).append("' ");
                 openSql.append("AND COM_ID = '").append(comId).append("' ");
                 openSql.append("AND PERSON_ID = '").append(userId).append("' ");
-                stmt.executeUpdate(openSql.toString());
+                int back = stmt.executeUpdate(openSql.toString());
+                if(back > 1){
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("启动审批返同一顺序返回多个，请检查审批人配置顺序！"));        
+                }
                 db.commit();
                 //发送邮件
                 this.sendMail(templateId,comName,userId,commitUser, "工作流表单审核！","请及时审核：","");
             }
             stmt.close();
         } catch (SQLException e) {
-            this._logger.severe(e);
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Update:部门启动第一个审批人异常！"));
+            this._logger.severe("Update:部门启动第一个审批人异常！"+e);
         }
     }
     
@@ -184,7 +189,8 @@ public class ApproveflowEngine {
             }
             stat.close();
         } catch (SQLException e) {
-            this._logger.severe(e);
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("启动下一审批人系统异常，请联系管理员！"));
+            this._logger.severe("启动下一审批人系统异常，请联系管理员！"+e);
         }
     }
     
@@ -203,11 +209,20 @@ public class ApproveflowEngine {
         uaSql.append("AND COM_ID = '").append(comId).append("' ");
         uaSql.append("AND PERSON_ID = '").append(userId).append("' ");
         try {
-            stat.executeUpdate(uaSql.toString());
-            trans.commit();
+            int backRow3 = stat.executeUpdate(uaSql.toString());
+            if(backRow3 == 0){
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("修改审批通过失败，请联系管理员！"));
+                trans.rollback();
+            }else if(backRow3 > 1){
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("修改审批通过返回多条记录，请联系管理员！"));
+                trans.rollback();
+            }else{
+                trans.commit();
+            }
             stat.close();
         } catch (SQLException e) {
-            this._logger.severe(e);
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("修改审批通过系统异常，请联系管理员！"));
+            this._logger.severe("修改审批通过系统异常，请联系管理员！"+e);
         }
         //启动下一个审批人
         this.nextApproveUser(wfId,runId, templateId, comId,commitUser,comName,stepNo);
@@ -273,6 +288,7 @@ public class ApproveflowEngine {
             uRs.close();
             stat.close();
         } catch (SQLException e) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("审批拒绝系统异常，请联系管理员！"));
             this._logger.severe(e);
         }
     }
