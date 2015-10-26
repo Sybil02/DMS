@@ -166,6 +166,7 @@ public class WorkflowDisplayBean {
                 this.writeSoc.setValue(null);    
             }
             String stepObject = curRow.getAttribute("StepObject").toString();
+
             openTemp(stepObject);
         }else if(stepTask.equals("APPROVE")&&(StepStatus.equals("WORKING")||StepStatus.equals("Y"))){
             if(this.approveSoc != null){

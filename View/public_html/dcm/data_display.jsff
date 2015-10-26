@@ -627,10 +627,15 @@
             <af:decorativeBox id="db1" topHeight="30px" styleClass="AFStretchWidth" >
               <f:facet name="center">
                 <af:panelGroupLayout id="pgl9">
+                  <af:selectManyCheckbox label="Label 1" id="smc1" layout="horizontal" autoSubmit="true">
+                    <af:selectItem label="E01" value="E01" id="si8"/>
+                    <af:selectItem label="E02" value="E02" id="si7"/>
+                    <af:selectItem label="E03" value="E03" id="si6"/>
+                  </af:selectManyCheckbox>
                   <af:outputLabel value="#{viewBundle['dms.wf.reason']}" id="bz"/>
                   <af:spacer id="sp_bz" height="5px" />
                   <af:inputText value="#{viewScope.DcmDataDisplayBean.backReason}" 
-                   partialTriggers="soc2" rows="17" columns="91" id="it5"/>
+                   partialTriggers="soc2" rows="15" columns="91" id="it5"/>
                 </af:panelGroupLayout>
               </f:facet>
               <f:facet name="top">

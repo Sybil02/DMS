@@ -1803,7 +1803,8 @@ public class DcmDataDisplayBean extends TablePagination {
                 trans.rollback();
                 return;    
             }
-            //trans.commit();
+            //先提交输入状态更改
+            trans.commit();
         } catch (SQLException e) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("提交审批系统异常，请联系管理员！"));
             this._logger.severe("提交审批系统异常，请联系管理员！"+e);
@@ -1813,16 +1814,17 @@ public class DcmDataDisplayBean extends TablePagination {
         Map<String, String> nextMap =
             wfEngine.queryNextStep(this.curWfId, this.curRunId, this.stepNo);
         String stepTask = nextMap.get("STEP_TASK");
-        //存在，直接进入下一步，改变审批状态
+        //下一步是审批，直接进入下一步，改变审批状态
         if (stepTask != null && stepTask.equals("APPROVE")) {
             ApproveflowEngine approveEgn = new ApproveflowEngine();
             try {
                 //打开部门审批，发送邮件
-                approveEgn.startApproveEntity(this.curRunId,
+                approveEgn.startApproveEntity(this.curWfId,
+                                              this.curRunId,
                                               this.curTempalte.getId(),
                                               this.curCombiantionRecord,
                                               this.getCurComRecordText(),
-                                              this.curUser.getName());
+                                              this.curUser.getName(),this.stepNo);
                 //改变工作流中审批步骤状态为进行中
                 StringBuffer updateApp = new StringBuffer();
                 updateApp.append("UPDATE DMS_WORKFLOW_STATUS SET STEP_STATUS = 'WORKING',START_AT = SYSDATE ");
@@ -2378,6 +2380,10 @@ public class DcmDataDisplayBean extends TablePagination {
         DBTransaction trans =
             (DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
         Statement stat = trans.createStatement(DBTransaction.DEFAULT);
+        //查询工作流中父节点下其他子部门
+        String entitySql = "SELECT P.ENTITY FROM DCM_ENTITY_PARENT P WHERE P.PARENT = " 
+            + "(SELECT DISTINCT P1.PARENT FROM WORKFLOW_TEMPLATE_STATUS W,DCM_ENTITY_PARENT P1 "
+            + "WHERE W.ENTITY_CODE = P1.ENTITY AND W.COM_ID = '" + this.curCombiantionRecord + "')";
         //查询当前审批步骤之前的填写表单步骤 
         String backSql = "SELECT DISTINCT T.STEP_NO,D.NAME FROM WORKFLOW_TEMPLATE_STATUS T,DCM_TEMPLATE D "
             + "WHERE T.TEMPLATE_ID = D.ID AND D.LOCALE = 'zh_CN' " + "AND T.RUN_ID = '"

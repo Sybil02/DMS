@@ -41,8 +41,8 @@ public class ApproveflowEngine {
     //开启审批流当中一个部门，审批人
     //审批状态  未开启：CLOSE 开启：APPROVEING 通过：Y 
 
-    public void startApproveEntity(String runId, String templateId,
-                                   String comId,String comName,String commitUser) throws AddressException,
+    public void startApproveEntity(String wfId,String runId, String templateId,
+                                   String comId,String comName,String commitUser,int writeStepNo) throws AddressException,
                                                         MessagingException {
         String userId = "";
         String seq = "";
@@ -60,7 +60,8 @@ public class ApproveflowEngine {
         sql.append("and t2.template_id = '").append(templateId).append("' ");
         sql.append("and t2.com_id = '").append(comId).append("' ");
         sql.append("order by t1.seq");
-        //System.out.println("test:"+sql);
+        //该模板实体是否需要审批
+        boolean isAppTemp = false;
         try {
             ResultSet rs = stmt.executeQuery(sql.toString());
             while (rs.next()) {
@@ -69,6 +70,7 @@ public class ApproveflowEngine {
                     rs.getString("APPROVAL_STATUS").equals("R")) {
                     userId = rs.getString("PERSON_ID");
                     seq = rs.getString("SEQ");
+                    isAppTemp = true;
                     break;
                 } else {
                     FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("部门启动第一个审批人异常！"));
@@ -91,6 +93,12 @@ public class ApproveflowEngine {
                 db.commit();
                 //发送邮件
                 this.sendMail(templateId,comName,userId,commitUser, "工作流表单审核！","请及时审核：","");
+            }
+            if(!isAppTemp){
+                //如果没有配置审批，则默认审批通过，检测同步骤中其他子部门是否全部输入完成，通过审核,是否进行下一步
+                WorkflowEngine wfe = new WorkflowEngine();
+                wfe.startNext(wfId, runId, templateId, comId, comName, writeStepNo+1, "APPROVE", commitUser);
+
             }
             stmt.close();
         } catch (SQLException e) {
@@ -303,8 +311,8 @@ public class ApproveflowEngine {
         List<String> childList = new ArrayList<String>();
         StringBuffer pSql = new StringBuffer();
         pSql.append("select ENTITY from dcm_entity_parent d where d.parent = ( ");
-        pSql.append("select distinct parent from approve_template_status t1 , dcm_entity_parent t2 ");
-        pSql.append("where t1.entity_id = t2.entity and t1.template_id = '").append(templateId).append("' ");
+        pSql.append("select distinct parent from workflow_template_status t1 , dcm_entity_parent t2 ");
+        pSql.append("where t1.entity_code = t2.entity and t1.template_id = '").append(templateId).append("' ");
         pSql.append("and t1.com_id = '").append(comId).append("')");
         try {
             ResultSet rs = stat.executeQuery(pSql.toString());
@@ -318,6 +326,8 @@ public class ApproveflowEngine {
             eSql.append("and t.run_id = '").append(runId).append("' ");
             eSql.append("and t.step_no = ").append(stepNo).append(" ");
             eSql.append("and t.entity_id in (");
+            //检查不需要审批的子部门是否完成输入
+            
             for(String entityCode : childList){
                 eSql.append("'").append(entityCode).append("',");
             }
