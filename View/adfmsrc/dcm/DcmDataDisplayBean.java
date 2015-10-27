@@ -199,6 +199,8 @@ public class DcmDataDisplayBean extends TablePagination {
     private RichPopup backStepPop;
     private String backReason;
     private RichSelectOneChoice backSoc;
+    private RichPopup commitWarnPop;
+    private RichPopup commitWarnCalcPop;
 
 
     public DcmDataDisplayBean() {
@@ -1714,10 +1716,10 @@ public class DcmDataDisplayBean extends TablePagination {
                                                          new FacesMessage("存在未选择参数！"));
             return;
         }
-        //System.out.println(calcPro+"&"+p_template_id+"&"+p_com_record_id+"&"+p_user_id+"&"+p_handle_mode+"&"+p_locale);
-        //System.out.println(args);
+        
         DBTransaction trans =
             (DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
+        Statement stat = trans.createStatement(DBTransaction.DEFAULT);
         CallableStatement cs =
             trans.createCallableStatement("{CALL " + calcPro +
                                           "(?,?,?,?,?,?,?)}", 0);
@@ -1734,13 +1736,20 @@ public class DcmDataDisplayBean extends TablePagination {
             if ("true".equals(cs.getString(7))) {
                 FacesContext.getCurrentInstance().addMessage(null,
                                                              new FacesMessage("程序执行成功！"));
+                //更新执行时间
+                String tSql = "UPDATE DCM_TEMPLATE_CALC T SET T.CALC_ARGS = TO_CHAR(SYSDATE,'yyyy-MM-dd HH:mm:ss') "
+                    + "WHERE T.TEMPLATE_ID = '" + this.curTempalte.getId() + "' "
+                    + "AND T.CALC_ID = '" + this.curCalcId + "'";
+                stat.executeUpdate(tSql);
                 trans.commit();
                 //刷新数据
                 this.queryTemplateData();
+                stat.close();
             } else {
                 FacesContext.getCurrentInstance().addMessage(null,
                                                              new FacesMessage("程序执行失败！"));
                 trans.rollback();
+                stat.close();
             }
             cs.close();
         } catch (SQLException e) {
@@ -1770,9 +1779,14 @@ public class DcmDataDisplayBean extends TablePagination {
             this._logger.severe("切换程序触发参数变化valueChangeEvent，导致空指针异常");
         }
     }
+    
+
     // 数据保存后，关闭组合，提交审批
 
     public void commitApprove(ActionEvent actionEvent) {
+        //提示
+        
+        
         //修改输入状态表状态为已输入
         DBTransaction trans =
             (DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
@@ -2446,6 +2460,65 @@ public class DcmDataDisplayBean extends TablePagination {
 
     public RichSelectOneChoice getBackSoc() {
         return backSoc;
+    }
+
+    public void setCommitWarnPop(RichPopup commitWarnPop) {
+        this.commitWarnPop = commitWarnPop;
+    }
+
+    public RichPopup getCommitWarnPop() {
+        return commitWarnPop;
+    }
+    
+    List<String> timeList = new ArrayList<String>();
+    public void showCommitWarn(ActionEvent actionEvent) {
+        String tempName = this.curTempalte.getName();
+        if(tempName.endsWith("输入表")){
+            RichPopup.PopupHints hints = new RichPopup.PopupHints();  
+            this.commitWarnPop.show(hints);
+            
+        }else if(tempName.endsWith("输出表")){
+            this.timeList.clear();
+            DBTransaction trans = (DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
+            Statement stat = trans.createStatement(DBTransaction.DEFAULT);  
+            String sql = "SELECT T.CALC_NAME,T.CALC_ARGS FROM DCM_TEMPLATE_CALC T WHERE T.TEMPLATE_ID = '" + this.curTempalte.getId() + "'";
+            try {
+                ResultSet rs = stat.executeQuery(sql);
+                while(rs.next()){
+                    String calcTime = rs.getString("CALC_NAME")+":"+rs.getString("CALC_ARGS");
+                    this.timeList.add(calcTime);
+                }
+                rs.close();
+                stat.close();
+            } catch (SQLException e) {
+                this._logger.severe(e);
+            }
+            RichPopup.PopupHints hints = new RichPopup.PopupHints();   
+            this.commitWarnCalcPop.show(hints);
+        }else{
+            this.saveAndCommit(actionEvent);
+        }
+    }
+
+    public void saveAndCommit(ActionEvent actionEvent) {
+        this.operation_save();
+        this.commitApprove(actionEvent);
+    }
+
+    public void setCommitWarnCalcPop(RichPopup commitWarnCalcPop) {
+        this.commitWarnCalcPop = commitWarnCalcPop;
+    }
+
+    public RichPopup getCommitWarnCalcPop() {
+        return commitWarnCalcPop;
+    }
+
+    public void setTimeList(List<String> timeList) {
+        this.timeList = timeList;
+    }
+
+    public List<String> getTimeList() {
+        return timeList;
     }
 }
 

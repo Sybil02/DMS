@@ -78,7 +78,7 @@
               <af:commandButton text="#{viewBundle['dms.workflow.approve']}"
                                 id="cb13"
                                 disabled="#{viewScope.DcmDataDisplayBean.writeStatus eq 'Y'}"
-                                actionListener="#{viewScope.DcmDataDisplayBean.commitApprove}"/>
+                                actionListener="#{viewScope.DcmDataDisplayBean.showCommitWarn}"/>
             </af:group>
             <af:group id="g8">
               <af:commandButton text="#{viewBundle['dms.approve.pass']}"
@@ -651,6 +651,47 @@
                 </af:panelGroupLayout>
               </f:facet>
             </af:decorativeBox>
+          </af:panelWindow>
+        </af:popup>
+        <!-- commitapprove warn pop -->
+        <af:popup id="p51"
+                binding="#{viewScope.DcmDataDisplayBean.commitWarnPop}">
+          <af:panelWindow id="pw51">
+            <af:panelGroupLayout id="pgl11">
+              <af:message id="m1" messageType="warning"
+                          message="#{viewBundle['dms.wf.commitwarn']}"/>
+            </af:panelGroupLayout>
+            <af:panelGroupLayout id="pgl131" layout="horizontal">
+              <af:spacer id="sp_close_a" width="50px"/>
+              <af:commandButton text="#{viewBundle['dcm.common.ok']}" id="cb61"
+                                actionListener="#{viewScope.DcmDataDisplayBean.saveAndCommit}"/>
+              <af:spacer id="sp_close" width="10px"/>
+              <af:commandButton text="#{viewBundle['dms.common.cancel']}" id="cb71"/>
+            </af:panelGroupLayout>
+          </af:panelWindow>
+        </af:popup>
+        <af:popup id="p12"
+                  binding="#{viewScope.DcmDataDisplayBean.commitWarnCalcPop}">
+          <af:panelWindow id="pw9">
+            <af:panelGroupLayout id="pgl13">
+                <af:message id="m2" messageType="warning"
+                          message="#{viewBundle['dms.wf.commitwarn2']}"/>
+            </af:panelGroupLayout>
+            <af:panelGroupLayout id="pgl12">
+              <af:outputLabel value="#{viewBundle['dms.wf.calctime']}" id="ol3"/>
+              <af:panelList id="pl1" maxColumns="5">
+                <af:forEach var="calcTime" items="#{viewScope.DcmDataDisplayBean.timeList}">
+                  <af:outputLabel value="#{calcTime}" id="ol2"/>
+                </af:forEach>
+              </af:panelList>
+            </af:panelGroupLayout>
+            <af:panelGroupLayout id="pgl10">
+              <af:spacer id="sp_close_a1" width="60px"/>
+              <af:commandButton text="#{viewBundle['dcm.common.ok']}" id="cb60"
+                                actionListener="#{viewScope.DcmDataDisplayBean.commitApprove}"/>
+              <af:spacer id="sp_close1" width="10px"/>
+              <af:commandButton text="#{viewBundle['dms.common.cancel']}" id="cb70"/>
+            </af:panelGroupLayout>
           </af:panelWindow>
         </af:popup>
       </af:panelGroupLayout>
