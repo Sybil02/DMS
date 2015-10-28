@@ -627,15 +627,27 @@
             <af:decorativeBox id="db1" topHeight="30px" styleClass="AFStretchWidth" >
               <f:facet name="center">
                 <af:panelGroupLayout id="pgl9">
-                  <af:selectManyCheckbox label="Label 1" id="smc1" layout="horizontal" autoSubmit="true">
-                    <af:selectItem label="E01" value="E01" id="si8"/>
-                    <af:selectItem label="E02" value="E02" id="si7"/>
-                    <af:selectItem label="E03" value="E03" id="si6"/>
-                  </af:selectManyCheckbox>
-                  <af:outputLabel value="#{viewBundle['dms.wf.reason']}" id="bz"/>
-                  <af:spacer id="sp_bz" height="5px" />
-                  <af:inputText value="#{viewScope.DcmDataDisplayBean.backReason}" 
-                   partialTriggers="soc2" rows="15" columns="91" id="it5"/>
+                <af:spacer id = "space_1" height="10px"/>
+                  <af:panelGroupLayout id="pgl15" layout="horizontal">
+                    <af:selectManyChoice label="选择表单:" id="smc1" autoSubmit="true"
+                                         valueChangeListener="#{viewScope.DcmDataDisplayBean.backTempChange}">
+                    <f:selectItems value="#{viewScope.DcmDataDisplayBean.tempList}"
+                                   id="si7"/>
+                  </af:selectManyChoice>
+                  <af:spacer id="space_3" width="20px" />
+                    <af:selectManyChoice label="选择实体:" id="smc2" autoSubmit="true"
+                                         valueChangeListener="#{viewScope.DcmDataDisplayBean.entityBackChange}">
+                      <f:selectItems value="#{viewScope.DcmDataDisplayBean.entityList}"
+                                     id="si6"/>
+                    </af:selectManyChoice>
+                  </af:panelGroupLayout>
+                  <af:panelGroupLayout id="pgl14">
+                  <af:spacer id = "space_2" height="10px"/>
+                    <af:outputLabel value="#{viewBundle['dms.wf.reason']}" id="bz"/>
+                    <af:spacer id="sp_bz" height="5px" />
+                    <af:inputText value="#{viewScope.DcmDataDisplayBean.backReason}" 
+                        partialTriggers="soc2" rows="15" columns="84" id="it5"/>
+                  </af:panelGroupLayout>
                 </af:panelGroupLayout>
               </f:facet>
               <f:facet name="top">

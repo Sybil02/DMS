@@ -2386,25 +2386,27 @@ public class DcmDataDisplayBean extends TablePagination {
         return backReason;
     }
 
-    private Map<String,List<String>> backMap = new HashMap<String,List<String>>();
+    private Map<String,Map<String,String>> backMap = new HashMap<String,Map<String,String>>();
+    private Map<String,Map<String,String>> entityMap = new HashMap<String,Map<String,String>>();
     private List<SelectItem> backList = new ArrayList<SelectItem>();
+    private List<SelectItem> entityList = new ArrayList<SelectItem>();
+    private List<SelectItem> tempList = new ArrayList<SelectItem>();
     public void showBackPop(ActionEvent actionEvent) {
         backMap.clear();
+        entityMap.clear();
         backList.clear();
         DBTransaction trans =
             (DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
         Statement stat = trans.createStatement(DBTransaction.DEFAULT);
-        //查询工作流中父节点下其他子部门
-        String entitySql = "SELECT P.ENTITY FROM DCM_ENTITY_PARENT P WHERE P.PARENT = " 
-            + "(SELECT DISTINCT P1.PARENT FROM WORKFLOW_TEMPLATE_STATUS W,DCM_ENTITY_PARENT P1 "
-            + "WHERE W.ENTITY_CODE = P1.ENTITY AND W.COM_ID = '" + this.curCombiantionRecord + "')";
+
         //查询当前审批步骤之前的填写表单步骤 
-        String backSql = "SELECT DISTINCT T.STEP_NO,D.NAME FROM WORKFLOW_TEMPLATE_STATUS T,DCM_TEMPLATE D "
+        String backSql = "SELECT DISTINCT T.STEP_NO,D.NAME,D.ID,T.ENTITY_CODE,E.MEANING FROM WORKFLOW_TEMPLATE_STATUS T,DCM_TEMPLATE D,DIM_ENTITYS E "
             + "WHERE T.TEMPLATE_ID = D.ID AND D.LOCALE = 'zh_CN' " + "AND T.RUN_ID = '"
             + this.curRunId + "' AND T.STEP_NO < " + this.approveStepNo + " AND T.ENTITY_CODE IN "
             + "(SELECT P.ENTITY FROM DCM_ENTITY_PARENT P WHERE P.PARENT = " 
             + "(SELECT DISTINCT P1.PARENT FROM WORKFLOW_TEMPLATE_STATUS W,DCM_ENTITY_PARENT P1 "
             + "WHERE W.ENTITY_CODE = P1.ENTITY AND W.COM_ID = '" + this.curCombiantionRecord + "')) "
+            + "AND T.ENTITY_CODE = E.CODE AND E.LOCALE = 'zh_CN' "
             + "ORDER BY T.STEP_NO DESC";
 
         try {
@@ -2412,16 +2414,32 @@ public class DcmDataDisplayBean extends TablePagination {
             while(bRs.next()){
                 String sNo = bRs.getString("STEP_NO");
                 String tName = bRs.getString("NAME");
+                String tId = bRs.getString("ID");
+                String eName = bRs.getString("MEANING");
+                String eId = bRs.getString("ENTITY_CODE");
+                
+                if(entityMap.get(sNo) != null){
+                    System.out.println("add:"+eName);
+                    entityMap.get(sNo).put(eId, eName);
+                }else{
+                    System.out.println("add:"+eName);  
+                    Map<String,String> eMap = new HashMap<String,String>();
+                    eMap.put(eId, eName);
+                    entityMap.put(sNo, eMap);
+                }
+                
                 if(backMap.get(sNo) == null){
-                    List<String> tList = new ArrayList<String>();
-                    tList.add(tName);
-                    backMap.put(sNo, tList);
+                    Map<String,String> tMap = new HashMap<String,String>();
+                    System.out.println("add:"+tName);
+                    tMap.put(tId, tName);
+                    backMap.put(sNo, tMap);
                     SelectItem si = new SelectItem();
                     si.setLabel("填写表单第"+sNo+"步");
                     si.setValue(sNo);
                     backList.add(si);
                 }else{
-                    backMap.get(sNo).add(tName);
+                    System.out.println("add:"+tName);
+                    backMap.get(sNo).put(tId, tName);
                 }
             }
             bRs.close();
@@ -2437,13 +2455,35 @@ public class DcmDataDisplayBean extends TablePagination {
     }
     
     public void backSocChangeValue(ValueChangeEvent valueChangeEvent) {
+        this.tempList.clear();
+        this.entityList.clear();
         String backNo = valueChangeEvent.getNewValue().toString();
-        this.backReason = "回退涉及到的表单 ：";
-        for(String name : backMap.get(backNo)){
-            this.backReason += "\n\t";
-            this.backReason += name;
-            this.backReason += ",";
+        
+        List<String> list = new ArrayList<String>();
+        for(Map.Entry<String,Map<String,String>> eMap : this.entityMap.entrySet()){
+            for(Map.Entry<String,String> entity : eMap.getValue().entrySet()){
+                if(Integer.parseInt(eMap.getKey()) >= Integer.parseInt(backNo) && Integer.parseInt(eMap.getKey()) < this.approveStepNo){
+                    if(!list.contains(entity.getKey())){
+                        list.add(entity.getKey());
+                        SelectItem eim = new SelectItem();
+                        eim.setLabel(entity.getValue());
+                        eim.setValue(entity.getKey());
+                        this.entityList.add(eim);
+                        System.out.println("entity:::"+entity.getValue());
+                    }    
+                }    
+            }        
+        }  
+        list.clear();
+        
+        for(Map.Entry<String,String> temp : this.backMap.get(backNo).entrySet()){
+            SelectItem tim = new SelectItem();
+            tim.setLabel(temp.getValue());
+            tim.setValue(temp.getKey());
+            System.out.println("temp::::"+temp.getValue());
+            this.tempList.add(tim);
         }
+        
     }
 
     public void setBackList(List<SelectItem> backList) {
@@ -2519,6 +2559,62 @@ public class DcmDataDisplayBean extends TablePagination {
 
     public List<String> getTimeList() {
         return timeList;
+    }
+
+    public void setEntityList(List<SelectItem> entityList) {
+        this.entityList = entityList;
+    }
+
+    public List<SelectItem> getEntityList() {
+        return entityList;
+    }
+
+    public void setTempList(List<SelectItem> tempList) {
+        this.tempList = tempList;
+    }
+
+    public List<SelectItem> getTempList() {
+        return tempList;
+    }
+
+    private List<String> backTemp = new ArrayList<String>();
+    public void backTempChange(ValueChangeEvent valueChangeEvent) {
+        
+        backTemp.clear();
+        Object obj = valueChangeEvent.getNewValue();
+        String[] tempArray = null;
+        if(obj != null){
+            String str = obj.toString();
+            str = str.substring(1, str.length()-1);
+            tempArray = str.split(", ");
+        }
+        if(tempArray != null){
+            for(String s : tempArray){
+                System.out.println(s);
+                backTemp.add(s);    
+            }    
+        }
+        
+    }
+
+    private List<String> backEntity = new ArrayList<String>();
+    public void entityBackChange(ValueChangeEvent valueChangeEvent) {
+        
+        backEntity.clear();
+        Object obj = valueChangeEvent.getNewValue();
+        String[] entityArray = null;
+        if(obj != null){
+            String str = obj.toString();
+            str = str.substring(1, str.length()-1);
+            entityArray = str.split(", ");
+        }
+        if(entityArray != null){
+            for(String s : entityArray){
+                System.out.println(s);
+                backEntity.add(s);    
+            }    
+        }
+
     }
 }
 

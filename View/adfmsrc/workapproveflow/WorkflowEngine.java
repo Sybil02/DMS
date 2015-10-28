@@ -1002,7 +1002,7 @@ public class WorkflowEngine {
             this._logger.severe(e);
         }
         //处理上上个到当前步骤之间的状态
-        this.retreatStep(wfId, runId, templateId, comId, stepList,commitUser,reason);
+        //this.retreatStep(wfId, runId, templateId, comId, stepList,commitUser,reason);
     }
     
     //回退到父节点在工作流中的起点位置
