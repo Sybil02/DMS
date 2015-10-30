@@ -9,6 +9,9 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.TreeMap;
 
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
+
 import oracle.adf.share.logging.ADFLogger;
 
 import oracle.jbo.server.DBTransaction;

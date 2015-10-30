@@ -52,6 +52,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import java.util.zip.ZipFile;
+
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -213,6 +215,7 @@ public class DcmDataDisplayBean extends TablePagination {
         //判断模板是否在工作流中，是输入还是审批状态
         this.isWfTemplate();
         this.disableCalcBtn();
+
     }
 
     public CollectionModel getDataModel() {
@@ -415,6 +418,10 @@ public class DcmDataDisplayBean extends TablePagination {
     public void operation_import(ActionEvent actionEvent) throws SQLException {
         this.dataImportWnd.cancel();
         String curComRecordId = this.curCombiantionRecord;
+        
+        //判断sheet页名称是否一致
+        //ZipFile zf = new ZipFile();
+        
         //组合找不到
         if (this.curTempalte.getCombinationId() != null &&
             curComRecordId == null) {
@@ -1784,9 +1791,7 @@ public class DcmDataDisplayBean extends TablePagination {
     // 数据保存后，关闭组合，提交审批
 
     public void commitApprove(ActionEvent actionEvent) {
-        //提示
-        
-        
+
         //修改输入状态表状态为已输入
         DBTransaction trans =
             (DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
@@ -1938,6 +1943,9 @@ public class DcmDataDisplayBean extends TablePagination {
                 this.stepNo = rs.getInt("STEP_NO");
                 this.writeStatus = rs.getString("WRITE_STATUS");
                 this.curStepTask = rs.getString("STEP_TASK");
+            }else{
+                this.curWfId = null;
+                this.curRunId = null;
             }
             rs.close();
             //如果不是未输入状态，则其他情况都为Y，不可提交
@@ -2099,12 +2107,16 @@ public class DcmDataDisplayBean extends TablePagination {
 
     //回退到指定步骤
     public void backSpecifyStep(ActionEvent actionEvent) {
+        if(backTemp.size() == 0 || backEntity.size() == 0){
+             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("请选择表单和实体！"));   
+             return;
+        }
         this.isEnd = true;
         this.approveStatus = "Y";
         int specifyStepNo = Integer.parseInt(this.backSoc.getValue().toString());
         WorkflowEngine wfEngine = new WorkflowEngine();
         wfEngine.retreat(this.curWfId, this.curRunId, this.approveStepNo,specifyStepNo,
-                         this.curTempalte.getId(), this.curCombiantionRecord,
+                         this.backTemp, this.backEntity,
                          this.curUser.getName(),this.backReason);
         this.backStepPop.cancel();
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("回退成功！"));
@@ -2113,7 +2125,8 @@ public class DcmDataDisplayBean extends TablePagination {
     //回退到父节点在工作流中的起点位置
     public void retreatStarted(ActionEvent actionEvent) {
         this.isEnd = true;
-        this.approveStatus = "Y";
+        this.approveStatus = "Y"; 
+        
         WorkflowEngine wfEngine = new WorkflowEngine();
         wfEngine.retreatStarted(this.curWfId, this.curRunId,
                                 this.approveStepNo, this.curTempalte.getId(),
@@ -2202,7 +2215,36 @@ public class DcmDataDisplayBean extends TablePagination {
     }
 
     public boolean isHasCalc() {
-        return hasCalc;
+        //实际数最终版锁定模板计算
+        int i = 0;
+        for (ComHeader hd : this.templateHeader) {
+            String code = hd.getCode();
+            String value = hd.getValue();
+            if (code.equals("SCENARIO") &&
+                "Actual".equals(value))
+                i++;
+            if (code.equals("VERSION") &&
+                "Final".equals(value))
+                i++;
+        }
+        if(i==2){
+            return true;    
+        }
+        //工作流提交后锁定模板计算
+        if(this.curWfId != null){
+            if("N".equals(this.writeStatus)){
+                return hasCalc;        
+            }else{
+                return true;    
+            }
+        }else{
+            if(this.curCombinationRecordEditable){
+                return hasCalc;
+            }else{
+                return true;
+            }  
+        }
+        
     }
 
     //检验是否存在组合，如果存在组合但没有选择组合，那么无法导出数据
@@ -2476,13 +2518,30 @@ public class DcmDataDisplayBean extends TablePagination {
         }  
         list.clear();
         
-        for(Map.Entry<String,String> temp : this.backMap.get(backNo).entrySet()){
-            SelectItem tim = new SelectItem();
-            tim.setLabel(temp.getValue());
-            tim.setValue(temp.getKey());
-            System.out.println("temp::::"+temp.getValue());
-            this.tempList.add(tim);
+        for(Map.Entry<String,Map<String,String>> entry : this.backMap.entrySet()){
+            if(Integer.parseInt(entry.getKey()) >= Integer.parseInt(backNo) && Integer.parseInt(entry.getKey()) < this.approveStepNo){
+                SelectItem simNo = new SelectItem();
+                simNo.setLabel("填写表单第"+entry.getKey()+"一步(必选)");
+                simNo.setValue(entry.getKey());
+                simNo.setDisabled(true);
+                simNo.setEscape(true);
+                this.tempList.add(simNo);
+                for(Map.Entry<String,String> temp : entry.getValue().entrySet()){
+                    SelectItem tim = new SelectItem();
+                    tim.setLabel(temp.getValue());
+                    tim.setValue(temp.getKey());
+                    this.tempList.add(tim);
+                }
+            }
         }
+        
+//        for(Map.Entry<String,String> temp : this.backMap.get(backNo).entrySet()){
+//            SelectItem tim = new SelectItem();
+//            tim.setLabel(temp.getValue());
+//            tim.setValue(temp.getKey());
+//            System.out.println("temp::::"+temp.getValue());
+//            this.tempList.add(tim);
+//        }
         
     }
 

@@ -1,7 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.1"
           xmlns:af="http://xmlns.oracle.com/adf/faces/rich"
-          xmlns:f="http://java.sun.com/jsf/core">
+          xmlns:f="http://java.sun.com/jsf/core"
+          xmlns:c="http://java.sun.com/jsp/jstl/core">
+  <c:set var="viewBundle" value="#{adfBundle['dms_v']}"/>
   <af:panelStretchLayout id="psl1" topHeight="42%" clientComponent="true">
     <f:facet name="center">
         
@@ -26,7 +28,9 @@
                   rowBandingInterval="0" editingMode="clickToEdit"
                   selectedRowKeys="#{bindings.DmsWorkflowStepsVO.collectionModel.selectedRow}"
                   selectionListener="#{bindings.DmsWorkflowStepsVO.collectionModel.makeCurrent}"
-                  rowSelection="single" id="t2" partialTriggers=":::pc1:t1">
+                  rowSelection="single" id="t2"
+                  partialTriggers=":::pc1:t1 ::cb1 ::cb2"
+                  binding="#{backingBeanScope.workflowEditBean.wfStepTable}">
           <af:column sortProperty="#{bindings.DmsWorkflowStepsVO.hints.StepNo.name}"
                      sortable="false"
                      headerText="#{bindings.DmsWorkflowStepsVO.hints.StepNo.label}"
@@ -81,50 +85,64 @@
                                id="si6"/>
               </af:selectOneChoice>
             </af:column>
-        </af:table>
+            <af:column headerText="#{viewBundle['dms.wf.afterpro']}" id="c7">
+              <af:commandImageLink text="#{viewBundle['dms.wf.setpro']}" id="cil1" partialSubmit="true"
+                                   actionListener="#{backingBeanScope.workflowEditBean.showStepProPop}"/>
+            </af:column>
+          </af:table>
       </af:panelCollection>
       </af:panelGroupLayout>
     </f:facet>
     <f:facet name="top">
       <!-- 工作流 -->
-      <af:panelCollection styleClass="AFStretchWidth" id="pc1">
-        <f:facet name="menus"/>
-        <f:facet name="toolbar">
-          <af:toolbar id="t3">
-            <af:commandButton text="新增" actionListener="#{bindings.WorkflowCreateInsert.execute}" id="cb5"/>
-            <af:commandButton text="删除" actionListener="#{bindings.WorkflowDelete.execute}" id="cb6"/>
-            <af:commandButton text="取消" actionListener="#{bindings.Rollback.execute}" id="cb8"
-                              immediate="true"/>
-            <af:commandButton text="保存" actionListener="#{bindings.Commit.execute}" id="cb7"/>
-          </af:toolbar>
-        </f:facet>
-        <f:facet name="statusbar"/>
-         <af:table value="#{bindings.DmsWorkflowInfoVO.collectionModel}"
-                  var="row" rows="#{bindings.DmsWorkflowInfoVO.rangeSize}"
-                  emptyText="#{bindings.DmsWorkflowInfoVO.viewable ? 'No data to display.' : 'Access Denied.'}"
-                  fetchSize="#{bindings.DmsWorkflowInfoVO.rangeSize}"
-                  rowBandingInterval="0" editingMode="clickToEdit"
-                  selectedRowKeys="#{bindings.DmsWorkflowInfoVO.collectionModel.selectedRow}"
-                  selectionListener="#{bindings.DmsWorkflowInfoVO.collectionModel.makeCurrent}"
-                  rowSelection="single" id="t1">
-          <af:column sortProperty="#{bindings.DmsWorkflowInfoVO.hints.WfName.name}"
-                     sortable="false"
-                     headerText="#{bindings.DmsWorkflowInfoVO.hints.WfName.label}"
-                     id="c2" width="215">
-            <af:inputText value="#{row.bindings.WfName.inputValue}"
-                          label="#{bindings.DmsWorkflowInfoVO.hints.WfName.label}"
-                          required="#{bindings.DmsWorkflowInfoVO.hints.WfName.mandatory}"
-                          columns="#{bindings.DmsWorkflowInfoVO.hints.WfName.displayWidth}"
-                          maximumLength="#{bindings.DmsWorkflowInfoVO.hints.WfName.precision}"
-                          shortDesc="#{bindings.DmsWorkflowInfoVO.hints.WfName.tooltip}"
-                          id="it2">
-              <f:validator binding="#{row.bindings.WfName.validator}"/>
-            </af:inputText>
-          </af:column>
-          <af:column sortProperty="#{bindings.DmsWorkflowInfoVO.hints.WfCom.name}"
-                     sortable="false"
-                     headerText="#{bindings.DmsWorkflowInfoVO.hints.WfCom.label}"
-                     id="c3" width="158">
+      <af:panelGroupLayout layout="scroll"
+                           xmlns:af="http://xmlns.oracle.com/adf/faces/rich"
+                           id="pgl3">
+        <af:panelCollection styleClass="AFStretchWidth" id="pc1">
+          <f:facet name="menus"/>
+          <f:facet name="toolbar">
+            <af:toolbar id="t3">
+              <af:commandButton text="新增"
+                                actionListener="#{bindings.WorkflowCreateInsert.execute}"
+                                id="cb5"/>
+              <af:commandButton text="删除"
+                                actionListener="#{bindings.WorkflowDelete.execute}"
+                                id="cb6"/>
+              <af:commandButton text="取消"
+                                actionListener="#{bindings.Rollback.execute}"
+                                id="cb8" immediate="true"/>
+              <af:commandButton text="保存"
+                                actionListener="#{bindings.Commit.execute}"
+                                id="cb7"/>
+            </af:toolbar>
+          </f:facet>
+          <f:facet name="statusbar"/>
+          <af:table value="#{bindings.DmsWorkflowInfoVO.collectionModel}"
+                    var="row" rows="#{bindings.DmsWorkflowInfoVO.rangeSize}"
+                    emptyText="#{bindings.DmsWorkflowInfoVO.viewable ? 'No data to display.' : 'Access Denied.'}"
+                    fetchSize="#{bindings.DmsWorkflowInfoVO.rangeSize}"
+                    rowBandingInterval="0" editingMode="clickToEdit"
+                    selectedRowKeys="#{bindings.DmsWorkflowInfoVO.collectionModel.selectedRow}"
+                    selectionListener="#{bindings.DmsWorkflowInfoVO.collectionModel.makeCurrent}"
+                    rowSelection="single" id="t1">
+            <af:column sortProperty="#{bindings.DmsWorkflowInfoVO.hints.WfName.name}"
+                       sortable="false"
+                       headerText="#{bindings.DmsWorkflowInfoVO.hints.WfName.label}"
+                       id="c2" width="215">
+              <af:inputText value="#{row.bindings.WfName.inputValue}"
+                            label="#{bindings.DmsWorkflowInfoVO.hints.WfName.label}"
+                            required="#{bindings.DmsWorkflowInfoVO.hints.WfName.mandatory}"
+                            columns="#{bindings.DmsWorkflowInfoVO.hints.WfName.displayWidth}"
+                            maximumLength="#{bindings.DmsWorkflowInfoVO.hints.WfName.precision}"
+                            shortDesc="#{bindings.DmsWorkflowInfoVO.hints.WfName.tooltip}"
+                            id="it2">
+                <f:validator binding="#{row.bindings.WfName.validator}"/>
+              </af:inputText>
+            </af:column>
+            <af:column sortProperty="#{bindings.DmsWorkflowInfoVO.hints.WfCom.name}"
+                       sortable="false"
+                       headerText="#{bindings.DmsWorkflowInfoVO.hints.WfCom.label}"
+                       id="c3" width="158">
               <af:selectOneChoice value="#{row.bindings.WfCom.inputValue}"
                                   label="#{row.bindings.WfCom.label}"
                                   required="#{bindings.DmsWorkflowInfoVO.hints.WfCom.mandatory}"
@@ -133,24 +151,52 @@
                 <f:selectItems value="#{row.bindings.WfCom.items}" id="si1"/>
               </af:selectOneChoice>
             </af:column>
-          <af:column sortProperty="#{bindings.DmsWorkflowInfoVO.hints.Seq.name}"
-                     sortable="false"
-                     headerText="#{bindings.DmsWorkflowInfoVO.hints.Seq.label}"
-                     id="c1" width="57">
-            <af:inputText value="#{row.bindings.Seq.inputValue}"
-                          label="#{bindings.DmsWorkflowInfoVO.hints.Seq.label}"
-                          required="#{bindings.DmsWorkflowInfoVO.hints.Seq.mandatory}"
-                          columns="#{bindings.DmsWorkflowInfoVO.hints.Seq.displayWidth}"
-                          maximumLength="#{bindings.DmsWorkflowInfoVO.hints.Seq.precision}"
-                          shortDesc="#{bindings.DmsWorkflowInfoVO.hints.Seq.tooltip}"
-                          id="it1">
-              <f:validator binding="#{row.bindings.Seq.validator}"/>
-              <af:convertNumber groupingUsed="false"
-                                pattern="#{bindings.DmsWorkflowInfoVO.hints.Seq.format}"/>
-            </af:inputText>
-          </af:column>
-        </af:table>
-      </af:panelCollection>
+            <af:column sortProperty="#{bindings.DmsWorkflowInfoVO.hints.Seq.name}"
+                       sortable="false"
+                       headerText="#{bindings.DmsWorkflowInfoVO.hints.Seq.label}"
+                       id="c1" width="57">
+              <af:inputText value="#{row.bindings.Seq.inputValue}"
+                            label="#{bindings.DmsWorkflowInfoVO.hints.Seq.label}"
+                            required="#{bindings.DmsWorkflowInfoVO.hints.Seq.mandatory}"
+                            columns="#{bindings.DmsWorkflowInfoVO.hints.Seq.displayWidth}"
+                            maximumLength="#{bindings.DmsWorkflowInfoVO.hints.Seq.precision}"
+                            shortDesc="#{bindings.DmsWorkflowInfoVO.hints.Seq.tooltip}"
+                            id="it1">
+                <f:validator binding="#{row.bindings.Seq.validator}"/>
+                <af:convertNumber groupingUsed="false"
+                                  pattern="#{bindings.DmsWorkflowInfoVO.hints.Seq.format}"/>
+              </af:inputText>
+            </af:column>
+          </af:table>
+        </af:panelCollection>
+        <af:panelGroupLayout id="pgl2">
+          <af:popup id="p1" autoCancel="disabled"
+                    binding="#{backingBeanScope.workflowEditBean.stepProPop}">
+            <af:panelWindow id="pw1">
+                <af:panelCollection id="pc3">
+              <f:facet name="menus"/>
+              <f:facet name="toolbar">
+                <af:toolbar id="t6">
+                  <af:commandButton text="#{viewBundle['dcm.common.new']}" partialSubmit="true" id="cb9"/>
+                  <af:commandButton text="#{viewBundle['dcm.common.delete']}" partialSubmit="true" id="cb10"/>
+                  <af:commandButton text="#{viewBundle['dms.common.cancel']}" partialSubmit="true" id="cb11"/>
+                  <af:commandButton text="#{viewBundle['dms.common.save']}" partialSubmit="true" id="cb12"/>
+                </af:toolbar>
+              </f:facet>
+              <f:facet name="statusbar"/>
+              <af:table var="row" rowBandingInterval="0" id="t5">
+                <af:column sortable="false" headerText="col1" id="c10">
+                  <af:outputText value="#{row.col1}" id="ot1"/>
+                </af:column>
+                <af:column sortable="false" headerText="col2" id="c8">
+                  <af:outputText value="#{row.col2}" id="ot2"/>
+                </af:column>
+              </af:table>
+            </af:panelCollection>
+            </af:panelWindow>
+          </af:popup>
+        </af:panelGroupLayout>
+      </af:panelGroupLayout>
     </f:facet>
   </af:panelStretchLayout>
 </jsp:root>

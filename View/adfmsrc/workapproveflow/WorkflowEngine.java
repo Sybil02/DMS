@@ -578,19 +578,43 @@ public class WorkflowEngine {
             (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
         Statement stat = trans.createStatement(DBTransaction.DEFAULT);
         try{
-        for(Map.Entry<String,List<String>> tempEntry : tempComMap.entrySet()){
-            for(String comId : tempEntry.getValue()){
-                StringBuffer upWs = new StringBuffer();
-                upWs.append("UPDATE WORKFLOW_TEMPLATE_STATUS T SET T.WRITE_STATUS = 'N' WHERE ");
-                upWs.append("T.RUN_ID = '").append(runId).append("' ");
-                upWs.append("AND T.TEMPLATE_ID = '").append(tempEntry.getKey()).append("' ");
-                upWs.append("AND T.STEP_NO = ").append(stepNo);
-                upWs.append(" AND T.COM_ID = '").append(comId).append("' ");
-                stat.addBatch(upWs.toString());
+            for(Map.Entry<String,List<String>> tempEntry : tempComMap.entrySet()){
+                for(String comId : tempEntry.getValue()){
+                    StringBuffer upWs = new StringBuffer();
+                    upWs.append("UPDATE WORKFLOW_TEMPLATE_STATUS T SET T.WRITE_STATUS = 'N' WHERE ");
+                    upWs.append("T.RUN_ID = '").append(runId).append("' ");
+                    upWs.append("AND T.TEMPLATE_ID = '").append(tempEntry.getKey()).append("' ");
+                    upWs.append("AND T.STEP_NO = ").append(stepNo);
+                    upWs.append(" AND T.COM_ID = '").append(comId).append("' ");
+                    upWs.append("AND T.WRITE_STATUS <> 'Y'");
+                    stat.addBatch(upWs.toString());
+                }
             }
-        }
             stat.executeBatch();
             trans.commit();
+            stat.clearBatch();
+            
+            //查询回退涉及到的子部门中已经输入完成
+            StringBuffer sql = new StringBuffer();
+            sql.append("SELECT T.TEMPLATE_ID,T.COM_ID FROM WORKFLOW_TEMPLATE_STATUS T WHERE T.WRITE_STATUS = 'Y' ");
+            sql.append("AND T.RUN_ID = '").append(runId).append("' ");
+            sql.append("AND T.STEP_NO = ").append(stepNo);
+            sql.append(" AND T.COM_ID IN (");
+            for(Map.Entry<String,List<String>> tempEntry : tempComMap.entrySet()){
+                for(String comId : tempEntry.getValue()){
+                    sql.append("'").append(comId).append("',");
+                }
+            }
+            sql.append("'')");
+            ResultSet rs = stat.executeQuery(sql.toString());
+            while(rs.next()){
+                String comSql = "UPDATE DCM_TEMPLATE_COMBINATION T SET T.STATUS = 'CLOSE',T.UPDATED_AT = SYSDATE " 
+                    + "WHERE T.TEMPLATE_ID = '" + rs.getString("TEMPLATE_ID") + "' AND T.COM_RECORD_ID = '" + rs.getString("COM_ID") + "'";
+                stat.addBatch(comSql);
+            }
+            stat.executeBatch();
+            trans.commit();
+            
             stat.close();
         }catch(Exception e){
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("开启子部门输入系统异常！"));
@@ -645,7 +669,7 @@ public class WorkflowEngine {
             stat.close();
             //打开子部门对应的模板组合
             this.openTempCom(tempComMap);
-            //开启模板输入状态
+            //开启模板输入状态,并将已经输入的子部门关闭（回退）
             this.openWirteStatus(tempComMap,runId, stepNo);
         } catch (SQLException e) {
             this._logger.severe(e);
@@ -812,9 +836,9 @@ public class WorkflowEngine {
         } catch (SQLException e) {
             this._logger.severe(e);
         }
-        if(isFinish){
-            //this.startNextSteps(wfId,runId, stepNo);    
-        }
+//        if(isFinish){
+//            //this.startNextSteps(wfId,runId, stepNo);    
+//        }
     }
     
     public void startNext(String wfId,String runId,String templateId,String comId ,String comName,
@@ -970,7 +994,7 @@ public class WorkflowEngine {
     }
     
     //回退到指定输入状态
-    public void retreat(String wfId,String runId,int stepNo,int backStepNo,String templateId,String comId,String commitUser,String reason){
+    public void retreat(String wfId,String runId,int stepNo,int backStepNo,List<String> backTemp,List<String> backEntity,String commitUser,String reason){
         DBTransaction trans =
             (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
         Statement stat = trans.createStatement(DBTransaction.DEFAULT);
@@ -997,12 +1021,10 @@ public class WorkflowEngine {
             }
             bRs.close();
             stat.close();
-            this.retreatStep(wfId, runId,templateId, comId, stepList,commitUser,reason);
+            this.retreatStep(wfId, runId,backTemp, backEntity, stepList,commitUser,reason);
         } catch (SQLException e) {
             this._logger.severe(e);
         }
-        //处理上上个到当前步骤之间的状态
-        //this.retreatStep(wfId, runId, templateId, comId, stepList,commitUser,reason);
     }
     
     //回退到父节点在工作流中的起点位置
@@ -1030,22 +1052,38 @@ public class WorkflowEngine {
             stepList.add(stepMap);
         }
         bRs.close();
+        
+        List<String> backEntity = this.getChildEntity(templateId, comId);
+        //查询步骤中涉及到的模板
+        StringBuffer tSql = new StringBuffer();
+        tSql.append("SELECT DISTINCT T.TEMPLATE_ID FROM WORKFLOW_TEMPLATE_STATUS T WHERE T.RUN_ID = '").append(runId).append("' ");
+        tSql.append("AND T.STEP_NO < ").append(stepNo).append(" AND T.ENTITY_CODE IN (");
+        for(String ety : backEntity){
+            tSql.append("'").append(ety).append("',");         
+        }
+        tSql.append("'')");
+        ResultSet tRs = stat.executeQuery(tSql.toString());
+            List<String> backTemp = new ArrayList<String>();
+            while(tRs.next()){
+                backTemp.add(tRs.getString("TEMPLATE_ID"));        
+            }
         stat.close();
-        this.retreatStep(wfId, runId, templateId, comId, stepList,commitUser,reason);
+        
+        this.retreatStep(wfId, runId, backTemp, backEntity, stepList,commitUser,reason);
         }catch(Exception e){
             this._logger.severe(e);    
         }
     }
     
     //更改步骤状态，回退步骤
-    public void retreatStep(String wfId,String runId,String templateId ,String comId,
+    public void retreatStep(String wfId,String runId,List<String> backTemp ,List<String> backEntity,
                             List<Map<String,String>> stepList,String commitUser,String reason){
         DBTransaction trans =
             (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
         Statement stat = trans.createStatement(DBTransaction.DEFAULT);
         ApproveflowEngine afe = new ApproveflowEngine();
-        //查询所有子部门
-        List<String> childList = this.getChildEntity(templateId, comId);
+        //回退子部门
+        List<String> childList = backEntity;
         try{
         boolean isFirst = true;
         for(Map<String,String> stepMap : stepList){
@@ -1073,6 +1111,16 @@ public class WorkflowEngine {
                 }
                 wspSql.append("'')");
                 tcuSql.append("'')");
+                
+                tcuSql.append(" AND T.TEMPLATE_ID IN (");
+                wspSql.append(" and t.template_id in (");
+                for(String tempCode : backTemp){
+                    tcuSql.append("'").append(tempCode).append("',");
+                    wspSql.append("'").append(tempCode).append("',");
+                }
+                tcuSql.append("'')");
+                wspSql.append("'')");   
+                
                 stat.executeUpdate(wspSql.toString());
                 //更改步骤状态为working
                 String uSql = "update dms_workflow_status t set t.step_status = 'WORKING',t.start_at = sysdate " + "where t.wf_id = '" + wfId + 
@@ -1107,6 +1155,16 @@ public class WorkflowEngine {
                 }
                 wsrSql.append("'')");
                 tcwSql.append("'')");
+                
+                    tcwSql.append(" AND T.TEMPLATE_ID IN (");
+                    wsrSql.append(" and t.template_id in (");
+                    for(String tempCode : backTemp){
+                        wsrSql.append("'").append(tempCode).append("',");
+                        tcwSql.append("'").append(tempCode).append("',");
+                    }
+                    wsrSql.append("'')");
+                    tcwSql.append("'')");
+
                 stat.executeUpdate(wsrSql.toString());
                 //更改步骤状态为working
                 String uSql = "update dms_workflow_status t set t.step_status = 'WORKING',t.start_at = sysdate " + "where t.wf_id = '" + wfId + 
@@ -1117,7 +1175,7 @@ public class WorkflowEngine {
                 //最前的开模板步骤，打开组合
                 if(isFirst){
                     //最前的打开模板步骤打开组合
-                    this.changeComStatus(runId, stepNo, childList, "OPEN");
+                    this.changeComStatus(runId, stepNo, childList,backTemp, "OPEN");
                     isFirst = false ;
                     Map<String,List<String>> tempComMap = new HashMap<String,List<String>>();
                     //send mail
@@ -1128,9 +1186,11 @@ public class WorkflowEngine {
                         if(tempComMap.containsKey(tid)){
                             tempComMap.get(tid).add(cid);    
                         }else{
-                            List<String> list = new ArrayList<String>();
-                            list.add(cid);
-                            tempComMap.put(tid, list);
+                            if(backTemp.contains(tid)){
+                                List<String> list = new ArrayList<String>();
+                                list.add(cid);
+                                tempComMap.put(tid, list);    
+                            }
                         }
                         String entityName ="_" + this.getEntityName(mRs.getString("ENTITY_CODE"));
                         afe.sendMail(tid, entityName, uid,commitUser, "工作流回退！", "工作流回退，请重新填写表单数据！",reason);
@@ -1139,7 +1199,7 @@ public class WorkflowEngine {
                     this.openWirteStatus(tempComMap, runId, stepNo);
                 }else{
                     //其他的打开模板步骤关闭组合
-                    this.changeComStatus(runId, stepNo, childList, "CLOSE");
+                    this.changeComStatus(runId, stepNo, childList,null, "CLOSE");
                     //send mail
                     while(mRs.next()){
                         String tid = mRs.getString("TEMPLATE_ID");
@@ -1176,7 +1236,7 @@ public class WorkflowEngine {
     }
     
     //通过部门改变父节点下所有子部门和模板对应的组合状态
-    public void changeComStatus(String runId,int stepNo,List<String> childList,String status){
+    public void changeComStatus(String runId,int stepNo,List<String> childList,List<String> backTemp,String status){
         DBTransaction trans =
             (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
         Statement stat = trans.createStatement(DBTransaction.DEFAULT);
@@ -1190,6 +1250,15 @@ public class WorkflowEngine {
             comSql.append("'").append(entityCode).append("',");
         }
         comSql.append("'')");
+        
+        if(backTemp != null){
+            comSql.append("and t.template_id in (");
+            for(String tempCode : backTemp){
+                comSql.append("'").append(tempCode).append("',");
+            }
+            comSql.append("'')");
+        }
+        
         try{
         ResultSet comRs = stat.executeQuery(comSql.toString());
         DBTransaction trans1 =
