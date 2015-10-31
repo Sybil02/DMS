@@ -36,7 +36,6 @@ public class WorkflowEditBean {
     //接口itemlList
     private List<SelectItem> etlObjItemList = new ArrayList<SelectItem>();
     private Person curUser;
-    private RichPopup stepProPop;
     private RichTable wfStepTable;
 
     public WorkflowEditBean() {
@@ -93,22 +92,6 @@ public class WorkflowEditBean {
         return etlObjItemList;
     }
 
-    public void setStepProPop(RichPopup stepProPop) {
-        this.stepProPop = stepProPop;
-    }
-
-    public RichPopup getStepProPop() {
-        return stepProPop;
-    }
-
-    public void showStepProPop(ActionEvent actionEvent) {
-        if(DmsUtils.getDmsApplicationModule().getTransaction().isDirty()){
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("请保存后再配置程序！"));
-            return;
-        }
-        RichPopup.PopupHints hint = new RichPopup.PopupHints();
-        this.stepProPop.show(hint);
-    }
 
     public void setWfStepTable(RichTable wfStepTable) {
         this.wfStepTable = wfStepTable;

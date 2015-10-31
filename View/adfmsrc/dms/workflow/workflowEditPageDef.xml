@@ -33,6 +33,7 @@
           <Item Value="LabelObject"/>
           <Item Value="ApproveObject"/>
           <Item Value="EtlObject"/>
+          <Item Value="AfterPro"/>
         </AttrNames>
       </nodeDefinition>
     </tree>

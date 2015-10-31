@@ -31,7 +31,8 @@ public class DmsWorkflowStepsEOImpl extends EntityImpl {
         PreStep,
         ApproveObject,
         EtlObject,
-        LabelObject;
+        LabelObject,
+        AfterPro;
         private static AttributesEnum[] vals = null;
         private static final int firstIndex = 0;
 
@@ -54,6 +55,7 @@ public class DmsWorkflowStepsEOImpl extends EntityImpl {
             return vals;
         }
     }
+
     public static final int ID = AttributesEnum.Id.index();
     public static final int LOCALE = AttributesEnum.Locale.index();
     public static final int STEPNO = AttributesEnum.StepNo.index();
@@ -67,11 +69,22 @@ public class DmsWorkflowStepsEOImpl extends EntityImpl {
     public static final int APPROVEOBJECT = AttributesEnum.ApproveObject.index();
     public static final int ETLOBJECT = AttributesEnum.EtlObject.index();
     public static final int LABELOBJECT = AttributesEnum.LabelObject.index();
+    public static final int AFTERPRO = AttributesEnum.AfterPro.index();
 
     /**
      * This is the default constructor (do not remove).
      */
     public DmsWorkflowStepsEOImpl() {
+    }
+
+    /**
+     * @return the definition object for this instance class.
+     */
+    public static synchronized EntityDefImpl getDefinitionObject() {
+        if (mDefinitionObject == null) {
+            mDefinitionObject = EntityDefImpl.findDefObject("team.epm.dms.model.DmsWorkflowStepsEO");
+        }
+        return mDefinitionObject;
     }
 
     /**
@@ -283,6 +296,22 @@ public class DmsWorkflowStepsEOImpl extends EntityImpl {
     }
 
     /**
+     * Gets the attribute value for AfterPro, using the alias name AfterPro.
+     * @return the AfterPro
+     */
+    public String getAfterPro() {
+        return (String)getAttributeInternal(AFTERPRO);
+    }
+
+    /**
+     * Sets <code>value</code> as the attribute value for AfterPro.
+     * @param value value to set the AfterPro
+     */
+    public void setAfterPro(String value) {
+        setAttributeInternal(AFTERPRO, value);
+    }
+
+    /**
      * @param id key constituent
      * @param locale key constituent
 
@@ -292,13 +321,4 @@ public class DmsWorkflowStepsEOImpl extends EntityImpl {
         return new Key(new Object[]{id, locale});
     }
 
-    /**
-     * @return the definition object for this instance class.
-     */
-    public static synchronized EntityDefImpl getDefinitionObject() {
-        if (mDefinitionObject == null) {
-            mDefinitionObject = EntityDefImpl.findDefObject("team.epm.dms.model.DmsWorkflowStepsEO");
-        }
-        return mDefinitionObject;
-    }
 }

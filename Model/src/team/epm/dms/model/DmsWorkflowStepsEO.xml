@@ -211,6 +211,18 @@
       <Attr Name="_DisplaySize" Value="1000"/>
     </DesignTime>
   </Attribute>
+  <Attribute
+    Name="AfterPro"
+    Precision="200"
+    ColumnName="AFTER_PRO"
+    SQLType="VARCHAR"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    TableName="DMS_WORKFLOW_STEPS">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="200"/>
+    </DesignTime>
+  </Attribute>
   <Key
     Name="PkWfSteps"
     PrimaryKey="true">

@@ -59,6 +59,7 @@
                 <af:selectItem label="填写表单" value="OPEN TEMPLATES" id="si2"/>
                 <af:selectItem label="接口" value="ETL" id="si4"/>
                 <af:selectItem label="审批" value="APPROVE" id="si3"/>
+                <af:selectItem label="计算程序" value="PROGRAM" id="si7"/>
                 </af:selectOneChoice>
             </af:column>
             <af:column headerText="#{bindings.DmsWorkflowStepsVO.hints.LabelObject.label}"
@@ -85,9 +86,17 @@
                                id="si6"/>
               </af:selectOneChoice>
             </af:column>
-            <af:column headerText="#{viewBundle['dms.wf.afterpro']}" id="c7">
-              <af:commandImageLink text="#{viewBundle['dms.wf.setpro']}" id="cil1" partialSubmit="true"
-                                   actionListener="#{backingBeanScope.workflowEditBean.showStepProPop}"/>
+            <af:column headerText="#{bindings.DmsWorkflowStepsVO.hints.AfterPro.label}"
+                       id="c7">
+              <af:inputText value="#{row.bindings.AfterPro.inputValue}"
+                            label="#{bindings.DmsWorkflowStepsVO.hints.AfterPro.label}"
+                            required="#{bindings.DmsWorkflowStepsVO.hints.AfterPro.mandatory}"
+                            columns="#{bindings.DmsWorkflowStepsVO.hints.AfterPro.displayWidth}"
+                            maximumLength="#{bindings.DmsWorkflowStepsVO.hints.AfterPro.precision}"
+                            shortDesc="#{bindings.DmsWorkflowStepsVO.hints.AfterPro.tooltip}"
+                            id="it3">
+                <f:validator binding="#{row.bindings.AfterPro.validator}"/>
+              </af:inputText>
             </af:column>
           </af:table>
       </af:panelCollection>
@@ -169,33 +178,6 @@
             </af:column>
           </af:table>
         </af:panelCollection>
-        <af:panelGroupLayout id="pgl2">
-          <af:popup id="p1" autoCancel="disabled"
-                    binding="#{backingBeanScope.workflowEditBean.stepProPop}">
-            <af:panelWindow id="pw1">
-                <af:panelCollection id="pc3">
-              <f:facet name="menus"/>
-              <f:facet name="toolbar">
-                <af:toolbar id="t6">
-                  <af:commandButton text="#{viewBundle['dcm.common.new']}" partialSubmit="true" id="cb9"/>
-                  <af:commandButton text="#{viewBundle['dcm.common.delete']}" partialSubmit="true" id="cb10"/>
-                  <af:commandButton text="#{viewBundle['dms.common.cancel']}" partialSubmit="true" id="cb11"/>
-                  <af:commandButton text="#{viewBundle['dms.common.save']}" partialSubmit="true" id="cb12"/>
-                </af:toolbar>
-              </f:facet>
-              <f:facet name="statusbar"/>
-              <af:table var="row" rowBandingInterval="0" id="t5">
-                <af:column sortable="false" headerText="col1" id="c10">
-                  <af:outputText value="#{row.col1}" id="ot1"/>
-                </af:column>
-                <af:column sortable="false" headerText="col2" id="c8">
-                  <af:outputText value="#{row.col2}" id="ot2"/>
-                </af:column>
-              </af:table>
-            </af:panelCollection>
-            </af:panelWindow>
-          </af:popup>
-        </af:panelGroupLayout>
       </af:panelGroupLayout>
     </f:facet>
   </af:panelStretchLayout>

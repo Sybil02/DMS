@@ -18,7 +18,8 @@
        DmsWorkflowStepsEO.WF_ID, 
        DmsWorkflowStepsEO.APPROVE_OBJECT, 
        DmsWorkflowStepsEO.LABEL_OBJECT, 
-       DmsWorkflowStepsEO.ETL_OBJECT"
+       DmsWorkflowStepsEO.ETL_OBJECT, 
+       DmsWorkflowStepsEO.AFTER_PRO"
   FromList="DMS_WORKFLOW_STEPS DmsWorkflowStepsEO"
   BindingStyle="OracleName"
   CustomQuery="false"
@@ -171,6 +172,19 @@
       <SchemaBasedProperties>
         <LABEL
           ResId="team.epm.dms.view.DmsWorkflowStepsVO.EtlObject_LABEL"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="AfterPro"
+    PrecisionRule="true"
+    EntityAttrName="AfterPro"
+    EntityUsage="DmsWorkflowStepsEO"
+    AliasName="AFTER_PRO">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="team.epm.dms.view.DmsWorkflowStepsVO.AfterPro_LABEL"/>
       </SchemaBasedProperties>
     </Properties>
   </ViewAttribute>
