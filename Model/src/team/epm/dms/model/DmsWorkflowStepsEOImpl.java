@@ -56,6 +56,7 @@ public class DmsWorkflowStepsEOImpl extends EntityImpl {
         }
     }
 
+
     public static final int ID = AttributesEnum.Id.index();
     public static final int LOCALE = AttributesEnum.Locale.index();
     public static final int STEPNO = AttributesEnum.StepNo.index();
@@ -76,6 +77,7 @@ public class DmsWorkflowStepsEOImpl extends EntityImpl {
      */
     public DmsWorkflowStepsEOImpl() {
     }
+
 
     /**
      * @return the definition object for this instance class.
@@ -320,5 +322,6 @@ public class DmsWorkflowStepsEOImpl extends EntityImpl {
     public static Key createPrimaryKey(String id, String locale) {
         return new Key(new Object[]{id, locale});
     }
+
 
 }

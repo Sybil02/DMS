@@ -37,6 +37,7 @@ public class WorkflowEditBean {
     private List<SelectItem> etlObjItemList = new ArrayList<SelectItem>();
     private Person curUser;
     private RichTable wfStepTable;
+    private RichPopup stepProPop;
 
     public WorkflowEditBean() {
 //        super();
@@ -99,5 +100,23 @@ public class WorkflowEditBean {
 
     public RichTable getWfStepTable() {
         return wfStepTable;
+    }
+
+    public void setStepProPop(RichPopup stepProPop) {
+        this.stepProPop = stepProPop;
+    }
+
+    public RichPopup getStepProPop() {
+        return stepProPop;
+    }
+
+    public void showProPop(ActionEvent actionEvent) {
+        if(DmsUtils.getDmsApplicationModule().getTransaction().isDirty()){
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("请先保存！"));
+            return;
+        }
+        
+        RichPopup.PopupHints hint = new RichPopup.PopupHints();
+        this.stepProPop.show(hint);
     }
 }

@@ -59,7 +59,6 @@
                 <af:selectItem label="填写表单" value="OPEN TEMPLATES" id="si2"/>
                 <af:selectItem label="接口" value="ETL" id="si4"/>
                 <af:selectItem label="审批" value="APPROVE" id="si3"/>
-                <af:selectItem label="计算程序" value="PROGRAM" id="si7"/>
                 </af:selectOneChoice>
             </af:column>
             <af:column headerText="#{bindings.DmsWorkflowStepsVO.hints.LabelObject.label}"
@@ -88,15 +87,10 @@
             </af:column>
             <af:column headerText="#{bindings.DmsWorkflowStepsVO.hints.AfterPro.label}"
                        id="c7">
-              <af:inputText value="#{row.bindings.AfterPro.inputValue}"
-                            label="#{bindings.DmsWorkflowStepsVO.hints.AfterPro.label}"
-                            required="#{bindings.DmsWorkflowStepsVO.hints.AfterPro.mandatory}"
-                            columns="#{bindings.DmsWorkflowStepsVO.hints.AfterPro.displayWidth}"
-                            maximumLength="#{bindings.DmsWorkflowStepsVO.hints.AfterPro.precision}"
-                            shortDesc="#{bindings.DmsWorkflowStepsVO.hints.AfterPro.tooltip}"
-                            id="it3">
-                <f:validator binding="#{row.bindings.AfterPro.validator}"/>
-              </af:inputText>
+              <af:commandImageLink text="#{viewBundle['dms.wf.setpro']}"  id="cil1"
+                                   partialSubmit="true"
+                                   rendered="#{row.bindings.StepTask.inputValue ne 'APPROVE'}"
+                                   actionListener="#{backingBeanScope.workflowEditBean.showProPop}"/>
             </af:column>
           </af:table>
       </af:panelCollection>
@@ -178,6 +172,83 @@
             </af:column>
           </af:table>
         </af:panelCollection>
+        <af:panelGroupLayout id="pgl2">
+          <af:popup id="p1" autoCancel="disabled"
+                    binding="#{backingBeanScope.workflowEditBean.stepProPop}">
+            <af:panelWindow id="pw1">
+              <af:panelCollection id="pc3">
+                <f:facet name="menus"/>
+                <f:facet name="toolbar">
+                  <af:toolbar id="t6">
+                    <af:commandButton text="#{viewBundle['dms.common.add']}"
+                        actionListener="#{bindings.ProCreateInsert.execute}" id="cb12"/>
+                    <af:commandButton text="#{viewBundle['dcm.common.delete']}"
+                        actionListener="#{bindings.ProDelete.execute}" id="cb11"/>
+                    <af:commandButton text="#{viewBundle['dms.common.cancel']}"
+                        actionListener="#{bindings.Rollback.execute}" id="cb10"/>
+                    <af:commandButton text="#{viewBundle['dms.common.save']}"
+                        actionListener="#{bindings.Commit.execute}" id="cb9"/>
+                  </af:toolbar>
+                </f:facet>
+                <f:facet name="statusbar"/>
+                <af:table value="#{bindings.DmsWorkflowStepProVO.collectionModel}"
+                          var="row"
+                          rows="#{bindings.DmsWorkflowStepProVO.rangeSize}"
+                          emptyText="#{bindings.DmsWorkflowStepProVO.viewable ? 'No data to display.' : 'Access Denied.'}"
+                          fetchSize="#{bindings.DmsWorkflowStepProVO.rangeSize}"
+                          rowBandingInterval="0"
+                          selectedRowKeys="#{bindings.DmsWorkflowStepProVO.collectionModel.selectedRow}"
+                          selectionListener="#{bindings.DmsWorkflowStepProVO.collectionModel.makeCurrent}"
+                          rowSelection="single" id="t5">
+                  <af:column sortProperty="#{bindings.DmsWorkflowStepProVO.hints.CalcName.name}"
+                             sortable="false"
+                             headerText="#{bindings.DmsWorkflowStepProVO.hints.CalcName.label}"
+                             id="c11">
+                    <af:inputText value="#{row.bindings.CalcName.inputValue}"
+                                  label="#{bindings.DmsWorkflowStepProVO.hints.CalcName.label}"
+                                  required="#{bindings.DmsWorkflowStepProVO.hints.CalcName.mandatory}"
+                                  columns="#{bindings.DmsWorkflowStepProVO.hints.CalcName.displayWidth}"
+                                  maximumLength="#{bindings.DmsWorkflowStepProVO.hints.CalcName.precision}"
+                                  shortDesc="#{bindings.DmsWorkflowStepProVO.hints.CalcName.tooltip}"
+                                  id="it3">
+                      <f:validator binding="#{row.bindings.CalcName.validator}"/>
+                    </af:inputText>
+                  </af:column>
+                  <af:column sortProperty="#{bindings.DmsWorkflowStepProVO.hints.CalcPro.name}"
+                             sortable="false"
+                             headerText="#{bindings.DmsWorkflowStepProVO.hints.CalcPro.label}"
+                             id="c8">
+                    <af:inputText value="#{row.bindings.CalcPro.inputValue}"
+                                  label="#{bindings.DmsWorkflowStepProVO.hints.CalcPro.label}"
+                                  required="#{bindings.DmsWorkflowStepProVO.hints.CalcPro.mandatory}"
+                                  columns="#{bindings.DmsWorkflowStepProVO.hints.CalcPro.displayWidth}"
+                                  maximumLength="#{bindings.DmsWorkflowStepProVO.hints.CalcPro.precision}"
+                                  shortDesc="#{bindings.DmsWorkflowStepProVO.hints.CalcPro.tooltip}"
+                                  id="it4">
+                      <f:validator binding="#{row.bindings.CalcPro.validator}"/>
+                    </af:inputText>
+                  </af:column>
+                  <af:column sortProperty="#{bindings.DmsWorkflowStepProVO.hints.Seq.name}"
+                             sortable="false"
+                             headerText="#{bindings.DmsWorkflowStepProVO.hints.Seq.label}"
+                             id="c10">
+                    <af:inputText value="#{row.bindings.Seq.inputValue}"
+                                  label="#{bindings.DmsWorkflowStepProVO.hints.Seq.label}"
+                                  required="#{bindings.DmsWorkflowStepProVO.hints.Seq.mandatory}"
+                                  columns="#{bindings.DmsWorkflowStepProVO.hints.Seq.displayWidth}"
+                                  maximumLength="#{bindings.DmsWorkflowStepProVO.hints.Seq.precision}"
+                                  shortDesc="#{bindings.DmsWorkflowStepProVO.hints.Seq.tooltip}"
+                                  id="it6">
+                      <f:validator binding="#{row.bindings.Seq.validator}"/>
+                      <af:convertNumber groupingUsed="false"
+                                        pattern="#{bindings.DmsWorkflowStepProVO.hints.Seq.format}"/>
+                    </af:inputText>
+                  </af:column>
+                </af:table>
+              </af:panelCollection>
+            </af:panelWindow>
+          </af:popup>
+        </af:panelGroupLayout>
       </af:panelGroupLayout>
     </f:facet>
   </af:panelStretchLayout>

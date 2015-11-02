@@ -125,6 +125,9 @@
   <ViewUsage
     Name="DmsRoleWorkflowVO"
     ViewObjectName="team.epm.dms.view.DmsRoleWorkflowVO"/>
+  <ViewUsage
+    Name="DmsWorkflowStepProVO"
+    ViewObjectName="team.epm.dms.view.DmsWorkflowStepProVO"/>
   <ViewLinkUsage
     Name="DmsGroupedRoleLnk"
     ViewLinkObjectName="team.epm.dms.DmsGroupedRoleLnk"
@@ -179,10 +182,32 @@
     SrcViewUsageName="team.epm.module.DmsModule.DmsEnabledRole"
     DstViewUsageName="team.epm.module.DmsModule.DmsRoleWorkflowVO"
     Reversed="false"/>
+  <ViewLinkUsage
+    Name="DmsWorkflowStepProLnk"
+    ViewLinkObjectName="team.epm.dms.DmsWorkflowStepProLnk"
+    SrcViewUsageName="team.epm.module.DmsModule.DmsWorkflowStepsVO"
+    DstViewUsageName="team.epm.module.DmsModule.DmsWorkflowStepProVO"
+    Reversed="false"/>
   <ResourceBundle>
     <PropertiesBundle
       PropertiesFile="ModelBundle"/>
   </ResourceBundle>
+  <ClientInterface>
+    <Method
+      Name="getDmsValueView">
+      <Return
+        Type="oracle.jbo.ViewObject"/>
+      <Parameter
+        Name="valueSetSrc"
+        Type="java.lang.String"/>
+      <Parameter
+        Name="valueSetId"
+        Type="java.lang.String"/>
+      <Parameter
+        Name="groupId"
+        Type="java.lang.String"/>
+    </Method>
+  </ClientInterface>
   <ClientInterface>
     <Method
       Name="getDmsValueView">

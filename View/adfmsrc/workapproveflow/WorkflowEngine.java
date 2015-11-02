@@ -4,10 +4,13 @@ import common.DmsUtils;
 
 import dms.login.Person;
 
+import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+
+import java.sql.Types;
 
 import java.text.SimpleDateFormat;
 
@@ -843,17 +846,36 @@ public class WorkflowEngine {
     
     public void startNext(String wfId,String runId,String templateId,String comId ,String comName,
                           int stepNo,String lastTask,String commitUser){
+        List<String> proList = new ArrayList<String>();
         //检查父节点是否完成输入或审批
         if(lastTask.equals("OPEN TEMPLATES")){
             if(!this.checkParent(runId, templateId, comId, stepNo)){
                 return;    
+            }else{
+                //获取执行程序
+                proList = this.getStepPro(stepNo, wfId);     
             }    
         }else{
             ApproveflowEngine afe = new ApproveflowEngine();
             if(!(afe.checkParentApprove(runId, templateId, comId, stepNo) && this.checkParent(runId, templateId, comId, stepNo-1))){
                 return;
+            }else{
+                //获取执行程序
+                proList = this.getStepPro(stepNo-1, wfId);
             }    
         }
+        
+        //执行
+        if(proList.size() > 0){
+            for(String calc : proList){
+                if(this.executePro(calc, comId)){
+                    continue;    
+                }else{
+                    break;
+                }        
+            }    
+        }
+        
         DBTransaction trans =
             (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
         Statement stat = trans.createStatement(DBTransaction.DEFAULT);
@@ -933,6 +955,76 @@ public class WorkflowEngine {
         }catch(Exception e){
             this._logger.severe(e);    
         }
+    }
+    
+    public boolean executePro(String pro,String comId){
+        DBTransaction trans =
+            (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
+        Statement stat = trans.createStatement(DBTransaction.DEFAULT);
+        CallableStatement cs =
+            trans.createCallableStatement("{CALL " + pro +
+                                          "(?,?,?,?,?,?,?)}", 0);
+        String sql = "SELECT ARGS FROM DMS_WORKFLOW_PRO_ARGS T WHERE T.CALC_PRO = '" + pro + "' AND T.COM_ID = '" + comId + "'";
+        String args = "";
+        System.out.println(sql);
+        boolean flag = true;
+        try {
+            ResultSet rs = stat.executeQuery(sql);
+            if(rs.next()){
+                args = rs.getString("ARGS");
+                System.out.println("args:" + args);
+            }
+            rs.close();
+
+            //执行程序
+            cs.setString(1, "");
+            cs.setString(2, comId);
+            cs.setString(3, this.curUser.getId());
+            cs.setString(4, "AUTO");
+            cs.setString(5, this.curUser.getLocale());
+            cs.setString(6, args);
+            //获取返回值
+            cs.registerOutParameter(7, Types.VARCHAR);
+            cs.execute();
+            //flag = cs.getBoolean(7);
+            if (flag) {
+                trans.commit();
+                stat.close();
+            } else {
+                trans.rollback();
+                stat.close();
+            }
+            cs.close();
+        } catch (SQLException e) {
+            trans.rollback();
+            this._logger.severe(e);
+        }
+        return flag;    
+    }
+    
+    public List<String> getStepPro(int stepNo,String wfId){
+        DBTransaction trans =
+            (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
+        Statement stat = trans.createStatement(DBTransaction.DEFAULT);
+        List<String> proList = new ArrayList<String>();
+        String pSql = "SELECT P.CALC_PRO,P.SEQ FROM DMS_WORKFLOW_STEPS T,DMS_WORKFLOW_STEP_PRO P WHERE T.ID = P.STEP_ID "
+                        + "AND T.STEP_NO = " + stepNo + " AND  T.WF_ID = '" + wfId + "' " + "ORDER BY P.SEQ";
+        
+        try {
+            ResultSet rs = stat.executeQuery(pSql);
+            while(rs.next()){
+                String pro = rs.getString("CALC_PRO");   
+                proList.add(pro);
+                System.out.println("add:"+pro);
+            }
+            rs.close();
+            stat.close();
+        } catch (SQLException e) {
+            this._logger.severe(e);
+        }
+
+        return proList;    
+        
     }
     
     public List<String> getChildEntity(String templateId , String comId){

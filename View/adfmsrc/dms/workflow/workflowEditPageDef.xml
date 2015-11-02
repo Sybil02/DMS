@@ -11,6 +11,9 @@
     <iterator Binds="DmsWorkflowStepsVO" RangeSize="25"
               DataControl="DmsModuleDataControl"
               id="DmsWorkflowStepsVOIterator"/>
+    <iterator Binds="DmsWorkflowStepProVO" RangeSize="25"
+              DataControl="DmsModuleDataControl"
+              id="DmsWorkflowStepProVOIterator"/>
   </executables>
   <bindings>
     <tree IterBinding="DmsWorkflowInfoVOIterator" id="DmsWorkflowInfoVO">
@@ -57,5 +60,23 @@
             RequiresUpdateModel="true" Action="commitTransaction"/>
     <action id="Rollback" DataControl="DmsModuleDataControl"
             RequiresUpdateModel="false" Action="rollbackTransaction"/>
+    <tree IterBinding="DmsWorkflowStepProVOIterator" id="DmsWorkflowStepProVO">
+      <nodeDefinition DefName="team.epm.dms.view.DmsWorkflowStepProVO"
+                      Name="DmsWorkflowStepProVO0">
+        <AttrNames>
+          <Item Value="CalcName"/>
+          <Item Value="CalcPro"/>
+          <Item Value="Seq"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <action IterBinding="DmsWorkflowStepProVOIterator" id="ProCreateInsert"
+            InstanceName="DmsModuleDataControl.DmsWorkflowStepProVO"
+            DataControl="DmsModuleDataControl" RequiresUpdateModel="true"
+            Action="createInsertRow"/>
+    <action IterBinding="DmsWorkflowStepProVOIterator" id="ProDelete"
+            InstanceName="DmsModuleDataControl.DmsWorkflowStepProVO"
+            DataControl="DmsModuleDataControl" RequiresUpdateModel="false"
+            Action="removeCurrentRow"/>
   </bindings>
 </pageDefinition>

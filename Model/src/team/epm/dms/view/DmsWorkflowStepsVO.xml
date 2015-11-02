@@ -188,6 +188,11 @@
       </SchemaBasedProperties>
     </Properties>
   </ViewAttribute>
+  <ViewLinkAccessor
+    Name="DmsWorkflowStepProVO"
+    ViewLink="team.epm.dms.DmsWorkflowStepProLnk"
+    Type="oracle.jbo.RowIterator"
+    IsUpdateable="false"/>
   <ResourceBundle>
     <PropertiesBundle
       PropertiesFile="ModelBundle"/>
