@@ -1991,9 +1991,27 @@ public class DcmDataDisplayBean extends TablePagination {
                         }
                         this.isEnd = false;
                     }
-                    //System.out.println("isEnd:"+isEnd);
+                    aRs.close();
+                }else{
+                    aRs.close();
+                    //没有审批，判断下一步是否为审批
+                    String bSql = "SELECT T.STEP_TASK FROM DMS_WORKFLOW_STATUS T WHERE T.WF_ID = '" + this.curWfId + "' "
+                                    + "AND T.RUN_ID = '" + this.curRunId + "' AND T.STEP_NO =" + (this.stepNo+1);
+                    ResultSet bRs = stat.executeQuery(bSql);
+                    if(bRs.next()){
+                        //不是审批，可以回退
+                        if(!"APPROVE".equals(bRs.getString("STEP_TASK")) && "N".equals(this.writeStatus)){
+                            this.isEnd = false;        
+                            this.approveStepNo = this.stepNo;
+                        }   
+                    }else{
+                        //没有下一步,可以回退
+                        this.isEnd = false;
+                        this.approveStepNo = this.stepNo;
+                    }
+                    bRs.close();
                 }
-                aRs.close();
+                
             }
             stat.close();
         } catch (SQLException e) {
@@ -2104,6 +2122,36 @@ public class DcmDataDisplayBean extends TablePagination {
     public List<ComboboxLOVBean> getComboboxLOVBeanList() {
         return _comboboxLOVBeanList;
     }
+    
+    //部分工作流存在前面步骤是销售部，后面的步骤只有缺省，销售部和缺省挂在同一父节点下，
+    //例如选择了销售部，则默认选中缺省，选择缺省，则默认选择了所有的销售部
+    public void addDefaultEntity(){
+        DBTransaction trans =
+            (DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
+        Statement stat = trans.createStatement(DBTransaction.DEFAULT);
+        
+        //查找已选择回退的实体存在哪些等同的实体
+        String eSql = "SELECT T.ENTITY_SYNONYM FROM DMS_WORKFLOW_ENTITY_SYNONYM T WHERE T.ENTITY IN (";
+        for(String entity : this.backEntity){
+            eSql = eSql + "'"+entity+"'," ;
+        }
+        eSql = eSql + "'')";
+
+        try {
+            ResultSet rs = stat.executeQuery(eSql);
+            while(rs.next()){
+                //将等同关系的实体添加到回退的实体当中
+                String entitySyn = rs.getString("ENTITY_SYNONYM");
+                if(!this.backEntity.contains(entitySyn)){
+                    this.backEntity.add(entitySyn);    
+                }
+            }
+            rs.close();
+            stat.close();
+        } catch (SQLException e) {
+            this._logger.severe(e);
+        }
+    }
 
     //回退到指定步骤
     public void backSpecifyStep(ActionEvent actionEvent) {
@@ -2115,6 +2163,8 @@ public class DcmDataDisplayBean extends TablePagination {
         this.approveStatus = "Y";
         int specifyStepNo = Integer.parseInt(this.backSoc.getValue().toString());
         WorkflowEngine wfEngine = new WorkflowEngine();
+        //如果存在缺省，则添加缺省的实体
+        this.addDefaultEntity();
         wfEngine.retreat(this.curWfId, this.curRunId, this.approveStepNo,specifyStepNo,
                          this.backTemp, this.backEntity,
                          this.curUser.getName(),this.backReason);
@@ -2444,13 +2494,13 @@ public class DcmDataDisplayBean extends TablePagination {
         //查询当前审批步骤之前的填写表单步骤 
         String backSql = "SELECT DISTINCT T.STEP_NO,D.NAME,D.ID,T.ENTITY_CODE,E.MEANING FROM WORKFLOW_TEMPLATE_STATUS T,DCM_TEMPLATE D,DIM_ENTITYS E "
             + "WHERE T.TEMPLATE_ID = D.ID AND D.LOCALE = 'zh_CN' " + "AND T.RUN_ID = '"
-            + this.curRunId + "' AND T.STEP_NO < " + this.approveStepNo + " AND T.ENTITY_CODE IN "
+            + this.curRunId + "' AND T.STEP_NO <= " + this.approveStepNo + " AND T.ENTITY_CODE IN "
             + "(SELECT P.ENTITY FROM DCM_ENTITY_PARENT P WHERE P.PARENT = " 
             + "(SELECT DISTINCT P1.PARENT FROM WORKFLOW_TEMPLATE_STATUS W,DCM_ENTITY_PARENT P1 "
             + "WHERE W.ENTITY_CODE = P1.ENTITY AND W.COM_ID = '" + this.curCombiantionRecord + "')) "
             + "AND T.ENTITY_CODE = E.CODE AND E.LOCALE = 'zh_CN' "
             + "ORDER BY T.STEP_NO DESC";
-
+        System.out.println(backSql);
         try {
             ResultSet bRs = stat.executeQuery(backSql);
             while(bRs.next()){
@@ -2497,14 +2547,16 @@ public class DcmDataDisplayBean extends TablePagination {
     }
     
     public void backSocChangeValue(ValueChangeEvent valueChangeEvent) {
+        
         this.tempList.clear();
         this.entityList.clear();
         String backNo = valueChangeEvent.getNewValue().toString();
+        System.out.println(valueChangeEvent.getNewValue());
         
         List<String> list = new ArrayList<String>();
         for(Map.Entry<String,Map<String,String>> eMap : this.entityMap.entrySet()){
             for(Map.Entry<String,String> entity : eMap.getValue().entrySet()){
-                if(Integer.parseInt(eMap.getKey()) >= Integer.parseInt(backNo) && Integer.parseInt(eMap.getKey()) < this.approveStepNo){
+                if(Integer.parseInt(eMap.getKey()) >= Integer.parseInt(backNo) && Integer.parseInt(eMap.getKey()) <= this.approveStepNo){
                     if(!list.contains(entity.getKey())){
                         list.add(entity.getKey());
                         SelectItem eim = new SelectItem();
@@ -2518,30 +2570,30 @@ public class DcmDataDisplayBean extends TablePagination {
         }  
         list.clear();
         
-        for(Map.Entry<String,Map<String,String>> entry : this.backMap.entrySet()){
-            if(Integer.parseInt(entry.getKey()) >= Integer.parseInt(backNo) && Integer.parseInt(entry.getKey()) < this.approveStepNo){
-                SelectItem simNo = new SelectItem();
-                simNo.setLabel("填写表单第"+entry.getKey()+"一步(必选)");
-                simNo.setValue(entry.getKey());
-                simNo.setDisabled(true);
-                simNo.setEscape(true);
-                this.tempList.add(simNo);
-                for(Map.Entry<String,String> temp : entry.getValue().entrySet()){
-                    SelectItem tim = new SelectItem();
-                    tim.setLabel(temp.getValue());
-                    tim.setValue(temp.getKey());
-                    this.tempList.add(tim);
-                }
-            }
-        }
-        
-//        for(Map.Entry<String,String> temp : this.backMap.get(backNo).entrySet()){
-//            SelectItem tim = new SelectItem();
-//            tim.setLabel(temp.getValue());
-//            tim.setValue(temp.getKey());
-//            System.out.println("temp::::"+temp.getValue());
-//            this.tempList.add(tim);
+//        for(Map.Entry<String,Map<String,String>> entry : this.backMap.entrySet()){
+//            if(Integer.parseInt(entry.getKey()) >= Integer.parseInt(backNo) && Integer.parseInt(entry.getKey()) <= this.approveStepNo){
+//                SelectItem simNo = new SelectItem();
+//                simNo.setLabel("填写表单第"+entry.getKey()+"步(必选一个)");
+//                simNo.setValue(entry.getKey());
+//                simNo.setDisabled(true);
+//                simNo.setEscape(true);
+//                this.tempList.add(simNo);
+//                for(Map.Entry<String,String> temp : entry.getValue().entrySet()){
+//                    SelectItem tim = new SelectItem();
+//                    tim.setLabel(temp.getValue());
+//                    tim.setValue(temp.getKey());
+//                    this.tempList.add(tim);
+//                }
+//            }
 //        }
+        
+        for(Map.Entry<String,String> temp : this.backMap.get(backNo).entrySet()){
+            SelectItem tim = new SelectItem();
+            tim.setLabel(temp.getValue());
+            tim.setValue(temp.getKey());
+            System.out.println("temp::::"+temp.getValue());
+            this.tempList.add(tim);
+        }
         
     }
 

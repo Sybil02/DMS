@@ -866,9 +866,28 @@ public class WorkflowEngine {
         }
         
         //执行
+//        if(proList.size() > 0){
+//            
+//            //查询当前步骤中的所有子部门
+//            List<String> childList = this.getChildEntity(templateId, comId);
+//            Map<String,List<String>> comIdMap = this.getComIdMap(childList,runId,stepNo);
+//            
+//            for(String calc : proList){
+//                if(this.executePro(calc, comIdMap)){
+//                    continue;    
+//                }else{
+//                    break;
+//                }        
+//            }    
+//        }
+        
         if(proList.size() > 0){
+            
+            //查询当前步骤中的所有子部门
+            List<String> childList = this.getChildEntity(templateId, comId);
+            
             for(String calc : proList){
-                if(this.executePro(calc, comId)){
+                if(this.executePro(calc, childList,wfId,stepNo)){
                     continue;    
                 }else{
                     break;
@@ -957,50 +976,154 @@ public class WorkflowEngine {
         }
     }
     
-    public boolean executePro(String pro,String comId){
+    public Map<String,List<String>> getComIdMap(List<String> childList,String runId,int stepNo){
+        DBTransaction trans =
+            (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
+        Statement stat = trans.createStatement(DBTransaction.DEFAULT);
+        Map<String,List<String>> comIdMap = new HashMap<String,List<String>>();
+        
+        String eSql = "SELECT T.TEMPLATE_ID,T.COM_ID FROM WORKFLOW_TEMPLATE_STATUS T WHERE T.RUN_ID = '" + runId + "'"
+                        + " AND  T.STEP_NO = " + stepNo + " AND T.ENTITY_CODE IN("; 
+        for(String entity : childList){
+            eSql = eSql + "'" + entity + "',";    
+        }
+        eSql = eSql + "'')";
+        try {
+            ResultSet rs = stat.executeQuery(eSql);
+            while(rs.next()){
+                
+                if(comIdMap.containsKey(rs.getString("TEMPLATE_ID"))){
+                    comIdMap.get(rs.getString("TEMPLATE_ID")).add(rs.getString("COM_ID"));
+                }else{
+                    List<String> comIdList = new ArrayList<String>();
+                    comIdList.add(rs.getString("COM_ID"));
+                    comIdMap.put(rs.getString("TEMPLATE_ID"), comIdList);
+                }
+                
+            }
+            rs.close();
+            stat.close();
+        } catch (SQLException e) {
+            this._logger.severe(e);
+        }
+        return comIdMap;    
+    }
+    
+    public boolean executePro(String pro,List<String> childList,String wfId,int stepNo){
         DBTransaction trans =
             (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
         Statement stat = trans.createStatement(DBTransaction.DEFAULT);
         CallableStatement cs =
             trans.createCallableStatement("{CALL " + pro +
                                           "(?,?,?,?,?,?,?)}", 0);
-        String sql = "SELECT ARGS FROM DMS_WORKFLOW_PRO_ARGS T WHERE T.CALC_PRO = '" + pro + "' AND T.COM_ID = '" + comId + "'";
-        String args = "";
-        System.out.println(sql);
-        boolean flag = true;
+        
+        boolean flag = false;
+        List<String> argsList = new ArrayList<String>();
+        
+        String sql = "SELECT ARGS FROM DMS_WORKFLOW_PRO_ARGS T WHERE T.CALC_PRO = '" + pro + "' AND T.ENTITY_CODE IN (";
+        for(String entity : childList){
+            sql = sql + "'"+entity+"',";        
+        }
+        sql = sql + "'')";
+
         try {
             ResultSet rs = stat.executeQuery(sql);
-            if(rs.next()){
-                args = rs.getString("ARGS");
-                System.out.println("args:" + args);
+            while(rs.next()){
+                argsList.add(rs.getString("ARGS"));    
             }
             rs.close();
-
-            //执行程序
-            cs.setString(1, "");
-            cs.setString(2, comId);
-            cs.setString(3, this.curUser.getId());
-            cs.setString(4, "AUTO");
-            cs.setString(5, this.curUser.getLocale());
-            cs.setString(6, args);
-            //获取返回值
-            cs.registerOutParameter(7, Types.VARCHAR);
-            cs.execute();
-            //flag = cs.getBoolean(7);
-            if (flag) {
-                trans.commit();
-                stat.close();
-            } else {
-                trans.rollback();
-                stat.close();
-            }
-            cs.close();
         } catch (SQLException e) {
-            trans.rollback();
             this._logger.severe(e);
         }
-        return flag;    
+        
+        for(String args : argsList){
+            //执行程序
+            try {
+                //执行程序
+                cs.setString(1, "");
+                cs.setString(2, args);
+                cs.setString(3, this.curUser.getId());
+                cs.setString(4, "EDIT");
+                cs.setString(5, this.curUser.getLocale());
+                cs.setString(6, args);
+                //获取返回值
+                cs.registerOutParameter(7, Types.VARCHAR);
+                cs.execute();
+                String str = cs.getString(7);
+                if("true".equals(str)){
+                    trans.commit();   
+                    String iSql = "INSERT INTO WF_PRO_HISTORY VALUES('" + args + "','" + stepNo + "','" + this.curUser.getId()
+                                          + "',SYSDATE,'" + wfId + "','" + pro + "')";
+                    stat.executeUpdate(iSql);
+                    trans.commit();
+                    flag = true;
+                }else{
+                    trans.rollback();    
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(pro+"计算程序执行出错！"));
+                    return false;
+                }
+            } catch (SQLException e) {
+                this._logger.severe(e);
+            }       
+        }
+
+        try {
+            stat.close();
+            cs.close();
+        } catch (SQLException e) {
+            this._logger.severe(e);
+        }
+        return flag;
     }
+    
+//    public boolean executePro(String pro,Map<String,List<String>> comIdMap){
+//        DBTransaction trans =
+//            (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
+//        Statement stat = trans.createStatement(DBTransaction.DEFAULT);
+//        CallableStatement cs =
+//            trans.createCallableStatement("{CALL " + pro +
+//                                          "(?,?,?,?,?,?,?)}", 0);
+//        
+//        boolean flag = false;
+//        for(Map.Entry<String,List<String>> entry : comIdMap.entrySet()){
+//            for(String comId : entry.getValue()){
+//                try {
+//                    String sql = "SELECT ARGS FROM DMS_WORKFLOW_PRO_ARGS T WHERE T.CALC_PRO = '" + pro + "' AND T.COM_ID = '" + comId + "'";
+//                    String args = "";
+//                    //获取参数
+//                    ResultSet rs = stat.executeQuery(sql);
+//                    if(rs.next()){
+//                        args = rs.getString("ARGS");
+//                        System.out.println("args:" + args);
+//                    }
+//                    rs.close();
+//                    //执行程序
+//                    cs.setString(1, entry.getKey());
+//                    cs.setString(2, comId);
+//                    cs.setString(3, this.curUser.getId());
+//                    cs.setString(4, "EDIT");
+//                    cs.setString(5, this.curUser.getLocale());
+//                    cs.setString(6, args);
+//                    //获取返回值
+//                    cs.registerOutParameter(7, Types.VARCHAR);
+//                    cs.execute();
+//                    String str = cs.getString(7);
+//                    if("true".equals(str)){
+//                        trans.commit();   
+//                        flag = true;
+//                    }else{
+//                        trans.rollback();    
+//                        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(pro+"计算程序执行出错！"));
+//                        return false;
+//                    }
+//                } catch (SQLException e) {
+//                    this._logger.severe(e);
+//                }
+//            }  
+//        }
+//        
+//        return flag;
+//    }
     
     public List<String> getStepPro(int stepNo,String wfId){
         DBTransaction trans =
@@ -1178,6 +1301,7 @@ public class WorkflowEngine {
         List<String> childList = backEntity;
         try{
         boolean isFirst = true;
+            boolean isFirstApprove = true;
         for(Map<String,String> stepMap : stepList){
             String stepTask = stepMap.get("STEP_TASK");
             int stepNo = Integer.parseInt(stepMap.get("STEP_NO"));
@@ -1204,14 +1328,26 @@ public class WorkflowEngine {
                 wspSql.append("'')");
                 tcuSql.append("'')");
                 
-                tcuSql.append(" AND T.TEMPLATE_ID IN (");
-                wspSql.append(" and t.template_id in (");
-                for(String tempCode : backTemp){
-                    tcuSql.append("'").append(tempCode).append("',");
-                    wspSql.append("'").append(tempCode).append("',");
-                }
-                tcuSql.append("'')");
-                wspSql.append("'')");   
+//                if(isFirstApprove){
+//                   tcuSql.append(" AND T.TEMPLATE_ID IN (");
+//                   wspSql.append(" and t.template_id in (");
+//                   for(String tempCode : backTemp){
+//                       tcuSql.append("'").append(tempCode).append("',");
+//                       wspSql.append("'").append(tempCode).append("',");
+//                   }
+//                   tcuSql.append("'')");
+//                   wspSql.append("'')");  
+//                   isFirstApprove = false;
+//                }
+                
+//                tcuSql.append(" AND T.TEMPLATE_ID IN (");
+//                wspSql.append(" and t.template_id in (");
+//                for(String tempCode : backTemp){
+//                    tcuSql.append("'").append(tempCode).append("',");
+//                    wspSql.append("'").append(tempCode).append("',");
+//                }
+//                tcuSql.append("'')");
+//                wspSql.append("'')");   
                 
                 stat.executeUpdate(wspSql.toString());
                 //更改步骤状态为working
@@ -1248,6 +1384,7 @@ public class WorkflowEngine {
                 wsrSql.append("'')");
                 tcwSql.append("'')");
                 
+                if(isFirst){
                     tcwSql.append(" AND T.TEMPLATE_ID IN (");
                     wsrSql.append(" and t.template_id in (");
                     for(String tempCode : backTemp){
@@ -1256,7 +1393,8 @@ public class WorkflowEngine {
                     }
                     wsrSql.append("'')");
                     tcwSql.append("'')");
-
+                }
+                
                 stat.executeUpdate(wsrSql.toString());
                 //更改步骤状态为working
                 String uSql = "update dms_workflow_status t set t.step_status = 'WORKING',t.start_at = sysdate " + "where t.wf_id = '" + wfId + 
@@ -1289,6 +1427,8 @@ public class WorkflowEngine {
                     }
                     //开启输入状态
                     this.openWirteStatus(tempComMap, runId, stepNo);
+                    //改变第一步填写表单对应的审批状态
+                    this.passOtherApprove(backTemp, backEntity,runId,stepNo+1);
                 }else{
                     //其他的打开模板步骤关闭组合
                     this.changeComStatus(runId, stepNo, childList,null, "CLOSE");
@@ -1305,6 +1445,38 @@ public class WorkflowEngine {
             stat.close();
         }catch(Exception e){
             this._logger.severe(e);    
+        }
+    }
+    
+    public void passOtherApprove(List<String> backTemp,List<String> backEntity,String runId,int stepNo){
+        DBTransaction trans =
+            (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
+        Statement stat = trans.createStatement(DBTransaction.DEFAULT);   
+        
+        //更改子部门的未回退的模板审批状态为已审批
+        StringBuffer wspSql = new StringBuffer();
+        wspSql.append("update approve_template_status t set t.approval_status = 'Y' ");
+        wspSql.append("where t.run_id = '").append(runId).append("' ");
+        wspSql.append("and t.step_no = ").append(stepNo);
+        wspSql.append("and t.entity_id in (");
+
+        for(String entityCode : backEntity){
+            wspSql.append("'").append(entityCode).append("',");
+        }
+        wspSql.append("'')");
+        
+        wspSql.append(" and t.template_id not in (");
+        for(String entityCode : backEntity){
+            wspSql.append("'").append(entityCode).append("',");
+        }
+        wspSql.append("'')");
+
+        try {
+            stat.executeUpdate(wspSql.toString());
+            trans.commit();
+            stat.close();
+        } catch (SQLException e) {
+            this._logger.severe(e);
         }
     }
     

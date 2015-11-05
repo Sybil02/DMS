@@ -11,7 +11,8 @@
   RowClass="team.epm.dms.view.DmsWorkflowTemplateStatusVORowImpl"
   ComponentClass="team.epm.dms.view.DmsWorkflowTemplateStatusVOImpl"
   PageIterMode="Full"
-  UseGlueCode="false">
+  UseGlueCode="false"
+  OrderBy='"MEANING"'>
   <DesignTime>
     <Attr Name="_codeGenFlag2" Value="Access|Coll|VarAccess"/>
     <Attr Name="_isCodegen" Value="true"/>

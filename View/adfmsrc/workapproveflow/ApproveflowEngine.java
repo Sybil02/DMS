@@ -138,7 +138,7 @@ public class ApproveflowEngine {
                           + "备注:" + reason + "<br/>"
                           + "上一处理人：" + commitUser + "<br/><br/><br/>"
                           + "<div align='center'><p>----------------------系统邮件，请勿回复！--------------------<p/><div/>";
-                sender.send(mailRs.getString("MAIL"), "【DMS系统邮件】"+subject,context); //收件人地址、主题、消息
+                sender.send(mailRs.getString("MAIL"), "【预算系统邮件】"+subject,context); //收件人地址、主题、消息
             }
             mailRs.close();
             stmt.close();
