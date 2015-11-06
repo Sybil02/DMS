@@ -1301,7 +1301,7 @@ public class WorkflowEngine {
         List<String> childList = backEntity;
         try{
         boolean isFirst = true;
-            boolean isFirstApprove = true;
+            boolean isFirstApprove = false;
         for(Map<String,String> stepMap : stepList){
             String stepTask = stepMap.get("STEP_TASK");
             int stepNo = Integer.parseInt(stepMap.get("STEP_NO"));
@@ -1328,17 +1328,17 @@ public class WorkflowEngine {
                 wspSql.append("'')");
                 tcuSql.append("'')");
                 
-//                if(isFirstApprove){
-//                   tcuSql.append(" AND T.TEMPLATE_ID IN (");
-//                   wspSql.append(" and t.template_id in (");
-//                   for(String tempCode : backTemp){
-//                       tcuSql.append("'").append(tempCode).append("',");
-//                       wspSql.append("'").append(tempCode).append("',");
-//                   }
-//                   tcuSql.append("'')");
-//                   wspSql.append("'')");  
-//                   isFirstApprove = false;
-//                }
+                if(isFirstApprove){
+                   tcuSql.append(" AND T.TEMPLATE_ID IN (");
+                   wspSql.append(" and t.template_id in (");
+                   for(String tempCode : backTemp){
+                       tcuSql.append("'").append(tempCode).append("',");
+                       wspSql.append("'").append(tempCode).append("',");
+                   }
+                   tcuSql.append("'')");
+                   wspSql.append("'')");  
+                   isFirstApprove = false;
+                }
                 
 //                tcuSql.append(" AND T.TEMPLATE_ID IN (");
 //                wspSql.append(" and t.template_id in (");
@@ -1427,8 +1427,10 @@ public class WorkflowEngine {
                     }
                     //开启输入状态
                     this.openWirteStatus(tempComMap, runId, stepNo);
-                    //改变第一步填写表单对应的审批状态
-                    this.passOtherApprove(backTemp, backEntity,runId,stepNo+1);
+                    //下一步是否为审批
+                    if(this.nextIsApprove(wfId, runId, stepNo+1)){ isFirstApprove = true; }
+                    
+                    //this.passOtherApprove(backTemp, backEntity,runId,stepNo+1);
                 }else{
                     //其他的打开模板步骤关闭组合
                     this.changeComStatus(runId, stepNo, childList,null, "CLOSE");
@@ -1448,37 +1450,59 @@ public class WorkflowEngine {
         }
     }
     
-    public void passOtherApprove(List<String> backTemp,List<String> backEntity,String runId,int stepNo){
+    public boolean nextIsApprove(String wfId,String runId,int stepNo){
         DBTransaction trans =
-            (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
-        Statement stat = trans.createStatement(DBTransaction.DEFAULT);   
-        
-        //更改子部门的未回退的模板审批状态为已审批
-        StringBuffer wspSql = new StringBuffer();
-        wspSql.append("update approve_template_status t set t.approval_status = 'Y' ");
-        wspSql.append("where t.run_id = '").append(runId).append("' ");
-        wspSql.append("and t.step_no = ").append(stepNo);
-        wspSql.append("and t.entity_id in (");
-
-        for(String entityCode : backEntity){
-            wspSql.append("'").append(entityCode).append("',");
-        }
-        wspSql.append("'')");
-        
-        wspSql.append(" and t.template_id not in (");
-        for(String entityCode : backEntity){
-            wspSql.append("'").append(entityCode).append("',");
-        }
-        wspSql.append("'')");
-
+                    (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
+        Statement stat = trans.createStatement(DBTransaction.DEFAULT); 
+        String sql = "SELECT T.STEP_TASK FROM DMS_WORKFLOW_STATUS T WHERE T.WF_ID = '" + wfId + "' AND T.RUN_ID = '"
+                        + runId + "' AND T.STEP_NO = " + stepNo;
+        boolean flag = false;
         try {
-            stat.executeUpdate(wspSql.toString());
-            trans.commit();
+            ResultSet rs = stat.executeQuery(sql);
+            if(rs.next()){
+                if(rs.getString("STEP_TASK").equals("APPROVE")){
+                    flag = true;        
+                }       
+            }
+            rs.close();
             stat.close();
         } catch (SQLException e) {
             this._logger.severe(e);
         }
+        return flag;    
     }
+    
+//    public void passOtherApprove(List<String> backTemp,List<String> backEntity,String runId,int stepNo){
+//        DBTransaction trans =
+//            (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
+//        Statement stat = trans.createStatement(DBTransaction.DEFAULT);   
+//        
+//        //更改子部门的未回退的模板审批状态为已审批
+//        StringBuffer wspSql = new StringBuffer();
+//        wspSql.append("update approve_template_status t set t.approval_status = 'Y' ");
+//        wspSql.append("where t.run_id = '").append(runId).append("' ");
+//        wspSql.append("and t.step_no = ").append(stepNo);
+//        wspSql.append("and t.entity_id in (");
+//
+//        for(String entityCode : backEntity){
+//            wspSql.append("'").append(entityCode).append("',");
+//        }
+//        wspSql.append("'')");
+//        
+//        wspSql.append(" and t.template_id not in (");
+//        for(String entityCode : backEntity){
+//            wspSql.append("'").append(entityCode).append("',");
+//        }
+//        wspSql.append("'')");
+//
+//        try {
+//            stat.executeUpdate(wspSql.toString());
+//            trans.commit();
+//            stat.close();
+//        } catch (SQLException e) {
+//            this._logger.severe(e);
+//        }
+//    }
     
     public String getEntityName(String entityCode){
         String entityName = "";

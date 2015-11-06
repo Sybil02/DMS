@@ -1949,7 +1949,7 @@ public class DcmDataDisplayBean extends TablePagination {
             }
             rs.close();
             //如果不是未输入状态，则其他情况都为Y，不可提交
-            if ("N".equals(this.writeStatus) && "WORKING".equals(stepStatus)) {
+            if ("N".equals(this.writeStatus) && "WORKING".equals(stepStatus) && this.curCombinationRecordEditable && this.isEditable) {
                 this.writeStatus = "N";
             } else {
                 this.writeStatus = "Y";
