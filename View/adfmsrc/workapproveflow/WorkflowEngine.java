@@ -866,23 +866,14 @@ public class WorkflowEngine {
         }
         
         //执行
-//        if(proList.size() > 0){
-//            
-//            //查询当前步骤中的所有子部门
-//            List<String> childList = this.getChildEntity(templateId, comId);
-//            Map<String,List<String>> comIdMap = this.getComIdMap(childList,runId,stepNo);
-//            
-//            for(String calc : proList){
-//                if(this.executePro(calc, comIdMap)){
-//                    continue;    
-//                }else{
-//                    break;
-//                }        
-//            }    
-//        }
         
         if(proList.size() > 0){
-            
+            if(lastTask.equals("OPEN TEMPLATES")){
+                //更改状态-正在计算
+                this.changeCalc(runId,templateId, comId, stepNo, "START");
+            }else{
+                this.changeCalc(runId,templateId, comId, stepNo-1, "START");
+            }
             //查询当前步骤中的所有子部门
             List<String> childList = this.getChildEntity(templateId, comId);
             
@@ -892,7 +883,14 @@ public class WorkflowEngine {
                 }else{
                     break;
                 }        
-            }    
+            }   
+            
+            if(lastTask.equals("OPEN TEMPLATES")){
+                //更改状态-完成
+                this.changeCalc(runId, templateId, comId, stepNo, "END");
+            }else{
+                this.changeCalc(runId, templateId, comId, stepNo-1, "END");
+            }
         }
         
         DBTransaction trans =
@@ -915,9 +913,12 @@ public class WorkflowEngine {
                 stat.executeUpdate(etlSql.toString());
                 trans.commit();
                 //发送邮件提醒用户
-                String uSql1 = "SELECT S.SCENE_ALIAS,USER_ID FROM ODI11_USER_SCENE_V T,ODI11_SCENE S WHERE T.SCENE_ID " +
-                    "= S.ID AND S.LOCALE = 'zh_CN' AND T.SCENE_ID = '"
-                    + stepObj + "'";
+//                String uSql1 = "SELECT S.SCENE_ALIAS,USER_ID FROM ODI11_USER_SCENE_V T,ODI11_SCENE S WHERE T.SCENE_ID " +
+//                    "= S.ID AND S.LOCALE = 'zh_CN' AND T.SCENE_ID = '"
+//                    + stepObj + "'";
+                String uSql1 = "SELECT DISTINCT S.ID,S.SCENE_ALIAS,T.USER_ID FROM ODI11_USER_SCENE_V T,ODI11_SCENE S , DMS_USER_VALUE_V D,WORKFLOW_TEMPLATE_STATUS W " +
+                    "WHERE T.SCENE_ID = S.ID AND S.LOCALE = 'zh_CN' AND T.SCENE_ID = '"
+                    + stepObj + "' AND W.ENTITY_CODE = D.VALUE_ID AND D.USER_ID = T.USER_ID AND W.COM_ID = '" + comId + "'" ;
                 ResultSet uRs1 = stat.executeQuery(uSql1);
                 while(uRs1.next()){
                     afe.sendMail(uRs1.getString("SCENE_ALIAS"), comName, uRs1.getString("USER_ID"), commitUser, "执行接口！", "表单审批通过，请及时执行接口！", "");        
@@ -973,6 +974,34 @@ public class WorkflowEngine {
         stat.close();
         }catch(Exception e){
             this._logger.severe(e);    
+        }
+    }
+    
+    public void changeCalc(String runId,String templateId,String comId,int stepNo,String status){
+        DBTransaction trans =
+            (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
+        Statement stat = trans.createStatement(DBTransaction.DEFAULT);
+        String wSql = "";
+        String aSql = "";
+        if(status.equals("START")){
+            wSql = "UPDATE WORKFLOW_TEMPLATE_STATUS T SET T.WRITE_STATUS = 'EXEC_CALC' WHERE T.RUN_ID = '" + runId + "' AND T.TEMPLATE_ID = '"
+                + templateId + "' AND T.COM_ID = '" + comId + "' AND T.STEP_NO = " + stepNo;
+            aSql = "UPDATE APPROVE_TEMPLATE_STATUS T SET T.APPROVAL_STATUS = 'EXEC_CALC' WHERE T.RUN_ID = '" + runId + "' AND T.TEMPLATE_ID = '"
+                + templateId + "' AND T.COM_ID = '" + comId + "' AND T.STEP_NO = " + (stepNo + 1);
+        }else{
+            wSql = "UPDATE WORKFLOW_TEMPLATE_STATUS T SET T.WRITE_STATUS = 'Y' WHERE T.RUN_ID = '" + runId + "' AND T.TEMPLATE_ID = '"
+                + templateId + "' AND T.COM_ID = '" + comId + "' AND T.STEP_NO = " + stepNo;
+            aSql = "UPDATE APPROVE_TEMPLATE_STATUS T SET T.APPROVAL_STATUS = 'Y' WHERE T.RUN_ID = '" + runId + "' AND T.TEMPLATE_ID = '"
+                + templateId + "' AND T.COM_ID = '" + comId + "' AND T.STEP_NO = " + (stepNo + 1);   
+        }
+
+        try {
+            stat.executeUpdate(wSql);
+            stat.executeUpdate(aSql);
+            trans.commit();
+            stat.close();
+        } catch (SQLException e) {
+            this._logger.severe(e);
         }
     }
     

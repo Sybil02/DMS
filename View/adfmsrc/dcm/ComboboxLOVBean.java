@@ -63,8 +63,10 @@ import oracle.adf.view.rich.model.ColumnDescriptor;
         if(list != null)
             for (SelectItem item : list)
             {
-              FileData data = new FileData(item.getValue().toString(), item.getLabel().toString());
-              _values.add(data);  
+                if(item.getValue()!=null && item.getLabel()!=null){
+                     FileData data = new FileData(item.getValue().toString(), item.getLabel().toString());
+                     _values.add(data);  
+                }
             }  
         _filteredList.addAll(_values);
     } 

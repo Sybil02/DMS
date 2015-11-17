@@ -72,7 +72,7 @@
                                sortable="true"
                                headerText="#{bindings.DmsApproveTemplateStatusVO.hints.ApprovalStatus.label}"
                                id="c20">
-                      <af:outputText value='#{row.ApprovalStatus eq "N" ? "拒绝":(row.ApprovalStatus eq "Y" ? "通过":(row.ApprovalStatus eq "CLOSE" ? "未开启":"审批中"))}'
+                      <af:outputText value='#{row.ApprovalStatus eq "N" ? "拒绝":(row.ApprovalStatus eq "Y" ? "通过":(row.ApprovalStatus eq "CLOSE" ? "未开启":(row.ApprovalStatus eq "EXEC_CALC" ? "正在计算":"审批中")))}'
                                      id="ot20"/>
                     </af:column>
                     <af:column sortProperty="#{bindings.DmsApproveTemplateStatusVO.hints.FinishAt.name}"
@@ -127,7 +127,7 @@
                                sortable="true"
                                headerText="#{bindings.DmsWorkflowTemplateStatusVO.hints.WriteStatus.label}"
                                id="c16">
-                      <af:outputText value='#{row.WriteStatus eq "N" ? "未完成":(row.WriteStatus eq "Y" ? "完成":"未开启")}'
+                      <af:outputText value='#{row.WriteStatus eq "N" ? "未完成":(row.WriteStatus eq "Y" ? "完成":(row.WriteStatus eq "EXEC_CALC" ? "正在计算":"未开启"))}'
                                      id="ot17"/>
                     </af:column>
                     <af:column sortProperty="#{bindings.DmsWorkflowTemplateStatusVO.hints.FinishAt.name}"

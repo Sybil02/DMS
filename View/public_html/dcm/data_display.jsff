@@ -560,7 +560,7 @@
                   binding="#{viewScope.DcmDataDisplayBean.calcWnd}">
           <af:panelWindow title="#{viewBundle['dms.cal.run']}" id="pw5">
             <af:panelStretchLayout id="psl3"
-                                   inlineStyle="width:400px;height:250px">
+                                   inlineStyle="width:400px;height:280px">
               <f:facet name="top">
                 <af:panelGroupLayout id="pgl5" layout="horizontal">
                   <af:selectOneChoice label="#{viewBundle['dms.cal.proc']}"
