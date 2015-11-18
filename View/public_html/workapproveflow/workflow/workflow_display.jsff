@@ -59,13 +59,13 @@
                     <af:column headerText="#{bindings.DmsApproveTemplateStatusVO.hints.Meaning.label}"
                                id="c23" width="160"
                                sortProperty="#{bindings.DmsApproveTemplateStatusVO.hints.Meaning.name}"
-                               sortable="false">
+                               sortable="true">
                       <af:outputText value="#{row.Meaning}" id="ot21"/>
                     </af:column>
                     <af:column headerText="#{bindings.DmsApproveTemplateStatusVO.hints.Name.label}"
                                id="c24" 
                                sortProperty="#{bindings.DmsApproveTemplateStatusVO.hints.Name.name}"
-                               sortable="false">
+                               sortable="true">
                       <af:outputText value="#{row.Name}" id="ot22"/>
                     </af:column>
                     <af:column sortProperty="#{bindings.DmsApproveTemplateStatusVO.hints.ApprovalStatus.name}"
@@ -76,7 +76,7 @@
                                      id="ot20"/>
                     </af:column>
                     <af:column sortProperty="#{bindings.DmsApproveTemplateStatusVO.hints.FinishAt.name}"
-                               sortable="true" width="140"
+                               sortable="false" width="140"
                                headerText="#{bindings.DmsApproveTemplateStatusVO.hints.FinishAt.label}"
                                id="c21">
                       <af:outputText value="#{row.FinishAt}" id="ot19">
@@ -120,7 +120,8 @@
                             partialTriggers=":::soc1"
                             styleClass="AFStretchWidth">
                     <af:column headerText="#{bindings.DmsWorkflowTemplateStatusVO.hints.Meaning.label}"
-                                width="160" id="c22">
+                                sortProperty="#{bindings.DmsWorkflowTemplateStatusVO.hints.Meaning.name}"
+                                sortable="true" width="160" id="c22">
                       <af:outputText value="#{row.Meaning}" id="ot18"/>
                     </af:column>
                     <af:column sortProperty="#{bindings.DmsWorkflowTemplateStatusVO.hints.WriteStatus.name}"
@@ -131,7 +132,7 @@
                                      id="ot17"/>
                     </af:column>
                     <af:column sortProperty="#{bindings.DmsWorkflowTemplateStatusVO.hints.FinishAt.name}"
-                               sortable="true" width="140"
+                               sortable="false" width="140"
                                headerText="#{bindings.DmsWorkflowTemplateStatusVO.hints.FinishAt.label}"
                                id="c17">
                       <af:outputText value="#{row.FinishAt}" id="ot15">

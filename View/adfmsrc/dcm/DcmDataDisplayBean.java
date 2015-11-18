@@ -203,6 +203,7 @@ public class DcmDataDisplayBean extends TablePagination {
     private RichSelectOneChoice backSoc;
     private RichPopup commitWarnPop;
     private RichPopup commitWarnCalcPop;
+    private String curEntityCode;
 
 
     public DcmDataDisplayBean() {
@@ -1924,7 +1925,7 @@ public class DcmDataDisplayBean extends TablePagination {
         Statement stat = trans.createStatement(DBTransaction.DEFAULT);
         //判断是否在工作流中，获取工作流信息
         StringBuffer sql = new StringBuffer();
-        sql.append("select t3.wf_id,t2.wf_runid,t4.step_status,t4.STEP_TASK,t4.STEP_NO,t5.write_status from ");
+        sql.append("select t3.wf_id,t2.wf_runid,t4.step_status,t4.STEP_TASK,t4.STEP_NO,t5.write_status,t5.entity_code from ");
         sql.append("dcm_template t1,dms_workflowinfo t2,dms_workflow_steps t3,dms_workflow_status t4,workflow_template_status t5 ");
         sql.append("where t2.id = t3.wf_id and t1.template_label = t3.label_object and t2.wf_runid = t4.run_id ");
         sql.append("and t3.step_no = t4.step_no and t1.id = t5.template_id and t4.run_id = t5.run_id and t4.step_no = t5.step_no ");
@@ -1943,6 +1944,7 @@ public class DcmDataDisplayBean extends TablePagination {
                 this.stepNo = rs.getInt("STEP_NO");
                 this.writeStatus = rs.getString("WRITE_STATUS");
                 this.curStepTask = rs.getString("STEP_TASK");
+                this.curEntityCode = rs.getString("ENTITY_CODE");
             }else{
                 this.curWfId = null;
                 this.curRunId = null;
@@ -2097,13 +2099,38 @@ public class DcmDataDisplayBean extends TablePagination {
             this._logger.severe(e);
         }
     }
+    
+    public boolean isCommitUser(){
+        boolean flag = false;
+        DBTransaction trans =
+            (DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
+        Statement stat = trans.createStatement(DBTransaction.DEFAULT);
+        String sql = "SELECT 1 FROM DCM_TEM_ENTITY_COM T WHERE T.DCM_TEMPLATE_ID = '" + this.curTempalte.getId() + "' AND T.ENTITY = '"
+            + this.curEntityCode + "' AND T.WRITE_BY = '" + this.curUser.getId() + "'";
+        try {
+            ResultSet rs = stat.executeQuery(sql);
+            if(rs.next()){
+                flag = true;    
+            }
+            rs.close();
+            stat.close();
+        } catch (SQLException e) {
+            this._logger.severe(e);
+        }
+        return flag;    
+    }
 
     public void setWriteStatus(String writeStatus) {
         this.writeStatus = writeStatus;
     }
 
     public String getWriteStatus() {
-        return writeStatus;
+        //提交者和admin才能提交
+        if("N".equals(writeStatus) && (this.isCommitUser() || this.curUser.getAcc().equals("admin"))){
+            return "N";    
+        }else{
+            return "Y";
+        }
     }
 
     public void setApproveStatus(String approveStatus) {
@@ -2281,19 +2308,19 @@ public class DcmDataDisplayBean extends TablePagination {
             return true;    
         }
         //工作流提交后锁定模板计算
-        if(this.curWfId != null){
-            if("N".equals(this.writeStatus)){
-                return hasCalc;        
-            }else{
-                return true;    
-            }
-        }else{
+//        if(this.curWfId != null){
+//            if("N".equals(this.writeStatus)){
+//                return hasCalc;        
+//            }else{
+//                return true;    
+//            }
+//        }else{
             if(this.curCombinationRecordEditable){
                 return hasCalc;
             }else{
                 return true;
             }  
-        }
+//        }
         
     }
 

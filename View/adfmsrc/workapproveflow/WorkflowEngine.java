@@ -310,16 +310,16 @@ public class WorkflowEngine {
                 //拼接模板组合中和工作流组合相同的值集条件(满足条件的为含组合的模板)
                 for(Map.Entry<String,String> cEntry : tempComVsMap.entrySet()){
                     if(valuesMap.containsKey(cEntry.getKey())){
-                        System.out.println("sssssss:"+tempFlag);
+                        //System.out.println("sssssss:"+tempFlag);
                         if(tempFlag){
                             cis.append(" WHERE ");
                             tempFlag = false;
                         }
-                        System.out.println(cEntry.getValue()+" = '"+valuesMap.get(cEntry.getValue()));
+                        //System.out.println(cEntry.getValue()+" = '"+valuesMap.get(cEntry.getValue()));
                         cis.append(cEntry.getKey()).append(" = '").append(valuesMap.get(cEntry.getKey())).append("' AND ");
                     }  
                 }
-                System.out.println(cis.toString());
+                //System.out.println(cis.toString());
                 boolean openEntity = false ;
                 //循环模板要打开的部门（满足条件的为含组合且组合中含部门的模板）
                 while(entityRs.next()){
@@ -377,6 +377,8 @@ public class WorkflowEngine {
             this.openTempCom(tempComMap);
             //初始化每张模板的输入状态tempEntityMap<temp_id,<entity_code,com_id>>
             this.initTemplateStatus(runId, stepNo, tempEntityMap,true);
+            //发送填写表单邮件
+            this.sendWriteMail(runId, stepNo, tempComMap,true);
             //查询审批步骤
             StringBuffer stepNoSql = new StringBuffer();
             int approveNo = stepNo;
@@ -465,16 +467,16 @@ public class WorkflowEngine {
                 //拼接模板组合中和工作流组合相同的值集条件(满足条件的为含组合的模板)
                 for(Map.Entry<String,String> cEntry : tempComVsMap.entrySet()){
                     if(valuesMap.containsKey(cEntry.getKey())){
-                        System.out.println("sssssss:"+tempFlag);
+                        //System.out.println("sssssss:"+tempFlag);
                         if(tempFlag){
                             cis.append(" WHERE ");
                             tempFlag = false;
                         }
-                        System.out.println(cEntry.getValue()+" = '"+valuesMap.get(cEntry.getValue()));
+                        //System.out.println(cEntry.getValue()+" = '"+valuesMap.get(cEntry.getValue()));
                         cis.append(cEntry.getKey()).append(" = '").append(valuesMap.get(cEntry.getKey())).append("' AND ");
                     }  
                 }
-                System.out.println(cis.toString());
+                //System.out.println(cis.toString());
                 boolean openEntity = false ;
                 //循环模板要打开的部门（满足条件的为含组合且组合中含部门的模板）
                 while(entityRs.next()){
@@ -575,6 +577,49 @@ public class WorkflowEngine {
         tempComVo.getApplicationModule().getTransaction().commit();
     }
     
+    public void sendWriteMail(String runId,int stepNo,Map<String,List<String>> tempComMap,boolean isFirst){
+        StringBuffer sql = new StringBuffer();
+        sql.append("SELECT DISTINCT T.WRITE_BY,E.MEANING,T.DCM_TEMPLATE_ID FROM DCM_TEM_ENTITY_COM T ,WORKFLOW_TEMPLATE_STATUS W ,DCM_TEMPLATE D ,DIM_ENTITYS E ");
+        sql.append("WHERE T.ENTITY = W.ENTITY_CODE AND T.DCM_TEMPLATE_ID = W.TEMPLATE_ID AND T.DCM_TEMPLATE_ID = D.ID AND T.ENTITY = E.CODE ");
+        if(isFirst){
+            //第一个步骤批量打开模板状态直接为N
+            sql.append("AND D.LOCALE = E.LOCALE AND D.LOCALE = 'zh_CN' AND W.WRITE_STATUS = 'N' ");
+        }else{
+            //回退一个子部门，再次打开时，不提醒没有回退的字部门
+            sql.append("AND D.LOCALE = E.LOCALE AND D.LOCALE = 'zh_CN' AND W.WRITE_STATUS = 'CLOSE' ");   
+        }
+        sql.append("AND W.RUN_ID = '").append(runId).append("' ");
+        sql.append("AND W.STEP_NO = ").append(stepNo);
+        String tempSql = " AND T.DCM_TEMPLATE_ID IN (";
+        String comSql = "AND W.COM_ID IN (";
+        for(Map.Entry<String,List<String>> tempEntry : tempComMap.entrySet()){
+            tempSql = tempSql + "'" + tempEntry.getKey() + "',";
+            for(String comId : tempEntry.getValue()){
+                comSql = comSql + "'" + comId + "',";
+            }
+        }
+        sql.append(tempSql).append("'') ").append(comSql).append("'')");
+        
+        DBTransaction trans =
+            (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
+        Statement stat = trans.createStatement(DBTransaction.DEFAULT);
+
+        ApproveflowEngine afe = new ApproveflowEngine();
+        try {
+            ResultSet rs = stat.executeQuery(sql.toString());
+            while(rs.next()){
+                String writeUser = rs.getString("WRITE_BY");
+                String entityName = rs.getString("MEANING");
+                String templateId = rs.getString("DCM_TEMPLATE_ID");
+                afe.sendMail(templateId, entityName, writeUser, "系统", "填写表单!", "请及时填写表单并提交！", "");
+            }
+            rs.close();
+            stat.close();
+        } catch (SQLException e) {
+            this._logger.severe(e);
+        }
+    }
+    
     //打开子部门的输入状态
     private void openWirteStatus(Map<String,List<String>> tempComMap,String runId,int stepNo){
         DBTransaction trans =
@@ -672,6 +717,8 @@ public class WorkflowEngine {
             stat.close();
             //打开子部门对应的模板组合
             this.openTempCom(tempComMap);
+            //发送邮件
+            this.sendWriteMail(runId, stepNo, tempComMap,false);
             //开启模板输入状态,并将已经输入的子部门关闭（回退）
             this.openWirteStatus(tempComMap,runId, stepNo);
         } catch (SQLException e) {
@@ -916,6 +963,7 @@ public class WorkflowEngine {
 //                String uSql1 = "SELECT S.SCENE_ALIAS,USER_ID FROM ODI11_USER_SCENE_V T,ODI11_SCENE S WHERE T.SCENE_ID " +
 //                    "= S.ID AND S.LOCALE = 'zh_CN' AND T.SCENE_ID = '"
 //                    + stepObj + "'";
+                
                 String uSql1 = "SELECT DISTINCT S.ID,S.SCENE_ALIAS,T.USER_ID FROM ODI11_USER_SCENE_V T,ODI11_SCENE S , DMS_USER_VALUE_V D,WORKFLOW_TEMPLATE_STATUS W " +
                     "WHERE T.SCENE_ID = S.ID AND S.LOCALE = 'zh_CN' AND T.SCENE_ID = '"
                     + stepObj + "' AND W.ENTITY_CODE = D.VALUE_ID AND D.USER_ID = T.USER_ID AND W.COM_ID = '" + comId + "'" ;

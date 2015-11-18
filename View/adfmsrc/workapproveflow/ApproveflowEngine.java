@@ -183,14 +183,14 @@ public class ApproveflowEngine {
                 this.sendMail(templateId,comName,nextUserId,commitUser,"工作流表单审核！", "请及时审核：","");
             }else{
                 //不存在下一个审批人，部门审批结束,发送邮件通知提交者。
-                String uSql = "SELECT WRITE_BY FROM WORKFLOW_TEMPLATE_STATUS T WHERE T.RUN_ID = '"
-                    + runId + "' AND T.TEMPLATE_ID = '" + templateId + "' AND T.COM_ID = '"
-                    + comId + "'";
-                ResultSet uRs = stat.executeQuery(uSql);
-                if(uRs.next()){
-                    this.sendMail(templateId, comName, uRs.getString("WRITE_BY"),commitUser,"审批通过！", "审批通过！","");    
-                }
-                uRs.close();
+//                String uSql = "SELECT WRITE_BY FROM WORKFLOW_TEMPLATE_STATUS T WHERE T.RUN_ID = '"
+//                    + runId + "' AND T.TEMPLATE_ID = '" + templateId + "' AND T.COM_ID = '"
+//                    + comId + "'";
+//                ResultSet uRs = stat.executeQuery(uSql);
+//                if(uRs.next()){
+//                    this.sendMail(templateId, comName, uRs.getString("WRITE_BY"),commitUser,"审批通过！", "审批通过！","");    
+//                }
+//                uRs.close();
                 //检查父节点是否全部审批通过，全部通过则启动下一个个步骤，否则不操作
                 WorkflowEngine wfEngine = new WorkflowEngine();
                 wfEngine.startNext(wfId, runId, templateId, comId, comName, stepNo, "APPROVE",commitUser);
