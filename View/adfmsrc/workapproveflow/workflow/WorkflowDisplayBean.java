@@ -375,6 +375,10 @@ public class WorkflowDisplayBean {
             Row row = wfVo.getCurrentRow();
             String wfId = row.getAttribute("WorkflowId").toString();
             String wfStatus = row.getAttribute("WfStatus").toString();
+            Object wfRunId = row.getAttribute("WfRunid");
+            if(wfRunId != null){
+                this.closeWfCom(wfRunId.toString());                
+            }
             //改变工作流状态
      
             if ( this.wfEngine.changeWfStatus(wfId, wfStatus) ) {
@@ -385,6 +389,26 @@ public class WorkflowDisplayBean {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("工作流关闭失败！")); 
             } 
         }
+        
+        public void closeWfCom(String runId){
+            DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
+            Statement stat=trans.createStatement(DBTransaction.DEFAULT);  
+            String sql = "SELECT T.TEMPLATE_ID,T.COM_ID FROM WORKFLOW_TEMPLATE_STATUS T WHERE T.RUN_ID = '" + runId + "'";
+        try {
+            ResultSet rs = stat.executeQuery(sql);
+            while(rs.next()){
+                String cSql = "UPDATE DCM_TEMPLATE_COMBINATION T SET T.STATUS = 'CLOSE' WHERE T.TEMPLATE_ID = '" + rs.getString("TEMPLATE_ID")
+                    + "' AND T.COM_RECORD_ID = '" + rs.getString("COM_ID") + "'";  
+                stat.addBatch(cSql);
+            }
+            rs.close();
+            stat.executeBatch();
+            trans.commit();
+            stat.close();
+        } catch (SQLException e) {
+            this._logger.severe(e);
+        }
+    }
 
     public void vsValueChange(ValueChangeEvent valueChangeEvent) {
         RichSelectOneChoice comSoc = (RichSelectOneChoice)valueChangeEvent.getSource();
