@@ -2001,10 +2001,19 @@ public class DcmDataDisplayBean extends TablePagination {
                                     + "AND T.RUN_ID = '" + this.curRunId + "' AND T.STEP_NO =" + (this.stepNo+1);
                     ResultSet bRs = stat.executeQuery(bSql);
                     if(bRs.next()){
-                        //不是审批，可以回退
-                        if(!"APPROVE".equals(bRs.getString("STEP_TASK")) && "N".equals(this.writeStatus)){
-                            this.isEnd = false;        
+                        //不是审批
+                        if(!"APPROVE".equals(bRs.getString("STEP_TASK"))){
+                            if("N".equals(this.writeStatus)){
+                                //未输入可以回退
+                                this.isEnd = false;  
+                            }else if("Y".equals(this.writeStatus)){
+                                //输入完成时最后一个父节点，可以回退
+                                this.isEnd = this.isEndNode(this.stepNo);
+                            }
                             this.approveStepNo = this.stepNo;
+                        }else{
+                            //下一步是审批，但该部门没有配置审批，如果下一步骤不存在该父节点，则可以回退
+                            this.isEnd = this.isEndNode(this.stepNo);
                         }   
                     }else{
                         //没有下一步,可以回退
@@ -2028,9 +2037,9 @@ public class DcmDataDisplayBean extends TablePagination {
             (DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
         Statement stat = trans.createStatement(DBTransaction.DEFAULT);
         String nSql =
-            "select step_no from approve_template_status t where t.run_id = '" +
-            this.curRunId + "' and t.step_no > " + step_no +
-            " and rownum = 1 order by step_no ";
+            "SELECT STEP_NO FROM DMS_WORKFLOW_STATUS T WHERE T.STEP_TASK = 'OPEN TEMPLATES' AND T.RUN_ID = '" +
+            this.curRunId + "' AND T.STEP_NO > " + step_no +
+            " ORDER BY T.STEP_NO ASC ";
 
         boolean flag = true;
         int nextStepNo = 0;
@@ -2041,10 +2050,10 @@ public class DcmDataDisplayBean extends TablePagination {
             }
             nRs.close();
             String rSql =
-                "select 1 from approve_template_status a where a.entity_id in " +
+                "select 1 from workflow_template_status a where a.entity_code in " +
                 "(select ENTITY from dcm_entity_parent d where d.parent = " +
-                "(select distinct parent from approve_template_status t1, dcm_entity_parent t2 " +
-                "where t1.entity_id = t2.entity and t1.template_id = '" +
+                "(select distinct parent from workflow_template_status t1, dcm_entity_parent t2 " +
+                "where t1.entity_code = t2.entity and t1.template_id = '" +
                 this.curTempalte.getId() + "' " + "and t1.com_id = '" +
                 this.curCombiantionRecord + "')) " + "and a.run_id = '" +
                 this.curRunId + "' " + "and a.step_no = " + nextStepNo;
@@ -2517,7 +2526,12 @@ public class DcmDataDisplayBean extends TablePagination {
         DBTransaction trans =
             (DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
         Statement stat = trans.createStatement(DBTransaction.DEFAULT);
-
+        
+        if(this.approveStepNo == 0){
+            //管理员回退最后父节点部门，并且已经审核通过，bug
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("请尝试审批人账号回退！"));
+            return;
+        }
         //查询当前审批步骤之前的填写表单步骤 
         String backSql = "SELECT DISTINCT T.STEP_NO,D.NAME,D.ID,T.ENTITY_CODE,E.MEANING FROM WORKFLOW_TEMPLATE_STATUS T,DCM_TEMPLATE D,DIM_ENTITYS E "
             + "WHERE T.TEMPLATE_ID = D.ID AND D.LOCALE = 'zh_CN' " + "AND T.RUN_ID = '"

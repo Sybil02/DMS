@@ -98,12 +98,12 @@
                                 disabled="#{viewScope.DcmDataDisplayBean.isEnd}"
                                 actionListener="#{viewScope.DcmDataDisplayBean.showBackPop}">
               </af:commandButton>
-              <af:commandButton text="#{viewBundle['dms.workflow.restart']}"
+              <!--af:commandButton text="#{viewBundle['dms.workflow.restart']}"
                                 id="cb17"
                                 disabled="#{viewScope.DcmDataDisplayBean.isEnd}"
                                 >
                 <af:showPopupBehavior popupId="::p11" triggerType="click"/>
-              </af:commandButton>
+              </af:commandButton-->
             </af:group>
           </af:toolbar>
         </f:facet>
