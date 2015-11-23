@@ -54,7 +54,7 @@ public class WorkflowDisplayBean {
     private RichTable wfTable;
     private List<WorkflowValueSet> wfValueSetList = new ArrayList<WorkflowValueSet>();
     //存放值集的CODE和选择的值ID
-    private Map<String,Map<String,String>> comSelectMap = new HashMap<String,Map<String,String>>();
+    private Map<String,Map<String,String>> comSelectMap = new LinkedHashMap<String,Map<String,String>>();
     //WORFKFLOW_ENGINE
     WorkflowEngine wfEngine = new WorkflowEngine();
     private RichPopup runPop;

@@ -88,7 +88,7 @@ public class ApproveflowEngine {
                 openSql.append("AND PERSON_ID = '").append(userId).append("' ");
                 int back = stmt.executeUpdate(openSql.toString());
                 if(back > 1){
-                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("启动审批返同一顺序返回多个，请检查审批人配置顺序！"));        
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("启动审批同一顺序审批人返回多个，请检查审批人顺序配置！"));        
                 }
                 db.commit();
                 //发送邮件

@@ -47,7 +47,7 @@
           </f:facet>
           <f:facet name="center">
             <af:panelFormLayout id="pfl1">
-            <af:outputLabel value="预算测试环境" id="ol1"
+            <af:outputLabel value="预算开发环境" id="ol1"
                               inlineStyle="color:Maroon; font-size:28px;"/>
               <af:inputText label="#{viewBundle['login.account']}"
                             id="login_account" value="#{LoginBean.account}"/>

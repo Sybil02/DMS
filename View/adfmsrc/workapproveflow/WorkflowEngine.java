@@ -17,8 +17,12 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
+import java.util.UUID;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -169,7 +173,7 @@ public class WorkflowEngine {
                 preStep = rs.getInt("PRE_STEP");
             }
             if (stepTask.equals("OPEN TEMPLATES")) {
-                this.openTemplates(stepObj, openCom,runId,1);
+                this.openTemplates(stepObj, openCom,wfId,runId,1);
                 //打开模板完成，更新步骤状态表为working
                 String udSql = "UPDATE DMS_WORKFLOW_STATUS SET STEP_STATUS = 'WORKING',START_AT = SYSDATE WHERE WF_ID = '" + wfId + "'"
                     + " AND RUN_ID = '" + runId + "'" + " AND STEP_NO = 1 ";
@@ -177,11 +181,15 @@ public class WorkflowEngine {
                 trans.commit();
             }
             if (stepTask.equals("ETL")) {
+                //初始化ODI执行状态表
+                
+                
                 //更新ETL步骤为开始
                 String ueSql = "UPDATE DMS_WORKFLOW_STATUS SET STEP_STATUS = 'WORKING',START_AT = SYSDATE WHERE WF_ID = '" + wfId + "'"
                     + " AND RUN_ID = '" + runId + "'" + " AND STEP_NO = 1 ";
                 stat.executeUpdate(ueSql);
                 trans.commit();
+
                 //发送邮件提醒用户
                 String uSql = "SELECT S.SCENE_ALIAS,USER_ID FROM ODI11_USER_SCENE_V T,ODI11_SCENE S WHERE T.SCENE_ID " +
                     "= S.ID AND S.LOCALE = 'zh_CN' AND T.SCENE_ID = '"
@@ -199,7 +207,7 @@ public class WorkflowEngine {
                         return;        
                     }
                     if("OPEN TEMPLATES".equals(nextMap.get("STEP_TASK"))){
-                        this.openTemplates(nextMap.get("STEP_OBJECT"), openCom,runId,stepNo+1);
+                        this.openTemplates(nextMap.get("STEP_OBJECT"), openCom,wfId,runId,stepNo+1);
                         //打开模板完成，更新步骤状态表为working
                         String udSql = "UPDATE DMS_WORKFLOW_STATUS SET STEP_STATUS = 'WORKING',START_AT = SYSDATE WHERE WF_ID = '" + wfId + "'"
                             + " AND RUN_ID = '" + runId + "'" + " AND STEP_NO = " + (stepNo + 1);
@@ -235,9 +243,85 @@ public class WorkflowEngine {
         }
     }
 
+    public Map<String,String> getWfCom(String wfId,String runId){
+        DBTransaction trans =
+            (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
+        Statement stat = trans.createStatement(DBTransaction.DEFAULT);
+        String sql = "SELECT DISTINCT T.OPEN_COM FROM DMS_WORKFLOW_STATUS T WHERE T.WF_ID = '" + wfId + "' AND T.RUN_ID = '"
+            + runId + "'";
+        String wSql = "SELECT D.NAME,D.CODE,D.SOURCE FROM DCM_COM_VS T,DMS_VALUE_SET D,DMS_WORKFLOWINFO W "
+            + "WHERE T.COMBINATION_ID = W.WF_COM AND W.LOCALE = D.LOCALE AND T.VALUE_SET_ID = D.ID AND D.LOCALE = 'zh_CN' "
+            + "AND W.ID = '" + wfId + "' ORDER BY T.SEQ";
+        String openCom = "";
+        Map<String,String> comMap = new HashMap<String,String>();
+        try {
+            ResultSet rs = stat.executeQuery(sql);
+            if(rs.next()){
+                openCom = rs.getString("OPEN_COM");        
+            }
+            if("".equals(openCom) || openCom == null){
+                return comMap;
+            }
+            rs.close();
+            
+            ResultSet wRs = stat.executeQuery(wSql);
+            Map<String,String> codeSourceMap = new LinkedHashMap<String,String>();
+            while(wRs.next()){
+                String vcode = wRs.getString("CODE");       
+                String vsource = wRs.getString("SOURCE");
+                codeSourceMap.put(vcode, vsource);
+            }
+            wRs.close();
+            
+            //YEARS:FY16#SCENARIO:Budget#VERSION:V01#
+            String comName = "";
+            String comCode = "";
+            String [] args = openCom.split("#");
+            
+            for(int i = 0;i<args.length ; i++){
+
+                String [] cv = args[i].split(":");
+                comName = comName + "#" + this.getValueName(codeSourceMap.get(cv[0]), cv[1]);
+                comCode = comCode + "#" + cv[1];   
+            }
+            comMap.put("comCode", comCode);
+            comMap.put("comName", comName);
+            stat.close();
+        } catch (SQLException e) { 
+            this._logger.severe(e);
+        }
+        return comMap;
+    }
+    
+    public String getValueName(String source,String value){
+        DBTransaction trans =
+            (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
+        Statement stat = trans.createStatement(DBTransaction.DEFAULT);
+        String sql = "SELECT MEANING FROM " + source + " WHERE LOCALE = 'zh_CN' AND CODE = '" + value + "'";
+        String meaning = "";
+        ResultSet rs;
+        try {
+            rs = stat.executeQuery(sql);
+            if(rs.next()){
+                meaning = rs.getString("MEANING");        
+            }
+            rs.close();
+            stat.close();
+        } catch (SQLException e) {
+            this._logger.severe(e);
+        } 
+        return meaning;
+    }
+    
+    public void initOdiStatus(String runId,String sceneId,int stepNo,boolean isFull){
+//        ID,RUN_ID,STEP_NO,ENTITY_CODE
+//        COM_ID,SCENE_ID,ODI_ARGS,EXEC_STATUS,EXEC_BY,FINISH_AT,CREATED_AT,CREATED_BY
+        String id = UUID.randomUUID().toString().replace("-", "");
+        String args = "";
+    }
     //打开模板，打开所有组合
     //stepObj 模板标签  openCom打开组合
-    public void openTemplates(String stepObj, String openCom,String runId,int stepNo) {
+    public void openTemplates(String stepObj, String openCom,String wfId,String runId,int stepNo) {
         //分割组合参数的值和列名
         Map<String, String> valuesMap = new HashMap<String, String>();
         //去掉拼接时最后一个#
@@ -378,7 +462,7 @@ public class WorkflowEngine {
             //初始化每张模板的输入状态tempEntityMap<temp_id,<entity_code,com_id>>
             this.initTemplateStatus(runId, stepNo, tempEntityMap,true);
             //发送填写表单邮件
-            this.sendWriteMail(runId, stepNo, tempComMap,true);
+            this.sendWriteMail(wfId,runId, stepNo, tempComMap,true);
             //查询审批步骤
             StringBuffer stepNoSql = new StringBuffer();
             int approveNo = stepNo;
@@ -577,7 +661,7 @@ public class WorkflowEngine {
         tempComVo.getApplicationModule().getTransaction().commit();
     }
     
-    public void sendWriteMail(String runId,int stepNo,Map<String,List<String>> tempComMap,boolean isFirst){
+    public void sendWriteMail(String wfId,String runId,int stepNo,Map<String,List<String>> tempComMap,boolean isFirst){
         StringBuffer sql = new StringBuffer();
         sql.append("SELECT DISTINCT T.WRITE_BY,E.MEANING,T.DCM_TEMPLATE_ID FROM DCM_TEM_ENTITY_COM T ,WORKFLOW_TEMPLATE_STATUS W ,DCM_TEMPLATE D ,DIM_ENTITYS E ");
         sql.append("WHERE T.ENTITY = W.ENTITY_CODE AND T.DCM_TEMPLATE_ID = W.TEMPLATE_ID AND T.DCM_TEMPLATE_ID = D.ID AND T.ENTITY = E.CODE ");
@@ -611,6 +695,7 @@ public class WorkflowEngine {
                 String writeUser = rs.getString("WRITE_BY");
                 String entityName = rs.getString("MEANING");
                 String templateId = rs.getString("DCM_TEMPLATE_ID");
+                entityName = this.getWfCom(wfId, runId).get("comName")+"#"+entityName;
                 afe.sendMail(templateId, entityName, writeUser, "系统", "填写表单!", "请及时填写表单并提交！", "");
             }
             rs.close();
@@ -718,7 +803,7 @@ public class WorkflowEngine {
             //打开子部门对应的模板组合
             this.openTempCom(tempComMap);
             //发送邮件
-            this.sendWriteMail(runId, stepNo, tempComMap,false);
+            this.sendWriteMail(wfId,runId, stepNo, tempComMap,false);
             //开启模板输入状态,并将已经输入的子部门关闭（回退）
             this.openWirteStatus(tempComMap,runId, stepNo);
         } catch (SQLException e) {

@@ -75,8 +75,11 @@ public abstract class AbstractExcel2007Writer {
 		System.gc();
 		// 删除临时模板文件
 		if (templateFile.isFile()&&templateFile.exists()){
-			templateFile.delete();
+                    templateFile.delete();
 		}
+                if(tmp.isFile()&&tmp.exists()){
+                    tmp.delete();
+                }
 	}
 
 	/**

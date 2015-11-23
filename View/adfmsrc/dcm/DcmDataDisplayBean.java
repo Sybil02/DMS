@@ -2693,7 +2693,10 @@ public class DcmDataDisplayBean extends TablePagination {
     }
 
     public void saveAndCommit(ActionEvent actionEvent) {
-        this.operation_save();
+        //只读时不调用保存（输出表，只读权限）
+        if(!this.isReadOnly()){
+            this.operation_save();        
+        }
         this.commitApprove(actionEvent);
     }
 
