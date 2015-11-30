@@ -97,7 +97,7 @@
          <string v="DMS_application1"/>
       </list>
       <value n="Security-Deployment-Overwrite-Credentials-Key" v="true"/>
-      <value n="Weblogic-JDBC-Auto-Sync-Key" v="false"/>
+      <value n="Weblogic-JDBC-Auto-Sync-Key" v="true"/>
    </hash>
    <hash n="oracle.jdeveloper.model.PathsConfiguration">
       <hash n="ApplicationSrcContentSet">

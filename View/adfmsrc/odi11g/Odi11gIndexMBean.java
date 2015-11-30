@@ -58,6 +58,8 @@ import org.apache.commons.lang.ObjectUtils;
 import org.apache.myfaces.trinidad.event.SelectionEvent;
 import org.apache.myfaces.trinidad.model.RowKeySet;
 
+import workapproveflow.WorkflowEngine;
+
 public class Odi11gIndexMBean {
     private Odi11gCatTreeModel model;
     private Map valueList = new HashMap();
@@ -312,13 +314,101 @@ public class Odi11gIndexMBean {
             this.showStatus();
             RichPopup.PopupHints hint = new RichPopup.PopupHints();
             this.statusPopup.show(hint);
+            
+            //workflow odi
+            final String sid = (String)sceneRow.getAttribute("Id");
+            final String para = parmStr.toString();
+            Runnable rb = new Runnable(){
+                public void run(){
+                    try {
+                        
+                        while(isRunning(sid, para)){
+                            System.out.println("五秒后再次检查执行状态...");
+                            Thread.sleep(5000);
+                        }
+                        
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }    
+            };
+            rb.run();
+            if(!isRunning(sid,para)){
+                if("D".equals(this.queryStatus(execRow))){
+                    System.out.println("ETL IS FINISH........"+para);
+                    this.checkEtlStep(sid,params);   
+                }    
+            }
+            this.refreshStatus(sceneId);
+            //workflow odi
+            
         } catch (IndexOutOfBoundsException e) {
             this._logger.severe("Agent or Workrepository may not exits!");
             this._logger.severe(e);
         }
     }
 
-    private boolean isRunning(String sceneId,
+    public void checkEtlStep(String sceneId,Map paraMap){
+        System.out.println("passEtlStepByParam");
+        DBTransaction trans =
+            (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
+        Statement stat = trans.createStatement(DBTransaction.DEFAULT);
+        //查询所有正在等待执行的接口和对应的工作流组合
+        String sql = "SELECT DISTINCT W.RUN_ID,W.ENTITY_PARENT,W.ODI_ARGS,T.OPEN_COM FROM WORKFLOW_ODI_STATUS W,DMS_WORKFLOW_STATUS T "
+            + "WHERE W.RUN_ID = T.RUN_ID AND W.EXEC_STATUS = 'N' AND W.SCENE_ID = '" + sceneId + "'";
+        WorkflowEngine wfe = new WorkflowEngine();
+        try {
+            ResultSet rs = stat.executeQuery(sql);
+            while(rs.next()){
+                String openCom = rs.getString("OPEN_COM");  
+                String odiArgs = rs.getString("ODI_ARGS");
+                String runId = rs.getString("RUN_ID");
+                String entityParent = rs.getString("ENTITY_PARENT");
+                if(this.compareParam(openCom, odiArgs, paraMap)){
+                    System.out.println("*********************************SCCUSSE**************************************");
+                    wfe.passEtlStep(runId, entityParent,odiArgs, sceneId);
+                }
+            }
+            rs.close();
+            stat.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public boolean compareParam(String openCom,String odiArgs,Map paraMap){
+        //比较实体
+        if(odiArgs != null && !"".equals(odiArgs)){
+            if(!paraMap.containsValue(odiArgs)){
+                return false;
+            }    
+        }
+        
+        //比较年场景版本
+        openCom = openCom.substring(0, openCom.length() - 1);
+        String[] str = openCom.split("#");
+        int count = 0;
+        for (int i = 0; i < str.length; i++) {
+            String[] s = str[i].split(":");
+            //s[0]:列名，s[1]：值 年份需要将FY15替换成2015格式
+            if(s[1].startsWith("FY")){
+                s[1] = s[1].replace("FY", "20");    
+            }
+            
+            if(paraMap.containsValue(s[1])){
+                count++;
+            }
+        }
+        
+        if(count == 3){
+            return true;    
+        }else{
+            return false;   
+        }
+        
+    }
+    
+    private final boolean isRunning(String sceneId,
                               String params) throws MalformedURLException {
         boolean isRunning = false;
         ViewObject execVo =

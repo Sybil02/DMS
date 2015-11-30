@@ -420,9 +420,6 @@ public class DcmDataDisplayBean extends TablePagination {
         this.dataImportWnd.cancel();
         String curComRecordId = this.curCombiantionRecord;
         
-        //判断sheet页名称是否一致
-        //ZipFile zf = new ZipFile();
-        
         //组合找不到
         if (this.curTempalte.getCombinationId() != null &&
             curComRecordId == null) {
@@ -435,11 +432,19 @@ public class DcmDataDisplayBean extends TablePagination {
             return;
         }
         //获取文件上传路径
+        UploadedFile fileTmp = (UploadedFile)this.fileInput.getValue();
+        String excelName = fileTmp.getFilename();
         String filePath = this.uploadFile();
         this.fileInput.resetValue();
         if (null == filePath) {
             return;
         }
+        //判断sheet页名称是否一致
+            
+        if(!this.checkExcelName(filePath,excelName)){
+            return;
+        }
+        
         //读取excel数据到数据库临时表
         if (!this.handleExcel(filePath, curComRecordId)) {
             return;
@@ -700,6 +705,45 @@ public class DcmDataDisplayBean extends TablePagination {
             return null;
         }
         return (new File(fileName)).getAbsolutePath();
+    }
+    
+    public boolean checkExcelName(String upFileName,String excelName){
+//        String curTempName = this.curTempalte.getName();
+        String [] str = excelName.split("\\.");
+        excelName = str[0];
+        String type = str[1];
+
+//        if (this.curCombiantion != null) {
+//            curTempName += this.getCurComRecordText();
+//        }
+//
+//        if(!curTempName.equals(excelName)){
+//            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Excel名称,组合跟表单名称，组合不一致，请检查后再导入！"));
+//            return false;    
+//        }
+        
+        try {
+            String sheetName = "";
+            if("xlsx".equals(type)){
+                XSSFWorkbook xwb = new XSSFWorkbook(new FileInputStream(upFileName));    
+                sheetName = xwb.getSheetName(0);
+            }else if("xls".equals(type)){
+                HSSFWorkbook hwb = new HSSFWorkbook(new FileInputStream(upFileName));
+                sheetName = hwb.getSheetName(0);
+            }else{
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("文件格式不对，请重新选择文件导入！"));
+                return false;
+            }
+            
+            if(!this.curTempalte.getName().equals(sheetName)){
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Excel中sheet页名称跟表单名称不一致，请检查后再导入！"));
+                return false;
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return true;
     }
     //数据导出
 

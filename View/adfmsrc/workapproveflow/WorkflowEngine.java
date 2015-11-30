@@ -182,7 +182,7 @@ public class WorkflowEngine {
             }
             if (stepTask.equals("ETL")) {
                 //初始化ODI执行状态表
-                
+                this.initOdiStatus(wfId,runId, stepObj, 1, true);
                 
                 //更新ETL步骤为开始
                 String ueSql = "UPDATE DMS_WORKFLOW_STATUS SET STEP_STATUS = 'WORKING',START_AT = SYSDATE WHERE WF_ID = '" + wfId + "'"
@@ -200,38 +200,38 @@ public class WorkflowEngine {
                 }
                 uRs.close();
                 //跳过ETL
-                int stepNo = 1 ;
-                while(true){
-                    Map<String,String> nextMap = this.queryNextStep(wfId, runId, stepNo);   
-                    if("".equals(nextMap.get("STEP_TASK")) || nextMap.get("STEP_TASK")==null){
-                        return;        
-                    }
-                    if("OPEN TEMPLATES".equals(nextMap.get("STEP_TASK"))){
-                        this.openTemplates(nextMap.get("STEP_OBJECT"), openCom,wfId,runId,stepNo+1);
-                        //打开模板完成，更新步骤状态表为working
-                        String udSql = "UPDATE DMS_WORKFLOW_STATUS SET STEP_STATUS = 'WORKING',START_AT = SYSDATE WHERE WF_ID = '" + wfId + "'"
-                            + " AND RUN_ID = '" + runId + "'" + " AND STEP_NO = " + (stepNo + 1);
-                        stat.executeUpdate(udSql);
-                        trans.commit();       
-                        break;
-                    }else if("ETL".equals(nextMap.get("STEP_TASK"))){
-                        //更新ETL步骤为开始
-                        String ueSql0 = "UPDATE DMS_WORKFLOW_STATUS SET STEP_STATUS = 'WORKING',START_AT = SYSDATE WHERE WF_ID = '" + wfId + "'"
-                            + " AND RUN_ID = '" + runId + "'" + " AND STEP_NO = " + (stepNo + 1);
-                        stat.executeUpdate(ueSql0);
-                        trans.commit();    
-                        stepNo = stepNo + 1;
-                        //发送邮件提醒用户
-                        String uSql0 = "SELECT S.SCENE_ALIAS,USER_ID FROM ODI11_USER_SCENE_V T,ODI11_SCENE S WHERE T.SCENE_ID " +
-                            "= S.ID AND S.LOCALE = 'zh_CN' AND T.SCENE_ID = '"
-                            + stepObj + "'";
-                        ResultSet uRs0 = stat.executeQuery(uSql0);
-                        while(uRs0.next()){
-                            afe.sendMail(uRs0.getString("SCENE_ALIAS"),"", uRs0.getString("USER_ID"), "工作流启动", "执行接口！", "工作流，请及时执行接口！", "");        
-                        }
-                        uRs.close();
-                    }
-                }
+//                int stepNo = 1 ;
+//                while(true){
+//                    Map<String,String> nextMap = this.queryNextStep(wfId, runId, stepNo);   
+//                    if("".equals(nextMap.get("STEP_TASK")) || nextMap.get("STEP_TASK")==null){
+//                        return;        
+//                    }
+//                    if("OPEN TEMPLATES".equals(nextMap.get("STEP_TASK"))){
+//                        this.openTemplates(nextMap.get("STEP_OBJECT"), openCom,wfId,runId,stepNo+1);
+//                        //打开模板完成，更新步骤状态表为working
+//                        String udSql = "UPDATE DMS_WORKFLOW_STATUS SET STEP_STATUS = 'WORKING',START_AT = SYSDATE WHERE WF_ID = '" + wfId + "'"
+//                            + " AND RUN_ID = '" + runId + "'" + " AND STEP_NO = " + (stepNo + 1);
+//                        stat.executeUpdate(udSql);
+//                        trans.commit();       
+//                        break;
+//                    }else if("ETL".equals(nextMap.get("STEP_TASK"))){
+//                        //更新ETL步骤为开始
+//                        String ueSql0 = "UPDATE DMS_WORKFLOW_STATUS SET STEP_STATUS = 'WORKING',START_AT = SYSDATE WHERE WF_ID = '" + wfId + "'"
+//                            + " AND RUN_ID = '" + runId + "'" + " AND STEP_NO = " + (stepNo + 1);
+//                        stat.executeUpdate(ueSql0);
+//                        trans.commit();    
+//                        stepNo = stepNo + 1;
+//                        //发送邮件提醒用户
+//                        String uSql0 = "SELECT S.SCENE_ALIAS,USER_ID FROM ODI11_USER_SCENE_V T,ODI11_SCENE S WHERE T.SCENE_ID " +
+//                            "= S.ID AND S.LOCALE = 'zh_CN' AND T.SCENE_ID = '"
+//                            + stepObj + "'";
+//                        ResultSet uRs0 = stat.executeQuery(uSql0);
+//                        while(uRs0.next()){
+//                            afe.sendMail(uRs0.getString("SCENE_ALIAS"),"", uRs0.getString("USER_ID"), "工作流启动", "执行接口！", "工作流，请及时执行接口！", "");        
+//                        }
+//                        uRs.close();
+//                    }
+//                }
             }
             if (stepTask.equals("APPROVE")) {
                 //提示没有审批对象
@@ -313,12 +313,140 @@ public class WorkflowEngine {
         return meaning;
     }
     
-    public void initOdiStatus(String runId,String sceneId,int stepNo,boolean isFull){
-//        ID,RUN_ID,STEP_NO,ENTITY_CODE
-//        COM_ID,SCENE_ID,ODI_ARGS,EXEC_STATUS,EXEC_BY,FINISH_AT,CREATED_AT,CREATED_BY
-        String id = UUID.randomUUID().toString().replace("-", "");
-        String args = "";
+    public void changeEtlStatus(String wfId,String runId,String sceneId,String comId,String status){
+        DBTransaction trans =
+            (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
+        Statement stat = trans.createStatement(DBTransaction.DEFAULT);
+        String sql = "UPDATE WORKFLOW_ODI_STATUS T SET T.EXEC_STATUS = '" + status + "' WHERE T.RUN_ID = '"
+            + runId + "' AND T.SCENE_ID = '" + sceneId 
+            + "' AND T.ENTITY_PARENT = ( SELECT DISTINCT D.PARENT FROM WORKFLOW_TEMPLATE_STATUS W,DCM_ENTITY_PARENT D WHERE W.ENTITY_CODE = D.ENTITY AND W.COM_ID = '"
+            + comId + "')";
+        
+        String eSql =  "SELECT DISTINCT T.ODI_PARAM,T.EXEC_BY FROM DMS_WORKFLOW_ODI_PARAM T WHERE T.RUN_ID = '"
+            + runId + "' AND T.SCENE_ID = '" + sceneId 
+            + "' AND T.ENTITY_PARENT = ( SELECT DISTINCT D.PARENT FROM WORKFLOW_TEMPLATE_STATUS W,DCM_ENTITY_PARENT D WHERE W.ENTITY_CODE = D.ENTITY AND W.COM_ID = '"
+            + comId + "')";
+        
+        try {
+            stat.executeUpdate(sql);
+            trans.commit();
+            
+            ResultSet rs = stat.executeQuery(eSql);
+            while(rs.next()){
+                this.sendEtlMail(wfId,runId,sceneId, rs.getString("ODI_PARAM"), rs.getString("EXEC_BY"));    
+            }
+            rs.close();
+            stat.close();
+        } catch (SQLException e) {
+            this._logger.severe(e);
+        }
     }
+    
+    public void initOdiStatus(String wfId,String runId,String sceneId,int stepNo,boolean isFull){
+        
+        DBTransaction trans =
+            (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
+        Statement stat = trans.createStatement(DBTransaction.DEFAULT);
+        String iSql = "INSERT INTO WORKFLOW_ODI_STATUS VALUES(?,?,?,?,?,?,?,?,SYSDATE,?,?)";
+        PreparedStatement pstat = trans.createPreparedStatement(iSql, 0);
+ 
+        //查询接口前一个填写表单步骤
+        String lSql = "SELECT T.STEP_NO FROM DMS_WORKFLOW_STATUS T WHERE T.STEP_TASK = 'OPEN TEMPLATES' AND T.STEP_NO < " + stepNo
+            + " AND T.RUN_ID = '" + runId + "' ORDER BY T.STEP_NO DESC";
+        
+        ResultSet lRs;
+        try {
+            lRs = stat.executeQuery(lSql);
+            if(lRs.next()){
+                //前面有填写模板的步骤   
+                int wNo = lRs.getInt("STEP_NO");
+                //查询填写模板的步骤存在的父节点，且部门父节点对应的ODI参数节点
+                String aSql = "SELECT DISTINCT T.ENTITY_PARENT,T.ODI_PARAM FROM WORKFLOW_TEMPLATE_STATUS W,DCM_ENTITY_PARENT D,DMS_WORKFLOW_ODI_PARAM T "
+                    + "WHERE W.ENTITY_CODE = D.ENTITY AND T.ENTITY_PARENT = D.PARENT AND W.RUN_ID = '" + runId + "' AND W.STEP_NO = " + wNo;
+                lRs.close();
+                ResultSet rs = stat.executeQuery(aSql);
+                while(rs.next()){
+                //INSERT INTO WORKFLOW_ODI_STATUS VALUES('ID','RUNID',1,'SID','ARGS','STATUS','EXEC_BY','FAT',SYSDATE,'CUSER','')
+                    pstat.setString(1, UUID.randomUUID().toString().replace("-", ""));
+                    pstat.setString(2, runId);
+                    pstat.setInt(3, stepNo);
+                    pstat.setString(4, sceneId);
+                    pstat.setString(5, rs.getString("ODI_PARAM"));
+                    pstat.setString(6, "CLOSE");
+                    pstat.setString(7, null);
+                    pstat.setDate(8, null);
+                    pstat.setString(9, this.curUser.getId());
+                    pstat.setString(10, rs.getString("ENTITY_PARENT"));
+                    pstat.addBatch();
+                }
+                pstat.executeBatch();
+                trans.commit();
+                rs.close();
+            }else{
+                //前面没有填写模板的步骤，接口为跑全部门,从dms_workflow_odi_param中查找参数
+                String sql1 = "SELECT DISTINCT T.ODI_PARAM,T.EXEC_BY FROM DMS_WORKFLOW_ODI_PARAM T WHERE T.SCENE_ID = '" + sceneId + "'";
+                ResultSet rs1 = stat.executeQuery(sql1);
+                while(rs1.next()){
+                    pstat.setString(1, UUID.randomUUID().toString().replace("-", ""));
+                    pstat.setString(2, runId);
+                    pstat.setInt(3, stepNo);
+                    pstat.setString(4, sceneId);
+                    pstat.setString(5, rs1.getString("ODI_PARAM"));
+                    pstat.setString(6, "N");
+                    pstat.setString(7, null);
+                    pstat.setDate(8, null);
+                    pstat.setString(9, this.curUser.getId());
+                    pstat.setString(10, "ALLENTITY");
+                    pstat.addBatch(); 
+                    
+                    //发送邮件
+                    this.sendEtlMail(wfId,runId,sceneId, rs1.getString("ODI_PARAM"), rs1.getString("EXEC_BY"));
+                }
+                pstat.executeBatch();
+                trans.commit();
+                rs1.close();
+            }
+            stat.close();
+            pstat.close();
+        } catch (SQLException e) {
+            this._logger.severe(e);
+        }
+    }
+    
+    public void sendEtlMail(String wfId,String runId,String sceneId,String odiParam,String execUser){
+        ApproveflowEngine afe = new ApproveflowEngine();
+        DBTransaction trans =
+            (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
+        Statement stat = trans.createStatement(DBTransaction.DEFAULT);
+        
+        String sql0 = "SELECT T.SCENE_ALIAS FROM ODI11_SCENE T WHERE T.LOCALE = 'zh_CN' AND T.ID = '" + sceneId + "'";
+        String sql1 = "SELECT T.MEANING FROM DIM_ENTITYS T WHERE T.LOCALE = 'zh_CN' AND T.CODE = '" + odiParam + "'";
+        try {
+            String odiName = "";
+            String paraName = "";
+
+            ResultSet rs0 = stat.executeQuery(sql0);
+            if(rs0.next()){
+                 odiName = rs0.getString("SCENE_ALIAS");   
+            }
+            rs0.close();
+            
+            ResultSet rs1 = stat.executeQuery(sql1);
+            if(rs1.next()){
+                 paraName = rs1.getString("MEANING");   
+            }
+            rs1.close();
+            
+            String comName = this.getWfCom(wfId, runId).get("comName")+"#"+paraName;
+            
+            afe.sendMail(odiName, comName, execUser, "系统", "执行接口！", "请及时执行接口！", "");
+            
+            stat.close();
+        } catch (SQLException e) {
+            this._logger.severe(e);
+        }
+    }
+    
     //打开模板，打开所有组合
     //stepObj 模板标签  openCom打开组合
     public void openTemplates(String stepObj, String openCom,String wfId,String runId,int stepNo) {
@@ -1035,7 +1163,15 @@ public class WorkflowEngine {
             String nextTask = nextMap.get("STEP_TASK");
             String stepObj = nextMap.get("STEP_OBJECT");
             String openCom = nextMap.get("OPEN_COM");
-            if("ETL".equals(nextTask)){
+            if("ETL".equals(nextTask)){           
+                //新增odi逻辑
+                String etlStatus = nextMap.get("STEP_STATUS");
+                if("N".equals(etlStatus)){
+                    this.initOdiStatus(wfId,runId, stepObj, stepNo+1, false);    
+                }
+                this.changeEtlStatus(wfId,runId, stepObj, comId, "N");
+                //新增odi逻辑
+                
                 //跟新ETL步骤状态，发送邮件
                 StringBuffer etlSql = new StringBuffer();
                 etlSql.append("UPDATE DMS_WORKFLOW_STATUS SET STEP_STATUS = 'WORKING',START_AT = SYSDATE ");
@@ -1044,21 +1180,18 @@ public class WorkflowEngine {
                 etlSql.append("AND STEP_NO = ").append(stepNo+1);
                 stat.executeUpdate(etlSql.toString());
                 trans.commit();
-                //发送邮件提醒用户
-//                String uSql1 = "SELECT S.SCENE_ALIAS,USER_ID FROM ODI11_USER_SCENE_V T,ODI11_SCENE S WHERE T.SCENE_ID " +
-//                    "= S.ID AND S.LOCALE = 'zh_CN' AND T.SCENE_ID = '"
-//                    + stepObj + "'";
                 
-                String uSql1 = "SELECT DISTINCT S.ID,S.SCENE_ALIAS,T.USER_ID FROM ODI11_USER_SCENE_V T,ODI11_SCENE S , DMS_USER_VALUE_V D,WORKFLOW_TEMPLATE_STATUS W " +
-                    "WHERE T.SCENE_ID = S.ID AND S.LOCALE = 'zh_CN' AND T.SCENE_ID = '"
-                    + stepObj + "' AND W.ENTITY_CODE = D.VALUE_ID AND D.USER_ID = T.USER_ID AND W.COM_ID = '" + comId + "'" ;
-                ResultSet uRs1 = stat.executeQuery(uSql1);
-                while(uRs1.next()){
-                    afe.sendMail(uRs1.getString("SCENE_ALIAS"), comName, uRs1.getString("USER_ID"), commitUser, "执行接口！", "表单审批通过，请及时执行接口！", "");        
-                }
-                uRs1.close();
-                //继续执行下一步
-                stepNo = stepNo + 1 ;
+//                String uSql1 = "SELECT DISTINCT S.ID,S.SCENE_ALIAS,T.USER_ID FROM ODI11_USER_SCENE_V T,ODI11_SCENE S , DMS_USER_VALUE_V D,WORKFLOW_TEMPLATE_STATUS W " +
+//                    "WHERE T.SCENE_ID = S.ID AND S.LOCALE = 'zh_CN' AND T.SCENE_ID = '"
+//                    + stepObj + "' AND W.ENTITY_CODE = D.VALUE_ID AND D.USER_ID = T.USER_ID AND W.COM_ID = '" + comId + "'" ;
+//                ResultSet uRs1 = stat.executeQuery(uSql1);
+//                while(uRs1.next()){
+//                    afe.sendMail(uRs1.getString("SCENE_ALIAS"), comName, uRs1.getString("USER_ID"), commitUser, "执行接口！", "表单审批通过，请及时执行接口！", "");        
+//                }
+//                uRs1.close();
+                break;
+//                //继续执行下一步
+//                stepNo = stepNo + 1 ;
             }else if("OPEN TEMPLATES".equals(nextTask)){
                 //父节点完成，打开下一个步骤父节点子部门
                 //查询是否已经初始化，否则执行初始化
@@ -1099,6 +1232,115 @@ public class WorkflowEngine {
                 updateApp.append("AND STEP_NO =").append(stepNo+1);
                 stat.executeUpdate(updateApp.toString());
                 trans.commit();
+                break;
+            }else{
+                break;    
+            }
+        }
+        stat.close();
+        }catch(Exception e){
+            this._logger.severe(e);    
+        }
+    }
+    
+    public void startEtlNext(String wfId,String runId,String parent,int stepNo){
+        DBTransaction trans =
+            (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
+        Statement stat = trans.createStatement(DBTransaction.DEFAULT);
+        
+        //判断parent是否为ALLENTITY，是则打开全部模板部门，否则按实体父节点走下一步
+        boolean beforeTmp = false;
+        String comId = "";
+        String templateId = "";
+        if(parent.equals("ALLENTITY")){
+            beforeTmp = true;
+        }else{
+            //获取工作流中该父节点下的一张模板和部门的comid
+            String nSql = "SELECT DISTINCT T.TEMPLATE_ID,T.COM_ID FROM WORKFLOW_TEMPLATE_STATUS T WHERE T.RUN_ID = '"
+                + runId + "' AND T.ENTITY_CODE IN (SELECT D.ENTITY FROM DCM_ENTITY_PARENT D WHERE D.PARENT = '"
+                + parent + "')";
+            try {
+                ResultSet rs = stat.executeQuery(nSql);
+                if(rs.next()){
+                    comId = rs.getString("COM_ID");
+                    templateId = rs.getString("TEMPLATE_ID");
+                }
+                rs.close();
+            } catch (SQLException e) {
+                this._logger.severe(e);
+            }
+        }
+
+        try{
+        while(true){
+            Map<String,String> nextMap = this.queryNextStep(wfId, runId, stepNo);  
+            String nextTask = nextMap.get("STEP_TASK");
+            String stepObj = nextMap.get("STEP_OBJECT");
+            String openCom = nextMap.get("OPEN_COM");
+            if("ETL".equals(nextTask)){           
+                //新增odi逻辑
+                String etlStatus = nextMap.get("STEP_STATUS");
+                if("N".equals(etlStatus)){
+                    this.initOdiStatus(wfId,runId, stepObj, stepNo, false);    
+                }
+                this.changeEtlStatus(wfId,runId, stepObj, comId, "N");
+                //新增odi逻辑
+                
+                //跟新ETL步骤状态，发送邮件
+                StringBuffer etlSql = new StringBuffer();
+                etlSql.append("UPDATE DMS_WORKFLOW_STATUS SET STEP_STATUS = 'WORKING',START_AT = SYSDATE ");
+                etlSql.append("WHERE WF_ID = '").append(wfId).append("' ");
+                etlSql.append("AND RUN_ID = '").append(runId).append("' ");
+                etlSql.append("AND STEP_NO = ").append(stepNo+1);
+                stat.executeUpdate(etlSql.toString());
+                trans.commit();
+                
+//                String uSql1 = "SELECT DISTINCT S.ID,S.SCENE_ALIAS,T.USER_ID FROM ODI11_USER_SCENE_V T,ODI11_SCENE S , DMS_USER_VALUE_V D,WORKFLOW_TEMPLATE_STATUS W " +
+//                    "WHERE T.SCENE_ID = S.ID AND S.LOCALE = 'zh_CN' AND T.SCENE_ID = '"
+//                    + stepObj + "' AND W.ENTITY_CODE = D.VALUE_ID AND D.USER_ID = T.USER_ID AND W.COM_ID = '" + comId + "'" ;
+//                ResultSet uRs1 = stat.executeQuery(uSql1);
+//                while(uRs1.next()){
+//                    afe.sendMail(uRs1.getString("SCENE_ALIAS"), comName, uRs1.getString("USER_ID"), commitUser, "执行接口！", "表单审批通过，请及时执行接口！", "");        
+//                }
+//                uRs1.close();
+                
+                break;
+
+            }else if("OPEN TEMPLATES".equals(nextTask)){
+                if(beforeTmp){
+                    this.openTemplates(stepObj, openCom,wfId,runId,stepNo+1);
+                    //打开模板完成，更新步骤状态表为working
+                    String udSql = "UPDATE DMS_WORKFLOW_STATUS SET STEP_STATUS = 'WORKING',START_AT = SYSDATE WHERE WF_ID = '" + wfId + "'"
+                        + " AND RUN_ID = '" + runId + "'" + " AND STEP_NO = " + (stepNo+1);
+                    stat.executeUpdate(udSql);
+                    trans.commit();
+                }else{
+                    //父节点完成，打开下一个步骤父节点子部门
+                    //查询是否已经初始化，否则执行初始化
+                    String stepStatus = "";
+                    String stepSql = "SELECT STEP_STATUS FROM DMS_WORKFLOW_STATUS T " + "WHERE T.WF_ID = '" + wfId + "' AND T.RUN_ID = '"
+                        + runId + "' AND STEP_NO = " + (stepNo+1);
+                    ResultSet statusRs = stat.executeQuery(stepSql);
+                    if(statusRs.next()){
+                        stepStatus = statusRs.getString("STEP_STATUS");  
+                    }
+                    if("N".equals(stepStatus)){
+                        //打开模板，初始化模板输入状态表和审批流状态表
+                        this.onlyOpenTemplates(stepObj, openCom, runId, stepNo+1);
+                        //更新步骤状态为WORKING
+                        int i = stepNo + 1;
+                        String udnSql = "UPDATE DMS_WORKFLOW_STATUS SET STEP_STATUS = 'WORKING',START_AT = SYSDATE WHERE WF_ID = '" + wfId + "'"
+                            + " AND RUN_ID = '" + runId + "'" + " AND STEP_NO = " + i;
+                        stat.executeUpdate(udnSql);
+                        trans.commit();    
+                    }
+                    statusRs.close();
+                    //打开父节点下所有部门的组合
+                    this.openComByChild(wfId, runId,templateId,comId, stepNo+1);
+                }
+                break;
+            }else if("APPROVE".equals(nextTask)){
+                //接口后面不能直接跟审批步骤
                 break;
             }else{
                 break;    
@@ -1467,8 +1709,20 @@ public class WorkflowEngine {
         for(Map<String,String> stepMap : stepList){
             String stepTask = stepMap.get("STEP_TASK");
             int stepNo = Integer.parseInt(stepMap.get("STEP_NO"));
+            String stepObj = stepMap.get("STEP_OBJECT");
             if("ETL".equals(stepTask)){
-                continue;
+                //更改ETL步骤为工作中
+                String eSql = "update dms_workflow_status t set t.step_status = 'WORKING',t.start_at = sysdate,t.finish_at = '' " + "where t.wf_id = '" + wfId + 
+                              "' and t.run_id = '" + runId + "' and t.step_no =" + stepNo;
+                //查询父节点，更改接口对应参数状态为CLSOE
+                String fSql = "UPDATE WORKFLOW_ODI_STATUS O SET O.EXEC_STATUS = 'CLOSE',O.FINISH_AT = '' WHERE O.RUN_ID = '" + runId + "' "
+                    + "AND O.SCENE_ID = '" + stepObj + "' AND O.ENTITY_PARENT = ( SELECT DISTINCT D.PARENT FROM DCM_ENTITY_PARENT D WHERE D.ENTITY = '"
+                    + childList.get(0) + "')";
+                stat.executeUpdate(eSql);
+                stat.executeUpdate(fSql);
+                trans.commit();
+                //发送邮件通知
+                
             }else if("APPROVE".equals(stepTask)){
                 //更改子部门的所有模板审批状态为未审批
                 StringBuffer wspSql = new StringBuffer();
@@ -1730,4 +1984,41 @@ public class WorkflowEngine {
             this._logger.severe(e);
         }
     }
+    
+    public void passEtlStep(String runId,String entityParent,String odiParam,String sceneId){
+        System.out.println(runId + ":" + entityParent + ":" + sceneId);
+        DBTransaction trans =
+            (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
+        Statement stat = trans.createStatement(DBTransaction.DEFAULT);
+        //更改接口执行状态
+        String uSql = "";
+        if(odiParam == null || "".equals(odiParam)){
+            uSql = "UPDATE WORKFLOW_ODI_STATUS T SET T.EXEC_STATUS = 'Y',T.EXEC_BY = '" + this.curUser.getId() 
+                + "',T.FINISH_AT = SYSDATE WHERE T.RUN_ID = '" + runId
+                + "' AND T.SCENE_ID = '" + sceneId + "' AND T.ENTITY_PARENT = '" + entityParent + "' AND T.ODI_ARGS IS NULL";  
+        }else{
+            uSql = "UPDATE WORKFLOW_ODI_STATUS T SET T.EXEC_STATUS = 'Y',T.EXEC_BY = '" + this.curUser.getId() 
+                + "',T.FINISH_AT = SYSDATE WHERE T.RUN_ID = '" + runId
+                + "' AND T.SCENE_ID = '" + sceneId + "' AND T.ENTITY_PARENT = '" + entityParent + "' AND T.ODI_ARGS ='" + odiParam + "'";
+        }
+
+        try {
+            stat.executeUpdate(uSql);
+            trans.commit();
+            
+            String sql = "SELECT D.WF_ID,D.STEP_NO FROM WORKFLOW_ODI_STATUS T,DMS_WORKFLOW_STATUS D WHERE T.RUN_ID = D.RUN_ID AND T.STEP_NO = D.STEP_NO AND D.STEP_TASK = 'ETL' " 
+            + "AND T.RUN_ID = '" + runId + "' AND T.SCENE_ID = '" + sceneId + "' AND T.ENTITY_PARENT = '" + entityParent + "'";
+            ResultSet rs = stat.executeQuery(sql);
+            if(rs.next()){
+                int stepNo = rs.getInt("STEP_NO");
+                String wfId = rs.getString("WF_ID");
+                this.startEtlNext(wfId,runId, entityParent, stepNo);
+            }
+            rs.close();
+            stat.close();
+        } catch (SQLException e) {
+            this._logger.severe(e);
+        }
+    }
+    
 }

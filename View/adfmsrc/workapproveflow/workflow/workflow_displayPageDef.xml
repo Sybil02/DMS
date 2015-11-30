@@ -33,6 +33,12 @@
                   Customizer="oracle.jbo.uicli.binding.JUSearchBindingCustomizer"/>
     <iterator Binds="Odi11ScaneVO" RangeSize="25"
               DataControl="Odi11gModuleDataControl" id="Odi11ScaneVOIterator"/>
+    <iterator Binds="DmsWorkflowOdiStatusVo" RangeSize="25"
+              DataControl="DmsModuleDataControl"
+              id="DmsWorkflowOdiStatusVoIterator"/>
+    <searchRegion Binds="DmsWorkflowOdiStatusVoIterator" Criteria=""
+                  Customizer="oracle.jbo.uicli.binding.JUSearchBindingCustomizer"
+                  id="DmsWorkflowOdiStatusVoQuery"/>
   </executables>
   <bindings>
     <tree IterBinding="DmsUserWorkflowVOIterator" id="DmsUserWorkflowVO">
@@ -202,6 +208,18 @@
           <Item Value="SceneName"/>
           <Item Value="UpdatedAt"/>
           <Item Value="UpdatedBy"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <tree IterBinding="DmsWorkflowOdiStatusVoIterator"
+          id="DmsWorkflowOdiStatusVo">
+      <nodeDefinition DefName="team.epm.dms.view.DmsWorkflowOdiStatusVo"
+                      Name="DmsWorkflowOdiStatusVo0">
+        <AttrNames>
+          <Item Value="OdiArgs"/>
+          <Item Value="ExecStatus"/>
+          <Item Value="ExecBy"/>
+          <Item Value="FinishAt"/>
         </AttrNames>
       </nodeDefinition>
     </tree>

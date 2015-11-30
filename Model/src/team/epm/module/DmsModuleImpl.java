@@ -476,4 +476,12 @@ public class DmsModuleImpl extends ApplicationModuleImpl implements DmsModule {
     public ViewLinkImpl getDmsWorkflowStepProLnk() {
         return (ViewLinkImpl)findViewLink("DmsWorkflowStepProLnk");
     }
+
+    /**
+     * Container's getter for DmsWorkflowOdiStatusVo.
+     * @return DmsWorkflowOdiStatusVo
+     */
+    public ViewObjectImpl getDmsWorkflowOdiStatusVo() {
+        return (ViewObjectImpl)findViewObject("DmsWorkflowOdiStatusVo");
+    }
 }

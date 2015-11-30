@@ -145,7 +145,73 @@
             </af:panelGroupLayout>
           </af:panelWindow>
         </af:popup>
-                    <!--启动工作流Popup-->
+        <!--ETL详情-->
+        <af:popup id="p6" autoCancel="disabled" 
+                  binding="#{viewScope.workflowDisplayBean.odiPop}">
+          <af:panelWindow id="pw6" title="接口执行详情">
+            <af:decorativeBox id="db1" topHeight="25px">
+              <f:facet name="center">
+                <af:panelCollection id="pc5">
+                  <f:facet name="menus"/>
+                  <f:facet name="toolbar">
+                  </f:facet>
+                  <f:facet name="statusbar"/>
+                  <af:table value="#{bindings.DmsWorkflowOdiStatusVo.collectionModel}"
+                            var="row"
+                            rows="#{bindings.DmsWorkflowOdiStatusVo.rangeSize}"
+                            emptyText="#{bindings.DmsWorkflowOdiStatusVo.viewable ? 'No data to display.' : 'Access Denied.'}"
+                            fetchSize="#{bindings.DmsWorkflowOdiStatusVo.rangeSize}"
+                            rowBandingInterval="0"
+                            filterModel="#{bindings.DmsWorkflowOdiStatusVoQuery.queryDescriptor}"
+                            queryListener="#{bindings.DmsWorkflowOdiStatusVoQuery.processQuery}"
+                            varStatus="vs"
+                            selectedRowKeys="#{bindings.DmsWorkflowOdiStatusVo.collectionModel.selectedRow}"
+                            selectionListener="#{bindings.DmsWorkflowOdiStatusVo.collectionModel.makeCurrent}"
+                            rowSelection="single" id="t8">
+                    <af:column sortProperty="#{bindings.DmsWorkflowOdiStatusVo.hints.OdiArgs.name}"
+                               filterable="true" sortable="true" width="100"
+                               headerText="#{bindings.DmsWorkflowOdiStatusVo.hints.OdiArgs.label}"
+                               id="c6">
+                      <af:outputText value="#{row.OdiArgs}" id="ot3"/>
+                    </af:column>
+                    <af:column sortProperty="#{bindings.DmsWorkflowOdiStatusVo.hints.ExecStatus.name}"
+                               filterable="true" sortable="true" width="100"
+                               headerText="#{bindings.DmsWorkflowOdiStatusVo.hints.ExecStatus.label}"
+                               id="c10">
+                      <af:outputText value="#{row.ExecStatus}" id="ot4"/>
+                    </af:column>
+                    <af:column sortProperty="#{bindings.DmsWorkflowOdiStatusVo.hints.ExecBy.name}"
+                               filterable="true" sortable="true" width="100"
+                               headerText="#{bindings.DmsWorkflowOdiStatusVo.hints.ExecBy.label}"
+                               id="c9">
+                      <af:outputText value="#{row.ExecBy}" id="ot5"/>
+                    </af:column>
+                    <af:column sortProperty="#{bindings.DmsWorkflowOdiStatusVo.hints.FinishAt.name}"
+                               sortable="true" width="157"
+                               headerText="#{bindings.DmsWorkflowOdiStatusVo.hints.FinishAt.label}"
+                               id="c5">
+                      <f:facet name="filter">
+                        <af:inputDate value="#{vs.filterCriteria.FinishAt}"
+                                      id="id1"/>
+                      </f:facet>
+                      <af:outputText value="#{row.FinishAt}" id="ot6">
+                        <af:convertDateTime pattern="#{bindings.DmsWorkflowOdiStatusVo.hints.FinishAt.format}"/>
+                      </af:outputText>
+                    </af:column>
+                  </af:table>
+                </af:panelCollection>
+              </f:facet>
+              <f:facet name="top">
+                <af:panelGroupLayout id="pgl14">
+                  <af:spacer width="10px" id="space_odi"/>
+                  <af:outputLabel value="ODI测试接口DMS年场景版本" id="ol1"
+                                  inlineStyle="font-size:medium;"/>
+                </af:panelGroupLayout>
+              </f:facet>
+            </af:decorativeBox>
+          </af:panelWindow>
+        </af:popup>
+        <!--启动工作流Popup-->
         <af:popup id="p1" autoCancel="disabled"
                   binding="#{viewScope.workflowDisplayBean.runPop}">
           <af:panelWindow title="#{viewBundle['dms.workflow.runpopup']}"

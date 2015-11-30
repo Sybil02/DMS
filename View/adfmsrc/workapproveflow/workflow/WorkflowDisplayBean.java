@@ -24,6 +24,7 @@ import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 
 import oracle.adf.model.binding.DCIteratorBinding;
+import oracle.adf.model.binding.DCIteratorBindingDef;
 import oracle.adf.share.ADFContext;
 import oracle.adf.share.logging.ADFLogger;
 import oracle.adf.view.rich.component.rich.RichPopup;
@@ -65,6 +66,7 @@ public class WorkflowDisplayBean {
     private RichSelectOneChoice approveSoc;
     private RichSelectOneChoice writeSoc;
     private RichPopup closeWfPop;
+    private RichPopup odiPop;
 
 
     public WorkflowDisplayBean() {
@@ -176,13 +178,24 @@ public class WorkflowDisplayBean {
             String StepNo = curRow.getAttribute("StepNo").toString();
             approveflow(runId,StepNo);
         }else if(stepTask.equals("ETL")){
-            FacesContext.getCurrentInstance().addMessage(null,new FacesMessage("该列为接口，没有详情！"));
-            return;
+            String runId = curRow.getAttribute("RunId").toString();
+            String stepNo = curRow.getAttribute("StepNo").toString();
+            this.odiStatus(runId, stepNo);
         }else{
             FacesContext.getCurrentInstance().addMessage(null,new FacesMessage("不能查看该列详情！"));
             return;
         }
         
+    }
+    
+    public void odiStatus(String runId,String stepNo){
+        DCIteratorBinding odiIter = ADFUtils.findIterator("DmsWorkflowOdiStatusVoIterator");
+        ViewObject odiVo = odiIter.getViewObject();
+        String whereClause = " RUN_ID = '" + runId + "'" + " AND STEP_NO = " + stepNo;
+        odiVo.setWhereClause(whereClause);
+        odiVo.executeQuery();
+        RichPopup.PopupHints odihint = new RichPopup.PopupHints();
+        this.odiPop.show(odihint);
     }
     
     public void approveflow(String runId,String StepNo){
@@ -552,5 +565,13 @@ public class WorkflowDisplayBean {
 
     public RichPopup getCloseWfPop() {
         return closeWfPop;
+    }
+
+    public void setOdiPop(RichPopup odiPop) {
+        this.odiPop = odiPop;
+    }
+
+    public RichPopup getOdiPop() {
+        return odiPop;
     }
 }
