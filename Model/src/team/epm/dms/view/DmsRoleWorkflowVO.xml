@@ -15,7 +15,8 @@
        DmsRoleWorkflowEO.WORKFLOW_ID, 
        DmsWorkflowInfoEO.WF_NAME, 
        DmsWorkflowInfoEO.ID AS ID1, 
-       DmsWorkflowInfoEO.LOCALE"
+       DmsWorkflowInfoEO.LOCALE, 
+       DmsRoleWorkflowEO.ENABLE_RUN"
   FromList="DMS_ROLE_WORKFLOW DmsRoleWorkflowEO, DMS_WORKFLOWINFO DmsWorkflowInfoEO"
   BindingStyle="OracleName"
   CustomQuery="false"
@@ -32,6 +33,39 @@
     Name="DmsWorkflowInfoVO1"
     ViewObjectName="team.epm.dms.view.DmsWorkflowInfoVO"
     RowLevelBinds="true"/>
+  <ViewAccessor
+    Name="DmsLookupView"
+    ViewObjectName="team.epm.dms.view.DmsLookupView">
+    <ViewCriteriaUsage
+      Name="DmsLookupViewCriteria"
+      FullName="team.epm.dms.view.DmsLookupView.DmsLookupViewCriteria"/>
+    <ParameterMap>
+      <PIMap Variable="locale">
+        <TransientExpression><![CDATA[adf.context.locale]]></TransientExpression>
+      </PIMap>
+      <PIMap Variable="lookupType">
+        <TransientExpression><![CDATA["YES_NO"]]></TransientExpression>
+      </PIMap>
+    </ParameterMap>
+  </ViewAccessor>
+  <ListBinding
+    Name="LOV_YES_NO"
+    ListVOName="DmsLookupView"
+    ListRangeSize="-1"
+    NullValueFlag="none"
+    NullValueId="LOV_YES_NO_LOVUIHints_NullValueId"
+    MRUCount="0">
+    <AttrArray Name="AttrNames">
+      <Item Value="EnableRun"/>
+    </AttrArray>
+    <AttrArray Name="ListAttrNames">
+      <Item Value="Code"/>
+    </AttrArray>
+    <AttrArray Name="ListDisplayAttrNames">
+      <Item Value="Meaning"/>
+    </AttrArray>
+    <DisplayCriteria/>
+  </ListBinding>
   <EntityUsage
     Name="DmsRoleWorkflowEO"
     Entity="team.epm.dms.model.DmsRoleWorkflowEO"/>
@@ -149,6 +183,22 @@
     EntityAttrName="Locale"
     EntityUsage="DmsWorkflowInfoEO"
     AliasName="LOCALE"/>
+  <ViewAttribute
+    Name="EnableRun"
+    PrecisionRule="true"
+    EntityAttrName="EnableRun"
+    EntityUsage="DmsRoleWorkflowEO"
+    AliasName="ENABLE_RUN"
+    LOVName="LOV_YES_NO">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="team.epm.dms.view.DmsRoleWorkflowVO.EnableRun_LABEL"/>
+        <CONTROLTYPE
+          Value="choice"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewLinkAccessor
     Name="DmsEnabledRole"
     ViewLink="team.epm.dms.DmsRoleWorkflowLnk"

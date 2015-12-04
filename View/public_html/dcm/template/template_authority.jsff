@@ -77,7 +77,7 @@
               <af:group id="g1">
  
              <af:inputComboboxListOfValues label="#{bindings.RoleName.label}"
-                                          id="soc1" 
+                                          id="soc1" autoSubmit="true"
                                           validator="#{viewScope.RoleNameComboboxBean.roleNameLov.validate}" 
                                           value="#{bindings.RoleName.attributeValue}"
                                           model="#{viewScope.RoleNameComboboxBean.roleNameLov.listOfValuesModel}"
@@ -105,7 +105,7 @@
                     filterModel="#{bindings.DcmRoleTemplateViewQuery.queryDescriptor}"
                     selectionListener="#{bindings.DcmRoleTemplateView.collectionModel.makeCurrent}"
                     rowSelection="multiple" id="t1"
-                    binding="#{TemplateAuthorityBean.assignedtemplateTable}" >
+                    binding="#{TemplateAuthorityBean.assignedtemplateTable}">
             <af:column sortProperty="#{bindings.DcmRoleTemplateView.hints.TemplateId.name}"
                        sortable="false" filterable="true"
                        width="270"
@@ -120,7 +120,7 @@
                                id="si4"/>
               </af:selectOneChoice>
               <f:facet name="filter">
-                <af:inputText label="Label 1" id="it1"
+                <af:inputText label="Label 1" id="it11"
                               valueChangeListener="#{TemplateAuthorityBean.filterModuleName}"/>
               </f:facet>
             </af:column>
@@ -129,10 +129,10 @@
                        headerText="#{bindings.DcmRoleTemplateView.hints.ReadOnly.label}"
                        id="c1" width="120">
               <af:selectOneChoice value="#{row.bindings.ReadOnly.inputValue}"
-                                  label="#{row.bindings.ReadOnly.label}"
+                                  label="#{row.bindings.ReadOnly.label}" autoSubmit="true" 
                                   required="#{bindings.DcmRoleTemplateView.hints.ReadOnly.mandatory}"
                                   shortDesc="#{bindings.DcmRoleTemplateView.hints.ReadOnly.tooltip}"
-                                  id="soc5">
+                                  valueChangeListener="#{TemplateAuthorityBean.readOnlyChange}">
                 <f:selectItems value="#{row.bindings.ReadOnly.items}" id="si5"/>
               </af:selectOneChoice>
             </af:column>

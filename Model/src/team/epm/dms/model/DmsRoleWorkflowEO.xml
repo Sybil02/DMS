@@ -109,6 +109,19 @@
     </DesignTime>
     <TransientExpression><![CDATA[adf.userSession.userData.userId]]></TransientExpression>
   </Attribute>
+  <Attribute
+    Name="EnableRun"
+    Precision="2"
+    ColumnName="ENABLE_RUN"
+    SQLType="VARCHAR"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    TableName="DMS_ROLE_WORKFLOW"
+    DefaultValue="N">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="2"/>
+    </DesignTime>
+  </Attribute>
   <Key
     Name="DmsroleworkfloweoPrimaryKey"
     PrimaryKey="true">

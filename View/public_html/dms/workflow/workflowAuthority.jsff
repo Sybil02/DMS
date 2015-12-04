@@ -108,7 +108,17 @@
                      id="c1" width="204"> 
             <af:outputText value="#{row.WfName}" id="ot5"/>
           </af:column>
-
+          <af:column headerText="#{bindings.DmsRoleWorkflowVO.hints.EnableRun.label}"
+                     id="c2">
+            <af:selectOneChoice value="#{row.bindings.EnableRun.inputValue}"
+                                label="#{row.bindings.EnableRun.label}" autoSubmit="true"
+                                required="#{bindings.DmsRoleWorkflowVO.hints.EnableRun.mandatory}"
+                                shortDesc="#{bindings.DmsRoleWorkflowVO.hints.EnableRun.tooltip}"
+                                valueChangeListener="#{workflowAuthorityBean.enableRunChange}"
+                                id="soc2">
+              <f:selectItems value="#{row.bindings.EnableRun.items}" id="si1"/>
+            </af:selectOneChoice>
+          </af:column>
           <af:column sortProperty="#{bindings.DmsRoleWorkflowVO.hints.UpdatedAt.name}"
                      sortable="false"
                      headerText="#{bindings.DmsRoleWorkflowVO.hints.UpdatedAt.label}"

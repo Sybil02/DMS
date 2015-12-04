@@ -257,16 +257,25 @@ public class DmsModuleImpl extends ApplicationModuleImpl implements DmsModule {
 
     
     public ViewObject getDmsValueView(String valueSetSrc,String valueSetId,String groupId){
-       
-        String voName="DmsVs"+valueSetSrc+groupId;
+
+        /*
+         * BUG:在创建VO的时候如果groupId含有小数点，则通过Iterator获取VO时会获取不到，
+         * 例如：groupId为5018.012，则创建的VO为DmsVs5018.012，但Iterator.getViewObject()方法获取VO的时候，传入的参数为DmsVs5018
+         * 小数.后面的全部丢失，所以找不到VO，导致空指针异常
+         * 暂时做替换处理
+         */
+        groupId = groupId.replace(".", "_bug_");
         
+        String voName="DmsVs"+valueSetSrc+groupId;
  
         ViewObject vo=this.getApplicationModule().findViewObject(voName);
-        
+
+        //创建VO查询的sql时，再替换成原来的groupId
+        groupId = groupId.replace("_bug_",".");
+
         if(vo == null && valueSetSrc != null){
             String sql="select t.code,t.meaning from \""+valueSetSrc.toUpperCase()+"\" t where t.locale='"
                 +ADFContext.getCurrent().getLocale()+"' and not exists(select 1 from dms_group_value v where v.group_id='"+groupId+"' and v.value_id=t.code and v.value_set_id='"+valueSetId+"') order by t.idx";
-            
             
             vo=this.getApplicationModule().createViewObjectFromQueryStmt(voName, sql);
         }

@@ -44,6 +44,7 @@
           <Item Value="WfName"/>
           <Item Value="RoleId"/>
           <Item Value="UpdatedAt"/>
+          <Item Value="EnableRun"/>
         </AttrNames>
       </nodeDefinition>
     </tree>

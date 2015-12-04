@@ -1,9 +1,12 @@
 package dms.workflow;
 
 import common.ADFUtils;
+import common.DmsUtils;
 import common.JSFUtils;
 import java.util.Iterator;
 import java.util.List;
+
+import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ValueChangeEvent;
 import oracle.adf.view.rich.component.rich.RichPopup;
@@ -18,6 +21,7 @@ import oracle.jbo.uicli.binding.JUCtrlHierNodeBinding;
 
 import org.apache.myfaces.trinidad.model.CollectionModel;
 import org.apache.myfaces.trinidad.model.RowKeySet;
+
 
 public class WorkflowAuthorityBean {
     private RichTable assignedworkflowTable;
@@ -126,6 +130,14 @@ public class WorkflowAuthorityBean {
 
     public RichTable getUnassignedworkflowTable() {
         return unassignedworkflowTable;
+    }
+
+    public void enableRunChange(ValueChangeEvent valueChangeEvent) {
+        //更新模型层
+        valueChangeEvent.getComponent().processUpdates(FacesContext.getCurrentInstance());
+        //提交之前要更新模型层，valueChangeEvent发生在更新模型层之前，commit只会提交模型层的数据，直接提交不会把新的值提交到数据库
+        ADFUtils.findIterator("DmsRoleWorkflowVOIterator").getViewObject().getApplicationModule().getTransaction().commit();
+        
     }
 }
 

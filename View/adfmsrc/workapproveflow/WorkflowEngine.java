@@ -191,14 +191,14 @@ public class WorkflowEngine {
                 trans.commit();
 
                 //发送邮件提醒用户
-                String uSql = "SELECT S.SCENE_ALIAS,USER_ID FROM ODI11_USER_SCENE_V T,ODI11_SCENE S WHERE T.SCENE_ID " +
-                    "= S.ID AND S.LOCALE = 'zh_CN' AND T.SCENE_ID = '"
-                    + stepObj + "'";
-                ResultSet uRs = stat.executeQuery(uSql);
-                while(uRs.next()){
-                    afe.sendMail(uRs.getString("SCENE_ALIAS"),"", uRs.getString("USER_ID"), "工作流启动", "执行接口！", "工作流启动，请及时执行接口！", "");        
-                }
-                uRs.close();
+//                String uSql = "SELECT S.SCENE_ALIAS,USER_ID FROM ODI11_USER_SCENE_V T,ODI11_SCENE S WHERE T.SCENE_ID " +
+//                    "= S.ID AND S.LOCALE = 'zh_CN' AND T.SCENE_ID = '"
+//                    + stepObj + "'";
+//                ResultSet uRs = stat.executeQuery(uSql);
+//                while(uRs.next()){
+//                    afe.sendMail(uRs.getString("SCENE_ALIAS"),"", uRs.getString("USER_ID"), "工作流启动", "执行接口！", "工作流启动，请及时执行接口！", "");        
+//                }
+//                uRs.close();
                 //跳过ETL
 //                int stepNo = 1 ;
 //                while(true){
@@ -249,7 +249,7 @@ public class WorkflowEngine {
         Statement stat = trans.createStatement(DBTransaction.DEFAULT);
         String sql = "SELECT DISTINCT T.OPEN_COM FROM DMS_WORKFLOW_STATUS T WHERE T.WF_ID = '" + wfId + "' AND T.RUN_ID = '"
             + runId + "'";
-        String wSql = "SELECT D.NAME,D.CODE,D.SOURCE FROM DCM_COM_VS T,DMS_VALUE_SET D,DMS_WORKFLOWINFO W "
+        String wSql = "SELECT W.WF_NAME,D.NAME,D.CODE,D.SOURCE FROM DCM_COM_VS T,DMS_VALUE_SET D,DMS_WORKFLOWINFO W "
             + "WHERE T.COMBINATION_ID = W.WF_COM AND W.LOCALE = D.LOCALE AND T.VALUE_SET_ID = D.ID AND D.LOCALE = 'zh_CN' "
             + "AND W.ID = '" + wfId + "' ORDER BY T.SEQ";
         String openCom = "";
@@ -265,10 +265,12 @@ public class WorkflowEngine {
             rs.close();
             
             ResultSet wRs = stat.executeQuery(wSql);
+            String wfName = "";
             Map<String,String> codeSourceMap = new LinkedHashMap<String,String>();
             while(wRs.next()){
                 String vcode = wRs.getString("CODE");       
                 String vsource = wRs.getString("SOURCE");
+                wfName = wRs.getString("WF_NAME");
                 codeSourceMap.put(vcode, vsource);
             }
             wRs.close();
@@ -286,6 +288,7 @@ public class WorkflowEngine {
             }
             comMap.put("comCode", comCode);
             comMap.put("comName", comName);
+            comMap.put("wfName", wfName);
             stat.close();
         } catch (SQLException e) { 
             this._logger.severe(e);
@@ -437,9 +440,11 @@ public class WorkflowEngine {
             }
             rs1.close();
             
-            String comName = this.getWfCom(wfId, runId).get("comName")+"#"+paraName;
+            Map<String,String> wfMap = this.getWfCom(wfId, runId);
+            String comName = wfMap.get("comName")+"#"+paraName;
+            String wfName = "【" + wfMap.get("wfName") + "】" ;
             
-            afe.sendMail(odiName, comName, execUser, "系统", "执行接口！", "请及时执行接口！", "");
+            afe.sendMail(odiName, comName, execUser, "系统", wfName + "执行接口！", "请及时执行接口！", "");
             
             stat.close();
         } catch (SQLException e) {
@@ -818,13 +823,15 @@ public class WorkflowEngine {
 
         ApproveflowEngine afe = new ApproveflowEngine();
         try {
+            Map<String,String> wfMap = this.getWfCom(wfId, runId);
             ResultSet rs = stat.executeQuery(sql.toString());
             while(rs.next()){
                 String writeUser = rs.getString("WRITE_BY");
                 String entityName = rs.getString("MEANING");
                 String templateId = rs.getString("DCM_TEMPLATE_ID");
-                entityName = this.getWfCom(wfId, runId).get("comName")+"#"+entityName;
-                afe.sendMail(templateId, entityName, writeUser, "系统", "填写表单!", "请及时填写表单并提交！", "");
+                String wfName = "【" + wfMap.get("wfName") + "】";
+                entityName = wfMap.get("comName")+"#"+entityName;
+                afe.sendMail(templateId, entityName, writeUser, "系统", wfName + "填写表单!", "请及时填写表单并提交！", "");
             }
             rs.close();
             stat.close();
@@ -1071,9 +1078,11 @@ public class WorkflowEngine {
         DBTransaction trans = (DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
         Statement stat = trans.createStatement(DBTransaction.DEFAULT);
         StringBuffer sql = new StringBuffer();
-        //System.out.println("type:"+stepTask);
+
         if(stepTask.equals("OPEN TEMPLATES")){
             sql.append("SELECT 1 FROM WORKFLOW_TEMPLATE_STATUS WHERE WRITE_STATUS <> 'Y' ");
+        }else if(stepTask.equals("ETL")){
+            sql.append("SELECT 1 FROM WORKFLOW_ODI_STATUS WHERE EXEC_STATUS <> 'Y' ");
         }else{
             sql.append("SELECT 1 FROM APPROVE_TEMPLATE_STATUS WHERE APPROVAL_STATUS <> 'Y' ");
         }
@@ -1099,9 +1108,6 @@ public class WorkflowEngine {
         } catch (SQLException e) {
             this._logger.severe(e);
         }
-//        if(isFinish){
-//            //this.startNextSteps(wfId,runId, stepNo);    
-//        }
     }
     
     public void startNext(String wfId,String runId,String templateId,String comId ,String comName,
@@ -1248,6 +1254,19 @@ public class WorkflowEngine {
             (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
         Statement stat = trans.createStatement(DBTransaction.DEFAULT);
         
+        //判断接口同一个实体父节点是否全部执行，否则不开启下一步
+        String cSql = "SELECT 1 FROM WORKFLOW_ODI_STATUS T WHERE T.EXEC_STATUS <> 'Y' AND T.ENTITY_PARENT = '" + parent + "' "
+            + "AND T.RUN_ID = '" + runId + "' AND T.STEP_NO = " + stepNo;
+
+        try {
+            ResultSet cRs = stat.executeQuery(cSql);
+            if(cRs.next()){
+                return;    
+            }
+            cRs.close();
+        } catch (SQLException e) {
+            this._logger.severe(e);
+        }
         //判断parent是否为ALLENTITY，是则打开全部模板部门，否则按实体父节点走下一步
         boolean beforeTmp = false;
         String comId = "";
@@ -1281,7 +1300,7 @@ public class WorkflowEngine {
                 //新增odi逻辑
                 String etlStatus = nextMap.get("STEP_STATUS");
                 if("N".equals(etlStatus)){
-                    this.initOdiStatus(wfId,runId, stepObj, stepNo, false);    
+                    this.initOdiStatus(wfId,runId, stepObj, stepNo+1, false);    
                 }
                 this.changeEtlStatus(wfId,runId, stepObj, comId, "N");
                 //新增odi逻辑
@@ -1294,15 +1313,6 @@ public class WorkflowEngine {
                 etlSql.append("AND STEP_NO = ").append(stepNo+1);
                 stat.executeUpdate(etlSql.toString());
                 trans.commit();
-                
-//                String uSql1 = "SELECT DISTINCT S.ID,S.SCENE_ALIAS,T.USER_ID FROM ODI11_USER_SCENE_V T,ODI11_SCENE S , DMS_USER_VALUE_V D,WORKFLOW_TEMPLATE_STATUS W " +
-//                    "WHERE T.SCENE_ID = S.ID AND S.LOCALE = 'zh_CN' AND T.SCENE_ID = '"
-//                    + stepObj + "' AND W.ENTITY_CODE = D.VALUE_ID AND D.USER_ID = T.USER_ID AND W.COM_ID = '" + comId + "'" ;
-//                ResultSet uRs1 = stat.executeQuery(uSql1);
-//                while(uRs1.next()){
-//                    afe.sendMail(uRs1.getString("SCENE_ALIAS"), comName, uRs1.getString("USER_ID"), commitUser, "执行接口！", "表单审批通过，请及时执行接口！", "");        
-//                }
-//                uRs1.close();
                 
                 break;
 
@@ -1712,10 +1722,10 @@ public class WorkflowEngine {
             String stepObj = stepMap.get("STEP_OBJECT");
             if("ETL".equals(stepTask)){
                 //更改ETL步骤为工作中
-                String eSql = "update dms_workflow_status t set t.step_status = 'WORKING',t.start_at = sysdate,t.finish_at = '' " + "where t.wf_id = '" + wfId + 
+                String eSql = "update dms_workflow_status t set t.step_status = 'WORKING',t.finish_at = '' " + "where t.wf_id = '" + wfId + 
                               "' and t.run_id = '" + runId + "' and t.step_no =" + stepNo;
                 //查询父节点，更改接口对应参数状态为CLSOE
-                String fSql = "UPDATE WORKFLOW_ODI_STATUS O SET O.EXEC_STATUS = 'CLOSE',O.FINISH_AT = '' WHERE O.RUN_ID = '" + runId + "' "
+                String fSql = "UPDATE WORKFLOW_ODI_STATUS O SET O.EXEC_STATUS = 'CLOSE',O.FINISH_AT = '',O.EXEC_BY = '' WHERE O.RUN_ID = '" + runId + "' "
                     + "AND O.SCENE_ID = '" + stepObj + "' AND O.ENTITY_PARENT = ( SELECT DISTINCT D.PARENT FROM DCM_ENTITY_PARENT D WHERE D.ENTITY = '"
                     + childList.get(0) + "')";
                 stat.executeUpdate(eSql);
@@ -1726,7 +1736,7 @@ public class WorkflowEngine {
             }else if("APPROVE".equals(stepTask)){
                 //更改子部门的所有模板审批状态为未审批
                 StringBuffer wspSql = new StringBuffer();
-                wspSql.append("update approve_template_status t set t.approval_status = 'CLOSE' ");
+                wspSql.append("update approve_template_status t set t.approval_status = 'CLOSE',t.finish_at = '' ");
                 wspSql.append("where t.run_id = '").append(runId).append("' ");
                 wspSql.append("and t.step_no = ").append(stepNo);
                 wspSql.append("and t.entity_id in (");
@@ -1767,22 +1777,29 @@ public class WorkflowEngine {
                 
                 stat.executeUpdate(wspSql.toString());
                 //更改步骤状态为working
-                String uSql = "update dms_workflow_status t set t.step_status = 'WORKING',t.start_at = sysdate " + "where t.wf_id = '" + wfId + 
+                String uSql = "update dms_workflow_status t set t.step_status = 'WORKING',,t.finish_at = '' " + "where t.wf_id = '" + wfId + 
                               "' and t.run_id = '" + runId + "' and t.step_no =" + stepNo;
                 stat.executeUpdate(uSql);
                 trans.commit();
+                
+                Map<String,String> wfMap = this.getWfCom(wfId, runId);
+                
                 ResultSet mRs = stat.executeQuery(tcuSql.toString());
                 //send mail
                 while(mRs.next()){
                     String tid = mRs.getString("TEMPLATE_ID");
                     String uid = mRs.getString("PERSON_ID");
                     String entityName ="_" + this.getEntityName(mRs.getString("ENTITY_ID"));
-                    afe.sendMail(tid, entityName, uid,commitUser, "工作流回退！", "工作流回退，请等待表单重新提交审批！",reason);
+                    String wfName = "【" + wfMap.get("wfName") + "】";
+                    afe.sendMail(tid, entityName, uid,commitUser, wfName + "工作流回退！", "工作流回退，请等待表单重新提交审批！",reason);
                 }
+                
+                this.stepIsFinish(wfId, runId, stepNo, stepTask);
+                
             }else if("OPEN TEMPLATES".equals(stepTask)){
                 //修改输入状态表为未输入
                 StringBuffer wsrSql = new StringBuffer();
-                wsrSql.append("update workflow_template_status t set t.write_status = 'CLOSE' ");
+                wsrSql.append("update workflow_template_status t set t.write_status = 'CLOSE',t.finish_at = '' ");
                 wsrSql.append("where t.run_id = '").append(runId).append("' ");
                 wsrSql.append("and t.step_no = ").append(stepNo);
                 wsrSql.append("and t.entity_code in (");
@@ -1813,7 +1830,7 @@ public class WorkflowEngine {
                 
                 stat.executeUpdate(wsrSql.toString());
                 //更改步骤状态为working
-                String uSql = "update dms_workflow_status t set t.step_status = 'WORKING',t.start_at = sysdate " + "where t.wf_id = '" + wfId + 
+                String uSql = "update dms_workflow_status t set t.step_status = 'WORKING',t.finish_at = '' " + "where t.wf_id = '" + wfId + 
                               "' and t.run_id = '" + runId + "' and t.step_no =" + stepNo;
                 stat.executeUpdate(uSql);
                 trans.commit();
@@ -1824,6 +1841,7 @@ public class WorkflowEngine {
                     this.changeComStatus(runId, stepNo, childList,backTemp, "OPEN");
                     isFirst = false ;
                     Map<String,List<String>> tempComMap = new HashMap<String,List<String>>();
+                    Map<String,String> wfMap = this.getWfCom(wfId, runId);
                     //send mail
                     while(mRs.next()){
                         String tid = mRs.getString("TEMPLATE_ID");
@@ -1839,7 +1857,8 @@ public class WorkflowEngine {
                             }
                         }
                         String entityName ="_" + this.getEntityName(mRs.getString("ENTITY_CODE"));
-                        afe.sendMail(tid, entityName, uid,commitUser, "工作流回退！", "工作流回退，请重新填写表单数据！",reason);
+                        String wfName = "【" + wfMap.get("wfName") + "】";
+                        afe.sendMail(tid, entityName, uid,commitUser, wfName + "工作流回退！", "工作流回退，请重新填写表单数据！",reason);
                     }
                     //开启输入状态
                     this.openWirteStatus(tempComMap, runId, stepNo);
@@ -1850,14 +1869,18 @@ public class WorkflowEngine {
                 }else{
                     //其他的打开模板步骤关闭组合
                     this.changeComStatus(runId, stepNo, childList,null, "CLOSE");
+                    Map<String,String> wfMap = this.getWfCom(wfId, runId);
                     //send mail
                     while(mRs.next()){
                         String tid = mRs.getString("TEMPLATE_ID");
                         String uid = mRs.getString("WRITE_BY");
                         String entityName ="_" + this.getEntityName(mRs.getString("ENTITY_CODE"));
+                        String wfName = "【" + wfMap.get("wfName") + "】";
                         afe.sendMail(tid, entityName, uid,commitUser, "工作流回退！", "工作流回退，请等待前面表单审批通过后，再重填表单数据！",reason);
                     }
                 }
+                
+                this.stepIsFinish(wfId, runId, stepNo, stepTask);
             }
         }
             stat.close();
@@ -2006,16 +2029,20 @@ public class WorkflowEngine {
             stat.executeUpdate(uSql);
             trans.commit();
             
+            //查询工作流ID和步骤编码
             String sql = "SELECT D.WF_ID,D.STEP_NO FROM WORKFLOW_ODI_STATUS T,DMS_WORKFLOW_STATUS D WHERE T.RUN_ID = D.RUN_ID AND T.STEP_NO = D.STEP_NO AND D.STEP_TASK = 'ETL' " 
             + "AND T.RUN_ID = '" + runId + "' AND T.SCENE_ID = '" + sceneId + "' AND T.ENTITY_PARENT = '" + entityParent + "'";
             ResultSet rs = stat.executeQuery(sql);
+            int stepNo = 0;
+            String wfId = "";
             if(rs.next()){
-                int stepNo = rs.getInt("STEP_NO");
-                String wfId = rs.getString("WF_ID");
+                stepNo = rs.getInt("STEP_NO");
+                wfId = rs.getString("WF_ID");
                 this.startEtlNext(wfId,runId, entityParent, stepNo);
             }
             rs.close();
             stat.close();
+            this.stepIsFinish(wfId, runId, stepNo, "ETL");
         } catch (SQLException e) {
             this._logger.severe(e);
         }

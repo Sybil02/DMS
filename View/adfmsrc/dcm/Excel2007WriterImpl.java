@@ -9,11 +9,12 @@ import java.sql.ResultSet;
 
 import java.text.DecimalFormat;
 
+import java.text.SimpleDateFormat;
+
 import java.util.List;
 
 import oracle.adf.share.logging.ADFLogger;
 
-import oracle.jbo.jbotester.load.SimpleDateFormatter;
 import oracle.jbo.server.DBTransaction;
 
 import org.apache.commons.lang.ObjectUtils;
@@ -56,9 +57,11 @@ public class Excel2007WriterImpl extends AbstractExcel2007Writer {
                 insertRow(n);
                 for (ColumnDef col : this.colsdef) {
                     Object obj=rs.getObject(col.getDbTableCol());
-                    if(obj instanceof java.sql.Date){
-                        SimpleDateFormatter format=new SimpleDateFormatter("yyyy-MM-dd hh:mm:ss");
-                        obj=format.format((java.sql.Date)obj);
+                    if(obj instanceof java.util.Date){
+                        SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd");//"yyyy-MM-dd hh:mm:ss"
+                        if(obj != null){
+                            obj=format.format((java.util.Date)obj);
+                        }
                         createCell(colInx,(String)obj);
                     }else if(col.getDataType().equals("NUMBER")){
                         if(obj != null){

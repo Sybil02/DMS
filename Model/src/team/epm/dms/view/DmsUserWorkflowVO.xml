@@ -32,7 +32,7 @@
     <TransientExpression><![CDATA[adf.userSession.userData.userId]]></TransientExpression>
   </Variable>
   <SQLQuery>
-    <![CDATA[SELECT DISTINCT T5.ID "WORKFLOW_ID", T5.WF_NAME "WF_NAME" ,T5.WF_STATUS,T5.WF_COM,T5.WF_RUNID,T5.SEQ
+    <![CDATA[SELECT DISTINCT T5.ID "WORKFLOW_ID", T5.WF_NAME "WF_NAME" ,T5.WF_STATUS,T5.WF_COM,T5.WF_RUNID,T5.SEQ,T4.ENABLE_RUN
        FROM DMS_USER          T1,
        DMS_USER_GROUP    T2,
        DMS_GROUP_ROLE    T3,
@@ -155,6 +155,21 @@
     SQLType="NUMERIC">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="22"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="EnableRun"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="2"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="ENABLE_RUN"
+    Expression="ENABLE_RUN"
+    SQLType="VARCHAR">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="2"/>
     </DesignTime>
   </ViewAttribute>
   <ViewLinkAccessor

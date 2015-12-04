@@ -68,7 +68,7 @@ public class EditUserMBean {
             if(DmsUserImpl.isPasswordValide(newPwd)){
             ViewObject usrVo =
                 ADFUtils.findIterator("DmsUserViewIterator").getViewObject();
-            String usrAcc = (String)usrVo.getCurrentRow().getAttribute("Acc");
+            String usrAcc = ADFUtils.findIterator("DmsUserViewIterator").getCurrentRow().getAttribute("Acc").toString();
             String encyptPwd;
             try {
                 encyptPwd = DigestUtils.digestSHA1(usrAcc + pwd);

@@ -423,7 +423,7 @@
             </af:inputText>
           </af:column>
           <af:column sortProperty="#{bindings.DcmTemplateView.hints.DbView.name}"
-                     sortable="false" filterable="false"
+                     sortable="false" filterable="true"
                      headerText="#{bindings.DcmTemplateView.hints.DbView.label}"
                      id="c4">
             <af:inputText value="#{row.bindings.DbView.inputValue}"
@@ -437,7 +437,7 @@
             </af:inputText>
           </af:column>
           <af:column sortProperty="#{bindings.DcmTemplateView.hints.TmpTable.name}"
-                     sortable="false" filterable="false"
+                     sortable="false" filterable="true"
                      headerText="#{bindings.DcmTemplateView.hints.TmpTable.label}"
                      id="c11">
             <af:inputListOfValues id="tmpTableId"
@@ -451,7 +451,7 @@
             </af:inputListOfValues>
           </af:column>
           <af:column sortProperty="#{bindings.DcmTemplateView.hints.PreProgram.name}"
-                     sortable="false" filterable="false"
+                     sortable="false" filterable="true"
                      headerText="#{bindings.DcmTemplateView.hints.PreProgram.label}"
                      id="c5">
             <af:inputText value="#{row.bindings.PreProgram.inputValue}"
@@ -465,7 +465,7 @@
             </af:inputText>
           </af:column>
           <af:column sortProperty="#{bindings.DcmTemplateView.hints.HandleProgram.name}"
-                     sortable="false" filterable="false"
+                     sortable="false" filterable="true"
                      headerText="#{bindings.DcmTemplateView.hints.HandleProgram.label}"
                      id="c6">
             <af:inputText value="#{row.bindings.HandleProgram.inputValue}"
@@ -479,7 +479,7 @@
             </af:inputText>
           </af:column>
           <af:column sortProperty="#{bindings.DcmTemplateView.hints.AfterProgram.name}"
-                     sortable="false" filterable="false"
+                     sortable="false" filterable="true"
                      headerText="#{bindings.DcmTemplateView.hints.AfterProgram.label}"
                      id="c13">
             <af:inputText value="#{row.bindings.AfterProgram.inputValue}"

@@ -9,7 +9,8 @@
   BindingStyle="OracleName"
   CustomQuery="true"
   PageIterMode="Full"
-  UseGlueCode="false">
+  UseGlueCode="false"
+  OrderBy='"SEQ"'>
   <DesignTime>
     <Attr Name="_isExpertMode" Value="true"/>
   </DesignTime>
@@ -32,7 +33,7 @@
     <TransientExpression><![CDATA[adf.userSession.userData.userId]]></TransientExpression>
   </Variable>
   <SQLQuery>
-    <![CDATA[SELECT T5.ID "TEMPLATE_ID", T5.NAME "TEMPLATE_NAME"
+    <![CDATA[SELECT T5.ID "TEMPLATE_ID", T5.NAME "TEMPLATE_NAME",T5.SEQ
   FROM DMS_USER          T1,
        DMS_USER_GROUP    T2,
        DMS_GROUP_ROLE    T3,
@@ -82,6 +83,22 @@
     SQLType="VARCHAR">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="300"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="Seq"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="38"
+    Scale="0"
+    Type="oracle.jbo.domain.Number"
+    ColumnType="NUMBER"
+    AliasName="SEQ"
+    Expression="SEQ"
+    SQLType="NUMERIC">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="39"/>
     </DesignTime>
   </ViewAttribute>
   <ResourceBundle>

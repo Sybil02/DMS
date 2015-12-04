@@ -163,8 +163,12 @@ public class ValueSetAuthorityBean {
         try {
             ViewObject vo =
                 ADFUtils.findIterator("getDmsValueViewIterator").getViewObject();
-            vo.setWhereClause("MEANING like '%'");
-            vo.executeQuery();
+            if(vo != null){
+                vo.setWhereClause("MEANING like '%'");
+                vo.executeQuery();
+            }else{
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("获取VO异常，数据出错！"));    
+            }
             //清空弹出框的值集过滤框的内容
             filterValueInput.setValue("");
             RichPopup.PopupHints hint = new RichPopup.PopupHints();

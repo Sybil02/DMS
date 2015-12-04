@@ -85,6 +85,7 @@ import oracle.jbo.RowIterator;
 import oracle.jbo.ViewCriteria;
 import oracle.jbo.ViewCriteriaRow;
 import oracle.jbo.ViewObject;
+
 import oracle.jbo.jbotester.load.SimpleDateFormatter;
 import oracle.jbo.server.DBTransaction;
 
@@ -336,7 +337,7 @@ public class DcmDataDisplayBean extends TablePagination {
     }
     //数据保存操作
 
-    public void operation_save() {
+    public boolean operation_save() {
         boolean flag = true;
         String curComRecordId = this.curCombiantionRecord;
         List<Map> modelData = (List<Map>)this.dataModel.getWrappedData();
@@ -407,6 +408,7 @@ public class DcmDataDisplayBean extends TablePagination {
         if (!flag) {
             this.showErrorPop();
         }
+        return flag;
     }
     //数据重置则直接刷新数据
 
@@ -991,10 +993,12 @@ public class DcmDataDisplayBean extends TablePagination {
                 for (ColumnDef col : this.colsdef) {
                     Object obj =
                         rs.getObject(col.getDbTableCol().toUpperCase());
-                    if (obj instanceof java.sql.Date) {
-                        SimpleDateFormatter format =
-                            new SimpleDateFormatter("yyyy-MM-dd hh:mm:ss");
-                        obj = format.format((java.sql.Date)obj);
+                    if (col.getDataType().equals("DATE")) {
+                        SimpleDateFormat format =
+                            new SimpleDateFormat("yyyy-MM-dd");//"yyyy-MM-dd hh:mm:ss"
+                        if(obj != null){
+                            obj = format.format((java.util.Date)obj);
+                        }
                     } else if (col.getDataType().equals("NUMBER")) {
                         try {
                             if (obj != null)
@@ -2738,10 +2742,14 @@ public class DcmDataDisplayBean extends TablePagination {
 
     public void saveAndCommit(ActionEvent actionEvent) {
         //只读时不调用保存（输出表，只读权限）
+        boolean flag = true;
         if(!this.isReadOnly()){
-            this.operation_save();        
+            flag = this.operation_save();        
         }
-        this.commitApprove(actionEvent);
+        //校验出错，不提交
+        if(flag){
+            this.commitApprove(actionEvent);
+        }
     }
 
     public void setCommitWarnCalcPop(RichPopup commitWarnCalcPop) {

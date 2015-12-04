@@ -417,6 +417,7 @@ public class DmsWorkflowTemplateStatusVORowImpl extends ViewRowImpl {
         return (RowSet)getAttributeInternal(DMSDIMENTITYSVA);
     }
 
+
     /**
      * getAttrInvokeAccessor: generated method. Do not modify.
      * @param index the index identifying the attribute

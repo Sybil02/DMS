@@ -2,12 +2,14 @@ package dcm.template;
 
 import common.ADFUtils;
 
+import common.DmsUtils;
 import common.JSFUtils;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
 import javax.faces.event.ValueChangeEvent;
@@ -135,6 +137,9 @@ public class TemplateAuthorityBean {
     public void roleChangeListener(ValueChangeEvent valueChangeEvent) {
         FacesCtrlListBinding roleName =  (FacesCtrlListBinding) JSFUtils.resolveExpression("#{bindings.RoleName}");
         roleName.setInputValue(valueChangeEvent.getNewValue());
+        ViewObject roleTemplateVo =
+            ADFUtils.findIterator("DcmRoleTemplateViewIterator").getViewObject();
+        roleTemplateVo.executeQuery();
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.assignedtemplateTable);    
     }
 
@@ -166,5 +171,12 @@ public class TemplateAuthorityBean {
          
         vo.executeQuery(); 
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.unassignedTemplateTable);  
+    }
+
+    public void readOnlyChange(ValueChangeEvent valueChangeEvent) {
+        //更新模型层
+        valueChangeEvent.getComponent().processUpdates(FacesContext.getCurrentInstance());
+        //提交模型层
+        DmsUtils.getDcmApplicationModule().getTransaction().commit();
     }
 }

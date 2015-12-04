@@ -39,6 +39,12 @@
     <searchRegion Binds="DmsWorkflowOdiStatusVoIterator" Criteria=""
                   Customizer="oracle.jbo.uicli.binding.JUSearchBindingCustomizer"
                   id="DmsWorkflowOdiStatusVoQuery"/>
+    <searchRegion id="DmsWorkflowTemplateStatusVOQuery" Criteria=""
+                  Binds="DmsWorkflowTemplateStatusVOIterator"
+                  Customizer="oracle.jbo.uicli.binding.JUSearchBindingCustomizer"/>
+    <searchRegion Binds="DmsApproveTemplateStatusVOIterator" Criteria=""
+                  Customizer="oracle.jbo.uicli.binding.JUSearchBindingCustomizer"
+                  id="DmsApproveTemplateStatusVO1Query"/>
   </executables>
   <bindings>
     <tree IterBinding="DmsUserWorkflowVOIterator" id="DmsUserWorkflowVO">
@@ -67,18 +73,6 @@
           <Item Value="StepStatus"/>
           <Item Value="StepTask"/>
           <Item Value="WfId"/>
-        </AttrNames>
-      </nodeDefinition>
-    </tree>
-    <tree IterBinding="DmsWorkflowTemplateStatusVOIterator"
-          id="DmsWorkflowTemplateStatusVO">
-      <nodeDefinition DefName="team.epm.dms.view.DmsWorkflowTemplateStatusVO"
-                      Name="DmsWorkflowTemplateStatusVO0">
-        <AttrNames>
-          <Item Value="EntityCode"/>
-          <Item Value="WriteStatus"/>
-          <Item Value="FinishAt"/>
-          <Item Value="Meaning"/>
         </AttrNames>
       </nodeDefinition>
     </tree>
@@ -220,6 +214,30 @@
           <Item Value="ExecStatus"/>
           <Item Value="ExecBy"/>
           <Item Value="FinishAt"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <tree IterBinding="DmsWorkflowTemplateStatusVOIterator"
+          id="DmsWorkflowTemplateStatusVO1">
+      <nodeDefinition DefName="team.epm.dms.view.DmsWorkflowTemplateStatusVO"
+                      Name="DmsWorkflowTemplateStatusVO10">
+        <AttrNames>
+          <Item Value="Meaning"/>
+          <Item Value="WriteStatus"/>
+          <Item Value="WriteBy"/>
+          <Item Value="FinishAt"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <tree IterBinding="DmsApproveTemplateStatusVOIterator"
+          id="DmsApproveTemplateStatusVO1">
+      <nodeDefinition DefName="team.epm.dms.view.DmsApproveTemplateStatusVO"
+                      Name="DmsApproveTemplateStatusVO10">
+        <AttrNames>
+          <Item Value="ApprovalStatus"/>
+          <Item Value="Meaning"/>
+          <Item Value="FinishAt"/>
+          <Item Value="Name"/>
         </AttrNames>
       </nodeDefinition>
     </tree>

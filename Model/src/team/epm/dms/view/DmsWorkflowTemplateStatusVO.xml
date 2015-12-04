@@ -38,11 +38,13 @@
        DmsWorkflowTemplateStatusEO.RUN_ID, 
        DmsWorkflowTemplateStatusEO.STEP_NO, 
        DmsWorkflowTemplateStatusEO.TEMPLATE_ID, 
-       DmsWorkflowTemplateStatusEO.WRITE_BY, 
+       (SELECT NAME FROM DMS_USER T WHERE T.ID = DTEC.WRITE_BY AND T.LOCALE = 'zh_CN' ) WRITE_BY, 
        DmsWorkflowTemplateStatusEO.WRITE_STATUS, 
        DmsWorkflowTemplateStatusEO.COM_ID
-FROM WORKFLOW_TEMPLATE_STATUS DmsWorkflowTemplateStatusEO,DIM_ENTITYS DimEntitys
-where DmsWorkflowTemplateStatusEO.ENTITY_CODE = DimEntitys.CODE]]>
+FROM WORKFLOW_TEMPLATE_STATUS DmsWorkflowTemplateStatusEO,DIM_ENTITYS DimEntitys,DCM_TEM_ENTITY_COM DTEC
+WHERE DmsWorkflowTemplateStatusEO.ENTITY_CODE = DimEntitys.CODE
+AND DTEC.DCM_TEMPLATE_ID = DmsWorkflowTemplateStatusEO.Template_Id
+AND DTEC.ENTITY = DmsWorkflowTemplateStatusEO.Entity_Code]]>
   </SQLQuery>
   <EntityUsage
     Name="DmsWorkflowTemplateStatusEO"
@@ -140,7 +142,14 @@ where DmsWorkflowTemplateStatusEO.ENTITY_CODE = DimEntitys.CODE]]>
     PrecisionRule="true"
     EntityAttrName="WriteBy"
     EntityUsage="DmsWorkflowTemplateStatusEO"
-    AliasName="WRITE_BY"/>
+    AliasName="WRITE_BY">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="team.epm.dms.view.DmsWorkflowTemplateStatusVO.WriteBy_LABEL"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewAttribute
     Name="WriteStatus"
     IsNotNull="true"

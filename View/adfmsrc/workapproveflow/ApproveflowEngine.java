@@ -91,8 +91,12 @@ public class ApproveflowEngine {
                     FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("启动审批同一顺序审批人返回多个，请检查审批人顺序配置！"));        
                 }
                 db.commit();
+                //
+                WorkflowEngine wfe = new WorkflowEngine();
+                Map<String,String> wfMap = wfe.getWfCom(wfId, runId);
+                String wfName = "【" + wfMap.get("wfName") + "】";
                 //发送邮件
-                this.sendMail(templateId,comName,userId,commitUser, "工作流表单审核！","请及时审核：","");
+                this.sendMail(templateId,comName,userId,commitUser, wfName + "工作流表单审核！","请及时审核：","");
             }
             if(!isAppTemp){
                 //如果没有配置审批，则默认审批通过，检测同步骤中其他子部门是否全部输入完成，通过审核,是否进行下一步
@@ -181,18 +185,13 @@ public class ApproveflowEngine {
                 nextSql.append("AND PERSON_ID = '").append(nextUserId).append("'");
                 stat.executeUpdate(nextSql.toString());
                 trans.commit();
+                //
+                WorkflowEngine wfe = new WorkflowEngine();
+                Map<String,String> wfMap = wfe.getWfCom(wfId, runId);
+                String wfName = "【" + wfMap.get("wfName") + "】";
                 //send mail to user
-                this.sendMail(templateId,comName,nextUserId,commitUser,"工作流表单审核！", "请及时审核：","");
+                this.sendMail(templateId,comName,nextUserId,commitUser,wfName + "工作流表单审核！", "请及时审核：","");
             }else{
-                //不存在下一个审批人，部门审批结束,发送邮件通知提交者。
-//                String uSql = "SELECT WRITE_BY FROM WORKFLOW_TEMPLATE_STATUS T WHERE T.RUN_ID = '"
-//                    + runId + "' AND T.TEMPLATE_ID = '" + templateId + "' AND T.COM_ID = '"
-//                    + comId + "'";
-//                ResultSet uRs = stat.executeQuery(uSql);
-//                if(uRs.next()){
-//                    this.sendMail(templateId, comName, uRs.getString("WRITE_BY"),commitUser,"审批通过！", "审批通过！","");    
-//                }
-//                uRs.close();
                 //检查父节点是否全部审批通过，全部通过则启动下一个个步骤，否则不操作
                 WorkflowEngine wfEngine = new WorkflowEngine();
                 wfEngine.startNext(wfId, runId, templateId, comId, comName, stepNo, "APPROVE",commitUser);

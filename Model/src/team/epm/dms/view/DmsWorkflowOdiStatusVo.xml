@@ -24,14 +24,13 @@
     <![CDATA[SELECT T.RUN_ID,
        T.STEP_NO,
        T.SCENE_ID,
-       T.ODI_ARGS,
+       (SELECT MEANING FROM DIM_ENTITYS WHERE CODE = T.ODI_ARGS AND LOCALE = 'zh_CN') ODI_ARGS,
        T.EXEC_STATUS,
        D.NAME EXEC_BY,
        T.FINISH_AT,
        T.ENTITY_PARENT
   FROM WORKFLOW_ODI_STATUS T, DMS_USER D
- WHERE T.EXEC_BY = D.ID
-   AND D.LOCALE = 'zh_CN']]>
+ WHERE T.EXEC_BY = D.ID(+)]]>
   </SQLQuery>
   <ViewAttribute
     Name="RunId"
@@ -81,15 +80,16 @@
     Name="OdiArgs"
     IsUpdateable="false"
     IsPersistent="false"
+    IsNotNull="true"
     PrecisionRule="true"
-    Precision="100"
+    Precision="80"
     Type="java.lang.String"
     ColumnType="VARCHAR2"
     AliasName="ODI_ARGS"
     Expression="ODI_ARGS"
     SQLType="VARCHAR">
     <DesignTime>
-      <Attr Name="_DisplaySize" Value="100"/>
+      <Attr Name="_DisplaySize" Value="80"/>
     </DesignTime>
     <Properties>
       <SchemaBasedProperties>
@@ -149,7 +149,7 @@
     ColumnType="DATE"
     AliasName="FINISH_AT"
     Expression="FINISH_AT"
-    SQLType="TIMESTAMP">
+    SQLType="DATE">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="7"/>
     </DesignTime>

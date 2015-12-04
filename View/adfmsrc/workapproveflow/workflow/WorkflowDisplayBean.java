@@ -31,9 +31,15 @@ import oracle.adf.view.rich.component.rich.RichPopup;
 import oracle.adf.view.rich.component.rich.data.RichTable;
 import oracle.adf.view.rich.component.rich.input.RichSelectOneChoice;
 import oracle.adf.view.rich.context.AdfFacesContext;
+
+import oracle.jbo.Key;
 import oracle.jbo.Row;
+import oracle.jbo.ViewCriteria;
+import oracle.jbo.ViewCriteriaRow;
 import oracle.jbo.ViewObject;
-import oracle.jbo.server.DBTransaction; 
+import oracle.jbo.server.DBTransaction;
+
+import org.apache.myfaces.trinidad.event.SelectionEvent;
 
 import workapproveflow.WorkflowEngine;
  
@@ -67,7 +73,7 @@ public class WorkflowDisplayBean {
     private RichSelectOneChoice writeSoc;
     private RichPopup closeWfPop;
     private RichPopup odiPop;
-
+    private boolean disableRun = true;
 
     public WorkflowDisplayBean() {
         super();
@@ -151,6 +157,7 @@ public class WorkflowDisplayBean {
         this.runPop.show(hints);
     }
     
+    String odiAliasName = "";
     public void showDetails(ActionEvent actionEvent) {
       //   Add event code here...
         tempItemList.clear();
@@ -178,8 +185,23 @@ public class WorkflowDisplayBean {
             String StepNo = curRow.getAttribute("StepNo").toString();
             approveflow(runId,StepNo);
         }else if(stepTask.equals("ETL")){
+            DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
+            Statement stat=trans.createStatement(DBTransaction.DEFAULT);
             String runId = curRow.getAttribute("RunId").toString();
             String stepNo = curRow.getAttribute("StepNo").toString();
+            String sceneId = curRow.getAttribute("StepObject").toString();
+            String aSql = "SELECT T.SCENE_ALIAS FROM ODI11_SCENE T WHERE T.LOCALE = 'zh_CN' AND T.ID = '" + sceneId + "'";
+            ResultSet aRs;
+            try {
+                aRs = stat.executeQuery(aSql);
+                if(aRs.next()){
+                    odiAliasName = "ODI接口："+aRs.getString("SCENE_ALIAS");
+                }
+                aRs.close();
+                stat.close();
+            } catch (SQLException e) {
+                this._logger.severe(e);
+            }
             this.odiStatus(runId, stepNo);
         }else{
             FacesContext.getCurrentInstance().addMessage(null,new FacesMessage("不能查看该列详情！"));
@@ -192,6 +214,7 @@ public class WorkflowDisplayBean {
         DCIteratorBinding odiIter = ADFUtils.findIterator("DmsWorkflowOdiStatusVoIterator");
         ViewObject odiVo = odiIter.getViewObject();
         String whereClause = " RUN_ID = '" + runId + "'" + " AND STEP_NO = " + stepNo;
+
         odiVo.setWhereClause(whereClause);
         odiVo.executeQuery();
         RichPopup.PopupHints odihint = new RichPopup.PopupHints();
@@ -256,7 +279,7 @@ public class WorkflowDisplayBean {
                 item.setLabel(rs.getString("name"));
                 tempItemList.add(item);
             }
-            rs.close();;
+            rs.close();
             stat.close();
         } catch (SQLException e) {
             this._logger.severe(e);
@@ -456,8 +479,8 @@ public class WorkflowDisplayBean {
         wftsVo.setWhereClause(sql.toString());
         wftsVo.executeQuery();
         // 刷新表格
-//        AdfFacesContext adfFacesContext = AdfFacesContext.getCurrentInstance();
-//        adfFacesContext.addPartialTarget(JSFUtils.findComponentInRoot("t6"));
+        AdfFacesContext adfFacesContext = AdfFacesContext.getCurrentInstance();
+        adfFacesContext.addPartialTarget(JSFUtils.findComponentInRoot("t6"));
     }
     
     public void valueChangeTemp(ValueChangeEvent valueChangeEvent) {
@@ -479,10 +502,12 @@ public class WorkflowDisplayBean {
         sql.append(stepNo).append("\'");
         ViewObject wftsVo = wftsIter.getViewObject();
         wftsVo.setWhereClause(sql.toString());
+
         wftsVo.executeQuery();
+
        // 刷新表格
-//        AdfFacesContext adfFace = AdfFacesContext.getCurrentInstance();
-//        adfFace.addPartialTarget(JSFUtils.findComponentInRoot("t5"));
+        AdfFacesContext adfFace = AdfFacesContext.getCurrentInstance();
+        adfFace.addPartialTarget(JSFUtils.findComponentInRoot("t5"));
        
     }
 
@@ -573,5 +598,39 @@ public class WorkflowDisplayBean {
 
     public RichPopup getOdiPop() {
         return odiPop;
+    }
+
+    public void setOdiAliasName(String odiAliasName) {
+        this.odiAliasName = odiAliasName;
+    }
+
+    public String getOdiAliasName() {
+        return odiAliasName;
+    }
+
+    public void makeCurrentRow(SelectionEvent selectionEvent) {
+        RichTable wfTable = (RichTable)selectionEvent.getSource();
+        CollectionModel cm = (CollectionModel)wfTable.getValue();
+        JUCtrlHierBinding tableBinding = (JUCtrlHierBinding)cm.getWrappedData();
+        DCIteratorBinding iter = tableBinding.getDCIteratorBinding();
+        JUCtrlHierNodeBinding selectedRowData = (JUCtrlHierNodeBinding)wfTable.getSelectedRowData();
+        Key rowKey = selectedRowData.getRowKey();
+        iter.setCurrentRowWithKey(rowKey.toStringFormat(true));
+        Row row = selectedRowData.getRow();
+        String enableRun  = row.getAttribute("EnableRun").toString();
+        if("Y".equals(enableRun)){
+            this.disableRun = false; 
+        }else{
+            this.disableRun = true; 
+        }
+        
+    }
+
+    public void setDisableRun(boolean disableRun) {
+        this.disableRun = disableRun;
+    }
+
+    public boolean isDisableRun() {
+        return disableRun;
     }
 }
