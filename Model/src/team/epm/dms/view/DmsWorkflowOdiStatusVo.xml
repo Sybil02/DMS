@@ -178,6 +178,12 @@
     <DesignTime>
       <Attr Name="_DisplaySize" Value="32"/>
     </DesignTime>
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="team.epm.dms.view.DmsWorkflowOdiStatusVo.EntityParent_LABEL"/>
+      </SchemaBasedProperties>
+    </Properties>
   </ViewAttribute>
   <ResourceBundle>
     <PropertiesBundle

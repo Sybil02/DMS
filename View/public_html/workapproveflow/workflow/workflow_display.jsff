@@ -175,26 +175,31 @@
                             selectedRowKeys="#{bindings.DmsWorkflowOdiStatusVo.collectionModel.selectedRow}"
                             selectionListener="#{bindings.DmsWorkflowOdiStatusVo.collectionModel.makeCurrent}"
                             rowSelection="single" id="t8">
+                    <af:column headerText="#{bindings.DmsWorkflowOdiStatusVo.hints.EntityParent.label}" filterable="true"
+                                sortProperty="#{bindings.DmsWorkflowOdiStatusVo.hints.EntityParent.name}" sortable="true" width="100"
+                               id="c11">
+                      <af:outputText value="#{row.EntityParent}" id="ot9"/>
+                    </af:column>
                     <af:column sortProperty="#{bindings.DmsWorkflowOdiStatusVo.hints.OdiArgs.name}"
-                               filterable="true" sortable="true" width="100"
+                               sortable="true" width="100"
                                headerText="#{bindings.DmsWorkflowOdiStatusVo.hints.OdiArgs.label}"
                                id="c6">
                       <af:outputText value="#{row.OdiArgs eq null ? '不分实体': row.OdiArgs}" id="ot3"/>
                     </af:column>
                     <af:column sortProperty="#{bindings.DmsWorkflowOdiStatusVo.hints.ExecStatus.name}"
-                               sortable="true" width="100"
+                               sortable="true" width="70"
                                headerText="#{bindings.DmsWorkflowOdiStatusVo.hints.ExecStatus.label}"
                                id="c10">
-                      <af:outputText value="#{row.ExecStatus eq 'N' ? '未完成':(row.ExecStatus eq 'Y' ? '完成':'未开启')}" id="ot4"/>
+                      <af:outputText value='#{row.ExecStatus eq "N" ? "未完成":(row.ExecStatus eq "Y" ? "完成":(row.ExecStatus eq "EXEC_CALC" ? "正在计算":"未开启"))}' id="ot4"/>
                     </af:column>
                     <af:column sortProperty="#{bindings.DmsWorkflowOdiStatusVo.hints.ExecBy.name}"
-                               sortable="true" width="100"
+                               sortable="true" width="80"
                                headerText="#{bindings.DmsWorkflowOdiStatusVo.hints.ExecBy.label}"
                                id="c9">
                       <af:outputText value="#{row.ExecBy}" id="ot5"/>
                     </af:column>
                     <af:column sortProperty="#{bindings.DmsWorkflowOdiStatusVo.hints.FinishAt.name}"
-                               sortable="true" width="157"
+                               sortable="true" width="140"
                                headerText="#{bindings.DmsWorkflowOdiStatusVo.hints.FinishAt.label}"
                                id="c5">
                       <f:facet name="filter">

@@ -365,7 +365,8 @@ public class WorkflowEngine {
                 int wNo = lRs.getInt("STEP_NO");
                 //查询填写模板的步骤存在的父节点，且部门父节点对应的ODI参数节点
                 String aSql = "SELECT DISTINCT T.ENTITY_PARENT,T.ODI_PARAM FROM WORKFLOW_TEMPLATE_STATUS W,DCM_ENTITY_PARENT D,DMS_WORKFLOW_ODI_PARAM T "
-                    + "WHERE W.ENTITY_CODE = D.ENTITY AND T.ENTITY_PARENT = D.PARENT AND W.RUN_ID = '" + runId + "' AND W.STEP_NO = " + wNo;
+                    + "WHERE W.ENTITY_CODE = D.ENTITY AND T.ENTITY_PARENT = D.PARENT AND W.RUN_ID = '" + runId + "' AND W.STEP_NO = " + wNo
+                    + " AND T.SCENE_ID = '" + sceneId + "'";
                 lRs.close();
                 ResultSet rs = stat.executeQuery(aSql);
                 while(rs.next()){
@@ -1777,7 +1778,7 @@ public class WorkflowEngine {
                 
                 stat.executeUpdate(wspSql.toString());
                 //更改步骤状态为working
-                String uSql = "update dms_workflow_status t set t.step_status = 'WORKING',,t.finish_at = '' " + "where t.wf_id = '" + wfId + 
+                String uSql = "update dms_workflow_status t set t.step_status = 'WORKING',t.finish_at = '' " + "where t.wf_id = '" + wfId + 
                               "' and t.run_id = '" + runId + "' and t.step_no =" + stepNo;
                 stat.executeUpdate(uSql);
                 trans.commit();

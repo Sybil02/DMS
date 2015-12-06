@@ -5,9 +5,29 @@
           xmlns:af="http://xmlns.oracle.com/adf/faces/rich"
           xmlns:c="http://java.sun.com/jsp/jstl/core">
   <c:set var="viewBundle" value="#{adfBundle['dms_v']}"/>
-  <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+ <jsp:directive.page contentType="text/html;charset=UTF-8" import="javax.crypto.Cipher" />
   <f:view>
     <af:document id="d1" title="#{viewBundle['title.login']}">
+
+      <c:if test="${param._sso=='true'}">
+        <af:resource type="javascript">
+            var username="${param.username}";
+            var password="${param.password}";
+            if(username == null || username == ''){
+                alert('用户名不能为空！');
+            }
+            if(password == null || password == ''){
+                alert('密码不能为空！');
+            }
+                setTimeout(function(){
+                    document.getElementById('login_account::content').setAttribute("value",username);
+                    document.getElementById('login_password::content').setAttribute("value",password);
+                    document.getElementById("login_action").click();//提交表单，做登陆操作
+                },1000);
+            
+        </af:resource> 
+        
+      </c:if>
       <af:form id="f1" defaultCommand="login_action">
         <af:panelStretchLayout id="psl1" startWidth="50%" endWidth="0px"
                                topHeight="30%"

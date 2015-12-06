@@ -214,6 +214,7 @@
           <Item Value="ExecStatus"/>
           <Item Value="ExecBy"/>
           <Item Value="FinishAt"/>
+          <Item Value="EntityParent"/>
         </AttrNames>
       </nodeDefinition>
     </tree>
