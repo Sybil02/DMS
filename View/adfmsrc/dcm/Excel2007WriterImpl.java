@@ -58,7 +58,7 @@ public class Excel2007WriterImpl extends AbstractExcel2007Writer {
                 for (ColumnDef col : this.colsdef) {
                     Object obj=rs.getObject(col.getDbTableCol());
                     if(obj instanceof java.util.Date){
-                        SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd");//"yyyy-MM-dd hh:mm:ss"
+                        SimpleDateFormat format=new SimpleDateFormat("yyyy/MM/dd");//"yyyy-MM-dd hh:mm:ss"
                         if(obj != null){
                             obj=format.format((java.util.Date)obj);
                         }

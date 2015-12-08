@@ -995,7 +995,7 @@ public class DcmDataDisplayBean extends TablePagination {
                         rs.getObject(col.getDbTableCol().toUpperCase());
                     if (col.getDataType().equals("DATE")) {
                         SimpleDateFormat format =
-                            new SimpleDateFormat("yyyy-MM-dd");//"yyyy-MM-dd hh:mm:ss"
+                            new SimpleDateFormat("yyyy/MM/dd");//"yyyy-MM-dd hh:mm:ss"
                         if(obj != null){
                             obj = format.format((java.util.Date)obj);
                         }

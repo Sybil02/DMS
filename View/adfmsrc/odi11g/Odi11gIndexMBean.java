@@ -21,6 +21,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
 import javax.faces.model.SelectItem;
@@ -136,9 +138,34 @@ public class Odi11gIndexMBean {
                 this.popup.show(hint);
             } else {
                 //没有参数
-                this.run(sceneVo.getCurrentRow(), new HashMap());
+                if(this.getRunNum("R")==0){
+                    this.run(sceneVo.getCurrentRow(), new HashMap());                  
+                }else{
+                    this.insertExecQueue(sceneVo.getCurrentRow(), new HashMap());  
+                    this.showStatusPopup(actionEvent);
+                }
+
             }
         }
+    }
+    
+    private int getRunNum(String status){
+        DBTransaction trans =
+            (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
+        Statement stat = trans.createStatement(DBTransaction.DEFAULT);
+        int num = 0;
+        String sql = "SELECT COUNT(1) RUNNUM FROM ODI11_SCENE_EXEC T WHERE T.EXEC_STATUS = '" + status + "'";
+        try {
+            ResultSet rs = stat.executeQuery(sql);
+            if(rs.next()){
+                num = rs.getInt("RUNNUM"); 
+            }
+            rs.close();
+            stat.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return num;
     }
 
     public void refreshSceneStatus(ActionEvent actionEvent) throws MalformedURLException {
@@ -246,10 +273,36 @@ public class Odi11gIndexMBean {
         return odiCredentialType;
     }
 
+    private void insertExecQueue(Row sceneRow, Map params){
+        String sceneId = ObjectUtils.toString(sceneRow.getAttribute("Id"));
+        StringBuffer parmStr = new StringBuffer();
+        for (Object v : params.keySet()) {
+            parmStr.append("#").append(v);
+            parmStr.append(":").append(params.get(v));
+        }
+
+        //插入执行队列
+        ViewObject execVo =
+            DmsUtils.getOdi11gApplicationModule().getOdi11SceneExecView();
+        String clearHistorySql =
+            "delete from odi11_scene_exec t where t.scene_id='" + sceneId +
+            "' and t.params " +
+            (params.isEmpty() ? "is null" : ("='" + parmStr.toString() +
+                                             "'"));
+        ((DBTransaction)execVo.getApplicationModule().getTransaction()).executeCommand(clearHistorySql);
+        Row execRow = execVo.createRow();
+        execRow.setAttribute("SceneId", sceneId);
+        execRow.setAttribute("Params", parmStr.toString());
+        execRow.setAttribute("ExecStatus", "QUEUE");
+        execVo.insertRow(execRow);
+        execVo.getApplicationModule().getTransaction().commit();
+    }
+
     private void run(Row sceneRow, Map params) throws MalformedURLException {
         StringBuffer parmStr = new StringBuffer();
-        for (Object v : params.values()) {
+        for (Object v : params.keySet()) {
             parmStr.append("#").append(v);
+            parmStr.append(":").append(params.get(v));
         }
         //不允许同一接口使用相同的参数同时执行
         if (this.isRunning((String)sceneRow.getAttribute("Id"),
@@ -294,6 +347,11 @@ public class Odi11gIndexMBean {
             OdiStartType response =
                 requestPortType.invokeStartScen(odiStartScenRequest);
             String sessionNum = ((Long)response.getSession()).toString();
+            
+            //odi queue
+            //接口运行，更新sessionNum
+ 
+            //odi queue
             //插入执行记录
             ViewObject execVo =
                 DmsUtils.getOdi11gApplicationModule().getOdi11SceneExecView();
@@ -336,7 +394,13 @@ public class Odi11gIndexMBean {
             if(!isRunning(sid,para)){
                 if("D".equals(this.queryStatus(execRow))){
                     System.out.println("ETL IS FINISH........"+para);
+                    //检查工作流接口
                     this.checkEtlStep(sid,params);   
+                    //检查队列中是否还有待执行接口
+                    if(this.getRunNum("QUEUE") > 0){
+                        this.executeNext();    
+                        this.showQueueNum();
+                    }
                 }    
             }
             this.refreshStatus(sceneId);
@@ -345,6 +409,66 @@ public class Odi11gIndexMBean {
         } catch (IndexOutOfBoundsException e) {
             this._logger.severe("Agent or Workrepository may not exits!");
             this._logger.severe(e);
+        }
+    }
+    
+    private void showQueueNum(){
+        DBTransaction trans =
+            (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
+        Statement stat = trans.createStatement(DBTransaction.DEFAULT);
+        String sql = "UPDATE ODI11_SCENE_EXEC T SET T.LOG_TEXT = '系统当前队列中" +this.getRunNum("QUEUE")+ "个接口待执行！'"
+            + " WHERE T.EXEC_STATUS = 'QUEUE'";
+        try {
+            stat.executeUpdate(sql);
+            trans.commit();
+            stat.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void executeNext(){
+        DBTransaction trans =
+            (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
+        Statement stat = trans.createStatement(DBTransaction.DEFAULT);
+        String sql = "SELECT T.SCENE_ID,T.PARAMS FROM ODI11_SCENE_EXEC T WHERE T.EXEC_STATUS = 'QUEUE' ORDER BY T.CREATED_AT ASC";
+        ResultSet rs;
+        try {
+            String sceneId = "";
+            String paramStr = "";
+            rs = stat.executeQuery(sql);
+            if(rs.next()){
+                sceneId = rs.getString("SCENE_ID");
+                paramStr = rs.getString("PARAMS");
+            }
+            rs.close();
+            stat.close();
+            
+            Map params = new LinkedHashMap();
+            
+            paramStr = paramStr.substring(1, paramStr.length());
+            String[] str = paramStr.split("#");
+            for (int i = 0; i < str.length; i++) {
+                String[] s = str[i].split(":");
+                //s[0]:列名，s[1]：值
+                params.put(s[0], s[1]);
+            }
+            
+            ViewObject vo = DmsUtils.getOdi11gApplicationModule().getOdi11SceneView();
+            ViewCriteria vc = vo.createViewCriteria();
+            ViewCriteriaRow vcRow = vc.createViewCriteriaRow();
+            vcRow.setAttribute("Id", "='"+sceneId+"'");
+            vcRow.setConjunction(vcRow.VC_CONJ_AND);
+            vc.addElement(vcRow);
+            vo.applyViewCriteria(vc);
+            vo.executeQuery();
+            Row sceneRow = vo.first();
+            vo.getViewCriteriaManager().setApplyViewCriteriaName(null);
+            this.run(sceneRow, params);
+
+            
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -534,7 +658,16 @@ public class Odi11gIndexMBean {
         for (Row row : rows) {
             params.put(row.getAttribute("PName"), row.getAttribute("value"));
         }
-        this.run(sceneVo.getCurrentRow(), params);
+        
+        if(this.getRunNum("R")==0){
+            this.run(sceneVo.getCurrentRow(), params);                 
+        }else{
+            this.insertExecQueue(sceneVo.getCurrentRow(), params);   
+            this.showQueueNum();
+            this.showStatusPopup(actionEvent);
+            this.popup.cancel();
+        }
+        
     }
 
     public void setParamTable(RichTable paramTable) {
