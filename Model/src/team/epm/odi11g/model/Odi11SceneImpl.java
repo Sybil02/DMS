@@ -149,6 +149,16 @@ public class Odi11SceneImpl extends DmsEntityImpl {
                 obj.setWorkrepId((String)value);
             }
         }
+        ,
+        Remarks {
+            public Object get(Odi11SceneImpl obj) {
+                return obj.getRemarks();
+            }
+
+            public void put(Odi11SceneImpl obj, Object value) {
+                obj.setRemarks((String)value);
+            }
+        }
         ;
         private static AttributesEnum[] vals = null;
         private static final int firstIndex = 0;
@@ -191,6 +201,7 @@ public class Odi11SceneImpl extends DmsEntityImpl {
     public static final int UPDATEDBY = AttributesEnum.UpdatedBy.index();
     public static final int CREATEDBY = AttributesEnum.CreatedBy.index();
     public static final int WORKREPID = AttributesEnum.WorkrepId.index();
+    public static final int REMARKS = AttributesEnum.Remarks.index();
 
     /**
      * This is the default constructor (do not remove).
@@ -415,6 +426,22 @@ public class Odi11SceneImpl extends DmsEntityImpl {
      */
     public void setWorkrepId(String value) {
         setAttributeInternal(WORKREPID, value);
+    }
+
+    /**
+     * Gets the attribute value for Remarks, using the alias name Remarks.
+     * @return the Remarks
+     */
+    public String getRemarks() {
+        return (String)getAttributeInternal(REMARKS);
+    }
+
+    /**
+     * Sets <code>value</code> as the attribute value for Remarks.
+     * @param value value to set the Remarks
+     */
+    public void setRemarks(String value) {
+        setAttributeInternal(REMARKS, value);
     }
 
     /**

@@ -18,7 +18,8 @@
        Odi11Scene.UPDATED_AT, 
        Odi11Scene.UPDATED_BY, 
        Odi11Scene.CREATED_BY, 
-       Odi11Scene.WORKREP_ID"
+       Odi11Scene.WORKREP_ID, 
+       Odi11Scene.REMARKS"
   FromList="ODI11_SCENE Odi11Scene"
   BindingStyle="OracleName"
   CustomQuery="false"
@@ -242,4 +243,21 @@
       </SchemaBasedProperties>
     </Properties>
   </ViewAttribute>
+  <ViewAttribute
+    Name="Remarks"
+    PrecisionRule="true"
+    EntityAttrName="Remarks"
+    EntityUsage="Odi11Scene"
+    AliasName="REMARKS">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="team.epm.odi11g.view.Odi11SceneView.Remarks_LABEL"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
+  <ResourceBundle>
+    <PropertiesBundle
+      PropertiesFile="ModelBundle"/>
+  </ResourceBundle>
 </ViewObject>

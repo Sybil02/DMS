@@ -276,6 +276,10 @@
                                        id="si1"/>
                       </af:selectOneChoice>
                     </af:column>
+                    <af:column headerText="#{bindings.Odi11AuthedSceneView.hints.Remarks.label}"
+                                width="700" id="c13">
+                      <af:outputText value="#{row.Remarks}" id="ot6"/>
+                    </af:column>
                   </af:table>
                 </af:panelCollection>
               </f:facet>

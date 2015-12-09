@@ -560,6 +560,19 @@
               <f:selectItems value="#{row.bindings.CatId.items}" id="si2"/>
             </af:selectOneChoice>
           </af:column>
+          <af:column headerText="#{bindings.Odi11SceneView.hints.Remarks.label}"
+                     width="250"
+                     id="c26">
+            <af:inputText value="#{row.bindings.Remarks.inputValue}"
+                          label="#{bindings.Odi11SceneView.hints.Remarks.label}"
+                          required="#{bindings.Odi11SceneView.hints.Remarks.mandatory}"
+                          columns="#{bindings.Odi11SceneView.hints.Remarks.displayWidth}"
+                          maximumLength="#{bindings.Odi11SceneView.hints.Remarks.precision}"
+                          shortDesc="#{bindings.Odi11SceneView.hints.Remarks.tooltip}"
+                          id="it17">
+              <f:validator binding="#{row.bindings.Remarks.validator}"/>
+            </af:inputText>
+          </af:column>
         </af:table>
       </af:panelCollection>
     </f:facet>

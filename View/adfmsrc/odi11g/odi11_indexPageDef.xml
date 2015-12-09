@@ -35,6 +35,7 @@
           <Item Value="SceneAlias"/>
           <Item Value="UpdatedAt"/>
           <Item Value="UpdatedBy"/>
+          <Item Value="Remarks"/>
         </AttrNames>
       </nodeDefinition>
     </tree>

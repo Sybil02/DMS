@@ -67,6 +67,7 @@
                        id="c4">
               <af:selectOneChoice id="soc3" autoSubmit="true"
                                   required="#{bindings.DmsWorkflowStepsVO.hints.LabelObject.mandatory}"
+                                  rendered="#{row.bindings.StepTask.inputValue ne 'APPROVE' and row.bindings.StepTask.inputValue ne 'ETL'}"
                                   label="#{row.bindings.LabelObject.label}"
                                   value="#{row.bindings.LabelObject.inputValue}" >
                 <f:selectItems value="#{backingBeanScope.workflowEditBean.taskObjItemList}"
@@ -77,6 +78,7 @@
                        id="c9">
               <af:selectOneChoice 
               autoSubmit="true"
+              rendered="#{row.bindings.StepTask.inputValue ne 'APPROVE' and row.bindings.StepTask.inputValue ne 'OPEN TEMPLATES'}"
               required="#{bindings.DmsWorkflowStepsVO.hints.EtlObject.mandatory}"
               label="#{row.bindings.EtlObject.label}" 
               value="#{row.bindings.EtlObject.inputValue}" 
@@ -89,8 +91,19 @@
                        id="c7">
               <af:commandImageLink text="#{viewBundle['dms.wf.setpro']}"  id="cil1"
                                    partialSubmit="true"
-                                   rendered="#{row.bindings.StepTask.inputValue ne 'APPROVE'}"
+                                   rendered="#{row.bindings.StepTask.inputValue ne 'APPROVE' and row.bindings.StepTask.inputValue ne 'ETL'}"
                                    actionListener="#{backingBeanScope.workflowEditBean.showProPop}"/>
+            </af:column>
+            <af:column headerText="#{bindings.DmsWorkflowStepsVO.hints.PreStep.label}"
+                       id="c12">
+              <af:selectOneChoice id="soc12"  autoSubmit="true"
+                                    label="#{row.bindings.PreStep.label}"
+                                    rendered="#{row.bindings.StepTask.inputValue ne 'APPROVE' and row.bindings.StepTask.inputValue ne 'ETL'}"
+                                    required="#{bindings.DmsWorkflowStepsVO.hints.PreStep.mandatory}"
+                                    value="#{row.bindings.PreStep.inputValue}">
+                <af:selectItem label="是" value="Y" id="sij4"/>
+                <af:selectItem label="否" value="N" id="sij3"/>
+                </af:selectOneChoice>
             </af:column>
           </af:table>
       </af:panelCollection>

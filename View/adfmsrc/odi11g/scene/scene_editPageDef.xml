@@ -36,6 +36,7 @@
           <Item Value="WorkrepId"/>
           <Item Value="AgentId"/>
           <Item Value="CatId"/>
+          <Item Value="Remarks"/>
         </AttrNames>
       </nodeDefinition>
     </tree>
