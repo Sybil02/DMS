@@ -2583,10 +2583,27 @@ public class DcmDataDisplayBean extends TablePagination {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("请尝试审批人账号回退！"));
             return;
         }
-        //查询当前审批步骤之前的填写表单步骤 
+        
+        //查询是否有集中审批步骤
+        String jSql = "SELECT MAX(T.STEP_NO) STEP_NO FROM DMS_WORKFLOW_STEPS T WHERE T.WF_ID = '" + this.curWfId + "'"
+            + " AND T.PRE_STEP = 'Y' AND T.STEP_NO < " + this.stepNo;
+        System.out.println("JZSP:"+jSql);
+        int jstepNo = 0;
+        try {
+            ResultSet jRs = stat.executeQuery(jSql);
+            if(jRs.next()){
+                jstepNo = jRs.getInt("STEP_NO");    
+            }
+            jRs.close();
+        } catch (SQLException e) {
+            this._logger.severe(e);
+        }
+
+        //查询当前审批步骤之前的填写表单步骤
         String backSql = "SELECT DISTINCT T.STEP_NO,D.NAME,D.ID,T.ENTITY_CODE,E.MEANING FROM WORKFLOW_TEMPLATE_STATUS T,DCM_TEMPLATE D,DIM_ENTITYS E "
             + "WHERE T.TEMPLATE_ID = D.ID AND D.LOCALE = 'zh_CN' " + "AND T.RUN_ID = '"
-            + this.curRunId + "' AND T.STEP_NO <= " + this.approveStepNo + " AND T.ENTITY_CODE IN "
+            + this.curRunId + "' AND T.STEP_NO <= " + this.approveStepNo + " AND T.STEP_NO >= " + jstepNo
+            + " AND T.ENTITY_CODE IN "
             + "(SELECT P.ENTITY FROM DCM_ENTITY_PARENT P WHERE P.PARENT = " 
             + "(SELECT DISTINCT P1.PARENT FROM WORKFLOW_TEMPLATE_STATUS W,DCM_ENTITY_PARENT P1 "
             + "WHERE W.ENTITY_CODE = P1.ENTITY AND W.COM_ID = '" + this.curCombiantionRecord + "')) "
