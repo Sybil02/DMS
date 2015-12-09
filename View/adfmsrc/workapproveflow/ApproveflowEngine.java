@@ -6,6 +6,7 @@ import common.MailSender;
 
 import dms.login.Person;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -15,6 +16,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import java.util.Map;
+
+import java.util.UUID;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -38,6 +41,54 @@ public class ApproveflowEngine {
         this.curUser =
                 (Person)ADFContext.getCurrent().getSessionScope().get("cur_user");
     }
+    
+    //更新审批人
+    public void updateApproveUser(String runId, String templateId,String entityCode,String comId,int stepNo){
+        DBTransaction db =
+            (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
+        Statement stmt = db.createStatement(DBTransaction.DEFAULT);
+        
+        String iSql = "INSERT INTO APPROVE_TEMPLATE_STATUS VALUES (?,?,?,?,?,?,?,?,?,SYSDATE,SYSDATE,?,?,?)";
+        PreparedStatement stat =
+            db.createPreparedStatement(iSql, 0);
+        //删除原来的审批信息
+        String dSql = "DELETE FROM APPROVE_TEMPLATE_STATUS T WHERE T.RUN_ID = '" + runId + "' AND T.TEMPLATE_ID = '" + templateId + "' "
+            + "AND T.ENTITY_ID = '" + entityCode + "'";
+        //查询现在的审批配置
+        String sql = "SELECT T2.USER_ID FROM DMS_APPROVALFLOWINFO T1, DMS_APPROVALFLOW_ENTITYS T2 "
+            + "WHERE T1.ID = T2.APPROVAL_ID AND T1.LOCALE = T2.LOCALE AND T1.LOCALE = 'zh_CN' "
+            + "AND T1.TEMPLATE_ID = '"+templateId+"' AND T2.CODE = '" + entityCode + "' ORDER BY T2.CODE, T2.SEQ";
+        ResultSet rs;
+        try {
+            stmt.executeUpdate(dSql);
+            db.commit();
+            rs = stmt.executeQuery(sql);
+            while(rs.next()){
+                stat.setString(1, UUID.randomUUID().toString().replace("-", ""));   
+                stat.setString(2, runId);
+                stat.setString(3, templateId);
+                stat.setString(4, entityCode);
+                stat.setInt(5, stepNo);
+                stat.setString(6, rs.getString("USER_ID"));
+                stat.setString(7, "CLOSE");
+                stat.setString(8, "zh_CN");
+                stat.setString(9, null);
+                stat.setString(10, this.curUser.getId());
+                stat.setString(11, this.curUser.getId());
+                stat.setString(12, comId);
+                stat.addBatch();
+            }
+            stat.executeBatch();
+            rs.close();
+            stmt.close();
+            stat.close();
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+    
     //开启审批流当中一个部门，审批人
     //审批状态  未开启：CLOSE 开启：APPROVEING 通过：Y 
 

@@ -1886,6 +1886,9 @@ public class DcmDataDisplayBean extends TablePagination {
         if (stepTask != null && stepTask.equals("APPROVE")) {
             ApproveflowEngine approveEgn = new ApproveflowEngine();
             try {
+                //更新审批人
+                approveEgn.updateApproveUser(this.curRunId,this.curTempalte.getId(),this.curEntityCode,this.curCombiantionRecord,this.stepNo+1);
+                
                 //打开部门审批，发送邮件
                 approveEgn.startApproveEntity(this.curWfId,
                                               this.curRunId,

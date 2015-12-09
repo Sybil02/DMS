@@ -4,7 +4,7 @@
       <Factory className="oracle.jdeveloper.db.adapter.DatabaseProviderFactory"/>
       <RefAddresses>
          <StringRefAddr addrType="sid">
-            <Contents>hy07</Contents>
+            <Contents>o148</Contents>
          </StringRefAddr>
          <StringRefAddr addrType="subtype">
             <Contents>oraJDBC</Contents>
@@ -13,7 +13,7 @@
             <Contents>1521</Contents>
          </StringRefAddr>
          <StringRefAddr addrType="hostname">
-            <Contents>10.112.0.157</Contents>
+            <Contents>10.112.0.149</Contents>
          </StringRefAddr>
          <StringRefAddr addrType="user">
             <Contents>dms</Contents>
