@@ -193,6 +193,17 @@ public class DmsApproveTemplateStatusVORowImpl extends ViewRowImpl {
             }
         }
         ,
+        Seq {
+            public Object get(DmsApproveTemplateStatusVORowImpl obj) {
+                return obj.getSeq();
+            }
+
+            public void put(DmsApproveTemplateStatusVORowImpl obj,
+                            Object value) {
+                obj.setSeq((Number)value);
+            }
+        }
+        ,
         DmsDimEntitysVA {
             public Object get(DmsApproveTemplateStatusVORowImpl obj) {
                 return obj.getDmsDimEntitysVA();
@@ -260,6 +271,7 @@ public class DmsApproveTemplateStatusVORowImpl extends ViewRowImpl {
     public static final int UPDATEDAT = AttributesEnum.UpdatedAt.index();
     public static final int UPDATEDBY = AttributesEnum.UpdatedBy.index();
     public static final int COMID = AttributesEnum.ComId.index();
+    public static final int SEQ = AttributesEnum.Seq.index();
     public static final int DMSDIMENTITYSVA = AttributesEnum.DmsDimEntitysVA.index();
     public static final int DMSUSERVA = AttributesEnum.DmsUserVA.index();
 
@@ -531,6 +543,22 @@ public class DmsApproveTemplateStatusVORowImpl extends ViewRowImpl {
      */
     public void setComId(String value) {
         setAttributeInternal(COMID, value);
+    }
+
+    /**
+     * Gets the attribute value for the calculated attribute Seq.
+     * @return the Seq
+     */
+    public Number getSeq() {
+        return (Number) getAttributeInternal(SEQ);
+    }
+
+    /**
+     * Sets <code>value</code> as the attribute value for the calculated attribute Seq.
+     * @param value value to set the  Seq
+     */
+    public void setSeq(Number value) {
+        setAttributeInternal(SEQ, value);
     }
 
     /**

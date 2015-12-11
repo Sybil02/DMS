@@ -68,6 +68,13 @@
                                sortable="true">
                       <af:outputText value="#{row.Name}" id="ot22"/>
                     </af:column>
+                    <af:column headerText="#{bindings.DmsApproveTemplateStatusVO1.hints.Seq.label}"
+                               id="c13">
+                      <af:outputText value="#{row.Seq}" id="ot10">
+                        <af:convertNumber groupingUsed="false"
+                                          pattern="#{bindings.DmsApproveTemplateStatusVO1.hints.Seq.format}"/>
+                      </af:outputText>
+                    </af:column>
                     <af:column sortProperty="#{bindings.DmsApproveTemplateStatusVO1.hints.ApprovalStatus.name}"
                                sortable="true"
                                headerText="#{bindings.DmsApproveTemplateStatusVO1.hints.ApprovalStatus.label}"

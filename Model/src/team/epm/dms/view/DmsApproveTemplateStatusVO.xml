@@ -12,7 +12,7 @@
   ComponentClass="team.epm.dms.view.DmsApproveTemplateStatusVOImpl"
   PageIterMode="Full"
   UseGlueCode="false"
-  OrderBy='"MEANING"'>
+  OrderBy='"MEANING","SEQ"'>
   <DesignTime>
     <Attr Name="_codeGenFlag2" Value="Access|Coll|VarAccess"/>
     <Attr Name="_isCodegen" Value="true"/>
@@ -48,7 +48,10 @@
        DmsApproveTemplateStatusEO.TEMPLATE_ID, 
        DmsApproveTemplateStatusEO.UPDATED_AT, 
        DmsApproveTemplateStatusEO.UPDATED_BY, 
-       DmsApproveTemplateStatusEO.COM_ID
+       DmsApproveTemplateStatusEO.COM_ID,
+       (SELECT DISTINCT DE.SEQ FROM DMS_APPROVALFLOWINFO INFO,DMS_APPROVALFLOW_ENTITYS DE 
+       WHERE INFO.ID = DE.APPROVAL_ID AND INFO.TEMPLATE_ID = DmsApproveTemplateStatusEO.Template_Id
+       AND DE.CODE = DmsApproveTemplateStatusEO.Entity_Id AND DE.USER_ID = DmsApproveTemplateStatusEO.Person_Id) SEQ
 FROM APPROVE_TEMPLATE_STATUS DmsApproveTemplateStatusEO ,DIM_ENTITYS DimEntitys,DMS_USER DmsUser
 where DmsApproveTemplateStatusEO.ENTITY_ID = DimEntitys.CODE and
 DmsApproveTemplateStatusEO.PERSON_ID = DmsUser.ID]]>
@@ -214,6 +217,26 @@ DmsApproveTemplateStatusEO.PERSON_ID = DmsUser.ID]]>
     EntityAttrName="ComId"
     EntityUsage="DmsApproveTemplateStatusEO"
     AliasName="COM_ID"/>
+  <ViewAttribute
+    Name="Seq"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Type="oracle.jbo.domain.Number"
+    ColumnType="NUMBER"
+    AliasName="SEQ"
+    Expression="SEQ"
+    SQLType="NUMERIC">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="39"/>
+    </DesignTime>
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="team.epm.dms.view.DmsApproveTemplateStatusVO.Seq_LABEL"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ResourceBundle>
     <PropertiesBundle
       PropertiesFile="ModelBundle"/>

@@ -239,6 +239,7 @@
           <Item Value="Meaning"/>
           <Item Value="FinishAt"/>
           <Item Value="Name"/>
+          <Item Value="Seq"/>
         </AttrNames>
       </nodeDefinition>
     </tree>

@@ -2024,8 +2024,8 @@ public class DcmDataDisplayBean extends TablePagination {
                 if (aRs.next()) {
                     String appStatus = aRs.getString("APPROVAL_STATUS");
                     this.approveStepNo = aRs.getInt("STEP_NO");
-                    //close状态可以回退
-                    if(appStatus.equals("CLOSE")){
+                    //填数为N，审批close状态可以回退
+                    if(appStatus.equals("CLOSE") && this.writeStatus.equals("N")){
                         this.isEnd = false;
                     }
                     //审批通过判断是否是最后节点，是则可以回退
@@ -2064,7 +2064,9 @@ public class DcmDataDisplayBean extends TablePagination {
                             this.approveStepNo = this.stepNo;
                         }else{
                             //下一步是审批，但该部门没有配置审批，如果下一步骤不存在该父节点，则可以回退
+                            if(this.writeStatus != "CLOSE"){
                             this.isEnd = this.isEndNode(this.stepNo);
+                            }
                         }   
                     }else{
                         //没有下一步,可以回退
@@ -2107,7 +2109,7 @@ public class DcmDataDisplayBean extends TablePagination {
                 "where t1.entity_code = t2.entity and t1.template_id = '" +
                 this.curTempalte.getId() + "' " + "and t1.com_id = '" +
                 this.curCombiantionRecord + "')) " + "and a.run_id = '" +
-                this.curRunId + "' " + "and a.step_no = " + nextStepNo;
+                this.curRunId + "' and a.write_status <> 'CLOSE' " + "and a.step_no = " + nextStepNo;
             ResultSet rRs = stat.executeQuery(rSql);
             if (rRs.next()) {
                 flag = true;
@@ -2645,6 +2647,11 @@ public class DcmDataDisplayBean extends TablePagination {
             }
             bRs.close();
             stat.close();
+            if(backList.size() == 0){
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("该部门没有维护工作流部门父子关系！"));    
+                return;
+            }
+
             this.backSoc.setValue(backList.get(0).getValue());
             ValueChangeEvent vcEvent = new ValueChangeEvent(this.backSoc,"",backList.get(0).getValue());
             this.backSocChangeValue(vcEvent);

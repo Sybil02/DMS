@@ -38,13 +38,13 @@
        DmsWorkflowTemplateStatusEO.RUN_ID, 
        DmsWorkflowTemplateStatusEO.STEP_NO, 
        DmsWorkflowTemplateStatusEO.TEMPLATE_ID, 
-       (SELECT NAME FROM DMS_USER T WHERE T.ID = DTEC.WRITE_BY AND T.LOCALE = 'zh_CN' ) WRITE_BY, 
+       (SELECT DISTINCT T.NAME FROM DMS_USER T,DCM_TEM_ENTITY_COM D WHERE T.ID = D.WRITE_BY AND T.LOCALE = 'zh_CN'
+       AND D.DCM_TEMPLATE_ID = DmsWorkflowTemplateStatusEO.Template_Id
+       AND D.ENTITY = DmsWorkflowTemplateStatusEO.Entity_Code  ) WRITE_BY, 
        DmsWorkflowTemplateStatusEO.WRITE_STATUS, 
        DmsWorkflowTemplateStatusEO.COM_ID
-FROM WORKFLOW_TEMPLATE_STATUS DmsWorkflowTemplateStatusEO,DIM_ENTITYS DimEntitys,DCM_TEM_ENTITY_COM DTEC
-WHERE DmsWorkflowTemplateStatusEO.ENTITY_CODE = DimEntitys.CODE
-AND DTEC.DCM_TEMPLATE_ID = DmsWorkflowTemplateStatusEO.Template_Id
-AND DTEC.ENTITY = DmsWorkflowTemplateStatusEO.Entity_Code]]>
+FROM WORKFLOW_TEMPLATE_STATUS DmsWorkflowTemplateStatusEO,DIM_ENTITYS DimEntitys
+WHERE DmsWorkflowTemplateStatusEO.ENTITY_CODE = DimEntitys.CODE]]>
   </SQLQuery>
   <EntityUsage
     Name="DmsWorkflowTemplateStatusEO"
