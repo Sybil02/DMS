@@ -1793,7 +1793,7 @@ public class DcmDataDisplayBean extends TablePagination {
                 FacesContext.getCurrentInstance().addMessage(null,
                                                              new FacesMessage("程序执行成功！"));
                 //更新执行时间
-                String tSql = "UPDATE DCM_TEMPLATE_CALC T SET T.CALC_ARGS = TO_CHAR(SYSDATE,'yyyy-MM-dd HH:mm:ss') "
+                String tSql = "UPDATE DCM_TEMPLATE_CALC T SET T.CALC_ARGS = TO_CHAR(SYSDATE,'yyyy-MM-dd HH24:mm:ss') "
                     + "WHERE T.TEMPLATE_ID = '" + this.curTempalte.getId() + "' "
                     + "AND T.CALC_ID = '" + this.curCalcId + "'";
                 stat.executeUpdate(tSql);
@@ -2212,6 +2212,39 @@ public class DcmDataDisplayBean extends TablePagination {
         return _comboboxLOVBeanList;
     }
     
+    public boolean checkTempEntity(){
+        //List<String> backTemp,List<String> backEntity
+        DBTransaction trans =
+            (DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
+        Statement stat = trans.createStatement(DBTransaction.DEFAULT);
+        String sql = "SELECT DISTINCT ENTITY_CODE FROM WORKFLOW_TEMPLATE_STATUS T WHERE T.RUN_ID = '" + this.curRunId 
+                     + "' AND T.TEMPLATE_ID IN (";
+        for(String str : this.backTemp){
+            sql = sql + "'" + str + "',";    
+        }
+        sql = sql + "'')";
+        
+        List<String> allEntityList = new ArrayList<String>();
+        try {
+            ResultSet rs = stat.executeQuery(sql);
+            while(rs.next()){
+                allEntityList.add(rs.getString("ENTITY_CODE"));  
+            }
+            rs.close();
+            stat.close();
+        } catch (SQLException e) {
+            this._logger.severe(e);
+        }
+        
+        for(String et : this.backEntity){
+            if(!allEntityList.contains(et)){
+                return false;    
+            }    
+        }
+        
+        return true;    
+    }
+    
     //部分工作流存在前面步骤是销售部，后面的步骤只有缺省，销售部和缺省挂在同一父节点下，
     //例如选择了销售部，则默认选中缺省，选择缺省，则默认选择了所有的销售部
     public void addDefaultEntity(){
@@ -2251,6 +2284,13 @@ public class DcmDataDisplayBean extends TablePagination {
         this.isEnd = true;
         this.approveStatus = "Y";
         int specifyStepNo = Integer.parseInt(this.backSoc.getValue().toString());
+        
+        //检查选择的实体是否在表单上存在
+        if(!this.checkTempEntity()){
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("回退的部门不在所选的表单中，请重新选择！"));
+            return;
+        }
+        
         WorkflowEngine wfEngine = new WorkflowEngine();
         //如果存在缺省，则添加缺省的实体
         this.addDefaultEntity();

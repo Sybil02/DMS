@@ -401,7 +401,14 @@ public class Odi11gIndexMBean {
                         this.executeNext();    
                         this.showQueueNum();
                     }
+                }else if("E".equals(this.queryStatus(execRow))){
+                    //检查队列中是否还有待执行接口
+                    if(this.getRunNum("QUEUE") > 0){
+                        this.executeNext();    
+                        this.showQueueNum();
+                    }
                 }    
+                
             }
             this.refreshStatus(sceneId);
             //workflow odi
@@ -636,7 +643,7 @@ public class Odi11gIndexMBean {
         ViewCriteria vc = sceneExecVo.createViewCriteria();
         ViewCriteriaRow vcr = vc.createViewCriteriaRow();
         vcr.setAttribute("SceneId", "='" + sceneId + "'");
-        vcr.setAttribute("CreatedBy", "='" + userId + "'");
+        //vcr.setAttribute("CreatedBy", "='" + userId + "'");
         vcr.setConjunction(vcr.VC_CONJ_AND);
         vc.addElement(vcr);
         sceneExecVo.applyViewCriteria(vc);
@@ -697,7 +704,7 @@ public class Odi11gIndexMBean {
         ViewCriteriaRow vcr = vc.createViewCriteriaRow();
         vcr.setAttribute("SceneId", "='" + sceneId + "'");
         vc.addElement(vcr);
-        vcr.setAttribute("CreatedBy", "='" + userId + "'");
+        //vcr.setAttribute("CreatedBy", "='" + userId + "'");
         vcr.setConjunction(vcr.VC_CONJ_AND);
         vc.addElement(vcr);
         sceneExecVo.applyViewCriteria(vc);

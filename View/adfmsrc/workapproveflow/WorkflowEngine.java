@@ -1145,7 +1145,7 @@ public class WorkflowEngine {
             List<String> childList = this.getChildEntity(templateId, comId);
             
             for(String calc : proList){
-                if(this.executePro(calc, childList,wfId,stepNo)){
+                if(this.executePro(calc, childList,wfId,runId,stepNo)){
                     continue;    
                 }else{
                     break;
@@ -1424,7 +1424,7 @@ public class WorkflowEngine {
         return comIdMap;    
     }
     
-    public boolean executePro(String pro,List<String> childList,String wfId,int stepNo){
+    public boolean executePro(String pro,List<String> childList,String wfId,String runId,int stepNo){
         DBTransaction trans =
             (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
         Statement stat = trans.createStatement(DBTransaction.DEFAULT);
@@ -1451,7 +1451,10 @@ public class WorkflowEngine {
             this._logger.severe(e);
         }
         
-        for(String args : argsList){
+        //转换参数
+        List<String> comIdList = this.getArgsComId(wfId, runId, argsList);
+        
+        for(String args : comIdList){
             //执行程序
             try {
                 //执行程序
@@ -1491,54 +1494,70 @@ public class WorkflowEngine {
         return flag;
     }
     
-//    public boolean executePro(String pro,Map<String,List<String>> comIdMap){
-//        DBTransaction trans =
-//            (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
-//        Statement stat = trans.createStatement(DBTransaction.DEFAULT);
-//        CallableStatement cs =
-//            trans.createCallableStatement("{CALL " + pro +
-//                                          "(?,?,?,?,?,?,?)}", 0);
-//        
-//        boolean flag = false;
-//        for(Map.Entry<String,List<String>> entry : comIdMap.entrySet()){
-//            for(String comId : entry.getValue()){
-//                try {
-//                    String sql = "SELECT ARGS FROM DMS_WORKFLOW_PRO_ARGS T WHERE T.CALC_PRO = '" + pro + "' AND T.COM_ID = '" + comId + "'";
-//                    String args = "";
-//                    //获取参数
-//                    ResultSet rs = stat.executeQuery(sql);
-//                    if(rs.next()){
-//                        args = rs.getString("ARGS");
-//                        System.out.println("args:" + args);
-//                    }
-//                    rs.close();
-//                    //执行程序
-//                    cs.setString(1, entry.getKey());
-//                    cs.setString(2, comId);
-//                    cs.setString(3, this.curUser.getId());
-//                    cs.setString(4, "EDIT");
-//                    cs.setString(5, this.curUser.getLocale());
-//                    cs.setString(6, args);
-//                    //获取返回值
-//                    cs.registerOutParameter(7, Types.VARCHAR);
-//                    cs.execute();
-//                    String str = cs.getString(7);
-//                    if("true".equals(str)){
-//                        trans.commit();   
-//                        flag = true;
-//                    }else{
-//                        trans.rollback();    
-//                        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(pro+"计算程序执行出错！"));
-//                        return false;
-//                    }
-//                } catch (SQLException e) {
-//                    this._logger.severe(e);
-//                }
-//            }  
-//        }
-//        
-//        return flag;
-//    }
+    public List<String> getArgsComId(String wfId,String runId,List<String> argsList){
+        DBTransaction trans =
+            (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
+        Statement stat = trans.createStatement(DBTransaction.DEFAULT);
+        List<String> comIdList = new ArrayList<String>();
+        //查询组合source表
+        String sql = "SELECT C.CODE FROM DMS_WORKFLOWINFO T,WORKFLOW_TEMPLATE_STATUS W,DCM_TEMPLATE D,DCM_COMBINATION C "
+            + "WHERE T.WF_RUNID = W.RUN_ID AND W.TEMPLATE_ID = D.ID AND D.COMBINATION_ID = C.ID "
+            + "AND T.ID = '" + wfId + "'";
+        //从source中查询组合ID
+        String cSql = "SELECT ID FROM ";
+        String source = "";
+        try {
+            ResultSet rs = stat.executeQuery(sql);
+            if(rs.next()){
+                source = rs.getString("CODE");
+            }else{
+                return new ArrayList<String>();    
+            }
+            rs.close();
+            
+            cSql = cSql + source + " WHERE 1=1";
+            
+            Map comMap = this.getWfCom(wfId, runId);
+            String openCom = comMap.get("comCode").toString();
+            openCom = openCom.substring(0, openCom.length() - 1);
+            String[] str = openCom.split("#");
+            for (int i = 0; i < str.length; i++) {
+                if(str[i].startsWith("FY")){
+                    cSql = cSql + " AND YEARS = '" + str[i] + "'";    
+                }else if(str[i].startsWith("V")){
+                    cSql = cSql + " AND VERSION = '" + str[i] + "'";
+                }else{
+                    cSql = cSql + " AND SCENARIO = '" + str[i] + "'";    
+                }
+            }
+            
+            if(source.equals("QB_ENTITYS_YEAR")){
+                cSql = cSql + " AND QB_ENTITYS IN (";
+            }else if(source.equals("FF_ENTITYS_YEAR")){
+                cSql = cSql + " AND FF_ENTITYS IN (";
+            }else if(source.equals("FY_SYSDEP_COM")){
+                cSql = cSql + " AND FY_ENTITYS IN (";
+            }
+            
+            for(String args : argsList){
+                cSql = cSql + "'" + args + "',";
+            }
+            
+            cSql = cSql + "'')";
+            
+            ResultSet cRs = stat.executeQuery(cSql);
+            while(cRs.next()){
+                comIdList.add(cRs.getString("ID")); 
+            }
+            cRs.close();
+            stat.close();
+            
+        } catch (SQLException e) {
+            this._logger.severe(e);
+        }
+        return comIdList;
+    }
+    
     
     public List<String> getStepPro(int stepNo,String wfId){
         DBTransaction trans =
