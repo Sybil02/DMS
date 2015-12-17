@@ -141,8 +141,10 @@ public class Odi11gIndexMBean {
                 if(this.getRunNum("R")==0){
                     this.run(sceneVo.getCurrentRow(), new HashMap());                  
                 }else{
+
                     this.insertExecQueue(sceneVo.getCurrentRow(), new HashMap());  
                     this.showStatusPopup(actionEvent);
+                    this.checkRunAndQueue();
                 }
 
             }
@@ -376,21 +378,6 @@ public class Odi11gIndexMBean {
             //workflow odi
             final String sid = (String)sceneRow.getAttribute("Id");
             final String para = parmStr.toString();
-//            Runnable rb = new Runnable(){
-//                public void run(){
-//                    try {
-//                        
-//                        while(isRunning(sid, para)){
-//                            System.out.println("五秒后再次检查执行状态...");
-//                            Thread.sleep(5000);
-//                        }
-//                        
-//                    } catch (Exception e) {
-//                        e.printStackTrace();
-//                    }
-//                }    
-//            };
-//            rb.run();
             
             
             for(int i=0;i<10000;i++){
@@ -407,25 +394,37 @@ public class Odi11gIndexMBean {
                 }
             }
             
+            Runnable rb = new Runnable(){
+                public void run(){
+                    try {
+                        Thread.sleep(3000);
+                        while(isRunning(sid, para)){
+                            System.out.println("五秒后再次检查执行状态...");
+                            Thread.sleep(5000);
+                        }
+                        
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }    
+            };
+            rb.run();
+            
             if(!isRunning(sid,para)){
-                if("D".equals(this.queryStatus(execRow))){
+                if("D".equals(this.getStatus(sid,para))){
                     System.out.println("ETL IS FINISH........"+para);
                     //检查工作流接口
                     this.checkEtlStep(sid,params);   
-                    //检查队列中是否还有待执行接口
-                    if(this.getRunNum("QUEUE") > 0){
-                        this.executeNext();    
-                        this.showQueueNum();
-                    }
-                }else if("E".equals(this.queryStatus(execRow))){
-                    //检查队列中是否还有待执行接口
-                    if(this.getRunNum("QUEUE") > 0){
-                        this.executeNext();    
-                        this.showQueueNum();
-                    }
-                }    
+                }
+                
+                //检查队列中是否还有待执行接口
+                if(this.getRunNum("QUEUE") > 0){
+                    this.executeNext();    
+                    this.showQueueNum();
+                }
                 
             }
+            
             this.refreshStatus(sceneId);
             //workflow odi
             
@@ -433,6 +432,31 @@ public class Odi11gIndexMBean {
             this._logger.severe("Agent or Workrepository may not exits!");
             this._logger.severe(e);
         }
+    }
+    
+    public String getStatus(String sceneId,String params){
+        String status = "D";
+        ViewObject execVo =
+            DmsUtils.getOdi11gApplicationModule().getOdi11SceneExecView();
+        ViewCriteria vc = execVo.createViewCriteria();
+        ViewCriteriaRow row = vc.createViewCriteriaRow();
+        row.setAttribute("SceneId", "='" + sceneId + "'");
+
+        if (params.length() > 0) {
+            row.setAttribute("Params", "='" + params + "'");
+        } else {
+            row.setAttribute("Params", " is null");
+        }
+        row.setConjunction(row.VC_CONJ_AND);
+        vc.addElement(row);
+        execVo.applyViewCriteria(vc);
+        execVo.executeQuery();
+        if (execVo.hasNext()) {
+            Row execRow = execVo.next();
+            status = this.queryStatus(execRow);
+        }
+        execVo.getViewCriteriaManager().setApplyViewCriteriaNames(null);
+        return status;
     }
     
     private void showQueueNum(){
@@ -470,6 +494,10 @@ public class Odi11gIndexMBean {
 
             Map params = new LinkedHashMap();
             
+            //更新执行人为创建者
+            String bSql = "UPDATE ODI11_SCENE_EXEC T SET T.CREATED_BY = '" + createBy + "',T.UPDATED_BY = '" + createBy
+                + "' WHERE T.SCENE_ID = '" + sceneId + "' AND T.PARAMS = '" + paramStr + "'";
+            
             paramStr = paramStr.substring(1, paramStr.length());
             String[] str = paramStr.split("#");
             for (int i = 0; i < str.length; i++) {
@@ -490,9 +518,6 @@ public class Odi11gIndexMBean {
             vo.getViewCriteriaManager().setApplyViewCriteriaName(null);
             this.run(sceneRow, params);
 
-            //更新执行人为创建者
-            String bSql = "UPDATE ODI11_SCENE_EXEC T SET T.CREATED_BY = '" + createBy + "',T.UPDATED_BY = '" + createBy
-                + "' WHERE T.SCENE_ID = '" + sceneId + "' AND T.PARAMS = '" + paramStr + "'";
             stat.executeUpdate(bSql);
             trans.commit();
             
@@ -561,7 +586,36 @@ public class Odi11gIndexMBean {
         
     }
     
-    //检查
+    //检查系统接口运行状态，调用排队接口
+    public void checkRunAndQueue(){
+        ViewObject execVo =
+            DmsUtils.getOdi11gApplicationModule().getOdi11SceneExecView();
+        ViewCriteria vc = execVo.createViewCriteria();
+        ViewCriteriaRow row = vc.createViewCriteriaRow();
+
+        row.setAttribute("ExecStatus", " in ('R','Q','W')");
+        row.setConjunction(row.VC_CONJ_AND);
+        vc.addElement(row);
+        execVo.applyViewCriteria(vc);
+        execVo.executeQuery();
+        if (execVo.hasNext()) {
+            Row execRow = execVo.next();
+
+            String status = this.queryStatus(execRow);
+            if ("D,E".contains(status)) {
+                if(this.getRunNum("QUEUE") > 0){
+                    this.executeNext();    
+                    this.showQueueNum();
+                }
+            }
+        }else{
+            if(this.getRunNum("QUEUE") > 0){
+                this.executeNext();    
+                this.showQueueNum();
+            }   
+        }
+        execVo.getViewCriteriaManager().setApplyViewCriteriaNames(null);
+    }
     
     private final boolean isRunning(String sceneId,
                               String params) throws MalformedURLException {
@@ -678,6 +732,7 @@ public class Odi11gIndexMBean {
                 queryStatus(row);
             }
         }
+        this.checkRunAndQueue();
     }
 
     public void execute(ActionEvent actionEvent) throws MalformedURLException {
@@ -690,11 +745,16 @@ public class Odi11gIndexMBean {
             params.put(row.getAttribute("PName"), row.getAttribute("value"));
         }
         
+        
         if(this.getRunNum("R")==0){
             this.run(sceneVo.getCurrentRow(), params);                 
         }else{
             this.insertExecQueue(sceneVo.getCurrentRow(), params);   
             this.showQueueNum();
+            
+            //检查全部ODI状态，调用排队
+            this.checkRunAndQueue();
+            
             this.showStatusPopup(actionEvent);
             this.popup.cancel();
         }
