@@ -376,21 +376,37 @@ public class Odi11gIndexMBean {
             //workflow odi
             final String sid = (String)sceneRow.getAttribute("Id");
             final String para = parmStr.toString();
-            Runnable rb = new Runnable(){
-                public void run(){
-                    try {
-                        
-                        while(isRunning(sid, para)){
-                            System.out.println("五秒后再次检查执行状态...");
-                            Thread.sleep(5000);
-                        }
-                        
-                    } catch (Exception e) {
-                        e.printStackTrace();
+//            Runnable rb = new Runnable(){
+//                public void run(){
+//                    try {
+//                        
+//                        while(isRunning(sid, para)){
+//                            System.out.println("五秒后再次检查执行状态...");
+//                            Thread.sleep(5000);
+//                        }
+//                        
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
+//                }    
+//            };
+//            rb.run();
+            
+            
+            for(int i=0;i<10000;i++){
+                try {
+                    Thread.sleep(1000);
+                    if(i%5==0){
+                    if(!isRunning(sid, para)){
+                        break;    
                     }
-                }    
-            };
-            rb.run();
+                    System.out.println("五秒后再次检查执行状态...");
+                    }
+                } catch (Exception e) {
+                    this._logger.severe("ODI排队检查异常***************************************************"+e);
+                }
+            }
+            
             if(!isRunning(sid,para)){
                 if("D".equals(this.queryStatus(execRow))){
                     System.out.println("ETL IS FINISH........"+para);
@@ -438,7 +454,8 @@ public class Odi11gIndexMBean {
         DBTransaction trans =
             (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
         Statement stat = trans.createStatement(DBTransaction.DEFAULT);
-        String sql = "SELECT T.SCENE_ID,T.PARAMS FROM ODI11_SCENE_EXEC T WHERE T.EXEC_STATUS = 'QUEUE' ORDER BY T.CREATED_AT ASC";
+        String sql = "SELECT T.SCENE_ID,T.PARAMS,T.CREATED_BY FROM ODI11_SCENE_EXEC T WHERE T.EXEC_STATUS = 'QUEUE' ORDER BY T.CREATED_AT ASC";
+        String createBy = "";
         ResultSet rs;
         try {
             String sceneId = "";
@@ -447,10 +464,10 @@ public class Odi11gIndexMBean {
             if(rs.next()){
                 sceneId = rs.getString("SCENE_ID");
                 paramStr = rs.getString("PARAMS");
+                createBy = rs.getString("CREATED_BY");
             }
             rs.close();
-            stat.close();
-            
+
             Map params = new LinkedHashMap();
             
             paramStr = paramStr.substring(1, paramStr.length());
@@ -473,6 +490,11 @@ public class Odi11gIndexMBean {
             vo.getViewCriteriaManager().setApplyViewCriteriaName(null);
             this.run(sceneRow, params);
 
+            //更新执行人为创建者
+            String bSql = "UPDATE ODI11_SCENE_EXEC T SET T.CREATED_BY = '" + createBy + "',T.UPDATED_BY = '" + createBy
+                + "' WHERE T.SCENE_ID = '" + sceneId + "' AND T.PARAMS = '" + paramStr + "'";
+            stat.executeUpdate(bSql);
+            trans.commit();
             
         } catch (Exception e) {
             e.printStackTrace();
@@ -538,6 +560,8 @@ public class Odi11gIndexMBean {
         }
         
     }
+    
+    //检查
     
     private final boolean isRunning(String sceneId,
                               String params) throws MalformedURLException {

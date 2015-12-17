@@ -601,14 +601,16 @@ public class WorkflowEngine {
             StringBuffer stepNoSql = new StringBuffer();
             int approveNo = stepNo;
             stepNoSql.append("select STEP_NO from dms_workflow_status where step_task = 'APPROVE' ");
-            stepNoSql.append("and step_no > ").append(stepNo);
-            stepNoSql.append("order by step_no");
+            stepNoSql.append(" and run_id = '").append(runId).append("'");
+            stepNoSql.append(" and step_no > ").append(stepNo);
+            stepNoSql.append(" order by step_no");
             ResultSet snRs = stat.executeQuery(stepNoSql.toString());
             if(snRs.next()){
-                approveNo = snRs.getInt("STEP_NO");        
+                approveNo = snRs.getInt("STEP_NO");    
+                //初始化每张模板的审批状态
+                this.initApproveStatus(runId, approveNo, tempEntityMap);
             }
-            //初始化每张模板的审批状态
-            this.initApproveStatus(runId, approveNo, tempEntityMap);
+            snRs.close();
             stat.close();
         } catch (SQLException e) {
             this._logger.severe(e);
@@ -756,14 +758,16 @@ public class WorkflowEngine {
             StringBuffer stepNoSql = new StringBuffer();
             int approveNo = stepNo;
             stepNoSql.append("select STEP_NO from dms_workflow_status where step_task = 'APPROVE' ");
-            stepNoSql.append("and step_no > ").append(stepNo);
-            stepNoSql.append("order by step_no");
+            stepNoSql.append(" and run_id = '").append(runId).append("'");
+            stepNoSql.append(" and step_no > ").append(stepNo);
+            stepNoSql.append(" order by step_no");
             ResultSet snRs = stat.executeQuery(stepNoSql.toString());
             if(snRs.next()){
-                approveNo = snRs.getInt("STEP_NO");        
+                approveNo = snRs.getInt("STEP_NO");
+                //初始化每张模板的审批状态
+                this.initApproveStatus(runId, approveNo, tempEntityMap);
             }
-            //初始化每张模板的审批状态
-            this.initApproveStatus(runId, approveNo, tempEntityMap);
+            snRs.close();
             stat.close();
         } catch (SQLException e) {
             this._logger.severe(e);
@@ -1519,7 +1523,7 @@ public class WorkflowEngine {
             
             Map comMap = this.getWfCom(wfId, runId);
             String openCom = comMap.get("comCode").toString();
-            openCom = openCom.substring(0, openCom.length() - 1);
+            openCom = openCom.substring(1, openCom.length());
             String[] str = openCom.split("#");
             for (int i = 0; i < str.length; i++) {
                 if(str[i].startsWith("FY")){
