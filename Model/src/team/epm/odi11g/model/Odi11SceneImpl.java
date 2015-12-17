@@ -159,6 +159,16 @@ public class Odi11SceneImpl extends DmsEntityImpl {
                 obj.setRemarks((String)value);
             }
         }
+        ,
+        QueueCategory {
+            public Object get(Odi11SceneImpl obj) {
+                return obj.getQueueCategory();
+            }
+
+            public void put(Odi11SceneImpl obj, Object value) {
+                obj.setQueueCategory((String)value);
+            }
+        }
         ;
         private static AttributesEnum[] vals = null;
         private static final int firstIndex = 0;
@@ -202,6 +212,7 @@ public class Odi11SceneImpl extends DmsEntityImpl {
     public static final int CREATEDBY = AttributesEnum.CreatedBy.index();
     public static final int WORKREPID = AttributesEnum.WorkrepId.index();
     public static final int REMARKS = AttributesEnum.Remarks.index();
+    public static final int QUEUECATEGORY = AttributesEnum.QueueCategory.index();
 
     /**
      * This is the default constructor (do not remove).
@@ -442,6 +453,22 @@ public class Odi11SceneImpl extends DmsEntityImpl {
      */
     public void setRemarks(String value) {
         setAttributeInternal(REMARKS, value);
+    }
+
+    /**
+     * Gets the attribute value for QueueCategory, using the alias name QueueCategory.
+     * @return the QueueCategory
+     */
+    public String getQueueCategory() {
+        return (String)getAttributeInternal(QUEUECATEGORY);
+    }
+
+    /**
+     * Sets <code>value</code> as the attribute value for QueueCategory.
+     * @param value value to set the QueueCategory
+     */
+    public void setQueueCategory(String value) {
+        setAttributeInternal(QUEUECATEGORY, value);
     }
 
     /**

@@ -19,7 +19,8 @@
        Odi11Scene.UPDATED_BY, 
        Odi11Scene.CREATED_BY, 
        Odi11Scene.WORKREP_ID, 
-       Odi11Scene.REMARKS"
+       Odi11Scene.REMARKS, 
+       Odi11Scene.QUEUE_CATEGORY"
   FromList="ODI11_SCENE Odi11Scene"
   BindingStyle="OracleName"
   CustomQuery="false"
@@ -253,6 +254,19 @@
       <SchemaBasedProperties>
         <LABEL
           ResId="team.epm.odi11g.view.Odi11SceneView.Remarks_LABEL"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="QueueCategory"
+    PrecisionRule="true"
+    EntityAttrName="QueueCategory"
+    EntityUsage="Odi11Scene"
+    AliasName="QUEUE_CATEGORY">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="team.epm.odi11g.view.Odi11SceneView.QueueCategory_LABEL"/>
       </SchemaBasedProperties>
     </Properties>
   </ViewAttribute>

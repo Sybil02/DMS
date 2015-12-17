@@ -37,6 +37,7 @@
           <Item Value="AgentId"/>
           <Item Value="CatId"/>
           <Item Value="Remarks"/>
+          <Item Value="QueueCategory"/>
         </AttrNames>
       </nodeDefinition>
     </tree>

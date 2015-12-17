@@ -573,6 +573,18 @@
               <f:validator binding="#{row.bindings.Remarks.validator}"/>
             </af:inputText>
           </af:column>
+          <af:column headerText="#{bindings.Odi11SceneView.hints.QueueCategory.label}"
+                     id="c27">
+            <af:inputText value="#{row.bindings.QueueCategory.inputValue}"
+                          label="#{bindings.Odi11SceneView.hints.QueueCategory.label}"
+                          required="#{bindings.Odi11SceneView.hints.QueueCategory.mandatory}"
+                          columns="#{bindings.Odi11SceneView.hints.QueueCategory.displayWidth}"
+                          maximumLength="#{bindings.Odi11SceneView.hints.QueueCategory.precision}"
+                          shortDesc="#{bindings.Odi11SceneView.hints.QueueCategory.tooltip}"
+                          id="it19">
+              <f:validator binding="#{row.bindings.QueueCategory.validator}"/>
+            </af:inputText>
+          </af:column>
         </af:table>
       </af:panelCollection>
     </f:facet>
