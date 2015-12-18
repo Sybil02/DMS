@@ -71,7 +71,8 @@
        ODI11SCENE.UPDATED_AT,
        ODI11SCENE.UPDATED_BY,
        ODI11SCENE.WORKREP_ID,
-       ODI11SCENE.REMARKS
+       ODI11SCENE.REMARKS,
+       ODI11SCENE.QUEUE_CATEGORY
   FROM ODI11_SCENE ODI11SCENE
  WHERE ODI11SCENE.LOCALE = :locale
    AND ODI11SCENE.CAT_ID = :catId
@@ -192,6 +193,12 @@
       </SchemaBasedProperties>
     </Properties>
   </ViewAttribute>
+  <ViewAttribute
+    Name="QueueCategory"
+    PrecisionRule="true"
+    EntityAttrName="QueueCategory"
+    EntityUsage="Odi11Scene"
+    AliasName="QUEUE_CATEGORY"/>
   <ResourceBundle>
     <PropertiesBundle
       PropertiesFile="ModelBundle"/>

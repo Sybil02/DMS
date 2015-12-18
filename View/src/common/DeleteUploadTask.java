@@ -38,16 +38,20 @@ public class DeleteUploadTask extends TimerTask {
                  context.log("开始执行指定任务");  
                  System.out.println("执行任务");
                  File file = new File("DMS/UPLOAD/");
-                 //System.out.println(file.getAbsolutePath());
+                 System.out.println("定时删除文件路径*************************"+file.getAbsolutePath());
                  deleteDir(file);
+                 File tempfiles = new File("");
+                 File files = new File(tempfiles.getAbsoluteFile()+"/");
+                 deleteXlsx(files);
                  isRunning = false;  
                  context.log("指定任务执行结束");  
              }   
     }
     private long sevenDay = 7 * 24 * 60  *60 * 1000;
+    private long threeHours = 24 * 60 * 60 * 1000;
     
     private void deleteDir(File file) {
-        
+
         if(file.isDirectory()) {
             for(File f : file.listFiles()) {
                 if(System.currentTimeMillis() - f.lastModified() >  sevenDay)
@@ -58,6 +62,18 @@ public class DeleteUploadTask extends TimerTask {
         }else {
             System.out.println("delete  ");
             file.delete();
+        }
+    }
+    
+    private void deleteXlsx(File file){
+        System.out.println("Check File Path............"+file.getAbsolutePath());
+        if(file.isDirectory()){
+            for(File xf : file.listFiles()){
+                if(xf.getName().endsWith(".xlsx")){
+                    System.out.println("delete xlsx"+xf.getName());
+                    xf.delete();    
+                }
+            }    
         }
     }
 }

@@ -110,7 +110,7 @@ public class WorkflowEngine {
             while (rs.next()) {
                 int stepNo = rs.getInt("STEP_NO");
                 String stepTask = rs.getString("STEP_TASK");
-                int preStep = rs.getInt("PRE_STEP");
+                String preStep = rs.getString("PRE_STEP");
                 String approveObj = rs.getString("APPROVE_OBJECT");
                 String etlObj = rs.getString("ETL_OBJECT");
                 String labelObj = rs.getString("LABEL_OBJECT");
@@ -133,7 +133,7 @@ public class WorkflowEngine {
                     //APPROVE
                     preStat.setString(8, approveObj);
                 }
-                preStat.setInt(9, preStep);
+                preStat.setString(9, preStep);
                 preStat.addBatch();
             }
             preStat.executeBatch();
@@ -165,12 +165,12 @@ public class WorkflowEngine {
             String stepTask = "";
             String openCom = "";
             String stepObj = "";
-            int preStep = 0;
+            String preStep = "";
             if (rs.next()) {
                 stepTask = rs.getString("STEP_TASK");
                 stepObj = rs.getString("STEP_OBJECT");
                 openCom = rs.getString("OPEN_COM");
-                preStep = rs.getInt("PRE_STEP");
+                preStep = rs.getString("PRE_STEP");
             }
             if (stepTask.equals("OPEN TEMPLATES")) {
                 this.openTemplates(stepObj, openCom,wfId,runId,1);
@@ -190,48 +190,6 @@ public class WorkflowEngine {
                 stat.executeUpdate(ueSql);
                 trans.commit();
 
-                //发送邮件提醒用户
-//                String uSql = "SELECT S.SCENE_ALIAS,USER_ID FROM ODI11_USER_SCENE_V T,ODI11_SCENE S WHERE T.SCENE_ID " +
-//                    "= S.ID AND S.LOCALE = 'zh_CN' AND T.SCENE_ID = '"
-//                    + stepObj + "'";
-//                ResultSet uRs = stat.executeQuery(uSql);
-//                while(uRs.next()){
-//                    afe.sendMail(uRs.getString("SCENE_ALIAS"),"", uRs.getString("USER_ID"), "工作流启动", "执行接口！", "工作流启动，请及时执行接口！", "");        
-//                }
-//                uRs.close();
-                //跳过ETL
-//                int stepNo = 1 ;
-//                while(true){
-//                    Map<String,String> nextMap = this.queryNextStep(wfId, runId, stepNo);   
-//                    if("".equals(nextMap.get("STEP_TASK")) || nextMap.get("STEP_TASK")==null){
-//                        return;        
-//                    }
-//                    if("OPEN TEMPLATES".equals(nextMap.get("STEP_TASK"))){
-//                        this.openTemplates(nextMap.get("STEP_OBJECT"), openCom,wfId,runId,stepNo+1);
-//                        //打开模板完成，更新步骤状态表为working
-//                        String udSql = "UPDATE DMS_WORKFLOW_STATUS SET STEP_STATUS = 'WORKING',START_AT = SYSDATE WHERE WF_ID = '" + wfId + "'"
-//                            + " AND RUN_ID = '" + runId + "'" + " AND STEP_NO = " + (stepNo + 1);
-//                        stat.executeUpdate(udSql);
-//                        trans.commit();       
-//                        break;
-//                    }else if("ETL".equals(nextMap.get("STEP_TASK"))){
-//                        //更新ETL步骤为开始
-//                        String ueSql0 = "UPDATE DMS_WORKFLOW_STATUS SET STEP_STATUS = 'WORKING',START_AT = SYSDATE WHERE WF_ID = '" + wfId + "'"
-//                            + " AND RUN_ID = '" + runId + "'" + " AND STEP_NO = " + (stepNo + 1);
-//                        stat.executeUpdate(ueSql0);
-//                        trans.commit();    
-//                        stepNo = stepNo + 1;
-//                        //发送邮件提醒用户
-//                        String uSql0 = "SELECT S.SCENE_ALIAS,USER_ID FROM ODI11_USER_SCENE_V T,ODI11_SCENE S WHERE T.SCENE_ID " +
-//                            "= S.ID AND S.LOCALE = 'zh_CN' AND T.SCENE_ID = '"
-//                            + stepObj + "'";
-//                        ResultSet uRs0 = stat.executeQuery(uSql0);
-//                        while(uRs0.next()){
-//                            afe.sendMail(uRs0.getString("SCENE_ALIAS"),"", uRs0.getString("USER_ID"), "工作流启动", "执行接口！", "工作流，请及时执行接口！", "");        
-//                        }
-//                        uRs.close();
-//                    }
-//                }
             }
             if (stepTask.equals("APPROVE")) {
                 //提示没有审批对象

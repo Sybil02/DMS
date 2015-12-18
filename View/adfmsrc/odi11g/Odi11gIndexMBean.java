@@ -138,7 +138,7 @@ public class Odi11gIndexMBean {
                 this.popup.show(hint);
             } else {
                 //没有参数
-                if(this.getRunNum("R")==0){
+                if(this.getRunNum("R",sceneVo.getCurrentRow().getAttribute("QueueCategory"))==0){
                     this.run(sceneVo.getCurrentRow(), new HashMap());                  
                 }else{
 
@@ -151,12 +151,19 @@ public class Odi11gIndexMBean {
         }
     }
     
-    private int getRunNum(String status){
+    private int getRunNum(String status,Object category){
         DBTransaction trans =
             (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
         Statement stat = trans.createStatement(DBTransaction.DEFAULT);
         int num = 0;
-        String sql = "SELECT COUNT(1) RUNNUM FROM ODI11_SCENE_EXEC T WHERE T.EXEC_STATUS = '" + status + "'";
+        String sql = "SELECT COUNT(1) RUNNUM FROM ODI11_SCENE_EXEC T,ODI11_SCENE O WHERE T.SCENE_ID = O.ID AND O.LOCALE = 'zh_CN' "
+                     + "AND T.EXEC_STATUS = '" + status + "' ";
+        if(category == null || "".equals(category)){
+            sql = sql + "AND O.QUEUE_CATEGORY IS NULL";
+        }else{
+            sql = sql + "AND O.QUEUE_CATEGORY = '" + category.toString() + "'";
+        }
+        
         try {
             ResultSet rs = stat.executeQuery(sql);
             if(rs.next()){
@@ -418,8 +425,8 @@ public class Odi11gIndexMBean {
                 }
                 
                 //检查队列中是否还有待执行接口
-                if(this.getRunNum("QUEUE") > 0){
-                    this.executeNext();    
+                if(this.getRunNum("QUEUE",this.getCategroy(sid)) > 0){
+                    this.executeNext(this.getCategroy(sid));    
                     this.showQueueNum();
                 }
                 
@@ -432,6 +439,24 @@ public class Odi11gIndexMBean {
             this._logger.severe("Agent or Workrepository may not exits!");
             this._logger.severe(e);
         }
+    }
+    
+    public Object getCategroy(String sid){
+        Object category = null;
+        
+        ViewObject vo = DmsUtils.getOdi11gApplicationModule().getOdi11SceneView();
+        ViewCriteria vc = vo.createViewCriteria();
+        ViewCriteriaRow vcRow = vc.createViewCriteriaRow();
+        vcRow.setAttribute("Id", "='" + sid + "'");
+        vcRow.setConjunction(vcRow.VC_CONJ_AND);
+        vc.addElement(vcRow);
+        vo.applyViewCriteria(vc);
+        vo.executeQuery();
+        Row sceneRow = vo.first();
+        category = sceneRow.getAttribute("QueueCategory");
+        vo.getViewCriteriaManager().setApplyViewCriteriaName(null);
+        
+        return category;
     }
     
     public String getStatus(String sceneId,String params){
@@ -463,22 +488,38 @@ public class Odi11gIndexMBean {
         DBTransaction trans =
             (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
         Statement stat = trans.createStatement(DBTransaction.DEFAULT);
-        String sql = "UPDATE ODI11_SCENE_EXEC T SET T.LOG_TEXT = '系统当前队列中" +this.getRunNum("QUEUE")+ "个接口待执行！'"
-            + " WHERE T.EXEC_STATUS = 'QUEUE'";
+        
+        String cSql = "SELECT COUNT(1) NUM FROM ODI11_SCENE_EXEC T WHERE T.EXEC_STATUS = 'QUEUE'";
+        String sql = "";
         try {
-            stat.executeUpdate(sql);
-            trans.commit();
+            ResultSet rs = stat.executeQuery(cSql);
+            if(rs.next()){
+                sql = "UPDATE ODI11_SCENE_EXEC T SET T.LOG_TEXT = '系统当前队列中" +rs.getString("NUM")+ "个接口待执行！'"
+                    + " WHERE T.EXEC_STATUS = 'QUEUE'";
+            }
+            rs.close();
+            if(sql.length() > 1){
+                stat.executeUpdate(sql);
+                trans.commit();
+            }
             stat.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    private void executeNext(){
+    private void executeNext(Object category){
         DBTransaction trans =
             (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
         Statement stat = trans.createStatement(DBTransaction.DEFAULT);
-        String sql = "SELECT T.SCENE_ID,T.PARAMS,T.CREATED_BY FROM ODI11_SCENE_EXEC T WHERE T.EXEC_STATUS = 'QUEUE' ORDER BY T.CREATED_AT ASC";
+        String sql = "SELECT T.SCENE_ID,T.PARAMS,T.CREATED_BY FROM ODI11_SCENE_EXEC T,ODI11_SCENE O "
+            + "WHERE O.ID = T.SCENE_ID AND O.LOCALE = 'zh_CN'";
+        if(category == null || "".equals(category)){
+            sql = sql + " AND O.QUEUE_CATEGORY IS NULL " ;
+        }else{
+            sql = sql + " AND O.QUEUE_CATEGORY = '" + category.toString() + "' ";    
+        }
+        sql = sql + " AND T.EXEC_STATUS = 'QUEUE' ORDER BY T.CREATED_AT ASC";
         String createBy = "";
         ResultSet rs;
         try {
@@ -600,21 +641,36 @@ public class Odi11gIndexMBean {
         execVo.executeQuery();
         if (execVo.hasNext()) {
             Row execRow = execVo.next();
-
+            String sid = execRow.getAttribute("SceneId").toString();
             String status = this.queryStatus(execRow);
             if ("D,E".contains(status)) {
-                if(this.getRunNum("QUEUE") > 0){
-                    this.executeNext();    
+                if(this.getRunNum("QUEUE",this.getCategroy(sid)) > 0){
+                    this.executeNext(this.getCategroy(sid));    
                     this.showQueueNum();
                 }
             }
         }else{
-            if(this.getRunNum("QUEUE") > 0){
-                this.executeNext();    
-                this.showQueueNum();
-            }   
+            this.reStartQueue();
         }
         execVo.getViewCriteriaManager().setApplyViewCriteriaNames(null);
+    }
+    
+    public void reStartQueue(){
+        DBTransaction trans =
+            (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
+        Statement stat = trans.createStatement(DBTransaction.DEFAULT);
+        String sql = "SELECT DISTINCT QUEUE_CATEGORY FROM ODI11_SCENE";
+        try {
+            ResultSet rs = stat.executeQuery(sql);
+            while(rs.next()){
+                if(this.getRunNum("QUEUE",rs.getString("QUEUE_CATEGORY")) > 0){
+                    this.executeNext(rs.getString("QUEUE_CATEGORY"));    
+                    this.showQueueNum();
+                }      
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
     
     private final boolean isRunning(String sceneId,
@@ -732,7 +788,6 @@ public class Odi11gIndexMBean {
                 queryStatus(row);
             }
         }
-        this.checkRunAndQueue();
     }
 
     public void execute(ActionEvent actionEvent) throws MalformedURLException {
@@ -745,8 +800,8 @@ public class Odi11gIndexMBean {
             params.put(row.getAttribute("PName"), row.getAttribute("value"));
         }
         
-        
-        if(this.getRunNum("R")==0){
+        String sid = sceneVo.getCurrentRow().getAttribute("Id").toString();
+        if(this.getRunNum("R",this.getCategroy(sid))==0){
             this.run(sceneVo.getCurrentRow(), params);                 
         }else{
             this.insertExecQueue(sceneVo.getCurrentRow(), params);   
@@ -770,6 +825,7 @@ public class Odi11gIndexMBean {
     }
 
     public void showStatusPopup(ActionEvent actionEvent) throws MalformedURLException {
+        this.checkRunAndQueue();
         this.refreshStatus((String)ADFUtils.findIterator("Odi11AuthedSceneViewIterator").getViewObject().getCurrentRow().getAttribute("Id"));
         this.showStatus();
         RichPopup.PopupHints hint = new RichPopup.PopupHints();
