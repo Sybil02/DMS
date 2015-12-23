@@ -246,6 +246,7 @@ public class ApproveflowEngine {
                 //检查父节点是否全部审批通过，全部通过则启动下一个个步骤，否则不操作
                 WorkflowEngine wfEngine = new WorkflowEngine();
                 wfEngine.startNext(wfId, runId, templateId, comId, comName, stepNo, "APPROVE",commitUser);
+                wfEngine.stepIsFinish(wfId, runId, stepNo, "APPROVE");
             }
             stat.close();
         } catch (SQLException e) {

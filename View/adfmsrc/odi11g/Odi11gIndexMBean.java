@@ -425,7 +425,7 @@ public class Odi11gIndexMBean {
                 }
                 
                 //检查队列中是否还有待执行接口
-                if(this.getRunNum("QUEUE",this.getCategroy(sid)) > 0){
+                if(this.getRunNum("QUEUE",this.getCategroy(sid)) > 0 && this.getRunNum("R",this.getCategroy(sid)) == 0){
                     this.executeNext(this.getCategroy(sid));    
                     this.showQueueNum();
                 }
@@ -644,7 +644,7 @@ public class Odi11gIndexMBean {
             String sid = execRow.getAttribute("SceneId").toString();
             String status = this.queryStatus(execRow);
             if ("D,E".contains(status)) {
-                if(this.getRunNum("QUEUE",this.getCategroy(sid)) > 0){
+                if(this.getRunNum("QUEUE",this.getCategroy(sid)) > 0 && this.getRunNum("R",this.getCategroy(sid)) == 0){
                     this.executeNext(this.getCategroy(sid));    
                     this.showQueueNum();
                 }
@@ -663,7 +663,7 @@ public class Odi11gIndexMBean {
         try {
             ResultSet rs = stat.executeQuery(sql);
             while(rs.next()){
-                if(this.getRunNum("QUEUE",rs.getString("QUEUE_CATEGORY")) > 0){
+                if(this.getRunNum("QUEUE",rs.getString("QUEUE_CATEGORY")) > 0 && this.getRunNum("R",rs.getString("QUEUE_CATEGORY")) == 0){
                     this.executeNext(rs.getString("QUEUE_CATEGORY"));    
                     this.showQueueNum();
                 }      

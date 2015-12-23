@@ -189,7 +189,14 @@
     PrecisionRule="true"
     EntityAttrName="UpdatedAt"
     EntityUsage="Odi11SceneExec"
-    AliasName="UPDATED_AT"/>
+    AliasName="UPDATED_AT">
+    <Properties>
+      <SchemaBasedProperties>
+        <FMT_FORMAT
+          ResId="team.epm.odi11g.view.Odi11SceneExecView.UpdatedAt_FMT_FORMAT"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewAttribute
     Name="UpdatedBy"
     PrecisionRule="true"
@@ -229,4 +236,8 @@
     ViewLink="team.epm.odi11g.Odi11gStatusLogLnk"
     Type="oracle.jbo.RowIterator"
     IsUpdateable="false"/>
+  <ResourceBundle>
+    <PropertiesBundle
+      PropertiesFile="ModelBundle"/>
+  </ResourceBundle>
 </ViewObject>
