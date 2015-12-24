@@ -557,8 +557,9 @@ public class Odi11gIndexMBean {
             vo.executeQuery();
             Row sceneRow = vo.first();
             vo.getViewCriteriaManager().setApplyViewCriteriaName(null);
-            this.run(sceneRow, params);
-
+            if(this.getRunNum("R",category)==0){
+                this.run(sceneRow, params);
+            }
             stat.executeUpdate(bSql);
             trans.commit();
             
