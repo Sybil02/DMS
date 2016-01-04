@@ -1110,7 +1110,7 @@ public class WorkflowEngine {
                 if(this.executePro(calc, childList,wfId,runId,stepNo)){
                     continue;    
                 }else{
-                    break;
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(calc+"程序执行出错，已跳过该计算程序！"));
                 }        
             }   
             
@@ -1486,7 +1486,7 @@ public class WorkflowEngine {
             for (int i = 0; i < str.length; i++) {
                 if(str[i].startsWith("FY")){
                     cSql = cSql + " AND YEARS = '" + str[i] + "'";    
-                }else if(str[i].startsWith("V")){
+                }else if(str[i].startsWith("V") || str[i].startsWith("Fin")){
                     cSql = cSql + " AND VERSION = '" + str[i] + "'";
                 }else{
                     cSql = cSql + " AND SCENARIO = '" + str[i] + "'";    
