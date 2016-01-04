@@ -174,7 +174,7 @@
                                 disabled="#{!bindings.CreateInsert.enabled}"
                                 id="cb5"/>
               <af:commandButton text="#{viewBundle['dcm.template.delete']}"
-                                id="ctb2"
+                                id="ctb2" immediate="true"
                                 actionListener="#{pageFlowScope.TemplateBackingBean.removeTemplate}"></af:commandButton>
               <af:commandButton actionListener="#{pageFlowScope.TemplateBackingBean.createTemplate}"
                                 text="#{viewBundle['dms.common.save']}"
@@ -424,7 +424,7 @@
                               text="#{viewBundle['dcm.templateColumn.add']}"
                               id="cb9"/>
             <af:commandButton actionListener="#{bindings.DeleteColumn.execute}"
-                              text="#{viewBundle['dcm.templateColumn.delete']}"
+                              text="#{viewBundle['dcm.templateColumn.delete']}" immediate="true"
                               id="cb8"/>
             <af:commandButton actionListener="#{pageFlowScope.TemplateBackingBean.createTemplate}"
                               text="#{viewBundle['dms.common.save']}"
@@ -457,7 +457,6 @@
                           maximumLength="#{bindings.DcmTemplateColumnView.hints.ColumnLabel.precision}"
                           shortDesc="#{bindings.DcmTemplateColumnView.hints.ColumnLabel.tooltip}"
                           id="it11">
-              <f:validator binding="#{row.bindings.ColumnLabel.validator}"/>
             </af:inputText>
           </af:column>
           <af:column sortProperty="#{bindings.DcmTemplateColumnView.hints.DataType.name}"
@@ -483,7 +482,6 @@
                           maximumLength="#{bindings.DcmTemplateColumnView.hints.DbTableCol.precision}"
                           shortDesc="#{bindings.DcmTemplateColumnView.hints.DbTableCol.tooltip}"
                           id="it13">
-              <f:validator binding="#{row.bindings.DbTableCol.validator}"/>
             </af:inputText>
           </af:column>
           <af:column headerText="#{viewBundle['dcm.template_column.value_set_id']}"
@@ -508,7 +506,6 @@
                           maximumLength="#{bindings.DcmTemplateColumnView.hints.Seq.precision}"
                           shortDesc="#{bindings.DcmTemplateColumnView.hints.Seq.tooltip}"
                           id="it12">
-              <f:validator binding="#{row.bindings.Seq.validator}"/>
               <af:convertNumber groupingUsed="false"
                                 pattern="#{bindings.DcmTemplateColumnView.hints.Seq.format}"/>
             </af:inputText>
