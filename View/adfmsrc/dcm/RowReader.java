@@ -1,10 +1,16 @@
 package dcm;
 
+import common.ReplaceSpecialChar;
+
 import java.sql.PreparedStatement;
 
 import java.sql.SQLException;
 
+import java.util.List;
 import java.util.TreeMap;
+
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 
 import oracle.adf.share.logging.ADFLogger;
 
@@ -24,6 +30,7 @@ public class RowReader implements IRowReader {
     private int n = 0;
     private static final int batchSize = 5000;
     private String templateName;
+    private List<ColumnDef> colsdef;
     private static ADFLogger logger=ADFLogger.createADFLogger(RowReader.class);
     public RowReader(DBTransaction trans, int startLine, String templateId,
                      String combinationRecord, String temptable,
@@ -59,18 +66,20 @@ public class RowReader implements IRowReader {
 
     public void getRows(int sheetIndex, String sheetName, int curRow,
                         TreeMap<Integer, String> rowlist) {
+        ReplaceSpecialChar rsc = new ReplaceSpecialChar();
         if (curRow >= this.startLine - 1&&sheetName.startsWith(this.templateName)) {
             boolean isEpty = true;
             try {
                 this.stmt.setString(1, sheetName);
                 this.stmt.setInt(2, curRow + 1);
                 for (int i = 0; i < this.columnSize; i++) {
+                    
                     String tmpstr = rowlist.get(i);
                     if (null == tmpstr || "".equals(tmpstr.trim())) {
                         this.stmt.setString(i + 3, "");
                     } else {
                         isEpty = false;
-                        this.stmt.setString(i + 3, tmpstr.trim());
+                        this.stmt.setString(i + 3, rsc.decodeString(tmpstr.trim()));        
                     }
                 }
                 if (!isEpty) {
