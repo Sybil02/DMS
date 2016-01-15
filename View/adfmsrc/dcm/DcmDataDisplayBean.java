@@ -13,6 +13,8 @@ import dcm.template.TemplateEO;
 
 import dms.login.Person;
 
+import dms.quartz.core.QuartzSchedulerSingleton;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -91,6 +93,8 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import org.hexj.excelhandler.reader.ExcelReaderUtil;
+
+import org.quartz.SchedulerException;
 
 import team.epm.dcm.view.DcmCombinationViewRowImpl;
 import team.epm.dcm.view.DcmTemplateColumnViewRowImpl;
@@ -293,18 +297,38 @@ public class DcmDataDisplayBean extends TablePagination{
             return;
         }
         //进行数据处理（前置程序、校验和善后程序）
-        if (this.handleData(this.isIncrement ? "INCREMENT" : "REPLACE",curComRecordId)) {
-            String msg = DmsUtils.getMsg("dcm.inform.data_import_success");
-            JSFUtils.addFacesInformationMessage(msg);
-        } else {
-            //若出现错误则显示错误信息提示框
-            this.showErrorPop();
-        }
+//        if (this.handleData(this.isIncrement ? "INCREMENT" : "REPLACE",curComRecordId)) {
+//            String msg = DmsUtils.getMsg("dcm.inform.data_import_success");
+//            JSFUtils.addFacesInformationMessage(msg);
+//        } else {
+//            //若出现错误则显示错误信息提示框
+//            this.showErrorPop();
+//        }
         //刷新数据
+        try {
+            this.newImportJob();
+        } catch (SchedulerException e) {
+            e.printStackTrace();
+        }
         this.queryTemplateData();
     }
+    
+    private void newImportJob() throws SchedulerException{
+        HashMap<String,String> jobDataMap = new HashMap<String,String>();
+        jobDataMap.put("connType", "jdbcURL");
+        jobDataMap.put("hostName", "127.0.0.1");
+        jobDataMap.put("port", "1521");
+        jobDataMap.put("sid", "XE");
+        jobDataMap.put("username", "dms");
+        jobDataMap.put("pwd", "dms");
+        String jobName = "impdata"+UUID.randomUUID().toString().replace("-", "");
+        jobDataMap.put("jobName", jobName);
+        jobDataMap.put("jobGroup", "DEFAULT");
+        QuartzSchedulerSingleton qss = QuartzSchedulerSingleton.getInstance();
+        qss.scheduleJobMap(jobName, "dms.quartz.job.DBJob", "0/60 * * * * ?", jobDataMap);
+    }
+    
     //执行数据校验和数据转移
-
     private boolean handleData(String mode, String curComRecordId) {
         boolean successFlag = true;
         DBTransaction trans = (DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
