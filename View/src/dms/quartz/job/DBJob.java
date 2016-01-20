@@ -73,7 +73,7 @@ public class DBJob implements Job, Serializable {
                 long i = context.getJobRunTime();
                 Date date = new Date(i);
                 System.out.println("RunTime:"+date);
-                context.getScheduler().unscheduleJob(context.getTrigger().getKey());
+
             } catch (Exception e) {
                 e.printStackTrace();
                 throw new IllegalArgumentException("DBJob 数据库存储过程调用失败，请检查jdbc信息!");
@@ -82,7 +82,7 @@ public class DBJob implements Job, Serializable {
         } else if ("jdbcDS".equals(connType)) {
 
             String jndiName = jobDataMap.getString("jndiName");
-            String plsql2 = jobDataMap.getString("plsql2");
+            
 
             DBConnUtils dbUtils = new DBConnUtils();
 
@@ -90,12 +90,51 @@ public class DBJob implements Job, Serializable {
 
                 Connection conn =
                     dbUtils.getJNDIConnectionByContainer(jndiName);
-
-                CallableStatement stmt = conn.prepareCall(plsql2);
-                stmt.execute();
+                System.out.println("ssss:"+conn);
+                //start by wtg
+                int startLine = Integer.parseInt(jobDataMap.getString("startLine"));
+                String tempId = jobDataMap.getString("tempId");
+                String comId = jobDataMap.getString("comId");
+                String tempTable = jobDataMap.getString("tempTable");
+                int colSize = Integer.parseInt(jobDataMap.getString("colSize"));
+                String userId = jobDataMap.getString("userId");
+                String tempName = jobDataMap.getString("tempName");
+                String filePath = jobDataMap.getString("filePath");
+                String impPro = jobDataMap.getString("impPro");
+                String afterPro = jobDataMap.getString("afterPro");
+                String mode = jobDataMap.getString("mode");
+                String locale = jobDataMap.getString("locale");
+                
+                RowReader reader = new RowReader(conn,startLine,tempId,comId,tempTable,colSize,userId,tempName);
+                ExcelReaderUtil.readExcel(reader, filePath, true);
+                reader.close();
+                conn.commit();
+                //执行导入程序
+                CallableStatement cs = conn.prepareCall("{CALl "+impPro+"(?,?,?,?,?)}");
+                cs.setString(1, tempId);
+                cs.setString(2, comId);
+                cs.setString(3, userId);
+                cs.setString(4, mode);
+                cs.setString(5, locale);
+                cs.execute();
+                
+                //执行善后程序
+                if(afterPro != null && !"".equals(afterPro)){
+                    CallableStatement css = conn.prepareCall("{CALl "+afterPro+"(?,?,?,?,?)}");
+                    css.setString(1, tempId);
+                    css.setString(2, comId);
+                    css.setString(3, userId);
+                    css.setString(4, mode);
+                    css.setString(5, locale);
+                    css.execute();
+                }
+                //end by wtg
                 conn.close();
+                long i = context.getJobRunTime();
+                Date date = new Date(i);
+                System.out.println("RunTime:"+date);
 
-            } catch (SQLException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
                 throw new IllegalArgumentException("DBJob 数据库存储过程调用失败，请检查jdbc DS信息!");
             }

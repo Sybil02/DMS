@@ -138,6 +138,7 @@ public class DcmDataDisplayBean extends TablePagination{
     //搜索
     private FilterableQueryDescriptor queryDescriptor=new DcmQueryDescriptor();
     private Map filters;
+    private boolean useQuartz = false;
     //初始化
     public DcmDataDisplayBean() {
         this.curUser =(Person)ADFContext.getCurrent().getSessionScope().get("cur_user");
@@ -296,36 +297,123 @@ public class DcmDataDisplayBean extends TablePagination{
         if (!this.handleExcel(filePath, curComRecordId)) {
             return;
         }
-        //进行数据处理（前置程序、校验和善后程序）
-//        if (this.handleData(this.isIncrement ? "INCREMENT" : "REPLACE",curComRecordId)) {
-//            String msg = DmsUtils.getMsg("dcm.inform.data_import_success");
-//            JSFUtils.addFacesInformationMessage(msg);
-//        } else {
-//            //若出现错误则显示错误信息提示框
-//            this.showErrorPop();
-//        }
-        //刷新数据
-        try {
-            this.newImportJob();
-        } catch (SchedulerException e) {
-            e.printStackTrace();
+        
+        //是否后台导入
+        if(useQuartz){
+            if(this.excelValidate(this.isIncrement ? "INCREMENT" : "REPLACE",curComRecordId)){
+                try {
+                    this.newImportJob(filePath);
+                } catch (SchedulerException e) {
+                    e.printStackTrace();
+                }
+            }else{
+                //若出现错误则显示错误信息提示框
+                this.showErrorPop();
+            }
+        }else{
+            //进行数据处理（前置程序、校验和善后程序）
+            if (this.handleData(this.isIncrement ? "INCREMENT" : "REPLACE",curComRecordId)) {
+                String msg = DmsUtils.getMsg("dcm.inform.data_import_success");
+                JSFUtils.addFacesInformationMessage(msg);
+            } else {
+                //若出现错误则显示错误信息提示框
+                this.showErrorPop();
+            }
+            //刷新数据
+            this.queryTemplateData();
         }
-        this.queryTemplateData();
+
     }
     
-    private void newImportJob() throws SchedulerException{
+    private void newImportJob(String filePath) throws SchedulerException{
         HashMap<String,String> jobDataMap = new HashMap<String,String>();
-        jobDataMap.put("connType", "jdbcURL");
-        jobDataMap.put("hostName", "127.0.0.1");
-        jobDataMap.put("port", "1521");
-        jobDataMap.put("sid", "XE");
-        jobDataMap.put("username", "dms");
-        jobDataMap.put("pwd", "dms");
-        String jobName = "impdata"+UUID.randomUUID().toString().replace("-", "");
+   
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+        String date = dateFormat.format(new Date());
+        String jobName = this.curUser.getAcc() + "-" + date;
+        //import info
+        int startL = (int)this.curTempalte.getDataStartLine().getValue();
+        jobDataMap.put("startLine", ObjectUtils.toString(startL));
+        jobDataMap.put("tempId",this.curTempalte.getId());
+        jobDataMap.put("comId",this.curCombiantionRecord);
+        jobDataMap.put("tempTable",this.curTempalte.getTmpTable());
+        jobDataMap.put("colSize",ObjectUtils.toString(this.colsdef.size()));
+        jobDataMap.put("userId",this.curUser.getId());
+        jobDataMap.put("tempName",this.curTempalte.getName());
+        jobDataMap.put("filePath", filePath);
+        jobDataMap.put("impPro", this.curTempalte.getHandleProgram());
+        jobDataMap.put("afterPro", this.curTempalte.getAfterProgram());
+        jobDataMap.put("mode",this.isIncrement ? "INCREMENT" : "REPLACE");
+        jobDataMap.put("locale", this.curUser.getLocale());
+        //job info
+        jobDataMap.put("connType", "jdbcDS");
+        jobDataMap.put("jndiName", "jdbc/DMSConnDS");
         jobDataMap.put("jobName", jobName);
         jobDataMap.put("jobGroup", "DEFAULT");
         QuartzSchedulerSingleton qss = QuartzSchedulerSingleton.getInstance();
-        qss.scheduleJobMap(jobName, "dms.quartz.job.DBJob", "0/60 * * * * ?", jobDataMap);
+        qss.scheduleJobMap(jobName, "dms.quartz.job.DBJob", "NULL", jobDataMap);
+        
+        
+    }
+    
+    //只执行数据校验
+    private boolean excelValidate(String mode ,String curComRecordId){
+        boolean successFlag = true;
+        DBTransaction trans = (DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
+        try {
+            //执行前置程序
+            if (this.curTempalte.getPreProgram() != null) {
+                CallableStatement prcs =trans.createCallableStatement("{CALl " + this.curTempalte.getPreProgram() +"(?,?,?,?,?)}", 0);
+                prcs.setString(1, this.curTempalte.getId());
+                prcs.setString(2, curComRecordId);
+                prcs.setString(3, this.curUser.getId());
+                prcs.setString(4, mode);
+                prcs.setString(5, this.curUser.getLocale());
+                prcs.execute();
+                trans.commit();
+                prcs.close();
+            }
+            //执行校验程序
+            ViewObject vo =DmsUtils.getDcmApplicationModule().getDcmValidationQueryView();
+            vo.setNamedWhereClauseParam("templateId", this.curTempalte.getId());
+            vo.executeQuery();
+            vo.reset();
+            while (vo.hasNext()) {
+                Row row = vo.next();
+                CallableStatement cs =trans.createCallableStatement("{CALL " + row.getAttribute("Program") +"(?,?,?,?,?,?,?,?,?)}", 0);
+                cs.setString(1, (String)row.getAttribute("ValidationId"));
+                cs.setString(2, this.curTempalte.getId());
+                cs.setString(3, curComRecordId);
+                //获取校验对应的临时表列
+                for (int i = 1; i <= this.colsdef.size(); i++) {
+                    if (this.colsdef.get(i -1).getDbTableCol().equals((String)row.getAttribute("DbTableCol"))) {
+                        cs.setString(4, "COLUMN" + i);
+                        break;
+                    }
+                }
+                cs.setString(5, (String)row.getAttribute("DbTableCol"));
+                cs.setString(6, mode);
+                cs.setString(7, this.curUser.getLocale());
+                cs.setString(8, (String)row.getAttribute("Args"));
+                cs.registerOutParameter(9, Types.VARCHAR);
+                cs.execute();
+                //若返回值为N则校验失败
+                if ("N".equals(cs.getString(9))) {
+                    successFlag = false;
+                }
+                trans.commit();
+                cs.close();
+            }
+        } catch (Exception e) {
+            successFlag = false;
+            String msg = e.getMessage();
+            if (msg.length() > 2048) {
+                msg = msg.substring(0, 2048);
+            }
+            this.writeErrorMsg(msg, curComRecordId);
+            this._logger.severe(e);
+        }
+        return successFlag;    
     }
     
     //执行数据校验和数据转移
@@ -1181,5 +1269,13 @@ public class DcmDataDisplayBean extends TablePagination{
     }
     public void setIsReplaceDefault(boolean flag){
        
+    }
+
+    public void setUseQuartz(boolean useQuartz) {
+        this.useQuartz = useQuartz;
+    }
+
+    public boolean isUseQuartz() {
+        return useQuartz;
     }
 }

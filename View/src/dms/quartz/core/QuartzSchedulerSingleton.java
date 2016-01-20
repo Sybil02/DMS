@@ -15,12 +15,12 @@ import org.quartz.JobDataMap;
 import org.quartz.JobDetail;
 import org.quartz.JobKey;
 import org.quartz.Scheduler;
+import org.quartz.SimpleTrigger;
 import org.quartz.Trigger;
 import org.quartz.TriggerBuilder;
 import org.quartz.impl.StdSchedulerFactory;
 import org.quartz.impl.matchers.GroupMatcher;
-
-
+import org.quartz.impl.triggers.SimpleTriggerImpl;
 
 
 /**
@@ -228,7 +228,7 @@ public class QuartzSchedulerSingleton implements Serializable{
             // Create a new cron based schedule 
             Trigger trigger =
                 TriggerBuilder.newTrigger().withIdentity(jobName).withSchedule(CronScheduleBuilder.cronSchedule(cronSchedule)).build();
-
+            
             _scheduler.scheduleJob(job,trigger);
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -254,19 +254,18 @@ public class QuartzSchedulerSingleton implements Serializable{
             JobDetail job =
                 JobBuilder.newJob(jobClass).withIdentity(jobName).build();
             
-            
             Set<String> keySet = map.keySet();
             
-            for(String key : keySet) {
-                
-                job.getJobDataMap().put(key, map.get(key));
-                    
+            for(String key : keySet) {   
+                job.getJobDataMap().put(key, map.get(key)); 
             }
 
             // Create a new cron based schedule 
-            Trigger trigger =
-                TriggerBuilder.newTrigger().withIdentity(jobName).withSchedule(CronScheduleBuilder.cronSchedule(cronSchedule)).build();
-            _scheduler.scheduleJob(job,trigger);
+//            Trigger Trigger =
+//                TriggerBuilder.newTrigger().withIdentity(jobName).withSchedule(CronScheduleBuilder.cronSchedule(cronSchedule)).build();
+            SimpleTrigger tgr = (SimpleTrigger)TriggerBuilder.newTrigger().withIdentity(jobName).startAt(new Date()).build();
+            //SimpleTrigger trigger = new SimpleTriggerImpl(jobName,Scheduler.DEFAULT_GROUP,new Date(),null,0,0L);
+            _scheduler.scheduleJob(job,tgr);
             
         } catch (Exception e) {
             throw new RuntimeException(e);

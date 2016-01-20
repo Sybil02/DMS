@@ -73,12 +73,10 @@ public class RowReader implements IRowReader {
 
     public void getRows(int sheetIndex, String sheetName, int curRow,
                         TreeMap<Integer, String> rowlist) {
-        System.out.println(startLine + "use get row............................................."+curRow);
+        
         if (curRow >= this.startLine - 1) {
             boolean isEpty = true;
             try {
-                String rowSql = this.sql.toString();
-                System.out.println("stmttttttt:"+stmt);
                 this.stmt.setString(1, sheetName);
                 this.stmt.setInt(2, curRow + 1);
                 for (int i = 0; i < this.columnSize; i++) {
@@ -93,8 +91,9 @@ public class RowReader implements IRowReader {
                 if (!isEpty) {
                     this.stmt.addBatch();
                 }
-                if (this.n >= 2) {
-                    //this.stmt.executeBatch();
+                if ((this.n + 1) % this.batchSize == 0) {
+                    this.stmt.executeBatch();
+                    this.stmt.getConnection().commit();
                 }
                 this.n += 1;
             } catch (Exception e) {

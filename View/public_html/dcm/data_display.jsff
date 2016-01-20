@@ -263,6 +263,14 @@
                                          rendered="#{viewScope.DcmDataDisplayBean.canReplaceImport}"/>
                 </af:gridCell>
               </af:gridRow>
+              <af:gridRow marginTop="5px" marginBottom="5px" height="auto" id="grq">
+                <af:gridCell marginStart="5px" marginEnd="5px" width="auto" inlineStyle="padding-top:5px"
+                             id="gcq">
+                  <af:selectBooleanCheckbox label="#{viewBundle['dms.quartz.msg']}" id="sbc1"
+                                         autoSubmit="true" value="#{viewScope.DcmDataDisplayBean.useQuartz}"
+                                            text="#{viewBundle['dms.quartz.msg']}"/>
+                </af:gridCell>
+              </af:gridRow>
               <af:gridRow marginTop="5px" marginBottom="5px" height="auto"
                           id="gr3">
                 <af:gridCell halign="center" width="auto" id="gc5"
