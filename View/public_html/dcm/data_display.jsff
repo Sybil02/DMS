@@ -266,7 +266,7 @@
               <af:gridRow marginTop="5px" marginBottom="5px" height="auto" id="grq">
                 <af:gridCell marginStart="5px" marginEnd="5px" width="auto" inlineStyle="padding-top:5px"
                              id="gcq">
-                  <af:selectBooleanCheckbox label="#{viewBundle['dms.quartz.msg']}" id="sbc1"
+                  <af:selectBooleanCheckbox label="#{viewBundle['dms.quartz.import']}" id="sbc1"
                                          autoSubmit="true" value="#{viewScope.DcmDataDisplayBean.useQuartz}"
                                             text="#{viewBundle['dms.quartz.msg']}"/>
                 </af:gridCell>

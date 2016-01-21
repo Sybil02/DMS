@@ -263,6 +263,7 @@ public class QuartzSchedulerSingleton implements Serializable{
             // Create a new cron based schedule 
 //            Trigger Trigger =
 //                TriggerBuilder.newTrigger().withIdentity(jobName).withSchedule(CronScheduleBuilder.cronSchedule(cronSchedule)).build();
+            //只执行一次的SimpleTrigger
             SimpleTrigger tgr = (SimpleTrigger)TriggerBuilder.newTrigger().withIdentity(jobName).startAt(new Date()).build();
             //SimpleTrigger trigger = new SimpleTriggerImpl(jobName,Scheduler.DEFAULT_GROUP,new Date(),null,0,0L);
             _scheduler.scheduleJob(job,tgr);

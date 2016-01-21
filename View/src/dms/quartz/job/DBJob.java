@@ -45,8 +45,8 @@ public class DBJob implements Job, Serializable {
             String sid = jobDataMap.getString("sid");
             String username = jobDataMap.getString("username");
             String pwd = jobDataMap.getString("pwd");
-            String jobName = jobDataMap.getString("jobName");
-            String jobGroup = jobDataMap.getString("jobGroup");
+//            String jobName = jobDataMap.getString("jobName");
+//            String jobGroup = jobDataMap.getString("jobGroup");
             
             DBConnUtils dbUtils = new DBConnUtils();
 
@@ -127,8 +127,10 @@ public class DBJob implements Job, Serializable {
                     css.setString(4, mode);
                     css.setString(5, locale);
                     css.execute();
+                    css.close();
                 }
                 //end by wtg
+                cs.close();
                 conn.close();
                 long i = context.getJobRunTime();
                 Date date = new Date(i);
