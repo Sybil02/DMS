@@ -139,10 +139,11 @@ public class Odi11gIndexMBean {
             } else {
                 //没有参数
                 if(this.getRunNum("R",sceneVo.getCurrentRow().getAttribute("QueueCategory"))==0){
-                    this.run(sceneVo.getCurrentRow(), new HashMap());                  
+                    this.run(sceneVo.getCurrentRow(), new HashMap(),null);                  
                 }else{
 
-                    this.insertExecQueue(sceneVo.getCurrentRow(), new HashMap());  
+                    this.insertExecQueue(sceneVo.getCurrentRow(), new HashMap()); 
+                    this.showQueueNum();
                     this.showStatusPopup(actionEvent);
                     this.checkRunAndQueue();
                 }
@@ -307,7 +308,7 @@ public class Odi11gIndexMBean {
         execVo.getApplicationModule().getTransaction().commit();
     }
 
-    private void run(Row sceneRow, Map params) throws MalformedURLException {
+    private void run(Row sceneRow, Map params,String createBy) throws MalformedURLException {
         StringBuffer parmStr = new StringBuffer();
         for (Object v : params.keySet()) {
             parmStr.append("#").append(v);
@@ -378,10 +379,14 @@ public class Odi11gIndexMBean {
             execVo.insertRow(execRow);
             execVo.getApplicationModule().getTransaction().commit();
             this.popup.cancel();
+            this.showQueueNum();
             this.showStatus();
             RichPopup.PopupHints hint = new RichPopup.PopupHints();
             this.statusPopup.show(hint);
             
+            if(createBy != null && !"".equals(createBy)){
+                this.updateCreateBy(sceneId, parmStr.toString(), createBy);
+            }
             //workflow odi
             final String sid = (String)sceneRow.getAttribute("Id");
             final String para = parmStr.toString();
@@ -427,7 +432,7 @@ public class Odi11gIndexMBean {
                 //检查队列中是否还有待执行接口
                 if(this.getRunNum("QUEUE",this.getCategroy(sid)) > 0 && this.getRunNum("R",this.getCategroy(sid)) == 0){
                     this.executeNext(this.getCategroy(sid));    
-                    this.showQueueNum();
+                    //this.showQueueNum();
                 }
                 
             }
@@ -532,12 +537,13 @@ public class Odi11gIndexMBean {
                 createBy = rs.getString("CREATED_BY");
             }
             rs.close();
+            stat.close();
 
             Map params = new LinkedHashMap();
             
             //更新执行人为创建者
-            String bSql = "UPDATE ODI11_SCENE_EXEC T SET T.CREATED_BY = '" + createBy + "',T.UPDATED_BY = '" + createBy
-                + "' WHERE T.SCENE_ID = '" + sceneId + "' AND T.PARAMS = '" + paramStr + "'";
+//            String bSql = "UPDATE ODI11_SCENE_EXEC T SET T.CREATED_BY = '" + createBy + "',T.UPDATED_BY = '" + createBy
+//                + "' WHERE T.SCENE_ID = '" + sceneId + "' AND T.PARAMS = '" + paramStr + "'";
             
             paramStr = paramStr.substring(1, paramStr.length());
             String[] str = paramStr.split("#");
@@ -558,16 +564,34 @@ public class Odi11gIndexMBean {
             Row sceneRow = vo.first();
             vo.getViewCriteriaManager().setApplyViewCriteriaName(null);
             if(this.getRunNum("R",category)==0){
-                this.run(sceneRow, params);
+                this.run(sceneRow, params,createBy);
             }
-            stat.executeUpdate(bSql);
-            trans.commit();
+//            stat.executeUpdate(bSql);
+//            trans.commit();
             
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+    
+    public void updateCreateBy(String sceneId,String paramStr,String createBy){
+        DBTransaction trans =
+            (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
+        Statement stat = trans.createStatement(DBTransaction.DEFAULT);
+        //更新执行人为创建者
+        String bSql = "UPDATE ODI11_SCENE_EXEC T SET T.CREATED_BY = '" + createBy + "',T.UPDATED_BY = '" + createBy
+            + "' WHERE T.SCENE_ID = '" + sceneId + "' AND T.PARAMS = '" + paramStr + "'";
 
+        try {
+            stat.executeUpdate(bSql);
+            trans.commit();
+            stat.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+    
     public void checkEtlStep(String sceneId,Map paraMap){
         System.out.println("passEtlStepByParam");
         DBTransaction trans =
@@ -647,7 +671,7 @@ public class Odi11gIndexMBean {
             if ("D,E".contains(status)) {
                 if(this.getRunNum("QUEUE",this.getCategroy(sid)) > 0 && this.getRunNum("R",this.getCategroy(sid)) == 0){
                     this.executeNext(this.getCategroy(sid));    
-                    this.showQueueNum();
+                    //this.showQueueNum();
                 }
             }
         }else{
@@ -666,7 +690,7 @@ public class Odi11gIndexMBean {
             while(rs.next()){
                 if(this.getRunNum("QUEUE",rs.getString("QUEUE_CATEGORY")) > 0 && this.getRunNum("R",rs.getString("QUEUE_CATEGORY")) == 0){
                     this.executeNext(rs.getString("QUEUE_CATEGORY"));    
-                    this.showQueueNum();
+                    //this.showQueueNum();
                 }      
             }
         } catch (Exception e) {
@@ -803,7 +827,7 @@ public class Odi11gIndexMBean {
         
         String sid = sceneVo.getCurrentRow().getAttribute("Id").toString();
         if(this.getRunNum("R",this.getCategroy(sid))==0){
-            this.run(sceneVo.getCurrentRow(), params);                 
+            this.run(sceneVo.getCurrentRow(), params,null);                 
         }else{
             this.insertExecQueue(sceneVo.getCurrentRow(), params);   
             this.showQueueNum();
