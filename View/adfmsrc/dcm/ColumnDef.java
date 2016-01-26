@@ -39,6 +39,17 @@ public class ColumnDef {
     private String templateId;
     private String valueSetId;
 
+    public ColumnDef(String columnLabel, String dbTableCol, String isPk,
+                     String readonly, String dataType, String visible, String valueSetId) {
+        this.columnLabel = columnLabel;
+        this.dbTableCol = dbTableCol;
+        this.isPk = isPk;
+        this.readonly = readonly;
+        this.dataType = dataType;
+        this.visible = visible;
+        this.valueSetId = valueSetId;
+    }
+
     public void setId(String id) {
         this.id = id;
     }

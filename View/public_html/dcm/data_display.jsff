@@ -308,7 +308,7 @@
               </af:gridRow>
               <af:gridRow marginTop="5px" marginBottom="5px" height="auto"
                           id="gr5">
-                <af:gridCell marginStart="5px" width="auto" columnSpan="2"
+                <af:gridCell marginStart="5px" width="auto" columnSpan="1"
                              halign="center" id="gc8"
                              inlineStyle="margin-top:5px">
                   <af:commandButton text="#{viewBundle['dcm.action.export']}"
@@ -316,6 +316,14 @@
                     <af:fileDownloadActionListener contentType="application/vnd.ms-excel"
                                                    method="#{viewScope.DcmDataDisplayBean.operation_export}"
                                                    filename="#{viewScope.DcmDataDisplayBean.exportDataExcelName}"/>
+                  </af:commandButton>
+                </af:gridCell>
+                <af:gridCell marginStart="3px" width="auto" columnSpan="1"
+                             halign="center" id="qgc8"
+                             inlineStyle="margin-top:3px">
+                  <af:commandButton text="#{viewBundle['dms.quartz.export']}" 
+                                    id="qcb11"
+                                    actionListener="#{viewScope.DcmDataDisplayBean.quartz_export}">
                   </af:commandButton>
                 </af:gridCell>
               </af:gridRow>

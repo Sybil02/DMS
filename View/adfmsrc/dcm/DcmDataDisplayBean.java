@@ -636,15 +636,54 @@ public class DcmDataDisplayBean extends TablePagination{
                 writer.writoToFile();
             } else {
                 Excel2007WriterImpl writer=new Excel2007WriterImpl(this.getQuerySql(),
-                                                                   (int)this.curTempalte.getDataStartLine().getValue(),
-                                                                   this.colsdef);
-                writer.process(outputStream, this.curTempalte.getName());
+                                                                       (int)this.curTempalte.getDataStartLine().getValue(),
+                                                                       this.colsdef);
+                writer.process(outputStream, this.curTempalte.getName());  
+                outputStream.flush();
             }
-            outputStream.flush();
         } catch (Exception e) {
             this._logger.severe(e);
         }
     }
+    
+    public void quartz_export(ActionEvent actionEvent) {
+        this.dataExportWnd.cancel();
+        String type = this.isXlsx ? "xlsx" : "xls";
+        if ("xls".equals(type)){
+            
+        }else{
+            this.newExportJob();
+        }
+    }
+    
+    public void newExportJob(){
+        try {
+                HashMap<String,String> jobDataMap = new HashMap<String,String>();
+                
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+                String date = dateFormat.format(new Date());
+                String jobName = this.curUser.getAcc() + "-" + date;
+                //import info
+                int startL = (int)this.curTempalte.getDataStartLine().getValue();
+                jobDataMap.put("startLine", ObjectUtils.toString(startL));
+                jobDataMap.put("tempId",this.curTempalte.getId());
+
+                jobDataMap.put("userId",this.curUser.getId());
+                jobDataMap.put("querySql", this.getQuerySql());
+                jobDataMap.put("fileName", this.getExportDataExcelName());
+                jobDataMap.put("sheetName", this.curTempalte.getName());
+
+                //job info
+                jobDataMap.put("jndiName", "jdbc/DMSConnDS");
+                jobDataMap.put("jobName", jobName);
+                jobDataMap.put("jobGroup", "DEFAULT");
+                QuartzSchedulerSingleton qss = QuartzSchedulerSingleton.getInstance();
+                qss.scheduleJobMap(jobName, "dms.quartz.job.ExportExcelJob", "NULL", jobDataMap);
+        } catch (Exception e) {
+            this._logger.severe(e);
+        }
+    }
+    
     //下载模板
     public void operation_download(FacesContext facesContext,java.io.OutputStream outputStream) {
         this.templateExportWnd.cancel();
@@ -1278,4 +1317,5 @@ public class DcmDataDisplayBean extends TablePagination{
     public boolean isUseQuartz() {
         return useQuartz;
     }
+
 }

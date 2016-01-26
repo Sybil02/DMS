@@ -90,7 +90,7 @@ public class DBJob implements Job, Serializable {
 
                 Connection conn =
                     dbUtils.getJNDIConnectionByContainer(jndiName);
-                System.out.println("ssss:"+conn);
+                //System.out.println("ssss:"+conn);
                 //start by wtg
                 int startLine = Integer.parseInt(jobDataMap.getString("startLine"));
                 String tempId = jobDataMap.getString("tempId");
