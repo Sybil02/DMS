@@ -206,4 +206,38 @@
       <property
          name="sdm:polyPoints">B50,1018.0,179.24707,1018.5,239.64355,T50</property>
    </ControlFlowCase>
+   <View
+      id="View26">
+      <property
+         name="activityId">jobConsole</property>
+      <property
+         name="page">/jobConsole/jobConsole.jspx</property>
+      <property
+         name="description">&lt;html>&lt;p>&lt;b>jobConsole&lt;/b>&lt;/p>&lt;p>Activity Type:  View&lt;/p></property>
+      <property
+         name="exceptionHandler">false</property>
+      <property
+         name="y">294.09766</property>
+      <property
+         name="x">1174.5</property>
+   </View>
+   <WildcardControlFlowRule
+      id="WildcardControlFlowRule27">
+      <property
+         name="activityId">*</property>
+      <property
+         name="y">142.59766</property>
+      <property
+         name="x">1174.0</property>
+   </WildcardControlFlowRule>
+   <ControlFlowCase
+      islink="true"
+      id="ControlFlowCase28"
+      from="WildcardControlFlowRule27"
+      to="View26">
+      <property
+         name="fromOutcome">GoJobConsole</property>
+      <property
+         name="sdm:polyPoints">B50,1174.0,185.24707,1174.5,239.74707,T50</property>
+   </ControlFlowCase>
 </SDM>

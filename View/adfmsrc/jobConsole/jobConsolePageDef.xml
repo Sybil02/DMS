@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pageDefinition xmlns="http://xmlns.oracle.com/adfm/uimodel"
+                version="11.1.1.64.93" id="jobConsolePageDef"
+                Package="jobConsole">
+  <parameters/>
+  <executables>
+    <variableIterator id="variables"/>
+    <page id="pageTemplateBinding" Refresh="ifNeeded"
+          path="dms.dynamicShell.dynamicTabShellPageDef"/>
+    <iterator id="DmsMenuTreeViewIterator" Binds="DmsMenuTreeView"
+              DataControl="DmsModuleDataControl" RangeSize="25"/>
+    <iterator Binds="DmsJobDetailsVO" RangeSize="25"
+              DataControl="DmsModuleDataControl" id="DmsJobDetailsVOIterator"/>
+  </executables>
+  <bindings>
+    <tree IterBinding="DmsJobDetailsVOIterator" id="DmsJobDetailsVO">
+      <nodeDefinition DefName="team.epm.dms.view.DmsJobDetailsVO"
+                      Name="DmsJobDetailsVO0">
+        <AttrNames>
+          <Item Value="JobId"/>
+          <Item Value="JobType"/>
+          <Item Value="JobObject"/>
+          <Item Value="FileName"/>
+          <Item Value="CreatedBy"/>
+          <Item Value="CreatedAt"/>
+          <Item Value="EndTime"/>
+          <Item Value="JobLog"/>
+          <Item Value="JobStatus"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+  </bindings>
+</pageDefinition>

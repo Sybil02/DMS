@@ -309,4 +309,12 @@ public class DmsModuleImpl extends ApplicationModuleImpl implements DmsModule {
     public ViewLinkImpl getDmsGroupGValueLnk() {
         return (ViewLinkImpl)findViewLink("DmsGroupGValueLnk");
     }
+
+    /**
+     * Container's getter for DmsJobDetailsVO.
+     * @return DmsJobDetailsVO
+     */
+    public ViewObjectImpl getDmsJobDetailsVO() {
+        return (ViewObjectImpl)findViewObject("DmsJobDetailsVO");
+    }
 }

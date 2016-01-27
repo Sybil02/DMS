@@ -18,6 +18,9 @@
   <view id="dgptIndex">
     <page>/dgpt/index.jspx</page>
   </view>
+  <view id="jobConsole">
+    <page>/jobConsole/jobConsole.jspx</page>
+  </view>
   <control-flow-rule id="__17">
     <from-activity-id id="__18">*</from-activity-id>
     <control-flow-case id="__20">
@@ -58,6 +61,13 @@
     <control-flow-case id="__57">
       <from-outcome id="__58">GoDgptIndex</from-outcome>
       <to-activity-id id="__56">dgptIndex</to-activity-id>
+    </control-flow-case>
+  </control-flow-rule>
+  <control-flow-rule id="__59">
+    <from-activity-id id="__60">*</from-activity-id>
+    <control-flow-case id="__61">
+      <from-outcome id="__63">GoJobConsole</from-outcome>
+      <to-activity-id id="__62">jobConsole</to-activity-id>
     </control-flow-case>
   </control-flow-rule>
   <managed-bean id="__1">
