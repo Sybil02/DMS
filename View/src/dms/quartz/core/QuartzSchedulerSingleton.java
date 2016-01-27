@@ -1,6 +1,12 @@
 package dms.quartz.core;
 
+import dms.quartz.utils.DBConnUtils;
+
 import java.io.Serializable;
+
+import java.sql.Connection;
+
+import java.sql.Statement;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -260,14 +266,40 @@ public class QuartzSchedulerSingleton implements Serializable{
                 job.getJobDataMap().put(key, map.get(key)); 
             }
 
-            // Create a new cron based schedule 
-//            Trigger Trigger =
-//                TriggerBuilder.newTrigger().withIdentity(jobName).withSchedule(CronScheduleBuilder.cronSchedule(cronSchedule)).build();
             //只执行一次的SimpleTrigger
             SimpleTrigger tgr = (SimpleTrigger)TriggerBuilder.newTrigger().withIdentity(jobName).startAt(new Date()).build();
-            //SimpleTrigger trigger = new SimpleTriggerImpl(jobName,Scheduler.DEFAULT_GROUP,new Date(),null,0,0L);
+
             _scheduler.scheduleJob(job,tgr);
             
+            //创建任务记录
+            String jndiName = map.get("jndiName");
+            String jobId = map.get("jobName");
+            String jobType = map.get("jobType");
+            String createdBy = map.get("userId");
+            String jobObject = "";
+            String fileName = "";
+            if(jobType.equals("ExportData")){
+                jobObject = map.get("sheetName");
+                fileName = "DMS/DOWNLOAD/" + map.get("sheetName") + "/" + map.get("fileName");
+            }else if(jobType.equals("ImportData")){
+                jobObject = map.get("tempName");
+                fileName = map.get("filePath");
+            }else{
+                    
+            }
+            
+            String sql = "INSERT INTO DMS_JOB_DETAILS VALUES('" + jobId + "','" + jobType + "','" + jobObject
+                + "','R',SYSDATE,'" + createdBy + "','" + fileName + "','','')" ;
+            
+            DBConnUtils dbUtils = new DBConnUtils();
+            Connection conn =
+                dbUtils.getJNDIConnectionByContainer(jndiName);
+            Statement stat = conn.createStatement();
+            stat.executeUpdate(sql);
+            conn.commit();
+            stat.close();
+            conn.close();
+
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

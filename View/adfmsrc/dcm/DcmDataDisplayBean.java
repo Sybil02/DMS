@@ -346,6 +346,7 @@ public class DcmDataDisplayBean extends TablePagination{
         jobDataMap.put("mode",this.isIncrement ? "INCREMENT" : "REPLACE");
         jobDataMap.put("locale", this.curUser.getLocale());
         //job info
+        jobDataMap.put("jobType", "ImportData");
         jobDataMap.put("connType", "jdbcDS");
         jobDataMap.put("jndiName", "jdbc/DMSConnDS");
         jobDataMap.put("jobName", jobName);
@@ -674,6 +675,7 @@ public class DcmDataDisplayBean extends TablePagination{
                 jobDataMap.put("sheetName", this.curTempalte.getName());
 
                 //job info
+                jobDataMap.put("jobType", "ExportData");
                 jobDataMap.put("jndiName", "jdbc/DMSConnDS");
                 jobDataMap.put("jobName", jobName);
                 jobDataMap.put("jobGroup", "DEFAULT");

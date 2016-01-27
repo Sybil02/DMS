@@ -4,6 +4,7 @@ import dcm.ColumnDef;
 
 import dms.quartz.utils.DBConnUtils;
 
+import dms.quartz.utils.JobUtils;
 import dms.quartz.utils.QrzExcel2007WriterImpl;
 
 import java.io.Serializable;
@@ -16,8 +17,6 @@ import java.sql.Statement;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import oracle.jbo.domain.Number;
 
 import org.quartz.Job;
 import org.quartz.JobDataMap;
@@ -34,6 +33,7 @@ public class ExportExcelJob implements Job, Serializable{
         JobDetail jobDetail = context.getJobDetail();
         JobDataMap jobDataMap = jobDetail.getJobDataMap();
         
+        String jobId = jobDataMap.getString("jobName");
         String jndiName = jobDataMap.getString("jndiName");
         String querySql = jobDataMap.getString("querySql");
         String tempId = jobDataMap.getString("tempId");
@@ -49,6 +49,9 @@ public class ExportExcelJob implements Job, Serializable{
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        JobUtils jobUtils = new JobUtils();
+        jobUtils.updateJobStatus(jndiName, jobId);
     }
     
     public List<ColumnDef> getColList(String tempId,String jndiName){
@@ -73,6 +76,7 @@ public class ExportExcelJob implements Job, Serializable{
             }
             rs.close();
             stat.close();
+            conn.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
