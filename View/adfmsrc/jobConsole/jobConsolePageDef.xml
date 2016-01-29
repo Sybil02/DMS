@@ -26,6 +26,7 @@
           <Item Value="EndTime"/>
           <Item Value="JobLog"/>
           <Item Value="JobStatus"/>
+          <Item Value="ExcelName"/>
         </AttrNames>
       </nodeDefinition>
     </tree>

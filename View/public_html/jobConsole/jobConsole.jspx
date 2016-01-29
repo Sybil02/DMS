@@ -14,7 +14,37 @@
                          value="#{bindings.pageTemplateBinding}" id="pt1">
           <!--f:facet name="navigation"/-->
           <f:facet name="globalLinks"/>
-          <f:facet name="status"/>
+          <f:facet name="status">
+            <af:popup id="p1" 
+                        binding="#{viewScope.DmsjobConsoleBean.downLoadPop}">
+              <af:dialog id="d2" inlineStyle="width:150px;height:30px" type="none">
+                              <af:panelGroupLayout id="pgl3">
+                <af:panelGridLayout id="pgl4" >
+                <af:gridRow marginTop="5px" height="auto" id="gr4">
+                  <af:gridCell marginStart="5px" columnSpan="2" halign="center" valign="middle" width="50%" id="gc11">
+                    <af:outputText value="#{viewBundle['dms.job.download']}" id="ot4"/>
+                  </af:gridCell>
+                </af:gridRow>
+                <af:gridRow marginTop="5px" marginBottom="5px" height="auto"
+                            id="gr3">
+                  <af:gridCell marginStart="5px" halign="center" valign="middle" width="50%" id="gc10">
+                    <af:commandButton text="#{viewBundle['dms.common.affirm']}" id="cb2">
+                        <af:fileDownloadActionListener contentType="application/vnd.ms-excel"
+                          filename="#{viewScope.DmsjobConsoleBean.downFileName}"
+                                                       method="#{viewScope.DmsjobConsoleBean.downLoadFile}"/>
+                    </af:commandButton>
+                  </af:gridCell>
+                  <af:gridCell marginStart="5px" halign="center" valign="middle" marginEnd="5px" width="50%"
+                               id="gc9">
+                    <af:commandButton text="#{viewBundle['dms.common.cancel']}" partialSubmit="true" id="cb3"
+                                      actionListener="#{viewScope.DmsjobConsoleBean.canclDownLoadPop}"/>
+                  </af:gridCell>
+                </af:gridRow>
+              </af:panelGridLayout>
+              </af:panelGroupLayout>
+              </af:dialog>
+            </af:popup>
+          </f:facet>
           <f:facet name="globalToolbar"/>
           <f:facet name="globalSearch"/>
           <f:facet name="globalTabs">
@@ -22,117 +52,156 @@
             </af:menuBar>
           </f:facet>
           <f:facet name="welcome">
-            <af:panelSplitter id="ps1" firstBorder="none" orientation="vertical"
-                              splitterPosition="80">
-              <f:facet name="first">
-                <af:panelGridLayout id="pgl1" inlineStyle="">
-                  <af:gridRow marginTop="5px" height="auto" id="gr1">
-                    <af:gridCell marginStart="5px" width="25%" id="gc3">
-                      <af:inputDate label="Label 1" id="id1"/>
-                    </af:gridCell>
-                    <af:gridCell marginStart="5px" width="25%" id="gc6">
-                      <af:inputDate label="Label 2" id="id2"/>
-                    </af:gridCell>
-                    <af:gridCell marginStart="5px" width="25%" id="gc2">
-                      <af:selectOneChoice label="#{viewBundle['dms.quartz.jobtype']}"
-                                          id="soc1">
-                        <af:selectItem label="ExportData" value="ExportData"
-                                       id="si1"/>
-                        <af:selectItem label="ImportData" value="ImportData"
-                                       id="si2"/>
-                      </af:selectOneChoice>
-                    </af:gridCell>
-                    <af:gridCell marginStart="5px" marginEnd="5px" width="25%"
-                                 id="gc1"/>
-                  </af:gridRow>
-                  <af:gridRow marginTop="5px" marginBottom="5px" height="auto"
-                              id="gr2">
-                    <af:gridCell marginStart="5px" width="25%" id="gc4">
-                      <af:selectOneChoice label="#{viewBundle['dcm.combinationRecord.status']}"
-                                          id="soc2">
-                        <af:selectItem label="完成" value="D" id="si3"/>
-                        <af:selectItem label="运行中" value="R" id="si5"/>
-                        <af:selectItem label="错误" value="E" id="si4"/>
-                      </af:selectOneChoice>
-                    </af:gridCell>
-                    <af:gridCell marginStart="5px" width="25%" id="gc8">
-                      <af:inputText label="#{viewBundle['dms.quartz.jobname']}" id="it1"/>
-                    </af:gridCell>
-                    <af:gridCell marginStart="5px" width="25%" id="gc7">
-                      <af:inputText label="#{viewBundle['dms.user.name']}" id="it2"/>
-                    </af:gridCell>
-                    <af:gridCell marginStart="5px" marginEnd="5px" width="25%"
-                                 id="gc5"/>
-                  </af:gridRow>
-                </af:panelGridLayout>
-              </f:facet>
-              <f:facet name="second">
-                <af:table value="#{bindings.DmsJobDetailsVO.collectionModel}"
-                          var="row" rows="#{bindings.DmsJobDetailsVO.rangeSize}"
-                          emptyText="#{bindings.DmsJobDetailsVO.viewable ? 'No data to display.' : 'Access Denied.'}"
-                          fetchSize="#{bindings.DmsJobDetailsVO.rangeSize}"
-                          rowBandingInterval="0" id="t1">
-                  <af:column sortProperty="#{bindings.DmsJobDetailsVO.hints.JobId.name}"
-                             sortable="false"
-                             headerText="#{bindings.DmsJobDetailsVO.hints.JobId.label}"
-                             id="c3">
-                    <af:outputText value="#{row.JobId}" id="ot7"/>
-                  </af:column>
-                  <af:column sortProperty="#{bindings.DmsJobDetailsVO.hints.JobType.name}"
-                             sortable="false"
-                             headerText="#{bindings.DmsJobDetailsVO.hints.JobType.label}"
-                             id="c9">
-                    <af:outputText value="#{row.JobType}" id="ot2"/>
-                  </af:column>
-                  <af:column sortProperty="#{bindings.DmsJobDetailsVO.hints.JobObject.name}"
-                             sortable="false"
-                             headerText="#{bindings.DmsJobDetailsVO.hints.JobObject.label}"
-                             id="c4">
-                    <af:outputText value="#{row.JobObject}" id="ot9"/>
-                  </af:column>
-                  <af:column sortProperty="#{bindings.DmsJobDetailsVO.hints.FileName.name}"
-                             sortable="false"
-                             headerText="#{bindings.DmsJobDetailsVO.hints.FileName.label}"
-                             id="c8">
-                    <af:outputText value="#{row.FileName}" id="ot4"/>
-                  </af:column>
-                  <af:column sortProperty="#{bindings.DmsJobDetailsVO.hints.CreatedBy.name}"
-                             sortable="false"
-                             headerText="#{bindings.DmsJobDetailsVO.hints.CreatedBy.label}"
-                             id="c7">
-                    <af:outputText value="#{row.CreatedBy}" id="ot1"/>
-                  </af:column>
-                  <af:column sortProperty="#{bindings.DmsJobDetailsVO.hints.CreatedAt.name}"
-                             sortable="false"
-                             headerText="#{bindings.DmsJobDetailsVO.hints.CreatedAt.label}"
-                             id="c6">
-                    <af:outputText value="#{row.CreatedAt}" id="ot3">
-                      <af:convertDateTime pattern="#{bindings.DmsJobDetailsVO.hints.CreatedAt.format}"/>
-                    </af:outputText>
-                  </af:column>
-                  <af:column sortProperty="#{bindings.DmsJobDetailsVO.hints.EndTime.name}"
-                             sortable="false"
-                             headerText="#{bindings.DmsJobDetailsVO.hints.EndTime.label}"
-                             id="c2">
-                    <af:outputText value="#{row.EndTime}" id="ot8">
-                      <af:convertDateTime pattern="#{bindings.DmsJobDetailsVO.hints.EndTime.format}"/>
-                    </af:outputText>
-                  </af:column>
-                  <af:column sortProperty="#{bindings.DmsJobDetailsVO.hints.JobLog.name}"
-                             sortable="false"
-                             headerText="#{bindings.DmsJobDetailsVO.hints.JobLog.label}"
-                             id="c1">
-                    <af:outputText value="#{row.JobLog}" id="ot5"/>
-                  </af:column>
-                  <af:column sortProperty="#{bindings.DmsJobDetailsVO.hints.JobStatus.name}"
-                             sortable="false"
-                             headerText="#{bindings.DmsJobDetailsVO.hints.JobStatus.label}"
-                             id="c5">
-                    <af:outputText value="#{row.JobStatus}" id="ot6"/>
-                  </af:column>
-                </af:table>
-              </f:facet>
-            </af:panelSplitter>
+            <af:group id="g1">
+              <af:panelSplitter id="ps1" firstBorder="none"
+                                orientation="vertical" splitterPosition="90">
+                <f:facet name="first">
+                  <af:panelGridLayout id="pgl1" inlineStyle="margin-top:15px">
+                    <af:gridRow marginTop="5px" height="auto" id="gr1">
+                      <af:gridCell marginStart="5px" halign="start" width="25%"
+                                   id="gc3">
+                        <af:inputDate label="#{viewBundle['dms.job.starttime']}" autoSubmit="true"
+                                      id="id1" simple="false"
+                                      binding="#{viewScope.DmsjobConsoleBean.startTime}"
+                                      />
+                      </af:gridCell>
+                      <af:gridCell marginStart="5px" halign="start" width="25%"
+                                   id="gc6">
+                        <af:inputDate label="#{viewBundle['dms.job.endtime']}" autoSubmit="true"
+                                      id="id2"
+                                      binding="#{viewScope.DmsjobConsoleBean.endTime}"/>
+                      </af:gridCell>
+                      <af:gridCell marginStart="5px" halign="start" width="25%"
+                                   id="gc2">
+                        <af:selectOneChoice label="#{viewBundle['dms.quartz.jobtype']}" autoSubmit="true"
+                                            id="soc1"
+                                            binding="#{viewScope.DmsjobConsoleBean.jobTypeSoc}">
+                          <af:selectItem label="ExportData" value="ExportData"
+                                         id="si1"/>
+                          <af:selectItem label="ImportData" value="ImportData"
+                                         id="si2"/>
+                        </af:selectOneChoice>
+                      </af:gridCell>
+                      <af:gridCell marginStart="5px" halign="start"
+                                   marginEnd="5px" width="25%" id="gc1"/>
+                    </af:gridRow>
+                    <af:gridRow marginTop="5px" marginBottom="5px" height="auto"
+                                id="gr2">
+                      <af:gridCell marginStart="5px" halign="start" width="25%"
+                                   id="gc4">
+                        <af:inputText label="#{viewBundle['dms.user.name']}" autoSubmit="true"
+                                      id="it2"
+                                      binding="#{viewScope.DmsjobConsoleBean.userName}"/>
+                      </af:gridCell>
+                      <af:gridCell marginStart="5px" halign="start" width="25%"
+                                   id="gc8">
+                        <af:inputText label="#{viewBundle['dms.quartz.jobname']}" autoSubmit="true"
+                                      id="it1"
+                                      binding="#{viewScope.DmsjobConsoleBean.jobName}"/>
+                      </af:gridCell>
+                      <af:gridCell marginStart="5px" halign="start" width="25%"
+                                   id="gc7">
+                        <af:panelGroupLayout id="pgl2" layout="horizontal">
+                        <af:selectOneChoice label="#{viewBundle['dcm.combinationRecord.status']}" autoSubmit="true"
+                                            id="soc2"
+                                            binding="#{viewScope.DmsjobConsoleBean.statusSoc}">
+                          <af:selectItem label="完成" value="D" id="si3"/>
+                          <af:selectItem label="运行中" value="R" id="si5"/>
+                          <af:selectItem label="错误" value="E" id="si4"/>
+                        </af:selectOneChoice>
+                        <af:spacer width="10px" id="sp1"/>
+                        <af:commandButton  id="cb1"
+                                          icon="/images/page-next.gif" 
+                                          partialSubmit="true"
+                                          actionListener="#{viewScope.DmsjobConsoleBean.queryJob}"/>
+                        </af:panelGroupLayout>
+                      </af:gridCell>
+                      <af:gridCell marginStart="5px" halign="start"
+                                   marginEnd="5px" width="25%" id="gc5">
+
+                      </af:gridCell>
+                    </af:gridRow>
+                  </af:panelGridLayout>
+                </f:facet>
+                <f:facet name="second">
+                  <af:panelCollection id="pc1">
+                    <f:facet name="menus"/>
+                    <f:facet name="toolbar"/>
+                    <f:facet name="statusbar"/>
+                    <af:table value="#{bindings.DmsJobDetailsVO.collectionModel}"
+                              var="row" 
+                              rows="#{bindings.DmsJobDetailsVO.rangeSize}"
+                              emptyText="#{bindings.DmsJobDetailsVO.viewable ? 'No data to display.' : 'Access Denied.'}"
+                              fetchSize="#{bindings.DmsJobDetailsVO.rangeSize}"
+                              rowBandingInterval="0" id="t1"
+                              partialTriggers=":::cb1">
+                      <af:column sortProperty="#{bindings.DmsJobDetailsVO.hints.JobId.name}"
+                                 sortable="false"
+                                 headerText="#{bindings.DmsJobDetailsVO.hints.JobId.label}"
+                                 id="c3">
+                        <af:outputText value="#{row.JobId}" id="ot7"/>
+                      </af:column>
+                      <af:column sortProperty="#{bindings.DmsJobDetailsVO.hints.JobType.name}"
+                                 sortable="false"
+                                 headerText="#{bindings.DmsJobDetailsVO.hints.JobType.label}"
+                                 id="c9">
+                        <af:outputText value="#{row.JobType}" id="ot2"/>
+                      </af:column>
+                      <af:column sortProperty="#{bindings.DmsJobDetailsVO.hints.JobObject.name}"
+                                 sortable="false"
+                                 headerText="#{bindings.DmsJobDetailsVO.hints.JobObject.label}"
+                                 id="c4">
+                        <af:outputText value="#{row.JobObject}" id="ot9"/>
+                      </af:column>
+                      <af:column sortProperty="#{bindings.DmsJobDetailsVO.hints.FileName.name}"
+                                 sortable="false"
+                                 headerText="#{bindings.DmsJobDetailsVO.hints.FileName.label}"
+                                 id="c8">
+                        <af:commandImageLink text="#{row.FileName}" id="cil1"
+                                             icon="/images/excel.png"
+                                             actionListener="#{viewScope.DmsjobConsoleBean.showDownLoadPop}"
+                                             partialSubmit="true">
+                        </af:commandImageLink>
+                      </af:column>
+                      <af:column sortProperty="#{bindings.DmsJobDetailsVO.hints.CreatedBy.name}"
+                                 sortable="false"
+                                 headerText="#{bindings.DmsJobDetailsVO.hints.CreatedBy.label}"
+                                 id="c7">
+                        <af:outputText value="#{row.CreatedBy}" id="ot1"/>
+                      </af:column>
+                      <af:column sortProperty="#{bindings.DmsJobDetailsVO.hints.CreatedAt.name}"
+                                 sortable="false"
+                                 headerText="#{bindings.DmsJobDetailsVO.hints.CreatedAt.label}"
+                                 id="c6">
+                        <af:outputText value="#{row.CreatedAt}" id="ot3">
+                          <af:convertDateTime pattern="#{bindings.DmsJobDetailsVO.hints.CreatedAt.format}"/>
+                        </af:outputText>
+                      </af:column>
+                      <af:column sortProperty="#{bindings.DmsJobDetailsVO.hints.EndTime.name}"
+                                 sortable="false"
+                                 headerText="#{bindings.DmsJobDetailsVO.hints.EndTime.label}"
+                                 id="c2">
+                        <af:outputText value="#{row.EndTime}" id="ot8">
+                          <af:convertDateTime pattern="#{bindings.DmsJobDetailsVO.hints.EndTime.format}"/>
+                        </af:outputText>
+                      </af:column>
+                      <af:column sortProperty="#{bindings.DmsJobDetailsVO.hints.JobLog.name}"
+                                 sortable="false"
+                                 headerText="#{bindings.DmsJobDetailsVO.hints.JobLog.label}"
+                                 id="c1">
+                        <af:outputText value="#{row.JobLog}" id="ot5"/>
+                      </af:column>
+                      <af:column sortProperty="#{bindings.DmsJobDetailsVO.hints.JobStatus.name}"
+                                 sortable="false"
+                                 headerText="#{bindings.DmsJobDetailsVO.hints.JobStatus.label}"
+                                 id="c5">
+                        <af:outputText value="#{row.JobStatus}" id="ot6"/>
+                      </af:column>
+                    </af:table>
+                  </af:panelCollection>
+                </f:facet>
+              </af:panelSplitter>
+            </af:group>
           </f:facet>
           <f:facet name="innerToolbar"/>
           <f:attribute name="brandingTitle" value="#{viewBundle['dms.title']}"/>

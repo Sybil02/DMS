@@ -275,15 +275,16 @@ public class QuartzSchedulerSingleton implements Serializable{
             String jndiName = map.get("jndiName");
             String jobId = map.get("jobName");
             String jobType = map.get("jobType");
-            String createdBy = map.get("userId");
+            String createdBy = map.get("userName");
             String jobObject = "";
             String fileName = "";
             if(jobType.equals("ExportData")){
                 jobObject = map.get("sheetName");
-                fileName = "DMS/DOWNLOAD/" + map.get("sheetName") + "/" + map.get("fileName");
+                fileName = "DMS\\DOWNLOAD\\" + map.get("sheetName") + "\\" + map.get("fileName");
             }else if(jobType.equals("ImportData")){
                 jobObject = map.get("tempName");
                 fileName = map.get("filePath");
+                fileName = fileName.substring(fileName.indexOf("DMS\\UPLOAD"));
             }else{
                     
             }

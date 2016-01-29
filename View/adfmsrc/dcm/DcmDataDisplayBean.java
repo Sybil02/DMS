@@ -339,6 +339,7 @@ public class DcmDataDisplayBean extends TablePagination{
         jobDataMap.put("tempTable",this.curTempalte.getTmpTable());
         jobDataMap.put("colSize",ObjectUtils.toString(this.colsdef.size()));
         jobDataMap.put("userId",this.curUser.getId());
+        jobDataMap.put("userName",this.curUser.getName());
         jobDataMap.put("tempName",this.curTempalte.getName());
         jobDataMap.put("filePath", filePath);
         jobDataMap.put("impPro", this.curTempalte.getHandleProgram());
@@ -670,6 +671,7 @@ public class DcmDataDisplayBean extends TablePagination{
                 jobDataMap.put("tempId",this.curTempalte.getId());
 
                 jobDataMap.put("userId",this.curUser.getId());
+                jobDataMap.put("userName",this.curUser.getName());
                 jobDataMap.put("querySql", this.getQuerySql());
                 jobDataMap.put("fileName", this.getExportDataExcelName());
                 jobDataMap.put("sheetName", this.curTempalte.getName());

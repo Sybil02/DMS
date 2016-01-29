@@ -39,12 +39,12 @@ public abstract class QrzAbstractExcel2007Writer {
     }
 
     public void process(String fileName, String sheetName) throws Exception {
-        File dmsBaseDir = new File("DMS/DOWNLOAD/" + sheetName);
+        File dmsBaseDir = new File("DMS\\DOWNLOAD\\" + sheetName);
         //如若文件路径不存在则创建文件目录
         if (!dmsBaseDir.exists()) {
             dmsBaseDir.mkdirs();
         }
-        fileName = dmsBaseDir + "/" + fileName;
+        fileName = dmsBaseDir + "\\" + fileName;
         
         File file = new File(fileName);
         if(file.exists() && file.isFile()){

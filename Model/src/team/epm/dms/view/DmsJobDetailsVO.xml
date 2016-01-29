@@ -27,6 +27,10 @@
         ResId="team.epm.dms.view.DmsJobDetailsVO_LABEL"/>
     </SchemaBasedProperties>
   </Properties>
+  <ViewAccessor
+    Name="DmsUserView"
+    ViewObjectName="team.epm.dms.view.DmsUserView"
+    RowLevelBinds="true"/>
   <EntityUsage
     Name="DmsJobDetailsEO"
     Entity="team.epm.dms.model.DmsJobDetailsEO"/>
@@ -35,57 +39,138 @@
     PrecisionRule="true"
     EntityAttrName="CreatedAt"
     EntityUsage="DmsJobDetailsEO"
-    AliasName="CREATED_AT"/>
+    AliasName="CREATED_AT">
+    <Properties>
+      <SchemaBasedProperties>
+        <FMT_FORMATTER
+          ResId="team.epm.dms.view.DmsJobDetailsVO.CreatedAt_FMT_FORMATTER"/>
+        <FMT_FORMAT
+          ResId="team.epm.dms.view.DmsJobDetailsVO.CreatedAt_FMT_FORMAT"/>
+        <LABEL
+          ResId="team.epm.dms.view.DmsJobDetailsVO.CreatedAt_LABEL"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewAttribute
     Name="CreatedBy"
     PrecisionRule="true"
     EntityAttrName="CreatedBy"
     EntityUsage="DmsJobDetailsEO"
-    AliasName="CREATED_BY"/>
+    AliasName="CREATED_BY">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="team.epm.dms.view.DmsJobDetailsVO.CreatedBy_LABEL"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewAttribute
     Name="EndTime"
     PrecisionRule="true"
     EntityAttrName="EndTime"
     EntityUsage="DmsJobDetailsEO"
-    AliasName="END_TIME"/>
+    AliasName="END_TIME">
+    <Properties>
+      <SchemaBasedProperties>
+        <FMT_FORMATTER
+          ResId="team.epm.dms.view.DmsJobDetailsVO.EndTime_FMT_FORMATTER"/>
+        <FMT_FORMAT
+          ResId="team.epm.dms.view.DmsJobDetailsVO.EndTime_FMT_FORMAT"/>
+        <LABEL
+          ResId="team.epm.dms.view.DmsJobDetailsVO.EndTime_LABEL"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewAttribute
     Name="FileName"
     PrecisionRule="true"
     EntityAttrName="FileName"
     EntityUsage="DmsJobDetailsEO"
-    AliasName="FILE_NAME"/>
+    AliasName="FILE_NAME">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="team.epm.dms.view.DmsJobDetailsVO.FileName_LABEL"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewAttribute
     Name="JobId"
     PrecisionRule="true"
     EntityAttrName="JobId"
     EntityUsage="DmsJobDetailsEO"
-    AliasName="JOB_ID"/>
+    AliasName="JOB_ID">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="team.epm.dms.view.DmsJobDetailsVO.JobId_LABEL"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewAttribute
     Name="JobLog"
     PrecisionRule="true"
     EntityAttrName="JobLog"
     EntityUsage="DmsJobDetailsEO"
-    AliasName="JOB_LOG"/>
+    AliasName="JOB_LOG">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="team.epm.dms.view.DmsJobDetailsVO.JobLog_LABEL"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewAttribute
     Name="JobObject"
     PrecisionRule="true"
     EntityAttrName="JobObject"
     EntityUsage="DmsJobDetailsEO"
-    AliasName="JOB_OBJECT"/>
+    AliasName="JOB_OBJECT">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="team.epm.dms.view.DmsJobDetailsVO.JobObject_LABEL"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewAttribute
     Name="JobStatus"
     PrecisionRule="true"
     EntityAttrName="JobStatus"
     EntityUsage="DmsJobDetailsEO"
-    AliasName="JOB_STATUS"/>
+    AliasName="JOB_STATUS">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="team.epm.dms.view.DmsJobDetailsVO.JobStatus_LABEL"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewAttribute
     Name="JobType"
     PrecisionRule="true"
     EntityAttrName="JobType"
     EntityUsage="DmsJobDetailsEO"
-    AliasName="JOB_TYPE"/>
+    AliasName="JOB_TYPE">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="team.epm.dms.view.DmsJobDetailsVO.JobType_LABEL"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ResourceBundle>
     <PropertiesBundle
       PropertiesFile="ModelBundle"/>
   </ResourceBundle>
+  <ViewAttribute
+    Name="ExcelName"
+    IsUpdateable="false"
+    IsSelected="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="VIEW_ATTR"
+    SQLType="VARCHAR"/>
 </ViewObject>

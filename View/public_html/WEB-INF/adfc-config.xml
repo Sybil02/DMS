@@ -105,4 +105,9 @@
     <managed-bean-class id="__53">odi11g.Odi11gIndexMBean</managed-bean-class>
     <managed-bean-scope id="__51">view</managed-bean-scope>
   </managed-bean>
+  <managed-bean id="__66">
+    <managed-bean-name id="__67">DmsjobConsoleBean</managed-bean-name>
+    <managed-bean-class id="__64">dms.quartz.core.DmsJobConsoleBean</managed-bean-class>
+    <managed-bean-scope id="__65">view</managed-bean-scope>
+  </managed-bean>
 </adfc-config>
