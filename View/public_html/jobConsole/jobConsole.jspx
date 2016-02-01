@@ -12,7 +12,7 @@
       <af:form id="f1">
           <af:pageTemplate viewId="/dms/dynamicShell/dynamicTabShell.jspx"
                          value="#{bindings.pageTemplateBinding}" id="pt1">
-          <!--f:facet name="navigation"/-->
+          <f:facet name="navigation"/>
           <f:facet name="globalLinks"/>
           <f:facet name="status">
             <af:popup id="p1" 
@@ -76,6 +76,7 @@
                         <af:selectOneChoice label="#{viewBundle['dms.quartz.jobtype']}" autoSubmit="true"
                                             id="soc1"
                                             binding="#{viewScope.DmsjobConsoleBean.jobTypeSoc}">
+                          <af:selectItem id="si8"/>
                           <af:selectItem label="ExportData" value="ExportData"
                                          id="si1"/>
                           <af:selectItem label="ImportData" value="ImportData"
@@ -95,7 +96,7 @@
                       </af:gridCell>
                       <af:gridCell marginStart="5px" halign="start" width="25%"
                                    id="gc8">
-                        <af:inputText label="#{viewBundle['dms.quartz.jobname']}" autoSubmit="true"
+                        <af:inputText label="#{viewBundle['dms.job.jobobject']}" autoSubmit="true"
                                       id="it1"
                                       binding="#{viewScope.DmsjobConsoleBean.jobName}"/>
                       </af:gridCell>
@@ -105,7 +106,8 @@
                         <af:selectOneChoice label="#{viewBundle['dcm.combinationRecord.status']}" autoSubmit="true"
                                             id="soc2"
                                             binding="#{viewScope.DmsjobConsoleBean.statusSoc}">
-                          <af:selectItem label="完成" value="D" id="si3"/>
+                          <af:selectItem id="si7"/>
+                          <af:selectItem label="完成" value="C" id="si3"/>
                           <af:selectItem label="运行中" value="R" id="si5"/>
                           <af:selectItem label="错误" value="E" id="si4"/>
                         </af:selectOneChoice>
@@ -136,25 +138,25 @@
                               rowBandingInterval="0" id="t1"
                               partialTriggers=":::cb1">
                       <af:column sortProperty="#{bindings.DmsJobDetailsVO.hints.JobId.name}"
-                                 sortable="false"
+                                 sortable="false" width="160"
                                  headerText="#{bindings.DmsJobDetailsVO.hints.JobId.label}"
                                  id="c3">
                         <af:outputText value="#{row.JobId}" id="ot7"/>
                       </af:column>
                       <af:column sortProperty="#{bindings.DmsJobDetailsVO.hints.JobType.name}"
-                                 sortable="false"
+                                 sortable="false" width="80"
                                  headerText="#{bindings.DmsJobDetailsVO.hints.JobType.label}"
                                  id="c9">
                         <af:outputText value="#{row.JobType}" id="ot2"/>
                       </af:column>
                       <af:column sortProperty="#{bindings.DmsJobDetailsVO.hints.JobObject.name}"
-                                 sortable="false"
+                                 sortable="false" width="200"
                                  headerText="#{bindings.DmsJobDetailsVO.hints.JobObject.label}"
                                  id="c4">
                         <af:outputText value="#{row.JobObject}" id="ot9"/>
                       </af:column>
                       <af:column sortProperty="#{bindings.DmsJobDetailsVO.hints.FileName.name}"
-                                 sortable="false"
+                                 sortable="false" width="235"
                                  headerText="#{bindings.DmsJobDetailsVO.hints.FileName.label}"
                                  id="c8">
                         <af:commandImageLink text="#{row.FileName}" id="cil1"
@@ -170,7 +172,7 @@
                         <af:outputText value="#{row.CreatedBy}" id="ot1"/>
                       </af:column>
                       <af:column sortProperty="#{bindings.DmsJobDetailsVO.hints.CreatedAt.name}"
-                                 sortable="false"
+                                 sortable="false" width="130"
                                  headerText="#{bindings.DmsJobDetailsVO.hints.CreatedAt.label}"
                                  id="c6">
                         <af:outputText value="#{row.CreatedAt}" id="ot3">
@@ -178,7 +180,7 @@
                         </af:outputText>
                       </af:column>
                       <af:column sortProperty="#{bindings.DmsJobDetailsVO.hints.EndTime.name}"
-                                 sortable="false"
+                                 sortable="false" width="130"
                                  headerText="#{bindings.DmsJobDetailsVO.hints.EndTime.label}"
                                  id="c2">
                         <af:outputText value="#{row.EndTime}" id="ot8">
@@ -186,7 +188,7 @@
                         </af:outputText>
                       </af:column>
                       <af:column sortProperty="#{bindings.DmsJobDetailsVO.hints.JobLog.name}"
-                                 sortable="false"
+                                 sortable="false" width="150"
                                  headerText="#{bindings.DmsJobDetailsVO.hints.JobLog.label}"
                                  id="c1">
                         <af:outputText value="#{row.JobLog}" id="ot5"/>
@@ -206,7 +208,8 @@
           <f:facet name="innerToolbar"/>
           <f:attribute name="brandingTitle" value="#{viewBundle['dms.title']}"/>
           <f:attribute name="globalAreaSplitterPosition" value="0"/>
-          <f:attribute name="navSplitterPosition" value="200"/>
+          <f:attribute name="navSplitterPosition" value="0"/>
+          <f:attribute name="navSplitterDisabled" value="true"/>
         </af:pageTemplate>
       </af:form>
     </af:document>

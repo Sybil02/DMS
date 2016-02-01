@@ -20,7 +20,7 @@ public class JobUtils {
         try {
             Connection conn = this.getConn(jndiName);
             Statement stat = conn.createStatement();
-            String sql = "UPDATE DMS_JOB_DETAILS T SET T.JOB_STATUS = 'D',T.END_TIME=SYSDATE WHERE T.JOB_ID = '" + jobId + "'";
+            String sql = "UPDATE DMS_JOB_DETAILS T SET T.JOB_STATUS = 'C',T.END_TIME=SYSDATE WHERE T.JOB_ID = '" + jobId + "'";
             stat.executeUpdate(sql);
             conn.commit();
             conn.close();

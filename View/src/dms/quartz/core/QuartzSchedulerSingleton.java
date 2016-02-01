@@ -278,19 +278,21 @@ public class QuartzSchedulerSingleton implements Serializable{
             String createdBy = map.get("userName");
             String jobObject = "";
             String fileName = "";
+            String filePath = "";
             if(jobType.equals("ExportData")){
                 jobObject = map.get("sheetName");
-                fileName = "DMS\\DOWNLOAD\\" + map.get("sheetName") + "\\" + map.get("fileName");
+                filePath = "DMS\\DOWNLOAD\\" + map.get("sheetName") + "\\" + map.get("fileName");
+                fileName = map.get("fileName");
             }else if(jobType.equals("ImportData")){
                 jobObject = map.get("tempName");
-                fileName = map.get("filePath");
-                fileName = fileName.substring(fileName.indexOf("DMS\\UPLOAD"));
+                filePath = map.get("filePath");
+                fileName = filePath.substring(filePath.lastIndexOf("\\")+1);
             }else{
                     
             }
             
             String sql = "INSERT INTO DMS_JOB_DETAILS VALUES('" + jobId + "','" + jobType + "','" + jobObject
-                + "','R',SYSDATE,'" + createdBy + "','" + fileName + "','','')" ;
+                + "','R',SYSDATE,'" + createdBy + "','" + fileName + "','','','" + filePath + "')" ;
             
             DBConnUtils dbUtils = new DBConnUtils();
             Connection conn =

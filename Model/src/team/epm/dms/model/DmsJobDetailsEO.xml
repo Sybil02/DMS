@@ -121,6 +121,18 @@
       <Attr Name="_DisplaySize" Value="7"/>
     </DesignTime>
   </Attribute>
+  <Attribute
+    Name="FilePath"
+    Precision="200"
+    ColumnName="FILE_PATH"
+    SQLType="VARCHAR"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    TableName="DMS_JOB_DETAILS">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="200"/>
+    </DesignTime>
+  </Attribute>
   <Key
     Name="DmsjobdetailseoPrimaryKey"
     PrimaryKey="true">

@@ -28,8 +28,10 @@ import oracle.adf.view.rich.component.rich.input.RichSelectOneChoice;
 import oracle.adf.view.rich.event.DialogEvent;
 
 import oracle.jbo.ViewCriteria;
+import oracle.jbo.ViewCriteriaItem;
 import oracle.jbo.ViewCriteriaRow;
 import oracle.jbo.ViewObject;
+import oracle.jbo.common.JboCompOper;
 
 public class DmsJobConsoleBean {
     private RichDialog downLoadDlg;
@@ -48,7 +50,7 @@ public class DmsJobConsoleBean {
     }
 
     public void showDownLoadPop(ActionEvent actionEvent) {
-        Object obj = ADFUtils.findIterator("DmsJobDetailsVOIterator").getCurrentRow().getAttribute("FileName");
+        Object obj = ADFUtils.findIterator("DmsJobDetailsVOIterator").getCurrentRow().getAttribute("FilePath");
         if(obj != null){
             this.downFilePath = obj.toString();
             this.downFileName = downFilePath.substring(downFilePath.lastIndexOf("\\")+1);
@@ -74,49 +76,45 @@ public class DmsJobConsoleBean {
     }
 
     public void queryJob(ActionEvent actionEvent) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-//        System.out.println(sdf.format((Date)this.startTime.getLocalValue()));  
+
         ViewObject jobView = DmsUtils.getDmsApplicationModule().getDmsJobDetailsVO();
         ViewCriteria vc = jobView.createViewCriteria();
         ViewCriteriaRow vcr = vc.createViewCriteriaRow();
         
         if(this.startTime.getLocalValue() != null){
-            String sTime = sdf.format((Date)this.startTime.getLocalValue());
-            vcr.setAttribute("CreatedAt", ">=to_date('"+sTime+"','yyyy-MM-dd')");
+            ViewCriteriaItem vci = vcr.ensureCriteriaItem("CreatedAt");
+            vci.setOperator(JboCompOper.OPER_ON_OR_AFTER);
+            vci.setValue(this.startTime.getLocalValue());
         }
         
         if(this.endTime.getLocalValue() != null){
-            String eTime = sdf.format((Date)this.endTime.getLocalValue());
-            vcr.setAttribute("EndTime", "<=to_date('"+eTime+"','yyyy-MM-dd')");
+            ViewCriteriaItem vci = vcr.ensureCriteriaItem("EndTime");
+            vci.setOperator(JboCompOper.OPER_ON_OR_BEFORE);
+            vci.setValue(this.endTime.getLocalValue());
         }
         
         if(this.jobTypeSoc.getValue() != null){
-            String type = this.jobTypeSoc.getValue().toString();
-            System.out.println("type:"+type);    
+            String type = this.jobTypeSoc.getValue().toString(); 
             vcr.setAttribute("JobType", "like '%"+type+"%'");
         }
         
         if(this.userName.getValue() != null){
             String name = this.userName.getValue().toString();
-            System.out.println("name:"+name);    
             vcr.setAttribute("CreatedBy", "like '%"+name+"%'");
         }
         
         if(this.jobName.getValue() != null){
             String jobId = this.jobName.getValue().toString();
-            System.out.println("JobId:"+jobId);    
-            vcr.setAttribute("JobId", "like '%"+jobId+"%'");
+            vcr.setAttribute("JobObject", "like '%"+jobId+"%'");
         }
         
         if(this.statusSoc.getValue() != null){
-            String status = this.statusSoc.getValue().toString();
-            System.out.println("status:"+status);    
+            String status = this.statusSoc.getValue().toString(); 
             vcr.setAttribute("JobStatus", "like '%"+status+"%'");
         }
         
         vc.add(vcr);
         jobView.applyViewCriteria(vc);
-        System.out.println("query:"+jobView.getQuery());
         jobView.executeQuery();
         jobView.getViewCriteriaManager().setApplyViewCriteriaName(null);
         
@@ -190,6 +188,7 @@ public class DmsJobConsoleBean {
                 outputStream.write(bytes,0,count);    
             }
             outputStream.flush();
+            outputStream.close();
         } catch (FileNotFoundException e) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("找不到指定文件！"));
             e.printStackTrace();

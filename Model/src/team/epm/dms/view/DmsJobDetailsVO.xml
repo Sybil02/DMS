@@ -14,7 +14,8 @@
        DmsJobDetailsEO.JOB_LOG, 
        DmsJobDetailsEO.JOB_OBJECT, 
        DmsJobDetailsEO.JOB_STATUS, 
-       DmsJobDetailsEO.JOB_TYPE"
+       DmsJobDetailsEO.JOB_TYPE, 
+       DmsJobDetailsEO.FILE_PATH"
   FromList="DMS_JOB_DETAILS DmsJobDetailsEO"
   OrderBy="DmsJobDetailsEO.CREATED_AT DESC"
   BindingStyle="OracleName"
@@ -164,13 +165,9 @@
       PropertiesFile="ModelBundle"/>
   </ResourceBundle>
   <ViewAttribute
-    Name="ExcelName"
-    IsUpdateable="false"
-    IsSelected="false"
-    IsPersistent="false"
+    Name="FilePath"
     PrecisionRule="true"
-    Type="java.lang.String"
-    ColumnType="VARCHAR2"
-    AliasName="VIEW_ATTR"
-    SQLType="VARCHAR"/>
+    EntityAttrName="FilePath"
+    EntityUsage="DmsJobDetailsEO"
+    AliasName="FILE_PATH"/>
 </ViewObject>
