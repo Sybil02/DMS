@@ -5,8 +5,10 @@ import dcm.ColumnDef;
 import dms.quartz.utils.DBConnUtils;
 
 import dms.quartz.utils.JobUtils;
+import dms.quartz.utils.QrzExcel2003WriterImpl;
 import dms.quartz.utils.QrzExcel2007WriterImpl;
 
+import java.io.IOException;
 import java.io.Serializable;
 
 import java.sql.Connection;
@@ -39,17 +41,29 @@ public class ExportExcelJob implements Job, Serializable{
         String tempId = jobDataMap.getString("tempId");
         String fileName = jobDataMap.getString("fileName");
         String sheetName = jobDataMap.getString("sheetName");
+        String isXlsx = jobDataMap.getString("isXlsx");
         int startLine = Integer.parseInt(jobDataMap.getString("startLine"));
         
         List<ColumnDef> colDefList = this.getColList(tempId,jndiName); 
         //导出Excel
-        QrzExcel2007WriterImpl writer = new QrzExcel2007WriterImpl(querySql,jndiName,startLine,colDefList);
-        try {
-            writer.process(fileName, sheetName);
-        } catch (Exception e) {
-            e.printStackTrace();
+        if("xlsx".equals(isXlsx)){
+            QrzExcel2007WriterImpl writer = new QrzExcel2007WriterImpl(querySql,jndiName,startLine,colDefList);
+            try {
+                writer.process(fileName, sheetName);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }else{
+            QrzExcel2003WriterImpl writer = new QrzExcel2003WriterImpl(querySql,sheetName,fileName,jndiName,startLine,colDefList);
+            try {
+                writer.writeToFile();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
-
+        
         JobUtils jobUtils = new JobUtils();
         jobUtils.updateJobStatus(jndiName, jobId);
     }

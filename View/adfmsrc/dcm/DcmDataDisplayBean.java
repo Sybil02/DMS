@@ -650,12 +650,7 @@ public class DcmDataDisplayBean extends TablePagination{
     
     public void quartz_export(ActionEvent actionEvent) {
         this.dataExportWnd.cancel();
-        String type = this.isXlsx ? "xlsx" : "xls";
-        if ("xls".equals(type)){
-            
-        }else{
-            this.newExportJob();
-        }
+        this.newExportJob();
     }
     
     public void newExportJob(){
@@ -669,6 +664,7 @@ public class DcmDataDisplayBean extends TablePagination{
                 int startL = (int)this.curTempalte.getDataStartLine().getValue();
                 jobDataMap.put("startLine", ObjectUtils.toString(startL));
                 jobDataMap.put("tempId",this.curTempalte.getId());
+                jobDataMap.put("isXlsx",this.isXlsx ? "xlsx" : "xls");
 
                 jobDataMap.put("userId",this.curUser.getId());
                 jobDataMap.put("userName",this.curUser.getName());
