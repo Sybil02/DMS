@@ -81,6 +81,8 @@
                                          id="si1"/>
                           <af:selectItem label="ImportData" value="ImportData"
                                          id="si2"/>
+                          <af:selectItem label="ODI" value="ODI"
+                                         id="si9"/>
                         </af:selectOneChoice>
                       </af:gridCell>
                       <af:gridCell marginStart="5px" halign="start"

@@ -9,8 +9,8 @@
   <f:view>
     <af:document id="d1" title="#{viewBundle['title.login']}">
       <af:form id="f1" defaultCommand="login_action">
-        <af:panelStretchLayout id="psl1" startWidth="50%" endWidth="0px"
-                               topHeight="30%"
+        <af:panelStretchLayout id="psl1" startWidth="60%" endWidth="0px"
+                               topHeight="30%" bottomHeight="15%"
                                inlineStyle="
                                -moz-background-size: 100% 100%; 
                                -o-background-size: 100% 100%; 
@@ -27,27 +27,24 @@
                                -o-background-size: contain;
                                background-size: contain;">
           <f:facet name="bottom">
-            <af:popup id="p1" autoCancel="disabled" childCreation="deferred"
-                      binding="#{LoginBean.popup}">
-              <af:panelWindow id="pw1" modal="true"
-                              title="#{viewBundle['login.forget_password']}">
-                <af:panelFormLayout id="pfl2" inlineStyle="width:230px;height:80px;">
-                  <af:inputText label="#{viewBundle['login.account']}" id="it1"
-                                binding="#{LoginBean.acc}"/>
-                  <af:inputText label="#{viewBundle['dms.user.mail']}" id="it2"
-                                binding="#{LoginBean.mail}"/>
-                  <f:facet name="footer">
-                    <af:commandButton inlineStyle="width:80px;margin-top:10px;margin-left:70px" text="#{viewBundle['login.reset_password']}" id="cb1"
-                                      actionListener="#{LoginBean.forgetPassword}"
-                                      partialSubmit="true"/>
-                  </f:facet>
-                </af:panelFormLayout>
-              </af:panelWindow>
-            </af:popup>
+            <af:panelGroupLayout id="pgl2" 
+                                 inlineStyle="background-color:#185E87; text-align:center; vertical-align:middle;">
+              <af:outputLabel value="#{viewBundle['dms.hand.com']}" id="ol2"
+                              inlineStyle="text-align:center; vertical-align:middle; color:#B2CBDB;"/>
+            </af:panelGroupLayout>
           </f:facet>
           <f:facet name="center">
-            <af:panelFormLayout id="pfl1">
-              <af:inputText label="#{viewBundle['login.account']}"
+            <af:panelGroupLayout id="pg13" inlineStyle="width:312px;height:215px;padding-left:25.0%;
+                                                          padding-right:30.0%">
+            <af:panelFormLayout id="pfl1"
+                                inlineStyle="background-color:White; padding-left:10%; padding-right:15%; padding-top:15%;
+                                 padding-bottom:10%;
+                                background-image:url(../images/Loginarea-bg.png;);
+                                -moz-border-image: url(../images/Loginarea-bg.png) 0; ">
+                <af:outputLabel value="#{viewBundle['dms.application.name']}" id="ol1"
+                                inlineStyle="font-size:x-large;"/>
+                <af:spacer height="10px" id="sp10"/>
+                <af:inputText label="#{viewBundle['login.account']}"
                             id="login_account" value="#{LoginBean.account}"/>
               <af:inputText label="#{viewBundle['login.password']}"
                             id="login_password" secret="true"
@@ -68,9 +65,26 @@
                 </af:panelGroupLayout>
               </f:facet>
             </af:panelFormLayout>
+            </af:panelGroupLayout>
           </f:facet>
           <f:facet name="start">
-            <af:spacer width="10" height="10" id="s1"/>
+            <af:popup id="p1" autoCancel="disabled" childCreation="deferred"
+                      binding="#{LoginBean.popup}">
+              <af:panelWindow id="pw1" modal="true"
+                              title="#{viewBundle['login.forget_password']}">
+                <af:panelFormLayout id="pfl2" inlineStyle="width:230px;height:80px;">
+                  <af:inputText label="#{viewBundle['login.account']}" id="it1"
+                                binding="#{LoginBean.acc}"/>
+                  <af:inputText label="#{viewBundle['dms.user.mail']}" id="it2"
+                                binding="#{LoginBean.mail}"/>
+                  <f:facet name="footer">
+                    <af:commandButton inlineStyle="width:80px;margin-top:10px;margin-left:70px" text="#{viewBundle['login.reset_password']}" id="cb1"
+                                      actionListener="#{LoginBean.forgetPassword}"
+                                      partialSubmit="true"/>
+                  </f:facet>
+                </af:panelFormLayout>
+              </af:panelWindow>
+            </af:popup>
           </f:facet>
           <f:facet name="end"/>
           <f:facet name="top">

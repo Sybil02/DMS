@@ -94,7 +94,7 @@
         <attribute>
           <attribute-name>logoImagePath</attribute-name>
           <attribute-class>java.lang.String</attribute-class>
-          <default-value>/dms/dynamicShell/images/logo.png</default-value>
+          <default-value>/dms/dynamicShell/images/hand-logo.png</default-value>
         </attribute>
       </component>
     </af:xmlContent>

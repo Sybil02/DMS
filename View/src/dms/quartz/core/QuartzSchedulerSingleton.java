@@ -292,7 +292,7 @@ public class QuartzSchedulerSingleton implements Serializable{
             }
             
             String sql = "INSERT INTO DMS_JOB_DETAILS VALUES('" + jobId + "','" + jobType + "','" + jobObject
-                + "','R',SYSDATE,'" + createdBy + "','" + fileName + "','','','" + filePath + "')" ;
+                + "','R',SYSDATE,'" + createdBy + "','" + fileName + "','','','" + filePath + "','')" ;
             
             DBConnUtils dbUtils = new DBConnUtils();
             Connection conn =

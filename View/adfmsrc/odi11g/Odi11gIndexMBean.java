@@ -15,7 +15,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import java.text.SimpleDateFormat;
+
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -305,6 +308,11 @@ public class Odi11gIndexMBean {
             execRow.setAttribute("ExecStatus", "R");
             execVo.insertRow(execRow);
             execVo.getApplicationModule().getTransaction().commit();
+            
+            //插入作业控制台
+            String sceneAlias = ObjectUtils.toString(sceneRow.getAttribute("SceneAlias"));
+            this.addJobConsole(sceneId,sceneAlias,parmStr.toString(),"sessionNum");
+            
             this.popup.cancel();
             this.showStatus();
             RichPopup.PopupHints hint = new RichPopup.PopupHints();
@@ -313,6 +321,29 @@ public class Odi11gIndexMBean {
             this._logger.severe("Agent or Workrepository may not exits!");
             this._logger.severe(e);
         }
+    }
+    
+    private void addJobConsole(String sceneId,String sceneName,String args,String sessionNum){
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+        String date = dateFormat.format(new Date());
+        Person curUser = (Person)ADFContext.getCurrent().getSessionScope().get("cur_user");
+        String jobId = curUser.getAcc() + "-" + date;
+        String idNum = sceneId + "-" + sessionNum;
+        String sql = "INSERT INTO DMS_JOB_DETAILS(JOB_ID,JOB_TYPE,JOB_OBJECT,JOB_STATUS,CREATED_AT,CREATED_BY,FILE_NAME,JOB_LOG,END_TIME,FILE_PATH) "
+            + "VALUES('" + jobId + "','ODI','" + sceneName + "','R',SYSDATE,'" + curUser.getName()
+            + "','" + args + "','','','','" + idNum + "')" ;
+        System.out.println(sql);
+        DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
+        Statement stat = trans.createStatement(1);
+
+        try {
+            stat.executeUpdate(sql);
+            trans.commit();
+            stat.close();
+        } catch (SQLException e) {
+            this._logger.severe(e);
+        }
+        
     }
 
     private boolean isRunning(String sceneId,
@@ -344,8 +375,29 @@ public class Odi11gIndexMBean {
         execVo.getViewCriteriaManager().setApplyViewCriteriaNames(null);
         return isRunning;
     }
+    
+    //更新作业控制台
+    private void updateJobConsole(String sceneId,String sessionNum,String exMsg,boolean hasExecption){
+        String idnum = sceneId + "-" + sessionNum;
+        String sql = "UPDATE DMS_JOB_DETAILS T SET T.END_TIME = SYSDATE,T.JOB_STATUS = '";
+        if(hasExecption){
+            sql = sql + "E',T.JOB_LOG = '" + exMsg + "' ";    
+        }else{
+            sql = sql + "C' ";
+        }
+        sql = sql + "WHERE T.SESSION_NUM = '" + idnum + "'";
+        DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
+        Statement stat = trans.createStatement(1);
+        try {
+            stat.executeUpdate(sql);
+            trans.commit();
+            stat.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    
     //获取执行状态
-
     private String queryStatus(Row execRow) {
         String status = "D";
 
@@ -378,16 +430,23 @@ public class Odi11gIndexMBean {
                 execRow.setAttribute("LogText",
                                      msg.length() <= 512 ? msg : (msg.substring(0,
                                                                                 512)+"......"));
-                if(this.hasException(ObjectUtils.toString(execRow.getAttribute("SessionNum")))){
+                String sessionNum = ObjectUtils.toString(execRow.getAttribute("SessionNum"));
+                String exMsg = msg.length() <= 512 ? msg : (msg.substring(0,512)+"......");
+                if(this.hasException(sessionNum)){
                     execRow.setAttribute("HasException", "Y");
+                    this.updateJobConsole(sceneId, sessionNum, exMsg, true);
                 }
                 vo.getApplicationModule().getTransaction().commit();
+                
+                if("D".equals(status)){
+                    this.updateJobConsole(sceneId, sessionNum, "", false);
+                }
                 
             }
             }
             catch(Exception ex){
                 if(ex.getMessage().contains("ODI-1701")){
-                    execRow.remove();   
+                    execRow.remove();
                     vo.getApplicationModule().getTransaction().commit();
                 }
                 this._logger.severe(ex);
