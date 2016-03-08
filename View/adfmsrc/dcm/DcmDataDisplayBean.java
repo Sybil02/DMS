@@ -34,6 +34,7 @@ import java.sql.Statement;
 
 import java.sql.Types;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 
 import java.util.ArrayList;
@@ -529,6 +530,7 @@ public class DcmDataDisplayBean extends TablePagination{
             DBTransaction trans =(DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
             Statement stat = trans.createStatement(1);
             try {
+
                 ResultSet rs = stat.executeQuery(sql.toString());
                 if (rs.next()) {
                     comRecordId = rs.getString("ID");
@@ -831,13 +833,22 @@ public class DcmDataDisplayBean extends TablePagination{
         ResultSet rs = null;
         try {
             rs = stat.executeQuery();
+            DecimalFormat dfm = new DecimalFormat();
+            dfm.setMaximumFractionDigits(4);
+            dfm.setGroupingUsed(false);
+            SimpleDateFormat format=new SimpleDateFormat("yyyy/MM/dd");//"yyyy-MM-dd hh:mm:ss"
             while (rs.next()) {
                 Map row = new HashMap();
                 for (ColumnDef col : this.colsdef) {
                     Object obj=rs.getObject(col.getDbTableCol().toUpperCase());
-                    if(obj instanceof java.sql.Date){
-                        SimpleDateFormatter format=new SimpleDateFormatter("yyyy-MM-dd hh:mm:ss");
-                        obj=format.format((java.sql.Date)obj);
+                    if(obj instanceof java.util.Date){
+                        if(obj != null){
+                            obj=format.format((java.util.Date)obj);
+                        }
+                    }else if(col.getDataType().equals("NUMBER")){
+                        if(obj != null){
+                            obj = dfm.format(Double.valueOf(obj.toString()));
+                        }
                     }else{
                         obj=ObjectUtils.toString(obj);
                     }

@@ -115,7 +115,7 @@
                         </af:selectOneChoice>
                         <af:spacer width="10px" id="sp1"/>
                         <af:commandButton  id="cb1"
-                                          icon="/images/page-next.gif" 
+                                          icon="/images/refresh.gif" 
                                           partialSubmit="true"
                                           actionListener="#{viewScope.DmsjobConsoleBean.queryJob}"/>
                         </af:panelGroupLayout>
@@ -199,7 +199,7 @@
                                  sortable="false"
                                  headerText="#{bindings.DmsJobDetailsVO.hints.JobStatus.label}"
                                  id="c5">
-                        <af:outputText value="#{row.JobStatus}" id="ot6"/>
+                        <af:outputText value="#{row.JobStatus eq 'C' ? '完成':(row.JobStatus eq 'R' ? '运行中':'异常')}" id="ot6"/>
                       </af:column>
                     </af:table>
                   </af:panelCollection>

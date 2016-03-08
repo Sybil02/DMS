@@ -311,7 +311,7 @@ public class Odi11gIndexMBean {
             
             //插入作业控制台
             String sceneAlias = ObjectUtils.toString(sceneRow.getAttribute("SceneAlias"));
-            this.addJobConsole(sceneId,sceneAlias,parmStr.toString(),"sessionNum");
+            //this.addJobConsole(sceneId,sceneAlias,parmStr.toString(),"sessionNum");
             
             this.popup.cancel();
             this.showStatus();
@@ -434,13 +434,13 @@ public class Odi11gIndexMBean {
                 String exMsg = msg.length() <= 512 ? msg : (msg.substring(0,512)+"......");
                 if(this.hasException(sessionNum)){
                     execRow.setAttribute("HasException", "Y");
-                    this.updateJobConsole(sceneId, sessionNum, exMsg, true);
+                    //this.updateJobConsole(sceneId, sessionNum, exMsg, true);
                 }
                 vo.getApplicationModule().getTransaction().commit();
                 
-                if("D".equals(status)){
-                    this.updateJobConsole(sceneId, sessionNum, "", false);
-                }
+//                if("D".equals(status)){
+//                    this.updateJobConsole(sceneId, sessionNum, "", false);
+//                }
                 
             }
             }
