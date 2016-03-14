@@ -1,0 +1,4 @@
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
+  <system systemId="http://win-mc4zf6bbat2:7334/wsh/services/BatchServices/DataIntegration?WSDL"
+          uri="http://win-mc4zf6bbat2:7334/wsh/services/BatchServices/DataIntegration?WSDL"/>
+</catalog>

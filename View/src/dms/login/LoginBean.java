@@ -10,14 +10,8 @@ import common.MailSender;
 
 import java.io.IOException;
 
-import java.io.UnsupportedEncodingException;
-
-import java.security.NoSuchAlgorithmException;
-
 import java.util.HashMap;
 import java.util.Map;
-
-import java.util.Random;
 
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
@@ -38,7 +32,6 @@ import oracle.adf.share.logging.ADFLogger;
 import oracle.adf.view.rich.component.rich.RichPopup;
 import oracle.adf.view.rich.component.rich.input.RichInputText;
 
-import oracle.jbo.ApplicationModule;
 import oracle.jbo.Row;
 import oracle.jbo.ViewObject;
 
@@ -129,7 +122,7 @@ public class LoginBean {
         ADFContext.getCurrent().getSessionScope().put("authoriedFunction",authoriedFunction);       
     }
 
-    public void logout() {
+    public void logout(){
         ADFContext.getCurrent().getSessionScope().remove("cur_user");
         ExternalContext ectx =FacesContext.getCurrentInstance().getExternalContext();
         HttpSession session = (HttpSession)ectx.getSession(false);

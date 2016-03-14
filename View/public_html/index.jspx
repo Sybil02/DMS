@@ -20,6 +20,103 @@
             </af:menuBar>
           </f:facet>
           <f:facet name="welcome">
+            <af:panelGroupLayout id="pgl1">
+              <af:panelGridLayout id="pgl2">
+                <af:gridRow marginTop="5px" height="auto" id="gr4">
+                  <af:gridCell marginStart="5px" width="50%" id="gc15">
+                                <af:inputText label="协议" id="it1" autoSubmit="true"
+                                              value="#{viewScope.DcmIndexBean.httpStr}"/>
+                  </af:gridCell>
+                  <af:gridCell marginStart="5px" marginEnd="5px" width="50%"
+                               id="gc1">
+                               <af:inputText label="WSH主机" id="it2" autoSubmit="true"
+                                              value="#{viewScope.DcmIndexBean.host}"/>
+                  </af:gridCell>
+                </af:gridRow>
+                <af:gridRow marginTop="5px" height="auto" id="gr8">
+                  <af:gridCell marginStart="5px" width="50%" id="gc8">
+                            <af:inputText label="端口" id="it3" autoSubmit="true"
+                                              value="#{viewScope.DcmIndexBean.prot}"/>
+                  </af:gridCell>
+                  <af:gridCell marginStart="5px" marginEnd="5px" width="50%"
+                               id="gc10">
+                                 <af:inputText label="仓库域名" id="it4" autoSubmit="true"
+                                              value="#{viewScope.DcmIndexBean.domain}"/>
+                  </af:gridCell>
+                </af:gridRow>
+                <af:gridRow marginTop="5px" height="auto" id="gr5">
+                  <af:gridCell marginStart="5px" width="50%" id="gc11">
+                            <af:inputText label="仓库名" id="it5" autoSubmit="true"
+                                              value="#{viewScope.DcmIndexBean.rep}"/>
+                  </af:gridCell>
+                  <af:gridCell marginStart="5px" marginEnd="5px" width="50%"
+                               id="gc20">
+                            <af:inputText label="用户名" id="it6" autoSubmit="true"
+                                              value="#{viewScope.DcmIndexBean.userName}"/>
+                   </af:gridCell>
+                </af:gridRow>
+                <af:gridRow marginTop="5px" height="auto" id="gr3">
+                  <af:gridCell marginStart="5px" width="50%" id="gc6">
+                        <af:inputText label="密码" id="it7" autoSubmit="true"
+                                              value="#{viewScope.DcmIndexBean.pwd}"/>
+                  </af:gridCell>
+                  <af:gridCell marginStart="5px" marginEnd="5px" width="50%"
+                               id="gc4"/>
+                </af:gridRow>
+                <af:gridRow marginTop="5px" height="auto" id="gr9">
+                  <af:gridCell marginStart="5px" width="50%" id="gc5">
+
+                  </af:gridCell>
+                  <af:gridCell marginStart="5px" marginEnd="5px" width="50%"
+                               id="gc2">
+                    <af:commandButton text="测试链接" id="cb1"
+                                      binding="#{viewScope.DcmIndexBean.testConn}"
+                                      actionListener="#{viewScope.DcmIndexBean.Test}"/>
+                  </af:gridCell>
+                </af:gridRow>
+                <af:gridRow marginTop="5px" height="auto" id="gr1">
+                  <af:gridCell marginStart="5px" width="50%" id="gc13"/>
+                  <af:gridCell marginStart="5px" marginEnd="5px" width="50%"
+                               id="gc18"/>
+                </af:gridRow>
+                <af:gridRow marginTop="5px" height="auto" id="gr7">
+                  <af:gridCell marginStart="5px" width="50%" id="gc14">
+                    <af:inputText label="文件夹" id="it8" autoSubmit="true"
+                                              value="#{viewScope.DcmIndexBean.folerName}"/>
+                  </af:gridCell>
+                  <af:gridCell marginStart="5px" marginEnd="5px" width="50%"
+                               id="gc7">
+                            <af:inputText label="工作流名称" id="it9" autoSubmit="true"
+                                              value="#{viewScope.DcmIndexBean.wfName}"/>
+                    </af:gridCell>
+                </af:gridRow>
+                <af:gridRow marginTop="5px" height="auto" id="gr6">
+                  <af:gridCell marginStart="5px" width="50%" id="gc3">
+                    <af:inputText label="理由" id="it10" autoSubmit="true"
+                                              value="#{viewScope.DcmIndexBean.reason}"/>
+                  </af:gridCell>
+                  <af:gridCell marginStart="5px" marginEnd="5px" width="50%"
+                               id="gc16">
+                            <af:inputText label="集成服务名" id="it11" autoSubmit="true"
+                                              value="#{viewScope.DcmIndexBean.isName}"/>    
+                    </af:gridCell>
+                </af:gridRow>
+                <af:gridRow marginTop="5px" height="auto" id="gr2">
+                  <af:gridCell marginStart="5px" width="50%" id="gc19">
+                    <af:commandButton text="运行" id="cb2"
+                                      actionListener="#{viewScope.DcmIndexBean.startWorkflow}"/>
+                  </af:gridCell>
+                  <af:gridCell marginStart="5px" marginEnd="5px" width="50%"
+                               id="gc17"/>
+                </af:gridRow>
+                <af:gridRow marginTop="5px" marginBottom="5px" height="auto"
+                            id="gr10">
+                  <af:gridCell marginStart="5px" width="50%" id="gc9"/>
+                  <af:gridCell marginStart="5px" marginEnd="5px" width="50%"
+                               id="gc12"/>
+                </af:gridRow>
+              </af:panelGridLayout>
+            </af:panelGroupLayout>
           </f:facet>
           <f:facet name="innerToolbar"/>
           <f:attribute name="brandingTitle" value="#{viewBundle['dms.title']}"/>
