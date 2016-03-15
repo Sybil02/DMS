@@ -40,6 +40,8 @@
       <page path="/odi11g/odi11_index.jspx" usageId="__odi11_indexPageDef"/>
       <page path="/dgpt/index.jspx" usageId="__indexPageDef2"/>
       <page path="/jobConsole/jobConsole.jspx" usageId="__jobConsolePageDef"/>
+      <page path="/infa/infa_edit.jsff" usageId="__infa_editPageDef"/>
+      <page path="/infa/infa_index.jspx" usageId="__infa_indexPageDef"/>
    </pageMap>
    <pageDefinitionUsages>
       <page id="__dynamicTabShellPageDef"
@@ -75,6 +77,8 @@
       <page id="__odi11_indexPageDef" path="odi11g.odi11_indexPageDef"/>
       <page id="__indexPageDef2" path="dgpt.indexPageDef"/>
       <page id="__jobConsolePageDef" path="jobConsole.jobConsolePageDef"/>
+      <page id="__infa_editPageDef" path="infa.infa_editPageDef"/>
+      <page id="__infa_indexPageDef" path="infa.infa_indexPageDef"/>
    </pageDefinitionUsages>
    <dataControlUsages>
       <BC4JDataControl id="DmsModuleDataControl" Package="team.epm.module"
@@ -97,6 +101,13 @@
                        SupportsRangesize="true" SupportsResetState="true"
                        SupportsSortCollection="true"
                        Configuration="Odi11gModuleLocal" syncMode="Immediate"
+                       xmlns="http://xmlns.oracle.com/adfm/datacontrol"/>
+      <BC4JDataControl id="InfaModuleDataControl" Package="team.epm.module"
+                       FactoryClass="oracle.adf.model.bc4j.DataControlFactoryImpl"
+                       SupportsTransactions="true" SupportsFindMode="true"
+                       SupportsRangesize="true" SupportsResetState="true"
+                       SupportsSortCollection="true"
+                       Configuration="InfaModuleLocal" syncMode="Immediate"
                        xmlns="http://xmlns.oracle.com/adfm/datacontrol"/>
    </dataControlUsages>
 </Application>

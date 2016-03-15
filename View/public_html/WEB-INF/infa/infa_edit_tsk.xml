@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<adfc-config xmlns="http://xmlns.oracle.com/adf/controller" version="1.2">
+  <task-flow-definition id="infa_edit_tsk">
+    <default-activity id="__1">infa_edit</default-activity>
+    <transaction id="__2">
+      <new-transaction/>
+    </transaction>
+    <data-control-scope id="__3">
+      <isolated/>
+    </data-control-scope>
+    <view id="infa_edit">
+      <page>/infa/infa_edit.jsff</page>
+    </view>
+    <use-page-fragments/>
+  </task-flow-definition>
+</adfc-config>

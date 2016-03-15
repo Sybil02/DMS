@@ -1,0 +1,469 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.1"
+          xmlns:af="http://xmlns.oracle.com/adf/faces/rich"
+          xmlns:f="http://java.sun.com/jsf/core"
+          xmlns:c="http://java.sun.com/jsp/jstl/core">
+  <c:set var="viewBundle" value="#{adfBundle['dms_v']}"/>
+  <af:panelStretchLayout id="psl1">
+    <f:facet name="bottom">
+      <af:panelGroupLayout layout="scroll"
+                           xmlns:af="http://xmlns.oracle.com/adf/faces/rich"
+                           id="pgl1">
+        <af:popup id="p1" autoCancel="disabled">
+          <af:panelWindow id="pw1" title="#{viewBundle['infa.rep.manager']}">
+            <af:panelCollection id="pc2">
+              <f:facet name="menus"/>
+              <f:facet name="toolbar">
+                <af:toolbar id="t4">
+                  <af:commandButton text="#{viewBundle['dcm.common.new']}" id="cb11"
+                                    partialSubmit="true"
+                                    actionListener="#{bindings.CreateInsertRep.execute}"/>
+                  <af:commandButton text="#{viewBundle['dcm.common.delete']}" id="cb10"
+                                     immediate="true" partialSubmit="true"
+                                    actionListener="#{bindings.DeleteRep.execute}"/>
+                  <af:commandButton text="#{viewBundle['dms.common.cancel']}" id="cb9"
+                                     immediate="true"
+                                    actionListener="#{bindings.Rollback.execute}"/>
+                  <af:commandButton text="#{viewBundle['dms.common.save']}" id="cb8"
+                                    partialSubmit="true"
+                                    actionListener="#{bindings.Commit.execute}"/>
+                </af:toolbar>
+              </f:facet>
+              <f:facet name="statusbar"/>
+              <af:table value="#{bindings.InfaRepInfoVO.collectionModel}"
+                        var="row" rows="#{bindings.InfaRepInfoVO.rangeSize}"
+                        emptyText="#{bindings.InfaRepInfoVO.viewable ? 'No data to display.' : 'Access Denied.'}"
+                        fetchSize="#{bindings.InfaRepInfoVO.rangeSize}"
+                        rowBandingInterval="0" editingMode="clickToEdit"
+                        filterModel="#{bindings.InfaRepInfoVOQuery.queryDescriptor}"
+                        queryListener="#{bindings.InfaRepInfoVOQuery.processQuery}"
+                        filterVisible="false" varStatus="vs"
+                        selectedRowKeys="#{bindings.InfaRepInfoVO.collectionModel.selectedRow}"
+                        selectionListener="#{bindings.InfaRepInfoVO.collectionModel.makeCurrent}"
+                        rowSelection="single" id="t3"
+                        partialTriggers="::cb11 ::cb10">
+                <af:column sortProperty="#{bindings.InfaRepInfoVO.hints.RepName.name}"
+                           filterable="true" sortable="true"
+                           headerText="#{bindings.InfaRepInfoVO.hints.RepName.label}"
+                           id="c11">
+                  <af:inputText value="#{row.bindings.RepName.inputValue}"
+                                label="#{bindings.InfaRepInfoVO.hints.RepName.label}"
+                                required="#{bindings.InfaRepInfoVO.hints.RepName.mandatory}"
+                                columns="#{bindings.InfaRepInfoVO.hints.RepName.displayWidth}"
+                                maximumLength="#{bindings.InfaRepInfoVO.hints.RepName.precision}"
+                                shortDesc="#{bindings.InfaRepInfoVO.hints.RepName.tooltip}"
+                                id="it10">
+                    <f:validator binding="#{row.bindings.RepName.validator}"/>
+                  </af:inputText>
+                </af:column>
+                <af:column sortProperty="#{bindings.InfaRepInfoVO.hints.RepDomain.name}"
+                           filterable="true" sortable="true"
+                           headerText="#{bindings.InfaRepInfoVO.hints.RepDomain.label}"
+                           id="c13">
+                  <af:inputText value="#{row.bindings.RepDomain.inputValue}"
+                                label="#{bindings.InfaRepInfoVO.hints.RepDomain.label}"
+                                required="#{bindings.InfaRepInfoVO.hints.RepDomain.mandatory}"
+                                columns="#{bindings.InfaRepInfoVO.hints.RepDomain.displayWidth}"
+                                maximumLength="#{bindings.InfaRepInfoVO.hints.RepDomain.precision}"
+                                shortDesc="#{bindings.InfaRepInfoVO.hints.RepDomain.tooltip}"
+                                id="it13">
+                    <f:validator binding="#{row.bindings.RepDomain.validator}"/>
+                  </af:inputText>
+                </af:column>
+                <af:column sortProperty="#{bindings.InfaRepInfoVO.hints.ServerId.name}"
+                           filterable="true" sortable="true"
+                           headerText="#{bindings.InfaRepInfoVO.hints.ServerId.label}"
+                           id="c10">
+                  <af:inputText value="#{row.bindings.ServerId.inputValue}"
+                                label="#{bindings.InfaRepInfoVO.hints.ServerId.label}"
+                                required="#{bindings.InfaRepInfoVO.hints.ServerId.mandatory}"
+                                columns="#{bindings.InfaRepInfoVO.hints.ServerId.displayWidth}"
+                                maximumLength="#{bindings.InfaRepInfoVO.hints.ServerId.precision}"
+                                shortDesc="#{bindings.InfaRepInfoVO.hints.ServerId.tooltip}"
+                                id="it11">
+                    <f:validator binding="#{row.bindings.ServerId.validator}"/>
+                  </af:inputText>
+                </af:column>
+                <af:column sortProperty="#{bindings.InfaRepInfoVO.hints.Password.name}"
+                           filterable="true" sortable="true"
+                           headerText="#{bindings.InfaRepInfoVO.hints.Password.label}"
+                           id="c9">
+                  <af:inputText value="#{row.bindings.Password.inputValue}"
+                                label="#{bindings.InfaRepInfoVO.hints.Password.label}"
+                                required="#{bindings.InfaRepInfoVO.hints.Password.mandatory}"
+                                columns="#{bindings.InfaRepInfoVO.hints.Password.displayWidth}"
+                                maximumLength="#{bindings.InfaRepInfoVO.hints.Password.precision}"
+                                shortDesc="#{bindings.InfaRepInfoVO.hints.Password.tooltip}"
+                                id="it9">
+                    <f:validator binding="#{row.bindings.Password.validator}"/>
+                  </af:inputText>
+                </af:column>
+                <af:column sortProperty="#{bindings.InfaRepInfoVO.hints.UserName.name}"
+                           filterable="true" sortable="true"
+                           headerText="#{bindings.InfaRepInfoVO.hints.UserName.label}"
+                           id="c12">
+                  <af:inputText value="#{row.bindings.UserName.inputValue}"
+                                label="#{bindings.InfaRepInfoVO.hints.UserName.label}"
+                                required="#{bindings.InfaRepInfoVO.hints.UserName.mandatory}"
+                                columns="#{bindings.InfaRepInfoVO.hints.UserName.displayWidth}"
+                                maximumLength="#{bindings.InfaRepInfoVO.hints.UserName.precision}"
+                                shortDesc="#{bindings.InfaRepInfoVO.hints.UserName.tooltip}"
+                                id="it12">
+                    <f:validator binding="#{row.bindings.UserName.validator}"/>
+                  </af:inputText>
+                </af:column>
+              </af:table>
+            </af:panelCollection>
+          </af:panelWindow>
+        </af:popup>
+        <af:popup id="p2" autoCancel="disabled">
+          <af:panelWindow id="pw2"
+                          title="#{viewBundle['infa.service.manager']}">
+            <af:panelCollection id="pc3">
+              <f:facet name="menus"/>
+              <f:facet name="toolbar">
+                <af:toolbar id="t6">
+                  <af:commandButton text="#{viewBundle['dcm.common.new']}" id="cb15"
+                                    partialSubmit="true"
+                                    actionListener="#{bindings.CreateInsertSer.execute}"/>
+                  <af:commandButton text="#{viewBundle['dcm.common.delete']}" id="cb14" 
+                                    partialSubmit="true"
+                                    actionListener="#{bindings.DeleteSer.execute}"
+                                    immediate="true"/>
+                  <af:commandButton text="#{viewBundle['dms.common.cancel']}" id="cb13"
+                                     immediate="true"
+                                    actionListener="#{bindings.Rollback.execute}"/>
+                  <af:commandButton text="#{viewBundle['dms.common.save']}" id="cb12"
+                                    partialSubmit="true"
+                                    actionListener="#{bindings.Commit.execute}"/>
+                </af:toolbar>
+              </f:facet>
+              <f:facet name="statusbar"/>
+              <af:table value="#{bindings.InfaServerInfoVO.collectionModel}"
+                        var="row" rows="#{bindings.InfaServerInfoVO.rangeSize}"
+                        emptyText="#{bindings.InfaServerInfoVO.viewable ? 'No data to display.' : 'Access Denied.'}"
+                        fetchSize="#{bindings.InfaServerInfoVO.rangeSize}"
+                        rowBandingInterval="0"
+                        filterModel="#{bindings.InfaServerInfoVOQuery.queryDescriptor}"
+                        queryListener="#{bindings.InfaServerInfoVOQuery.processQuery}"
+                        filterVisible="false" varStatus="vs" editingMode="clickToEdit"
+                        selectedRowKeys="#{bindings.InfaServerInfoVO.collectionModel.selectedRow}"
+                        selectionListener="#{bindings.InfaServerInfoVO.collectionModel.makeCurrent}"
+                        rowSelection="single" id="t5"
+                        partialTriggers="::cb15 ::cb14">
+                <af:column sortProperty="#{bindings.InfaServerInfoVO.hints.ServerAlias.name}"
+                           filterable="true" sortable="true"
+                           headerText="#{bindings.InfaServerInfoVO.hints.ServerAlias.label}"
+                           id="c15">
+                  <af:inputText value="#{row.bindings.ServerAlias.inputValue}"
+                                label="#{bindings.InfaServerInfoVO.hints.ServerAlias.label}"
+                                required="#{bindings.InfaServerInfoVO.hints.ServerAlias.mandatory}"
+                                columns="#{bindings.InfaServerInfoVO.hints.ServerAlias.displayWidth}"
+                                maximumLength="#{bindings.InfaServerInfoVO.hints.ServerAlias.precision}"
+                                shortDesc="#{bindings.InfaServerInfoVO.hints.ServerAlias.tooltip}"
+                                id="it14">
+                    <f:validator binding="#{row.bindings.ServerAlias.validator}"/>
+                  </af:inputText>
+                </af:column>
+                <af:column sortProperty="#{bindings.InfaServerInfoVO.hints.Protocol.name}"
+                           filterable="true" sortable="true"
+                           headerText="#{bindings.InfaServerInfoVO.hints.Protocol.label}"
+                           id="c14">
+                  <af:inputText value="#{row.bindings.Protocol.inputValue}"
+                                label="#{bindings.InfaServerInfoVO.hints.Protocol.label}"
+                                required="#{bindings.InfaServerInfoVO.hints.Protocol.mandatory}"
+                                columns="#{bindings.InfaServerInfoVO.hints.Protocol.displayWidth}"
+                                maximumLength="#{bindings.InfaServerInfoVO.hints.Protocol.precision}"
+                                shortDesc="#{bindings.InfaServerInfoVO.hints.Protocol.tooltip}"
+                                id="it17">
+                    <f:validator binding="#{row.bindings.Protocol.validator}"/>
+                  </af:inputText>
+                </af:column>
+                <af:column sortProperty="#{bindings.InfaServerInfoVO.hints.ServerHost.name}"
+                           filterable="true" sortable="true"
+                           headerText="#{bindings.InfaServerInfoVO.hints.ServerHost.label}"
+                           id="c16">
+                  <af:inputText value="#{row.bindings.ServerHost.inputValue}"
+                                label="#{bindings.InfaServerInfoVO.hints.ServerHost.label}"
+                                required="#{bindings.InfaServerInfoVO.hints.ServerHost.mandatory}"
+                                columns="#{bindings.InfaServerInfoVO.hints.ServerHost.displayWidth}"
+                                maximumLength="#{bindings.InfaServerInfoVO.hints.ServerHost.precision}"
+                                shortDesc="#{bindings.InfaServerInfoVO.hints.ServerHost.tooltip}"
+                                id="it15">
+                    <f:validator binding="#{row.bindings.ServerHost.validator}"/>
+                  </af:inputText>
+                </af:column>
+                <af:column sortProperty="#{bindings.InfaServerInfoVO.hints.ServerPort.name}"
+                           filterable="true" sortable="true"
+                           headerText="#{bindings.InfaServerInfoVO.hints.ServerPort.label}"
+                           id="c17">
+                  <af:inputText value="#{row.bindings.ServerPort.inputValue}"
+                                label="#{bindings.InfaServerInfoVO.hints.ServerPort.label}"
+                                required="#{bindings.InfaServerInfoVO.hints.ServerPort.mandatory}"
+                                columns="#{bindings.InfaServerInfoVO.hints.ServerPort.displayWidth}"
+                                maximumLength="#{bindings.InfaServerInfoVO.hints.ServerPort.precision}"
+                                shortDesc="#{bindings.InfaServerInfoVO.hints.ServerPort.tooltip}"
+                                id="it16">
+                    <f:validator binding="#{row.bindings.ServerPort.validator}"/>
+                  </af:inputText>
+                </af:column>
+              </af:table>
+            </af:panelCollection>
+          </af:panelWindow>
+        </af:popup>
+        <af:popup id="p3" autoCancel="disabled">
+          <af:panelWindow id="pw3" title="#{viewBundle['infa.param.manager']}">
+            <af:panelCollection id="pc4">
+              <f:facet name="menus"/>
+              <f:facet name="toolbar">
+                <af:toolbar id="t8">
+                  <af:commandButton text="#{viewBundle['dcm.common.new']}" id="cb19"
+                                    partialSubmit="true"
+                                    actionListener="#{bindings.CreateInsertP.execute}"/>
+                  <af:commandButton text="#{viewBundle['dcm.common.delete']}" id="cb18" 
+                                    partialSubmit="true"
+                                    actionListener="#{bindings.DeleteP.execute}"
+                                    immediate="true"/>
+                  <af:commandButton text="#{viewBundle['dms.common.cancel']}" id="cb17"
+                                     immediate="true"
+                                    actionListener="#{bindings.Rollback.execute}"/>
+                  <af:commandButton text="#{viewBundle['dms.common.save']}" id="cb16"
+                                    partialSubmit="true"
+                                    actionListener="#{bindings.Commit.execute}"/>
+                </af:toolbar>
+              </f:facet>
+              <f:facet name="statusbar"/>
+              <af:table value="#{bindings.InfaParameterVO.collectionModel}"
+                        var="row" rows="#{bindings.InfaParameterVO.rangeSize}"
+                        emptyText="#{bindings.InfaParameterVO.viewable ? 'No data to display.' : 'Access Denied.'}"
+                        fetchSize="#{bindings.InfaParameterVO.rangeSize}"
+                        rowBandingInterval="0" editingMode="clickToEdit"
+                        filterModel="#{bindings.InfaParameterVOQuery.queryDescriptor}"
+                        queryListener="#{bindings.InfaParameterVOQuery.processQuery}"
+                        filterVisible="false" varStatus="vs"
+                        selectedRowKeys="#{bindings.InfaParameterVO.collectionModel.selectedRow}"
+                        selectionListener="#{bindings.InfaParameterVO.collectionModel.makeCurrent}"
+                        rowSelection="single" id="t7"
+                        partialTriggers="::cb19 ::cb18">
+                <af:column sortProperty="#{bindings.InfaParameterVO.hints.PAlias.name}"
+                           filterable="true" sortable="true"
+                           headerText="#{bindings.InfaParameterVO.hints.PAlias.label}"
+                           id="c20">
+                  <af:inputText value="#{row.bindings.PAlias.inputValue}"
+                                label="#{bindings.InfaParameterVO.hints.PAlias.label}"
+                                required="#{bindings.InfaParameterVO.hints.PAlias.mandatory}"
+                                columns="#{bindings.InfaParameterVO.hints.PAlias.displayWidth}"
+                                maximumLength="#{bindings.InfaParameterVO.hints.PAlias.precision}"
+                                shortDesc="#{bindings.InfaParameterVO.hints.PAlias.tooltip}"
+                                id="it19">
+                    <f:validator binding="#{row.bindings.PAlias.validator}"/>
+                  </af:inputText>
+                </af:column>
+                <af:column sortProperty="#{bindings.InfaParameterVO.hints.PName.name}"
+                           filterable="true" sortable="true"
+                           headerText="#{bindings.InfaParameterVO.hints.PName.label}"
+                           id="c19">
+                  <af:inputText value="#{row.bindings.PName.inputValue}"
+                                label="#{bindings.InfaParameterVO.hints.PName.label}"
+                                required="#{bindings.InfaParameterVO.hints.PName.mandatory}"
+                                columns="#{bindings.InfaParameterVO.hints.PName.displayWidth}"
+                                maximumLength="#{bindings.InfaParameterVO.hints.PName.precision}"
+                                shortDesc="#{bindings.InfaParameterVO.hints.PName.tooltip}"
+                                id="it21">
+                    <f:validator binding="#{row.bindings.PName.validator}"/>
+                  </af:inputText>
+                </af:column>
+                <af:column sortProperty="#{bindings.InfaParameterVO.hints.PScope.name}"
+                           filterable="true" sortable="true"
+                           headerText="#{bindings.InfaParameterVO.hints.PScope.label}"
+                           id="c18">
+                  <af:inputText value="#{row.bindings.PScope.inputValue}"
+                                label="#{bindings.InfaParameterVO.hints.PScope.label}"
+                                required="#{bindings.InfaParameterVO.hints.PScope.mandatory}"
+                                columns="#{bindings.InfaParameterVO.hints.PScope.displayWidth}"
+                                maximumLength="#{bindings.InfaParameterVO.hints.PScope.precision}"
+                                shortDesc="#{bindings.InfaParameterVO.hints.PScope.tooltip}"
+                                id="it20">
+                    <f:validator binding="#{row.bindings.PScope.validator}"/>
+                  </af:inputText>
+                </af:column>
+                <af:column sortProperty="#{bindings.InfaParameterVO.hints.VsId.name}"
+                           filterable="true" sortable="true"
+                           headerText="#{bindings.InfaParameterVO.hints.VsId.label}"
+                           id="c21">
+                  <af:inputText value="#{row.bindings.VsId.inputValue}"
+                                label="#{bindings.InfaParameterVO.hints.VsId.label}"
+                                required="#{bindings.InfaParameterVO.hints.VsId.mandatory}"
+                                columns="#{bindings.InfaParameterVO.hints.VsId.displayWidth}"
+                                maximumLength="#{bindings.InfaParameterVO.hints.VsId.precision}"
+                                shortDesc="#{bindings.InfaParameterVO.hints.VsId.tooltip}"
+                                id="it18">
+                    <f:validator binding="#{row.bindings.VsId.validator}"/>
+                  </af:inputText>
+                </af:column>
+              </af:table>
+            </af:panelCollection>
+          </af:panelWindow>
+        </af:popup>
+      </af:panelGroupLayout>
+    </f:facet>
+    <f:facet name="center">
+      <af:panelCollection id="pc1">
+        <f:facet name="menus"/>
+        <f:facet name="toolbar">
+          <af:toolbar id="t2">
+            <af:group id="g1"> 
+                <af:commandButton text="#{viewBundle['dms.common.add']}" id="cb1"
+                                  actionListener="#{bindings.CreateInsertWf.execute}"/>
+                <af:commandButton text="#{viewBundle['dcm.common.delete']}" id="cb2"
+                                  actionListener="#{bindings.DeleteWf.execute}"/>
+                <af:commandButton text="#{viewBundle['dms.common.save']}" id="cb3"
+                                  actionListener="#{bindings.Commit.execute}"/>
+                <af:commandButton text="#{viewBundle['dms.common.cancel']}" id="cb4"
+                                  actionListener="#{bindings.Rollback.execute}"/>
+            </af:group>
+            <af:group id="g2">
+              <af:commandButton text="#{viewBundle['infa.rep.manager']}" id="cb5">
+                <af:showPopupBehavior popupId="::p1" triggerType="click"/>
+              </af:commandButton>
+              <af:commandButton text="#{viewBundle['infa.service.manager']}" id="cb6">
+                <af:showPopupBehavior popupId="::p2" triggerType="click"/>
+              </af:commandButton>
+              <af:commandButton text="#{viewBundle['infa.param.manager']}" id="cb7">
+                <af:showPopupBehavior popupId="::p3" triggerType="click"/>
+              </af:commandButton>
+            </af:group>
+          </af:toolbar>
+        </f:facet>
+        <f:facet name="statusbar"/>
+        <af:table value="#{bindings.InfaWorkflowVO.collectionModel}" var="row"
+                  rows="#{bindings.InfaWorkflowVO.rangeSize}"
+                  emptyText="#{bindings.InfaWorkflowVO.viewable ? 'No data to display.' : 'Access Denied.'}"
+                  fetchSize="#{bindings.InfaWorkflowVO.rangeSize}"
+                  rowBandingInterval="0" editingMode="clickToEdit"
+                  filterModel="#{bindings.InfaWorkflowVOQuery.queryDescriptor}"
+                  queryListener="#{bindings.InfaWorkflowVOQuery.processQuery}"
+                  filterVisible="false" varStatus="vs"
+                  selectedRowKeys="#{bindings.InfaWorkflowVO.collectionModel.selectedRow}"
+                  selectionListener="#{bindings.InfaWorkflowVO.collectionModel.makeCurrent}"
+                  rowSelection="single" id="t1" partialTriggers="::cb1">
+          <af:column sortProperty="#{bindings.InfaWorkflowVO.hints.WorkflowName.name}"
+                     filterable="true" sortable="true"
+                     headerText="#{bindings.InfaWorkflowVO.hints.WorkflowName.label}"
+                     id="c2">
+            <af:inputText value="#{row.bindings.WorkflowName.inputValue}"
+                          label="#{bindings.InfaWorkflowVO.hints.WorkflowName.label}"
+                          required="#{bindings.InfaWorkflowVO.hints.WorkflowName.mandatory}"
+                          columns="#{bindings.InfaWorkflowVO.hints.WorkflowName.displayWidth}"
+                          maximumLength="#{bindings.InfaWorkflowVO.hints.WorkflowName.precision}"
+                          shortDesc="#{bindings.InfaWorkflowVO.hints.WorkflowName.tooltip}"
+                          id="it1">
+              <f:validator binding="#{row.bindings.WorkflowName.validator}"/>
+            </af:inputText>
+          </af:column>
+          <af:column headerText="#{bindings.InfaWorkflowVO.hints.WorkflowAlias.label}"
+                      sortProperty="#{bindings.InfaWorkflowVO.hints.WorkflowAlias.name}"
+                      filterable="true" sortable="true"
+                      id="c8">
+            <af:inputText value="#{row.bindings.WorkflowAlias.inputValue}"
+                          label="#{bindings.InfaWorkflowVO.hints.WorkflowAlias.label}"
+                          required="#{bindings.InfaWorkflowVO.hints.WorkflowAlias.mandatory}"
+                          columns="#{bindings.InfaWorkflowVO.hints.WorkflowAlias.displayWidth}"
+                          maximumLength="#{bindings.InfaWorkflowVO.hints.WorkflowAlias.precision}"
+                          shortDesc="#{bindings.InfaWorkflowVO.hints.WorkflowAlias.tooltip}"
+                          id="it8">
+              <f:validator binding="#{row.bindings.WorkflowAlias.validator}"/>
+            </af:inputText>
+          </af:column>
+          <af:column sortProperty="#{bindings.InfaWorkflowVO.hints.CatId.name}"
+                     filterable="true" sortable="true"
+                     headerText="#{bindings.InfaWorkflowVO.hints.CatId.label}"
+                     id="c4">
+            <af:inputText value="#{row.bindings.CatId.inputValue}"
+                          label="#{bindings.InfaWorkflowVO.hints.CatId.label}"
+                          required="#{bindings.InfaWorkflowVO.hints.CatId.mandatory}"
+                          columns="#{bindings.InfaWorkflowVO.hints.CatId.displayWidth}"
+                          maximumLength="#{bindings.InfaWorkflowVO.hints.CatId.precision}"
+                          shortDesc="#{bindings.InfaWorkflowVO.hints.CatId.tooltip}"
+                          id="it3">
+              <f:validator binding="#{row.bindings.CatId.validator}"/>
+            </af:inputText>
+          </af:column>
+          <af:column sortProperty="#{bindings.InfaWorkflowVO.hints.Foldername.name}"
+                     filterable="true" sortable="true"
+                     headerText="#{bindings.InfaWorkflowVO.hints.Foldername.label}"
+                     id="c6">
+            <af:inputText value="#{row.bindings.Foldername.inputValue}"
+                          label="#{bindings.InfaWorkflowVO.hints.Foldername.label}"
+                          required="#{bindings.InfaWorkflowVO.hints.Foldername.mandatory}"
+                          columns="#{bindings.InfaWorkflowVO.hints.Foldername.displayWidth}"
+                          maximumLength="#{bindings.InfaWorkflowVO.hints.Foldername.precision}"
+                          shortDesc="#{bindings.InfaWorkflowVO.hints.Foldername.tooltip}"
+                          id="it2">
+              <f:validator binding="#{row.bindings.Foldername.validator}"/>
+            </af:inputText>
+          </af:column>
+          <af:column sortProperty="#{bindings.InfaWorkflowVO.hints.RepId.name}"
+                     filterable="true" sortable="true"
+                     headerText="#{bindings.InfaWorkflowVO.hints.RepId.label}"
+                     id="c5">
+            <af:inputText value="#{row.bindings.RepId.inputValue}"
+                          label="#{bindings.InfaWorkflowVO.hints.RepId.label}"
+                          required="#{bindings.InfaWorkflowVO.hints.RepId.mandatory}"
+                          columns="#{bindings.InfaWorkflowVO.hints.RepId.displayWidth}"
+                          maximumLength="#{bindings.InfaWorkflowVO.hints.RepId.precision}"
+                          shortDesc="#{bindings.InfaWorkflowVO.hints.RepId.tooltip}"
+                          id="it4">
+              <f:validator binding="#{row.bindings.RepId.validator}"/>
+            </af:inputText>
+          </af:column>
+          <af:column sortProperty="#{bindings.InfaWorkflowVO.hints.ServiceName.name}"
+                     filterable="true" sortable="true"
+                     headerText="#{bindings.InfaWorkflowVO.hints.ServiceName.label}"
+                     id="c1">
+            <af:inputText value="#{row.bindings.ServiceName.inputValue}"
+                          label="#{bindings.InfaWorkflowVO.hints.ServiceName.label}"
+                          required="#{bindings.InfaWorkflowVO.hints.ServiceName.mandatory}"
+                          columns="#{bindings.InfaWorkflowVO.hints.ServiceName.displayWidth}"
+                          maximumLength="#{bindings.InfaWorkflowVO.hints.ServiceName.precision}"
+                          shortDesc="#{bindings.InfaWorkflowVO.hints.ServiceName.tooltip}"
+                          id="it7">
+              <f:validator binding="#{row.bindings.ServiceName.validator}"/>
+            </af:inputText>
+          </af:column>
+          <af:column sortProperty="#{bindings.InfaWorkflowVO.hints.RequestMode.name}"
+                     filterable="true" sortable="true"
+                     headerText="#{bindings.InfaWorkflowVO.hints.RequestMode.label}"
+                     id="c3">
+            <af:inputText value="#{row.bindings.RequestMode.inputValue}"
+                          label="#{bindings.InfaWorkflowVO.hints.RequestMode.label}"
+                          required="#{bindings.InfaWorkflowVO.hints.RequestMode.mandatory}"
+                          columns="#{bindings.InfaWorkflowVO.hints.RequestMode.displayWidth}"
+                          maximumLength="#{bindings.InfaWorkflowVO.hints.RequestMode.precision}"
+                          shortDesc="#{bindings.InfaWorkflowVO.hints.RequestMode.tooltip}"
+                          id="it5">
+              <f:validator binding="#{row.bindings.RequestMode.validator}"/>
+            </af:inputText>
+          </af:column>
+          <af:column sortProperty="#{bindings.InfaWorkflowVO.hints.Idx.name}"
+                     filterable="true" sortable="true"
+                     headerText="#{bindings.InfaWorkflowVO.hints.Idx.label}"
+                     id="c7">
+            <af:inputText value="#{row.bindings.Idx.inputValue}"
+                          label="#{bindings.InfaWorkflowVO.hints.Idx.label}"
+                          required="#{bindings.InfaWorkflowVO.hints.Idx.mandatory}"
+                          columns="#{bindings.InfaWorkflowVO.hints.Idx.displayWidth}"
+                          maximumLength="#{bindings.InfaWorkflowVO.hints.Idx.precision}"
+                          shortDesc="#{bindings.InfaWorkflowVO.hints.Idx.tooltip}"
+                          id="it6">
+              <f:validator binding="#{row.bindings.Idx.validator}"/>
+              <af:convertNumber groupingUsed="false"
+                                pattern="#{bindings.InfaWorkflowVO.hints.Idx.format}"/>
+            </af:inputText>
+          </af:column>
+        </af:table>
+      </af:panelCollection>
+    </f:facet>
+    <f:facet name="top"/>
+  </af:panelStretchLayout>
+</jsp:root>

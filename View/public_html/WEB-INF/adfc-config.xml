@@ -21,6 +21,9 @@
   <view id="jobConsole">
     <page>/jobConsole/jobConsole.jspx</page>
   </view>
+  <view id="infaIndex">
+    <page>/infa/infa_index.jspx</page>
+  </view>
   <control-flow-rule id="__17">
     <from-activity-id id="__18">*</from-activity-id>
     <control-flow-case id="__20">
@@ -70,6 +73,13 @@
       <to-activity-id id="__62">jobConsole</to-activity-id>
     </control-flow-case>
   </control-flow-rule>
+  <control-flow-rule id="__74">
+    <from-activity-id id="__73">*</from-activity-id>
+    <control-flow-case id="__75">
+      <from-outcome id="__77">GoInfaIndex</from-outcome>
+      <to-activity-id id="__76">infaIndex</to-activity-id>
+    </control-flow-case>
+  </control-flow-rule>
   <managed-bean id="__1">
     <managed-bean-name id="__4">dmsTabContext</managed-bean-name>
     <managed-bean-class id="__2">dms.dynamicShell.TabContext</managed-bean-class>
@@ -109,5 +119,10 @@
     <managed-bean-name id="__67">DmsjobConsoleBean</managed-bean-name>
     <managed-bean-class id="__64">dms.quartz.core.DmsJobConsoleBean</managed-bean-class>
     <managed-bean-scope id="__65">view</managed-bean-scope>
+  </managed-bean>
+  <managed-bean id="__81">
+    <managed-bean-name id="__79">InfaIndexBean</managed-bean-name>
+    <managed-bean-class id="__78">infa.InfaIndexBean</managed-bean-class>
+    <managed-bean-scope id="__80">view</managed-bean-scope>
   </managed-bean>
 </adfc-config>

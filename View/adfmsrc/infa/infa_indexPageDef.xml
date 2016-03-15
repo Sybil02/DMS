@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pageDefinition xmlns="http://xmlns.oracle.com/adfm/uimodel"
+                version="11.1.1.64.93" id="infa_indexPageDef" Package="infa">
+  <parameters/>
+  <executables>
+    <variableIterator id="variables"/>
+    <page path="dms.dynamicShell.dynamicTabShellPageDef"
+          id="pageTemplateBinding" Refresh="ifNeeded"/>
+    <iterator id="DmsMenuTreeViewIterator" Binds="DmsMenuTreeView"
+              DataControl="DmsModuleDataControl" RangeSize="25"/>
+  </executables>
+  <bindings/>
+</pageDefinition>

@@ -240,4 +240,38 @@
       <property
          name="sdm:polyPoints">B50,1174.0,185.24707,1174.5,239.74707,T50</property>
    </ControlFlowCase>
+   <View
+      id="View30">
+      <property
+         name="activityId">infaIndex</property>
+      <property
+         name="page">/infa/infa_index.jspx</property>
+      <property
+         name="description">&lt;html>&lt;p>&lt;b>infaIndex&lt;/b>&lt;/p>&lt;p>Activity Type:  View&lt;/p></property>
+      <property
+         name="exceptionHandler">false</property>
+      <property
+         name="y">302.44238</property>
+      <property
+         name="x">1326.0</property>
+   </View>
+   <WildcardControlFlowRule
+      id="WildcardControlFlowRule31">
+      <property
+         name="activityId">*</property>
+      <property
+         name="y">159.59766</property>
+      <property
+         name="x">1322.0</property>
+   </WildcardControlFlowRule>
+   <ControlFlowCase
+      islink="true"
+      id="ControlFlowCase32"
+      from="WildcardControlFlowRule31"
+      to="View30">
+      <property
+         name="fromOutcome">GoInfaIndex</property>
+      <property
+         name="sdm:polyPoints">B50,1322.0,202.24707,1326.0,248.0918,T50</property>
+   </ControlFlowCase>
 </SDM>

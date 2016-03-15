@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pageDefinition xmlns="http://xmlns.oracle.com/adfm/uimodel"
+                version="11.1.1.64.93" id="infa_editPageDef" Package="infa">
+  <parameters/>
+  <executables>
+    <variableIterator id="variables"/>
+    <iterator Binds="InfaWorkflowVO" RangeSize="25"
+              DataControl="InfaModuleDataControl" id="InfaWorkflowVOIterator"/>
+    <searchRegion Binds="InfaWorkflowVOIterator" Criteria=""
+                  Customizer="oracle.jbo.uicli.binding.JUSearchBindingCustomizer"
+                  id="InfaWorkflowVOQuery"/>
+    <iterator Binds="InfaRepInfoVO" RangeSize="25"
+              DataControl="InfaModuleDataControl" id="InfaRepInfoVOIterator"/>
+    <searchRegion Binds="InfaRepInfoVOIterator" Criteria=""
+                  Customizer="oracle.jbo.uicli.binding.JUSearchBindingCustomizer"
+                  id="InfaRepInfoVOQuery"/>
+    <iterator Binds="InfaServerInfoVO" RangeSize="25"
+              DataControl="InfaModuleDataControl"
+              id="InfaServerInfoVOIterator"/>
+    <searchRegion Binds="InfaServerInfoVOIterator" Criteria=""
+                  Customizer="oracle.jbo.uicli.binding.JUSearchBindingCustomizer"
+                  id="InfaServerInfoVOQuery"/>
+    <iterator Binds="InfaParameterVO" RangeSize="25"
+              DataControl="InfaModuleDataControl" id="InfaParameterVOIterator"/>
+    <searchRegion Binds="InfaParameterVOIterator" Criteria=""
+                  Customizer="oracle.jbo.uicli.binding.JUSearchBindingCustomizer"
+                  id="InfaParameterVOQuery"/>
+  </executables>
+  <bindings>
+    <tree IterBinding="InfaWorkflowVOIterator" id="InfaWorkflowVO">
+      <nodeDefinition DefName="team.epm.infa.view.InfaWorkflowVO"
+                      Name="InfaWorkflowVO0">
+        <AttrNames>
+          <Item Value="WorkflowName"/>
+          <Item Value="CatId"/>
+          <Item Value="Foldername"/>
+          <Item Value="RepId"/>
+          <Item Value="ServiceName"/>
+          <Item Value="RequestMode"/>
+          <Item Value="Idx"/>
+          <Item Value="WorkflowAlias"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <action IterBinding="InfaWorkflowVOIterator" id="DeleteWf"
+            InstanceName="InfaModuleDataControl.InfaWorkflowVO"
+            DataControl="InfaModuleDataControl" RequiresUpdateModel="false"
+            Action="removeCurrentRow"/>
+    <action id="Commit" DataControl="InfaModuleDataControl"
+            RequiresUpdateModel="true" Action="commitTransaction"/>
+    <action id="Rollback" DataControl="InfaModuleDataControl"
+            RequiresUpdateModel="false" Action="rollbackTransaction"/>
+    <action IterBinding="InfaWorkflowVOIterator" id="CreateInsertWf"
+            RequiresUpdateModel="true" Action="createInsertRow"/>
+    <tree IterBinding="InfaRepInfoVOIterator" id="InfaRepInfoVO">
+      <nodeDefinition DefName="team.epm.infa.view.InfaRepInfoVO"
+                      Name="InfaRepInfoVO0">
+        <AttrNames>
+          <Item Value="RepName"/>
+          <Item Value="RepDomain"/>
+          <Item Value="ServerId"/>
+          <Item Value="Password"/>
+          <Item Value="UserName"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <action IterBinding="InfaRepInfoVOIterator" id="CreateInsertRep"
+            RequiresUpdateModel="true" Action="createInsertRow"/>
+    <action IterBinding="InfaRepInfoVOIterator" id="DeleteRep"
+            RequiresUpdateModel="false" Action="removeCurrentRow"/>
+    <tree IterBinding="InfaServerInfoVOIterator" id="InfaServerInfoVO">
+      <nodeDefinition DefName="team.epm.infa.view.InfaServerInfoVO"
+                      Name="InfaServerInfoVO0">
+        <AttrNames>
+          <Item Value="ServerAlias"/>
+          <Item Value="Protocol"/>
+          <Item Value="ServerHost"/>
+          <Item Value="ServerPort"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <action IterBinding="InfaServerInfoVOIterator" id="CreateInsertSer"
+            RequiresUpdateModel="true" Action="createInsertRow"/>
+    <action IterBinding="InfaServerInfoVOIterator" id="DeleteSer"
+            RequiresUpdateModel="false" Action="removeCurrentRow"/>
+    <tree IterBinding="InfaParameterVOIterator" id="InfaParameterVO">
+      <nodeDefinition DefName="team.epm.infa.view.InfaParameterVO"
+                      Name="InfaParameterVO0">
+        <AttrNames>
+          <Item Value="PAlias"/>
+          <Item Value="PName"/>
+          <Item Value="PScope"/>
+          <Item Value="VsId"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <action IterBinding="InfaParameterVOIterator" id="CreateInsertP"
+            RequiresUpdateModel="true" Action="createInsertRow"/>
+    <action IterBinding="InfaParameterVOIterator" id="DeleteP"
+            RequiresUpdateModel="false" Action="removeCurrentRow"/>
+  </bindings>
+</pageDefinition>

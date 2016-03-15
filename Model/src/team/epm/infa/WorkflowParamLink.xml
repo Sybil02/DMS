@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE ViewLink SYSTEM "jbo_03_01.dtd">
+<!---->
+<ViewLink
+  xmlns="http://xmlns.oracle.com/bc4j"
+  Name="WorkflowParamLink"
+  Version="11.1.1.64.93"
+  InheritPersonalization="true">
+  <DesignTime>
+    <Attr Name="_isCodegen" Value="true"/>
+  </DesignTime>
+  <Properties>
+    <SchemaBasedProperties>
+      <LABEL
+        ResId="team.epm.infa.WorkflowParamLink_LABEL"/>
+    </SchemaBasedProperties>
+  </Properties>
+  <ViewLinkDefEnd
+    Name="InfaWorkflowVO"
+    Cardinality="1"
+    Owner="team.epm.infa.view.InfaWorkflowVO"
+    Source="true">
+    <DesignTime>
+      <Attr Name="_finderName" Value="InfaWorkflowVO"/>
+      <Attr Name="_isUpdateable" Value="true"/>
+    </DesignTime>
+    <AttrArray Name="Attributes">
+      <Item Value="team.epm.infa.view.InfaWorkflowVO.Id"/>
+    </AttrArray>
+  </ViewLinkDefEnd>
+  <ViewLinkDefEnd
+    Name="InfaWorkflowParamVO"
+    Cardinality="-1"
+    Owner="team.epm.infa.view.InfaWorkflowParamVO">
+    <DesignTime>
+      <Attr Name="_finderName" Value="InfaWorkflowParamVO"/>
+      <Attr Name="_isUpdateable" Value="true"/>
+    </DesignTime>
+    <AttrArray Name="Attributes">
+      <Item Value="team.epm.infa.view.InfaWorkflowParamVO.WorkflowId"/>
+    </AttrArray>
+  </ViewLinkDefEnd>
+  <ResourceBundle>
+    <PropertiesBundle
+      PropertiesFile="ModelBundle"/>
+  </ResourceBundle>
+</ViewLink>

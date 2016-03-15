@@ -14,6 +14,7 @@
       <Attr Name="_appModuleNames0" Value="team.epm.module.DmsModule"/>
       <Attr Name="_NamedConnection" Value="DMSConn"/>
       <Attr Name="_appModuleNames2" Value="team.epm.module.Odi11gModule"/>
+      <Attr Name="_appModuleNames3" Value="team.epm.module.InfaModule"/>
    </DesignTime>
    <Containee
       Name="model"
@@ -58,6 +59,30 @@
    <Containee
       Name="view"
       PackageName="team.epm.dms.view"
+      ObjectType="JboPackage">
+      <DesignTime>
+         <Attr Name="_VO" Value="true"/>
+      </DesignTime>
+   </Containee>
+   <Containee
+      Name="infa"
+      PackageName="team.epm.infa"
+      ObjectType="JboPackage">
+      <DesignTime>
+         <Attr Name="_VL" Value="true"/>
+      </DesignTime>
+   </Containee>
+   <Containee
+      Name="model"
+      PackageName="team.epm.infa.model"
+      ObjectType="JboPackage">
+      <DesignTime>
+         <Attr Name="_EO" Value="true"/>
+      </DesignTime>
+   </Containee>
+   <Containee
+      Name="view"
+      PackageName="team.epm.infa.view"
       ObjectType="JboPackage">
       <DesignTime>
          <Attr Name="_VO" Value="true"/>
