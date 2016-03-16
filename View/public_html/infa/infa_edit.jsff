@@ -70,19 +70,17 @@
                     <f:validator binding="#{row.bindings.RepDomain.validator}"/>
                   </af:inputText>
                 </af:column>
-                <af:column sortProperty="#{bindings.InfaRepInfoVO.hints.ServerId.name}"
-                           filterable="true" sortable="true"
+                <af:column sortProperty="#{bindings.InfaRepInfoVO.hints.ServerId.name}" sortable="true"
                            headerText="#{bindings.InfaRepInfoVO.hints.ServerId.label}"
                            id="c10">
-                  <af:inputText value="#{row.bindings.ServerId.inputValue}"
-                                label="#{bindings.InfaRepInfoVO.hints.ServerId.label}"
-                                required="#{bindings.InfaRepInfoVO.hints.ServerId.mandatory}"
-                                columns="#{bindings.InfaRepInfoVO.hints.ServerId.displayWidth}"
-                                maximumLength="#{bindings.InfaRepInfoVO.hints.ServerId.precision}"
-                                shortDesc="#{bindings.InfaRepInfoVO.hints.ServerId.tooltip}"
-                                id="it11">
-                    <f:validator binding="#{row.bindings.ServerId.validator}"/>
-                  </af:inputText>
+                  <af:selectOneChoice value="#{row.bindings.ServerId.inputValue}"
+                                      label="#{row.bindings.ServerId.label}"
+                                      required="#{bindings.InfaRepInfoVO.hints.ServerId.mandatory}"
+                                      shortDesc="#{bindings.InfaRepInfoVO.hints.ServerId.tooltip}"
+                                      id="soc5">
+                    <f:selectItems value="#{row.bindings.ServerId.items}"
+                                   id="si6"/>
+                  </af:selectOneChoice>
                 </af:column>
                 <af:column sortProperty="#{bindings.InfaRepInfoVO.hints.Password.name}"
                            filterable="true" sortable="true"

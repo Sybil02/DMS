@@ -43,10 +43,21 @@
        INFA.WORKFLOW_NAME,
        INFA.REQUEST_MODE,
        INFA.SERVICE_NAME,
+       SV.PROTOCOL,
+       SV.SERVER_HOST,
+       SV.SERVER_PORT,
+       RP.REP_DOMAIN,
+       RP.REP_NAME,
+       RP.USER_NAME,
+       RP.PASSWORD,
        INFA.LOCALE,
        INFA.IDX
-  FROM INFA_WORKFLOW INFA
- WHERE INFA.LOCALE = :locale
+  FROM INFA_WORKFLOW INFA,INFA_SERVER_INFO SV,INFA_REP_INFO RP
+ WHERE RP.ID = INFA.REP_ID
+   AND RP.SERVER_ID = SV.ID
+   AND RP.LOCALE = SV.LOCALE
+   AND RP.LOCALE = INFA.LOCALE
+   AND INFA.LOCALE = :locale
    AND INFA.CAT_ID = :catId
    AND EXISTS
  (SELECT 1
@@ -164,6 +175,111 @@ ORDER BY INFA.IDX]]>
     SQLType="VARCHAR">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="100"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="Protocol"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="10"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="PROTOCOL"
+    Expression="PROTOCOL"
+    SQLType="VARCHAR">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="10"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="ServerHost"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="20"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="SERVER_HOST"
+    Expression="SERVER_HOST"
+    SQLType="VARCHAR">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="20"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="ServerPort"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="10"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="SERVER_PORT"
+    Expression="SERVER_PORT"
+    SQLType="VARCHAR">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="10"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="RepDomain"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="100"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="REP_DOMAIN"
+    Expression="REP_DOMAIN"
+    SQLType="VARCHAR">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="100"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="RepName"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="100"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="REP_NAME"
+    Expression="REP_NAME"
+    SQLType="VARCHAR">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="100"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="UserName"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="32"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="USER_NAME"
+    Expression="USER_NAME"
+    SQLType="VARCHAR">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="32"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="Password"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="32"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="PASSWORD"
+    Expression="PASSWORD"
+    SQLType="VARCHAR">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="32"/>
     </DesignTime>
   </ViewAttribute>
   <ViewAttribute

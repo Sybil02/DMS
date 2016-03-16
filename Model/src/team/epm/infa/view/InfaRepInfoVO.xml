@@ -35,6 +35,28 @@
     Type="java.lang.String">
     <TransientExpression><![CDATA[adf.context.locale]]></TransientExpression>
   </Variable>
+  <ViewAccessor
+    Name="InfaServerInfoVO"
+    ViewObjectName="team.epm.infa.view.InfaServerInfoVO"
+    RowLevelBinds="true"/>
+  <ListBinding
+    Name="LOV_ServerId"
+    ListVOName="InfaServerInfoVO"
+    ListRangeSize="-1"
+    NullValueFlag="start"
+    NullValueId="${adfBundle['oracle.javatools.resourcebundle.SystemBundle']['NULL_VALUE_RESID']}"
+    MRUCount="0">
+    <AttrArray Name="AttrNames">
+      <Item Value="ServerId"/>
+    </AttrArray>
+    <AttrArray Name="ListAttrNames">
+      <Item Value="Id"/>
+    </AttrArray>
+    <AttrArray Name="ListDisplayAttrNames">
+      <Item Value="ServerAlias"/>
+    </AttrArray>
+    <DisplayCriteria/>
+  </ListBinding>
   <EntityUsage
     Name="InfaRepInfoEO"
     Entity="team.epm.infa.model.InfaRepInfoEO"/>
@@ -110,11 +132,14 @@
     PrecisionRule="true"
     EntityAttrName="ServerId"
     EntityUsage="InfaRepInfoEO"
-    AliasName="SERVER_ID">
+    AliasName="SERVER_ID"
+    LOVName="LOV_ServerId">
     <Properties>
       <SchemaBasedProperties>
         <LABEL
           ResId="infa.service"/>
+        <CONTROLTYPE
+          Value="choice"/>
       </SchemaBasedProperties>
     </Properties>
   </ViewAttribute>

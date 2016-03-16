@@ -61,7 +61,8 @@
                                headerText="#{viewBundle['infa.operate']}">
                       <af:panelGroupLayout id="pgl1">
                         <af:spacer id="sp2" width="10px"/>
-                        <af:commandLink text="#{viewBundle['odi11g.scene.execute']}" id="cl1"/>
+                        <af:commandLink text="#{viewBundle['odi11g.scene.execute']}" id="cl1"
+                                        actionListener="#{viewScope.InfaIndexBean.workflowExecute}"/>
                         <af:spacer id="sp1" width="15px"/>
                         <af:commandLink text="#{viewBundle['odi11g.scene.status']}" id="cl2"/>
                       </af:panelGroupLayout>
