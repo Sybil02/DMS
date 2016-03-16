@@ -33,6 +33,28 @@
     Type="java.lang.String">
     <TransientExpression><![CDATA[adf.context.locale]]></TransientExpression>
   </Variable>
+  <ViewAccessor
+    Name="InfaParameterVO"
+    ViewObjectName="team.epm.infa.view.InfaParameterVO"
+    RowLevelBinds="true"/>
+  <ListBinding
+    Name="LOV_ParamsId"
+    ListVOName="InfaParameterVO"
+    ListRangeSize="-1"
+    NullValueFlag="start"
+    NullValueId="${adfBundle['oracle.javatools.resourcebundle.SystemBundle']['NULL_VALUE_RESID']}"
+    MRUCount="0">
+    <AttrArray Name="AttrNames">
+      <Item Value="ParamsId"/>
+    </AttrArray>
+    <AttrArray Name="ListAttrNames">
+      <Item Value="Id"/>
+    </AttrArray>
+    <AttrArray Name="ListDisplayAttrNames">
+      <Item Value="PAlias"/>
+    </AttrArray>
+    <DisplayCriteria/>
+  </ListBinding>
   <EntityUsage
     Name="InfaWorkflowParamEO"
     Entity="team.epm.infa.model.InfaWorkflowParamEO"/>
@@ -79,11 +101,14 @@
     PrecisionRule="true"
     EntityAttrName="ParamsId"
     EntityUsage="InfaWorkflowParamEO"
-    AliasName="PARAMS_ID">
+    AliasName="PARAMS_ID"
+    LOVName="LOV_ParamsId">
     <Properties>
       <SchemaBasedProperties>
         <LABEL
           ResId="odi11g.sceneparam.param"/>
+        <CONTROLTYPE
+          Value="choice"/>
       </SchemaBasedProperties>
     </Properties>
   </ViewAttribute>

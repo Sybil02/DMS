@@ -305,6 +305,72 @@
             </af:panelCollection>
           </af:panelWindow>
         </af:popup>
+        <af:popup id="p4" autoCancel="disabled"
+                  binding="#{backingBeanScope.InfaEditBean.paramPop}">
+          <af:panelWindow id="pw4" title="#{viewBundle['infa.wf.param']}">
+            <af:panelCollection id="pc5">
+              <f:facet name="menus"/>
+              <f:facet name="toolbar">
+                <af:toolbar id="t10">
+                  <af:commandButton text="#{viewBundle['dcm.common.new']}" id="cb23"
+                                    partialSubmit="true"
+                                    actionListener="#{bindings.CreateInsertWP.execute}"/>
+                  <af:commandButton text="#{viewBundle['dcm.common.delete']}" id="cb22" 
+                                    partialSubmit="true"
+                                    actionListener="#{bindings.DeleteWP.execute}"
+                                    immediate="true"/>
+                  <af:commandButton text="#{viewBundle['dms.common.cancel']}" id="cb21"
+                                     immediate="true"
+                                    actionListener="#{bindings.Rollback.execute}"/>
+                  <af:commandButton text="#{viewBundle['dms.common.save']}" id="cb20"
+                                    partialSubmit="true"
+                                    actionListener="#{bindings.Commit.execute}"/>
+                </af:toolbar>
+              </f:facet>
+              <f:facet name="statusbar"/>
+              <af:table value="#{bindings.InfaWorkflowParamVO.collectionModel}"
+                        var="row"
+                        rows="#{bindings.InfaWorkflowParamVO.rangeSize}"
+                        emptyText="#{bindings.InfaWorkflowParamVO.viewable ? 'No data to display.' : 'Access Denied.'}"
+                        fetchSize="#{bindings.InfaWorkflowParamVO.rangeSize}"
+                        rowBandingInterval="0" editingMode="clickToEdit"
+                        selectedRowKeys="#{bindings.InfaWorkflowParamVO.collectionModel.selectedRow}"
+                        selectionListener="#{bindings.InfaWorkflowParamVO.collectionModel.makeCurrent}"
+                        rowSelection="single" id="t9"
+                        partialTriggers="::cb23 ::cb22">
+                <af:column sortProperty="#{bindings.InfaWorkflowParamVO.hints.ParamsId.name}"
+                           sortable="false"
+                           headerText="#{bindings.InfaWorkflowParamVO.hints.ParamsId.label}"
+                           id="c24">
+                  <af:selectOneChoice value="#{row.bindings.ParamsId.inputValue}"
+                                      label="#{row.bindings.ParamsId.label}"
+                                      required="#{bindings.InfaWorkflowParamVO.hints.ParamsId.mandatory}"
+                                      shortDesc="#{bindings.InfaWorkflowParamVO.hints.ParamsId.tooltip}"
+                                      id="soc4">
+                    <f:selectItems value="#{row.bindings.ParamsId.items}"
+                                   id="si5"/>
+                  </af:selectOneChoice>
+                </af:column>
+                <af:column sortProperty="#{bindings.InfaWorkflowParamVO.hints.Idx.name}"
+                           sortable="false"
+                           headerText="#{bindings.InfaWorkflowParamVO.hints.Idx.label}"
+                           id="c23">
+                  <af:inputText value="#{row.bindings.Idx.inputValue}"
+                                label="#{bindings.InfaWorkflowParamVO.hints.Idx.label}"
+                                required="#{bindings.InfaWorkflowParamVO.hints.Idx.mandatory}"
+                                columns="#{bindings.InfaWorkflowParamVO.hints.Idx.displayWidth}"
+                                maximumLength="#{bindings.InfaWorkflowParamVO.hints.Idx.precision}"
+                                shortDesc="#{bindings.InfaWorkflowParamVO.hints.Idx.tooltip}"
+                                id="it3">
+                    <f:validator binding="#{row.bindings.Idx.validator}"/>
+                    <af:convertNumber groupingUsed="false"
+                                      pattern="#{bindings.InfaWorkflowParamVO.hints.Idx.format}"/>
+                  </af:inputText>
+                </af:column>
+              </af:table>
+            </af:panelCollection>
+          </af:panelWindow>
+        </af:popup>
       </af:panelGroupLayout>
     </f:facet>
     <f:facet name="center">
@@ -375,22 +441,23 @@
               <f:validator binding="#{row.bindings.WorkflowAlias.validator}"/>
             </af:inputText>
           </af:column>
-          <af:column sortProperty="#{bindings.InfaWorkflowVO.hints.CatId.name}"
-                     filterable="true" sortable="true"
+          <af:column sortProperty="#{bindings.InfaWorkflowVO.hints.CatId.name}" sortable="true"
                      headerText="#{bindings.InfaWorkflowVO.hints.CatId.label}"
                      id="c4">
-            <af:inputText value="#{row.bindings.CatId.inputValue}"
-                          label="#{bindings.InfaWorkflowVO.hints.CatId.label}"
-                          required="#{bindings.InfaWorkflowVO.hints.CatId.mandatory}"
-                          columns="#{bindings.InfaWorkflowVO.hints.CatId.displayWidth}"
-                          maximumLength="#{bindings.InfaWorkflowVO.hints.CatId.precision}"
-                          shortDesc="#{bindings.InfaWorkflowVO.hints.CatId.tooltip}"
-                          id="it3">
-              <f:validator binding="#{row.bindings.CatId.validator}"/>
-            </af:inputText>
+            <af:selectOneChoice value="#{row.bindings.CatId.inputValue}"
+                                label="#{row.bindings.CatId.label}"
+                                required="#{bindings.InfaWorkflowVO.hints.CatId.mandatory}"
+                                shortDesc="#{bindings.InfaWorkflowVO.hints.CatId.tooltip}"
+                                id="soc1">
+              <f:selectItems value="#{row.bindings.CatId.items}" id="si1"/>
+            </af:selectOneChoice>
           </af:column>
-          <af:column sortProperty="#{bindings.InfaWorkflowVO.hints.Foldername.name}"
-                     filterable="true" sortable="true"
+          <af:column id="c22" headerText="#{viewBundle['infa.wf.args']}">
+            <af:commandLink text="#{viewBundle['odi11g.scene.param']}" id="cl1"
+                            actionListener="#{backingBeanScope.InfaEditBean.paramSelect}">
+            </af:commandLink>
+          </af:column>
+          <af:column sortProperty="#{bindings.InfaWorkflowVO.hints.Foldername.name}" sortable="true"
                      headerText="#{bindings.InfaWorkflowVO.hints.Foldername.label}"
                      id="c6">
             <af:inputText value="#{row.bindings.Foldername.inputValue}"
@@ -403,19 +470,16 @@
               <f:validator binding="#{row.bindings.Foldername.validator}"/>
             </af:inputText>
           </af:column>
-          <af:column sortProperty="#{bindings.InfaWorkflowVO.hints.RepId.name}"
-                     filterable="true" sortable="true"
+          <af:column sortProperty="#{bindings.InfaWorkflowVO.hints.RepId.name}" sortable="true"
                      headerText="#{bindings.InfaWorkflowVO.hints.RepId.label}"
                      id="c5">
-            <af:inputText value="#{row.bindings.RepId.inputValue}"
-                          label="#{bindings.InfaWorkflowVO.hints.RepId.label}"
-                          required="#{bindings.InfaWorkflowVO.hints.RepId.mandatory}"
-                          columns="#{bindings.InfaWorkflowVO.hints.RepId.displayWidth}"
-                          maximumLength="#{bindings.InfaWorkflowVO.hints.RepId.precision}"
-                          shortDesc="#{bindings.InfaWorkflowVO.hints.RepId.tooltip}"
-                          id="it4">
-              <f:validator binding="#{row.bindings.RepId.validator}"/>
-            </af:inputText>
+            <af:selectOneChoice value="#{row.bindings.RepId.inputValue}"
+                                label="#{row.bindings.RepId.label}"
+                                required="#{bindings.InfaWorkflowVO.hints.RepId.mandatory}"
+                                shortDesc="#{bindings.InfaWorkflowVO.hints.RepId.tooltip}"
+                                id="soc3">
+              <f:selectItems value="#{row.bindings.RepId.items}" id="si3"/>
+            </af:selectOneChoice>
           </af:column>
           <af:column sortProperty="#{bindings.InfaWorkflowVO.hints.ServiceName.name}"
                      filterable="true" sortable="true"
@@ -435,15 +499,11 @@
                      filterable="true" sortable="true"
                      headerText="#{bindings.InfaWorkflowVO.hints.RequestMode.label}"
                      id="c3">
-            <af:inputText value="#{row.bindings.RequestMode.inputValue}"
-                          label="#{bindings.InfaWorkflowVO.hints.RequestMode.label}"
-                          required="#{bindings.InfaWorkflowVO.hints.RequestMode.mandatory}"
-                          columns="#{bindings.InfaWorkflowVO.hints.RequestMode.displayWidth}"
-                          maximumLength="#{bindings.InfaWorkflowVO.hints.RequestMode.precision}"
-                          shortDesc="#{bindings.InfaWorkflowVO.hints.RequestMode.tooltip}"
-                          id="it5">
-              <f:validator binding="#{row.bindings.RequestMode.validator}"/>
-            </af:inputText>
+            <af:selectOneChoice value="#{row.bindings.RequestMode.inputValue}"
+                                label="#{row.bindings.RequestMode.label}" id="soc2">
+              <af:selectItem label="NORMAL" value="NORMAL" id="si4"/>
+              <af:selectItem label="RECOVERY" value="RECOVERY" id="si2"/>
+            </af:selectOneChoice>
           </af:column>
           <af:column sortProperty="#{bindings.InfaWorkflowVO.hints.Idx.name}"
                      filterable="true" sortable="true"

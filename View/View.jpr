@@ -741,6 +741,7 @@
             <hash>
                <url n="content-folder-url" path="adfmsrc/infa/"/>
                <list n="pattern-filters">
+                  <string v="+infa/InfaEditBean.java"/>
                   <string v="+infa/InfaCatTreeModel.java"/>
                   <string v="+infa/InfaCatTreeItem.java"/>
                   <string v="+infa/InfaIndexBean.java"/>
@@ -769,10 +770,7 @@
             <value n="JavaScriptRunConfigurationStopOnException" v="false"/>
             <value n="JavaScriptRunConfigurationTransferErrors" v="true"/>
             <value n="name" v="Default"/>
-            <hash n="oracle.adfdt.controller.adfc.source.runner.JsfJspRunnerLaunchSettings">
-               <value n="delegateRunTarget" v="/WEB-INF/adfc-config.xml"/>
-               <value n="viewActivityId" v="index"/>
-            </hash>
+            <hash n="oracle.adfdt.controller.adfc.source.runner.JsfJspRunnerLaunchSettings"/>
             <hash n="oracle.jdevimpl.runner.debug.DebugConfiguration">
                <value n="remoteParameter:jpda:jdi_attach_method:" v=""/>
                <value n="remoteParameter:jpdaListen:localAddress" v=""/>

@@ -8,6 +8,11 @@
     <data-control-scope id="__3">
       <isolated/>
     </data-control-scope>
+    <managed-bean id="__7">
+      <managed-bean-name id="__4">InfaEditBean</managed-bean-name>
+      <managed-bean-class id="__6">infa.InfaEditBean</managed-bean-class>
+      <managed-bean-scope id="__5">backingBean</managed-bean-scope>
+    </managed-bean>
     <view id="infa_edit">
       <page>/infa/infa_edit.jsff</page>
     </view>

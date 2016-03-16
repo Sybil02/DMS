@@ -25,6 +25,9 @@
     <searchRegion Binds="InfaParameterVOIterator" Criteria=""
                   Customizer="oracle.jbo.uicli.binding.JUSearchBindingCustomizer"
                   id="InfaParameterVOQuery"/>
+    <iterator Binds="InfaWorkflowParamVO" RangeSize="25"
+              DataControl="InfaModuleDataControl"
+              id="InfaWorkflowParamVOIterator"/>
   </executables>
   <bindings>
     <tree IterBinding="InfaWorkflowVOIterator" id="InfaWorkflowVO">
@@ -97,6 +100,19 @@
     <action IterBinding="InfaParameterVOIterator" id="CreateInsertP"
             RequiresUpdateModel="true" Action="createInsertRow"/>
     <action IterBinding="InfaParameterVOIterator" id="DeleteP"
+            RequiresUpdateModel="false" Action="removeCurrentRow"/>
+    <tree IterBinding="InfaWorkflowParamVOIterator" id="InfaWorkflowParamVO">
+      <nodeDefinition DefName="team.epm.infa.view.InfaWorkflowParamVO"
+                      Name="InfaWorkflowParamVO0">
+        <AttrNames>
+          <Item Value="ParamsId"/>
+          <Item Value="Idx"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <action IterBinding="InfaWorkflowParamVOIterator" id="CreateInsertWP"
+            RequiresUpdateModel="true" Action="createInsertRow"/>
+    <action IterBinding="InfaWorkflowParamVOIterator" id="DeleteWP"
             RequiresUpdateModel="false" Action="removeCurrentRow"/>
   </bindings>
 </pageDefinition>

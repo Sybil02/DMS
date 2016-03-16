@@ -39,6 +39,50 @@
     Type="java.lang.String">
     <TransientExpression><![CDATA[adf.context.locale]]></TransientExpression>
   </Variable>
+  <ViewAccessor
+    Name="InfaWorkflowCatVO"
+    ViewObjectName="team.epm.infa.view.InfaWorkflowCatVO"
+    RowLevelBinds="true"/>
+  <ViewAccessor
+    Name="InfaRepInfoVO"
+    ViewObjectName="team.epm.infa.view.InfaRepInfoVO"
+    RowLevelBinds="true"/>
+  <ListBinding
+    Name="LOV_CatId"
+    ListVOName="InfaWorkflowCatVO"
+    ListRangeSize="-1"
+    NullValueFlag="start"
+    NullValueId="${adfBundle['oracle.javatools.resourcebundle.SystemBundle']['NULL_VALUE_RESID']}"
+    MRUCount="0">
+    <AttrArray Name="AttrNames">
+      <Item Value="CatId"/>
+    </AttrArray>
+    <AttrArray Name="ListAttrNames">
+      <Item Value="Id"/>
+    </AttrArray>
+    <AttrArray Name="ListDisplayAttrNames">
+      <Item Value="CatName"/>
+    </AttrArray>
+    <DisplayCriteria/>
+  </ListBinding>
+  <ListBinding
+    Name="LOV_RepId"
+    ListVOName="InfaRepInfoVO"
+    ListRangeSize="-1"
+    NullValueFlag="start"
+    NullValueId="${adfBundle['oracle.javatools.resourcebundle.SystemBundle']['NULL_VALUE_RESID']}"
+    MRUCount="0">
+    <AttrArray Name="AttrNames">
+      <Item Value="RepId"/>
+    </AttrArray>
+    <AttrArray Name="ListAttrNames">
+      <Item Value="Id"/>
+    </AttrArray>
+    <AttrArray Name="ListDisplayAttrNames">
+      <Item Value="RepName"/>
+    </AttrArray>
+    <DisplayCriteria/>
+  </ListBinding>
   <EntityUsage
     Name="InfaWorkflowEO"
     Entity="team.epm.infa.model.InfaWorkflowEO"/>
@@ -47,11 +91,14 @@
     PrecisionRule="true"
     EntityAttrName="CatId"
     EntityUsage="InfaWorkflowEO"
-    AliasName="CAT_ID">
+    AliasName="CAT_ID"
+    LOVName="LOV_CatId">
     <Properties>
       <SchemaBasedProperties>
         <LABEL
           ResId="infa.wf.cat"/>
+        <CONTROLTYPE
+          Value="choice"/>
       </SchemaBasedProperties>
     </Properties>
   </ViewAttribute>
@@ -110,11 +157,14 @@
     PrecisionRule="true"
     EntityAttrName="RepId"
     EntityUsage="InfaWorkflowEO"
-    AliasName="REP_ID">
+    AliasName="REP_ID"
+    LOVName="LOV_RepId">
     <Properties>
       <SchemaBasedProperties>
         <LABEL
           ResId="infa.rep.name"/>
+        <CONTROLTYPE
+          Value="choice"/>
       </SchemaBasedProperties>
     </Properties>
   </ViewAttribute>
