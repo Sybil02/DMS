@@ -36,6 +36,9 @@
   <ViewUsage
     Name="InfaUserWorkflowVO"
     ViewObjectName="team.epm.infa.view.InfaUserWorkflowVO"/>
+  <ViewUsage
+    Name="InfaWorkflowCatVO"
+    ViewObjectName="team.epm.infa.view.InfaWorkflowCatVO"/>
   <ViewLinkUsage
     Name="WorkflowParamLink"
     ViewLinkObjectName="team.epm.infa.WorkflowParamLink"

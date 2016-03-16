@@ -23,6 +23,7 @@ import org.apache.myfaces.trinidad.model.CollectionModel;
 
 import team.epm.module.DcmModuleImpl;
 import team.epm.module.DmsModuleImpl;
+import team.epm.module.InfaModuleImpl;
 import team.epm.module.Odi11gModuleImpl;
 
 public class DmsUtils {
@@ -84,6 +85,9 @@ public class DmsUtils {
     }
     public static Odi11gModuleImpl getOdi11gApplicationModule(){
         return (Odi11gModuleImpl)ADFUtils.getApplicationModuleForDataControl("Odi11gModuleDataControl");
+    }
+    public static InfaModuleImpl getInfaApplicationModule(){
+        return (InfaModuleImpl)ADFUtils.getApplicationModuleForDataControl("InfaModuleDataControl");    
     }
     public static Map getSystemProperty(){
         Map props=new HashMap();

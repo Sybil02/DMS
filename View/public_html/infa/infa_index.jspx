@@ -2,14 +2,26 @@
 <jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.1"
           xmlns:f="http://java.sun.com/jsf/core"
           xmlns:h="http://java.sun.com/jsf/html"
-          xmlns:af="http://xmlns.oracle.com/adf/faces/rich">
+          xmlns:af="http://xmlns.oracle.com/adf/faces/rich"
+          xmlns:c="http://java.sun.com/jsp/jstl/core">
+  <c:set var="viewBundle" value="#{adfBundle['dms_v']}"/>
   <jsp:directive.page contentType="text/html;charset=UTF-8"/>
   <f:view locale="#{sessionScope.cur_user.locale}" beforePhase="#{MainPageMBean.initMenuBar}">
     <af:document id="d1">
+      <af:messages id="m1"/>
       <af:form id="f1">
         <af:pageTemplate viewId="/dms/dynamicShell/dynamicTabShell.jspx"
                          value="#{bindings.pageTemplateBinding}" id="pt1">
-          <f:facet name="navigation"/>
+          <f:facet name="navigation">
+            <af:tree id="tree1" rowSelection="single"
+                     value="#{viewScope.InfaIndexBean.infaTreeModel}"
+                     var="node"
+                     selectionListener="#{viewScope.InfaIndexBean.infaTreeSelection}">
+              <f:facet name="nodeStamp">
+                <af:outputLabel id="otl" value="#{node.label}"/>
+              </f:facet>
+            </af:tree>
+          </f:facet>
           <f:facet name="globalLinks"/>
           <f:facet name="status"/>
           <f:facet name="globalToolbar"/>
@@ -18,7 +30,50 @@
             <af:menuBar id="mb1" binding="#{MainPageMBean.menuBar}">
             </af:menuBar>
           </f:facet>
-          <f:facet name="welcome"/>
+          <f:facet name="welcome">
+            <af:panelStretchLayout id="psl1">
+              <f:facet name="bottom"/>
+              <f:facet name="center">
+                <af:panelCollection id="pc1">
+                  <f:facet name="menus"/>
+                  <f:facet name="toolbar"/>
+                  <f:facet name="statusbar"/>
+                  <af:table value="#{bindings.InfaUserWorkflowVO.collectionModel}"
+                            var="row"
+                            rows="#{bindings.InfaUserWorkflowVO.rangeSize}"
+                            emptyText="#{bindings.InfaUserWorkflowVO.viewable ? 'No data to display.' : 'Access Denied.'}"
+                            fetchSize="#{bindings.InfaUserWorkflowVO.rangeSize}"
+                            rowBandingInterval="0"
+                            filterModel="#{bindings.InfaUserWorkflowVOQuery.queryDescriptor}"
+                            queryListener="#{bindings.InfaUserWorkflowVOQuery.processQuery}"
+                            filterVisible="false" varStatus="vs"
+                            selectedRowKeys="#{bindings.InfaUserWorkflowVO.collectionModel.selectedRow}"
+                            selectionListener="#{bindings.InfaUserWorkflowVO.collectionModel.makeCurrent}"
+                            rowSelection="single" id="t1"
+                            binding="#{viewScope.InfaIndexBean.wfTable}">
+                    <af:column sortProperty="#{bindings.InfaUserWorkflowVO.hints.WorkflowName.name}"
+                               filterable="true" sortable="false" width="200"
+                               headerText="#{bindings.InfaUserWorkflowVO.hints.WorkflowName.label}"
+                               id="c1">
+                      <af:outputText value="#{row.WorkflowName}" id="ot1"/>
+                    </af:column>
+                    <af:column id="c2" width="150"
+                               headerText="#{viewBundle['infa.operate']}">
+                      <af:panelGroupLayout id="pgl1">
+                        <af:spacer id="sp2" width="10px"/>
+                        <af:commandLink text="#{viewBundle['odi11g.scene.execute']}" id="cl1"/>
+                        <af:spacer id="sp1" width="15px"/>
+                        <af:commandLink text="#{viewBundle['odi11g.scene.status']}" id="cl2"/>
+                      </af:panelGroupLayout>
+                    </af:column>
+                  </af:table>
+                </af:panelCollection>
+              </f:facet>
+              <f:facet name="start"/>
+              <f:facet name="end"/>
+              <f:facet name="top"/>
+            </af:panelStretchLayout>
+          </f:facet>
           <f:facet name="innerToolbar"/>
           <f:attribute name="brandingTitle" value="#{viewBundle['dms.title']}"/>
           <f:attribute name="globalAreaSplitterPosition" value="0"/>

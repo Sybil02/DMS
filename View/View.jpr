@@ -741,6 +741,8 @@
             <hash>
                <url n="content-folder-url" path="adfmsrc/infa/"/>
                <list n="pattern-filters">
+                  <string v="+infa/InfaCatTreeModel.java"/>
+                  <string v="+infa/InfaCatTreeItem.java"/>
                   <string v="+infa/InfaIndexBean.java"/>
                </list>
                <list n="url-path">

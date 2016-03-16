@@ -8,6 +8,21 @@
           id="pageTemplateBinding" Refresh="ifNeeded"/>
     <iterator id="DmsMenuTreeViewIterator" Binds="DmsMenuTreeView"
               DataControl="DmsModuleDataControl" RangeSize="25"/>
+    <iterator Binds="InfaUserWorkflowVO" RangeSize="25"
+              DataControl="InfaModuleDataControl"
+              id="InfaUserWorkflowVOIterator"/>
+    <searchRegion Binds="InfaUserWorkflowVOIterator" Criteria=""
+                  Customizer="oracle.jbo.uicli.binding.JUSearchBindingCustomizer"
+                  id="InfaUserWorkflowVOQuery"/>
   </executables>
-  <bindings/>
+  <bindings>
+    <tree IterBinding="InfaUserWorkflowVOIterator" id="InfaUserWorkflowVO">
+      <nodeDefinition DefName="team.epm.infa.view.InfaUserWorkflowVO"
+                      Name="InfaUserWorkflowVO0">
+        <AttrNames>
+          <Item Value="WorkflowName"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+  </bindings>
 </pageDefinition>
