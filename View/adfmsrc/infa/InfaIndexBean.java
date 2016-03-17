@@ -5,15 +5,21 @@ import common.ADFUtils;
 import common.DmsUtils;
 import common.JSFUtils;
 
+import dms.login.Person;
+
+import infa.dataintegration.types.DIServerDetails;
 import infa.dataintegration.types.DIServiceInfo;
 import infa.dataintegration.types.ETaskRunMode;
 import infa.dataintegration.types.LoginRequest;
 import infa.dataintegration.types.Parameter;
 import infa.dataintegration.types.ParameterArray;
 import infa.dataintegration.types.SessionHeader;
+import infa.dataintegration.types.TypeGetWorkflowDetailsExRequest;
 import infa.dataintegration.types.TypeStartWorkflowExRequest;
 import infa.dataintegration.types.TypeStartWorkflowExResponse;
+import infa.dataintegration.types.WorkflowDetails;
 import infa.dataintegration.types.WorkflowRequest;
+import infa.dataintegration.ws.DataIntegrationClient;
 import infa.dataintegration.ws.DataIntegrationInterface;
 
 import infa.dataintegration.ws.Fault;
@@ -21,12 +27,15 @@ import infa.dataintegration.ws.Fault;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import java.util.List;
+
 import javax.faces.event.ActionEvent;
 
 import javax.xml.namespace.QName;
 import javax.xml.ws.Holder;
 import javax.xml.ws.Service;
 
+import oracle.adf.share.ADFContext;
 import oracle.adf.view.rich.component.rich.data.RichTable;
 import oracle.adf.view.rich.component.rich.data.RichTree;
 
@@ -98,9 +107,12 @@ public class InfaIndexBean {
         }
         
         //参数
-        if(hasParameter(execRow)){
-        
+        String name = execRow.getAttribute("WorkflowName").toString();
+        System.out.println(name+"......................");
+        if(name.equals("Workflow2")){
+            System.out.println("set the param .......................");
             this.showParamPop();
+            this.startWorkflowEx(execRow, this.getParameter(execRow));
             
         }else{
             
@@ -115,7 +127,18 @@ public class InfaIndexBean {
     }
     
     private ParameterArray getParameter(Row execRow){
-        return null;    
+        ParameterArray paraArray = new ParameterArray();
+        Parameter p1 = new Parameter();
+        p1.setName("$$DNAME");
+        p1.setValue("'SALES'");
+        p1.setScope("Global");
+        paraArray.getParameters().add(p1);
+        Parameter p2 = new Parameter();
+        p2.setName("$$Job");
+        p2.setValue("'SALESMAN'");
+        p2.setScope("Global");
+        paraArray.getParameters().add(p2);
+        return paraArray;    
     }
     
     private void startWorkflowEx(Row execRow,ParameterArray paramArray){
@@ -133,7 +156,7 @@ public class InfaIndexBean {
         workflow.setWorkflowName(wfName);
         workflow.setReason("INFA-");
         
-        if(paramArray != null){
+        if(paramArray.getParameters().size() > 0){
             workflow.setParameters(paramArray);    
         }
 
@@ -170,8 +193,44 @@ public class InfaIndexBean {
         
     }
     
-    private void getWfDetails(Row execRow){
+    private void getWfDetails(Row execRow,String sessionId,int runId){
+        TypeGetWorkflowDetailsExRequest detailsReq = new TypeGetWorkflowDetailsExRequest();
         
+        String folderName = execRow.getAttribute("Foldername").toString();
+        String wfName = execRow.getAttribute("WorkflowName").toString();
+        String domain = execRow.getAttribute("RepDomain").toString();
+        String isServer = execRow.getAttribute("ServiceName").toString();
+        
+        detailsReq.setFolderName(folderName);
+        detailsReq.setWorkflowName(wfName);
+        
+        DIServiceInfo dinfo = new DIServiceInfo();
+        dinfo.setDomainName(domain);
+        dinfo.setServiceName(isServer);
+        detailsReq.setDIServiceInfo(dinfo);
+        
+        detailsReq.setWorkflowRunId(runId);
+        
+        SessionHeader sHead = new SessionHeader();
+        sHead.setSessionId(sessionId);
+        
+        DataIntegrationInterface DIService = this.getDIService(execRow);
+
+        try {
+            
+            DIServerDetails wfLog = DIService.getWorkflowDetailsEx(detailsReq, sHead);
+            wfLog.getStartupTime();
+
+        } catch (Fault e) {
+            e.printStackTrace();
+        }
+        
+    }
+    
+    private int[] getRunId(Row execRow){
+        String userId = ((Person)ADFContext.getCurrent().getSessionScope().get("cur_user")).getId();
+        String wfId = execRow.getAttribute("Id").toString();
+        return null;    
     }
     
     private void logout(String sessionId){

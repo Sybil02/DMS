@@ -32,7 +32,77 @@
           </f:facet>
           <f:facet name="welcome">
             <af:panelStretchLayout id="psl1">
-              <f:facet name="bottom"/>
+              <f:facet name="bottom">
+                <af:panelGroupLayout id="pgl2">
+                  <af:popup id="p1"/>
+                  <af:popup id="p2" autoCancel="disabled">
+                    <af:panelWindow id="pw1"
+                                    title="#{viewBundle['odi11g.scene.status']}">
+                      <af:panelCollection id="pc2"
+                                          inlineStyle="width:950px; height:450.0px;">
+                        <f:facet name="menus"/>
+                        <f:facet name="toolbar"/>
+                        <f:facet name="statusbar"/>
+                        <af:table value="#{bindings.InfaWorkflowExecVO.collectionModel}"
+                                  var="row"
+                                  rows="#{bindings.InfaWorkflowExecVO.rangeSize}"
+                                  emptyText="#{bindings.InfaWorkflowExecVO.viewable ? 'No data to display.' : 'Access Denied.'}"
+                                  fetchSize="#{bindings.InfaWorkflowExecVO.rangeSize}"
+                                  rowBandingInterval="0"
+                                  filterModel="#{bindings.InfaWorkflowExecVOQuery.queryDescriptor}"
+                                  queryListener="#{bindings.InfaWorkflowExecVOQuery.processQuery}"
+                                  filterVisible="false" varStatus="vs"
+                                  selectedRowKeys="#{bindings.InfaWorkflowExecVO.collectionModel.selectedRow}"
+                                  selectionListener="#{bindings.InfaWorkflowExecVO.collectionModel.makeCurrent}"
+                                  rowSelection="single" id="t2">
+                          <af:column sortProperty="#{bindings.InfaWorkflowExecVO.hints.WorkflowId.name}"
+                                     filterable="true" sortable="true"
+                                     headerText="#{bindings.InfaWorkflowExecVO.hints.WorkflowId.label}"
+                                     id="c5">
+                            <af:outputText value="#{row.WorkflowId}" id="ot3"/>
+                          </af:column>
+                          <af:column sortProperty="#{bindings.InfaWorkflowExecVO.hints.Params.name}"
+                                     filterable="true" sortable="true"
+                                     headerText="#{bindings.InfaWorkflowExecVO.hints.Params.label}"
+                                     id="c6">
+                            <af:outputText value="#{row.Params}" id="ot7"/>
+                          </af:column>
+                          <af:column sortProperty="#{bindings.InfaWorkflowExecVO.hints.LogText.name}"
+                                     filterable="true" sortable="true"
+                                     headerText="#{bindings.InfaWorkflowExecVO.hints.LogText.label}"
+                                     id="c3">
+                            <af:outputText value="#{row.LogText}" id="ot5"/>
+                          </af:column>
+                          <af:column sortProperty="#{bindings.InfaWorkflowExecVO.hints.ExecStatus.name}"
+                                     filterable="true" sortable="true"
+                                     headerText="#{bindings.InfaWorkflowExecVO.hints.ExecStatus.label}"
+                                     id="c8">
+                            <af:outputText value="#{row.ExecStatus}" id="ot2"/>
+                          </af:column>
+                          <af:column sortProperty="#{bindings.InfaWorkflowExecVO.hints.CreatedBy.name}"
+                                     filterable="true" sortable="true"
+                                     headerText="#{bindings.InfaWorkflowExecVO.hints.CreatedBy.label}"
+                                     id="c4">
+                            <af:outputText value="#{row.CreatedBy}" id="ot6"/>
+                          </af:column>
+                          <af:column sortProperty="#{bindings.InfaWorkflowExecVO.hints.FinishTime.name}"
+                                     filterable="true" sortable="true"
+                                     headerText="#{bindings.InfaWorkflowExecVO.hints.FinishTime.label}"
+                                     id="c7">
+                            <f:facet name="filter">
+                              <af:inputDate value="#{vs.filterCriteria.FinishTime}"
+                                            id="id1"/>
+                            </f:facet>
+                            <af:outputText value="#{row.FinishTime}" id="ot4">
+                              <af:convertDateTime pattern="#{bindings.InfaWorkflowExecVO.hints.FinishTime.format}"/>
+                            </af:outputText>
+                          </af:column>
+                        </af:table>
+                      </af:panelCollection>
+                    </af:panelWindow>
+                  </af:popup>
+                </af:panelGroupLayout>
+              </f:facet>
               <f:facet name="center">
                 <af:panelCollection id="pc1">
                   <f:facet name="menus"/>
@@ -64,7 +134,11 @@
                         <af:commandLink text="#{viewBundle['odi11g.scene.execute']}" id="cl1"
                                         actionListener="#{viewScope.InfaIndexBean.workflowExecute}"/>
                         <af:spacer id="sp1" width="15px"/>
-                        <af:commandLink text="#{viewBundle['odi11g.scene.status']}" id="cl2"/>
+                        <af:commandLink text="#{viewBundle['odi11g.scene.status']}" id="cl2"
+                                          partialSubmit="true">
+                          <af:showPopupBehavior popupId=":::p2"
+                                                triggerType="click"/>
+                        </af:commandLink>
                       </af:panelGroupLayout>
                     </af:column>
                   </af:table>

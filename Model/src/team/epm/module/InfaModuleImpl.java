@@ -94,4 +94,12 @@ public class InfaModuleImpl extends ApplicationModuleImpl {
     public ViewObjectImpl getInfaWorkflowCatVO() {
         return (ViewObjectImpl)findViewObject("InfaWorkflowCatVO");
     }
+
+    /**
+     * Container's getter for InfaWorkflowExecVO.
+     * @return InfaWorkflowExecVO
+     */
+    public ViewObjectImpl getInfaWorkflowExecVO() {
+        return (ViewObjectImpl)findViewObject("InfaWorkflowExecVO");
+    }
 }
