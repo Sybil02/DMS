@@ -34,8 +34,28 @@
             <af:panelStretchLayout id="psl1">
               <f:facet name="bottom">
                 <af:panelGroupLayout id="pgl2">
-                  <af:popup id="p1"/>
-                  <af:popup id="p2" autoCancel="disabled">
+                  <af:popup autoCancel="disabled" id="p1"
+                            binding="#{viewScope.InfaIndexBean.paramPop}">
+                    <af:panelWindow id="pw2"
+                                    title="#{viewBundle['odi11g.scene.param']}">
+                      <af:panelGroupLayout  id="pgl3" layout="vertical">
+                        <af:forEach items="#{viewScope.InfaIndexBean.paramList}"
+                                    var="paramBean">
+                          <af:selectOneChoice label="#{paramBean.PAlias}" autoSubmit="true"
+                                                clientComponent="true" id="soc1"
+                                                 binding="#{viewScope.InfaIndexBean.paraSocMap[paramBean.PName]}" 
+                                              valueChangeListener="#{viewScope.InfaIndexBean.paramSelectListener}">
+                            <f:selectItems value="#{paramBean.valuesList}" id="si1"/>
+                          </af:selectOneChoice>
+                          <af:spacer id="sph" height="10px"/>
+                        </af:forEach>
+                        <af:commandButton text="#{viewBundle['odi11g.scene.execute']}" id="cb1"
+                                          actionListener="#{viewScope.InfaIndexBean.workflowExecByParam}"/>
+                      </af:panelGroupLayout>
+                    </af:panelWindow>
+                  </af:popup>
+                  <af:popup id="p2" autoCancel="disabled"
+                            binding="#{viewScope.InfaIndexBean.detailsPop}">
                     <af:panelWindow id="pw1"
                                     title="#{viewBundle['odi11g.scene.status']}">
                       <af:panelCollection id="pc2"
@@ -131,13 +151,12 @@
                                headerText="#{viewBundle['infa.operate']}">
                       <af:panelGroupLayout id="pgl1">
                         <af:spacer id="sp2" width="10px"/>
-                        <af:commandLink text="#{viewBundle['odi11g.scene.execute']}" id="cl1"
+                        <af:commandLink text="#{viewBundle['odi11g.scene.execute']}" id="cl1" partialSubmit="true"
                                         actionListener="#{viewScope.InfaIndexBean.workflowExecute}"/>
                         <af:spacer id="sp1" width="15px"/>
                         <af:commandLink text="#{viewBundle['odi11g.scene.status']}" id="cl2"
-                                          partialSubmit="true">
-                          <af:showPopupBehavior popupId=":::p2"
-                                                triggerType="click"/>
+                                          partialSubmit="true"
+                                        actionListener="#{viewScope.InfaIndexBean.showStatusPop}">
                         </af:commandLink>
                       </af:panelGroupLayout>
                     </af:column>

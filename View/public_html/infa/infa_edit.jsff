@@ -285,19 +285,16 @@
                     <f:validator binding="#{row.bindings.PScope.validator}"/>
                   </af:inputText>
                 </af:column>
-                <af:column sortProperty="#{bindings.InfaParameterVO.hints.VsId.name}"
-                           filterable="true" sortable="true"
+                <af:column sortProperty="#{bindings.InfaParameterVO.hints.VsId.name}" sortable="true"
                            headerText="#{bindings.InfaParameterVO.hints.VsId.label}"
                            id="c21">
-                  <af:inputText value="#{row.bindings.VsId.inputValue}"
-                                label="#{bindings.InfaParameterVO.hints.VsId.label}"
-                                required="#{bindings.InfaParameterVO.hints.VsId.mandatory}"
-                                columns="#{bindings.InfaParameterVO.hints.VsId.displayWidth}"
-                                maximumLength="#{bindings.InfaParameterVO.hints.VsId.precision}"
-                                shortDesc="#{bindings.InfaParameterVO.hints.VsId.tooltip}"
-                                id="it18">
-                    <f:validator binding="#{row.bindings.VsId.validator}"/>
-                  </af:inputText>
+                  <af:selectOneChoice value="#{row.bindings.VsId.inputValue}"
+                                      label="#{row.bindings.VsId.label}"
+                                      required="#{bindings.InfaParameterVO.hints.VsId.mandatory}"
+                                      shortDesc="#{bindings.InfaParameterVO.hints.VsId.tooltip}"
+                                      id="soc6">
+                    <f:selectItems value="#{row.bindings.VsId.items}" id="si7"/>
+                  </af:selectOneChoice>
                 </af:column>
               </af:table>
             </af:panelCollection>

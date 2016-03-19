@@ -34,6 +34,28 @@
     Type="java.lang.String">
     <TransientExpression><![CDATA[adf.context.locale]]></TransientExpression>
   </Variable>
+  <ViewAccessor
+    Name="DmsValueSetView"
+    ViewObjectName="team.epm.dms.view.DmsValueSetView"
+    RowLevelBinds="true"/>
+  <ListBinding
+    Name="LOV_VsId"
+    ListVOName="DmsValueSetView"
+    ListRangeSize="-1"
+    NullValueFlag="start"
+    NullValueId="${adfBundle['oracle.javatools.resourcebundle.SystemBundle']['NULL_VALUE_RESID']}"
+    MRUCount="0">
+    <AttrArray Name="AttrNames">
+      <Item Value="VsId"/>
+    </AttrArray>
+    <AttrArray Name="ListAttrNames">
+      <Item Value="Id"/>
+    </AttrArray>
+    <AttrArray Name="ListDisplayAttrNames">
+      <Item Value="Name"/>
+    </AttrArray>
+    <DisplayCriteria/>
+  </ListBinding>
   <EntityUsage
     Name="InfaParameterEO"
     Entity="team.epm.infa.model.InfaParameterEO"/>
@@ -94,7 +116,14 @@
     PrecisionRule="true"
     EntityAttrName="PScope"
     EntityUsage="InfaParameterEO"
-    AliasName="P_SCOPE"/>
+    AliasName="P_SCOPE">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="infa.param.scope"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewAttribute
     Name="UpdatedAt"
     PrecisionRule="true"
@@ -113,11 +142,14 @@
     PrecisionRule="true"
     EntityAttrName="VsId"
     EntityUsage="InfaParameterEO"
-    AliasName="VS_ID">
+    AliasName="VS_ID"
+    LOVName="LOV_VsId">
     <Properties>
       <SchemaBasedProperties>
         <LABEL
           ResId="odi11g.param.valueset"/>
+        <CONTROLTYPE
+          Value="choice"/>
       </SchemaBasedProperties>
     </Properties>
   </ViewAttribute>

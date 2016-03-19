@@ -42,6 +42,9 @@
   <ViewUsage
     Name="InfaWorkflowExecVO"
     ViewObjectName="team.epm.infa.view.InfaWorkflowExecVO"/>
+  <ViewUsage
+    Name="InfaWorkflowParamQuery"
+    ViewObjectName="team.epm.infa.view.InfaWorkflowParamVO"/>
   <ViewLinkUsage
     Name="WorkflowParamLink"
     ViewLinkObjectName="team.epm.infa.WorkflowParamLink"
