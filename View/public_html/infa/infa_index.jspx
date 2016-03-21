@@ -74,12 +74,19 @@
                                   filterVisible="false" varStatus="vs"
                                   selectedRowKeys="#{bindings.InfaWorkflowExecVO.collectionModel.selectedRow}"
                                   selectionListener="#{bindings.InfaWorkflowExecVO.collectionModel.makeCurrent}"
-                                  rowSelection="single" id="t2">
-                          <af:column sortProperty="#{bindings.InfaWorkflowExecVO.hints.WorkflowId.name}"
-                                     filterable="true" sortable="true"
+                                  rowSelection="single" id="t2"
+                                  binding="#{viewScope.InfaIndexBean.statusTable}">
+                          <af:column sortProperty="#{bindings.InfaWorkflowExecVO.hints.WorkflowId.name}" sortable="true"
                                      headerText="#{bindings.InfaWorkflowExecVO.hints.WorkflowId.label}"
                                      id="c5">
-                            <af:outputText value="#{row.WorkflowId}" id="ot3"/>
+                            <af:selectOneChoice value="#{row.bindings.WorkflowId.inputValue}"
+                                                label="#{row.bindings.WorkflowId.label}" readOnly="true"
+                                                required="#{bindings.InfaWorkflowExecVO.hints.WorkflowId.mandatory}"
+                                                shortDesc="#{bindings.InfaWorkflowExecVO.hints.WorkflowId.tooltip}"
+                                                id="soc2">
+                              <f:selectItems value="#{row.bindings.WorkflowId.items}"
+                                             id="si2"/>
+                            </af:selectOneChoice>
                           </af:column>
                           <af:column sortProperty="#{bindings.InfaWorkflowExecVO.hints.Params.name}"
                                      filterable="true" sortable="true"
@@ -97,7 +104,7 @@
                                      filterable="true" sortable="true"
                                      headerText="#{bindings.InfaWorkflowExecVO.hints.ExecStatus.label}"
                                      id="c8">
-                            <af:outputText value="#{row.ExecStatus}" id="ot2"/>
+                            <af:outputText value="#{row.ExecStatus eq 'D' ? viewBundle['infa.status.success']:(row.ExecStatus eq 'R' ? viewBundle['infa.status.running'] : viewBundle['infa.status.faild'] )}" id="ot2"/>
                           </af:column>
                           <af:column sortProperty="#{bindings.InfaWorkflowExecVO.hints.CreatedBy.name}"
                                      filterable="true" sortable="true"

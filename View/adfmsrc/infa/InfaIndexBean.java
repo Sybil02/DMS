@@ -76,6 +76,7 @@ public class InfaIndexBean {
     
     List<InfaParamBean> paramList = new ArrayList<InfaParamBean>();
     Map<String,RichSelectOneChoice> paraSocMap = new LinkedHashMap<String,RichSelectOneChoice>();
+    private RichTable statusTable;
 
     public InfaIndexBean() {
         super();
@@ -300,12 +301,13 @@ public class InfaIndexBean {
                 DIServerDate date = wfDt.getEndTime();
                 System.out.println(date.getHours() +":"+ date.getMinutes());
                 EWorkflowRunStatus ws = wfDt.getWorkflowRunStatus();
-                System.out.println(ws.value());
+                String st = ws.value();
+                System.out.println(st);
                 String sql = "";
-                if(ws.value().equals("SUCCESS")){
+                if(st.equals("SUCCEEDED")){
                     sql = "UPDATE INFA_WORKFLOW_EXEC T SET T.EXEC_STATUS = 'D' WHERE T.RUN_ID = '" + runId 
                                  + "' AND T.WORKFLOW_ID = '" + wfId + "'";
-                }else{
+                }else if(st.equals("FAILED")){
                     sql = "UPDATE INFA_WORKFLOW_EXEC T SET T.EXEC_STATUS = 'E' WHERE T.RUN_ID = '" + runId 
                                  + "' AND T.WORKFLOW_ID = '" + wfId + "'";
                 }
@@ -314,7 +316,7 @@ public class InfaIndexBean {
                 DmsUtils.getInfaApplicationModule().getTransaction().commit();
                 System.out.println(wfDt.getRunErrorMessage());
             }
-
+            
         } catch (Fault e) {
             e.printStackTrace();
         }
@@ -366,9 +368,8 @@ public class InfaIndexBean {
         vo.executeQuery();
 
         while(vo.hasNext()){
-            String pId =  vo.next().getAttribute("ParamsId").toString();   
+            String pId =  vo.next().getAttribute("ParamsId").toString();
             this.initParamSoc(pId);
-            System.out.println(pId + ":..............FUCK");
             flag = true;
         }
         
@@ -537,6 +538,20 @@ public class InfaIndexBean {
             this.logout(sessionId);
         }
         
+        String wfId = execRow.getAttribute("Id").toString();
+        String userId = ((Person)ADFContext.getCurrent().getSessionScope().get("cur_user")).getId();
+        ViewObject vo = DmsUtils.getInfaApplicationModule().getInfaWorkflowExecVO();
+        ViewCriteria vc = vo.createViewCriteria();
+        ViewCriteriaRow vr = vc.createViewCriteriaRow();
+        vr.setAttribute("WorkflowId", "='" + wfId + "'");
+        vr.setAttribute("CreatedBy", "='" + userId + "'");
+        vr.setConjunction(vr.VC_CONJ_AND);
+        vc.addElement(vr);
+        vo.applyViewCriteria(vc);
+        vo.executeQuery();
+        vo.getViewCriteriaManager().setApplyViewCriteriaName(null);
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.statusTable);
+        
         RichPopup.PopupHints hints = new RichPopup.PopupHints();
         this.detailsPop.show(hints);
     }
@@ -565,4 +580,11 @@ public class InfaIndexBean {
         return paramPop;
     }
 
+    public void setStatusTable(RichTable statusTable) {
+        this.statusTable = statusTable;
+    }
+
+    public RichTable getStatusTable() {
+        return statusTable;
+    }
 }

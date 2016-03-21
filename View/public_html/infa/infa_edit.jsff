@@ -476,8 +476,7 @@
               <f:selectItems value="#{row.bindings.RepId.items}" id="si3"/>
             </af:selectOneChoice>
           </af:column>
-          <af:column sortProperty="#{bindings.InfaWorkflowVO.hints.ServiceName.name}"
-                     filterable="true" sortable="true"
+          <af:column sortProperty="#{bindings.InfaWorkflowVO.hints.ServiceName.name}" sortable="true"
                      headerText="#{bindings.InfaWorkflowVO.hints.ServiceName.label}"
                      id="c1">
             <af:inputText value="#{row.bindings.ServiceName.inputValue}"

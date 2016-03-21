@@ -36,6 +36,28 @@
     Type="java.lang.String">
     <TransientExpression><![CDATA[adf.userSession.userData.userId]]></TransientExpression>
   </Variable>
+  <ViewAccessor
+    Name="InfaWorkflowVO"
+    ViewObjectName="team.epm.infa.view.InfaWorkflowVO"
+    RowLevelBinds="true"/>
+  <ListBinding
+    Name="LOV_WorkflowId"
+    ListVOName="InfaWorkflowVO"
+    ListRangeSize="-1"
+    NullValueFlag="start"
+    NullValueId="${adfBundle['oracle.javatools.resourcebundle.SystemBundle']['NULL_VALUE_RESID']}"
+    MRUCount="0">
+    <AttrArray Name="AttrNames">
+      <Item Value="WorkflowId"/>
+    </AttrArray>
+    <AttrArray Name="ListAttrNames">
+      <Item Value="Id"/>
+    </AttrArray>
+    <AttrArray Name="ListDisplayAttrNames">
+      <Item Value="WorkflowAlias"/>
+    </AttrArray>
+    <DisplayCriteria/>
+  </ListBinding>
   <EntityUsage
     Name="InfaWorkflowExecEO"
     Entity="team.epm.infa.model.InfaWorkflowExecEO"/>
@@ -125,11 +147,14 @@
     PrecisionRule="true"
     EntityAttrName="WorkflowId"
     EntityUsage="InfaWorkflowExecEO"
-    AliasName="WORKFLOW_ID">
+    AliasName="WORKFLOW_ID"
+    LOVName="LOV_WorkflowId">
     <Properties>
       <SchemaBasedProperties>
         <LABEL
           ResId="infa.wf.alias"/>
+        <CONTROLTYPE
+          Value="choice"/>
       </SchemaBasedProperties>
     </Properties>
   </ViewAttribute>
