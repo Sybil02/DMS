@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pageDefinition xmlns="http://xmlns.oracle.com/adfm/uimodel"
+                version="11.1.1.64.93" id="infa_authorityPageDef"
+                Package="infa">
+  <parameters/>
+  <executables>
+    <variableIterator id="variables"/>
+    <iterator Binds="InfaRoleWorkflowVO" RangeSize="-1"
+              DataControl="InfaModuleDataControl"
+              id="InfaRoleWorkflowVOIterator"/>
+    <searchRegion Binds="InfaRoleWorkflowVOIterator" Criteria=""
+                  Customizer="oracle.jbo.uicli.binding.JUSearchBindingCustomizer"
+                  id="InfaRoleWorkflowVOQuery"/>
+    <iterator Binds="DmsEnabledRole" RangeSize="10"
+              DataControl="InfaModuleDataControl" id="DmsEnabledRoleIterator"/>
+    <iterator Binds="InfaUnauthedWorkflowVO" RangeSize="25"
+              DataControl="InfaModuleDataControl"
+              id="InfaUnauthedWorkflowVOIterator"/>
+    <searchRegion Binds="InfaUnauthedWorkflowVOIterator" Criteria=""
+                  Customizer="oracle.jbo.uicli.binding.JUSearchBindingCustomizer"
+                  id="InfaUnauthedWorkflowVOQuery"/>
+  </executables>
+  <bindings>
+    <tree IterBinding="InfaRoleWorkflowVOIterator" id="InfaRoleWorkflowVO">
+      <nodeDefinition DefName="team.epm.infa.view.InfaRoleWorkflowVO"
+                      Name="InfaRoleWorkflowVO0">
+        <AttrNames>
+          <Item Value="WorkflowId"/>
+          <Item Value="UpdatedAt"/>
+          <Item Value="UpdatedBy"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <list ListOperMode="navigation" IterBinding="DmsEnabledRoleIterator"
+          id="RoleName" DTSupportsMRU="true">
+      <AttrNames>
+        <Item Value="RoleName"/>
+      </AttrNames>
+    </list>
+    <tree IterBinding="InfaUnauthedWorkflowVOIterator"
+          id="InfaUnauthedWorkflowVO">
+      <nodeDefinition DefName="team.epm.infa.view.InfaUnauthedWorkflowVO"
+                      Name="InfaUnauthedWorkflowVO0">
+        <AttrNames>
+          <Item Value="WorkflowAlias"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+  </bindings>
+</pageDefinition>

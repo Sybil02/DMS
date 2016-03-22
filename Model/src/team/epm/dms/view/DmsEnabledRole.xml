@@ -112,6 +112,11 @@ WHERE  DmsRole.LOCALE=:locale
     ViewLink="team.epm.odi11g.Odi11gRoleSceneLnk"
     Type="oracle.jbo.RowIterator"
     IsUpdateable="false"/>
+  <ViewLinkAccessor
+    Name="InfaRoleWorkflowVO"
+    ViewLink="team.epm.infa.InfaRoleWorkLink"
+    Type="oracle.jbo.RowIterator"
+    IsUpdateable="false"/>
   <ResourceBundle>
     <PropertiesBundle
       PropertiesFile="ModelBundle"/>

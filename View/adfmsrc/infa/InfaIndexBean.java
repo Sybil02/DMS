@@ -307,13 +307,16 @@ public class InfaIndexBean {
                 if(st.equals("SUCCEEDED")){
                     sql = "UPDATE INFA_WORKFLOW_EXEC T SET T.EXEC_STATUS = 'D' WHERE T.RUN_ID = '" + runId 
                                  + "' AND T.WORKFLOW_ID = '" + wfId + "'";
+                    DmsUtils.getInfaApplicationModule().getTransaction().executeCommand(sql);
+                    DmsUtils.getInfaApplicationModule().getTransaction().commit();
                 }else if(st.equals("FAILED")){
                     sql = "UPDATE INFA_WORKFLOW_EXEC T SET T.EXEC_STATUS = 'E' WHERE T.RUN_ID = '" + runId 
                                  + "' AND T.WORKFLOW_ID = '" + wfId + "'";
+                    DmsUtils.getInfaApplicationModule().getTransaction().executeCommand(sql);
+                    DmsUtils.getInfaApplicationModule().getTransaction().commit();
+                }else{
+                    
                 }
-                
-                DmsUtils.getInfaApplicationModule().getTransaction().executeCommand(sql);
-                DmsUtils.getInfaApplicationModule().getTransaction().commit();
                 System.out.println(wfDt.getRunErrorMessage());
             }
             

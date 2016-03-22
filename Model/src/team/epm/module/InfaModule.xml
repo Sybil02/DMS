@@ -45,11 +45,26 @@
   <ViewUsage
     Name="InfaWorkflowParamQuery"
     ViewObjectName="team.epm.infa.view.InfaWorkflowParamVO"/>
+  <ViewUsage
+    Name="DmsEnabledRole"
+    ViewObjectName="team.epm.dms.view.DmsEnabledRole"/>
+  <ViewUsage
+    Name="InfaRoleWorkflowVO"
+    ViewObjectName="team.epm.infa.view.InfaRoleWorkflowVO"/>
+  <ViewUsage
+    Name="InfaUnauthedWorkflowVO"
+    ViewObjectName="team.epm.infa.view.InfaUnauthedWorkflowVO"/>
   <ViewLinkUsage
     Name="WorkflowParamLink"
     ViewLinkObjectName="team.epm.infa.WorkflowParamLink"
     SrcViewUsageName="team.epm.module.InfaModule.InfaWorkflowVO"
     DstViewUsageName="team.epm.module.InfaModule.InfaWorkflowParamVO"
+    Reversed="false"/>
+  <ViewLinkUsage
+    Name="InfaRoleWorkLink"
+    ViewLinkObjectName="team.epm.infa.InfaRoleWorkLink"
+    SrcViewUsageName="team.epm.module.InfaModule.DmsEnabledRole"
+    DstViewUsageName="team.epm.module.InfaModule.InfaRoleWorkflowVO"
     Reversed="false"/>
   <ResourceBundle>
     <PropertiesBundle

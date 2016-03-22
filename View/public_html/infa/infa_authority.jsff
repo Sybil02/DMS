@@ -1,18 +1,118 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.1"
           xmlns:af="http://xmlns.oracle.com/adf/faces/rich"
-          xmlns:f="http://java.sun.com/jsf/core">
-  <af:panelStretchLayout id="psl1">
+          xmlns:f="http://java.sun.com/jsf/core"
+          xmlns:c="http://java.sun.com/jsp/jstl/core">
+  <c:set var="viewBundle" value="#{adfBundle['dms_v']}"/>
+  <af:panelStretchLayout id="psl1" topHeight="0px">
     <f:facet name="bottom"/>
     <f:facet name="center">
       <af:panelCollection id="pc1">
         <f:facet name="menus"/>
-        <f:facet name="toolbar"/>
+        <f:facet name="toolbar">
+            <af:toolbar id="tb1">
+            <af:group id="g1">
+              <af:selectOneChoice value="#{bindings.RoleName.inputValue}"
+                                  label="#{bindings.RoleName.label}"
+                                  required="#{bindings.RoleName.hints.mandatory}"
+                                  shortDesc="#{bindings.RoleName.hints.tooltip}"
+                                  autoSubmit="true"
+                                  id="soc1">
+                <f:selectItems value="#{bindings.RoleName.items}" id="si1"/>
+              </af:selectOneChoice>
+            </af:group>
+            <af:group id="g2">
+              <af:commandButton text="#{viewBundle['dms.common.add']}" id="cb1"
+                                actionListener="#{backingBeanScope.InfaAuthrityBean.showAddPop}"/>
+              <af:commandButton text="#{viewBundle['dcm.common.delete']}" id="cb2"
+                                actionListener="#{backingBeanScope.InfaAuthrityBean.remove}"/>
+            </af:group>
+            </af:toolbar>
+        </f:facet>
         <f:facet name="statusbar"/>
+        <af:table value="#{bindings.InfaRoleWorkflowVO.collectionModel}"
+                  var="row" rows="#{bindings.InfaRoleWorkflowVO.rangeSize}"
+                  emptyText="#{bindings.InfaRoleWorkflowVO.viewable ? 'No data to display.' : 'Access Denied.'}"
+                  fetchSize="#{bindings.InfaRoleWorkflowVO.rangeSize}"
+                  rowBandingInterval="0"
+                  filterModel="#{bindings.InfaRoleWorkflowVOQuery.queryDescriptor}"
+                  queryListener="#{bindings.InfaRoleWorkflowVOQuery.processQuery}"
+                  filterVisible="false" varStatus="vs"
+                  selectionListener="#{bindings.InfaRoleWorkflowVO.collectionModel.makeCurrent}"
+                  rowSelection="multiple" id="t1" partialTriggers="::soc1"
+                  binding="#{backingBeanScope.InfaAuthrityBean.authedTable}">
+          <af:column sortProperty="#{bindings.InfaRoleWorkflowVO.hints.WorkflowId.name}" sortable="true"
+                     headerText="#{bindings.InfaRoleWorkflowVO.hints.WorkflowId.label}"
+                     id="c2">
+            <af:selectOneChoice value="#{row.bindings.WorkflowId.inputValue}"
+                                label="#{row.bindings.WorkflowId.label}" readOnly="true"
+                                required="#{bindings.InfaRoleWorkflowVO.hints.WorkflowId.mandatory}"
+                                shortDesc="#{bindings.InfaRoleWorkflowVO.hints.WorkflowId.tooltip}"
+                                id="soc2">
+              <f:selectItems value="#{row.bindings.WorkflowId.items}" id="si2"/>
+            </af:selectOneChoice>
+          </af:column>
+          <af:column sortProperty="#{bindings.InfaRoleWorkflowVO.hints.UpdatedAt.name}" sortable="true"
+                     headerText="#{bindings.InfaRoleWorkflowVO.hints.UpdatedAt.label}"
+                     id="c1">
+            <af:outputText value="#{row.UpdatedAt}" id="ot3">
+              <af:convertDateTime pattern="#{bindings.InfaRoleWorkflowVO.hints.UpdatedAt.format}"/>
+            </af:outputText>
+          </af:column>
+          <af:column sortProperty="#{bindings.InfaRoleWorkflowVO.hints.UpdatedBy.name}" sortable="true"
+                     headerText="#{bindings.InfaRoleWorkflowVO.hints.UpdatedBy.label}"
+                     id="c3">
+            <af:selectOneChoice value="#{row.bindings.UpdatedBy.inputValue}"
+                                label="#{row.bindings.UpdatedBy.label}" readOnly="true"
+                                required="#{bindings.InfaRoleWorkflowVO.hints.UpdatedBy.mandatory}"
+                                shortDesc="#{bindings.InfaRoleWorkflowVO.hints.UpdatedBy.tooltip}"
+                                id="soc3">
+              <f:selectItems value="#{row.bindings.UpdatedBy.items}" id="si3"/>
+            </af:selectOneChoice>
+          </af:column>
+        </af:table>
       </af:panelCollection>
     </f:facet>
     <f:facet name="start"/>
     <f:facet name="end"/>
-    <f:facet name="top"/>
+    <f:facet name="top">
+        <af:popup id="p1" autoCancel="disabled"
+                  binding="#{backingBeanScope.InfaAuthrityBean.workflowPop}">
+          <af:panelWindow id="pw1"
+                          title="#{viewBundle['infa.authority.object']}">
+            <af:panelCollection id="pc2">
+              <f:facet name="menus"/>
+              <f:facet name="toolbar">
+                <af:toolbar id="t3">
+                  <af:group id="g3">
+                    <af:commandButton text="#{viewBundle['dms.common.add']}" id="cb3"
+                                      actionListener="#{backingBeanScope.InfaAuthrityBean.addWf}"/>
+                  </af:group>
+                </af:toolbar>
+              </f:facet>
+              <f:facet name="statusbar"/>
+              <af:table value="#{bindings.InfaUnauthedWorkflowVO.collectionModel}"
+                        var="row"
+                        rows="#{bindings.InfaUnauthedWorkflowVO.rangeSize}"
+                        emptyText="#{bindings.InfaUnauthedWorkflowVO.viewable ? 'No data to display.' : 'Access Denied.'}"
+                        fetchSize="#{bindings.InfaUnauthedWorkflowVO.rangeSize}"
+                        rowBandingInterval="0"
+                        filterModel="#{bindings.InfaUnauthedWorkflowVOQuery.queryDescriptor}"
+                        queryListener="#{bindings.InfaUnauthedWorkflowVOQuery.processQuery}"
+                        filterVisible="false" varStatus="vs"
+                        selectionListener="#{bindings.InfaUnauthedWorkflowVO.collectionModel.makeCurrent}"
+                        rowSelection="multiple" id="t2"
+                        binding="#{backingBeanScope.InfaAuthrityBean.unAuthedTable}">
+                <af:column sortProperty="#{bindings.InfaUnauthedWorkflowVO.hints.WorkflowAlias.name}"
+                           filterable="true" sortable="true"
+                           headerText="#{bindings.InfaUnauthedWorkflowVO.hints.WorkflowAlias.label}"
+                           id="c4">
+                  <af:outputText value="#{row.WorkflowAlias}" id="ot1"/>
+                </af:column>
+              </af:table>
+            </af:panelCollection>
+          </af:panelWindow>
+        </af:popup>
+    </f:facet>
   </af:panelStretchLayout>
 </jsp:root>
