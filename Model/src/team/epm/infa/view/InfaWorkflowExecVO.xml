@@ -23,7 +23,8 @@
   BindingStyle="OracleName"
   CustomQuery="false"
   PageIterMode="Full"
-  UseGlueCode="false">
+  UseGlueCode="false"
+  OrderBy="InfaWorkflowExecEO.UPDATED_AT DESC">
   <Properties>
     <SchemaBasedProperties>
       <LABEL
@@ -39,6 +40,10 @@
   <ViewAccessor
     Name="InfaWorkflowVO"
     ViewObjectName="team.epm.infa.view.InfaWorkflowVO"
+    RowLevelBinds="true"/>
+  <ViewAccessor
+    Name="DmsUserView"
+    ViewObjectName="team.epm.dms.view.DmsUserView"
     RowLevelBinds="true"/>
   <ListBinding
     Name="LOV_WorkflowId"
@@ -58,6 +63,24 @@
     </AttrArray>
     <DisplayCriteria/>
   </ListBinding>
+  <ListBinding
+    Name="LOV_CreatedBy"
+    ListVOName="DmsUserView"
+    ListRangeSize="-1"
+    NullValueFlag="start"
+    NullValueId="${adfBundle['oracle.javatools.resourcebundle.SystemBundle']['NULL_VALUE_RESID']}"
+    MRUCount="0">
+    <AttrArray Name="AttrNames">
+      <Item Value="CreatedBy"/>
+    </AttrArray>
+    <AttrArray Name="ListAttrNames">
+      <Item Value="Id"/>
+    </AttrArray>
+    <AttrArray Name="ListDisplayAttrNames">
+      <Item Value="Name"/>
+    </AttrArray>
+    <DisplayCriteria/>
+  </ListBinding>
   <EntityUsage
     Name="InfaWorkflowExecEO"
     Entity="team.epm.infa.model.InfaWorkflowExecEO"/>
@@ -66,13 +89,32 @@
     PrecisionRule="true"
     EntityAttrName="CreatedAt"
     EntityUsage="InfaWorkflowExecEO"
-    AliasName="CREATED_AT"/>
+    AliasName="CREATED_AT">
+    <Properties>
+      <SchemaBasedProperties>
+        <FMT_FORMATTER
+          ResId="team.epm.infa.view.InfaWorkflowExecVO.CreatedAt_FMT_FORMATTER"/>
+        <FMT_FORMAT
+          ResId="team.epm.infa.view.InfaWorkflowExecVO.CreatedAt_FMT_FORMAT"/>
+        <LABEL
+          ResId="team.epm.dms.view.DmsJobDetailsVO.CreatedAt_LABEL"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewAttribute
     Name="CreatedBy"
     PrecisionRule="true"
     EntityAttrName="CreatedBy"
     EntityUsage="InfaWorkflowExecEO"
-    AliasName="CREATED_BY"/>
+    AliasName="CREATED_BY"
+    LOVName="LOV_CreatedBy">
+    <Properties>
+      <SchemaBasedProperties>
+        <CONTROLTYPE
+          Value="choice"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewAttribute
     Name="ExecStatus"
     PrecisionRule="true"

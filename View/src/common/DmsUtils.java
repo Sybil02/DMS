@@ -1,5 +1,13 @@
 package common;
 
+import java.io.File;
+
+import java.io.FileWriter;
+import java.io.IOException;
+
+import java.text.SimpleDateFormat;
+
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -29,6 +37,32 @@ import team.epm.module.Odi11gModuleImpl;
 public class DmsUtils {
     public DmsUtils() {
         super();
+    }
+    
+    //Writer the message to txt file and return the filepath
+    public static String writeToTxT(String message,String type){
+        File dmsBaseDir = new File("DMS\\DmsLog");
+        //如若文件路径不存在则创建文件目录
+        if (!dmsBaseDir.exists()) {
+            dmsBaseDir.mkdirs();
+        }
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+        String date = dateFormat.format(new Date());
+        String fileName = type + "-" + date + ".txt";
+        fileName = dmsBaseDir + "\\" + fileName;
+        
+        File logFile = new File(fileName);
+
+        try {
+            logFile.createNewFile();
+            FileWriter fw = new FileWriter(logFile);
+            fw.write(message);
+            fw.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        
+        return fileName;    
     }
     
     public static String getRandomString(int length) { //length表示生成字符串的长度  

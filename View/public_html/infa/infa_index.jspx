@@ -89,16 +89,17 @@
                             </af:selectOneChoice>
                           </af:column>
                           <af:column sortProperty="#{bindings.InfaWorkflowExecVO.hints.Params.name}"
-                                     filterable="true" sortable="true"
+                                     filterable="true" sortable="true" width="140"
                                      headerText="#{bindings.InfaWorkflowExecVO.hints.Params.label}"
                                      id="c6">
                             <af:outputText value="#{row.Params}" id="ot7"/>
                           </af:column>
                           <af:column sortProperty="#{bindings.InfaWorkflowExecVO.hints.LogText.name}"
-                                     filterable="true" sortable="true"
+                                     filterable="true" sortable="true" width="150"
                                      headerText="#{bindings.InfaWorkflowExecVO.hints.LogText.label}"
                                      id="c3">
-                            <af:outputText value="#{row.LogText}" id="ot5"/>
+                            <af:commandLink text="#{viewBundle['infa.error.txt']}" id="cl3" rendered="#{row.ExecStatus eq 'E'}"
+                                            actionListener="#{viewScope.InfaIndexBean.showLogTxt}"/>
                           </af:column>
                           <af:column sortProperty="#{bindings.InfaWorkflowExecVO.hints.ExecStatus.name}"
                                      filterable="true" sortable="true"
@@ -106,14 +107,26 @@
                                      id="c8">
                             <af:outputText value="#{row.ExecStatus eq 'D' ? viewBundle['infa.status.success']:(row.ExecStatus eq 'R' ? viewBundle['infa.status.running'] : viewBundle['infa.status.faild'] )}" id="ot2"/>
                           </af:column>
-                          <af:column sortProperty="#{bindings.InfaWorkflowExecVO.hints.CreatedBy.name}"
-                                     filterable="true" sortable="true"
+                          <af:column sortProperty="#{bindings.InfaWorkflowExecVO.hints.CreatedBy.name}" sortable="true"
                                      headerText="#{bindings.InfaWorkflowExecVO.hints.CreatedBy.label}"
                                      id="c4">
-                            <af:outputText value="#{row.CreatedBy}" id="ot6"/>
+                            <af:selectOneChoice value="#{row.bindings.CreatedBy.inputValue}"
+                                                label="#{row.bindings.CreatedBy.label}" readOnly="true"
+                                                required="#{bindings.InfaWorkflowExecVO.hints.CreatedBy.mandatory}"
+                                                shortDesc="#{bindings.InfaWorkflowExecVO.hints.CreatedBy.tooltip}"
+                                                id="soc3">
+                              <f:selectItems value="#{row.bindings.CreatedBy.items}"
+                                             id="si3"/>
+                            </af:selectOneChoice>
+                          </af:column>
+                          <af:column headerText="#{bindings.InfaWorkflowExecVO.hints.CreatedAt.label}" width="160"
+                                     id="c9">
+                            <af:outputText value="#{row.CreatedAt}" id="ot3">
+                              <af:convertDateTime pattern="#{bindings.InfaWorkflowExecVO.hints.CreatedAt.format}"/>
+                            </af:outputText>
                           </af:column>
                           <af:column sortProperty="#{bindings.InfaWorkflowExecVO.hints.FinishTime.name}"
-                                     filterable="true" sortable="true"
+                                     filterable="true" sortable="true" width="160"
                                      headerText="#{bindings.InfaWorkflowExecVO.hints.FinishTime.label}"
                                      id="c7">
                             <f:facet name="filter">
@@ -128,6 +141,16 @@
                       </af:panelCollection>
                     </af:panelWindow>
                   </af:popup>
+                  <af:popup id="p3" autoCancel="disabled"
+                            binding="#{viewScope.InfaIndexBean.logPop}">
+                    <af:panelWindow id="pw3" contentHeight="400" contentWidth="800" title="#{viewBundle['dms.log']}">
+                      <af:panelGroupLayout id="pgl5" layout="scroll">
+                      <af:message id="m2" messageType="info"
+                                  message="#{viewScope.InfaIndexBean.logMessage}"/>
+                      </af:panelGroupLayout>
+                    </af:panelWindow>
+                  </af:popup>
+                  <af:panelGroupLayout id="pgl4"/>
                 </af:panelGroupLayout>
               </f:facet>
               <f:facet name="center">

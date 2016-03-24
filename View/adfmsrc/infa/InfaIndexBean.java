@@ -12,6 +12,8 @@ import infa.dataintegration.types.DIServerDetails;
 import infa.dataintegration.types.DIServiceInfo;
 import infa.dataintegration.types.ETaskRunMode;
 import infa.dataintegration.types.EWorkflowRunStatus;
+import infa.dataintegration.types.GetWorkflowLogRequest;
+import infa.dataintegration.types.Log;
 import infa.dataintegration.types.LoginRequest;
 import infa.dataintegration.types.Parameter;
 import infa.dataintegration.types.ParameterArray;
@@ -19,12 +21,23 @@ import infa.dataintegration.types.SessionHeader;
 import infa.dataintegration.types.TypeGetWorkflowDetailsExRequest;
 import infa.dataintegration.types.TypeStartWorkflowExRequest;
 import infa.dataintegration.types.TypeStartWorkflowExResponse;
+import infa.dataintegration.types.VoidRequest;
 import infa.dataintegration.types.WorkflowDetails;
 import infa.dataintegration.types.WorkflowRequest;
 import infa.dataintegration.ws.DataIntegrationClient;
 import infa.dataintegration.ws.DataIntegrationInterface;
 
 import infa.dataintegration.ws.Fault;
+
+import java.io.BufferedReader;
+import java.io.File;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
+import java.io.UnsupportedEncodingException;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -34,6 +47,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -77,7 +91,9 @@ public class InfaIndexBean {
     List<InfaParamBean> paramList = new ArrayList<InfaParamBean>();
     Map<String,RichSelectOneChoice> paraSocMap = new LinkedHashMap<String,RichSelectOneChoice>();
     private RichTable statusTable;
-
+    private RichPopup logPop;
+    String logMessage = null ;
+    
     public InfaIndexBean() {
         super();
     }
@@ -130,7 +146,6 @@ public class InfaIndexBean {
         this.paramList.clear();
         this.paraSocMap.clear();
         if(this.hasParameter(execRow)){
-            System.out.println("set the param .......................");
             this.showParamPop();
         }else{
             this.startWorkflowEx(execRow, null);
@@ -159,7 +174,6 @@ public class InfaIndexBean {
         this.paramPop.show(hints);
     }
     
-
     public void paramSelectListener(ValueChangeEvent valueChangeEvent) {
         System.out.println(valueChangeEvent.getNewValue()+"........");
         
@@ -167,7 +181,6 @@ public class InfaIndexBean {
             (RichSelectOneChoice)valueChangeEvent.getSource();
         for(Object key : this.paraSocMap.keySet()){
             if(pSoc.equals(this.paraSocMap.get(key))){
-  
                 for(InfaParamBean ipb : this.paramList){
                     if(ipb.getPName().equals(key.toString())){
                         ipb.setChoiceValue(valueChangeEvent.getNewValue().toString());
@@ -187,24 +200,40 @@ public class InfaIndexBean {
             pam.setName(ipb.getPName());
             pam.setScope(ipb.getPScope());
             pam.setValue(ipb.getChoiceValue());
-            System.out.println("Add param:"+ipb.getPName()+"-"+ipb.getPScope()+"-"+ipb.getChoiceValue());
             paraArray.getParameters().add(pam);
         }
             
         return paraArray;    
     }
     
+    private String getParamName(){
+        String pnStr = "";
+        for(InfaParamBean ipb : this.paramList){
+            String value = ipb.getChoiceValue();
+            List<SelectItem> ls = ipb.getValuesList();
+            for(SelectItem item : ls){
+                if(item.getValue().equals(value)){
+                    pnStr = pnStr + "#" + item.getLabel();
+                    break;    
+                }    
+            }
+        }
+        return pnStr;    
+    }
+    
     private void startWorkflowEx(Row execRow,ParameterArray paramArray){
         
-        String paramStr = "";
+       // String paramStr = "";
+        String paramNameStr = "";
         if(paramArray != null && paramArray.getParameters().size() > 0){
-            for(Parameter pat : paramArray.getParameters()){
-                paramStr = paramStr + "#" + pat.getName() + ":" + pat.getValue();
-            }
+         //   for(Parameter pat : paramArray.getParameters()){
+//                paramStr = paramStr + "#" + pat.getName() + ":" + pat.getValue();
+//            }
+            paramNameStr = this.getParamName();
         }
         
         //判断是否在执行
-        if(isRunning(execRow,paramStr)){
+        if(isRunning(execRow,paramNameStr)){
             JSFUtils.addFacesInformationMessage("接口正在运行！");
             return;
         }
@@ -215,7 +244,6 @@ public class InfaIndexBean {
         String domain = execRow.getAttribute("RepDomain").toString();
         String isServer = execRow.getAttribute("ServiceName").toString();
         String sessionId = this.getLogin(execRow);
-        
         
         TypeStartWorkflowExRequest workflow = new TypeStartWorkflowExRequest();
         workflow.setFolderName(folderName);
@@ -246,12 +274,16 @@ public class InfaIndexBean {
         try {
             TypeStartWorkflowExResponse response = DIService.startWorkflowEx(workflow, sHead);
             System.out.println("StartWorkflow Return : " + response.getRunId());
-            this.createExecRecord(execRow, paramStr, response.getRunId());
+            this.createExecRecord(execRow, paramNameStr, response.getRunId());
         } catch (Fault e) {
+            JSFUtils.addFacesErrorMessage(e.getFaultInfo().getExtendedDetails());
             e.printStackTrace();
         }
         
-        this.logout(sessionId);
+        this.logout(execRow,sessionId);
+        this.paramPop.cancel();
+        RichPopup.PopupHints hints = new RichPopup.PopupHints();
+        this.detailsPop.show(hints);
         
     }
     
@@ -299,28 +331,44 @@ public class InfaIndexBean {
             wfLog.getWorkflowDetails();
             for(WorkflowDetails wfDt : wfLog.getWorkflowDetails()){
                 DIServerDate date = wfDt.getEndTime();
-                System.out.println(date.getHours() +":"+ date.getMinutes());
+                String dateStr = date.getYear() + "/" +date.getMonth() + "/" + date.getDate()
+                                    + " " + date.getHours() + ":" +date.getMinutes() + ":" + date.getSeconds();
+        
                 EWorkflowRunStatus ws = wfDt.getWorkflowRunStatus();
                 String st = ws.value();
-                System.out.println(st);
+                
                 String sql = "";
                 if(st.equals("SUCCEEDED")){
-                    sql = "UPDATE INFA_WORKFLOW_EXEC T SET T.EXEC_STATUS = 'D' WHERE T.RUN_ID = '" + runId 
-                                 + "' AND T.WORKFLOW_ID = '" + wfId + "'";
+                    sql = "UPDATE INFA_WORKFLOW_EXEC T SET T.EXEC_STATUS = 'D',T.FINISH_TIME = TO_DATE('" + dateStr + "','yyyy/mm/dd hh24:mi:ss') " +
+                        "WHERE T.RUN_ID = '" + runId + "' AND T.WORKFLOW_ID = '" + wfId + "'";
                     DmsUtils.getInfaApplicationModule().getTransaction().executeCommand(sql);
                     DmsUtils.getInfaApplicationModule().getTransaction().commit();
                 }else if(st.equals("FAILED")){
-                    sql = "UPDATE INFA_WORKFLOW_EXEC T SET T.EXEC_STATUS = 'E' WHERE T.RUN_ID = '" + runId 
-                                 + "' AND T.WORKFLOW_ID = '" + wfId + "'";
+                
+                    GetWorkflowLogRequest logReq = new GetWorkflowLogRequest();
+                    logReq.setDIServiceInfo(dinfo);
+                    logReq.setFolderName(folderName);
+                    logReq.setTimeout(100);
+                    logReq.setWorkflowName(wfName);
+                    logReq.setWorkflowRunId(runId);
+                    Log log = DIService.getWorkflowLog(logReq, sHead);
+                    String logStr = log.getBuffer();
+                    String filePath = DmsUtils.writeToTxT(logStr, "INFA");
+                
+                    sql = "UPDATE INFA_WORKFLOW_EXEC T SET T.EXEC_STATUS = 'E',T.FINISH_TIME = TO_DATE('" + dateStr + "','yyyy/mm/dd hh24:mi:ss')" +
+                        ",LOG_TEXT='" + filePath +"' WHERE T.RUN_ID = '" + runId + "' AND T.WORKFLOW_ID = '" + wfId + "'";
                     DmsUtils.getInfaApplicationModule().getTransaction().executeCommand(sql);
                     DmsUtils.getInfaApplicationModule().getTransaction().commit();
+                    
                 }else{
                     
                 }
                 System.out.println(wfDt.getRunErrorMessage());
+                System.out.println(wfDt.getRunErrorCode());
             }
             
         } catch (Fault e) {
+            JSFUtils.addFacesErrorMessage(e.getFaultInfo().getExtendedDetails());
             e.printStackTrace();
         }
         
@@ -334,7 +382,6 @@ public class InfaIndexBean {
         ViewCriteria vc = vo.createViewCriteria();
         ViewCriteriaRow vr = vc.createViewCriteriaRow();
         vr.setAttribute("WorkflowId", "='" + wfId + "'");
-        vr.setAttribute("CreatedBy", "='" + userId + "'");
         vr.setAttribute("ExecStatus", "='R'");
         vr.setConjunction(vr.VC_CONJ_AND);
         vc.addElement(vr);
@@ -350,8 +397,17 @@ public class InfaIndexBean {
         return runIdList;    
     }
     
-    private void logout(String sessionId){
-        
+    private void logout(Row execRow,String sessionId){
+         DataIntegrationInterface DIService = this.getDIService(execRow);
+         VoidRequest voidReq = new VoidRequest();
+         SessionHeader sHead = new SessionHeader();
+         sHead.setSessionId(sessionId);
+        try {
+            DIService.logout(voidReq, sHead);
+        } catch (Fault e) {
+            JSFUtils.addFacesErrorMessage(e.getFaultInfo().getExtendedDetails());
+            e.printStackTrace();
+        }
     }
     
     private boolean hasParameter(Row execRow){
@@ -402,6 +458,7 @@ public class InfaIndexBean {
             rs.close();
             stat.close();
         } catch (SQLException e) {
+            JSFUtils.addFacesErrorMessage(ObjectUtils.toString(e.getErrorCode()));
             e.printStackTrace();
         }
     }
@@ -438,12 +495,25 @@ public class InfaIndexBean {
     private boolean isRunning(Row execRow,String paramStr){
         boolean flag = false;
         
+        List<String> runIdList = this.getRunId(execRow);
+        
+        if(runIdList.size() > 0){
+            String sessionId = this.getLogin(execRow);
+            for(String runId : runIdList){
+                this.getWfDetails(execRow, sessionId, Integer.parseInt(runId));
+            }    
+            this.logout(execRow,sessionId);
+        }
+        
         String wfId = execRow.getAttribute("Id").toString();
         ViewObject vo = DmsUtils.getInfaApplicationModule().getInfaWorkflowExecVO();
         ViewCriteria vc = vo.createViewCriteria();
         ViewCriteriaRow vr = vc.createViewCriteriaRow();
         vr.setAttribute("WorkflowId", "='"+wfId+"'");
-        vr.setAttribute("Params", paramStr);
+        if(paramStr != null && !"".equals(paramStr)){
+            vr.setAttribute("Params", paramStr);   
+        }
+        vr.setAttribute("ExecStatus", "R");
         vr.setConjunction(vr.VC_CONJ_AND);
         vc.addElement(vr);
         vo.applyViewCriteria(vc);
@@ -482,6 +552,7 @@ public class InfaIndexBean {
         try {
             sessionId = DIService.login(loginReq, Context);
         } catch (Fault e) {
+            JSFUtils.addFacesErrorMessage(e.getFaultInfo().getExtendedDetails());
             e.printStackTrace();
         }
         System.out.println("login success:"+sessionId);
@@ -503,6 +574,7 @@ public class InfaIndexBean {
         try {
             url = new URL(uri);
         } catch (MalformedURLException e) {
+            JSFUtils.addFacesErrorMessage("WEBSERVICE URL ERROR!");
             e.printStackTrace();
         }
         
@@ -538,7 +610,7 @@ public class InfaIndexBean {
             for(String runId : runIdList){
                 this.getWfDetails(execRow, sessionId, Integer.parseInt(runId));
             }    
-            this.logout(sessionId);
+            this.logout(execRow,sessionId);
         }
         
         String wfId = execRow.getAttribute("Id").toString();
@@ -589,5 +661,58 @@ public class InfaIndexBean {
 
     public RichTable getStatusTable() {
         return statusTable;
+    }
+
+    public void showLogTxt(ActionEvent actionEvent){
+        this.logMessage = null;
+        ViewObject vo = ADFUtils.findIterator("InfaWorkflowExecVOIterator").getViewObject();
+        Row logRow = vo.getCurrentRow();
+        Object obj = logRow.getAttribute("LogText");
+        if(obj == null){
+            return;    
+        }
+        String filePath = obj.toString();
+        File file = new File(filePath);
+        System.out.println(file.getAbsolutePath());
+        if(file.exists() && file.isFile()){
+            InputStreamReader isr;
+            try {
+                isr = new InputStreamReader(new FileInputStream(file),"GBK");
+                BufferedReader br = new BufferedReader(isr);
+                String temp =  null;
+                while((temp = br.readLine()) != null){
+                    this.logMessage = this.logMessage + temp + "\n";    
+                }
+            } catch (UnsupportedEncodingException e) {
+                JSFUtils.addFacesErrorMessage("UnsupportedEncodingException:");
+                e.printStackTrace();
+            } catch (FileNotFoundException e) {
+                JSFUtils.addFacesErrorMessage("FileNotFoundException");
+                e.printStackTrace();
+            } catch (IOException e) {
+                JSFUtils.addFacesErrorMessage("IOException");
+                e.printStackTrace();
+            }
+        }
+        
+        RichPopup.PopupHints hints = new RichPopup.PopupHints();
+        this.logPop.show(hints);
+        
+    }
+
+    public void setLogPop(RichPopup logPop) {
+        this.logPop = logPop;
+    }
+
+    public RichPopup getLogPop() {
+        return logPop;
+    }
+
+    public void setLogMessage(String logMessage) {
+        this.logMessage = logMessage;
+    }
+
+    public String getLogMessage() {
+        return logMessage;
     }
 }

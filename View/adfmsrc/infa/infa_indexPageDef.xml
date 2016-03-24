@@ -40,6 +40,7 @@
           <Item Value="ExecStatus"/>
           <Item Value="CreatedBy"/>
           <Item Value="FinishTime"/>
+          <Item Value="CreatedAt"/>
         </AttrNames>
       </nodeDefinition>
     </tree>
