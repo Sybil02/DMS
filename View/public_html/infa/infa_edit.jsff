@@ -380,7 +380,7 @@
                                   actionListener="#{bindings.DeleteWf.execute}"/>
                 <af:commandButton text="#{viewBundle['dms.common.save']}" id="cb3"
                                   actionListener="#{bindings.Commit.execute}"/>
-                <af:commandButton text="#{viewBundle['dms.common.cancel']}" id="cb4"
+                <af:commandButton text="#{viewBundle['dms.common.cancel']}" id="cb4" immediate="true"
                                   actionListener="#{bindings.Rollback.execute}"/>
             </af:group>
             <af:group id="g2">
