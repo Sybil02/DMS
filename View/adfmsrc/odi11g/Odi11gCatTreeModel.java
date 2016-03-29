@@ -2,6 +2,10 @@ package odi11g;
 
 import common.DmsUtils;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,6 +13,8 @@ import oracle.jbo.Row;
 import oracle.jbo.ViewCriteria;
 import oracle.jbo.ViewCriteriaRow;
 import oracle.jbo.ViewObject;
+
+import oracle.jbo.server.DBTransaction;
 
 import org.apache.commons.lang.ObjectUtils;
 import org.apache.myfaces.trinidad.model.ChildPropertyTreeModel;
@@ -20,7 +26,7 @@ public class Odi11gCatTreeModel extends ChildPropertyTreeModel {
         super();        
         List<Odi11gCatTreeItem> root = this.getChildTreeItem(null);
         for (Odi11gCatTreeItem itm : root) {
-                itm.setChildren(this.getChildTreeItem(itm.getId()));
+            itm.setChildren(this.getChildTreeItem(itm.getId()));
         }
         this.setChildProperty("children");
         this.setWrappedData(root);
@@ -46,9 +52,40 @@ public class Odi11gCatTreeModel extends ChildPropertyTreeModel {
             Odi11gCatTreeItem item = new Odi11gCatTreeItem();
             item.setId(id);
             item.setLabel(label);
-            items.add(item);
+            if(this.nodeVisible(item)){
+                items.add(item);         
+            }
         }
         return items;
+    }
+    
+    private boolean nodeVisible(Odi11gCatTreeItem item){
+        boolean flag = false;
+        ViewObject sceneVo = DmsUtils.getOdi11gApplicationModule().getOdi11AuthedSceneView();
+        DBTransaction trans = (DBTransaction)DmsUtils.getOdi11gApplicationModule().getTransaction();
+        Statement stat = trans.createStatement(1);
+        
+        String sql = "SELECT T.ID FROM ODI11_SCENE_CAT T START WITH T.ID='" + item.getId() 
+            + "' CONNECT BY PRIOR T.ID = T.P_ID";
+        
+        ResultSet rs;
+        try {
+            rs = stat.executeQuery(sql);
+            while(rs.next()){
+                sceneVo.setNamedWhereClauseParam("catId", rs.getString("ID"));
+                sceneVo.executeQuery();
+                if(sceneVo.hasNext()){
+                    flag = true;    
+                    break;
+                }
+            }
+            rs.close();
+            stat.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return flag;
     }
 
     @Override

@@ -2,14 +2,19 @@ package infa;
 
 import common.DmsUtils;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
 import java.util.ArrayList;
 import java.util.List;
-
 
 import oracle.jbo.Row;
 import oracle.jbo.ViewCriteria;
 import oracle.jbo.ViewCriteriaRow;
 import oracle.jbo.ViewObject;
+
+import oracle.jbo.server.DBTransaction;
 
 import org.apache.commons.lang.ObjectUtils;
 import org.apache.myfaces.trinidad.model.ChildPropertyTreeModel;
@@ -46,10 +51,42 @@ public class InfaCatTreeModel extends ChildPropertyTreeModel{
             InfaCatTreeItem item = new InfaCatTreeItem();
             item.setId(id);
             item.setLabel(label);
-            items.add(item);
+            if(this.nodeVisible(item)){
+                items.add(item);
+            }
         }
         return items;
     }
+    
+    private boolean nodeVisible(InfaCatTreeItem item){
+        boolean flag = false;
+        ViewObject infaVo = DmsUtils.getInfaApplicationModule().getInfaUserWorkflowVO();
+        DBTransaction trans = (DBTransaction)DmsUtils.getInfaApplicationModule().getTransaction();
+        Statement stat = trans.createStatement(1);
+        
+        String sql = "SELECT T.ID FROM INFA_WORKFLOW_CAT T START WITH T.ID='" + item.getId() 
+            + "' CONNECT BY PRIOR T.ID = T.P_ID";
+        
+        ResultSet rs;
+        try {
+            rs = stat.executeQuery(sql);
+            while(rs.next()){
+                infaVo.setNamedWhereClauseParam("catId", rs.getString("ID"));
+                infaVo.executeQuery();
+                if(infaVo.hasNext()){
+                    flag = true;    
+                    break;
+                }
+            }
+            rs.close();
+            stat.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return flag;
+    }
+
 
     @Override
     public Object getRowData() {

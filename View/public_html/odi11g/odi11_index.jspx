@@ -20,7 +20,7 @@
                      selectionListener="#{viewScope.Odi11gIndexMBean.selectListener}"
                      partialTriggers="">
               <f:facet name="nodeStamp">
-                <af:outputLabel value="#{node.label}"/>
+                <af:outputLabel id="nodeout" value="#{node.label}"/>
               </f:facet>
             </af:tree>
           </f:facet>
