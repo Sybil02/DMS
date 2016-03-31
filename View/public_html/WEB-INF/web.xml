@@ -74,6 +74,9 @@
   <listener>
     <listener-class>oracle.bc4j.mbean.BC4JConfigLifeCycleCallBack</listener-class>
   </listener>
+  <listener>
+    <listener-class>common.AppInitListener</listener-class>
+  </listener>
   <servlet>
     <servlet-name>Faces Servlet</servlet-name>
     <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
