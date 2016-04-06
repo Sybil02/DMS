@@ -92,6 +92,9 @@
   <ViewUsage
     Name="DmsJobDetailsVO"
     ViewObjectName="team.epm.dms.view.DmsJobDetailsVO"/>
+  <ViewUsage
+    Name="DmsTemplateTimerVO"
+    ViewObjectName="team.epm.dms.view.DmsTemplateTimerVO"/>
   <ViewLinkUsage
     Name="DmsGroupedRoleLnk"
     ViewLinkObjectName="team.epm.dms.DmsGroupedRoleLnk"

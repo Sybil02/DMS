@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pageDefinition xmlns="http://xmlns.oracle.com/adfm/uimodel"
+                version="11.1.1.64.93" id="mailTimer_editPageDef"
+                Package="mailTimer">
+  <parameters/>
+  <executables>
+    <variableIterator id="variables"/>
+    <iterator Binds="DmsTemplateTimerVO" RangeSize="25"
+              DataControl="DmsModuleDataControl"
+              id="DmsTemplateTimerVOIterator"/>
+    <searchRegion Binds="DmsTemplateTimerVOIterator" Criteria=""
+                  Customizer="oracle.jbo.uicli.binding.JUSearchBindingCustomizer"
+                  id="DmsTemplateTimerVOQuery"/>
+  </executables>
+  <bindings>
+    <tree IterBinding="DmsTemplateTimerVOIterator" id="DmsTemplateTimerVO">
+      <nodeDefinition DefName="team.epm.dms.view.DmsTemplateTimerVO"
+                      Name="DmsTemplateTimerVO0">
+        <AttrNames>
+          <Item Value="TempId"/>
+          <Item Value="MailContent"/>
+          <Item Value="TimerCron"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <action IterBinding="DmsTemplateTimerVOIterator" id="CreateInsert"
+            RequiresUpdateModel="true" Action="createInsertRow"/>
+    <action IterBinding="DmsTemplateTimerVOIterator" id="Delete"
+            RequiresUpdateModel="false" Action="removeCurrentRow"/>
+    <action id="Rollback" RequiresUpdateModel="false"
+            Action="rollbackTransaction" DataControl="DmsModuleDataControl"/>
+  </bindings>
+</pageDefinition>

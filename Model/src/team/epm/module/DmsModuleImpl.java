@@ -317,4 +317,12 @@ public class DmsModuleImpl extends ApplicationModuleImpl implements DmsModule {
     public ViewObjectImpl getDmsJobDetailsVO() {
         return (ViewObjectImpl)findViewObject("DmsJobDetailsVO");
     }
+
+    /**
+     * Container's getter for DmsTemplateTimerVO.
+     * @return DmsTemplateTimerVO
+     */
+    public ViewObjectImpl getDmsTemplateTimerVO() {
+        return (ViewObjectImpl)findViewObject("DmsTemplateTimerVO");
+    }
 }
