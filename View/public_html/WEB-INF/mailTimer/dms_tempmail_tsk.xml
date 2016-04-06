@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<adfc-config xmlns="http://xmlns.oracle.com/adf/controller" version="1.2">
+  <task-flow-definition id="dms_tempmail_tsk">
+    <default-activity id="__1">mailTimer_edit</default-activity>
+    <managed-bean id="__2">
+      <managed-bean-name id="__4">TempTimerBean</managed-bean-name>
+      <managed-bean-class id="__5">mailTimer.TempTimerBean</managed-bean-class>
+      <managed-bean-scope id="__3">request</managed-bean-scope>
+    </managed-bean>
+    <view id="mailTimer_edit">
+      <page>/mailTimer/mailTimer_edit.jsff</page>
+    </view>
+    <use-page-fragments/>
+  </task-flow-definition>
+</adfc-config>

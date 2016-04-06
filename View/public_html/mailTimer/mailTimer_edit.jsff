@@ -1,0 +1,82 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.1"
+          xmlns:af="http://xmlns.oracle.com/adf/faces/rich"
+          xmlns:f="http://java.sun.com/jsf/core"
+          xmlns:c="http://java.sun.com/jsp/jstl/core">
+  <c:set var="viewBundle" value="#{adfBundle['dms_v']}"/>
+  <af:panelCollection id="pc1">
+    <f:facet name="menus"/>
+    <f:facet name="toolbar">
+      <af:toolbar id="t2">
+        <af:commandButton text="#{viewBundle['dcm.common.new']}" id="cb4"
+                          partialSubmit="true"
+                          actionListener="#{bindings.CreateInsert.execute}"/>
+        <af:commandButton text="#{viewBundle['dcm.common.delete']}" id="cb3"
+                          partialSubmit="true"
+                          actionListener="#{bindings.Delete.execute}"
+                          immediate="true"/>
+        <af:commandButton text="#{viewBundle['dms.common.cancel']}" id="cb2"
+                          actionListener="#{bindings.Rollback.execute}"
+                          immediate="true">
+          <af:resetActionListener/>
+        </af:commandButton>
+        <af:commandButton text="#{viewBundle['dms.common.save']}" id="cb1"
+                          partialSubmit="true"
+                          actionListener="#{TempTimerBean.saveAndRefresh}"/>
+      </af:toolbar>
+    </f:facet>
+    <f:facet name="statusbar"/>
+    <af:table value="#{bindings.DmsTemplateTimerVO.collectionModel}" var="row"
+              rows="#{bindings.DmsTemplateTimerVO.rangeSize}"
+              emptyText="#{bindings.DmsTemplateTimerVO.viewable ? 'No data to display.' : 'Access Denied.'}"
+              fetchSize="#{bindings.DmsTemplateTimerVO.rangeSize}"
+              rowBandingInterval="0" editingMode="clickToEdit"
+              filterModel="#{bindings.DmsTemplateTimerVOQuery.queryDescriptor}"
+              queryListener="#{bindings.DmsTemplateTimerVOQuery.processQuery}"
+              filterVisible="false" varStatus="vs"
+              selectedRowKeys="#{bindings.DmsTemplateTimerVO.collectionModel.selectedRow}"
+              selectionListener="#{bindings.DmsTemplateTimerVO.collectionModel.makeCurrent}"
+              rowSelection="single" id="t1" partialTriggers="::cb4 ::cb3">
+      <af:column sortProperty="#{bindings.DmsTemplateTimerVO.hints.TempId.name}"
+                 filterable="true" sortable="true" width="160"
+                 headerText="#{bindings.DmsTemplateTimerVO.hints.TempId.label}"
+                 id="c1">
+        <af:selectOneChoice value="#{row.bindings.TempId.inputValue}"
+                            label="#{row.bindings.TempId.label}"
+                            required="#{bindings.DmsTemplateTimerVO.hints.TempId.mandatory}"
+                            shortDesc="#{bindings.DmsTemplateTimerVO.hints.TempId.tooltip}"
+                            id="soc1">
+          <f:selectItems value="#{row.bindings.TempId.items}" id="si1"/>
+        </af:selectOneChoice>
+      </af:column>
+      <af:column sortProperty="#{bindings.DmsTemplateTimerVO.hints.MailContent.name}"
+                 filterable="true" sortable="true" width="500"
+                 headerText="#{bindings.DmsTemplateTimerVO.hints.MailContent.label}"
+                 id="c3">
+        <af:inputText value="#{row.bindings.MailContent.inputValue}"
+                      label="#{bindings.DmsTemplateTimerVO.hints.MailContent.label}"
+                      required="#{bindings.DmsTemplateTimerVO.hints.MailContent.mandatory}"
+                      columns="#{bindings.DmsTemplateTimerVO.hints.MailContent.displayWidth}"
+                      maximumLength="#{bindings.DmsTemplateTimerVO.hints.MailContent.precision}"
+                      shortDesc="#{bindings.DmsTemplateTimerVO.hints.MailContent.tooltip}"
+                      id="it1">
+          <f:validator binding="#{row.bindings.MailContent.validator}"/>
+        </af:inputText>
+      </af:column>
+      <af:column sortProperty="#{bindings.DmsTemplateTimerVO.hints.TimerCron.name}"
+                 filterable="true" sortable="true" width="160"
+                 headerText="#{bindings.DmsTemplateTimerVO.hints.TimerCron.label}"
+                 id="c2">
+        <af:inputText value="#{row.bindings.TimerCron.inputValue}"
+                      label="#{bindings.DmsTemplateTimerVO.hints.TimerCron.label}"
+                      required="#{bindings.DmsTemplateTimerVO.hints.TimerCron.mandatory}"
+                      columns="#{bindings.DmsTemplateTimerVO.hints.TimerCron.displayWidth}"
+                      maximumLength="#{bindings.DmsTemplateTimerVO.hints.TimerCron.precision}"
+                      shortDesc="#{bindings.DmsTemplateTimerVO.hints.TimerCron.tooltip}"
+                      id="it2">
+          <f:validator binding="#{row.bindings.TimerCron.validator}"/>
+        </af:inputText>
+      </af:column>
+    </af:table>
+  </af:panelCollection>
+</jsp:root>
