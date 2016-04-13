@@ -36,8 +36,7 @@
     SQLType="VARCHAR"
     Type="java.lang.String"
     ColumnType="VARCHAR2"
-    TableName="DMS_TEMPLATE_TIMER"
-    IsNotNull="true">
+    TableName="DMS_TEMPLATE_TIMER">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="32"/>
     </DesignTime>
@@ -49,8 +48,7 @@
     SQLType="VARCHAR"
     Type="java.lang.String"
     ColumnType="VARCHAR2"
-    TableName="DMS_TEMPLATE_TIMER"
-    IsNotNull="true">
+    TableName="DMS_TEMPLATE_TIMER">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="100"/>
     </DesignTime>
@@ -62,8 +60,7 @@
     SQLType="VARCHAR"
     Type="java.lang.String"
     ColumnType="VARCHAR2"
-    TableName="DMS_TEMPLATE_TIMER"
-    IsNotNull="true">
+    TableName="DMS_TEMPLATE_TIMER">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="1000"/>
     </DesignTime>
@@ -75,8 +72,7 @@
     SQLType="VARCHAR"
     Type="java.lang.String"
     ColumnType="VARCHAR2"
-    TableName="DMS_TEMPLATE_TIMER"
-    IsNotNull="true">
+    TableName="DMS_TEMPLATE_TIMER">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="40"/>
     </DesignTime>
@@ -88,8 +84,7 @@
     SQLType="VARCHAR"
     Type="java.lang.String"
     ColumnType="VARCHAR2"
-    TableName="DMS_TEMPLATE_TIMER"
-    IsNotNull="true">
+    TableName="DMS_TEMPLATE_TIMER">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="32"/>
     </DesignTime>
@@ -103,9 +98,7 @@
       <Attr Name="_checkCondition" Value='"JOB_NAME" IS NOT NULL'/>
       <Attr Name="_isCheck" Value="true"/>
     </DesignTime>
-    <AttrArray Name="Attributes">
-      <Item Value="team.epm.dms.model.DmsTemplateTimerEO.JobName"/>
-    </AttrArray>
+    <AttrArray Name="Attributes"/>
   </Key>
   <Key
     Name="DmsTemplateTimerLocaleCheck">
@@ -115,9 +108,7 @@
       <Attr Name="_checkCondition" Value='"LOCALE" IS NOT NULL'/>
       <Attr Name="_isCheck" Value="true"/>
     </DesignTime>
-    <AttrArray Name="Attributes">
-      <Item Value="team.epm.dms.model.DmsTemplateTimerEO.Locale"/>
-    </AttrArray>
+    <AttrArray Name="Attributes"/>
   </Key>
   <Key
     Name="DmsTemplateTimerMailContentCheck">
@@ -127,9 +118,7 @@
       <Attr Name="_checkCondition" Value='"MAIL_CONTENT" IS NOT NULL'/>
       <Attr Name="_isCheck" Value="true"/>
     </DesignTime>
-    <AttrArray Name="Attributes">
-      <Item Value="team.epm.dms.model.DmsTemplateTimerEO.MailContent"/>
-    </AttrArray>
+    <AttrArray Name="Attributes"/>
   </Key>
   <Key
     Name="DmsTemplateTimerTempIdCheck">
@@ -139,9 +128,7 @@
       <Attr Name="_checkCondition" Value='"TEMP_ID" IS NOT NULL'/>
       <Attr Name="_isCheck" Value="true"/>
     </DesignTime>
-    <AttrArray Name="Attributes">
-      <Item Value="team.epm.dms.model.DmsTemplateTimerEO.TempId"/>
-    </AttrArray>
+    <AttrArray Name="Attributes"/>
   </Key>
   <Key
     Name="DmsTemplateTimerTimerCronCheck">
@@ -151,9 +138,7 @@
       <Attr Name="_checkCondition" Value='"TIMER_CRON" IS NOT NULL'/>
       <Attr Name="_isCheck" Value="true"/>
     </DesignTime>
-    <AttrArray Name="Attributes">
-      <Item Value="team.epm.dms.model.DmsTemplateTimerEO.TimerCron"/>
-    </AttrArray>
+    <AttrArray Name="Attributes"/>
   </Key>
   <Key
     Name="DmstemplatetimereoPrimaryKey"

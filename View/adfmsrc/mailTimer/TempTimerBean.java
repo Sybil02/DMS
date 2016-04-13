@@ -3,6 +3,8 @@ package mailTimer;
 import common.ADFUtils;
 import common.DmsUtils;
 
+import common.JSFUtils;
+
 import dms.quartz.core.QuartzSchedulerSingleton;
 
 import javax.faces.event.ActionEvent;
@@ -39,6 +41,14 @@ public class TempTimerBean {
     public void saveAndModify(ActionEvent actionEvent) {
         ViewObject timerVo =
             ADFUtils.findIterator("DmsTemplateTimerVOIterator").getViewObject();
+        
+        for(Row tRow : timerVo.getAllRowsInRange()){
+            if(tRow.getAttribute("TempId") == null || tRow.getAttribute("TimerCron") == null){
+                JSFUtils.addFacesErrorMessage("模板名称或Cron表达式不能为空！");
+                return;
+            }
+        }
+        
         for (Row tRow : timerVo.getAllRowsInRange()) {
             ViewRowImpl row = (ViewRowImpl)tRow;
             if (row.getEntities()[0].getEntityState() == 0) {
