@@ -13,16 +13,11 @@
                           actionListener="#{bindings.CreateInsert.execute}"/>
         <af:commandButton text="#{viewBundle['dcm.common.delete']}" id="cb3"
                           partialSubmit="true"
-                          actionListener="#{bindings.Delete.execute}"
+                          actionListener="#{TempTimerBean.deleteTimer}"
                           immediate="true"/>
-        <af:commandButton text="#{viewBundle['dms.common.cancel']}" id="cb2"
-                          actionListener="#{bindings.Rollback.execute}"
-                          immediate="true">
-          <af:resetActionListener/>
-        </af:commandButton>
         <af:commandButton text="#{viewBundle['dms.common.save']}" id="cb1"
                           partialSubmit="true"
-                          actionListener="#{TempTimerBean.saveAndRefresh}"/>
+                          actionListener="#{TempTimerBean.saveAndModify}"/>
       </af:toolbar>
     </f:facet>
     <f:facet name="statusbar"/>
@@ -36,7 +31,7 @@
               filterVisible="false" varStatus="vs"
               selectedRowKeys="#{bindings.DmsTemplateTimerVO.collectionModel.selectedRow}"
               selectionListener="#{bindings.DmsTemplateTimerVO.collectionModel.makeCurrent}"
-              rowSelection="single" id="t1" partialTriggers="::cb4 ::cb3">
+              rowSelection="single" id="t1" partialTriggers="::cb4 ::cb3 ::cb1">
       <af:column sortProperty="#{bindings.DmsTemplateTimerVO.hints.TempId.name}"
                  filterable="true" sortable="true" width="160"
                  headerText="#{bindings.DmsTemplateTimerVO.hints.TempId.label}"

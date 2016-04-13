@@ -7,10 +7,10 @@ public class MailTest {
 
     public static void main(String[] args) {
         MailSender sender=new MailSender(
-                              "mail.hand-china.com","xiangjia.he@hand-china.com","h339449!");
+                              "smtp.sina.com","dmshand@sina.com","handhand","25");
         try {
-            for(int i=0;i<100;i++){
-            sender.send("zhenyi.yang@hand-china.com", "Test", "Hi");
+            for(int i=0;i<5;i++){
+                sender.send("tiegang.wang@hand-china.com", "Test", "Hi");
             }
         } catch (AddressException e) {
             e.printStackTrace();

@@ -1,5 +1,14 @@
 package common;
 
+import dms.quartz.utils.DBConnUtils;
+
+import java.sql.Connection;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -30,9 +39,44 @@ public class MailSender {
         init();
     }
     
-    public MailSender(String smtpHostName, String username, String password) {
+    public MailSender(String jndiName){
+        Map map = this.getEmailProperty(jndiName);
+        String smtpHost=ObjectUtils.toString(map.get("mail.host"));
+        String userName=ObjectUtils.toString(map.get("mail.account"));
+        String password=ObjectUtils.toString(map.get("mail.password"));
+        String port=ObjectUtils.toString(map.get("mail.port"));
+        this.authenticator = new MailAuthenticator(userName, password);
+        this.smtpHostName = smtpHost;
+        this.port=port;
+        init();
+    }
+    
+    public Map getEmailProperty(String jndiName){
+        Map<String,String> map = new HashMap<String,String>();
+        
+        DBConnUtils dbUtils = new DBConnUtils();
+        Connection conn = dbUtils.getJNDIConnectionByContainer(jndiName);
+        String sql = "SELECT T.CKEY,T.CVALUE FROM DMS_PROPERTY T WHERE T.ENABLE_FLAG = 'Y'";
+        Statement stat;
+        try {
+            stat = conn.createStatement();
+            ResultSet rs = stat.executeQuery(sql);
+            while(rs.next()){
+                map.put(rs.getString("CKEY"), rs.getString("CVALUE"));
+            }
+            rs.close();
+            stat.close();
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return map;
+    }
+    
+    public MailSender(String smtpHostName, String username, String password,String port) {
         this.authenticator = new MailAuthenticator(username, password);
         this.smtpHostName = smtpHostName;
+        this.port = port;
         init();
     }
 

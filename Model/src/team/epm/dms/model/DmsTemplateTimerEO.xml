@@ -36,7 +36,8 @@
     SQLType="VARCHAR"
     Type="java.lang.String"
     ColumnType="VARCHAR2"
-    TableName="DMS_TEMPLATE_TIMER">
+    TableName="DMS_TEMPLATE_TIMER"
+    IsNotNull="true">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="32"/>
     </DesignTime>
@@ -48,7 +49,8 @@
     SQLType="VARCHAR"
     Type="java.lang.String"
     ColumnType="VARCHAR2"
-    TableName="DMS_TEMPLATE_TIMER">
+    TableName="DMS_TEMPLATE_TIMER"
+    IsNotNull="true">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="100"/>
     </DesignTime>
@@ -60,11 +62,99 @@
     SQLType="VARCHAR"
     Type="java.lang.String"
     ColumnType="VARCHAR2"
-    TableName="DMS_TEMPLATE_TIMER">
+    TableName="DMS_TEMPLATE_TIMER"
+    IsNotNull="true">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="1000"/>
     </DesignTime>
   </Attribute>
+  <Attribute
+    Name="JobName"
+    Precision="40"
+    ColumnName="JOB_NAME"
+    SQLType="VARCHAR"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    TableName="DMS_TEMPLATE_TIMER"
+    IsNotNull="true">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="40"/>
+    </DesignTime>
+  </Attribute>
+  <Attribute
+    Name="Locale"
+    Precision="32"
+    ColumnName="LOCALE"
+    SQLType="VARCHAR"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    TableName="DMS_TEMPLATE_TIMER"
+    IsNotNull="true">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="32"/>
+    </DesignTime>
+    <TransientExpression><![CDATA[adf.context.locale]]></TransientExpression>
+  </Attribute>
+  <Key
+    Name="DmsTemplateTimerJobNameCheck">
+    <DesignTime>
+      <Attr Name="_isNotNull" Value="true"/>
+      <Attr Name="_DBObjectName" Value="DMS_TEMPLATE_TIMER_JOB_NAME_CH"/>
+      <Attr Name="_checkCondition" Value='"JOB_NAME" IS NOT NULL'/>
+      <Attr Name="_isCheck" Value="true"/>
+    </DesignTime>
+    <AttrArray Name="Attributes">
+      <Item Value="team.epm.dms.model.DmsTemplateTimerEO.JobName"/>
+    </AttrArray>
+  </Key>
+  <Key
+    Name="DmsTemplateTimerLocaleCheck">
+    <DesignTime>
+      <Attr Name="_isNotNull" Value="true"/>
+      <Attr Name="_DBObjectName" Value="DMS_TEMPLATE_TIMER_LOCALE_CHEC"/>
+      <Attr Name="_checkCondition" Value='"LOCALE" IS NOT NULL'/>
+      <Attr Name="_isCheck" Value="true"/>
+    </DesignTime>
+    <AttrArray Name="Attributes">
+      <Item Value="team.epm.dms.model.DmsTemplateTimerEO.Locale"/>
+    </AttrArray>
+  </Key>
+  <Key
+    Name="DmsTemplateTimerMailContentCheck">
+    <DesignTime>
+      <Attr Name="_isNotNull" Value="true"/>
+      <Attr Name="_DBObjectName" Value="DMS_TEMPLATE_TIMER_MAIL_CONTEN"/>
+      <Attr Name="_checkCondition" Value='"MAIL_CONTENT" IS NOT NULL'/>
+      <Attr Name="_isCheck" Value="true"/>
+    </DesignTime>
+    <AttrArray Name="Attributes">
+      <Item Value="team.epm.dms.model.DmsTemplateTimerEO.MailContent"/>
+    </AttrArray>
+  </Key>
+  <Key
+    Name="DmsTemplateTimerTempIdCheck">
+    <DesignTime>
+      <Attr Name="_isNotNull" Value="true"/>
+      <Attr Name="_DBObjectName" Value="DMS_TEMPLATE_TIMER_TEMP_ID_CHE"/>
+      <Attr Name="_checkCondition" Value='"TEMP_ID" IS NOT NULL'/>
+      <Attr Name="_isCheck" Value="true"/>
+    </DesignTime>
+    <AttrArray Name="Attributes">
+      <Item Value="team.epm.dms.model.DmsTemplateTimerEO.TempId"/>
+    </AttrArray>
+  </Key>
+  <Key
+    Name="DmsTemplateTimerTimerCronCheck">
+    <DesignTime>
+      <Attr Name="_isNotNull" Value="true"/>
+      <Attr Name="_DBObjectName" Value="DMS_TEMPLATE_TIMER_TIMER_CRON_"/>
+      <Attr Name="_checkCondition" Value='"TIMER_CRON" IS NOT NULL'/>
+      <Attr Name="_isCheck" Value="true"/>
+    </DesignTime>
+    <AttrArray Name="Attributes">
+      <Item Value="team.epm.dms.model.DmsTemplateTimerEO.TimerCron"/>
+    </AttrArray>
+  </Key>
   <Key
     Name="DmstemplatetimereoPrimaryKey"
     PrimaryKey="true">
