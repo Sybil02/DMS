@@ -5,7 +5,7 @@
     <managed-bean id="__3">
       <managed-bean-name id="__2">DmsApprovalBean</managed-bean-name>
       <managed-bean-class id="__5">dmsApproval.DmsApprovalBean</managed-bean-class>
-      <managed-bean-scope id="__4">request</managed-bean-scope>
+      <managed-bean-scope id="__4">view</managed-bean-scope>
     </managed-bean>
     <view id="approval_edit">
       <page>/dmsApproval/approval_edit.jsff</page>

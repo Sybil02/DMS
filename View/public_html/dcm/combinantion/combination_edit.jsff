@@ -159,7 +159,7 @@
                   rows="#{bindings.DcmComVsView.rangeSize}"
                   emptyText="#{viewBundle['dms.common.nodata']}"
                   fetchSize="#{bindings.DcmComVsView.rangeSize}"
-                  rowBandingInterval="0"
+                  rowBandingInterval="0" editingMode="clickToEdit"
                   selectedRowKeys="#{bindings.DcmComVsView.collectionModel.selectedRow}"
                   selectionListener="#{bindings.DcmComVsView.collectionModel.makeCurrent}"
                   rowSelection="single" id="t3" partialTriggers=":::pc1:t1">
@@ -186,6 +186,16 @@
                                 id="soc3" autoSubmit="true">
               <f:selectItems value="#{row.bindings.IsAuthority.items}"
                              id="si3"/>
+            </af:selectOneChoice>
+          </af:column>
+          <af:column headerText="#{bindings.DcmComVsView.hints.IsApproval.label}"
+                     id="c9">
+            <af:selectOneChoice value="#{row.bindings.IsApproval.inputValue}"
+                                label="#{row.bindings.IsApproval.label}"
+                                required="#{bindings.DcmComVsView.hints.IsApproval.mandatory}"
+                                shortDesc="#{bindings.DcmComVsView.hints.IsApproval.tooltip}"
+                                id="soc5">
+              <f:selectItems value="#{row.bindings.IsApproval.items}" id="si5"/>
             </af:selectOneChoice>
           </af:column>
           <af:column sortProperty="#{bindings.DcmComVsView.hints.Seq.name}"

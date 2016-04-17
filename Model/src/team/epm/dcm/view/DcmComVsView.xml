@@ -13,7 +13,8 @@
        DcmComVs.UPDATED_AT, 
        DcmComVs.UPDATED_BY, 
        DcmComVs.CREATED_BY, 
-       DcmComVs.SEQ"
+       DcmComVs.SEQ, 
+       DcmComVs.IS_APPROVAL"
   FromList="DCM_COM_VS DcmComVs"
   BindingStyle="OracleName"
   CustomQuery="false"
@@ -76,6 +77,24 @@
     </AttrArray>
     <AttrArray Name="ListDisplayAttrNames">
       <Item Value="Name"/>
+    </AttrArray>
+    <DisplayCriteria/>
+  </ListBinding>
+  <ListBinding
+    Name="LOV_IsApproval"
+    ListVOName="LKP_YES_NO"
+    ListRangeSize="-1"
+    NullValueFlag="start"
+    NullValueId="${adfBundle['oracle.javatools.resourcebundle.SystemBundle']['NULL_VALUE_RESID']}"
+    MRUCount="0">
+    <AttrArray Name="AttrNames">
+      <Item Value="IsApproval"/>
+    </AttrArray>
+    <AttrArray Name="ListAttrNames">
+      <Item Value="Code"/>
+    </AttrArray>
+    <AttrArray Name="ListDisplayAttrNames">
+      <Item Value="Meaning"/>
     </AttrArray>
     <DisplayCriteria/>
   </ListBinding>
@@ -182,6 +201,20 @@
     EntityAttrName="Seq"
     EntityUsage="DcmComVs"
     AliasName="SEQ"/>
+  <ViewAttribute
+    Name="IsApproval"
+    PrecisionRule="true"
+    EntityAttrName="IsApproval"
+    EntityUsage="DcmComVs"
+    AliasName="IS_APPROVAL"
+    LOVName="LOV_IsApproval">
+    <Properties>
+      <SchemaBasedProperties>
+        <CONTROLTYPE
+          Value="choice"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ResourceBundle>
     <PropertiesBundle
       PropertiesFile="ModelBundle"/>

@@ -145,6 +145,18 @@
     </DesignTime>
     <TransientExpression><![CDATA[adf.userSession.userData.userId]]></TransientExpression>
   </Attribute>
+  <Attribute
+    Name="IsApproval"
+    Precision="10"
+    ColumnName="IS_APPROVAL"
+    SQLType="VARCHAR"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    TableName="DCM_COM_VS">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="10"/>
+    </DesignTime>
+  </Attribute>
   <Key
     Name="AltKey"
     AltKey="true">

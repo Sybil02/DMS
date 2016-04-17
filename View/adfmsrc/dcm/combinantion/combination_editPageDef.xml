@@ -34,6 +34,7 @@
           <Item Value="Seq"/>
           <Item Value="UpdatedBy"/>
           <Item Value="UpdatedAt"/>
+          <Item Value="IsApproval"/>
         </AttrNames>
       </nodeDefinition>
     </tree>

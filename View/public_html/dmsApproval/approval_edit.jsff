@@ -5,7 +5,7 @@
           xmlns:c="http://java.sun.com/jsp/jstl/core">
   <c:set var="viewBundle" value="#{adfBundle['dms_v']}"/>
   <af:panelCollection id="pc1">
-    <af:popup id="p1" autoCancel="disabled" binding="#{DmsApprovalBean.approvalPop}">
+    <af:popup id="p1" autoCancel="disabled" binding="#{viewScope.DmsApprovalBean.approvalPop}">
       <af:panelWindow id="pw1" title="#{viewBundle['dms.approval.entity']}">
         <af:panelCollection id="pc2">
           <f:facet name="menus"/>
@@ -15,7 +15,7 @@
                                 actionListener="#{bindings.CreateInsert.execute}"/>
               <af:commandButton text="#{viewBundle['dcm.common.delete']}" id="cb7"
                                 actionListener="#{bindings.Delete.execute}"/>
-              <af:commandButton text="#{viewBundle['dms.common.cancel']}" id="cb6"
+              <af:commandButton text="#{viewBundle['dms.common.cancel']}" id="cb6" immediate="true"
                                 actionListener="#{bindings.Rollback.execute}">
                 <af:resetActionListener/>
               </af:commandButton>
@@ -29,7 +29,7 @@
                     rows="#{bindings.DmsApprovalflowEntitysVO.rangeSize}"
                     emptyText="#{bindings.DmsApprovalflowEntitysVO.viewable ? 'No data to display.' : 'Access Denied.'}"
                     fetchSize="#{bindings.DmsApprovalflowEntitysVO.rangeSize}"
-                    rowBandingInterval="0"
+                    rowBandingInterval="0" editingMode="clickToEdit"
                     filterModel="#{bindings.DmsApprovalflowEntitysVOQuery.queryDescriptor}"
                     queryListener="#{bindings.DmsApprovalflowEntitysVOQuery.processQuery}"
                     filterVisible="false" varStatus="vs"
@@ -40,15 +40,11 @@
                        filterable="true" sortable="true"
                        headerText="#{bindings.DmsApprovalflowEntitysVO.hints.EntityCode.label}"
                        id="c6">
-              <af:inputText value="#{row.bindings.EntityCode.inputValue}"
-                            label="#{bindings.DmsApprovalflowEntitysVO.hints.EntityCode.label}"
-                            required="#{bindings.DmsApprovalflowEntitysVO.hints.EntityCode.mandatory}"
-                            columns="#{bindings.DmsApprovalflowEntitysVO.hints.EntityCode.displayWidth}"
-                            maximumLength="#{bindings.DmsApprovalflowEntitysVO.hints.EntityCode.precision}"
-                            shortDesc="#{bindings.DmsApprovalflowEntitysVO.hints.EntityCode.tooltip}"
-                            id="it5">
-                <f:validator binding="#{row.bindings.EntityCode.validator}"/>
-              </af:inputText>
+              <af:selectOneChoice value="#{row.bindings.EntityCode.inputValue}"
+                                  label="#{bindings.DmsApprovalflowEntitysVO.hints.EntityCode.label}"
+                                  id="soc21">
+                <f:selectItems value="#{viewScope.DmsApprovalBean.entityList}" id="si21"/>
+              </af:selectOneChoice>
             </af:column>
             <af:column sortProperty="#{bindings.DmsApprovalflowEntitysVO.hints.UserId.name}" sortable="true"
                        headerText="#{bindings.DmsApprovalflowEntitysVO.hints.UserId.label}"
@@ -93,7 +89,7 @@
           <af:resetActionListener/>
         </af:commandButton>
         <af:commandButton text="#{viewBundle['dms.common.save']}" id="cb1" 
-                          actionListener="#{DmsApprovalBean.save}"/>
+                          actionListener="#{viewScope.DmsApprovalBean.save}"/>
       </af:toolbar>
     </f:facet>
     <f:facet name="statusbar"/>
@@ -134,7 +130,7 @@
       </af:column>
       <af:column headerText="#{viewBundle['infa.operate']}" id="c4">
         <af:commandLink text="#{viewBundle['dms.approval.entity']}" id="cl1"
-                        actionListener="#{DmsApprovalBean.showApprovalEntity}"/>
+                        actionListener="#{viewScope.DmsApprovalBean.showApprovalEntity}"/>
       </af:column>
       <af:column sortProperty="#{bindings.DmsApprovalflowInfoVO.hints.Seq.name}"
                  filterable="true" sortable="true"
