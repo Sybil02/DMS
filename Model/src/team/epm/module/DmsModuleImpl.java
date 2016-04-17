@@ -325,4 +325,36 @@ public class DmsModuleImpl extends ApplicationModuleImpl implements DmsModule {
     public ViewObjectImpl getDmsTemplateTimerVO() {
         return (ViewObjectImpl)findViewObject("DmsTemplateTimerVO");
     }
+
+    /**
+     * Container's getter for DmsApprovalflowInfoVO.
+     * @return DmsApprovalflowInfoVO
+     */
+    public ViewObjectImpl getDmsApprovalflowInfoVO() {
+        return (ViewObjectImpl)findViewObject("DmsApprovalflowInfoVO");
+    }
+
+    /**
+     * Container's getter for DmsApprovalflowEntitysVO.
+     * @return DmsApprovalflowEntitysVO
+     */
+    public ViewObjectImpl getDmsApprovalflowEntitysVO() {
+        return (ViewObjectImpl)findViewObject("DmsApprovalflowEntitysVO");
+    }
+
+    /**
+     * Container's getter for DmsApprovalLink1.
+     * @return DmsApprovalLink1
+     */
+    public ViewLinkImpl getDmsApprovalLink1() {
+        return (ViewLinkImpl)findViewLink("DmsApprovalLink1");
+    }
+
+    /**
+     * Container's getter for DmsComTempVO.
+     * @return DmsComTempVO
+     */
+    public ViewObjectImpl getDmsComTempVO() {
+        return (ViewObjectImpl)findViewObject("DmsComTempVO");
+    }
 }

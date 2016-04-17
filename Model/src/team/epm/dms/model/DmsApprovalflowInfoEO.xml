@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE Entity SYSTEM "jbo_03_01.dtd">
+<!---->
+<Entity
+  xmlns="http://xmlns.oracle.com/bc4j"
+  Name="DmsApprovalflowInfoEO"
+  Version="11.1.1.64.93"
+  InheritPersonalization="true"
+  DBObjectType="table"
+  DBObjectName="DMS_APPROVALFLOW_INFO"
+  AliasName="DmsApprovalflowInfoEO"
+  BindingStyle="OracleName"
+  UseGlueCode="false"
+  RowClass="team.epm.dms.model.DmsApprovalflowInfoEOImpl">
+  <DesignTime>
+    <AttrArray Name="_publishEvents"/>
+    <Attr Name="_codeGenFlag2" Value="Init|Delete|Access|DML"/>
+    <Attr Name="_isCodegen" Value="true"/>
+  </DesignTime>
+  <Attribute
+    Name="Id"
+    IsNotNull="true"
+    Precision="32"
+    ColumnName="ID"
+    SQLType="VARCHAR"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    TableName="DMS_APPROVALFLOW_INFO"
+    PrimaryKey="true">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="32"/>
+    </DesignTime>
+    <TransientExpression><![CDATA[java.util.UUID.randomUUID().toString().replace("-", "")]]></TransientExpression>
+  </Attribute>
+  <Attribute
+    Name="ApprovalName"
+    Precision="100"
+    ColumnName="APPROVAL_NAME"
+    SQLType="VARCHAR"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    TableName="DMS_APPROVALFLOW_INFO"
+    IsNotNull="true">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="100"/>
+    </DesignTime>
+  </Attribute>
+  <Attribute
+    Name="TemplateId"
+    IsNotNull="true"
+    Precision="32"
+    ColumnName="TEMPLATE_ID"
+    SQLType="VARCHAR"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    TableName="DMS_APPROVALFLOW_INFO">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="32"/>
+    </DesignTime>
+  </Attribute>
+  <Attribute
+    Name="ValueSetId"
+    IsNotNull="true"
+    Precision="32"
+    ColumnName="VALUE_SET_ID"
+    SQLType="VARCHAR"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    TableName="DMS_APPROVALFLOW_INFO">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="32"/>
+    </DesignTime>
+  </Attribute>
+  <Attribute
+    Name="Seq"
+    Precision="10"
+    Scale="0"
+    ColumnName="SEQ"
+    SQLType="NUMERIC"
+    Type="oracle.jbo.domain.Number"
+    ColumnType="NUMBER"
+    TableName="DMS_APPROVALFLOW_INFO">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="11"/>
+    </DesignTime>
+  </Attribute>
+  <Attribute
+    Name="CreatedAt"
+    IsNotNull="true"
+    ColumnName="CREATED_AT"
+    SQLType="TIMESTAMP"
+    Type="oracle.jbo.domain.Date"
+    ColumnType="DATE"
+    TableName="DMS_APPROVALFLOW_INFO">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="7"/>
+    </DesignTime>
+    <TransientExpression><![CDATA[adf.currentDateTime]]></TransientExpression>
+  </Attribute>
+  <Attribute
+    Name="UpdatedAt"
+    IsNotNull="true"
+    ColumnName="UPDATED_AT"
+    SQLType="TIMESTAMP"
+    Type="oracle.jbo.domain.Date"
+    ColumnType="DATE"
+    TableName="DMS_APPROVALFLOW_INFO">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="7"/>
+    </DesignTime>
+    <TransientExpression><![CDATA[adf.currentDateTime]]></TransientExpression>
+  </Attribute>
+  <Attribute
+    Name="CreatedBy"
+    IsNotNull="true"
+    Precision="32"
+    ColumnName="CREATED_BY"
+    SQLType="VARCHAR"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    TableName="DMS_APPROVALFLOW_INFO">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="32"/>
+    </DesignTime>
+    <TransientExpression><![CDATA[adf.userSession.userData.userId]]></TransientExpression>
+  </Attribute>
+  <Attribute
+    Name="UpdatedBy"
+    IsNotNull="true"
+    Precision="32"
+    ColumnName="UPDATED_BY"
+    SQLType="VARCHAR"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    TableName="DMS_APPROVALFLOW_INFO">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="32"/>
+    </DesignTime>
+    <TransientExpression><![CDATA[adf.userSession.userData.userId]]></TransientExpression>
+  </Attribute>
+  <Attribute
+    Name="ComRecordId"
+    Precision="32"
+    ColumnName="COM_RECORD_ID"
+    SQLType="VARCHAR"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    TableName="DMS_APPROVALFLOW_INFO">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="32"/>
+    </DesignTime>
+  </Attribute>
+  <Attribute
+    Name="Idx"
+    ColumnName="IDX"
+    SQLType="NUMERIC"
+    Type="oracle.jbo.domain.Number"
+    ColumnType="NUMBER"
+    TableName="DMS_APPROVALFLOW_INFO">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="39"/>
+    </DesignTime>
+  </Attribute>
+  <Key
+    Name="DmsApprovalflowInfoApprovalNameCheck">
+    <DesignTime>
+      <Attr Name="_isNotNull" Value="true"/>
+      <Attr Name="_DBObjectName" Value="DMS_APPROVALFLOW_INFO_APPROVAL"/>
+      <Attr Name="_checkCondition" Value='"APPROVAL_NAME" IS NOT NULL'/>
+      <Attr Name="_isCheck" Value="true"/>
+    </DesignTime>
+    <AttrArray Name="Attributes">
+      <Item Value="team.epm.dms.model.DmsApprovalflowInfoEO.ApprovalName"/>
+    </AttrArray>
+  </Key>
+  <Key
+    Name="DmsapprovalflowinfoeoPrimaryKey"
+    PrimaryKey="true">
+    <DesignTime>
+      <Attr Name="_DBObjectName" Value="DMSAPPROVALFLOWINFOEO_PRIMARY_"/>
+    </DesignTime>
+    <AttrArray Name="Attributes">
+      <Item Value="team.epm.dms.model.DmsApprovalflowInfoEO.Id"/>
+    </AttrArray>
+  </Key>
+  <Key
+    Name="SysC0015997">
+    <DesignTime>
+      <Attr Name="_DBObjectName" Value="SYS_C0015997"/>
+      <Attr Name="_checkCondition" Value='"ID" IS NOT NULL'/>
+      <Attr Name="_isCheck" Value="true"/>
+    </DesignTime>
+    <AttrArray Name="Attributes">
+      <Item Value="team.epm.dms.model.DmsApprovalflowInfoEO.Id"/>
+    </AttrArray>
+  </Key>
+  <Key
+    Name="SysC0015998">
+    <DesignTime>
+      <Attr Name="_DBObjectName" Value="SYS_C0015998"/>
+      <Attr Name="_checkCondition" Value='"TEMPLATE_ID" IS NOT NULL'/>
+      <Attr Name="_isCheck" Value="true"/>
+    </DesignTime>
+    <AttrArray Name="Attributes">
+      <Item Value="team.epm.dms.model.DmsApprovalflowInfoEO.TemplateId"/>
+    </AttrArray>
+  </Key>
+  <Key
+    Name="SysC0015999">
+    <DesignTime>
+      <Attr Name="_DBObjectName" Value="SYS_C0015999"/>
+      <Attr Name="_checkCondition" Value='"VALUE_SET_ID" IS NOT NULL'/>
+      <Attr Name="_isCheck" Value="true"/>
+    </DesignTime>
+    <AttrArray Name="Attributes">
+      <Item Value="team.epm.dms.model.DmsApprovalflowInfoEO.ValueSetId"/>
+    </AttrArray>
+  </Key>
+  <Key
+    Name="SysC0016000">
+    <DesignTime>
+      <Attr Name="_DBObjectName" Value="SYS_C0016000"/>
+      <Attr Name="_checkCondition" Value='"CREATED_AT" IS NOT NULL'/>
+      <Attr Name="_isCheck" Value="true"/>
+    </DesignTime>
+    <AttrArray Name="Attributes">
+      <Item Value="team.epm.dms.model.DmsApprovalflowInfoEO.CreatedAt"/>
+    </AttrArray>
+  </Key>
+  <Key
+    Name="SysC0016001">
+    <DesignTime>
+      <Attr Name="_DBObjectName" Value="SYS_C0016001"/>
+      <Attr Name="_checkCondition" Value='"UPDATED_AT" IS NOT NULL'/>
+      <Attr Name="_isCheck" Value="true"/>
+    </DesignTime>
+    <AttrArray Name="Attributes">
+      <Item Value="team.epm.dms.model.DmsApprovalflowInfoEO.UpdatedAt"/>
+    </AttrArray>
+  </Key>
+  <Key
+    Name="SysC0016002">
+    <DesignTime>
+      <Attr Name="_DBObjectName" Value="SYS_C0016002"/>
+      <Attr Name="_checkCondition" Value='"CREATED_BY" IS NOT NULL'/>
+      <Attr Name="_isCheck" Value="true"/>
+    </DesignTime>
+    <AttrArray Name="Attributes">
+      <Item Value="team.epm.dms.model.DmsApprovalflowInfoEO.CreatedBy"/>
+    </AttrArray>
+  </Key>
+  <Key
+    Name="SysC0016003">
+    <DesignTime>
+      <Attr Name="_DBObjectName" Value="SYS_C0016003"/>
+      <Attr Name="_checkCondition" Value='"UPDATED_BY" IS NOT NULL'/>
+      <Attr Name="_isCheck" Value="true"/>
+    </DesignTime>
+    <AttrArray Name="Attributes">
+      <Item Value="team.epm.dms.model.DmsApprovalflowInfoEO.UpdatedBy"/>
+    </AttrArray>
+  </Key>
+</Entity>

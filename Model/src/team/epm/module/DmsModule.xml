@@ -95,6 +95,15 @@
   <ViewUsage
     Name="DmsTemplateTimerVO"
     ViewObjectName="team.epm.dms.view.DmsTemplateTimerVO"/>
+  <ViewUsage
+    Name="DmsApprovalflowInfoVO"
+    ViewObjectName="team.epm.dms.view.DmsApprovalflowInfoVO"/>
+  <ViewUsage
+    Name="DmsApprovalflowEntitysVO"
+    ViewObjectName="team.epm.dms.view.DmsApprovalflowEntitysVO"/>
+  <ViewUsage
+    Name="DmsComTempVO"
+    ViewObjectName="team.epm.dms.view.DmsComTempVO"/>
   <ViewLinkUsage
     Name="DmsGroupedRoleLnk"
     ViewLinkObjectName="team.epm.dms.DmsGroupedRoleLnk"
@@ -124,6 +133,12 @@
     ViewLinkObjectName="team.epm.dms.DmsGroupGValueLnk"
     SrcViewUsageName="team.epm.module.DmsModule.DmsEnabledGroupView"
     DstViewUsageName="team.epm.module.DmsModule.DmsGroupValueView"
+    Reversed="false"/>
+  <ViewLinkUsage
+    Name="DmsApprovalLink1"
+    ViewLinkObjectName="team.epm.dms.DmsApprovalLink"
+    SrcViewUsageName="team.epm.module.DmsModule.DmsApprovalflowInfoVO"
+    DstViewUsageName="team.epm.module.DmsModule.DmsApprovalflowEntitysVO"
     Reversed="false"/>
   <ResourceBundle>
     <PropertiesBundle

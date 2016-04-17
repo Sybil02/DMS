@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pageDefinition xmlns="http://xmlns.oracle.com/adfm/uimodel"
+                version="11.1.1.64.93" id="approval_editPageDef"
+                Package="dmsApproval">
+  <parameters/>
+  <executables>
+    <variableIterator id="variables"/>
+    <iterator Binds="DmsApprovalflowInfoVO" RangeSize="25"
+              DataControl="DmsModuleDataControl"
+              id="DmsApprovalflowInfoVOIterator"/>
+    <searchRegion Binds="DmsApprovalflowInfoVOIterator" Criteria=""
+                  Customizer="oracle.jbo.uicli.binding.JUSearchBindingCustomizer"
+                  id="DmsApprovalflowInfoVOQuery"/>
+    <iterator Binds="DmsApprovalflowEntitysVO" RangeSize="25"
+              DataControl="DmsModuleDataControl"
+              id="DmsApprovalflowEntitysVOIterator"/>
+    <searchRegion Binds="DmsApprovalflowEntitysVOIterator" Criteria=""
+                  Customizer="oracle.jbo.uicli.binding.JUSearchBindingCustomizer"
+                  id="DmsApprovalflowEntitysVOQuery"/>
+  </executables>
+  <bindings>
+    <tree IterBinding="DmsApprovalflowInfoVOIterator"
+          id="DmsApprovalflowInfoVO">
+      <nodeDefinition DefName="team.epm.dms.view.DmsApprovalflowInfoVO"
+                      Name="DmsApprovalflowInfoVO0">
+        <AttrNames>
+          <Item Value="ApprovalName"/>
+          <Item Value="TemplateId"/>
+          <Item Value="Seq"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <action IterBinding="DmsApprovalflowInfoVOIterator" id="CreateInsertInfo"
+            RequiresUpdateModel="true" Action="createInsertRow"/>
+    <action IterBinding="DmsApprovalflowInfoVOIterator" id="DeleteInfo"
+            RequiresUpdateModel="false" Action="removeCurrentRow"/>
+    <action id="Rollback" RequiresUpdateModel="false"
+            Action="rollbackTransaction" DataControl="DmsModuleDataControl"/>
+    <tree IterBinding="DmsApprovalflowEntitysVOIterator"
+          id="DmsApprovalflowEntitysVO">
+      <nodeDefinition DefName="team.epm.dms.view.DmsApprovalflowEntitysVO"
+                      Name="DmsApprovalflowEntitysVO0">
+        <AttrNames>
+          <Item Value="EntityCode"/>
+          <Item Value="UserId"/>
+          <Item Value="Seq"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <action IterBinding="DmsApprovalflowEntitysVOIterator" id="CreateInsert"
+            RequiresUpdateModel="true" Action="createInsertRow"/>
+    <action IterBinding="DmsApprovalflowEntitysVOIterator" id="Delete"
+            RequiresUpdateModel="false" Action="removeCurrentRow"/>
+    <action id="Commit" RequiresUpdateModel="true" Action="commitTransaction"
+            DataControl="DmsModuleDataControl"/>
+  </bindings>
+</pageDefinition>

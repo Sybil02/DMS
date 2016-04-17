@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<adfc-config xmlns="http://xmlns.oracle.com/adf/controller" version="1.2">
+  <task-flow-definition id="dms_approval_tsk">
+    <default-activity id="__1">approval_edit</default-activity>
+    <managed-bean id="__3">
+      <managed-bean-name id="__2">DmsApprovalBean</managed-bean-name>
+      <managed-bean-class id="__5">dmsApproval.DmsApprovalBean</managed-bean-class>
+      <managed-bean-scope id="__4">request</managed-bean-scope>
+    </managed-bean>
+    <view id="approval_edit">
+      <page>/dmsApproval/approval_edit.jsff</page>
+    </view>
+    <use-page-fragments/>
+  </task-flow-definition>
+</adfc-config>

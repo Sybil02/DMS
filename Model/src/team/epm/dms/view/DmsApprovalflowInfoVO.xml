@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE ViewObject SYSTEM "jbo_03_01.dtd">
+<!---->
+<ViewObject
+  xmlns="http://xmlns.oracle.com/bc4j"
+  Name="DmsApprovalflowInfoVO"
+  Version="11.1.1.64.93"
+  InheritPersonalization="true"
+  SelectList="DmsApprovalflowInfoEO.APPROVAL_NAME, 
+       DmsApprovalflowInfoEO.COM_RECORD_ID, 
+       DmsApprovalflowInfoEO.CREATED_AT, 
+       DmsApprovalflowInfoEO.CREATED_BY, 
+       DmsApprovalflowInfoEO.ID, 
+       DmsApprovalflowInfoEO.IDX, 
+       DmsApprovalflowInfoEO.SEQ, 
+       DmsApprovalflowInfoEO.TEMPLATE_ID, 
+       DmsApprovalflowInfoEO.UPDATED_AT, 
+       DmsApprovalflowInfoEO.UPDATED_BY, 
+       DmsApprovalflowInfoEO.VALUE_SET_ID"
+  FromList="DMS_APPROVALFLOW_INFO DmsApprovalflowInfoEO"
+  BindingStyle="OracleName"
+  CustomQuery="false"
+  PageIterMode="Full"
+  UseGlueCode="false">
+  <Properties>
+    <SchemaBasedProperties>
+      <LABEL
+        ResId="team.epm.dms.view.DmsApprovalflowInfoVO_LABEL"/>
+    </SchemaBasedProperties>
+  </Properties>
+  <ViewAccessor
+    Name="DmsComTempVO"
+    ViewObjectName="team.epm.dms.view.DmsComTempVO"
+    RowLevelBinds="true"/>
+  <ListBinding
+    Name="LOV_TemplateId"
+    ListVOName="DmsComTempVO"
+    ListRangeSize="-1"
+    NullValueFlag="start"
+    NullValueId="${adfBundle['oracle.javatools.resourcebundle.SystemBundle']['NULL_VALUE_RESID']}"
+    MRUCount="0">
+    <AttrArray Name="AttrNames">
+      <Item Value="TemplateId"/>
+    </AttrArray>
+    <AttrArray Name="DerivedAttrNames">
+      <Item Value="ValueSetId"/>
+    </AttrArray>
+    <AttrArray Name="ListAttrNames">
+      <Item Value="Id"/>
+      <Item Value="CombinationId"/>
+    </AttrArray>
+    <AttrArray Name="ListDisplayAttrNames">
+      <Item Value="Name"/>
+    </AttrArray>
+    <DisplayCriteria/>
+  </ListBinding>
+  <EntityUsage
+    Name="DmsApprovalflowInfoEO"
+    Entity="team.epm.dms.model.DmsApprovalflowInfoEO"/>
+  <ViewAttribute
+    Name="ApprovalName"
+    PrecisionRule="true"
+    EntityAttrName="ApprovalName"
+    EntityUsage="DmsApprovalflowInfoEO"
+    AliasName="APPROVAL_NAME">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="dms.approval.name"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="ComRecordId"
+    PrecisionRule="true"
+    EntityAttrName="ComRecordId"
+    EntityUsage="DmsApprovalflowInfoEO"
+    AliasName="COM_RECORD_ID"/>
+  <ViewAttribute
+    Name="CreatedAt"
+    IsNotNull="true"
+    PrecisionRule="true"
+    EntityAttrName="CreatedAt"
+    EntityUsage="DmsApprovalflowInfoEO"
+    AliasName="CREATED_AT"/>
+  <ViewAttribute
+    Name="CreatedBy"
+    IsNotNull="true"
+    PrecisionRule="true"
+    EntityAttrName="CreatedBy"
+    EntityUsage="DmsApprovalflowInfoEO"
+    AliasName="CREATED_BY"/>
+  <ViewAttribute
+    Name="Id"
+    IsNotNull="true"
+    PrecisionRule="true"
+    EntityAttrName="Id"
+    EntityUsage="DmsApprovalflowInfoEO"
+    AliasName="ID"/>
+  <ViewAttribute
+    Name="Idx"
+    PrecisionRule="true"
+    EntityAttrName="Idx"
+    EntityUsage="DmsApprovalflowInfoEO"
+    AliasName="IDX"/>
+  <ViewAttribute
+    Name="Seq"
+    PrecisionRule="true"
+    EntityAttrName="Seq"
+    EntityUsage="DmsApprovalflowInfoEO"
+    AliasName="SEQ">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="infa.wf.idx"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="TemplateId"
+    IsNotNull="true"
+    PrecisionRule="true"
+    EntityAttrName="TemplateId"
+    EntityUsage="DmsApprovalflowInfoEO"
+    AliasName="TEMPLATE_ID"
+    IsUpdateable="while_insert"
+    LOVName="LOV_TemplateId">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="dcm.template.name"/>
+        <CONTROLTYPE
+          Value="choice"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="UpdatedAt"
+    IsNotNull="true"
+    PrecisionRule="true"
+    EntityAttrName="UpdatedAt"
+    EntityUsage="DmsApprovalflowInfoEO"
+    AliasName="UPDATED_AT"/>
+  <ViewAttribute
+    Name="UpdatedBy"
+    IsNotNull="true"
+    PrecisionRule="true"
+    EntityAttrName="UpdatedBy"
+    EntityUsage="DmsApprovalflowInfoEO"
+    AliasName="UPDATED_BY"/>
+  <ViewAttribute
+    Name="ValueSetId"
+    IsNotNull="true"
+    PrecisionRule="true"
+    EntityAttrName="ValueSetId"
+    EntityUsage="DmsApprovalflowInfoEO"
+    AliasName="VALUE_SET_ID"/>
+  <ResourceBundle>
+    <PropertiesBundle
+      PropertiesFile="ModelBundle"/>
+  </ResourceBundle>
+  <ViewLinkAccessor
+    Name="DmsApprovalflowEntitysVO"
+    ViewLink="team.epm.dms.DmsApprovalLink"
+    Type="oracle.jbo.RowIterator"
+    IsUpdateable="false"/>
+</ViewObject>

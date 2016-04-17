@@ -45,6 +45,8 @@
       <page path="/infa/infa_authority.jsff" usageId="__infa_authorityPageDef"/>
       <page path="/mailTimer/mailTimer_edit.jsff"
             usageId="__mailTimer_editPageDef"/>
+      <page path="/dmsApproval/approval_edit.jsff"
+            usageId="__approval_editPageDef"/>
    </pageMap>
    <pageDefinitionUsages>
       <page id="__dynamicTabShellPageDef"
@@ -85,6 +87,8 @@
       <page id="__infa_authorityPageDef" path="infa.infa_authorityPageDef"/>
       <page id="__mailTimer_editPageDef"
             path="mailTimer.mailTimer_editPageDef"/>
+      <page id="__approval_editPageDef"
+            path="dmsApproval.approval_editPageDef"/>
    </pageDefinitionUsages>
    <dataControlUsages>
       <BC4JDataControl id="DmsModuleDataControl" Package="team.epm.module"
