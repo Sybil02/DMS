@@ -251,18 +251,18 @@
       <property
          name="exceptionHandler">false</property>
       <property
-         name="y">302.44238</property>
+         name="y">301.7412</property>
       <property
-         name="x">1326.0</property>
+         name="x">1316.0</property>
    </View>
    <WildcardControlFlowRule
       id="WildcardControlFlowRule31">
       <property
          name="activityId">*</property>
       <property
-         name="y">159.59766</property>
+         name="y">157.49414</property>
       <property
-         name="x">1322.0</property>
+         name="x">1315.0</property>
    </WildcardControlFlowRule>
    <ControlFlowCase
       islink="true"
@@ -272,6 +272,40 @@
       <property
          name="fromOutcome">GoInfaIndex</property>
       <property
-         name="sdm:polyPoints">B50,1322.0,202.24707,1326.0,248.0918,T50</property>
+         name="sdm:polyPoints">B50,1315.0,200.14355,1316.0,247.39062,T50</property>
+   </ControlFlowCase>
+   <View
+      id="View34">
+      <property
+         name="activityId">approvalIdx</property>
+      <property
+         name="page">/dmsApproval/approval_index.jspx</property>
+      <property
+         name="description">&lt;html>&lt;p>&lt;b>approvalIdx&lt;/b>&lt;/p>&lt;p>Activity Type:  View&lt;/p></property>
+      <property
+         name="exceptionHandler">false</property>
+      <property
+         name="y">303.84473</property>
+      <property
+         name="x">1449.0</property>
+   </View>
+   <WildcardControlFlowRule
+      id="WildcardControlFlowRule35">
+      <property
+         name="activityId">*</property>
+      <property
+         name="y">153.59766</property>
+      <property
+         name="x">1448.0</property>
+   </WildcardControlFlowRule>
+   <ControlFlowCase
+      islink="true"
+      id="ControlFlowCase37"
+      from="WildcardControlFlowRule35"
+      to="View34">
+      <property
+         name="fromOutcome">GoApproval</property>
+      <property
+         name="sdm:polyPoints">B50,1448.0,196.24707,1449.0,249.49414,T50</property>
    </ControlFlowCase>
 </SDM>

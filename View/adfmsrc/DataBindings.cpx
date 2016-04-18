@@ -47,6 +47,8 @@
             usageId="__mailTimer_editPageDef"/>
       <page path="/dmsApproval/approval_edit.jsff"
             usageId="__approval_editPageDef"/>
+      <page path="/dmsApproval/approval_index.jspx"
+            usageId="__approval_indexPageDef"/>
    </pageMap>
    <pageDefinitionUsages>
       <page id="__dynamicTabShellPageDef"
@@ -89,6 +91,8 @@
             path="mailTimer.mailTimer_editPageDef"/>
       <page id="__approval_editPageDef"
             path="dmsApproval.approval_editPageDef"/>
+      <page id="__approval_indexPageDef"
+            path="dmsApproval.approval_indexPageDef"/>
    </pageDefinitionUsages>
    <dataControlUsages>
       <BC4JDataControl id="DmsModuleDataControl" Package="team.epm.module"

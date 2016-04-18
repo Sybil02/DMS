@@ -24,6 +24,9 @@
   <view id="infaIndex">
     <page>/infa/infa_index.jspx</page>
   </view>
+  <view id="approvalIdx">
+    <page>/dmsApproval/approval_index.jspx</page>
+  </view>
   <control-flow-rule id="__17">
     <from-activity-id id="__18">*</from-activity-id>
     <control-flow-case id="__20">
@@ -80,6 +83,13 @@
       <to-activity-id id="__76">infaIndex</to-activity-id>
     </control-flow-case>
   </control-flow-rule>
+  <control-flow-rule id="__68">
+    <from-activity-id id="__69">*</from-activity-id>
+    <control-flow-case id="__82">
+      <from-outcome id="__83">GoApproval</from-outcome>
+      <to-activity-id id="__72">approvalIdx</to-activity-id>
+    </control-flow-case>
+  </control-flow-rule>
   <managed-bean id="__1">
     <managed-bean-name id="__4">dmsTabContext</managed-bean-name>
     <managed-bean-class id="__2">dms.dynamicShell.TabContext</managed-bean-class>
@@ -124,5 +134,10 @@
     <managed-bean-name id="__79">InfaIndexBean</managed-bean-name>
     <managed-bean-class id="__78">infa.InfaIndexBean</managed-bean-class>
     <managed-bean-scope id="__80">view</managed-bean-scope>
+  </managed-bean>
+  <managed-bean id="__70">
+    <managed-bean-name id="__84">ApprovalIndexBean</managed-bean-name>
+    <managed-bean-class id="__85">dmsApproval.ApprovalIndexBean</managed-bean-class>
+    <managed-bean-scope id="__71">view</managed-bean-scope>
   </managed-bean>
 </adfc-config>

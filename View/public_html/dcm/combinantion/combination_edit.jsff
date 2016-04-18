@@ -191,7 +191,7 @@
           <af:column headerText="#{bindings.DcmComVsView.hints.IsApproval.label}"
                      id="c9">
             <af:selectOneChoice value="#{row.bindings.IsApproval.inputValue}"
-                                label="#{row.bindings.IsApproval.label}"
+                                label="#{row.bindings.IsApproval.label}" autoSubmit="true"
                                 required="#{bindings.DcmComVsView.hints.IsApproval.mandatory}"
                                 shortDesc="#{bindings.DcmComVsView.hints.IsApproval.tooltip}"
                                 id="soc5">

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pageDefinition xmlns="http://xmlns.oracle.com/adfm/uimodel"
+                version="11.1.1.64.93" id="approval_indexPageDef"
+                Package="dmsApproval">
+  <parameters/>
+  <executables>
+    <variableIterator id="variables"/>
+    <page path="dms.dynamicShell.dynamicTabShellPageDef"
+          id="pageTemplateBinding" Refresh="ifNeeded"/>
+    <iterator id="DmsMenuTreeViewIterator" Binds="DmsMenuTreeView"
+              DataControl="DmsModuleDataControl" RangeSize="25"/>
+    <iterator Binds="DmsUserApprovalVO" RangeSize="25"
+              DataControl="DmsModuleDataControl"
+              id="DmsUserApprovalVOIterator"/>
+    <searchRegion Binds="DmsUserApprovalVOIterator" Criteria=""
+                  Customizer="oracle.jbo.uicli.binding.JUSearchBindingCustomizer"
+                  id="DmsUserApprovalVOQuery"/>
+    <iterator Binds="DmsApprovalStatusVO" RangeSize="25"
+              DataControl="DmsModuleDataControl"
+              id="DmsApprovalStatusVOIterator"/>
+    <searchRegion Binds="DmsApprovalStatusVOIterator" Criteria=""
+                  Customizer="oracle.jbo.uicli.binding.JUSearchBindingCustomizer"
+                  id="DmsApprovalStatusVOQuery"/>
+  </executables>
+  <bindings>
+    <tree IterBinding="DmsUserApprovalVOIterator" id="DmsUserApprovalVO">
+      <nodeDefinition DefName="team.epm.dms.view.DmsUserApprovalVO"
+                      Name="DmsUserApprovalVO0">
+        <AttrNames>
+          <Item Value="ApprovalName"/>
+          <Item Value="TemplateId"/>
+          <Item Value="ApprovalStatus"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <tree IterBinding="DmsApprovalStatusVOIterator" id="DmsApprovalStatusVO">
+      <nodeDefinition DefName="team.epm.dms.view.DmsApprovalStatusVO"
+                      Name="DmsApprovalStatusVO0">
+        <AttrNames>
+          <Item Value="EntityId"/>
+          <Item Value="PersonId"/>
+          <Item Value="Seq"/>
+          <Item Value="ApprovalStatus"/>
+          <Item Value="FinishAt"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+  </bindings>
+</pageDefinition>

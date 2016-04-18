@@ -16,7 +16,7 @@
             <Contents>localhost</Contents>
          </StringRefAddr>
          <StringRefAddr addrType="user">
-            <Contents>wcdms</Contents>
+            <Contents>hdms</Contents>
          </StringRefAddr>
          <SecureRefAddr addrType="password"/>
          <StringRefAddr addrType="DeployPassword">
