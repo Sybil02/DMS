@@ -138,10 +138,14 @@ public class ApprovalIndexBean {
         
         DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
         Statement stat = trans.createStatement(1);
+        
         //初始化状态
         String runId = UUID.randomUUID().toString().replace("-", "");
         String userId = ((Person)ADFContext.getCurrent().getSessionScope().get("cur_user")).getId();
         String comSource = this.getComSource();
+        //更改审批了runId
+        String uSql = "UPDATE DMS_APPROVALFLOW_INFO T SET T.RUN_ID = '" + runId +"' WHERE T.ID = '" + this.curAppId + "'";
+        
         String sql = "INSERT INTO APPROVAL_TEMPLATE_STATUS SELECT T.ID,'" + runId + "',T.TEMP_ID,T.ENTITY_CODE,T.USER_ID,"
             + "'N',NULL,SYSDATE,SYSDATE,'" + userId + "','" + userId + "',C.ID,T.SEQ FROM DMS_APPROVALFLOW_ENTITYS T,"
             + comSource + " C WHERE C." + this.entityCode + " = T.ENTITY_CODE AND T.APPROVAL_ID = '" + this.curAppId
@@ -156,6 +160,7 @@ public class ApprovalIndexBean {
             String deleteSql = "DELETE DCM_TEMPLATE_COMBINATION D WHERE EXISTS (SELECT 1 FROM APPROVAL_TEMPLATE_STATUS T " 
                 + "WHERE T.RUN_ID = '" + runId + "' AND T.TEMPLATE_ID = D.TEMPLATE_ID AND T.COM_ID = D.COM_RECORD_ID)";
             stat.executeUpdate(deleteSql);
+            stat.executeUpdate(uSql);
             trans.commit();
             //再新增组合状态
             String sSql = "SELECT DISTINCT T.TEMPLATE_ID,T.COM_ID FROM APPROVAL_TEMPLATE_STATUS T WHERE T.RUN_ID = '" + runId + "'";
@@ -176,6 +181,10 @@ public class ApprovalIndexBean {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        
+        ADFUtils.findIterator("DmsUserApprovalVOIterator").getViewObject().executeQuery();
+        this.paramPop.cancel();
+        JSFUtils.addFacesInformationMessage("启动成功！");
 
     }
     
