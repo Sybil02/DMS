@@ -23,6 +23,7 @@ import oracle.jbo.server.ViewObjectImpl;
 import team.epm.dcm.view.DcmComVsViewImpl;
 import team.epm.dcm.view.DcmCombinationViewImpl;
 import team.epm.dcm.view.DcmTemplateColumnViewImpl;
+import team.epm.dcm.view.DcmTemplateCombinationVOImpl;
 import team.epm.dcm.view.DcmTemplateViewImpl;
 import team.epm.dms.view.DmsEnabledRoleImpl;
 import team.epm.dms.view.DmsRoleViewImpl;
@@ -294,6 +295,14 @@ public class DcmModuleImpl extends ApplicationModuleImpl implements DcmModule {
      */
     public ViewObjectImpl getDcmUnAssignedTemplate() {
         return (ViewObjectImpl)findViewObject("DcmUnAssignedTemplate");
+    }
+
+    /**
+     * Container's getter for DcmTemplateCombinationVO.
+     * @return DcmTemplateCombinationVO
+     */
+    public DcmTemplateCombinationVOImpl getDcmTemplateCombinationVO() {
+        return (DcmTemplateCombinationVOImpl)findViewObject("DcmTemplateCombinationVO");
     }
 }
 

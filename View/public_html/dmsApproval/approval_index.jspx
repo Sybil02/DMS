@@ -14,6 +14,28 @@
         <af:pageTemplate viewId="/dms/dynamicShell/dynamicTabShell.jspx"
                          value="#{bindings.pageTemplateBinding}" id="pt1">
           <f:facet name="navigation">
+            <af:panelGroupLayout id="pgl1">
+              <af:popup autoCancel="disabled" id="p1"
+                            binding="#{viewScope.ApprovalIndexBean.paramPop}">
+                    <af:panelWindow id="pw2"
+                                    title="#{viewBundle['odi11g.scene.param']}">
+                      <af:panelGroupLayout  id="pgl3" layout="vertical">
+                        <af:forEach items="#{viewScope.ApprovalIndexBean.paramList}"
+                                    var="paramBean">
+                          <af:selectOneChoice label="#{paramBean.PName}" autoSubmit="true"
+                                                clientComponent="true" id="soc1"
+                                                 binding="#{viewScope.ApprovalIndexBean.paraSocMap[paramBean.PName]}" 
+                                              valueChangeListener="#{viewScope.ApprovalIndexBean.paramSelectListener}">
+                            <f:selectItems value="#{paramBean.valueList}" id="si1"/>
+                          </af:selectOneChoice>
+                          <af:spacer id="sph" height="10px"/>
+                        </af:forEach>
+                        <af:commandButton text="#{viewBundle['odi11g.scene.execute']}" id="cb1"
+                                          actionListener="#{viewScope.ApprovalIndexBean.runApproval}"/>
+                      </af:panelGroupLayout>
+                    </af:panelWindow>
+                  </af:popup>
+            </af:panelGroupLayout>
           </f:facet>
           <f:facet name="globalLinks"/>
           <f:facet name="status"/>
@@ -33,7 +55,7 @@
                       <af:commandButton text="#{viewBundle['dms.start']}" id="cb2"
                                         actionListener="#{viewScope.ApprovalIndexBean.startApproval}"/>
                       <af:spacer id="spw" width="10px"/>
-                      <af:commandButton text="#{viewBundle['dms.close']}" id="cb1"
+                      <af:commandButton text="#{viewBundle['dms.close']}" id="cb12"
                                         actionListener="#{viewScope.ApprovalIndexBean.closeApproval}"/>
                     </af:toolbar>
                   </f:facet>
@@ -71,9 +93,9 @@
                                           label="#{row.bindings.TemplateId.label}"
                                           required="#{bindings.DmsUserApprovalVO.hints.TemplateId.mandatory}"
                                           shortDesc="#{bindings.DmsUserApprovalVO.hints.TemplateId.tooltip}"
-                                          id="soc1">
+                                          id="soc12">
                         <f:selectItems value="#{row.bindings.TemplateId.items}"
-                                       id="si1"/>
+                                       id="si12"/>
                       </af:selectOneChoice>
                     </af:column>
                     <af:column sortProperty="#{bindings.DmsUserApprovalVO.hints.ApprovalStatus.name}"

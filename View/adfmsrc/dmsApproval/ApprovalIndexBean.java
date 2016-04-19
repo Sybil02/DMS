@@ -4,21 +4,46 @@ import common.ADFUtils;
 
 import common.DmsUtils;
 
+import common.JSFUtils;
+
+import dms.login.Person;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import java.util.UUID;
+
 import javax.faces.event.ActionEvent;
+
+import javax.faces.event.ValueChangeEvent;
+import javax.faces.model.SelectItem;
+
+import oracle.adf.share.ADFContext;
+import oracle.adf.view.rich.component.rich.RichPopup;
+
+import oracle.adf.view.rich.component.rich.input.RichSelectOneChoice;
 
 import oracle.jbo.ViewObject;
 import oracle.jbo.server.DBTransaction;
 
+import team.epm.dcm.view.DcmTemplateCombinationVOImpl;
+import team.epm.dcm.view.DcmTemplateCombinationVORowImpl;
+
 public class ApprovalIndexBean {
+    private RichPopup paramPop;
+    private String entityCode;
+    private String combination;
+    private String curAppId;
+
+    Map<String,RichSelectOneChoice> paraSocMap = new LinkedHashMap<String,RichSelectOneChoice>();
+
     public ApprovalIndexBean() {
         super();
     }
@@ -27,7 +52,8 @@ public class ApprovalIndexBean {
     
     public void startApproval(ActionEvent actionEvent) {
         ViewObject vo = ADFUtils.findIterator("DmsUserApprovalVOIterator").getViewObject();
-        String combination = vo.getCurrentRow().getAttribute("ValueSetId").toString();
+        this.combination = vo.getCurrentRow().getAttribute("ValueSetId").toString();
+        this.curAppId = vo.getCurrentRow().getAttribute("Id").toString();
         
         DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
         Statement stat = trans.createStatement(1);
@@ -45,6 +71,8 @@ public class ApprovalIndexBean {
                     param.setPSource(rs.getString("SOURCE"));
                     param.setPCode(rs.getString("CODE"));
                     this.paramList.add(param);
+                }else{
+                    this.entityCode = rs.getString("CODE");
                 }
             }
             rs.close();
@@ -54,11 +82,156 @@ public class ApprovalIndexBean {
                 e.printStackTrace();
         }
         
+        this.initValues();
+        RichPopup.PopupHints hints = new RichPopup.PopupHints();
+        this.paramPop.show(hints);
         
+    }
+    
+    public void initValues(){
+        DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
+        Statement stat = trans.createStatement(1);
+        try {
+        for(AppParamBean app : this.paramList){
+            String sql = "SELECT T.CODE,T.MEANING FROM " + app.getPSource() + " T WHERE T.ENABLED = 'Y'";
+            ResultSet rs;
+            List<SelectItem> valueList = new ArrayList<SelectItem>();
+            rs = stat.executeQuery(sql);
+            while(rs.next()){
+                SelectItem sim = new SelectItem();
+                sim.setLabel(rs.getString("MEANING"));
+                sim.setValue(rs.getString("CODE"));
+                valueList.add(sim);
+            }
+            rs.close();
+            app.setValueList(valueList);
+        }
+            stat.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public void paramSelectListener(ValueChangeEvent valueChangeEvent) {
+        System.out.println(valueChangeEvent.getNewValue()+"........");
         
+        RichSelectOneChoice pSoc = (RichSelectOneChoice)valueChangeEvent.getSource();
+        for(Map.Entry entry : this.paraSocMap.entrySet()){
+            if(pSoc.equals(entry.getValue())){
+                for(AppParamBean app : this.paramList){
+                    if(app.getPName().equals(entry.getKey())){
+                        app.setPChoiced(valueChangeEvent.getNewValue().toString());  
+                    }    
+                }
+            }    
+        }
+        
+    }
+    
+    public void runApproval(ActionEvent actionEvent) {
+        for(AppParamBean app : this.paramList){
+            if(app.getPChoiced() == null || "".equals(app.getPChoiced())){
+                JSFUtils.addFacesErrorMessage("参数不能为空！");
+                return;    
+            }   
+        }
+        
+        DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
+        Statement stat = trans.createStatement(1);
+        //初始化状态
+        String runId = UUID.randomUUID().toString().replace("-", "");
+        String userId = ((Person)ADFContext.getCurrent().getSessionScope().get("cur_user")).getId();
+        String comSource = this.getComSource();
+        String sql = "INSERT INTO APPROVAL_TEMPLATE_STATUS SELECT T.ID,'" + runId + "',T.TEMP_ID,T.ENTITY_CODE,T.USER_ID,"
+            + "'N',NULL,SYSDATE,SYSDATE,'" + userId + "','" + userId + "',C.ID,T.SEQ FROM DMS_APPROVALFLOW_ENTITYS T,"
+            + comSource + " C WHERE C." + this.entityCode + " = T.ENTITY_CODE AND T.APPROVAL_ID = '" + this.curAppId
+            + "' ";
+        for(AppParamBean app : this.paramList){
+           sql = sql + "AND C." + app.getPCode() + " ='" + app.getPChoiced() + "' ";
+        }
+        try {
+            stat.executeUpdate(sql);
+            trans.commit();   
+            //先删除组合状态
+            String deleteSql = "DELETE DCM_TEMPLATE_COMBINATION D WHERE EXISTS (SELECT 1 FROM APPROVAL_TEMPLATE_STATUS T " 
+                + "WHERE T.RUN_ID = '" + runId + "' AND T.TEMPLATE_ID = D.TEMPLATE_ID AND T.COM_ID = D.COM_RECORD_ID)";
+            stat.executeUpdate(deleteSql);
+            trans.commit();
+            //再新增组合状态
+            String sSql = "SELECT DISTINCT T.TEMPLATE_ID,T.COM_ID FROM APPROVAL_TEMPLATE_STATUS T WHERE T.RUN_ID = '" + runId + "'";
+            ResultSet rs = stat.executeQuery(sSql);
+            Map<String,List<String>> tempComMap = new HashMap<String,List<String>>();
+            List<String> comList = new ArrayList<String>();
+            String tId = "";
+            
+            while(rs.next()){
+                tId = rs.getString("TEMPLATE_ID");
+                comList.add(rs.getString("COM_ID"));
+            }
+            rs.close();
+            stat.close();
+            //打开组合
+            tempComMap.put(tId, comList);
+            this.openTempCom(tempComMap);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+    
+    private void openTempCom(Map<String,List<String>> tempComMap){
+        DcmTemplateCombinationVOImpl tempComVo =DmsUtils.getDcmApplicationModule().getDcmTemplateCombinationVO();
+        for(Map.Entry<String,List<String>> tempEntry : tempComMap.entrySet()){
+            for(String comId : tempEntry.getValue()){
+                //不存在则新建一条
+                DcmTemplateCombinationVORowImpl newRow = (DcmTemplateCombinationVORowImpl)tempComVo.createRow();
+                newRow.setComRecordId(comId);
+                newRow.setTemplateId(tempEntry.getKey());
+                newRow.setStatus("OPEN");
+                tempComVo.insertRow(newRow);
+            }
+        }
+        tempComVo.getApplicationModule().getTransaction().commit();
+    }
+    
+    public String getComSource(){
+        ViewObject vo = DmsUtils.getDcmApplicationModule().getDcmCombinationView();
+        String whereClause = " ID = '" + this.combination + "'";
+        vo.setWhereClause(whereClause);
+        vo.executeQuery();
+        String source = "";
+        if(vo.hasNext()){
+            source = vo.first().getAttribute("Code").toString();   
+        }
+        return source;        
     }
 
     public void closeApproval(ActionEvent actionEvent) {
         // Add event code here...
     }
+
+    public void setParamPop(RichPopup paramPop) {
+        this.paramPop = paramPop;
+    }
+
+    public RichPopup getParamPop() {
+        return paramPop;
+    }
+
+    public void setParamList(List<AppParamBean> paramList) {
+        this.paramList = paramList;
+    }
+
+    public List<AppParamBean> getParamList() {
+        return paramList;
+    }
+
+    public void setParaSocMap(Map<String, RichSelectOneChoice> paraSocMap) {
+        this.paraSocMap = paraSocMap;
+    }
+
+    public Map<String, RichSelectOneChoice> getParaSocMap() {
+        return paraSocMap;
+    }
+
 }
