@@ -71,6 +71,22 @@
                 <af:showPopupBehavior popupId="::p4" alignId=""/>
               </af:commandButton>
             </af:group>
+            <af:group id="g6">
+              <af:commandButton text="#{viewBundle['dms.approval.pass']}" id="cb12" 
+                                partialTriggers="::pgl1"
+                                actionListener="#{viewScope.DcmDataDisplayBean.approvalPass}"
+                                disabled="#{viewScope.DcmDataDisplayBean.appEnable}"/>
+              <af:commandButton text="#{viewBundle['dms.approval.refuse']}" id="cb5"
+                                partialTriggers="::pgl1"
+                                actionListener="#{viewScope.DcmDataDisplayBean.approvalRefuse}"
+                                disabled="#{viewScope.DcmDataDisplayBean.appEnable}"/>
+            </af:group>
+            <af:group id="g7">
+              <af:commandButton text="#{viewBundle['dms.approval.back']}" id="cb13"
+                                partialTriggers="::pgl1"
+                                actionListener="#{viewScope.DcmDataDisplayBean.approvalBack}"
+                                disabled="#{viewScope.DcmDataDisplayBean.backEnable}"/>
+            </af:group>
           </af:toolbar>
         </f:facet>
         <!-- 分页控件 -->

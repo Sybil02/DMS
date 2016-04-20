@@ -100,6 +100,7 @@ import org.quartz.SchedulerException;
 import team.epm.dcm.view.DcmCombinationViewRowImpl;
 import team.epm.dcm.view.DcmTemplateColumnViewRowImpl;
 import team.epm.dcm.view.DcmTemplateViewRowImpl;
+import team.epm.module.DmsModuleImpl;
 
 public class DcmDataDisplayBean extends TablePagination{
     private CollectionModel dataModel;
@@ -145,8 +146,10 @@ public class DcmDataDisplayBean extends TablePagination{
         this.curUser =(Person)ADFContext.getCurrent().getSessionScope().get("cur_user");
         this.dataModel = new DcmDataTableModel();
         this.initTemplate();
+        this.getRunId();
         this.initCombination();
         this.queryTemplateData();
+
     }
 
     public CollectionModel getDataModel() {
@@ -1003,6 +1006,13 @@ public class DcmDataDisplayBean extends TablePagination{
             }
             this.curCombinationRecordEditable=flag;
         }
+        
+        //判断审批
+        if(!this.runId.equals("NOT APP")){
+            this.approvalEnable();
+            this.backEnable();
+        }
+        
     }
     private void initHeaderValueList(ComHeader header){
         List<SelectItem> values = new ArrayList<SelectItem>();
@@ -1328,5 +1338,98 @@ public class DcmDataDisplayBean extends TablePagination{
     public boolean isUseQuartz() {
         return useQuartz;
     }
+    
+    //一下为审批代码
+    private String runId;
+    private boolean appEnable = true;
+    private boolean backEnable = true;
+    
+    public void getRunId(){
+        Statement stmt=DmsUtils.getDcmApplicationModule().getDBTransaction().createStatement(DBTransaction.DEFAULT);
+        String sql = "SELECT T.RUN_ID FROM DMS_APPROVALFLOW_INFO T WHERE T.APPROVAL_STATUS = 'Y' "
+            + "AND T.TEMPLATE_ID = '" + this.curTempalte.getId() + "'";
+        ResultSet rs;
+        try {
+            rs = stmt.executeQuery(sql);
+            if(rs.next()){
+                this.runId = rs.getString("RUN_ID");    
+            }else{
+                this.runId = "NOT APP";
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public void approvalEnable(){
+        //默认true
+        this.appEnable = true;
+        ViewObject vo = DmsUtils.getDmsApplicationModule().getDmsApprovalStatusQuery();
+        //setWhereClause中不能含有ORDER BY 语句
+        String whereCluse = " RUN_ID = '" + this.runId + "' "
+            + " AND TEMPLATE_ID = '" + this.curTempalte.getId() + "' "
+            + " AND COM_ID = '" + this.curCombiantionRecord + "'"
+            + " AND PERSON_ID = '" + this.curUser.getId() + "'";
+        System.out.println(whereCluse);
+        vo.setWhereClause(whereCluse);
+        vo.executeQuery();
+        if(vo.hasNext()){
+            String status = vo.first().getAttribute("ApprovalStatus").toString();   
+            if(status.equals("N")){
+                this.appEnable = false;
+            }
+        }
+    }
+    
+    public void backEnable(){
+        //默认true
+        this.backEnable = true;
+        Statement stmt = DmsUtils.getDcmApplicationModule().getDBTransaction().createStatement(DBTransaction.DEFAULT);
+        String sql = "SELECT APPROVAL_STATUS,PERSON_ID FROM APPROVAL_TEMPLATE_STATUS WHERE RUN_ID = '" + this.runId + "' "
+            + " AND TEMPLATE_ID = '" + this.curTempalte.getId() + "' "
+            + " AND COM_ID = '" + this.curCombiantionRecord + "' ORDER BY SEQ DESC";
+        ResultSet rs;
+        try {
+            rs = stmt.executeQuery(sql);
+            if(rs.next()){
+                String status = rs.getString("APPROVAL_STATUS");   
+                String personId = rs.getString("PERSON_ID");
+                if(status.equals("Y") && personId.equals(this.curUser.getId())){
+                    this.backEnable = false;        
+                }
+            }
+            rs.close();
+            stmt.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
+    public void approvalPass(ActionEvent actionEvent) {
+        // Add event code here...
+    }
+
+    public void approvalRefuse(ActionEvent actionEvent) {
+        // Add event code here...
+    }
+
+    public void approvalBack(ActionEvent actionEvent) {
+        // Add event code here...
+    }
+
+    public void setAppEnable(boolean appEnable) {
+        this.appEnable = appEnable;
+    }
+
+    public boolean isAppEnable() {
+        return appEnable;
+    }
+
+    public void setBackEnable(boolean backEnable) {
+        this.backEnable = backEnable;
+    }
+
+    public boolean isBackEnable() {
+        return backEnable;
+    }
 }
