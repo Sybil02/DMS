@@ -390,4 +390,28 @@ public class DmsModuleImpl extends ApplicationModuleImpl implements DmsModule {
     public ViewObjectImpl getDmsApprovalStatusQuery() {
         return (ViewObjectImpl)findViewObject("DmsApprovalStatusQuery");
     }
+
+    /**
+     * Container's getter for DmsRoleApprovalVO.
+     * @return DmsRoleApprovalVO
+     */
+    public ViewObjectImpl getDmsRoleApprovalVO() {
+        return (ViewObjectImpl)findViewObject("DmsRoleApprovalVO");
+    }
+
+    /**
+     * Container's getter for DmsRoleAppLink.
+     * @return DmsRoleAppLink
+     */
+    public ViewLinkImpl getDmsRoleAppLink() {
+        return (ViewLinkImpl)findViewLink("DmsRoleAppLink");
+    }
+
+    /**
+     * Container's getter for DmsUnAssignedAppVO.
+     * @return DmsUnAssignedAppVO
+     */
+    public ViewObjectImpl getDmsUnAssignedAppVO() {
+        return (ViewObjectImpl)findViewObject("DmsUnAssignedAppVO");
+    }
 }

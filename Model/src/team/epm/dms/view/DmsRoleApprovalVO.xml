@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE ViewObject SYSTEM "jbo_03_01.dtd">
+<!---->
+<ViewObject
+  xmlns="http://xmlns.oracle.com/bc4j"
+  Name="DmsRoleApprovalVO"
+  Version="11.1.1.64.93"
+  InheritPersonalization="true"
+  SelectList="DmsRoleApproval.APPROVAL_ID, 
+       DmsRoleApproval.CREATED_AT, 
+       DmsRoleApproval.CREATED_BY, 
+       DmsRoleApproval.ENABLE_RUN, 
+       DmsRoleApproval.ID, 
+       DmsRoleApproval.ROLE_ID, 
+       DmsRoleApproval.UPDATED_AT, 
+       DmsRoleApproval.UPDATED_BY"
+  FromList="DMS_ROLE_APPROVAL DmsRoleApproval"
+  BindingStyle="OracleName"
+  CustomQuery="false"
+  PageIterMode="Full"
+  UseGlueCode="false">
+  <Properties>
+    <SchemaBasedProperties>
+      <LABEL
+        ResId="team.epm.dms.view.DmsRoleApprovalVO_LABEL"/>
+    </SchemaBasedProperties>
+  </Properties>
+  <ViewAccessor
+    Name="DmsLookupView"
+    ViewObjectName="team.epm.dms.view.DmsLookupView">
+    <ViewCriteriaUsage
+      Name="DmsLookupViewCriteria"
+      FullName="team.epm.dms.view.DmsLookupView.DmsLookupViewCriteria"/>
+    <ParameterMap>
+      <PIMap Variable="locale">
+        <TransientExpression><![CDATA[adf.context.locale]]></TransientExpression>
+      </PIMap>
+      <PIMap Variable="lookupType">
+        <TransientExpression><![CDATA["YES_NO"]]></TransientExpression>
+      </PIMap>
+    </ParameterMap>
+  </ViewAccessor>
+  <ViewAccessor
+    Name="DmsApprovalflowInfoVO"
+    ViewObjectName="team.epm.dms.view.DmsApprovalflowInfoVO"
+    RowLevelBinds="true"/>
+  <ListBinding
+    Name="LOV_EnableRun"
+    ListVOName="DmsLookupView"
+    ListRangeSize="-1"
+    NullValueFlag="start"
+    NullValueId="${adfBundle['oracle.javatools.resourcebundle.SystemBundle']['NULL_VALUE_RESID']}"
+    MRUCount="0">
+    <AttrArray Name="AttrNames">
+      <Item Value="EnableRun"/>
+    </AttrArray>
+    <AttrArray Name="ListAttrNames">
+      <Item Value="Code"/>
+    </AttrArray>
+    <AttrArray Name="ListDisplayAttrNames">
+      <Item Value="Meaning"/>
+    </AttrArray>
+    <DisplayCriteria/>
+  </ListBinding>
+  <ListBinding
+    Name="LOV_ApprovalId"
+    ListVOName="DmsApprovalflowInfoVO"
+    ListRangeSize="-1"
+    NullValueFlag="start"
+    NullValueId="${adfBundle['oracle.javatools.resourcebundle.SystemBundle']['NULL_VALUE_RESID']}"
+    MRUCount="0">
+    <AttrArray Name="AttrNames">
+      <Item Value="ApprovalId"/>
+    </AttrArray>
+    <AttrArray Name="ListAttrNames">
+      <Item Value="Id"/>
+    </AttrArray>
+    <AttrArray Name="ListDisplayAttrNames">
+      <Item Value="ApprovalName"/>
+    </AttrArray>
+    <DisplayCriteria/>
+  </ListBinding>
+  <EntityUsage
+    Name="DmsRoleApproval"
+    Entity="team.epm.dms.model.DmsRoleApproval"/>
+  <ViewAttribute
+    Name="ApprovalId"
+    IsNotNull="true"
+    PrecisionRule="true"
+    EntityAttrName="ApprovalId"
+    EntityUsage="DmsRoleApproval"
+    AliasName="APPROVAL_ID"
+    LOVName="LOV_ApprovalId"
+    IsUpdateable="while_insert">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="dms.approval.name"/>
+        <CONTROLTYPE
+          Value="choice"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="CreatedAt"
+    IsNotNull="true"
+    PrecisionRule="true"
+    EntityAttrName="CreatedAt"
+    EntityUsage="DmsRoleApproval"
+    AliasName="CREATED_AT"/>
+  <ViewAttribute
+    Name="CreatedBy"
+    IsNotNull="true"
+    PrecisionRule="true"
+    EntityAttrName="CreatedBy"
+    EntityUsage="DmsRoleApproval"
+    AliasName="CREATED_BY"/>
+  <ViewAttribute
+    Name="EnableRun"
+    PrecisionRule="true"
+    EntityAttrName="EnableRun"
+    EntityUsage="DmsRoleApproval"
+    AliasName="ENABLE_RUN"
+    LOVName="LOV_EnableRun">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="dms.approval.enablerun"/>
+        <CONTROLTYPE
+          Value="choice"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="Id"
+    IsNotNull="true"
+    PrecisionRule="true"
+    EntityAttrName="Id"
+    EntityUsage="DmsRoleApproval"
+    AliasName="ID"/>
+  <ViewAttribute
+    Name="RoleId"
+    IsNotNull="true"
+    PrecisionRule="true"
+    EntityAttrName="RoleId"
+    EntityUsage="DmsRoleApproval"
+    AliasName="ROLE_ID"/>
+  <ViewAttribute
+    Name="UpdatedAt"
+    IsNotNull="true"
+    PrecisionRule="true"
+    EntityAttrName="UpdatedAt"
+    EntityUsage="DmsRoleApproval"
+    AliasName="UPDATED_AT"/>
+  <ViewAttribute
+    Name="UpdatedBy"
+    IsNotNull="true"
+    PrecisionRule="true"
+    EntityAttrName="UpdatedBy"
+    EntityUsage="DmsRoleApproval"
+    AliasName="UPDATED_BY"/>
+  <ResourceBundle>
+    <PropertiesBundle
+      PropertiesFile="ModelBundle"/>
+  </ResourceBundle>
+</ViewObject>

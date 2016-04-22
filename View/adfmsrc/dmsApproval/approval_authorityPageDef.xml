@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pageDefinition xmlns="http://xmlns.oracle.com/adfm/uimodel"
+                version="11.1.1.64.93" id="approval_authorityPageDef"
+                Package="dmsApproval">
+  <parameters/>
+  <executables>
+    <variableIterator id="variables"/>
+    <iterator Binds="DmsUnAssignedAppVO" RangeSize="25"
+              DataControl="DmsModuleDataControl"
+              id="DmsUnAssignedAppVOIterator"/>
+    <searchRegion Binds="DmsUnAssignedAppVOIterator" Criteria=""
+                  Customizer="oracle.jbo.uicli.binding.JUSearchBindingCustomizer"
+                  id="DmsUnAssignedAppVOQuery"/>
+    <iterator Binds="DmsEnabledRole" RangeSize="25"
+              DataControl="DmsModuleDataControl" id="DmsEnabledRoleIterator"/>
+    <iterator Binds="DmsRoleApprovalVO" RangeSize="25"
+              DataControl="DmsModuleDataControl"
+              id="DmsRoleApprovalVOIterator"/>
+  </executables>
+  <bindings>
+    <tree IterBinding="DmsUnAssignedAppVOIterator" id="DmsUnAssignedAppVO">
+      <nodeDefinition DefName="team.epm.dms.view.DmsUnAssignedAppVO"
+                      Name="DmsUnAssignedAppVO0">
+        <AttrNames>
+          <Item Value="ApprovalName"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <list IterBinding="DmsEnabledRoleIterator" id="RoleName"
+          DTSupportsMRU="true" StaticList="true" ListOperMode="navigation">
+      <AttrNames>
+        <Item Value="RoleName"/>
+      </AttrNames>
+    </list>
+    <action id="Commit" RequiresUpdateModel="true" Action="commitTransaction"
+            DataControl="DmsModuleDataControl"/>
+    <action id="Rollback" RequiresUpdateModel="false"
+            Action="rollbackTransaction" DataControl="DmsModuleDataControl"/>
+    <tree IterBinding="DmsRoleApprovalVOIterator" id="DmsRoleApprovalVO">
+      <nodeDefinition DefName="team.epm.dms.view.DmsRoleApprovalVO"
+                      Name="DmsRoleApprovalVO0">
+        <AttrNames>
+          <Item Value="ApprovalId"/>
+          <Item Value="EnableRun"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+  </bindings>
+</pageDefinition>

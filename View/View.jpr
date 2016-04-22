@@ -764,6 +764,7 @@
             <hash>
                <url n="content-folder-url" path="adfmsrc/dmsApproval/"/>
                <list n="pattern-filters">
+                  <string v="+dmsApproval/ApprovalAuthorityBean.java"/>
                   <string v="+dmsApproval/AppParamBean.java"/>
                   <string v="+dmsApproval/ApprovalIndexBean.java"/>
                   <string v="+dmsApproval/DmsApprovalBean.java"/>

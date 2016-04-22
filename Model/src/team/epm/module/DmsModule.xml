@@ -113,6 +113,12 @@
   <ViewUsage
     Name="DmsApprovalStatusQuery"
     ViewObjectName="team.epm.dms.view.DmsApprovalStatusVO"/>
+  <ViewUsage
+    Name="DmsRoleApprovalVO"
+    ViewObjectName="team.epm.dms.view.DmsRoleApprovalVO"/>
+  <ViewUsage
+    Name="DmsUnAssignedAppVO"
+    ViewObjectName="team.epm.dms.view.DmsUnAssignedAppVO"/>
   <ViewLinkUsage
     Name="DmsGroupedRoleLnk"
     ViewLinkObjectName="team.epm.dms.DmsGroupedRoleLnk"
@@ -155,10 +161,32 @@
     SrcViewUsageName="team.epm.module.DmsModule.DmsUserApprovalVO"
     DstViewUsageName="team.epm.module.DmsModule.DmsApprovalStatusVO"
     Reversed="false"/>
+  <ViewLinkUsage
+    Name="DmsRoleAppLink"
+    ViewLinkObjectName="team.epm.dms.DmsRoleAppLink"
+    SrcViewUsageName="team.epm.module.DmsModule.DmsEnabledRole"
+    DstViewUsageName="team.epm.module.DmsModule.DmsRoleApprovalVO"
+    Reversed="false"/>
   <ResourceBundle>
     <PropertiesBundle
       PropertiesFile="ModelBundle"/>
   </ResourceBundle>
+  <ClientInterface>
+    <Method
+      Name="getDmsValueView">
+      <Return
+        Type="oracle.jbo.ViewObject"/>
+      <Parameter
+        Name="valueSetSrc"
+        Type="java.lang.String"/>
+      <Parameter
+        Name="valueSetId"
+        Type="java.lang.String"/>
+      <Parameter
+        Name="groupId"
+        Type="java.lang.String"/>
+    </Method>
+  </ClientInterface>
   <ClientInterface>
     <Method
       Name="getDmsValueView">

@@ -49,6 +49,8 @@
             usageId="__approval_editPageDef"/>
       <page path="/dmsApproval/approval_index.jspx"
             usageId="__approval_indexPageDef"/>
+      <page path="/dmsApproval/approval_authority.jsff"
+            usageId="__approval_authorityPageDef"/>
    </pageMap>
    <pageDefinitionUsages>
       <page id="__dynamicTabShellPageDef"
@@ -93,6 +95,8 @@
             path="dmsApproval.approval_editPageDef"/>
       <page id="__approval_indexPageDef"
             path="dmsApproval.approval_indexPageDef"/>
+      <page id="__approval_authorityPageDef"
+            path="dmsApproval.approval_authorityPageDef"/>
    </pageDefinitionUsages>
    <dataControlUsages>
       <BC4JDataControl id="DmsModuleDataControl" Package="team.epm.module"

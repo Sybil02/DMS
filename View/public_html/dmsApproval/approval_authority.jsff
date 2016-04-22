@@ -1,0 +1,111 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.1"
+          xmlns:af="http://xmlns.oracle.com/adf/faces/rich"
+          xmlns:f="http://java.sun.com/jsf/core"
+          xmlns:c="http://java.sun.com/jsp/jstl/core">
+  <c:set var="viewBundle" value="#{adfBundle['dms_v']}"/>
+  <af:panelStretchLayout id="pgl2" topHeight="0">
+    <f:facet name="top">
+      <af:popup id="p1" autoCancel="disabled"
+                binding="#{ApprovalAuthortityBean.popup}">
+        <af:panelWindow id="pw1" modal="true"
+                        title="#{viewBundle['dcm.template.add_authority']}">
+          <af:panelCollection id="pc1">
+            <f:facet name="menus"/>
+            <f:facet name="toolbar">
+              <af:toolbar id="t3">
+                <af:commandButton text="#{viewBundle['dms.common.add']}" id="cb5"
+                                  actionListener="#{ApprovalAuthortityBean.addApproval}"/>
+              </af:toolbar>
+            </f:facet>
+            <f:facet name="statusbar"/>
+            <af:table value="#{bindings.DmsUnAssignedAppVO.collectionModel}"
+                      var="row" rows="#{bindings.DmsUnAssignedAppVO.rangeSize}"
+                      emptyText="#{bindings.DmsUnAssignedAppVO.viewable ? 'No data to display.' : 'Access Denied.'}"
+                      fetchSize="#{bindings.DmsUnAssignedAppVO.rangeSize}"
+                      rowBandingInterval="0"
+                      filterModel="#{bindings.DmsUnAssignedAppVOQuery.queryDescriptor}"
+                      queryListener="#{bindings.DmsUnAssignedAppVOQuery.processQuery}"
+                      filterVisible="false" varStatus="vs"
+                      selectionListener="#{bindings.DmsUnAssignedAppVO.collectionModel.makeCurrent}"
+                      rowSelection="multiple" id="t2"
+                      binding="#{ApprovalAuthortityBean.unAuthorityTable}">
+              <af:column sortProperty="#{bindings.DmsUnAssignedAppVO.hints.ApprovalName.name}"
+                         filterable="true" sortable="true"
+                         headerText="#{bindings.DmsUnAssignedAppVO.hints.ApprovalName.label}"
+                         id="c5">
+                <af:outputText value="#{row.ApprovalName}" id="ot1"/>
+              </af:column>
+            </af:table>
+          </af:panelCollection>
+          
+        </af:panelWindow>
+      </af:popup>
+    </f:facet>
+    <f:facet name="center">
+      <af:panelCollection id="pc2">
+        <f:facet name="toolbar">
+          <af:toolbar id="t7">
+            <af:group id="g1">
+              <af:selectOneChoice value="#{bindings.RoleName.inputValue}"
+                                  label="#{bindings.RoleName.label}"
+                                  autoSubmit="true"
+                                  required="#{bindings.RoleName.hints.mandatory}"
+                                  shortDesc="#{bindings.RoleName.hints.tooltip}"
+                                  id="soc3">
+                <f:selectItems value="#{bindings.RoleName.items}" id="si3"/>
+              </af:selectOneChoice>
+            </af:group>
+            <af:group id="g2">
+              <af:commandButton text="#{viewBundle['dms.common.add']}" id="cb1"
+                                actionListener="#{ApprovalAuthortityBean.showAddPop}"/>
+              <af:commandButton text="#{viewBundle['dcm.common.delete']}" id="cb2"
+                                actionListener="#{ApprovalAuthortityBean.removeApp}"/>
+              <af:commandButton text="#{viewBundle['dms.common.save']}"
+                                id="cb3"
+                                actionListener="#{bindings.Commit.execute}"/>
+              <af:commandButton text="#{viewBundle['dms.common.cancel']}" id="cb4"
+                                actionListener="#{bindings.Rollback.execute}"
+                                immediate="true">
+                <af:resetActionListener/>
+              </af:commandButton>
+            </af:group>
+          </af:toolbar>
+        </f:facet>
+        <af:table value="#{bindings.DmsRoleApprovalVO.collectionModel}"
+                  var="row" rows="#{bindings.DmsRoleApprovalVO.rangeSize}"
+                  emptyText="#{bindings.DmsRoleApprovalVO.viewable ? 'No data to display.' : 'Access Denied.'}"
+                  fetchSize="#{bindings.DmsRoleApprovalVO.rangeSize}"
+                  rowBandingInterval="0" editingMode="clickToEdit" 
+                  selectionListener="#{bindings.DmsRoleApprovalVO.collectionModel.makeCurrent}"
+                  rowSelection="multiple" id="t1" partialTriggers="::soc3"
+                  binding="#{ApprovalAuthortityBean.authorityTable}">
+          <af:column sortProperty="#{bindings.DmsRoleApprovalVO.hints.ApprovalId.name}"
+                     sortable="true"
+                     headerText="#{bindings.DmsRoleApprovalVO.hints.ApprovalId.label}"
+                     id="c1">
+            <af:selectOneChoice value="#{row.bindings.ApprovalId.inputValue}"
+                                label="#{row.bindings.ApprovalId.label}"
+                                required="#{bindings.DmsRoleApprovalVO.hints.ApprovalId.mandatory}"
+                                shortDesc="#{bindings.DmsRoleApprovalVO.hints.ApprovalId.tooltip}"
+                                id="soc1">
+              <f:selectItems value="#{row.bindings.ApprovalId.items}" id="si2"/>
+            </af:selectOneChoice>
+          </af:column>
+          <af:column sortProperty="#{bindings.DmsRoleApprovalVO.hints.EnableRun.name}"
+                     sortable="true"
+                     headerText="#{bindings.DmsRoleApprovalVO.hints.EnableRun.label}"
+                     id="c2">
+            <af:selectOneChoice value="#{row.bindings.EnableRun.inputValue}"
+                                label="#{row.bindings.EnableRun.label}"
+                                required="#{bindings.DmsRoleApprovalVO.hints.EnableRun.mandatory}"
+                                shortDesc="#{bindings.DmsRoleApprovalVO.hints.EnableRun.tooltip}"
+                                id="soc2">
+              <f:selectItems value="#{row.bindings.EnableRun.items}" id="si1"/>
+            </af:selectOneChoice>
+          </af:column>
+        </af:table>
+      </af:panelCollection>
+    </f:facet>
+  </af:panelStretchLayout>
+</jsp:root>
