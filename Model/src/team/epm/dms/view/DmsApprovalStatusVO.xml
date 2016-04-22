@@ -6,7 +6,7 @@
   Name="DmsApprovalStatusVO"
   Version="11.1.1.64.93"
   InheritPersonalization="true"
-  OrderBy='"ENTITY_ID"'
+  OrderBy='"ENTITY_ID","SEQ" ASC'
   BindingStyle="OracleName"
   CustomQuery="true"
   PageIterMode="Full"
@@ -20,6 +20,28 @@
         ResId="team.epm.dms.view.DmsApprovalStatusVO_LABEL"/>
     </SchemaBasedProperties>
   </Properties>
+  <ViewAccessor
+    Name="DmsUserView"
+    ViewObjectName="team.epm.dms.view.DmsUserView"
+    RowLevelBinds="true"/>
+  <ListBinding
+    Name="LOV_PersonId"
+    ListVOName="DmsUserView"
+    ListRangeSize="-1"
+    NullValueFlag="start"
+    NullValueId="${adfBundle['oracle.javatools.resourcebundle.SystemBundle']['NULL_VALUE_RESID']}"
+    MRUCount="0">
+    <AttrArray Name="AttrNames">
+      <Item Value="PersonId"/>
+    </AttrArray>
+    <AttrArray Name="ListAttrNames">
+      <Item Value="Id"/>
+    </AttrArray>
+    <AttrArray Name="ListDisplayAttrNames">
+      <Item Value="Name"/>
+    </AttrArray>
+    <DisplayCriteria/>
+  </ListBinding>
   <SQLQuery>
     <![CDATA[SELECT T.RUN_ID,
        T.TEMPLATE_ID,
@@ -96,7 +118,8 @@
     ColumnType="VARCHAR2"
     AliasName="PERSON_ID"
     Expression="PERSON_ID"
-    SQLType="VARCHAR">
+    SQLType="VARCHAR"
+    LOVName="LOV_PersonId">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="32"/>
     </DesignTime>
@@ -104,6 +127,8 @@
       <SchemaBasedProperties>
         <LABEL
           ResId="dms.approval.user"/>
+        <CONTROLTYPE
+          Value="choice"/>
       </SchemaBasedProperties>
     </Properties>
   </ViewAttribute>
@@ -138,12 +163,16 @@
     ColumnType="DATE"
     AliasName="FINISH_AT"
     Expression="FINISH_AT"
-    SQLType="TIMESTAMP">
+    SQLType="DATE">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="7"/>
     </DesignTime>
     <Properties>
       <SchemaBasedProperties>
+        <FMT_FORMATTER
+          ResId="team.epm.dms.view.DmsApprovalStatusVO.FinishAt_FMT_FORMATTER"/>
+        <FMT_FORMAT
+          ResId="team.epm.dms.view.DmsApprovalStatusVO.FinishAt_FMT_FORMAT"/>
         <LABEL
           ResId="dms.finishtime"/>
       </SchemaBasedProperties>

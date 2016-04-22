@@ -56,12 +56,23 @@ public class ApprovalIndexBean {
     Map<String,RichSelectOneChoice> paraSocMap = new LinkedHashMap<String,RichSelectOneChoice>();
 
     public ApprovalIndexBean() {
-        super();
+        //初始化时不显示状态，因为entityList没有初始化出来，显示有问题。
+        ViewObject vo = ADFUtils.findIterator("DmsApprovalStatusVOIterator").getViewObject();
+        String where = " 1 = 2";
+        vo.setWhereClause(where);
+        vo.executeQuery();
+        vo.setWhereClause(null);
     }
     
     private List<AppParamBean> paramList;
+    private List<SelectItem> entityList = new ArrayList<SelectItem>();
+    private List<String> comList = new ArrayList<String>();
     
     public void makeCurrentRow(SelectionEvent selectionEvent) {
+        //重置StatusVO，此时查询生成entityList
+        ViewObject vo = ADFUtils.findIterator("DmsApprovalStatusVOIterator").getViewObject();
+        vo.executeQuery();
+        
         RichTable wfTable = (RichTable)selectionEvent.getSource();
         CollectionModel cm = (CollectionModel)wfTable.getValue();
         JUCtrlHierBinding tableBinding = (JUCtrlHierBinding)cm.getWrappedData();
@@ -71,12 +82,56 @@ public class ApprovalIndexBean {
         iter.setCurrentRowWithKey(rowKey.toStringFormat(true));
         Row row = selectedRowData.getRow();
         String enableRun  = row.getAttribute("EnableRun").toString();
+        String comId = row.getAttribute("ValueSetId").toString();
         if("Y".equals(enableRun)){
             this.disableRun = false; 
         }else{
             this.disableRun = true; 
         }
         
+        //已经查询过的不再查询
+        if(!this.comList.contains(comId)){
+            this.getEntityList(comId);  
+            this.comList.add(comId);
+        }
+
+        
+    }
+    
+    public List<SelectItem> getEntityList(String comId){
+        List<SelectItem> list = new ArrayList<SelectItem>();
+        DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
+        Statement stat = trans.createStatement(1);
+        String sql = "SELECT V.ID,V.SOURCE FROM DCM_COM_VS T,DMS_VALUE_SET V WHERE T.IS_APPROVAL = 'Y' "
+            + "AND T.VALUE_SET_ID = V.ID AND V.LOCALE = 'zh_CN' AND T.COMBINATION_ID = '" + comId + "'";
+        ResultSet rs;
+        String source = "";
+        try {
+            rs = stat.executeQuery(sql);
+            if(rs.next()){
+                source = rs.getString("SOURCE");    
+            }else{
+                rs.close();
+                stat.close();
+                return list;
+            }
+            rs.close();
+            
+            String sql1 = "SELECT T.CODE,T.MEANING FROM " + source + " T WHERE T.LOCALE = '" 
+                          + ADFContext.getCurrent().getLocale() + "'";
+            ResultSet eRs = stat.executeQuery(sql1);    
+            while(eRs.next()){
+                SelectItem sim = new SelectItem();
+                sim.setValue(eRs.getString("CODE"));
+                sim.setLabel(eRs.getString("MEANING"));
+                System.out.println(eRs.getString("MEANING"));
+                this.entityList.add(sim);
+            }
+            eRs.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
     }
     
     public void startApproval(ActionEvent actionEvent) {
@@ -297,5 +352,13 @@ public class ApprovalIndexBean {
 
     public boolean isDisableRun() {
         return disableRun;
+    }
+
+    public void setEntityList(List<SelectItem> entityList) {
+        this.entityList = entityList;
+    }
+
+    public List<SelectItem> getEntityList() {
+        return entityList;
     }
 }

@@ -64,7 +64,7 @@
                     </af:toolbar>
                   </f:facet>
                   <af:table value="#{bindings.DmsUserApprovalVO.collectionModel}"
-                            var="row"
+                            var="row" 
                             rows="#{bindings.DmsUserApprovalVO.rangeSize}"
                             emptyText="#{bindings.DmsUserApprovalVO.viewable ? 'No data to display.' : 'Access Denied.'}"
                             fetchSize="#{bindings.DmsUserApprovalVO.rangeSize}"
@@ -132,13 +132,23 @@
                                filterable="true" sortable="true"
                                headerText="#{bindings.DmsApprovalStatusVO.hints.EntityId.label}"
                                id="c8">
-                      <af:outputText value="#{row.EntityId}" id="ot4"/>
+                      <af:selectOneChoice value="#{row.bindings.EntityId.inputValue}"
+                                  label="#{bindings.DmsApprovalStatusVO.hints.EntityId.label}"
+                                  id="soc21">
+                            <f:selectItems value="#{viewScope.ApprovalIndexBean.entityList}" id="si21"/>
+                      </af:selectOneChoice>
                     </af:column>
-                    <af:column sortProperty="#{bindings.DmsApprovalStatusVO.hints.PersonId.name}"
-                               filterable="true" sortable="true"
+                    <af:column sortProperty="#{bindings.DmsApprovalStatusVO.hints.PersonId.name}" sortable="true"
                                headerText="#{bindings.DmsApprovalStatusVO.hints.PersonId.label}"
                                id="c7">
-                      <af:outputText value="#{row.PersonId}" id="ot1"/>
+                      <af:selectOneChoice value="#{row.bindings.PersonId.inputValue}"
+                                          label="#{row.bindings.PersonId.label}"
+                                          required="#{bindings.DmsApprovalStatusVO.hints.PersonId.mandatory}"
+                                          shortDesc="#{bindings.DmsApprovalStatusVO.hints.PersonId.tooltip}"
+                                          id="soc2">
+                        <f:selectItems value="#{row.bindings.PersonId.items}"
+                                       id="si2"/>
+                      </af:selectOneChoice>
                     </af:column>
                     <af:column sortProperty="#{bindings.DmsApprovalStatusVO.hints.Seq.name}"
                                filterable="true" sortable="true"
