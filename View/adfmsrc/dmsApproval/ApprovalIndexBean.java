@@ -147,17 +147,14 @@ public class ApprovalIndexBean {
         String uSql = "UPDATE DMS_APPROVALFLOW_INFO T SET T.APPROVAL_STATUS = 'Y',T.RUN_ID = '" + runId +"' WHERE T.ID = '" + this.curAppId + "'";
         //插入状态表
         String sql = "INSERT INTO APPROVAL_TEMPLATE_STATUS SELECT T.ID,'" + runId + "',T.TEMP_ID,T.ENTITY_CODE,T.USER_ID,"
-            + "'CLOSE',NULL,SYSDATE,SYSDATE,'" + userId + "','" + userId + "',C.ID,T.SEQ FROM DMS_APPROVALFLOW_ENTITYS T,"
+            + "'CLOSE',NULL,SYSDATE,SYSDATE,'" + userId + "','" + userId + "',C.ID,T.SEQ,'' FROM DMS_APPROVALFLOW_ENTITYS T,"
             + comSource + " C WHERE C." + this.entityCode + " = T.ENTITY_CODE AND T.APPROVAL_ID = '" + this.curAppId
             + "' ";
         for(AppParamBean app : this.paramList){
            sql = sql + "AND C." + app.getPCode() + " ='" + app.getPChoiced() + "' ";
         }
-        //启动第一审批人
-        String fSql = "UPDATE APPROVAL_TEMPLATE_STATUS T SET T.APPROVAL_STATUS = 'N' WHERE T.SEQ = 1 AND T.RUN_ID = '" + runId + "'";
         try {
             stat.executeUpdate(sql);
-            stat.executeUpdate(fSql);
             trans.commit();   
             //先删除组合状态
             String deleteSql = "DELETE DCM_TEMPLATE_COMBINATION D WHERE EXISTS (SELECT 1 FROM APPROVAL_TEMPLATE_STATUS T " 
@@ -226,7 +223,19 @@ public class ApprovalIndexBean {
     }
 
     public void closeApproval(ActionEvent actionEvent) {
-        // Add event code here...
+        ViewObject vo = ADFUtils.findIterator("DmsUserApprovalVOIterator").getViewObject();
+        String id = vo.getCurrentRow().getAttribute("Id").toString();
+        //更新状态
+        DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
+        Statement stat = trans.createStatement(DBTransaction.DEFAULT);
+        String sql = "UPDATE DMS_APPROVALFLOW_INFO T SET T.APPROVAL_STATUS = 'N' WHERE T.ID = '" + id + "'";
+        try {
+            stat.executeUpdate(sql);
+            trans.commit();
+            stat.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public void setParamPop(RichPopup paramPop) {

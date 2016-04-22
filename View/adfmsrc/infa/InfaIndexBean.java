@@ -183,7 +183,7 @@ public class InfaIndexBean {
             if(pSoc.equals(this.paraSocMap.get(key))){
                 for(InfaParamBean ipb : this.paramList){
                     if(ipb.getPName().equals(key.toString())){
-                        ipb.setChoiceValue(valueChangeEvent.getNewValue().toString());
+                        ipb.setChoiceValue("'" + valueChangeEvent.getNewValue().toString() + "'");
                     }
                 }
                 

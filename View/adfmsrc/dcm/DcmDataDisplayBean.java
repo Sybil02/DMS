@@ -5,6 +5,7 @@ import common.DmsUtils;
 
 import common.JSFUtils;
 
+import common.MailSender;
 import common.TablePagination;
 
 import dcm.combinantion.CombinationEO;
@@ -52,6 +53,9 @@ import javax.faces.event.FacesEvent;
 import javax.faces.event.ValueChangeEvent;
 
 import javax.faces.model.SelectItem;
+
+import javax.mail.MessagingException;
+import javax.mail.internet.AddressException;
 
 import oracle.adf.share.ADFContext;
 import oracle.adf.share.logging.ADFLogger;
@@ -1009,6 +1013,7 @@ public class DcmDataDisplayBean extends TablePagination{
         
         //判断审批
         if(!this.runId.equals("NOT APP")){
+            this.commitEnable();
             this.approvalEnable();
             this.backEnable();
         }
@@ -1343,6 +1348,8 @@ public class DcmDataDisplayBean extends TablePagination{
     private String runId;
     private boolean appEnable = true;
     private boolean backEnable = true;
+    private boolean commitEnable = true;
+    private String reason = "";
     
     public void getRunId(){
         Statement stmt=DmsUtils.getDcmApplicationModule().getDBTransaction().createStatement(DBTransaction.DEFAULT);
@@ -1356,6 +1363,28 @@ public class DcmDataDisplayBean extends TablePagination{
             }else{
                 this.runId = "NOT APP";
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public void commitEnable(){
+        this.commitEnable = true;
+        Statement stmt = DmsUtils.getDcmApplicationModule().getDBTransaction().createStatement(DBTransaction.DEFAULT);
+        String sql = "SELECT APPROVAL_STATUS,PERSON_ID FROM APPROVAL_TEMPLATE_STATUS WHERE RUN_ID = '" + this.runId + "' "
+            + " AND TEMPLATE_ID = '" + this.curTempalte.getId() + "' "
+            + " AND COM_ID = '" + this.curCombiantionRecord + "' ORDER BY SEQ ASC";
+        ResultSet rs;
+        try {
+            rs = stmt.executeQuery(sql);
+            if(rs.next()){
+                String status = rs.getString("APPROVAL_STATUS");   
+                if(status.equals("CLOSE")){
+                    this.commitEnable = false;        
+                }
+            }
+            rs.close();
+            stmt.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -1404,17 +1433,153 @@ public class DcmDataDisplayBean extends TablePagination{
             e.printStackTrace();
         }
     }
+    
+    public void commitApproval(ActionEvent actionEvent) {
+        this.commitEnable = true;
+        Statement stmt = DmsUtils.getDcmApplicationModule().getDBTransaction().createStatement(DBTransaction.DEFAULT);
+        //关闭组合
+        String cSql = "UPDATE DCM_TEMPLATE_COMBINATION T SET T.STATUS = 'CLOSE',T.UPDATED_AT=SYSDATE,T.UPDATED_BY='" + this.curUser.getId() + "'"
+            + " WHERE T.TEMPLATE_ID = '" + this.curTempalte.getId() + "'" + " AND T.COM_RECORD_ID = '" + this.curCombiantionRecord + "'"; 
+
+        try {
+            stmt.executeUpdate(cSql);
+            DmsUtils.getDcmApplicationModule().getDBTransaction().commit();
+            stmt.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        
+        //启动第一审批人
+        this.startNextApproval();
+
+    }
 
     public void approvalPass(ActionEvent actionEvent) {
-        // Add event code here...
+        this.appEnable = true;
+        Statement stmt = DmsUtils.getDcmApplicationModule().getDBTransaction().createStatement(DBTransaction.DEFAULT);
+        //更改状态为Y
+        String sql = "UPDATE APPROVAL_TEMPLATE_STATUS T SET T.APPROVAL_STATUS = 'Y',T.FINISH_AT = SYSDATE"
+            + " WHERE T.RUN_ID = '" + this.runId + "' AND T.TEMPLATE_ID = '" + this.curTempalte.getId() + "' AND T.COM_ID = '"
+            + this.curCombiantionRecord + "' AND T.PERSON_ID = '" + this.curUser.getId() + "'";
+        try {
+            stmt.executeUpdate(sql);
+            DmsUtils.getDcmApplicationModule().getDBTransaction().commit();
+            stmt.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        //开启下一审批人
+        this.startNextApproval();
+    }
+    
+    public void startNextApproval(){
+        Statement stmt = DmsUtils.getDcmApplicationModule().getDBTransaction().createStatement(DBTransaction.DEFAULT);
+        String sql = "SELECT T.ID,T.PERSON_ID FROM APPROVAL_TEMPLATE_STATUS T WHERE T.APPROVAL_STATUS = 'CLOSE' AND T.RUN_ID = '" + this.runId + "' AND T.TEMPLATE_ID = '"
+            + this.curTempalte.getId() + "' AND T.COM_ID = '" + this.curCombiantionRecord + "' ORDER BY T.SEQ ASC";
+        ResultSet rs;
+        String personId = "";
+        try {
+            rs = stmt.executeQuery(sql);
+            if(rs.next()){
+                String id = rs.getString("ID");
+                personId = rs.getString("PERSON_ID");
+                String fSql = "UPDATE APPROVAL_TEMPLATE_STATUS T SET T.APPROVAL_STATUS = 'N',T.PROPOSER = '" + this.curUser.getId() + "' WHERE T.ID = '"
+                    + id + "' AND T.RUN_ID = '" + this.runId + "'";
+                stmt.executeUpdate(fSql);
+                DmsUtils.getDcmApplicationModule().getDBTransaction().commit();
+            }else{
+                rs.close();
+                stmt.close();
+                return;
+            }
+            rs.close();
+            stmt.close();
+            //send email
+            this.sendEmail("PASS",personId);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public void sendEmail(String type,String userId){
+        String email = "";
+        String tempName = this.curTempalte.getName();
+        String comName = this.getCurComRecordText();
+        String content = "";
+        Statement stmt = DmsUtils.getDcmApplicationModule().getDBTransaction().createStatement(DBTransaction.DEFAULT);
+        String sql = "SELECT T.MAIL FROM DMS_USER T WHERE T.ID = '" + userId + "'";
+        ResultSet rs;
+        try {
+            rs = stmt.executeQuery(sql);
+            if(rs.next()){
+                email = rs.getString("MAIL");
+            }
+            rs.close();
+            stmt.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        
+        if("".equals(email)){
+            return;
+        }
+        
+        if(type.equals("PASS")){
+            content = "<div align='center'><P>===========================请及时审批模板数据============================</P></div></br><P>" 
+                      + tempName + comName + ":数据需要审批，请及时审批！" 
+                      + "</br><P>处理人：" + this.curUser.getName() + "</P>"
+                      + "</P></br><div align='center'><P>===========================系统邮件，请勿回复============================</P></div>"; 
+        }else{
+            content = "<div align='center'><P>===========================请及时提交模板数据============================</P></div></br><P>" 
+                      + tempName + comName + ":审批拒绝，请修改数据提交！"
+                      + "</br><P>备注：" + this.reason + "</P>"
+                      + "</br><P>处理人：" + this.curUser.getName() + "</P>"
+                      + "</P></br><div align='center'><P>===========================系统邮件，请勿回复============================</P></div>"; 
+        }
+        
+        MailSender sender = new MailSender();
+        try {
+            sender.send(email, "[审批流] : "+tempName, content);
+        } catch (AddressException e) {
+            e.printStackTrace();
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
     }
 
     public void approvalRefuse(ActionEvent actionEvent) {
-        // Add event code here...
+        this.appEnable = true;
+        Statement stmt = DmsUtils.getDcmApplicationModule().getDBTransaction().createStatement(DBTransaction.DEFAULT);
+        //查询提交者
+        String proposer = "";
+        String sql = "SELECT T.ID,T.PROPOSER FROM APPROVAL_TEMPLATE_STATUS T WHERE T.RUN_ID = '" + this.runId + "' AND T.TEMPLATE_ID = '"
+            + this.curTempalte.getId() + "' AND T.COM_ID = '" + this.curCombiantionRecord + "' ORDER BY T.SEQ ASC";
+        //打开组合
+        String cSql = "UPDATE DCM_TEMPLATE_COMBINATION T SET T.STATUS = 'OPEN',T.UPDATED_AT=SYSDATE,T.UPDATED_BY='" + this.curUser.getId() + "'"
+            + " WHERE T.TEMPLATE_ID = '" + this.curTempalte.getId() + "'" + " AND T.COM_RECORD_ID = '" + this.curCombiantionRecord + "'"; 
+        //更改状态
+        String uSql = "UPDATE APPROVAL_TEMPLATE_STATUS T SET T.APPROVAL_STATUS = 'CLOSE',T.PROPOSER = NULL ,T.FINISH_AT = NULL "
+            + "WHERE T.RUN_ID = '" + this.runId + "' AND T.TEMPLATE_ID = '" + this.curTempalte.getId() + "' AND T.COM_ID = '" + this.curCombiantionRecord + "'";
+        try {
+            ResultSet rs = stmt.executeQuery(sql);
+            if(rs.next()){
+                proposer = rs.getString("PROPOSER");
+            }
+            rs.close();
+            stmt.executeUpdate(uSql);
+            stmt.executeUpdate(cSql);
+            DmsUtils.getDcmApplicationModule().getDBTransaction().commit();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        //发送邮件
+        this.sendEmail("REFUSE",proposer);
     }
 
     public void approvalBack(ActionEvent actionEvent) {
-        // Add event code here...
+        this.appEnable = true;
+        // 同拒绝
+        this.approvalRefuse(actionEvent);
     }
 
     public void setAppEnable(boolean appEnable) {
@@ -1431,5 +1596,21 @@ public class DcmDataDisplayBean extends TablePagination{
 
     public boolean isBackEnable() {
         return backEnable;
+    }
+
+    public void setCommitEnable(boolean commitEnable) {
+        this.commitEnable = commitEnable;
+    }
+
+    public boolean isCommitEnable() {
+        return commitEnable;
+    }
+
+    public void setReason(String reason) {
+        this.reason = reason;
+    }
+
+    public String getReason() {
+        return reason;
     }
 }

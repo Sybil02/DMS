@@ -71,21 +71,26 @@
                 <af:showPopupBehavior popupId="::p4" alignId=""/>
               </af:commandButton>
             </af:group>
+            <af:group id="g8">
+              <af:commandButton text="#{viewBundle['dms.approval.commit']}" id="cb14"
+              disabled="#{(viewScope.DcmDataDisplayBean.isEditable eq false) or viewScope.DcmDataDisplayBean.commitEnable}"
+                                actionListener="#{viewScope.DcmDataDisplayBean.commitApproval}"/>
+            </af:group>
             <af:group id="g6">
               <af:commandButton text="#{viewBundle['dms.approval.pass']}" id="cb12" 
                                 partialTriggers="::pgl1"
                                 actionListener="#{viewScope.DcmDataDisplayBean.approvalPass}"
                                 disabled="#{viewScope.DcmDataDisplayBean.appEnable}"/>
-              <af:commandButton text="#{viewBundle['dms.approval.refuse']}" id="cb5"
-                                partialTriggers="::pgl1"
-                                actionListener="#{viewScope.DcmDataDisplayBean.approvalRefuse}"
-                                disabled="#{viewScope.DcmDataDisplayBean.appEnable}"/>
+              <af:commandButton text="#{viewBundle['dms.approval.refuse']}" id="cb5" partialSubmit="true"
+                                disabled="#{viewScope.DcmDataDisplayBean.appEnable}">
+                <af:showPopupBehavior popupId="::pop9" triggerType="click"/>
+              </af:commandButton>
             </af:group>
             <af:group id="g7">
-              <af:commandButton text="#{viewBundle['dms.approval.back']}" id="cb13"
-                                partialTriggers="::pgl1"
-                                actionListener="#{viewScope.DcmDataDisplayBean.approvalBack}"
-                                disabled="#{viewScope.DcmDataDisplayBean.backEnable}"/>
+              <af:commandButton text="#{viewBundle['dms.approval.back']}" id="cb13" partialSubmit="true"
+                                disabled="#{viewScope.DcmDataDisplayBean.backEnable}">
+                <af:showPopupBehavior popupId="::pop9" triggerType="click"/>
+              </af:commandButton>
             </af:group>
           </af:toolbar>
         </f:facet>
@@ -384,6 +389,17 @@
                 </af:gridCell>
               </af:gridRow>
             </af:panelGridLayout>
+          </af:panelWindow>
+        </af:popup>
+        <af:popup id="pop9">
+          <af:panelWindow id="pw7" contentWidth="400" contentHeight="80" 
+            title="#{viewBundle['dms.approval.reason']}"  >
+            <af:inputText rows="7" columns="100" id="it4"
+                          value="#{viewScope.DcmDataDisplayBean.reason}"/>
+            <af:spacer height="5px" id="sp1"/>
+            <af:spacer width="350px" id="sp2"/>
+            <af:commandButton text="#{viewBundle['dcm.common.ok']}" id="cb18"
+                              actionListener="#{viewScope.DcmDataDisplayBean.approvalRefuse}"/>
           </af:panelWindow>
         </af:popup>
       </af:panelGroupLayout>
