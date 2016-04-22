@@ -49,12 +49,23 @@
     <DisplayCriteria/>
   </ListBinding>
   <SQLQuery>
-    <![CDATA[SELECT T.ID,T.APPROVAL_NAME,T.TEMPLATE_ID,T.VALUE_SET_ID,T.SEQ,T.RUN_ID,T.APPROVAL_STATUS
-FROM DMS_APPROVALFLOW_INFO T ,DMS_ROLE_APPROVAL R ,DMS_GROUP_ROLE G,DMS_USER_GROUP U
-WHERE T.ID = R.APPROVAL_ID
-AND R.ROLE_ID = G.ROLE_ID
-AND G.GROUP_ID = U.GROUP_ID
-AND U.USER_ID = :userId]]>
+    <![CDATA[SELECT T.ID,
+       T.APPROVAL_NAME,
+       T.TEMPLATE_ID,
+       T.VALUE_SET_ID,
+       T.SEQ,
+       T.RUN_ID,
+       T.APPROVAL_STATUS,
+       R.ENABLE_RUN
+  FROM DMS_APPROVALFLOW_INFO T,
+       DMS_ROLE_APPROVAL     R,
+       DMS_GROUP_ROLE        G,
+       DMS_USER_GROUP        U
+ WHERE T.ID = R.APPROVAL_ID
+   AND R.ROLE_ID = G.ROLE_ID
+   AND G.GROUP_ID = U.GROUP_ID
+   AND U.USER_ID = :userId
+ ORDER BY "SEQ"]]>
   </SQLQuery>
   <ViewAttribute
     Name="Id"
@@ -185,6 +196,21 @@ AND U.USER_ID = :userId]]>
           ResId="team.epm.dms.view.DmsJobDetailsVO.JobStatus_LABEL"/>
       </SchemaBasedProperties>
     </Properties>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="EnableRun"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="2"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="ENABLE_RUN"
+    Expression="ENABLE_RUN"
+    SQLType="VARCHAR">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="2"/>
+    </DesignTime>
   </ViewAttribute>
   <AttrArray Name="KeyAttributes">
     <Item Value="Id"/>

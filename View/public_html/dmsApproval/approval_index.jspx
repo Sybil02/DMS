@@ -53,9 +53,13 @@
                   <f:facet name="toolbar">
                     <af:toolbar id="t3">
                       <af:commandButton text="#{viewBundle['dms.start']}" id="cb2"
-                                        actionListener="#{viewScope.ApprovalIndexBean.startApproval}"/>
+                                        actionListener="#{viewScope.ApprovalIndexBean.startApproval}"
+                                        disabled="#{viewScope.ApprovalIndexBean.disableRun}"
+                                        partialTriggers="t1"/>
                       <af:spacer id="spw" width="10px"/>
                       <af:commandButton text="#{viewBundle['dms.close']}" id="cb12"
+                                        disabled="#{viewScope.ApprovalIndexBean.disableRun}"
+                                        partialTriggers="t1"
                                         actionListener="#{viewScope.ApprovalIndexBean.closeApproval}"/>
                     </af:toolbar>
                   </f:facet>
@@ -69,7 +73,7 @@
                             queryListener="#{bindings.DmsUserApprovalVOQuery.processQuery}"
                             filterVisible="false" varStatus="vs"
                             selectedRowKeys="#{bindings.DmsUserApprovalVO.collectionModel.selectedRow}"
-                            selectionListener="#{bindings.DmsUserApprovalVO.collectionModel.makeCurrent}"
+                            selectionListener="#{viewScope.ApprovalIndexBean.makeCurrentRow}"
                             rowSelection="single" id="t1">
                     <af:column sortProperty="#{bindings.DmsUserApprovalVO.hints.ApprovalName.name}"
                                filterable="true" sortable="true" 
@@ -98,19 +102,10 @@
                                        id="si12"/>
                       </af:selectOneChoice>
                     </af:column>
-                    <af:column sortProperty="#{bindings.DmsUserApprovalVO.hints.ApprovalStatus.name}"
-                               filterable="true" sortable="true"
+                    <af:column sortProperty="#{bindings.DmsUserApprovalVO.hints.ApprovalStatus.name}" sortable="true"
                                headerText="#{bindings.DmsUserApprovalVO.hints.ApprovalStatus.label}"
                                id="c3">
-                      <af:inputText value="#{row.bindings.ApprovalStatus.inputValue}"
-                                    label="#{bindings.DmsUserApprovalVO.hints.ApprovalStatus.label}"
-                                    required="#{bindings.DmsUserApprovalVO.hints.ApprovalStatus.mandatory}"
-                                    columns="#{bindings.DmsUserApprovalVO.hints.ApprovalStatus.displayWidth}"
-                                    maximumLength="#{bindings.DmsUserApprovalVO.hints.ApprovalStatus.precision}"
-                                    shortDesc="#{bindings.DmsUserApprovalVO.hints.ApprovalStatus.tooltip}"
-                                    id="it2">
-                        <f:validator binding="#{row.bindings.ApprovalStatus.validator}"/>
-                      </af:inputText>
+                      <af:outputText value="#{row.ApprovalStatus eq 'Y' ? 'Open':'Closed'}" id="ot6"/>
                     </af:column>
                   </af:table>
                 </af:panelCollection>

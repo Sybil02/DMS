@@ -25,13 +25,23 @@ import javax.faces.event.ActionEvent;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 
+import oracle.adf.model.binding.DCIteratorBinding;
 import oracle.adf.share.ADFContext;
 import oracle.adf.view.rich.component.rich.RichPopup;
 
+import oracle.adf.view.rich.component.rich.data.RichTable;
 import oracle.adf.view.rich.component.rich.input.RichSelectOneChoice;
 
+import oracle.jbo.Key;
+import oracle.jbo.Row;
 import oracle.jbo.ViewObject;
 import oracle.jbo.server.DBTransaction;
+
+import oracle.jbo.uicli.binding.JUCtrlHierBinding;
+import oracle.jbo.uicli.binding.JUCtrlHierNodeBinding;
+
+import org.apache.myfaces.trinidad.event.SelectionEvent;
+import org.apache.myfaces.trinidad.model.CollectionModel;
 
 import team.epm.dcm.view.DcmTemplateCombinationVOImpl;
 import team.epm.dcm.view.DcmTemplateCombinationVORowImpl;
@@ -41,6 +51,7 @@ public class ApprovalIndexBean {
     private String entityCode;
     private String combination;
     private String curAppId;
+    private boolean disableRun = true;
 
     Map<String,RichSelectOneChoice> paraSocMap = new LinkedHashMap<String,RichSelectOneChoice>();
 
@@ -49,6 +60,24 @@ public class ApprovalIndexBean {
     }
     
     private List<AppParamBean> paramList;
+    
+    public void makeCurrentRow(SelectionEvent selectionEvent) {
+        RichTable wfTable = (RichTable)selectionEvent.getSource();
+        CollectionModel cm = (CollectionModel)wfTable.getValue();
+        JUCtrlHierBinding tableBinding = (JUCtrlHierBinding)cm.getWrappedData();
+        DCIteratorBinding iter = tableBinding.getDCIteratorBinding();
+        JUCtrlHierNodeBinding selectedRowData = (JUCtrlHierNodeBinding)wfTable.getSelectedRowData();
+        Key rowKey = selectedRowData.getRowKey();
+        iter.setCurrentRowWithKey(rowKey.toStringFormat(true));
+        Row row = selectedRowData.getRow();
+        String enableRun  = row.getAttribute("EnableRun").toString();
+        if("Y".equals(enableRun)){
+            this.disableRun = false; 
+        }else{
+            this.disableRun = true; 
+        }
+        
+    }
     
     public void startApproval(ActionEvent actionEvent) {
         ViewObject vo = ADFUtils.findIterator("DmsUserApprovalVOIterator").getViewObject();
@@ -262,4 +291,11 @@ public class ApprovalIndexBean {
         return paraSocMap;
     }
 
+    public void setDisableRun(boolean disableRun) {
+        this.disableRun = disableRun;
+    }
+
+    public boolean isDisableRun() {
+        return disableRun;
+    }
 }
