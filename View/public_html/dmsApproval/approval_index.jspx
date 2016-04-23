@@ -57,8 +57,8 @@
                                         disabled="#{viewScope.ApprovalIndexBean.disableRun}"
                                         partialTriggers="t1"/>
                       <af:spacer id="spw" width="10px"/>
-                      <af:commandButton text="#{viewBundle['dms.close']}" id="cb12"
-                                        disabled="#{viewScope.ApprovalIndexBean.disableRun}"
+                      <af:commandButton text="#{viewBundle['dms.approval.close']}" id="cb12"
+                                        disabled="#{viewScope.ApprovalIndexBean.disableClose}"
                                         partialTriggers="t1"
                                         actionListener="#{viewScope.ApprovalIndexBean.closeApproval}"/>
                     </af:toolbar>
@@ -105,7 +105,7 @@
                     <af:column sortProperty="#{bindings.DmsUserApprovalVO.hints.ApprovalStatus.name}" sortable="true"
                                headerText="#{bindings.DmsUserApprovalVO.hints.ApprovalStatus.label}"
                                id="c3">
-                      <af:outputText value="#{row.ApprovalStatus eq 'Y' ? 'Open':'Closed'}" id="ot6"/>
+                      <af:outputText value="#{row.ApprovalStatus eq 'Y' ? viewBundle['dms.approval.open'] : viewBundle['dms.approval.close'] }" id="ot6"/>
                     </af:column>
                   </af:table>
                 </af:panelCollection>
@@ -160,10 +160,10 @@
                                filterable="true" sortable="true"
                                headerText="#{bindings.DmsApprovalStatusVO.hints.ApprovalStatus.label}"
                                id="c5">
-                      <af:outputText value="#{row.ApprovalStatus}" id="ot2"/>
+                      <af:outputText value="#{row.ApprovalStatus eq 'CLOSE' ? viewBundle['dms.approval.wait'] : (row.ApprovalStatus eq 'N' ? viewBundle['dms.approval.ing'] : viewBundle['dms.approval.status.pass'])}" id="ot2"/>
                     </af:column>
                     <af:column sortProperty="#{bindings.DmsApprovalStatusVO.hints.FinishAt.name}"
-                               filterable="true" sortable="true"
+                               filterable="true" sortable="true" width="150"
                                headerText="#{bindings.DmsApprovalStatusVO.hints.FinishAt.label}"
                                id="c4">
                       <f:facet name="filter">

@@ -52,6 +52,7 @@ public class ApprovalIndexBean {
     private String combination;
     private String curAppId;
     private boolean disableRun = true;
+    private boolean disableClose = true;
 
     Map<String,RichSelectOneChoice> paraSocMap = new LinkedHashMap<String,RichSelectOneChoice>();
 
@@ -83,10 +84,16 @@ public class ApprovalIndexBean {
         Row row = selectedRowData.getRow();
         String enableRun  = row.getAttribute("EnableRun").toString();
         String comId = row.getAttribute("ValueSetId").toString();
-        if("Y".equals(enableRun)){
+        Object status = row.getAttribute("ApprovalStatus");
+        if("Y".equals(enableRun) && !"Y".equals(status)){
             this.disableRun = false; 
-        }else{
-            this.disableRun = true; 
+            this.disableClose = true;
+        }else if("Y".equals(enableRun) && !"N".equals(status)){
+            this.disableClose = false; 
+            this.disableRun = true;
+        }else if("N".equals(enableRun)){
+            this.disableClose = true;
+            this.disableRun = true;
         }
         
         //已经查询过的不再查询
@@ -309,17 +316,24 @@ public class ApprovalIndexBean {
     public void closeApproval(ActionEvent actionEvent) {
         ViewObject vo = ADFUtils.findIterator("DmsUserApprovalVOIterator").getViewObject();
         String id = vo.getCurrentRow().getAttribute("Id").toString();
+        String runId = vo.getCurrentRow().getAttribute("RunId").toString();
+        //关闭组合
+        String cSql = "UPDATE DCM_TEMPLATE_COMBINATION T SET T.STATUS = 'CLOSE' WHERE EXISTS (SELECT 1 FROM APPROVAL_TEMPLATE_STATUS A "
+            + "WHERE A.COM_ID = T.COM_RECORD_ID AND A.RUN_ID = '" + runId + "')";
         //更新状态
         DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
         Statement stat = trans.createStatement(DBTransaction.DEFAULT);
         String sql = "UPDATE DMS_APPROVALFLOW_INFO T SET T.APPROVAL_STATUS = 'N' WHERE T.ID = '" + id + "'";
         try {
             stat.executeUpdate(sql);
+            stat.executeUpdate(cSql);
             trans.commit();
             stat.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        //刷新Table
+        vo.executeQuery();
     }
 
     public void setParamPop(RichPopup paramPop) {
@@ -360,5 +374,13 @@ public class ApprovalIndexBean {
 
     public List<SelectItem> getEntityList() {
         return entityList;
+    }
+
+    public void setDisableClose(boolean disableClose) {
+        this.disableClose = disableClose;
+    }
+
+    public boolean isDisableClose() {
+        return disableClose;
     }
 }
