@@ -22,7 +22,8 @@
   BindingStyle="OracleName"
   CustomQuery="false"
   PageIterMode="Full"
-  UseGlueCode="false">
+  UseGlueCode="false"
+  OrderBy="DmsApprovalflowEntitysEO.ENTITY_CODE,DmsApprovalflowEntitysEO.SEQ ASC">
   <Properties>
     <SchemaBasedProperties>
       <LABEL

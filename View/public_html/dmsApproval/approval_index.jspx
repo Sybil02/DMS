@@ -69,14 +69,13 @@
                             emptyText="#{bindings.DmsUserApprovalVO.viewable ? 'No data to display.' : 'Access Denied.'}"
                             fetchSize="#{bindings.DmsUserApprovalVO.rangeSize}"
                             rowBandingInterval="0" editingMode="clickToEdit"
-                            filterModel="#{bindings.DmsUserApprovalVOQuery.queryDescriptor}"
                             queryListener="#{bindings.DmsUserApprovalVOQuery.processQuery}"
-                            filterVisible="false" varStatus="vs"
+                            varStatus="vs"
                             selectedRowKeys="#{bindings.DmsUserApprovalVO.collectionModel.selectedRow}"
                             selectionListener="#{viewScope.ApprovalIndexBean.makeCurrentRow}"
                             rowSelection="single" id="t1">
                     <af:column sortProperty="#{bindings.DmsUserApprovalVO.hints.ApprovalName.name}"
-                               filterable="true" sortable="true" 
+                               filterable="false" sortable="true" 
                                headerText="#{bindings.DmsUserApprovalVO.hints.ApprovalName.label}"
                                id="c2">
                       <af:inputText value="#{row.bindings.ApprovalName.inputValue}"
@@ -115,21 +114,16 @@
                   <f:facet name="menus"/>
                   <f:facet name="toolbar"/>
                   <f:facet name="statusbar"/>
-                  <af:table value="#{bindings.DmsApprovalStatusVO.collectionModel}"
-                            var="row"
-                            rows="#{bindings.DmsApprovalStatusVO.rangeSize}"
-                            emptyText="#{bindings.DmsApprovalStatusVO.viewable ? 'No data to display.' : 'Access Denied.'}"
-                            fetchSize="#{bindings.DmsApprovalStatusVO.rangeSize}"
+                  <af:table value="#{bindings.DmsApprovalStatusVO1.collectionModel}"
+                            var="row" partialTriggers=":::pc1:t1"
+                            rows="#{bindings.DmsApprovalStatusVO1.rangeSize}"
+                            emptyText="#{bindings.DmsApprovalStatusVO1.viewable ? 'No data to display.' : 'Access Denied.'}"
+                            fetchSize="#{bindings.DmsApprovalStatusVO1.rangeSize}"
                             rowBandingInterval="0"
-                            filterModel="#{bindings.DmsApprovalStatusVOQuery.queryDescriptor}"
-                            queryListener="#{bindings.DmsApprovalStatusVOQuery.processQuery}"
-                            filterVisible="false" varStatus="vs"
-                            selectedRowKeys="#{bindings.DmsApprovalStatusVO.collectionModel.selectedRow}"
-                            selectionListener="#{bindings.DmsApprovalStatusVO.collectionModel.makeCurrent}"
-                            rowSelection="single" id="t2"
-                            partialTriggers=":::pc1:t1">
+                            selectionListener="#{bindings.DmsApprovalStatusVO1.collectionModel.makeCurrent}"
+                            rowSelection="multiple" id="t4">
                     <af:column sortProperty="#{bindings.DmsApprovalStatusVO.hints.EntityId.name}"
-                               filterable="true" sortable="true"
+                               filterable="false" sortable="true"
                                headerText="#{bindings.DmsApprovalStatusVO.hints.EntityId.label}"
                                id="c8">
                       <af:selectOneChoice value="#{row.bindings.EntityId.inputValue}"
@@ -166,10 +160,6 @@
                                filterable="true" sortable="true" width="150"
                                headerText="#{bindings.DmsApprovalStatusVO.hints.FinishAt.label}"
                                id="c4">
-                      <f:facet name="filter">
-                        <af:inputDate value="#{vs.filterCriteria.FinishAt}"
-                                      id="id1"/>
-                      </f:facet>
                       <af:outputText value="#{row.FinishAt}" id="ot5">
                         <af:convertDateTime pattern="#{bindings.DmsApprovalStatusVO.hints.FinishAt.format}"/>
                       </af:outputText>

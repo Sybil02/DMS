@@ -30,9 +30,8 @@
                     emptyText="#{bindings.DmsApprovalflowEntitysVO.viewable ? 'No data to display.' : 'Access Denied.'}"
                     fetchSize="#{bindings.DmsApprovalflowEntitysVO.rangeSize}"
                     rowBandingInterval="0" editingMode="clickToEdit"
-                    filterModel="#{bindings.DmsApprovalflowEntitysVOQuery.queryDescriptor}"
                     queryListener="#{bindings.DmsApprovalflowEntitysVOQuery.processQuery}"
-                    filterVisible="false" varStatus="vs"
+                     varStatus="vs"
                     selectedRowKeys="#{bindings.DmsApprovalflowEntitysVO.collectionModel.selectedRow}"
                     selectionListener="#{bindings.DmsApprovalflowEntitysVO.collectionModel.makeCurrent}"
                     rowSelection="single" id="t3" partialTriggers="::cb8 ::cb7">

@@ -45,5 +45,17 @@
         </AttrNames>
       </nodeDefinition>
     </tree>
+    <tree IterBinding="DmsApprovalStatusVOIterator" id="DmsApprovalStatusVO1">
+      <nodeDefinition DefName="team.epm.dms.view.DmsApprovalStatusVO"
+                      Name="DmsApprovalStatusVO10">
+        <AttrNames>
+          <Item Value="EntityId"/>
+          <Item Value="PersonId"/>
+          <Item Value="ApprovalStatus"/>
+          <Item Value="Seq"/>
+          <Item Value="FinishAt"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
   </bindings>
 </pageDefinition>
