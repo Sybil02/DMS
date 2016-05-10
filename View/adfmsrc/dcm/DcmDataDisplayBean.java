@@ -140,6 +140,9 @@ public class DcmDataDisplayBean extends TablePagination{
     private FilterableQueryDescriptor queryDescriptor=new DcmQueryDescriptor();
     private Map filters;
     private boolean useQuartz = false;
+    //和利时特殊模板
+    private boolean special = false;
+    
     //初始化
     public DcmDataDisplayBean() {
         this.curUser =(Person)ADFContext.getCurrent().getSessionScope().get("cur_user");
@@ -748,11 +751,19 @@ public class DcmDataDisplayBean extends TablePagination{
 
     private void initTemplate() {
         String curTemplateId = (String)ADFContext.getCurrent().getPageFlowScope().get("curTemplateId");
+        
         ViewObject templateView =DmsUtils.getDcmApplicationModule().getDcmTemplateView();
         templateView.executeQuery();
         Row[] rows=templateView.findByKey(new Key(new Object[]{curTemplateId,ADFContext.getCurrent().getLocale().toString()}), 1);
         if(rows.length>0){
             this.curTempalte=new TemplateEO((DcmTemplateViewRowImpl)rows[0]); 
+            
+            if("Y".equals(this.curTempalte.getIsSpecial())){
+                this.special = true;
+            }else{
+                this.special = false;
+            }
+            
             //只读模板
             if("Y".equals(this.curTempalte.getReadonly())){
                 this.isEditable=false;
@@ -812,6 +823,7 @@ public class DcmDataDisplayBean extends TablePagination{
     }
     //查询数据
     private void queryTemplateData() {
+        
         List<Map> data = new ArrayList<Map>();
         DBTransaction dbTransaction =(DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
         String countSql=this.getCountSql(this.getQuerySql());
@@ -841,6 +853,16 @@ public class DcmDataDisplayBean extends TablePagination{
                 Map row = new HashMap();
                 for (ColumnDef col : this.colsdef) {
                     Object obj=rs.getObject(col.getDbTableCol().toUpperCase());
+                    
+                    //列有数据，则显示
+                    if(obj != null && this.special){
+                        col.setDataNotNull("Y");    
+                    }
+                    //非特殊模板，设置为显示
+                    if(!this.special){
+                        col.setDataNotNull("Y");
+                    }
+                    
                     if(obj instanceof java.util.Date){
                         if(obj != null){
                             obj=format.format((java.util.Date)obj);
@@ -1108,6 +1130,12 @@ public class DcmDataDisplayBean extends TablePagination{
         this.curCombiantionRecord=this.getCurCombinationRecord();
         this.setCurCombinationRecordEditable();
         this.setCurPage(1);
+        
+        //切换组合时重置显示属性
+        for(ColumnDef col : this.colsdef){
+            col.setDataNotNull("N");    
+        }
+        
         this.queryTemplateData();
         AdfFacesContext adfFacesContext = AdfFacesContext.getCurrentInstance();
         adfFacesContext.addPartialTarget(this.panelaCollection);
@@ -1329,4 +1357,11 @@ public class DcmDataDisplayBean extends TablePagination{
         return useQuartz;
     }
 
+    public void setSpecial(boolean special) {
+        this.special = special;
+    }
+
+    public boolean isSpecial() {
+        return special;
+    }
 }
