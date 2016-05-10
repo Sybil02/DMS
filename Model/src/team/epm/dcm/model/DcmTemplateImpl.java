@@ -230,6 +230,16 @@ public class DcmTemplateImpl extends DmsEntityImpl {
                 obj.setCategoryId((String)value);
             }
         }
+        ,
+        IsSpecial {
+            public Object get(DcmTemplateImpl obj) {
+                return obj.getIsSpecial();
+            }
+
+            public void put(DcmTemplateImpl obj, Object value) {
+                obj.setIsSpecial((String)value);
+            }
+        }
         ;
         private static AttributesEnum[] vals = null;
         private static final int firstIndex = 0;
@@ -258,6 +268,7 @@ public class DcmTemplateImpl extends DmsEntityImpl {
         }
     }
 
+
     public static final int ID = AttributesEnum.Id.index();
     public static final int LOCALE = AttributesEnum.Locale.index();
     public static final int NAME = AttributesEnum.Name.index();
@@ -279,12 +290,14 @@ public class DcmTemplateImpl extends DmsEntityImpl {
     public static final int DATASTARTLINE = AttributesEnum.DataStartLine.index();
     public static final int COMBINATIONID = AttributesEnum.CombinationId.index();
     public static final int CATEGORYID = AttributesEnum.CategoryId.index();
+    public static final int ISSPECIAL = AttributesEnum.IsSpecial.index();
 
     /**
      * This is the default constructor (do not remove).
      */
     public DcmTemplateImpl() {
     }
+
 
     /**
      * @return the definition object for this instance class.
@@ -630,6 +643,22 @@ public class DcmTemplateImpl extends DmsEntityImpl {
      */
     public void setCategoryId(String value) {
         setAttributeInternal(CATEGORYID, value);
+    }
+
+    /**
+     * Gets the attribute value for IsSpecial, using the alias name IsSpecial.
+     * @return the IsSpecial
+     */
+    public String getIsSpecial() {
+        return (String)getAttributeInternal(ISSPECIAL);
+    }
+
+    /**
+     * Sets <code>value</code> as the attribute value for IsSpecial.
+     * @param value value to set the IsSpecial
+     */
+    public void setIsSpecial(String value) {
+        setAttributeInternal(ISSPECIAL, value);
     }
 
     /**

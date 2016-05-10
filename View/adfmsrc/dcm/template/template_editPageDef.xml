@@ -43,6 +43,8 @@
           <Item Value="DataStartLine"/>
           <Item Value="Seq"/>
           <Item Value="Description"/>
+          <Item Value="Id"/>
+          <Item Value="IsSpecial"/>
         </AttrNames>
       </nodeDefinition>
     </tree>

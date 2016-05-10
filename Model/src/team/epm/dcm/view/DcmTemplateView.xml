@@ -32,7 +32,8 @@
        DcmTemplate.TEMPLATE_FILE, 
        DcmTemplate.DATA_START_LINE, 
        DcmTemplate.COMBINATION_ID, 
-       DcmTemplate.CATEGORY_ID"
+       DcmTemplate.CATEGORY_ID, 
+       DcmTemplate.IS_SPECIAL"
   OrderBy="DcmTemplate.SEQ"
   RowClass="team.epm.dcm.view.DcmTemplateViewRowImpl"
   ComponentClass="team.epm.dcm.view.DcmTemplateViewImpl">
@@ -272,6 +273,24 @@
     </AttrArray>
     <DisplayCriteria
       Hint="hide"/>
+  </ListBinding>
+  <ListBinding
+    Name="LOV_IsSpecial"
+    ListVOName="LKP_YES_NO"
+    ListRangeSize="-1"
+    NullValueFlag="start"
+    NullValueId="${adfBundle['oracle.javatools.resourcebundle.SystemBundle']['NULL_VALUE_RESID']}"
+    MRUCount="0">
+    <AttrArray Name="AttrNames">
+      <Item Value="IsSpecial"/>
+    </AttrArray>
+    <AttrArray Name="ListAttrNames">
+      <Item Value="Code"/>
+    </AttrArray>
+    <AttrArray Name="ListDisplayAttrNames">
+      <Item Value="Meaning"/>
+    </AttrArray>
+    <DisplayCriteria/>
   </ListBinding>
   <EntityUsage
     Name="DcmTemplate"
@@ -555,6 +574,20 @@
       <SchemaBasedProperties>
         <LABEL
           ResId="dcm.category_id"/>
+        <CONTROLTYPE
+          Value="choice"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="IsSpecial"
+    PrecisionRule="true"
+    EntityAttrName="IsSpecial"
+    EntityUsage="DcmTemplate"
+    AliasName="IS_SPECIAL"
+    LOVName="LOV_IsSpecial">
+    <Properties>
+      <SchemaBasedProperties>
         <CONTROLTYPE
           Value="choice"/>
       </SchemaBasedProperties>

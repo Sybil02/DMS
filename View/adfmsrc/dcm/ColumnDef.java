@@ -38,6 +38,7 @@ public class ColumnDef {
     private Number seq;
     private String templateId;
     private String valueSetId;
+    private String dataNotNull;
 
     public ColumnDef(String columnLabel, String dbTableCol, String isPk,
                      String readonly, String dataType, String visible, String valueSetId) {
@@ -168,5 +169,13 @@ public class ColumnDef {
 
     public String getValueSetId() {
         return valueSetId;
+    }
+
+    public void setDataNotNull(String dataNotNull) {
+        this.dataNotNull = dataNotNull;
+    }
+
+    public String getDataNotNull() {
+        return dataNotNull;
     }
 }

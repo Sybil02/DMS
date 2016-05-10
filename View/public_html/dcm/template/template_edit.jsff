@@ -412,6 +412,18 @@
               <f:validator binding="#{row.bindings.Description.validator}"/>
             </af:inputText>
           </af:column>
+          <af:column sortProperty="#{bindings.DcmTemplateView.hints.IsSpecial.name}"
+                     sortable="false"
+                     headerText="#{bindings.DcmTemplateView.hints.IsSpecial.label}"
+                     id="c29">
+            <af:selectOneChoice value="#{row.bindings.IsSpecial.inputValue}"
+                                label="#{row.bindings.IsSpecial.label}"
+                                required="#{bindings.DcmTemplateView.hints.IsSpecial.mandatory}"
+                                shortDesc="#{bindings.DcmTemplateView.hints.IsSpecial.tooltip}"
+                                id="soc12">
+              <f:selectItems value="#{row.bindings.IsSpecial.items}" id="si12"/>
+            </af:selectOneChoice>
+          </af:column>
         </af:table>
       </af:panelCollection>
     </f:facet>

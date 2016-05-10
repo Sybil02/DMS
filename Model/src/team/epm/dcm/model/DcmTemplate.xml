@@ -201,6 +201,18 @@
          <Attr Name="_DisplaySize" Value="32"/>
       </DesignTime>
    </Attribute>
+   <Attribute
+      Name="IsSpecial"
+      Precision="10"
+      ColumnName="IS_SPECIAL"
+      SQLType="VARCHAR"
+      Type="java.lang.String"
+      ColumnType="VARCHAR2"
+      TableName="DCM_TEMPLATE">
+      <DesignTime>
+         <Attr Name="_DisplaySize" Value="10"/>
+      </DesignTime>
+   </Attribute>
    <Key Name="PkDcmTemplate" PrimaryKey="true">
       <DesignTime>
          <Attr Name="_DBObjectName" Value="PK_DCM_TEMPLATE"/>

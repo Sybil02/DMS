@@ -28,6 +28,7 @@ public class TemplateEO {
         this.combinationId=row.getCombinationId();
         this.categoryId=row.getCategoryId();
         this.name=row.getName();
+        this.isSpecial = row.getIsSpecial();
     }
     private String Id;
     private String locale;
@@ -50,6 +51,7 @@ public class TemplateEO {
     private Number dataStartLine;
     private String combinationId;
     private String categoryId;
+    private String isSpecial;
 
     public void setId(String Id) {
         this.Id = Id;
@@ -217,5 +219,13 @@ public class TemplateEO {
 
     public String getName() {
         return name;
+    }
+
+    public void setIsSpecial(String isSpecial) {
+        this.isSpecial = isSpecial;
+    }
+
+    public String getIsSpecial() {
+        return isSpecial;
     }
 }
