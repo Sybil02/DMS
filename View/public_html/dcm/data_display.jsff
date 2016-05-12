@@ -53,7 +53,7 @@
               <af:commandButton text="#{viewBundle['dcm.action.import']}"
                                 id="cb10"
                                 partialTriggers="::pgl1"
-                                disabled="#{viewScope.DcmDataDisplayBean.isEditable eq false}">
+                                disabled="#{viewScope.DcmDataDisplayBean.isEditable eq false or viewScope.DcmDataDisplayBean.special}">
                 <af:showPopupBehavior popupId="::p2" alignId=""/>
               </af:commandButton>
               <af:commandButton text="#{viewBundle['dcm.import_error']}"
@@ -299,6 +299,7 @@
                              id="gc9">
                   <af:selectBooleanRadio text="#{viewBundle['dcm.export.03format']}"
                                          id="sbr3" group="excelFormat1"
+                                         rendered="#{!viewScope.DcmDataDisplayBean.special}"
                                          simple="true"/>
                   <af:selectBooleanRadio text="#{viewBundle['dcm.export.07format']}"
                                          id="sbr4" group="excelFormat1"

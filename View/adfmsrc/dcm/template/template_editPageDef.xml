@@ -7,7 +7,7 @@
     <variableIterator id="variables"/>
     <iterator Binds="DcmTemplateView" RangeSize="25"
               DataControl="DcmModuleDataControl" id="DcmTemplateViewIterator"/>
-    <iterator Binds="DcmTemplateColumnView" RangeSize="25"
+    <iterator Binds="DcmTemplateColumnView" RangeSize="-1"
               DataControl="DcmModuleDataControl"
               id="DcmTemplateColumnViewIterator"/>
     <methodIterator Binds="getCombinationRecordView.result"

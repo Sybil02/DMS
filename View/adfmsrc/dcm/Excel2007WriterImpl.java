@@ -26,10 +26,12 @@ public class Excel2007WriterImpl extends AbstractExcel2007Writer {
     private String sql;
     private int dataStartLine;
     private List<ColumnDef> colsdef;
-    public Excel2007WriterImpl(String sql,int dataStartLine,List<ColumnDef> colsdef) {
+    private boolean special;
+    public Excel2007WriterImpl(String sql,int dataStartLine,List<ColumnDef> colsdef,boolean special) {
         this.sql=sql;
         this.dataStartLine=dataStartLine;
         this.colsdef=colsdef;
+        this.special = special;
     }
 
     public void generate() {
@@ -43,8 +45,16 @@ public class Excel2007WriterImpl extends AbstractExcel2007Writer {
             //电子表格开始
             beginSheet();
             insertRow(dataStartLine - 2);
-            for (int i = 0; i < this.colsdef.size(); i++) {
-                createCell(i, this.colsdef.get(i).getColumnLabel());
+            for (int i = 0,j = 0; i < this.colsdef.size(); i++) {
+                if(special){
+                    if("Y".equals(this.colsdef.get(i).getDataNotNull())){
+                        createCell(j, this.colsdef.get(i).getColumnLabel());
+                        j++;
+                    }
+                }else{
+                    createCell(i, this.colsdef.get(i).getColumnLabel());
+                }
+                //createCell(i, this.colsdef.get(i).getColumnLabel());
             }
             endRow();
             int n =dataStartLine  - 1;
@@ -56,6 +66,13 @@ public class Excel2007WriterImpl extends AbstractExcel2007Writer {
                 int colInx = 0;
                 insertRow(n);
                 for (ColumnDef col : this.colsdef) {
+                    
+                    if(special){
+                        if(!"Y".equals(col.getDataNotNull())){
+                            continue;
+                        }    
+                    }
+                    
                     Object obj=rs.getObject(col.getDbTableCol());
                     if(obj instanceof java.util.Date){
                         SimpleDateFormat format=new SimpleDateFormat("yyyy/MM/dd");//"yyyy-MM-dd hh:mm:ss"

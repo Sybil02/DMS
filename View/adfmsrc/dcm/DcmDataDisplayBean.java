@@ -642,9 +642,9 @@ public class DcmDataDisplayBean extends TablePagination{
                                                outputStream);
                 writer.writoToFile();
             } else {
-                Excel2007WriterImpl writer=new Excel2007WriterImpl(this.getQuerySql(),
+                Excel2007WriterImpl writer=new Excel2007WriterImpl(this.getExportSql(),
                                                                        (int)this.curTempalte.getDataStartLine().getValue(),
-                                                                       this.colsdef);
+                                                                       this.colsdef,this.special);
                 writer.process(outputStream, this.curTempalte.getName());  
                 outputStream.flush();
             }
@@ -849,7 +849,9 @@ public class DcmDataDisplayBean extends TablePagination{
             dfm.setMaximumFractionDigits(4);
             dfm.setGroupingUsed(false);
             SimpleDateFormat format=new SimpleDateFormat("yyyy/MM/dd");//"yyyy-MM-dd hh:mm:ss"
+            boolean flag = true;
             while (rs.next()) {
+                flag = false;
                 Map row = new HashMap();
                 for (ColumnDef col : this.colsdef) {
                     Object obj=rs.getObject(col.getDbTableCol().toUpperCase());
@@ -879,6 +881,22 @@ public class DcmDataDisplayBean extends TablePagination{
                 row.put("ROW_ID", rs.getString("ROW_ID"));
                 data.add(row);
             }
+            
+            if(flag){
+                //无数据情况下
+                for (ColumnDef col : this.colsdef) {
+                    //非特殊模板，设置为显示
+                    if(!this.special){
+                        col.setDataNotNull("Y");
+                    }
+                    //特殊模板，设置为不显示
+                    if(this.special){
+                        col.setDataNotNull("N");
+                    }
+                }
+
+            }
+            
             rs.close();
             stat.close();
         } catch (SQLException e) {
@@ -901,6 +919,73 @@ public class DcmDataDisplayBean extends TablePagination{
         }
         for (ColumnDef col : this.colsdef) {
             sql_select.append(",\"").append(col.getDbTableCol()).append("\"");
+        }
+        if (this.curCombiantion != null) {
+            sql_where.append(" WHERE COM_RECORD_ID='").append(this.curCombiantionRecord).append("'");
+        } else {
+            sql_where.append(" WHERE COM_RECORD_ID IS NULL");
+        }
+        if(this.filters!=null){
+            for(Object key:this.filters.keySet()){
+                if(!ObjectUtils.toString(this.filters.get(key)).trim().equals("")){
+                    String fv=ObjectUtils.toString(this.filters.get(key));
+                    if("NULL".equals(fv.toUpperCase())){
+                        sql_where.append(" AND \"").append(key).append("\" IS NULL");
+                    }else{
+                        sql_where.append(" AND UPPER(\"").append(key).append("\") LIKE UPPER('");
+                        if(fv.startsWith("%")){
+                            sql_where.append("%");
+                            fv=fv.substring(1);
+                        }
+                        if(fv.endsWith("%")){
+                            fv=fv.substring(0,fv.lastIndexOf("%"));
+                            sql_where.append(fv);
+                            sql_where.append("%");
+                        }else{
+                            sql_where.append(fv);
+                        } 
+                        sql_where.append("')");
+                    }
+                }
+            }
+        }
+        if(this.sortCriterions==null){
+            sql_where.append(" ORDER BY IDX");
+        }else{
+            sql_where.append(" ORDER BY ");
+            for(int i=0;i<this.sortCriterions.size();i++){
+                SortCriterion s=this.sortCriterions.get(i);
+                if(i>0){
+                    sql_where.append(",");
+                }
+                sql_where.append("\"").append(s.getProperty()).append("\"").append(s.isAscending() ? " ASC":" DESC");
+            }
+        }
+        return sql_select.toString() + sql_from.toString() +
+            sql_where.toString();
+    }
+    
+    //获取数据查询语句
+    private String getExportSql() {
+        StringBuffer sql_select = new StringBuffer();
+        StringBuffer sql_from = new StringBuffer();
+        StringBuffer sql_where = new StringBuffer();
+        if (null != this.curTempalte.getDbView()) {
+            sql_select.append("SELECT ROW_ID");
+            sql_from.append(" ").append("FROM ").append(this.curTempalte.getDbView());
+        } else {
+            sql_select.append("SELECT ROWID ROW_ID");
+            sql_from.append(" ").append("FROM ").append(this.curTempalte.getDbTable());
+        }
+        for (ColumnDef col : this.colsdef) {
+            if(this.special){
+                if("Y".equals(col.getDataNotNull())){
+                    sql_select.append(",\"").append(col.getDbTableCol()).append("\"");
+                }
+            }else{
+                sql_select.append(",\"").append(col.getDbTableCol()).append("\"");
+            }
+            //sql_select.append(",\"").append(col.getDbTableCol()).append("\"");
         }
         if (this.curCombiantion != null) {
             sql_where.append(" WHERE COM_RECORD_ID='").append(this.curCombiantionRecord).append("'");
