@@ -10,7 +10,7 @@
               id="DcmCombinationViewIterator"/>
     <iterator Binds="DcmComVsView" RangeSize="25"
               DataControl="DcmModuleDataControl" id="DcmComVsViewIterator"/>
-    <iterator Binds="DmsValueSetView" RangeSize="25"
+    <iterator Binds="DmsValueSetView" RangeSize="-1"
               DataControl="DmsModuleDataControl" id="DmsValueSetViewIterator"/>
   </executables>
   <bindings>

@@ -3,6 +3,7 @@ package team.epm.dms.model;
 import oracle.jbo.AttributeList;
 import oracle.jbo.Key;
 import oracle.jbo.domain.Date;
+import oracle.jbo.domain.Number;
 import oracle.jbo.server.AttributeDefImpl;
 import oracle.jbo.server.EntityDefImpl;
 import oracle.jbo.server.EntityImpl;
@@ -112,6 +113,16 @@ public class DmsValueSetImpl extends DmsEntityImpl {
                 obj.setCreatedBy((String)value);
             }
         }
+        ,
+        Idx {
+            public Object get(DmsValueSetImpl obj) {
+                return obj.getIdx();
+            }
+
+            public void put(DmsValueSetImpl obj, Object value) {
+                obj.setIdx((Number)value);
+            }
+        }
         ;
         private static AttributesEnum[] vals = null;
         private static final int firstIndex = 0;
@@ -150,6 +161,7 @@ public class DmsValueSetImpl extends DmsEntityImpl {
     public static final int UPDATEDAT = AttributesEnum.UpdatedAt.index();
     public static final int UPDATEDBY = AttributesEnum.UpdatedBy.index();
     public static final int CREATEDBY = AttributesEnum.CreatedBy.index();
+    public static final int IDX = AttributesEnum.Idx.index();
 
     /**
      * This is the default constructor (do not remove).
@@ -294,6 +306,22 @@ public class DmsValueSetImpl extends DmsEntityImpl {
      */
     public void setCreatedBy(String value) {
         setAttributeInternal(CREATEDBY, value);
+    }
+
+    /**
+     * Gets the attribute value for Idx, using the alias name Idx.
+     * @return the Idx
+     */
+    public Number getIdx() {
+        return (Number)getAttributeInternal(IDX);
+    }
+
+    /**
+     * Sets <code>value</code> as the attribute value for Idx.
+     * @param value value to set the Idx
+     */
+    public void setIdx(Number value) {
+        setAttributeInternal(IDX, value);
     }
 
     /**

@@ -36,7 +36,7 @@
                           var="row" rows="#{bindings.DmsValueSetView.rangeSize}"
                           emptyText="#{bindings.DmsValueSetView.viewable ? 'No data to display.' : 'Access Denied.'}"
                           fetchSize="#{bindings.DmsValueSetView.rangeSize}"
-                          rowBandingInterval="0" id="t5"
+                          rowBandingInterval="0" id="t5" 
                           rowSelection="multiple"
                           selectedRowKeys="#{backingBeanScope.CombinationBean.selectedRows}"
                           binding="#{backingBeanScope.CombinationBean.valueSetTable}">

@@ -198,6 +198,17 @@
       </SchemaBasedProperties>
     </Properties>
   </Attribute>
+  <Attribute
+    Name="Idx"
+    ColumnName="IDX"
+    SQLType="NUMERIC"
+    Type="oracle.jbo.domain.Number"
+    ColumnType="NUMBER"
+    TableName="DMS_VALUE_SET">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="39"/>
+    </DesignTime>
+  </Attribute>
   <Key
     Name="DmsValueSetCodeCheck">
     <DesignTime>

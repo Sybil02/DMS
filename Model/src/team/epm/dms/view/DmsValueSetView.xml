@@ -14,7 +14,8 @@
        DmsValueSet.CREATED_AT, 
        DmsValueSet.UPDATED_AT, 
        DmsValueSet.UPDATED_BY, 
-       DmsValueSet.CREATED_BY"
+       DmsValueSet.CREATED_BY, 
+       DmsValueSet.IDX"
   FromList="DMS_VALUE_SET DmsValueSet"
   BindingStyle="OracleName"
   CustomQuery="false"
@@ -22,7 +23,8 @@
   UseGlueCode="false"
   Where="DmsValueSet.LOCALE=:locale"
   ComponentClass="team.epm.dms.view.DmsValueSetViewImpl"
-  RowClass="team.epm.dms.view.DmsValueSetViewRowImpl">
+  RowClass="team.epm.dms.view.DmsValueSetViewRowImpl"
+  OrderBy="DmsValueSet.IDX">
   <DesignTime>
     <Attr Name="_codeGenFlag2" Value="Access|Coll|VarAccess"/>
     <Attr Name="_isCodegen" Value="true"/>
@@ -205,6 +207,12 @@
     SQLType="VARCHAR">
     <TransientExpression><![CDATA[Id]]></TransientExpression>
   </ViewAttribute>
+  <ViewAttribute
+    Name="Idx"
+    PrecisionRule="true"
+    EntityAttrName="Idx"
+    EntityUsage="DmsValueSet"
+    AliasName="IDX"/>
   <ViewCriteria
     Name="DmsValueSetViewCriteria"
     ViewObjectName="team.epm.dms.view.DmsValueSetView"
