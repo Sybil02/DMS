@@ -33,7 +33,8 @@
        DcmTemplate.DATA_START_LINE, 
        DcmTemplate.COMBINATION_ID, 
        DcmTemplate.CATEGORY_ID, 
-       DcmTemplate.IS_SPECIAL"
+       DcmTemplate.IS_SPECIAL, 
+       DcmTemplate.IS_CLOSE_RECORD"
   OrderBy="DcmTemplate.SEQ"
   RowClass="team.epm.dcm.view.DcmTemplateViewRowImpl"
   ComponentClass="team.epm.dcm.view.DcmTemplateViewImpl">
@@ -283,6 +284,24 @@
     MRUCount="0">
     <AttrArray Name="AttrNames">
       <Item Value="IsSpecial"/>
+    </AttrArray>
+    <AttrArray Name="ListAttrNames">
+      <Item Value="Code"/>
+    </AttrArray>
+    <AttrArray Name="ListDisplayAttrNames">
+      <Item Value="Meaning"/>
+    </AttrArray>
+    <DisplayCriteria/>
+  </ListBinding>
+  <ListBinding
+    Name="LOV_IsCloseRecord"
+    ListVOName="LKP_YES_NO"
+    ListRangeSize="-1"
+    NullValueFlag="start"
+    NullValueId="${adfBundle['oracle.javatools.resourcebundle.SystemBundle']['NULL_VALUE_RESID']}"
+    MRUCount="0">
+    <AttrArray Name="AttrNames">
+      <Item Value="IsCloseRecord"/>
     </AttrArray>
     <AttrArray Name="ListAttrNames">
       <Item Value="Code"/>
@@ -588,6 +607,22 @@
     LOVName="LOV_IsSpecial">
     <Properties>
       <SchemaBasedProperties>
+        <CONTROLTYPE
+          Value="choice"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="IsCloseRecord"
+    PrecisionRule="true"
+    EntityAttrName="IsCloseRecord"
+    EntityUsage="DcmTemplate"
+    AliasName="IS_CLOSE_RECORD"
+    LOVName="LOV_IsCloseRecord">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="_U51BB_U7ED3_U6309_U94AE"/>
         <CONTROLTYPE
           Value="choice"/>
       </SchemaBasedProperties>

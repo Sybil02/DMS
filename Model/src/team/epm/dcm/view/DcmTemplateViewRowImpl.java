@@ -239,6 +239,16 @@ public class DcmTemplateViewRowImpl extends ViewRowImpl {
             }
         }
         ,
+        IsCloseRecord {
+            public Object get(DcmTemplateViewRowImpl obj) {
+                return obj.getIsCloseRecord();
+            }
+
+            public void put(DcmTemplateViewRowImpl obj, Object value) {
+                obj.setIsCloseRecord((String)value);
+            }
+        }
+        ,
         DcmTemplateColumnView {
             public Object get(DcmTemplateViewRowImpl obj) {
                 return obj.getDcmTemplateColumnView();
@@ -379,6 +389,7 @@ public class DcmTemplateViewRowImpl extends ViewRowImpl {
     public static final int COMBINATIONID = AttributesEnum.CombinationId.index();
     public static final int CATEGORYID = AttributesEnum.CategoryId.index();
     public static final int ISSPECIAL = AttributesEnum.IsSpecial.index();
+    public static final int ISCLOSERECORD = AttributesEnum.IsCloseRecord.index();
     public static final int DCMTEMPLATECOLUMNVIEW = AttributesEnum.DcmTemplateColumnView.index();
     public static final int DCMTEMPLATEVALIDATIONVIEW = AttributesEnum.DcmTemplateValidationView.index();
     public static final int LKP_YES_NO = AttributesEnum.LKP_YES_NO.index();
@@ -753,6 +764,22 @@ public class DcmTemplateViewRowImpl extends ViewRowImpl {
      */
     public void setIsSpecial(String value) {
         setAttributeInternal(ISSPECIAL, value);
+    }
+
+    /**
+     * Gets the attribute value for IS_CLOSE_RECORD using the alias name IsCloseRecord.
+     * @return the IS_CLOSE_RECORD
+     */
+    public String getIsCloseRecord() {
+        return (String) getAttributeInternal(ISCLOSERECORD);
+    }
+
+    /**
+     * Sets <code>value</code> as attribute value for IS_CLOSE_RECORD using the alias name IsCloseRecord.
+     * @param value value to set the IS_CLOSE_RECORD
+     */
+    public void setIsCloseRecord(String value) {
+        setAttributeInternal(ISCLOSERECORD, value);
     }
 
     /**

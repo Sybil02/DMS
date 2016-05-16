@@ -45,6 +45,7 @@
           <Item Value="Description"/>
           <Item Value="Id"/>
           <Item Value="IsSpecial"/>
+          <Item Value="IsCloseRecord"/>
         </AttrNames>
       </nodeDefinition>
     </tree>

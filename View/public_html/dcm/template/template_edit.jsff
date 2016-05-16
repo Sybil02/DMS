@@ -256,6 +256,17 @@
               <f:selectItems value="#{row.bindings.Readonly.items}" id="si4"/>
             </af:selectOneChoice>
           </af:column>
+          <af:column headerText="#{bindings.DcmTemplateView.hints.IsCloseRecord.label}"
+                     id="c30">
+            <af:selectOneChoice value="#{row.bindings.IsCloseRecord.inputValue}"
+                                label="#{row.bindings.IsCloseRecord.label}"
+                                required="#{bindings.DcmTemplateView.hints.IsCloseRecord.mandatory}"
+                                shortDesc="#{bindings.DcmTemplateView.hints.IsCloseRecord.tooltip}"
+                                id="soc13">
+              <f:selectItems value="#{row.bindings.IsCloseRecord.items}"
+                             id="si13"/>
+            </af:selectOneChoice>
+          </af:column>
           <af:column sortProperty="#{bindings.DcmTemplateView.hints.DbTable.name}"
                      sortable="false"
                      headerText="#{bindings.DcmTemplateView.hints.DbTable.label}"

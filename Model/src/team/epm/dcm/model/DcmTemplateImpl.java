@@ -240,6 +240,16 @@ public class DcmTemplateImpl extends DmsEntityImpl {
                 obj.setIsSpecial((String)value);
             }
         }
+        ,
+        IsCloseRecord {
+            public Object get(DcmTemplateImpl obj) {
+                return obj.getIsCloseRecord();
+            }
+
+            public void put(DcmTemplateImpl obj, Object value) {
+                obj.setIsCloseRecord((String)value);
+            }
+        }
         ;
         private static AttributesEnum[] vals = null;
         private static final int firstIndex = 0;
@@ -291,6 +301,7 @@ public class DcmTemplateImpl extends DmsEntityImpl {
     public static final int COMBINATIONID = AttributesEnum.CombinationId.index();
     public static final int CATEGORYID = AttributesEnum.CategoryId.index();
     public static final int ISSPECIAL = AttributesEnum.IsSpecial.index();
+    public static final int ISCLOSERECORD = AttributesEnum.IsCloseRecord.index();
 
     /**
      * This is the default constructor (do not remove).
@@ -659,6 +670,22 @@ public class DcmTemplateImpl extends DmsEntityImpl {
      */
     public void setIsSpecial(String value) {
         setAttributeInternal(ISSPECIAL, value);
+    }
+
+    /**
+     * Gets the attribute value for IsCloseRecord, using the alias name IsCloseRecord.
+     * @return the IsCloseRecord
+     */
+    public String getIsCloseRecord() {
+        return (String)getAttributeInternal(ISCLOSERECORD);
+    }
+
+    /**
+     * Sets <code>value</code> as the attribute value for IsCloseRecord.
+     * @param value value to set the IsCloseRecord
+     */
+    public void setIsCloseRecord(String value) {
+        setAttributeInternal(ISCLOSERECORD, value);
     }
 
     /**

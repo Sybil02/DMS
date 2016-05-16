@@ -119,6 +119,8 @@ public class DcmDataDisplayBean extends TablePagination{
     private Map valueSet=new HashMap();
     //是否可编辑
     private boolean isEditable=true;
+    //是否冻结
+    private boolean isClose=false;
     //当前组合是否可编辑
     private boolean curCombinationRecordEditable=true;
     //
@@ -1449,4 +1451,38 @@ public class DcmDataDisplayBean extends TablePagination{
     public boolean isSpecial() {
         return special;
     }
+
+    public void setIsClose(boolean isClose) {
+        this.isClose = isClose;
+    }
+
+    public boolean isIsClose() {
+        boolean flag=false;
+        
+        if("Y".equals(this.curTempalte.getIsCloseRecord())){
+            flag=true;
+        }
+        return flag;
+    }
+
+    public void closeCombination(ActionEvent actionEvent) {
+        StringBuffer sql = new StringBuffer();
+        sql.append("UPDATE DCM_TEMPLATE_COMBINATION SET STATUS=\'CLOSE\',UPDATED_AT=SYSDATE WHERE ")
+            .append("TEMPLATE_ID= \'").append(this.curTempalte.getId()).append("' ")
+            .append("AND COM_RECORD_ID=\'").append(this.curCombiantionRecord).append("' ");
+        try {
+            DBTransaction trans =(DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
+            PreparedStatement stat =trans.createPreparedStatement(sql.toString(), 0);
+            stat.executeUpdate();
+            trans.commit();
+            stat.close();
+        } catch (SQLException e) {
+            this._logger.severe(e);
+        }
+        this.curCombinationRecordEditable = false;
+        //刷新数据
+        this.queryTemplateData();
+    }
+
+ 
 }

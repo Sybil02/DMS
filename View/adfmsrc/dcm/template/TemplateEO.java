@@ -29,6 +29,7 @@ public class TemplateEO {
         this.categoryId=row.getCategoryId();
         this.name=row.getName();
         this.isSpecial = row.getIsSpecial();
+        this.isCloseRecord=row.getIsCloseRecord();
     }
     private String Id;
     private String locale;
@@ -52,6 +53,7 @@ public class TemplateEO {
     private String combinationId;
     private String categoryId;
     private String isSpecial;
+    private String isCloseRecord;
 
     public void setId(String Id) {
         this.Id = Id;
@@ -227,5 +229,13 @@ public class TemplateEO {
 
     public String getIsSpecial() {
         return isSpecial;
+    }
+
+    public void setIsCloseRecord(String isCloseRecord) {
+        this.isCloseRecord = isCloseRecord;
+    }
+
+    public String getIsCloseRecord() {
+        return isCloseRecord;
     }
 }
