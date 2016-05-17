@@ -125,4 +125,9 @@
     <managed-bean-class id="__78">infa.InfaIndexBean</managed-bean-class>
     <managed-bean-scope id="__80">view</managed-bean-scope>
   </managed-bean>
+  <managed-bean id="__71">
+    <managed-bean-name id="__69">Launcher</managed-bean-name>
+    <managed-bean-class id="__70">dgpt.Launcher</managed-bean-class>
+    <managed-bean-scope id="__68">backingBean</managed-bean-scope>
+  </managed-bean>
 </adfc-config>

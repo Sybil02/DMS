@@ -16,7 +16,7 @@
             <Contents>127.0.0.1</Contents>
          </StringRefAddr>
          <StringRefAddr addrType="user">
-            <Contents>hls</Contents>
+            <Contents>hdms</Contents>
          </StringRefAddr>
          <SecureRefAddr addrType="password"/>
          <StringRefAddr addrType="DeployPassword">

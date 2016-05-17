@@ -2,21 +2,37 @@
 <jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.1"
           xmlns:f="http://java.sun.com/jsf/core"
           xmlns:h="http://java.sun.com/jsf/html"
-          xmlns:af="http://xmlns.oracle.com/adf/faces/rich">
+          xmlns:af="http://xmlns.oracle.com/adf/faces/rich"
+          xmlns:c="http://java.sun.com/jsp/jstl/core">
+  <c:set var="viewBundle" value="#{adfBundle['dms_v']}"/>
   <jsp:directive.page contentType="text/html;charset=UTF-8"/>
-  <f:view>
+  <f:view locale="#{sessionScope.cur_user.locale}" beforePhase="#{MainPageMBean.initMenuBar}">
     <af:document id="d1">
       <af:form id="f1">
         <af:pageTemplate viewId="/dms/dynamicShell/dynamicTabShell.jspx"
                          value="#{bindings.pageTemplateBinding}" id="pt1">
-          <f:facet name="navigation"/>
+          <f:facet name="navigation">
+            <af:group id="g1">
+              <af:panelList id="pl1">
+                <af:commandLink text="预计新签项目预算编制表-北和" id="cl1"
+                                actionListener="#{backingBeanScope.Launcher.launcherBh}"/>
+                <af:commandLink text="预计新签项目预算编制表-杭和" id="cl2"/>
+              </af:panelList>
+            </af:group>
+          </f:facet>
           <f:facet name="globalLinks"/>
           <f:facet name="status"/>
           <f:facet name="globalToolbar"/>
           <f:facet name="globalSearch"/>
-          <f:facet name="globalTabs"/>
+          <f:facet name="globalTabs">
+                <af:menuBar id="mb1" binding="#{MainPageMBean.menuBar}">
+                </af:menuBar>
+          </f:facet>
           <f:facet name="welcome"/>
           <f:facet name="innerToolbar"/>
+          <f:attribute name="brandingTitle" value="#{viewBundle['dms.title']}"/>
+          <f:attribute name="globalAreaSplitterPosition" value="0"/>
+          <f:attribute name="navSplitterPosition" value="250"/>
         </af:pageTemplate>
       </af:form>
     </af:document>

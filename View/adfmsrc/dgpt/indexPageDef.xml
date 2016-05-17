@@ -6,6 +6,8 @@
     <variableIterator id="variables"/>
     <page path="dms.dynamicShell.dynamicTabShellPageDef"
           id="pageTemplateBinding" Refresh="ifNeeded"/>
+    <iterator id="DmsMenuTreeViewIterator" Binds="DmsMenuTreeView"
+              DataControl="DmsModuleDataControl" RangeSize="25"/>
   </executables>
   <bindings/>
 </pageDefinition>
