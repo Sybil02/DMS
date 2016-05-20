@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pageDefinition xmlns="http://xmlns.oracle.com/adfm/uimodel"
+                version="11.1.1.64.93" id="xqys_bhPageDef" Package="dgpt">
+  <parameters/>
+  <executables>
+    <variableIterator id="variables"/>
+    <iterator Binds="BhXqysVO" RangeSize="25" DataControl="DmsModuleDataControl"
+              id="BhXqysVOIterator"/>
+    <searchRegion Binds="BhXqysVOIterator" Criteria=""
+                  Customizer="oracle.jbo.uicli.binding.JUSearchBindingCustomizer"
+                  id="BhXqysVOQuery"/>
+  </executables>
+  <bindings>
+    <tree IterBinding="BhXqysVOIterator" id="BhXqysVO">
+      <nodeDefinition DefName="team.epm.dms.view.BhXqysVO" Name="BhXqysVO0">
+        <AttrNames>
+          <Item Value="AccType"/>
+          <Item Value="Unit"/>
+          <Item Value="Quntity"/>
+          <Item Value="UnitCost"/>
+          <Item Value="Amount"/>
+          <Item Value="AmountAdj"/>
+          <Item Value="AftAmountAdj"/>
+          <Item Value="CurApr"/>
+          <Item Value="CurAug"/>
+          <Item Value="CurDec"/>
+          <Item Value="CurFeb"/>
+          <Item Value="CurJan"/>
+          <Item Value="CurJul"/>
+          <Item Value="CurJun"/>
+          <Item Value="CurMar"/>
+          <Item Value="CurMay"/>
+          <Item Value="CurNov"/>
+          <Item Value="CurOct"/>
+          <Item Value="CurSep"/>
+          <Item Value="LastNov"/>
+          <Item Value="NextApr"/>
+          <Item Value="NextFeb"/>
+          <Item Value="NextJan"/>
+          <Item Value="NextJun"/>
+          <Item Value="NextMar"/>
+          <Item Value="NextMay"/>
+          <Item Value="AfterJuly"/>
+          <Item Value="RowID"/>
+          <Item Value="DetailAcc"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <action IterBinding="BhXqysVOIterator" id="CreateInsert"
+            RequiresUpdateModel="true" Action="createInsertRow"/>
+    <action IterBinding="BhXqysVOIterator" id="Delete"
+            RequiresUpdateModel="false" Action="removeCurrentRow"/>
+  </bindings>
+</pageDefinition>

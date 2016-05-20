@@ -4,7 +4,7 @@
       <Factory className="oracle.jdeveloper.db.adapter.DatabaseProviderFactory"/>
       <RefAddresses>
          <StringRefAddr addrType="sid">
-            <Contents>XE</Contents>
+            <Contents>HYDEV</Contents>
          </StringRefAddr>
          <StringRefAddr addrType="subtype">
             <Contents>oraJDBC</Contents>
@@ -13,10 +13,10 @@
             <Contents>1521</Contents>
          </StringRefAddr>
          <StringRefAddr addrType="hostname">
-            <Contents>127.0.0.1</Contents>
+            <Contents>172.20.101.212</Contents>
          </StringRefAddr>
          <StringRefAddr addrType="user">
-            <Contents>hdms</Contents>
+            <Contents>dms</Contents>
          </StringRefAddr>
          <SecureRefAddr addrType="password"/>
          <StringRefAddr addrType="DeployPassword">

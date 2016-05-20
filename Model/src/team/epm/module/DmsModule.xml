@@ -92,6 +92,9 @@
   <ViewUsage
     Name="DmsJobDetailsVO"
     ViewObjectName="team.epm.dms.view.DmsJobDetailsVO"/>
+  <ViewUsage
+    Name="BhXqysVO"
+    ViewObjectName="team.epm.dms.view.BhXqysVO"/>
   <ViewLinkUsage
     Name="DmsGroupedRoleLnk"
     ViewLinkObjectName="team.epm.dms.DmsGroupedRoleLnk"
