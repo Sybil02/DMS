@@ -7,7 +7,6 @@ import common.JSFUtils;
 import dms.login.Person;
 
 import java.sql.CallableStatement;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -30,15 +29,13 @@ import oracle.jbo.server.ViewRowImpl;
 
 import org.apache.commons.lang.ObjectUtils;
 
-import team.epm.module.DmsModuleImpl;
-
-public class BhBean {
+public class HhBean {
     private Person curUser;
-    public BhBean() {
+    public HhBean() {
         super();
         this.curUser = (Person)(ADFContext.getCurrent().getSessionScope().get("cur_user"));
         this.initList();
-        ViewObject vo = DmsUtils.getDmsApplicationModule().getBhXqysVO();
+        ViewObject vo = DmsUtils.getDmsApplicationModule().getHhXqysVO();
         vo.setWhereClause("1=2");
         vo.executeQuery();
     }
@@ -46,14 +43,12 @@ public class BhBean {
     private List<SelectItem> yearList;
     private String entity;
     private List<SelectItem> entityList;
-    private String proCode;
-    private List<SelectItem> proCodeList;
+    private String pLine;
+    private List<SelectItem> pLineList;
     private String version;
     private List<SelectItem> versionList;
     private String hLine;
     private List<SelectItem> hlList;
-    private String yLine;
-    private List<SelectItem> ylList;
     private String proType;
     private List<SelectItem> proTypeList;
     private String accType;
@@ -62,11 +57,10 @@ public class BhBean {
     private void initList(){
         this.yearList = queryValues("HLS_YEAR");
         this.entityList = queryValues("HLS_ENTITY_C");
-        this.proCodeList = queryProCode("BH_USER_PRO_V");
+        this.pLineList = queryValues("HLS_PRODUCT_LINE");
         this.versionList = queryValues("HLS_MODEL");
-        this.proTypeList = queryValues("HLS_BEIHE_PROJECT_C2");
+        this.proTypeList = queryValues("HLS_PROJECT_TYPE_C");
         this.hlList = queryValues("HLS_INDUSTRY_LINE");
-        this.ylList = queryValues("HLS_STAFFING_LOB");
         this.accTypeList = queryValues("HLS_PROJECT_ACCOUNT_C");
     }
     
@@ -113,18 +107,17 @@ public class BhBean {
     }
     
     public void saveData(ActionEvent actionEvent) {
-        ViewObject vo = DmsUtils.getDmsApplicationModule().getBhXqysVO();
+        ViewObject vo = DmsUtils.getDmsApplicationModule().getHhXqysVO();
         Row [] rows = vo.getAllRowsInRange();
         for(Row row : rows){
             ViewRowImpl vRow = (ViewRowImpl)row;
             if(vRow.getEntities()[0].getEntityState() == 0){
                 vRow.setAttribute("HlsYear", year);
                 vRow.setAttribute("EntityName", entity);
-                vRow.setAttribute("ProjectCode", proCode);
+                vRow.setAttribute("ProductLine", pLine);
                 vRow.setAttribute("Version", version);
-                vRow.setAttribute("IndustryLine", hLine);
-                vRow.setAttribute("BusinessLine", yLine);
                 vRow.setAttribute("ProjectType", proType);
+                vRow.setAttribute("IndustryLine", hLine);
             }
         }
         //数据到临时表
@@ -142,15 +135,14 @@ public class BhBean {
     
     public void afterPro(){
         DBTransaction trans = (DBTransaction)DmsUtils.getDcmApplicationModule().getDBTransaction();
-        CallableStatement cs = trans.createCallableStatement("{CALl DMS_SYSTEM.BH_AFTER_PRO(?,?,?,?,?,?,?)}", 0);
+        CallableStatement cs = trans.createCallableStatement("{CALl DMS_SYSTEM.HH_AFTER_PRO(?,?,?,?,?,?)}", 0);
         try {
             cs.setString(1, year);
             cs.setString(2, entity);
-            cs.setString(3, proCode);
+            cs.setString(3, pLine);
             cs.setString(4, version);
-            cs.setString(5, hLine);
-            cs.setString(6, yLine);
-            cs.setString(7, proType);
+            cs.setString(5, proType);
+            cs.setString(6, hLine);
             cs.execute();
             trans.commit();
             cs.close();
@@ -162,7 +154,7 @@ public class BhBean {
     public boolean validation(){
         boolean flag = true;
         DBTransaction trans = (DBTransaction)DmsUtils.getDcmApplicationModule().getDBTransaction();
-        CallableStatement cs = trans.createCallableStatement("{CALl DMS_SYSTEM.BH_VALIDATION(?,?)}", 0);
+        CallableStatement cs = trans.createCallableStatement("{CALl DMS_SYSTEM.HH_VALIDATION(?,?)}", 0);
         try {
             cs.setString(1, this.curUser.getId());
             cs.registerOutParameter(2, Types.VARCHAR);
@@ -181,11 +173,11 @@ public class BhBean {
     public void copyToTemp(){
         DBTransaction trans = (DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
         Statement stat = trans.createStatement(DBTransaction.DEFAULT);
-        ViewObject vo = DmsUtils.getDmsApplicationModule().getBhXqysVO();
+        ViewObject vo = DmsUtils.getDmsApplicationModule().getHhXqysVO();
         Row [] rows = vo.getAllRowsInRange();
         
         //删除临时表上次数据
-        String dSql = "DELETE FROM BH_XQYS_TEMP T WHERE T.CREATED_BY = '" + this.curUser.getId() + "'";
+        String dSql = "DELETE FROM HH_XQYS_TEMP T WHERE T.CREATED_BY = '" + this.curUser.getId() + "'";
         
         try{
         stat.executeUpdate(dSql);
@@ -194,38 +186,34 @@ public class BhBean {
         for(Row row : rows){
             ViewRowImpl vRow = (ViewRowImpl)row;
             if(vRow.getEntities()[0].getEntityState() == 2){
-                String sql = "INSERT INTO BH_XQYS_TEMP (HLS_YEAR, ENTITY_NAME, PROJECT_CODE, VERSION, INDUSTRY_LINE, BUSINESS_LINE, PROJECT_TYPE, ACC_TYPE, " +
-                    "UNIT, QUNTITY, UNIT_COST, AMOUNT, AMOUNT_ADJ, AFT_AMOUNT_ADJ, LAST_NOV, CUR_JAN, CUR_FEB, CUR_MAR, CUR_APR, CUR_MAY, " +
-                    "CUR_JUN, CUR_JUL, CUR_AUG, CUR_SEP, CUR_OCT, CUR_NOV, CUR_DEC, NEXT_JAN, NEXT_FEB, NEXT_MAR, NEXT_APR, NEXT_MAY, NEXT_JUN, AFTER_JULY, " +
-                    "CREATED_BY, ROW_ID,DETAIL_ACC) VALUES (";
+                String sql = "INSERT INTO HH_XQYS_TEMP (HLS_YEAR, ENTITY_NAME, PRODUCT_LINE, VERSION, PROJECT_TYPE, INDUSTRY_LINE, ACC_TYPE," + 
+                "DETAIL_ACC_TYPE, QUNTITY, UNIT_COST, AMOUNT, LAST_NOV, JAN, FEB, MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV," + 
+                "DEC, NEXT_JAN, NEXT_FEB, NEXT_MAR, NEXT_APR, NEXT_MAY, NEXT_JUN, AFTER_JULY, CREATED_BY) VALUES (";
                 sql = sql + "'" + ObjectUtils.toString(vRow.getAttribute("HlsYear")) + "',";
                 sql = sql + "'" + ObjectUtils.toString(vRow.getAttribute("EntityName")) + "',";
-                sql = sql + "'" + ObjectUtils.toString(vRow.getAttribute("ProjectCode")) + "',";
+                sql = sql + "'" + ObjectUtils.toString(vRow.getAttribute("ProductLine")) + "',";
                 sql = sql + "'" + ObjectUtils.toString(vRow.getAttribute("Version")) + "',";
-                sql = sql + "'" + ObjectUtils.toString(vRow.getAttribute("IndustryLine")) + "',";
-                sql = sql + "'" + ObjectUtils.toString(vRow.getAttribute("BusinessLine")) + "',";
                 sql = sql + "'" + ObjectUtils.toString(vRow.getAttribute("ProjectType")) + "',";
+                sql = sql + "'" + ObjectUtils.toString(vRow.getAttribute("IndustryLine")) + "',";
                 sql = sql + "'" + ObjectUtils.toString(vRow.getAttribute("AccType")) + "',";
-                sql = sql + "'" + ObjectUtils.toString(vRow.getAttribute("Unit")) + "',";
+                sql = sql + "'" + ObjectUtils.toString(vRow.getAttribute("DetailAccType")) + "',";
                 sql = sql + "'" + ObjectUtils.toString(vRow.getAttribute("Quntity")) + "',";      
                 sql = sql + "'" + ObjectUtils.toString(vRow.getAttribute("UnitCost")) + "',";
                 sql = sql + "'" + ObjectUtils.toString(vRow.getAttribute("Amount")) + "',";
-                sql = sql + "'" + ObjectUtils.toString(vRow.getAttribute("AmountAdj")) + "',";
-                sql = sql + "'" + ObjectUtils.toString(vRow.getAttribute("AftAmountAdj")) + "',";
                 
                 sql = sql + "'" + ObjectUtils.toString(vRow.getAttribute("LastNov")) + "',";
-                sql = sql + "'" + ObjectUtils.toString(vRow.getAttribute("CurJan")) + "',";
-                sql = sql + "'" + ObjectUtils.toString(vRow.getAttribute("CurFeb")) + "',";
-                sql = sql + "'" + ObjectUtils.toString(vRow.getAttribute("CurMar")) + "',";
-                sql = sql + "'" + ObjectUtils.toString(vRow.getAttribute("CurApr")) + "',";
-                sql = sql + "'" + ObjectUtils.toString(vRow.getAttribute("CurMay")) + "',";
-                sql = sql + "'" + ObjectUtils.toString(vRow.getAttribute("CurJun")) + "',";
-                sql = sql + "'" + ObjectUtils.toString(vRow.getAttribute("CurJul")) + "',";
-                sql = sql + "'" + ObjectUtils.toString(vRow.getAttribute("CurAug")) + "',";
-                sql = sql + "'" + ObjectUtils.toString(vRow.getAttribute("CurSep")) + "',";
-                sql = sql + "'" + ObjectUtils.toString(vRow.getAttribute("CurOct")) + "',";
-                sql = sql + "'" + ObjectUtils.toString(vRow.getAttribute("CurNov")) + "',";
-                sql = sql + "'" + ObjectUtils.toString(vRow.getAttribute("CurDec")) + "',";
+                sql = sql + "'" + ObjectUtils.toString(vRow.getAttribute("Jan")) + "',";
+                sql = sql + "'" + ObjectUtils.toString(vRow.getAttribute("Feb")) + "',";
+                sql = sql + "'" + ObjectUtils.toString(vRow.getAttribute("Mar")) + "',";
+                sql = sql + "'" + ObjectUtils.toString(vRow.getAttribute("Apr")) + "',";
+                sql = sql + "'" + ObjectUtils.toString(vRow.getAttribute("May")) + "',";
+                sql = sql + "'" + ObjectUtils.toString(vRow.getAttribute("Jun")) + "',";
+                sql = sql + "'" + ObjectUtils.toString(vRow.getAttribute("Jul")) + "',";
+                sql = sql + "'" + ObjectUtils.toString(vRow.getAttribute("Aug")) + "',";
+                sql = sql + "'" + ObjectUtils.toString(vRow.getAttribute("Sep")) + "',";
+                sql = sql + "'" + ObjectUtils.toString(vRow.getAttribute("Oct")) + "',";
+                sql = sql + "'" + ObjectUtils.toString(vRow.getAttribute("Nov")) + "',";
+                sql = sql + "'" + ObjectUtils.toString(vRow.getAttribute("Dec")) + "',";
                 
                 sql = sql + "'" + ObjectUtils.toString(vRow.getAttribute("NextJan")) + "',";
                 sql = sql + "'" + ObjectUtils.toString(vRow.getAttribute("NextFeb")) + "',";
@@ -234,44 +222,37 @@ public class BhBean {
                 sql = sql + "'" + ObjectUtils.toString(vRow.getAttribute("NextMay")) + "',";
                 sql = sql + "'" + ObjectUtils.toString(vRow.getAttribute("NextJun")) + "',";
                 sql = sql + "'" + ObjectUtils.toString(vRow.getAttribute("AfterJuly")) + "',";
-                sql = sql + "'" + this.curUser.getId() + "',";
-                sql = sql + "'" + ObjectUtils.toString(vRow.getAttribute("RowID")) + "',";
-                sql = sql + "'" + ObjectUtils.toString(vRow.getAttribute("DetailAcc")) + "')";
-                //System.out.println(sql);
+                sql = sql + "'" + this.curUser.getId() + "')";
                 stat.addBatch(sql);
             }else if(vRow.getEntities()[0].getEntityState() == 0){
-                String sql = "INSERT INTO BH_XQYS_TEMP (HLS_YEAR, ENTITY_NAME, PROJECT_CODE, VERSION, INDUSTRY_LINE, BUSINESS_LINE, PROJECT_TYPE, ACC_TYPE, " +
-                    "UNIT, QUNTITY, UNIT_COST, AMOUNT, AMOUNT_ADJ, AFT_AMOUNT_ADJ, LAST_NOV, CUR_JAN, CUR_FEB, CUR_MAR, CUR_APR, CUR_MAY, " +
-                    "CUR_JUN, CUR_JUL, CUR_AUG, CUR_SEP, CUR_OCT, CUR_NOV, CUR_DEC, NEXT_JAN, NEXT_FEB, NEXT_MAR, NEXT_APR, NEXT_MAY, NEXT_JUN, AFTER_JULY, " +
-                    "CREATED_BY, ROW_ID,DETAIL_ACC) VALUES (";
+                String sql = "INSERT INTO HH_XQYS_TEMP (HLS_YEAR, ENTITY_NAME, PRODUCT_LINE, VERSION, PROJECT_TYPE, INDUSTRY_LINE, ACC_TYPE," + 
+                "DETAIL_ACC_TYPE, QUNTITY, UNIT_COST, AMOUNT, LAST_NOV, JAN, FEB, MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV," + 
+                "DEC, NEXT_JAN, NEXT_FEB, NEXT_MAR, NEXT_APR, NEXT_MAY, NEXT_JUN, AFTER_JULY, CREATED_BY) VALUES (";
                 sql = sql + "'" + ObjectUtils.toString(vRow.getAttribute("HlsYear")) + "',";
                 sql = sql + "'" + ObjectUtils.toString(vRow.getAttribute("EntityName")) + "',";
-                sql = sql + "'" + ObjectUtils.toString(vRow.getAttribute("ProjectCode")) + "',";
+                sql = sql + "'" + ObjectUtils.toString(vRow.getAttribute("ProductLine")) + "',";
                 sql = sql + "'" + ObjectUtils.toString(vRow.getAttribute("Version")) + "',";
-                sql = sql + "'" + ObjectUtils.toString(vRow.getAttribute("IndustryLine")) + "',";
-                sql = sql + "'" + ObjectUtils.toString(vRow.getAttribute("BusinessLine")) + "',";
                 sql = sql + "'" + ObjectUtils.toString(vRow.getAttribute("ProjectType")) + "',";
+                sql = sql + "'" + ObjectUtils.toString(vRow.getAttribute("IndustryLine")) + "',";
                 sql = sql + "'" + ObjectUtils.toString(vRow.getAttribute("AccType")) + "',";
-                sql = sql + "'" + ObjectUtils.toString(vRow.getAttribute("Unit")) + "',";
+                sql = sql + "'" + ObjectUtils.toString(vRow.getAttribute("DetailAccType")) + "',";
                 sql = sql + "'" + ObjectUtils.toString(vRow.getAttribute("Quntity")) + "',";      
                 sql = sql + "'" + ObjectUtils.toString(vRow.getAttribute("UnitCost")) + "',";
                 sql = sql + "'" + ObjectUtils.toString(vRow.getAttribute("Amount")) + "',";
-                sql = sql + "'" + ObjectUtils.toString(vRow.getAttribute("AmountAdj")) + "',";
-                sql = sql + "'" + ObjectUtils.toString(vRow.getAttribute("AftAmountAdj")) + "',";
                 
                 sql = sql + "'" + ObjectUtils.toString(vRow.getAttribute("LastNov")) + "',";
-                sql = sql + "'" + ObjectUtils.toString(vRow.getAttribute("CurJan")) + "',";
-                sql = sql + "'" + ObjectUtils.toString(vRow.getAttribute("CurFeb")) + "',";
-                sql = sql + "'" + ObjectUtils.toString(vRow.getAttribute("CurMar")) + "',";
-                sql = sql + "'" + ObjectUtils.toString(vRow.getAttribute("CurApr")) + "',";
-                sql = sql + "'" + ObjectUtils.toString(vRow.getAttribute("CurMay")) + "',";
-                sql = sql + "'" + ObjectUtils.toString(vRow.getAttribute("CurJun")) + "',";
-                sql = sql + "'" + ObjectUtils.toString(vRow.getAttribute("CurJul")) + "',";
-                sql = sql + "'" + ObjectUtils.toString(vRow.getAttribute("CurAug")) + "',";
-                sql = sql + "'" + ObjectUtils.toString(vRow.getAttribute("CurSep")) + "',";
-                sql = sql + "'" + ObjectUtils.toString(vRow.getAttribute("CurOct")) + "',";
-                sql = sql + "'" + ObjectUtils.toString(vRow.getAttribute("CurNov")) + "',";
-                sql = sql + "'" + ObjectUtils.toString(vRow.getAttribute("CurDec")) + "',";
+                sql = sql + "'" + ObjectUtils.toString(vRow.getAttribute("Jan")) + "',";
+                sql = sql + "'" + ObjectUtils.toString(vRow.getAttribute("Feb")) + "',";
+                sql = sql + "'" + ObjectUtils.toString(vRow.getAttribute("Mar")) + "',";
+                sql = sql + "'" + ObjectUtils.toString(vRow.getAttribute("Apr")) + "',";
+                sql = sql + "'" + ObjectUtils.toString(vRow.getAttribute("May")) + "',";
+                sql = sql + "'" + ObjectUtils.toString(vRow.getAttribute("Jun")) + "',";
+                sql = sql + "'" + ObjectUtils.toString(vRow.getAttribute("Jul")) + "',";
+                sql = sql + "'" + ObjectUtils.toString(vRow.getAttribute("Aug")) + "',";
+                sql = sql + "'" + ObjectUtils.toString(vRow.getAttribute("Sep")) + "',";
+                sql = sql + "'" + ObjectUtils.toString(vRow.getAttribute("Oct")) + "',";
+                sql = sql + "'" + ObjectUtils.toString(vRow.getAttribute("Nov")) + "',";
+                sql = sql + "'" + ObjectUtils.toString(vRow.getAttribute("Dec")) + "',";
                 
                 sql = sql + "'" + ObjectUtils.toString(vRow.getAttribute("NextJan")) + "',";
                 sql = sql + "'" + ObjectUtils.toString(vRow.getAttribute("NextFeb")) + "',";
@@ -280,9 +261,7 @@ public class BhBean {
                 sql = sql + "'" + ObjectUtils.toString(vRow.getAttribute("NextMay")) + "',";
                 sql = sql + "'" + ObjectUtils.toString(vRow.getAttribute("NextJun")) + "',";
                 sql = sql + "'" + ObjectUtils.toString(vRow.getAttribute("AfterJuly")) + "',";
-                sql = sql + "'" + this.curUser.getId() + "',";
-                sql = sql + "''," ;
-                sql = sql + "'" + ObjectUtils.toString(vRow.getAttribute("DetailAcc")) + "')";
+                sql = sql + "'" + this.curUser.getId() + "')";
                 //System.out.println(sql);
                 stat.addBatch(sql);
             }
@@ -296,20 +275,20 @@ public class BhBean {
         }
     }
     
-    /*HLS_YEAR   '年';ENTITY_NAME  '实体';PROJECT_CODE '项目编号';VERSION '版本';
-    INDUSTRY_LINE '行业线';BUSINESS_LINE '业务线';PROJECT_TYPE '项目类型';ACC_TYPE '科目类';
-    DETAIL_ACC_TYPE '科目物料明细';*/
+    /*HlsYear, year   EntityName, entity
+        ProductLine, pLine   Version, version
+        ProjectType, proType   IndustryLine, hLine*/
     public void queryData(ActionEvent actionEvent) {
-        if(year == null || entity == null || proCode == null 
-           || version == null || hLine == null || yLine == null || proType == null ){
+        if(year == null || entity == null || pLine == null 
+           || version == null || proType == null || hLine == null ){
             JSFUtils.addFacesInformationMessage("表头条件不能为空");
             return;    
         }
 
-        ViewObject vo = DmsUtils.getDmsApplicationModule().getBhXqysVO();
-        String whereClause = "HLS_YEAR = '" + year + "' AND ENTITY_NAME = '" + entity + "' AND PROJECT_CODE ='"
-            + proCode +"' AND VERSION = '" + version + "' AND INDUSTRY_LINE ='" + hLine + "' AND BUSINESS_LINE ='"
-            + yLine + "' AND PROJECT_TYPE ='" + proType + "'";
+        ViewObject vo = DmsUtils.getDmsApplicationModule().getHhXqysVO();
+        String whereClause = "HLS_YEAR = '" + year + "' AND ENTITY_NAME = '" + entity + "' AND PRODUCT_LINE ='"
+            + pLine +"' AND VERSION = '" + version + "' AND PROJECT_TYPE ='" + proType + "' AND INDUSTRY_LINE ='"
+            + hLine +  "'";
         vo.setWhereClause(whereClause);
         vo.executeQuery();
     }
@@ -328,14 +307,6 @@ public class BhBean {
 
     public List<SelectItem> getEntityList() {
         return entityList;
-    }
-
-    public void setproCodeList(List<SelectItem> proCodeList) {
-        this.proCodeList = proCodeList;
-    }
-
-    public List<SelectItem> getproCodeList() {
-        return proCodeList;
     }
 
     public void setVersionList(List<SelectItem> versionList) {
@@ -370,14 +341,6 @@ public class BhBean {
         return accTypeList;
     }
 
-    public void setYlList(List<SelectItem> ylList) {
-        this.ylList = ylList;
-    }
-
-    public List<SelectItem> getYlList() {
-        return ylList;
-    }
-
     public void setYear(String year) {
         this.year = year;
     }
@@ -394,13 +357,6 @@ public class BhBean {
         return entity;
     }
 
-    public void setProCode(String proCode) {
-        this.proCode = proCode;
-    }
-
-    public String getProCode() {
-        return proCode;
-    }
 
     public void setVersion(String version) {
         this.version = version;
@@ -416,14 +372,6 @@ public class BhBean {
 
     public String getHLine() {
         return hLine;
-    }
-
-    public void setYLine(String yLine) {
-        this.yLine = yLine;
-    }
-
-    public String getYLine() {
-        return yLine;
     }
 
     public void setProType(String proType) {
@@ -447,4 +395,19 @@ public class BhBean {
         this.queryData(actionEvent);
     }
 
+    public void setPLine(String pLine) {
+        this.pLine = pLine;
+    }
+
+    public String getPLine() {
+        return pLine;
+    }
+
+    public void setPLineList(List<SelectItem> pLineList) {
+        this.pLineList = pLineList;
+    }
+
+    public List<SelectItem> getPLineList() {
+        return pLineList;
+    }
 }

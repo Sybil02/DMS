@@ -9,6 +9,7 @@ import oracle.jbo.Session;
 import oracle.jbo.ViewObject;
 import oracle.jbo.server.ApplicationModuleImpl;
 import oracle.jbo.server.ViewLinkImpl;
+
 import oracle.jbo.server.ViewObjectImpl;
 
 import team.epm.dms.view.DmsEnabledGroupViewImpl;
@@ -324,5 +325,13 @@ public class DmsModuleImpl extends ApplicationModuleImpl implements DmsModule {
      */
     public ViewObjectImpl getBhXqysVO() {
         return (ViewObjectImpl)findViewObject("BhXqysVO");
+    }
+
+    /**
+     * Container's getter for HhXqysVO.
+     * @return HhXqysVO
+     */
+    public ViewObjectImpl getHhXqysVO() {
+        return (ViewObjectImpl)findViewObject("HhXqysVO");
     }
 }

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<adfc-config xmlns="http://xmlns.oracle.com/adf/controller" version="1.2">
+  <task-flow-definition id="dms_xqys_hh">
+    <default-activity id="__1">xqys_hh</default-activity>
+    <managed-bean id="__5">
+      <managed-bean-name id="__4">HhBean</managed-bean-name>
+      <managed-bean-class id="__3">dgpt.HhBean</managed-bean-class>
+      <managed-bean-scope id="__2">view</managed-bean-scope>
+    </managed-bean>
+    <view id="xqys_hh">
+      <page>/dgpt/xqys_hh.jsff</page>
+    </view>
+    <use-page-fragments/>
+  </task-flow-definition>
+</adfc-config>

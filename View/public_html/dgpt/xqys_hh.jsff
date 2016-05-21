@@ -1,0 +1,459 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.1"
+          xmlns:af="http://xmlns.oracle.com/adf/faces/rich"
+          xmlns:f="http://java.sun.com/jsf/core"
+          xmlns:c="http://java.sun.com/jsp/jstl/core">
+  <c:set var="viewBundle" value="#{adfBundle['dms_v']}"/>
+  <af:panelStretchLayout id="psl1" bottomHeight="0">
+    <f:facet name="top">
+          <af:panelGroupLayout id="pgl1" layout="vertical">
+        <af:panelGroupLayout id="pgl3" layout="horizontal">
+          <af:selectOneChoice label="年" id="soc1" autoSubmit="true" value="#{viewScope.HhBean.year}">
+            <f:selectItems value="#{viewScope.HhBean.yearList}" id="si1"/>
+          </af:selectOneChoice>
+          <af:spacer width="3px" id="sp1"/>
+          <af:selectOneChoice label="实体" id="soc2" autoSubmit="true" value="#{viewScope.HhBean.entity}">
+            <f:selectItems value="#{viewScope.HhBean.entityList}" id="si2"/>
+          </af:selectOneChoice>
+          <af:spacer width="3px" id="sp2"/>
+          <af:selectOneChoice label="产品线" id="soc3" autoSubmit="true" value="#{viewScope.HhBean.PLine}">
+            <f:selectItems value="#{viewScope.HhBean.PLineList}" id="si3"/>
+          </af:selectOneChoice>
+          <af:spacer width="3px" id="sp3"/>
+          <af:selectOneChoice label="版本" id="soc4" autoSubmit="true" value="#{viewScope.HhBean.version}">
+            <f:selectItems value="#{viewScope.HhBean.versionList}" id="si4"/>
+          </af:selectOneChoice>
+          <af:spacer width="3px" id="sp4"/>
+        </af:panelGroupLayout>
+        <af:panelGroupLayout id="pgl4" layout="horizontal">
+          <af:selectOneChoice label="项目规模" id="soc5" autoSubmit="true" value="#{viewScope.HhBean.proType}">
+            <f:selectItems value="#{viewScope.HhBean.proTypeList}" id="si5"/>
+          </af:selectOneChoice>
+          <af:spacer width="3px" id="sp5"/>
+          <af:selectOneChoice label="行业线" id="soc6" autoSubmit="true" value="#{viewScope.HhBean.HLine}">
+            <f:selectItems value="#{viewScope.HhBean.hlList}" id="si6"/>
+          </af:selectOneChoice>
+          <af:spacer width="3px" id="sp6"/>
+          <af:spacer width="3px" id="sp7"/>
+          <af:commandButton text="#{viewBundle['dms.common.query']}" id="cb5"
+                            actionListener="#{viewScope.HhBean.queryData}"/>
+        </af:panelGroupLayout>
+      </af:panelGroupLayout>
+    </f:facet>
+    <f:facet name="center">
+        <af:panelCollection id="pc1" styleClass="AFStretchWidth">
+          <f:facet name="menus"/>
+          <f:facet name="toolbar">
+          <af:toolbar id="t2">
+            <af:commandButton text="#{viewBundle['dcm.common.new']}" id="cb1"
+                              actionListener="#{bindings.CreateInsert.execute}"/>
+            <af:commandButton text="#{viewBundle['dms.common.save']}" id="cb4"
+                              actionListener="#{viewScope.HhBean.saveData}"/>
+            <af:commandButton text="#{viewBundle['dms.common.cancel']}" id="cb3"
+                              actionListener="#{viewScope.HhBean.reset}"/>
+            <af:commandButton text="#{viewBundle['dcm.common.delete']}" id="cb2"
+                              actionListener="#{bindings.Delete.execute}"/>
+          </af:toolbar>
+        </f:facet>
+          <f:facet name="statusbar"/>
+        <af:table value="#{bindings.HhXqysVO.collectionModel}" var="row"
+                  rows="#{bindings.HhXqysVO.rangeSize}"
+                  emptyText="#{bindings.HhXqysVO.viewable ? 'No data to display.' : 'Access Denied.'}"
+                  fetchSize="#{bindings.HhXqysVO.rangeSize}"
+                  rowBandingInterval="0" editingMode="clickToEdit"
+                  filterModel="#{bindings.HhXqysVOQuery.queryDescriptor}"
+                  queryListener="#{bindings.HhXqysVOQuery.processQuery}"
+                  filterVisible="false" varStatus="vs"
+                  selectionListener="#{bindings.HhXqysVO.collectionModel.makeCurrent}"
+                  rowSelection="multiple" id="t1">
+          <af:column id="c30" width="3" inlineStyle="#{row.row.entities[0].entityState == 0?'background-color:#307D7E;':(row.row.entities[0].entityState == 2?'background-color:red;':'')}"
+                     frozen="true"/>
+          <af:column sortProperty="#{bindings.HhXqysVO.hints.AccType.name}"
+                     filterable="true" sortable="true"
+                     headerText="#{bindings.HhXqysVO.hints.AccType.label}"
+                     id="c8">
+            <af:inputText value="#{row.bindings.AccType.inputValue}"
+                          label="#{bindings.HhXqysVO.hints.AccType.label}"
+                          required="#{bindings.HhXqysVO.hints.AccType.mandatory}"
+                          columns="#{bindings.HhXqysVO.hints.AccType.displayWidth}"
+                          maximumLength="#{bindings.HhXqysVO.hints.AccType.precision}"
+                          shortDesc="#{bindings.HhXqysVO.hints.AccType.tooltip}"
+                          id="it2">
+              <f:validator binding="#{row.bindings.AccType.validator}"/>
+            </af:inputText>
+          </af:column>
+          <af:column sortProperty="#{bindings.HhXqysVO.hints.DetailAccType.name}"
+                     filterable="true" sortable="true"
+                     headerText="#{bindings.HhXqysVO.hints.DetailAccType.label}"
+                     id="c10">
+            <af:inputText value="#{row.bindings.DetailAccType.inputValue}"
+                          label="#{bindings.HhXqysVO.hints.DetailAccType.label}"
+                          required="#{bindings.HhXqysVO.hints.DetailAccType.mandatory}"
+                          columns="#{bindings.HhXqysVO.hints.DetailAccType.displayWidth}"
+                          maximumLength="#{bindings.HhXqysVO.hints.DetailAccType.precision}"
+                          shortDesc="#{bindings.HhXqysVO.hints.DetailAccType.tooltip}"
+                          id="it24">
+              <f:validator binding="#{row.bindings.DetailAccType.validator}"/>
+            </af:inputText>
+          </af:column>
+          <af:column sortProperty="#{bindings.HhXqysVO.hints.Quntity.name}"
+                     filterable="true" sortable="true"
+                     headerText="#{bindings.HhXqysVO.hints.Quntity.label}"
+                     id="c9">
+            <af:inputText value="#{row.bindings.Quntity.inputValue}"
+                          label="#{bindings.HhXqysVO.hints.Quntity.label}"
+                          required="#{bindings.HhXqysVO.hints.Quntity.mandatory}"
+                          columns="#{bindings.HhXqysVO.hints.Quntity.displayWidth}"
+                          maximumLength="#{bindings.HhXqysVO.hints.Quntity.precision}"
+                          shortDesc="#{bindings.HhXqysVO.hints.Quntity.tooltip}"
+                          id="it25">
+              <f:validator binding="#{row.bindings.Quntity.validator}"/>
+              <af:convertNumber groupingUsed="false"
+                                pattern="#{bindings.HhXqysVO.hints.Quntity.format}"/>
+            </af:inputText>
+          </af:column>
+          <af:column sortProperty="#{bindings.HhXqysVO.hints.UnitCost.name}"
+                     filterable="true" sortable="true"
+                     headerText="#{bindings.HhXqysVO.hints.UnitCost.label}"
+                     id="c7">
+            <af:inputText value="#{row.bindings.UnitCost.inputValue}"
+                          label="#{bindings.HhXqysVO.hints.UnitCost.label}"
+                          required="#{bindings.HhXqysVO.hints.UnitCost.mandatory}"
+                          columns="#{bindings.HhXqysVO.hints.UnitCost.displayWidth}"
+                          maximumLength="#{bindings.HhXqysVO.hints.UnitCost.precision}"
+                          shortDesc="#{bindings.HhXqysVO.hints.UnitCost.tooltip}"
+                          id="it15">
+              <f:validator binding="#{row.bindings.UnitCost.validator}"/>
+              <af:convertNumber groupingUsed="false"
+                                pattern="#{bindings.HhXqysVO.hints.UnitCost.format}"/>
+            </af:inputText>
+          </af:column>
+          <af:column sortProperty="#{bindings.HhXqysVO.hints.Amount.name}"
+                     filterable="true" sortable="true"
+                     headerText="#{bindings.HhXqysVO.hints.Amount.label}"
+                     id="c22">
+            <af:inputText value="#{row.bindings.Amount.inputValue}"
+                          label="#{bindings.HhXqysVO.hints.Amount.label}"
+                          required="#{bindings.HhXqysVO.hints.Amount.mandatory}"
+                          columns="#{bindings.HhXqysVO.hints.Amount.displayWidth}"
+                          maximumLength="#{bindings.HhXqysVO.hints.Amount.precision}"
+                          shortDesc="#{bindings.HhXqysVO.hints.Amount.tooltip}"
+                          id="it23">
+              <f:validator binding="#{row.bindings.Amount.validator}"/>
+              <af:convertNumber groupingUsed="false"
+                                pattern="#{bindings.HhXqysVO.hints.Amount.format}"/>
+            </af:inputText>
+          </af:column>
+          <af:column sortProperty="#{bindings.HhXqysVO.hints.LastNov.name}"
+                     filterable="true" sortable="true"
+                     headerText="#{bindings.HhXqysVO.hints.LastNov.label}"
+                     id="c5">
+            <af:inputText value="#{row.bindings.LastNov.inputValue}"
+                          label="#{bindings.HhXqysVO.hints.LastNov.label}"
+                          required="#{bindings.HhXqysVO.hints.LastNov.mandatory}"
+                          columns="#{bindings.HhXqysVO.hints.LastNov.displayWidth}"
+                          maximumLength="#{bindings.HhXqysVO.hints.LastNov.precision}"
+                          shortDesc="#{bindings.HhXqysVO.hints.LastNov.tooltip}"
+                          id="it17">
+              <f:validator binding="#{row.bindings.LastNov.validator}"/>
+              <af:convertNumber groupingUsed="false"
+                                pattern="#{bindings.HhXqysVO.hints.LastNov.format}"/>
+            </af:inputText>
+          </af:column>
+          <af:column sortProperty="#{bindings.HhXqysVO.hints.Jan.name}"
+                     filterable="true" sortable="true"
+                     headerText="#{bindings.HhXqysVO.hints.Jan.label}" id="c21">
+            <af:inputText value="#{row.bindings.Jan.inputValue}"
+                          label="#{bindings.HhXqysVO.hints.Jan.label}"
+                          required="#{bindings.HhXqysVO.hints.Jan.mandatory}"
+                          columns="#{bindings.HhXqysVO.hints.Jan.displayWidth}"
+                          maximumLength="#{bindings.HhXqysVO.hints.Jan.precision}"
+                          shortDesc="#{bindings.HhXqysVO.hints.Jan.tooltip}"
+                          id="it1">
+              <f:validator binding="#{row.bindings.Jan.validator}"/>
+              <af:convertNumber groupingUsed="false"
+                                pattern="#{bindings.HhXqysVO.hints.Jan.format}"/>
+            </af:inputText>
+          </af:column>
+          <af:column sortProperty="#{bindings.HhXqysVO.hints.Feb.name}"
+                     filterable="true" sortable="true"
+                     headerText="#{bindings.HhXqysVO.hints.Feb.label}" id="c18">
+            <af:inputText value="#{row.bindings.Feb.inputValue}"
+                          label="#{bindings.HhXqysVO.hints.Feb.label}"
+                          required="#{bindings.HhXqysVO.hints.Feb.mandatory}"
+                          columns="#{bindings.HhXqysVO.hints.Feb.displayWidth}"
+                          maximumLength="#{bindings.HhXqysVO.hints.Feb.precision}"
+                          shortDesc="#{bindings.HhXqysVO.hints.Feb.tooltip}"
+                          id="it3">
+              <f:validator binding="#{row.bindings.Feb.validator}"/>
+              <af:convertNumber groupingUsed="false"
+                                pattern="#{bindings.HhXqysVO.hints.Feb.format}"/>
+            </af:inputText>
+          </af:column>
+          <af:column sortProperty="#{bindings.HhXqysVO.hints.Mar.name}"
+                     filterable="true" sortable="true"
+                     headerText="#{bindings.HhXqysVO.hints.Mar.label}" id="c16">
+            <af:inputText value="#{row.bindings.Mar.inputValue}"
+                          label="#{bindings.HhXqysVO.hints.Mar.label}"
+                          required="#{bindings.HhXqysVO.hints.Mar.mandatory}"
+                          columns="#{bindings.HhXqysVO.hints.Mar.displayWidth}"
+                          maximumLength="#{bindings.HhXqysVO.hints.Mar.precision}"
+                          shortDesc="#{bindings.HhXqysVO.hints.Mar.tooltip}"
+                          id="it22">
+              <f:validator binding="#{row.bindings.Mar.validator}"/>
+              <af:convertNumber groupingUsed="false"
+                                pattern="#{bindings.HhXqysVO.hints.Mar.format}"/>
+            </af:inputText>
+          </af:column>
+          <af:column sortProperty="#{bindings.HhXqysVO.hints.Apr.name}"
+                     filterable="true" sortable="true"
+                     headerText="#{bindings.HhXqysVO.hints.Apr.label}" id="c20">
+            <af:inputText value="#{row.bindings.Apr.inputValue}"
+                          label="#{bindings.HhXqysVO.hints.Apr.label}"
+                          required="#{bindings.HhXqysVO.hints.Apr.mandatory}"
+                          columns="#{bindings.HhXqysVO.hints.Apr.displayWidth}"
+                          maximumLength="#{bindings.HhXqysVO.hints.Apr.precision}"
+                          shortDesc="#{bindings.HhXqysVO.hints.Apr.tooltip}"
+                          id="it16">
+              <f:validator binding="#{row.bindings.Apr.validator}"/>
+              <af:convertNumber groupingUsed="false"
+                                pattern="#{bindings.HhXqysVO.hints.Apr.format}"/>
+            </af:inputText>
+          </af:column>
+          <af:column sortProperty="#{bindings.HhXqysVO.hints.May.name}"
+                     filterable="true" sortable="true"
+                     headerText="#{bindings.HhXqysVO.hints.May.label}" id="c11">
+            <af:inputText value="#{row.bindings.May.inputValue}"
+                          label="#{bindings.HhXqysVO.hints.May.label}"
+                          required="#{bindings.HhXqysVO.hints.May.mandatory}"
+                          columns="#{bindings.HhXqysVO.hints.May.displayWidth}"
+                          maximumLength="#{bindings.HhXqysVO.hints.May.precision}"
+                          shortDesc="#{bindings.HhXqysVO.hints.May.tooltip}"
+                          id="it7">
+              <f:validator binding="#{row.bindings.May.validator}"/>
+              <af:convertNumber groupingUsed="false"
+                                pattern="#{bindings.HhXqysVO.hints.May.format}"/>
+            </af:inputText>
+          </af:column>
+          <af:column sortProperty="#{bindings.HhXqysVO.hints.Jun.name}"
+                     filterable="true" sortable="true"
+                     headerText="#{bindings.HhXqysVO.hints.Jun.label}" id="c13">
+            <af:inputText value="#{row.bindings.Jun.inputValue}"
+                          label="#{bindings.HhXqysVO.hints.Jun.label}"
+                          required="#{bindings.HhXqysVO.hints.Jun.mandatory}"
+                          columns="#{bindings.HhXqysVO.hints.Jun.displayWidth}"
+                          maximumLength="#{bindings.HhXqysVO.hints.Jun.precision}"
+                          shortDesc="#{bindings.HhXqysVO.hints.Jun.tooltip}"
+                          id="it8">
+              <f:validator binding="#{row.bindings.Jun.validator}"/>
+              <af:convertNumber groupingUsed="false"
+                                pattern="#{bindings.HhXqysVO.hints.Jun.format}"/>
+            </af:inputText>
+          </af:column>
+          <af:column sortProperty="#{bindings.HhXqysVO.hints.Jul.name}"
+                     filterable="true" sortable="true"
+                     headerText="#{bindings.HhXqysVO.hints.Jul.label}" id="c1">
+            <af:inputText value="#{row.bindings.Jul.inputValue}"
+                          label="#{bindings.HhXqysVO.hints.Jul.label}"
+                          required="#{bindings.HhXqysVO.hints.Jul.mandatory}"
+                          columns="#{bindings.HhXqysVO.hints.Jul.displayWidth}"
+                          maximumLength="#{bindings.HhXqysVO.hints.Jul.precision}"
+                          shortDesc="#{bindings.HhXqysVO.hints.Jul.tooltip}"
+                          id="it19">
+              <f:validator binding="#{row.bindings.Jul.validator}"/>
+              <af:convertNumber groupingUsed="false"
+                                pattern="#{bindings.HhXqysVO.hints.Jul.format}"/>
+            </af:inputText>
+          </af:column>
+          <af:column sortProperty="#{bindings.HhXqysVO.hints.Aug.name}"
+                     filterable="true" sortable="true"
+                     headerText="#{bindings.HhXqysVO.hints.Aug.label}" id="c23">
+            <af:inputText value="#{row.bindings.Aug.inputValue}"
+                          label="#{bindings.HhXqysVO.hints.Aug.label}"
+                          required="#{bindings.HhXqysVO.hints.Aug.mandatory}"
+                          columns="#{bindings.HhXqysVO.hints.Aug.displayWidth}"
+                          maximumLength="#{bindings.HhXqysVO.hints.Aug.precision}"
+                          shortDesc="#{bindings.HhXqysVO.hints.Aug.tooltip}"
+                          id="it4">
+              <f:validator binding="#{row.bindings.Aug.validator}"/>
+              <af:convertNumber groupingUsed="false"
+                                pattern="#{bindings.HhXqysVO.hints.Aug.format}"/>
+            </af:inputText>
+          </af:column>
+          <af:column sortProperty="#{bindings.HhXqysVO.hints.Sep.name}"
+                     filterable="true" sortable="true"
+                     headerText="#{bindings.HhXqysVO.hints.Sep.label}" id="c15">
+            <af:inputText value="#{row.bindings.Sep.inputValue}"
+                          label="#{bindings.HhXqysVO.hints.Sep.label}"
+                          required="#{bindings.HhXqysVO.hints.Sep.mandatory}"
+                          columns="#{bindings.HhXqysVO.hints.Sep.displayWidth}"
+                          maximumLength="#{bindings.HhXqysVO.hints.Sep.precision}"
+                          shortDesc="#{bindings.HhXqysVO.hints.Sep.tooltip}"
+                          id="it18">
+              <f:validator binding="#{row.bindings.Sep.validator}"/>
+              <af:convertNumber groupingUsed="false"
+                                pattern="#{bindings.HhXqysVO.hints.Sep.format}"/>
+            </af:inputText>
+          </af:column>
+          <af:column sortProperty="#{bindings.HhXqysVO.hints.Oct.name}"
+                     filterable="true" sortable="true"
+                     headerText="#{bindings.HhXqysVO.hints.Oct.label}" id="c17">
+            <af:inputText value="#{row.bindings.Oct.inputValue}"
+                          label="#{bindings.HhXqysVO.hints.Oct.label}"
+                          required="#{bindings.HhXqysVO.hints.Oct.mandatory}"
+                          columns="#{bindings.HhXqysVO.hints.Oct.displayWidth}"
+                          maximumLength="#{bindings.HhXqysVO.hints.Oct.precision}"
+                          shortDesc="#{bindings.HhXqysVO.hints.Oct.tooltip}"
+                          id="it14">
+              <f:validator binding="#{row.bindings.Oct.validator}"/>
+              <af:convertNumber groupingUsed="false"
+                                pattern="#{bindings.HhXqysVO.hints.Oct.format}"/>
+            </af:inputText>
+          </af:column>
+          <af:column sortProperty="#{bindings.HhXqysVO.hints.Nov.name}"
+                     filterable="true" sortable="true"
+                     headerText="#{bindings.HhXqysVO.hints.Nov.label}" id="c14">
+            <af:inputText value="#{row.bindings.Nov.inputValue}"
+                          label="#{bindings.HhXqysVO.hints.Nov.label}"
+                          required="#{bindings.HhXqysVO.hints.Nov.mandatory}"
+                          columns="#{bindings.HhXqysVO.hints.Nov.displayWidth}"
+                          maximumLength="#{bindings.HhXqysVO.hints.Nov.precision}"
+                          shortDesc="#{bindings.HhXqysVO.hints.Nov.tooltip}"
+                          id="it5">
+              <f:validator binding="#{row.bindings.Nov.validator}"/>
+              <af:convertNumber groupingUsed="false"
+                                pattern="#{bindings.HhXqysVO.hints.Nov.format}"/>
+            </af:inputText>
+          </af:column>
+          <af:column sortProperty="#{bindings.HhXqysVO.hints.Dec.name}"
+                     filterable="true" sortable="true"
+                     headerText="#{bindings.HhXqysVO.hints.Dec.label}" id="c2">
+            <af:inputText value="#{row.bindings.Dec.inputValue}"
+                          label="#{bindings.HhXqysVO.hints.Dec.label}"
+                          required="#{bindings.HhXqysVO.hints.Dec.mandatory}"
+                          columns="#{bindings.HhXqysVO.hints.Dec.displayWidth}"
+                          maximumLength="#{bindings.HhXqysVO.hints.Dec.precision}"
+                          shortDesc="#{bindings.HhXqysVO.hints.Dec.tooltip}"
+                          id="it12">
+              <f:validator binding="#{row.bindings.Dec.validator}"/>
+              <af:convertNumber groupingUsed="false"
+                                pattern="#{bindings.HhXqysVO.hints.Dec.format}"/>
+            </af:inputText>
+          </af:column>
+          <af:column sortProperty="#{bindings.HhXqysVO.hints.NextJan.name}"
+                     filterable="true" sortable="true"
+                     headerText="#{bindings.HhXqysVO.hints.NextJan.label}"
+                     id="c3">
+            <af:inputText value="#{row.bindings.NextJan.inputValue}"
+                          label="#{bindings.HhXqysVO.hints.NextJan.label}"
+                          required="#{bindings.HhXqysVO.hints.NextJan.mandatory}"
+                          columns="#{bindings.HhXqysVO.hints.NextJan.displayWidth}"
+                          maximumLength="#{bindings.HhXqysVO.hints.NextJan.precision}"
+                          shortDesc="#{bindings.HhXqysVO.hints.NextJan.tooltip}"
+                          id="it13">
+              <f:validator binding="#{row.bindings.NextJan.validator}"/>
+              <af:convertNumber groupingUsed="false"
+                                pattern="#{bindings.HhXqysVO.hints.NextJan.format}"/>
+            </af:inputText>
+          </af:column>
+          <af:column sortProperty="#{bindings.HhXqysVO.hints.NextFeb.name}"
+                     filterable="true" sortable="true"
+                     headerText="#{bindings.HhXqysVO.hints.NextFeb.label}"
+                     id="c19">
+            <af:inputText value="#{row.bindings.NextFeb.inputValue}"
+                          label="#{bindings.HhXqysVO.hints.NextFeb.label}"
+                          required="#{bindings.HhXqysVO.hints.NextFeb.mandatory}"
+                          columns="#{bindings.HhXqysVO.hints.NextFeb.displayWidth}"
+                          maximumLength="#{bindings.HhXqysVO.hints.NextFeb.precision}"
+                          shortDesc="#{bindings.HhXqysVO.hints.NextFeb.tooltip}"
+                          id="it20">
+              <f:validator binding="#{row.bindings.NextFeb.validator}"/>
+              <af:convertNumber groupingUsed="false"
+                                pattern="#{bindings.HhXqysVO.hints.NextFeb.format}"/>
+            </af:inputText>
+          </af:column>
+          <af:column sortProperty="#{bindings.HhXqysVO.hints.NextMar.name}"
+                     filterable="true" sortable="true"
+                     headerText="#{bindings.HhXqysVO.hints.NextMar.label}"
+                     id="c25">
+            <af:inputText value="#{row.bindings.NextMar.inputValue}"
+                          label="#{bindings.HhXqysVO.hints.NextMar.label}"
+                          required="#{bindings.HhXqysVO.hints.NextMar.mandatory}"
+                          columns="#{bindings.HhXqysVO.hints.NextMar.displayWidth}"
+                          maximumLength="#{bindings.HhXqysVO.hints.NextMar.precision}"
+                          shortDesc="#{bindings.HhXqysVO.hints.NextMar.tooltip}"
+                          id="it21">
+              <f:validator binding="#{row.bindings.NextMar.validator}"/>
+              <af:convertNumber groupingUsed="false"
+                                pattern="#{bindings.HhXqysVO.hints.NextMar.format}"/>
+            </af:inputText>
+          </af:column>
+          <af:column sortProperty="#{bindings.HhXqysVO.hints.NextApr.name}"
+                     filterable="true" sortable="true"
+                     headerText="#{bindings.HhXqysVO.hints.NextApr.label}"
+                     id="c12">
+            <af:inputText value="#{row.bindings.NextApr.inputValue}"
+                          label="#{bindings.HhXqysVO.hints.NextApr.label}"
+                          required="#{bindings.HhXqysVO.hints.NextApr.mandatory}"
+                          columns="#{bindings.HhXqysVO.hints.NextApr.displayWidth}"
+                          maximumLength="#{bindings.HhXqysVO.hints.NextApr.precision}"
+                          shortDesc="#{bindings.HhXqysVO.hints.NextApr.tooltip}"
+                          id="it10">
+              <f:validator binding="#{row.bindings.NextApr.validator}"/>
+              <af:convertNumber groupingUsed="false"
+                                pattern="#{bindings.HhXqysVO.hints.NextApr.format}"/>
+            </af:inputText>
+          </af:column>
+          <af:column sortProperty="#{bindings.HhXqysVO.hints.NextMay.name}"
+                     filterable="true" sortable="true"
+                     headerText="#{bindings.HhXqysVO.hints.NextMay.label}"
+                     id="c24">
+            <af:inputText value="#{row.bindings.NextMay.inputValue}"
+                          label="#{bindings.HhXqysVO.hints.NextMay.label}"
+                          required="#{bindings.HhXqysVO.hints.NextMay.mandatory}"
+                          columns="#{bindings.HhXqysVO.hints.NextMay.displayWidth}"
+                          maximumLength="#{bindings.HhXqysVO.hints.NextMay.precision}"
+                          shortDesc="#{bindings.HhXqysVO.hints.NextMay.tooltip}"
+                          id="it11">
+              <f:validator binding="#{row.bindings.NextMay.validator}"/>
+              <af:convertNumber groupingUsed="false"
+                                pattern="#{bindings.HhXqysVO.hints.NextMay.format}"/>
+            </af:inputText>
+          </af:column>
+          <af:column sortProperty="#{bindings.HhXqysVO.hints.NextJun.name}"
+                     filterable="true" sortable="true"
+                     headerText="#{bindings.HhXqysVO.hints.NextJun.label}"
+                     id="c4">
+            <af:inputText value="#{row.bindings.NextJun.inputValue}"
+                          label="#{bindings.HhXqysVO.hints.NextJun.label}"
+                          required="#{bindings.HhXqysVO.hints.NextJun.mandatory}"
+                          columns="#{bindings.HhXqysVO.hints.NextJun.displayWidth}"
+                          maximumLength="#{bindings.HhXqysVO.hints.NextJun.precision}"
+                          shortDesc="#{bindings.HhXqysVO.hints.NextJun.tooltip}"
+                          id="it9">
+              <f:validator binding="#{row.bindings.NextJun.validator}"/>
+              <af:convertNumber groupingUsed="false"
+                                pattern="#{bindings.HhXqysVO.hints.NextJun.format}"/>
+            </af:inputText>
+          </af:column>
+          <af:column sortProperty="#{bindings.HhXqysVO.hints.AfterJuly.name}"
+                     filterable="true" sortable="true"
+                     headerText="#{bindings.HhXqysVO.hints.AfterJuly.label}"
+                     id="c6">
+            <af:inputText value="#{row.bindings.AfterJuly.inputValue}"
+                          label="#{bindings.HhXqysVO.hints.AfterJuly.label}"
+                          required="#{bindings.HhXqysVO.hints.AfterJuly.mandatory}"
+                          columns="#{bindings.HhXqysVO.hints.AfterJuly.displayWidth}"
+                          maximumLength="#{bindings.HhXqysVO.hints.AfterJuly.precision}"
+                          shortDesc="#{bindings.HhXqysVO.hints.AfterJuly.tooltip}"
+                          id="it6">
+              <f:validator binding="#{row.bindings.AfterJuly.validator}"/>
+              <af:convertNumber groupingUsed="false"
+                                pattern="#{bindings.HhXqysVO.hints.AfterJuly.format}"/>
+            </af:inputText>
+          </af:column>
+        </af:table>
+      </af:panelCollection>
+    </f:facet>
+  </af:panelStretchLayout>
+</jsp:root>
