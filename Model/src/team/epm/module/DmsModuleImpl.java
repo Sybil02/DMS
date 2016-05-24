@@ -334,4 +334,12 @@ public class DmsModuleImpl extends ApplicationModuleImpl implements DmsModule {
     public ViewObjectImpl getHhXqysVO() {
         return (ViewObjectImpl)findViewObject("HhXqysVO");
     }
+
+    /**
+     * Container's getter for HtysBHVO1.
+     * @return HtysBHVO1
+     */
+    public ViewObjectImpl getHtysBHVO() {
+        return (ViewObjectImpl)findViewObject("HtysBHVO");
+    }
 }

@@ -1,0 +1,234 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.1"
+          xmlns:x="http://java.sun.com/jsp/jstl/xml"
+          xmlns:c="http://java.sun.com/jsp/jstl/core"
+          xmlns:af="http://xmlns.oracle.com/adf/faces/rich"
+          xmlns:f="http://java.sun.com/jsf/core">
+  <c:set var="viewBundle" value="#{adfBundle['dms_v']}"/>
+  <af:panelStretchLayout id="psl1" topHeight="52px" startWidth="0px">
+    <f:facet name="bottom"/>
+    <f:facet name="center">
+      <af:panelCollection id="pc1">
+        <f:facet name="menus"/>
+        <f:facet name="toolbar">
+          <af:toolbar id="t1">
+            <af:commandButton text="#{viewBundle['dcm.common.new']}" id="cb2"
+                              actionListener="#{bindings.CreateInsert.execute}"/>
+            <af:commandButton text="#{viewBundle['dms.common.save']}" id="cb3"
+                              actionListener="#{viewScope.HTYSBean.saveData}"/>
+            <af:commandButton text="#{viewBundle['dms.common.cancel']}" id="cb4"
+                              actionListener="#{viewScope.HTYSBean.reset}"/>
+            <af:commandButton text="#{viewBundle['dcm.common.delete']}" id="cb5"
+                              actionListener="#{bindings.Delete.execute}"/>
+          </af:toolbar>
+        </f:facet>
+        <f:facet name="statusbar"/>
+        <af:table value="#{bindings.HtysBHVO.collectionModel}" var="row"
+                  rows="#{bindings.HtysBHVO.rangeSize}"
+                  emptyText="#{bindings.HtysBHVO.viewable ? 'No data to display.' : 'Access Denied.'}"
+                  fetchSize="50" editingMode="clickToEdit"
+                  rowBandingInterval="0"
+                  filterModel="#{bindings.HtysBHVOQuery.queryDescriptor}"
+                  queryListener="#{bindings.HtysBHVOQuery.processQuery}"
+                  filterVisible="false" varStatus="vs"
+                  selectionListener="#{bindings.HtysBHVO.collectionModel.makeCurrent}"
+                  rowSelection="multiple" id="t2" autoHeightRows="-1"
+                  partialTriggers="::cb2 ::cb5">
+          <af:column id="c30" width="3" inlineStyle="#{row.row.entities[0].entityState == 0?'background-color:#307D7E;':(row.row.entities[0].entityState == 2?'background-color:red;':'')}"
+                     frozen="true"/>
+          <af:column sortProperty="#{bindings.HtysBHVO.hints.AccountType.name}"
+                     filterable="true" sortable="false"
+                     headerText="#{bindings.HtysBHVO.hints.AccountType.label}"
+                     id="c9">
+            <af:selectOneChoice label="#{bindings.HtysBHVO.hints.AccountType.label}" id="soc8"
+                                value="#{viewScope.HTYSBean.accType}">
+              <f:selectItems value="#{viewScope.HTYSBean.accTypeList}" id="si8"/>
+            </af:selectOneChoice>
+          </af:column>
+          <af:column sortProperty="#{bindings.HtysBHVO.hints.DetailAccType.name}"
+                     filterable="true" sortable="false"
+                     headerText="#{bindings.HtysBHVO.hints.DetailAccType.label}"
+                     id="c10">
+            <af:inputText value="#{row.bindings.DetailAccType.inputValue}"
+                          label="#{bindings.HtysBHVO.hints.DetailAccType.label}"
+                          required="#{bindings.HtysBHVO.hints.DetailAccType.mandatory}"
+                          columns="#{bindings.HtysBHVO.hints.DetailAccType.displayWidth}"
+                          maximumLength="#{bindings.HtysBHVO.hints.DetailAccType.precision}"
+                          shortDesc="#{bindings.HtysBHVO.hints.DetailAccType.tooltip}"
+                          id="it6">
+              <f:validator binding="#{row.bindings.DetailAccType.validator}"/>
+            </af:inputText>
+          </af:column>
+          <af:column sortProperty="#{bindings.HtysBHVO.hints.Unit.name}"
+                     filterable="true" sortable="false"
+                     headerText="#{bindings.HtysBHVO.hints.Unit.label}" id="c3">
+            <af:inputText value="#{row.bindings.Unit.inputValue}"
+                          label="#{bindings.HtysBHVO.hints.Unit.label}"
+                          required="#{bindings.HtysBHVO.hints.Unit.mandatory}"
+                          columns="#{bindings.HtysBHVO.hints.Unit.displayWidth}"
+                          maximumLength="#{bindings.HtysBHVO.hints.Unit.precision}"
+                          shortDesc="#{bindings.HtysBHVO.hints.Unit.tooltip}"
+                          id="it2">
+              <f:validator binding="#{row.bindings.Unit.validator}"/>
+            </af:inputText>
+          </af:column>
+          <af:column sortProperty="#{bindings.HtysBHVO.hints.Quntity.name}"
+                     filterable="true" sortable="false"
+                     headerText="#{bindings.HtysBHVO.hints.Quntity.label}"
+                     id="c6">
+            <af:inputText value="#{row.bindings.Quntity.inputValue}"
+                          label="#{bindings.HtysBHVO.hints.Quntity.label}"
+                          required="#{bindings.HtysBHVO.hints.Quntity.mandatory}"
+                          columns="#{bindings.HtysBHVO.hints.Quntity.displayWidth}"
+                          maximumLength="#{bindings.HtysBHVO.hints.Quntity.precision}"
+                          shortDesc="#{bindings.HtysBHVO.hints.Quntity.tooltip}"
+                          id="it1">
+              <f:validator binding="#{row.bindings.Quntity.validator}"/>
+            </af:inputText>
+          </af:column>
+          <af:column sortProperty="#{bindings.HtysBHVO.hints.UnitCost.name}"
+                     filterable="true" sortable="false"
+                     headerText="#{bindings.HtysBHVO.hints.UnitCost.label}"
+                     id="c5">
+            <af:inputText value="#{row.bindings.UnitCost.inputValue}"
+                          label="#{bindings.HtysBHVO.hints.UnitCost.label}"
+                          required="#{bindings.HtysBHVO.hints.UnitCost.mandatory}"
+                          columns="#{bindings.HtysBHVO.hints.UnitCost.displayWidth}"
+                          maximumLength="#{bindings.HtysBHVO.hints.UnitCost.precision}"
+                          shortDesc="#{bindings.HtysBHVO.hints.UnitCost.tooltip}"
+                          id="it4">
+              <f:validator binding="#{row.bindings.UnitCost.validator}"/>
+              <af:convertNumber groupingUsed="false"
+                                pattern="#{bindings.HtysBHVO.hints.UnitCost.format}"/>
+            </af:inputText>
+          </af:column>
+          <af:column sortProperty="#{bindings.HtysBHVO.hints.Amount.name}"
+                     filterable="true" sortable="false"
+                     headerText="#{bindings.HtysBHVO.hints.Amount.label}"
+                     id="c4">
+            <af:inputText value="#{row.bindings.Amount.inputValue}"
+                          label="#{bindings.HtysBHVO.hints.Amount.label}"
+                          required="#{bindings.HtysBHVO.hints.Amount.mandatory}"
+                          columns="#{bindings.HtysBHVO.hints.Amount.displayWidth}"
+                          maximumLength="#{bindings.HtysBHVO.hints.Amount.precision}"
+                          shortDesc="#{bindings.HtysBHVO.hints.Amount.tooltip}"
+                          id="it3">
+              <f:validator binding="#{row.bindings.Amount.validator}"/>
+              <af:convertNumber groupingUsed="false"
+                                pattern="#{bindings.HtysBHVO.hints.Amount.format}"/>
+            </af:inputText>
+          </af:column>
+          <af:column sortProperty="#{bindings.HtysBHVO.hints.AmountAdj.name}"
+                     filterable="true" sortable="false"
+                     headerText="#{bindings.HtysBHVO.hints.AmountAdj.label}"
+                     id="c8">
+            <af:inputText value="#{row.bindings.AmountAdj.inputValue}"
+                          label="#{bindings.HtysBHVO.hints.AmountAdj.label}"
+                          required="#{bindings.HtysBHVO.hints.AmountAdj.mandatory}"
+                          columns="#{bindings.HtysBHVO.hints.AmountAdj.displayWidth}"
+                          maximumLength="#{bindings.HtysBHVO.hints.AmountAdj.precision}"
+                          shortDesc="#{bindings.HtysBHVO.hints.AmountAdj.tooltip}"
+                          id="it10">
+              <f:validator binding="#{row.bindings.AmountAdj.validator}"/>
+              <af:convertNumber groupingUsed="false"
+                                pattern="#{bindings.HtysBHVO.hints.AmountAdj.format}"/>
+            </af:inputText>
+          </af:column>
+          <af:column sortProperty="#{bindings.HtysBHVO.hints.AftAmountAdj.name}"
+                     filterable="true" sortable="false"
+                     headerText="#{bindings.HtysBHVO.hints.AftAmountAdj.label}"
+                     id="c2">
+            <af:inputText value="#{row.bindings.AftAmountAdj.inputValue}"
+                          label="#{bindings.HtysBHVO.hints.AftAmountAdj.label}"
+                          required="#{bindings.HtysBHVO.hints.AftAmountAdj.mandatory}"
+                          columns="#{bindings.HtysBHVO.hints.AftAmountAdj.displayWidth}"
+                          maximumLength="#{bindings.HtysBHVO.hints.AftAmountAdj.precision}"
+                          shortDesc="#{bindings.HtysBHVO.hints.AftAmountAdj.tooltip}"
+                          id="it9">
+              <f:validator binding="#{row.bindings.AftAmountAdj.validator}"/>
+              <af:convertNumber groupingUsed="false"
+                                pattern="#{bindings.HtysBHVO.hints.AftAmountAdj.format}"/>
+            </af:inputText>
+          </af:column>
+          <af:column sortProperty="#{bindings.HtysBHVO.hints.OrderCode.name}"
+                     filterable="true" sortable="false"
+                     headerText="#{bindings.HtysBHVO.hints.OrderCode.label}"
+                     id="c1">
+            <af:inputText value="#{row.bindings.OrderCode.inputValue}"
+                          label="#{bindings.HtysBHVO.hints.OrderCode.label}"
+                          required="#{bindings.HtysBHVO.hints.OrderCode.mandatory}"
+                          columns="#{bindings.HtysBHVO.hints.OrderCode.displayWidth}"
+                          maximumLength="#{bindings.HtysBHVO.hints.OrderCode.precision}"
+                          shortDesc="#{bindings.HtysBHVO.hints.OrderCode.tooltip}"
+                          id="it5">
+              <f:validator binding="#{row.bindings.OrderCode.validator}"/>
+            </af:inputText>
+          </af:column>
+          <af:column sortProperty="#{bindings.HtysBHVO.hints.ProductLine.name}"
+                     filterable="true" sortable="false"
+                     headerText="#{bindings.HtysBHVO.hints.ProductLine.label}"
+                     id="c7">
+            <af:inputText value="#{row.bindings.ProductLine.inputValue}"
+                          label="#{bindings.HtysBHVO.hints.ProductLine.label}"
+                          required="#{bindings.HtysBHVO.hints.ProductLine.mandatory}"
+                          columns="#{bindings.HtysBHVO.hints.ProductLine.displayWidth}"
+                          maximumLength="#{bindings.HtysBHVO.hints.ProductLine.precision}"
+                          shortDesc="#{bindings.HtysBHVO.hints.ProductLine.tooltip}"
+                          id="it8">
+              <f:validator binding="#{row.bindings.ProductLine.validator}"/>
+            </af:inputText>
+          </af:column>
+        </af:table>
+      </af:panelCollection>
+    </f:facet>
+    <f:facet name="start"/>
+    <f:facet name="end"/>
+    <f:facet name="top">
+      <af:panelGroupLayout id="pgl1" layout="vertical">
+        <af:panelGroupLayout id="pgl2" layout="horizontal">
+        <af:selectOneChoice value="#{viewScope.HTYSBean.year}"
+                            label="年" autoSubmit="true"
+                            id="soc1">
+          <f:selectItems value="#{viewScope.HTYSBean.yearList}" id="si1"/>
+        </af:selectOneChoice>
+          <af:selectOneChoice value="#{viewScope.HTYSBean.entity}"
+                              label="实体" autoSubmit="true"
+                              id="soc2">
+            <f:selectItems value="#{viewScope.HTYSBean.entityList}" id="si2"/>
+          </af:selectOneChoice>
+          <af:selectOneChoice value="#{viewScope.HTYSBean.proCode}"
+                              label="项目编号" autoSubmit="true"
+                              id="soc3">
+            <f:selectItems value="#{viewScope.HTYSBean.proCodeList}" id="si3"/>
+          </af:selectOneChoice>
+          <af:selectOneChoice value="#{viewScope.HTYSBean.version}"
+                              label="版本" autoSubmit="true"
+                              id="soc4">
+            <f:selectItems value="#{viewScope.HTYSBean.versionList}" id="si4"/>
+          </af:selectOneChoice>
+        </af:panelGroupLayout>
+        <af:panelGroupLayout id="pgl3" layout="horizontal">
+          <af:selectOneChoice value="#{viewScope.HTYSBean.HLine}"
+                              label="行业线" autoSubmit="true"
+                              id="soc5">
+            <f:selectItems value="#{viewScope.HTYSBean.hlList}" id="si5"/>
+          </af:selectOneChoice>
+          <af:selectOneChoice value="#{viewScope.HTYSBean.YLine}"
+                              label="业务线" autoSubmit="true"
+                              id="soc6">
+            <f:selectItems value="#{viewScope.HTYSBean.ylList}" id="si6"/>
+          </af:selectOneChoice>
+          <af:selectOneChoice value="#{viewScope.HTYSBean.proType}"
+                              label="项目类型" autoSubmit="true"
+                              id="soc7">
+            <f:selectItems value="#{viewScope.HTYSBean.proTypeList}" id="si7"/>
+          </af:selectOneChoice>
+          <af:commandButton text="#{viewBundle['dms.common.query']}" id="cb1"
+                            actionListener="#{viewScope.HTYSBean.queryData}"/>
+        </af:panelGroupLayout>
+      </af:panelGroupLayout>
+    </f:facet>
+  </af:panelStretchLayout>
+  
+
+</jsp:root>

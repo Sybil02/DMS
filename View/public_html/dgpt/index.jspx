@@ -18,6 +18,8 @@
                                 actionListener="#{backingBeanScope.Launcher.launcherBh}"/>
                 <af:commandLink text="预计新签项目预算编制表-杭和" id="cl2"
                                 actionListener="#{backingBeanScope.Launcher.launcherHh}"/>
+                <af:commandLink text="合同预算-北和" id="cl3"
+                                actionListener="#{backingBeanScope.Launcher.launcherHtysBH}"/>
               </af:panelList>
             </af:group>
           </f:facet>

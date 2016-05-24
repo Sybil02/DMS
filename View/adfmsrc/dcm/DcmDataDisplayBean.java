@@ -299,7 +299,7 @@ public class DcmDataDisplayBean extends TablePagination{
         if (null == filePath) {
             return;
         }
-        //读取excel数据到数据库临时表
+        //读取excel数据到数据库临时表--路径，组合id
         if (!this.handleExcel(filePath, curComRecordId)) {
             return;
         }
@@ -807,7 +807,7 @@ public class DcmDataDisplayBean extends TablePagination{
             String vsCode=(String)vsRows[0].getAttribute("Source");
             StringBuffer sql=new StringBuffer();
             sql.append("SELECT T.CODE, T.MEANING FROM \"").append(vsCode)
-            .append("\" T WHERE T.LOCALE = '").append(ADFContext.getCurrent().getLocale()).append("'  ORDER BY T.IDX ");
+                .append("\" T WHERE T.LOCALE = '").append(ADFContext.getCurrent().getLocale()).append("'  ORDER BY T.IDX ");
             Statement stmt= DmsUtils.getDmsApplicationModule().getDBTransaction().createStatement(DBTransaction.DEFAULT);
             try {
                 ResultSet rs = stmt.executeQuery(sql.toString());
@@ -907,7 +907,7 @@ public class DcmDataDisplayBean extends TablePagination{
         }
         this.dataModel.setWrappedData(data);
     }
-    //获取数据查询语句
+    //获取数据查询语句03
     private String getQuerySql() {
         StringBuffer sql_select = new StringBuffer();
         StringBuffer sql_from = new StringBuffer();
@@ -967,7 +967,7 @@ public class DcmDataDisplayBean extends TablePagination{
             sql_where.toString();
     }
     
-    //获取数据查询语句
+    //获取数据查询语句07
     private String getExportSql() {
         StringBuffer sql_select = new StringBuffer();
         StringBuffer sql_from = new StringBuffer();

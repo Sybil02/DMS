@@ -20,4 +20,10 @@ public class Launcher extends TabLauncher{
                         "/WEB-INF/dgpt/dms_xqys_hh.xml#dms_xqys_hh",
                         false);
     }
+
+    public void launcherHtysBH(ActionEvent actionEvent) {
+        _launchActivity("合同预算-北和",
+                        "/WEB-INF/dgpt/dms_htys_bh_tsk.xml#dms_htys_bh_tsk",
+                        false);
+    }
 }
