@@ -661,6 +661,7 @@
             <hash>
                <url n="content-folder-url" path="adfmsrc/dcm/template/"/>
                <list n="pattern-filters">
+                  <string v="+dcm/template/TemplateEntity.java"/>
                   <string v="+dcm/template/TemplateEO.java"/>
                   <string v="+dcm/template/TemplateTreeModel.java"/>
                   <string v="+dcm/template/TemplateTreeItem.java"/>

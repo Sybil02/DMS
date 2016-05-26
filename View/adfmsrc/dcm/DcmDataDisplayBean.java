@@ -11,6 +11,8 @@ import dcm.combinantion.CombinationEO;
 
 import dcm.template.TemplateEO;
 
+import dcm.template.TemplateEntity;
+
 import dms.login.Person;
 
 import dms.quartz.core.QuartzSchedulerSingleton;
@@ -314,8 +316,14 @@ public class DcmDataDisplayBean extends TablePagination{
         }
         
         //读取excel数据到数据库临时表
-        if (!this.handleExcel(filePath, curComRecordId)) {
-            return;
+        if(this.batchExcel){
+            if (!this.batchHandleExcel(filePath, curComRecordId, batchTempList)) {
+                return;
+            }
+        }else{
+            if (!this.handleExcel(filePath, curComRecordId)) {
+                return;
+            }
         }
         
         //是否后台导入
@@ -619,16 +627,68 @@ public class DcmDataDisplayBean extends TablePagination{
         return text;
     }
     
+    //构造批量导入模板List
+    private List<TemplateEntity> getTempList(List<String> batchTempList){
+        DBTransaction trans =(DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
+        Statement stat = trans.createStatement(DBTransaction.DEFAULT);
+        List<TemplateEntity> tempList = new ArrayList<TemplateEntity>();
+        for(String tempId : batchTempList){
+            String temptable = "";
+            int startLine = 2;
+            int columnSize = 0;
+            String templateName = "";
+            String sql = "SELECT T.ID,T.NAME,T.DATA_START_LINE,T.TMP_TABLE FROM DCM_TEMPLATE T WHERE T.LOCALE = '" + this.curUser.getLocale() 
+                         + "' AND T.ID = '" + tempId + "'";
+            String countSql = "SELECT COUNT(1) AS COLSIZE FROM DCM_TEMPLATE_COLUMN T WHERE T.LOCALE = '" + this.curUser.getLocale()
+                         + "' AND T.TEMPLATE_ID = '" + tempId + "'";
+            ResultSet rs;
+            ResultSet cRs;
+            try {
+                rs = stat.executeQuery(sql);
+                if(rs.next()){
+                    temptable = rs.getString("TMP_TABLE"); 
+                    templateName = rs.getString("NAME");
+                    startLine = rs.getInt("DATA_START_LINE");
+                }
+                rs.close();
+                cRs = stat.executeQuery(countSql);
+                if(cRs.next()){
+                    columnSize = cRs.getInt("COLSIZE"); 
+                }
+                cRs.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            TemplateEntity te = new TemplateEntity(tempId,templateName,temptable,columnSize,startLine);
+            tempList.add(te);
+        }
+        try {
+            stat.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return tempList;
+    }
+    
     //批量读取数据到临时表
     private boolean batchHandleExcel(String fileName,String curComRecordId,List<String> batchTempList) throws SQLException {
         //清空临时表,错误表数据
         for(String tempId : batchTempList){
             this.clearTmpTableAndErrTable(curComRecordId, tempId);
-        }
-        
+        }  
         //读取Excel数据
-        
-        
+        DBTransaction trans =(DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
+        String combinationRecord = ObjectUtils.toString(curComRecordId);
+        BatchExcelReader beReader = new BatchExcelReader(trans,combinationRecord,this.curUser.getId(),getTempList(batchTempList));
+
+        try {
+            ExcelReaderUtil.readExcel(beReader, fileName, true);
+            beReader.close();
+        } catch (Exception e) {
+            this._logger.severe(e);
+            JSFUtils.addFacesErrorMessage(DmsUtils.getMsg("dcm.excel_handle_error"));
+            return false;
+        }
         return true;    
     }
     
