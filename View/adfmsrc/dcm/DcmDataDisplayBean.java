@@ -140,6 +140,8 @@ public class DcmDataDisplayBean extends TablePagination{
     private FilterableQueryDescriptor queryDescriptor=new DcmQueryDescriptor();
     private Map filters;
     private boolean useQuartz = false;
+    private boolean batchExcel = false;
+    private List<String> batchTempList;
     //初始化
     public DcmDataDisplayBean() {
         this.curUser =(Person)ADFContext.getCurrent().getSessionScope().get("cur_user");
@@ -294,6 +296,23 @@ public class DcmDataDisplayBean extends TablePagination{
         if (null == filePath) {
             return;
         }
+        
+        //如果批量导入，验证sheet页权限
+        if(this.batchExcel){
+            this.batchTempList = new ArrayList<String>();
+            XSSFWorkbook xs;
+            try {
+                xs = new XSSFWorkbook(filePath);
+                int stNum = xs.getNumberOfSheets();
+                for(int i = 0;i < stNum ; i++){
+                    XSSFSheet st = xs.getSheetAt(i);
+                    this.vaildateSheetAuthority(st.getSheetName());
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        
         //读取excel数据到数据库临时表
         if (!this.handleExcel(filePath, curComRecordId)) {
             return;
@@ -311,6 +330,8 @@ public class DcmDataDisplayBean extends TablePagination{
                 //若出现错误则显示错误信息提示框
                 this.showErrorPop();
             }
+        }else if(this.batchExcel){
+            
         }else{
             //进行数据处理（前置程序、校验和善后程序）
             if (this.handleData(this.isIncrement ? "INCREMENT" : "REPLACE",curComRecordId)) {
@@ -324,6 +345,46 @@ public class DcmDataDisplayBean extends TablePagination{
             this.queryTemplateData();
         }
 
+    }
+    
+    private boolean vaildateSheetAuthority(String sheetName){
+        boolean flag = true;
+        //query template by sheetName
+        ViewObject vo = DmsUtils.getDcmApplicationModule().getDcmTemplateView();
+        vo.setWhereClause("NAME = '" + sheetName + "' AND LOCALE = '" + this.curUser.getLocale() + "'");
+        vo.executeQuery();
+        vo.setWhereClause(null);
+        String tempId = "";
+        if(vo.hasNext()){
+            Row row = vo.first();
+            tempId = row.getAttribute("Id").toString();
+        }else{
+            flag = false;
+            return flag;
+        }
+        //校验用户是否有模板权限
+        ViewObject authVo = DmsUtils.getDcmApplicationModule().getDcmUserTemplateView();
+        authVo.setWhereClause("TEMPLATE_ID = '" + tempId + "' AND READ_ONLY = 'N'" );
+        authVo.executeQuery();
+        authVo.setWhereClause(null);
+        if(!authVo.hasNext()){
+            flag = false;
+            return flag;
+        }
+        //能在该组合下导入，则用户在其他模板下也具有该组合值集权限
+        //校验组合是否打开
+        ViewObject comVo = DmsUtils.getDcmApplicationModule().getDcmTemplateCombinationView();
+        comVo.setWhereClause("TEMPLATE_ID = '" + tempId + "' AND COM_RECORD_ID ='" + this.curCombiantionRecord + "' AND STATUS = 'OPEN'");
+        comVo.executeQuery();
+        comVo.setWhereClause(null);
+        if(!comVo.hasNext()){
+            flag = false;
+        }
+        
+        if(flag){
+            this.batchTempList.add(tempId);
+        }
+        return flag;
     }
     
     private void newImportJob(String filePath) throws SchedulerException{
@@ -557,6 +618,20 @@ public class DcmDataDisplayBean extends TablePagination{
         }
         return text;
     }
+    
+    //批量读取数据到临时表
+    private boolean batchHandleExcel(String fileName,String curComRecordId,List<String> batchTempList) throws SQLException {
+        //清空临时表,错误表数据
+        for(String tempId : batchTempList){
+            this.clearTmpTableAndErrTable(curComRecordId, tempId);
+        }
+        
+        //读取Excel数据
+        
+        
+        return true;    
+    }
+    
     //读取excel数据到临时表
     private boolean handleExcel(String fileName, String curComRecordId) throws SQLException {
         DBTransaction trans =(DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
@@ -575,8 +650,8 @@ public class DcmDataDisplayBean extends TablePagination{
         }
         return true;
     }
+    
     //文件上传
-
     private String uploadFile() {
         UploadedFile file = (UploadedFile)this.fileInput.getValue();
         if (!(file.getFilename().endsWith(".xls") ||
@@ -1192,6 +1267,25 @@ public class DcmDataDisplayBean extends TablePagination{
     public RichPopup getErrorWindow() {
         return errorWindow;
     }
+    
+    private void clearTmpTableAndErrTable(String comRecordId,String tempId){
+        String clearTmpTableSql="DELETE FROM \"" +this.curTempalte.getTmpTable() 
+                                +"\" WHERE TEMPLATE_ID='" +
+                                tempId +"' AND COM_RECORD_ID " 
+                                +(comRecordId == null ?
+                                "IS NULL" :("='" + comRecordId + "'"));
+        String clearErrTableSql="DELETE FROM DCM_ERROR WHERE TEMPLATE_ID='" 
+                                +tempId +"' AND COM_RECORD_ID " 
+                                +(comRecordId == null ?
+                                "IS NULL" :("='" + comRecordId + "'"));
+        ApplicationModule dcmApplicationModule =DmsUtils.getDcmApplicationModule();
+        //清空临时表相应数据
+        dcmApplicationModule.getTransaction().executeCommand(clearTmpTableSql);
+        //清空错误表相应数据
+        dcmApplicationModule.getTransaction().executeCommand(clearErrTableSql);
+        dcmApplicationModule.getTransaction().commit();
+    }
+    
     private void clearTmpTableAndErrTable(String comRecordId) throws SQLException {
         String clearTmpTableSql="DELETE FROM \"" +this.curTempalte.getTmpTable() 
                                 +"\" WHERE TEMPLATE_ID='" +
@@ -1329,4 +1423,11 @@ public class DcmDataDisplayBean extends TablePagination{
         return useQuartz;
     }
 
+    public void setBatchExcel(boolean batchExcel) {
+        this.batchExcel = batchExcel;
+    }
+
+    public boolean isBatchExcel() {
+        return batchExcel;
+    }
 }

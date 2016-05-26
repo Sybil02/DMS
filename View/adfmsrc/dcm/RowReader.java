@@ -9,9 +9,6 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.TreeMap;
 
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
-
 import oracle.adf.share.logging.ADFLogger;
 
 import oracle.jbo.server.DBTransaction;
@@ -67,6 +64,7 @@ public class RowReader implements IRowReader {
     public void getRows(int sheetIndex, String sheetName, int curRow,
                         TreeMap<Integer, String> rowlist) {
         ReplaceSpecialChar rsc = new ReplaceSpecialChar();
+        System.out.println(sheetIndex + ":" + sheetName);
         if (curRow >= this.startLine - 1&&sheetName.startsWith(this.templateName)) {
             boolean isEpty = true;
             try {
