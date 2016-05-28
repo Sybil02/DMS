@@ -10,20 +10,19 @@ public class PcColumnDef {
         this.locale=row.getLocale();
         this.columnLable=row.getColumnLabel();
         this.dbTableCol= row.getDbTableCol();
-        this.dataType=row.getDataType();
-        this.seq=row.getSeq();
+        
     }
     
     private String id;
     private String locale;
     private String columnLable;
     private String dbTableCol;
-    private String dataType;
-    private Number seq;
+    private boolean isReadonly;
 
-    public PcColumnDef(String columnLable, String dbTableCol) {
+    public PcColumnDef(String columnLable, String dbTableCol,boolean isReadonly) {
         this.columnLable = columnLable;
         this.dbTableCol = dbTableCol;
+        this.isReadonly = isReadonly;
     }
 
 
@@ -59,19 +58,11 @@ public class PcColumnDef {
         return dbTableCol;
     }
 
-    public void setSeq(Number seq) {
-        this.seq = seq;
+    public void setIsReadonly(boolean isReadonly) {
+        this.isReadonly = isReadonly;
     }
 
-    public Number getSeq() {
-        return seq;
-    }
-
-    public void setDataType(String dataType) {
-        this.dataType = dataType;
-    }
-
-    public String getDataType() {
-        return dataType;
+    public boolean isIsReadonly() {
+        return isReadonly;
     }
 }

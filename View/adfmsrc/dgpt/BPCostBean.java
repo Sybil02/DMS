@@ -2,15 +2,21 @@ package dgpt;
 
 import common.DmsUtils;
 
+import common.JSFUtils;
+
 import dcm.PcColumnDef;
 
 import dcm.PcDataTableModel;
 
 import dms.login.Person;
 
+import java.sql.CallableStatement;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+
+import java.sql.Types;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -24,6 +30,7 @@ import java.util.List;
 
 import java.util.Map;
 
+import javax.faces.event.ActionEvent;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 
@@ -36,6 +43,8 @@ import oracle.jbo.server.DBTransaction;
 import org.apache.myfaces.trinidad.event.SelectionEvent;
 import org.apache.myfaces.trinidad.model.CollectionModel;
 import org.apache.myfaces.trinidad.model.RowKeySet;
+
+import utils.system;
 
 public class BPCostBean {
     private Person curUser;
@@ -147,7 +156,7 @@ public class BPCostBean {
             this.createTableModel();
         }
     }
-   //数据查询
+   //数据查询--头
     public void queryData(){
         DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
         Statement stat = trans.createStatement(DBTransaction.DEFAULT);
@@ -199,7 +208,10 @@ public class BPCostBean {
             rs = stat.executeQuery(sql.toString());
             while(rs.next()){
                 Map row = new HashMap();
-                
+                for(Map.Entry<String,String> entry:labelMap.entrySet()){
+                    row.put(entry.getValue(), rs.getString(entry.getValue()));
+                }
+                row.put("ROW_ID", rs.getString("ROW_ID"));
                 data.add(row);
             }
             rs.close();
@@ -229,13 +241,27 @@ public class BPCostBean {
             start = sdf.parse(pStart);
             end = sdf.parse(pEnd);
             monthList = this.findDates(start, end);
-            for(int i = 10 ; i < monthList.size()+10 ; i++){
-                labelMap.put("M"+i, "Y"+sdf.format(monthList.get(i)));
+            for(int i = 0 ; i < monthList.size() ; i++){
+                labelMap.put("KEY"+(i+10), "Y"+sdf.format(monthList.get(i)));
             }
+            labelMap.put("KEY"+(monthList.size()+10),"SUM_AFTER_JUL");
+            System.out.println("ge:"+labelMap.size());
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        labelMap.put("SUM_AFTER_JUL","SUM_AFTER_JUL");
+        int flag = 1;
+        boolean isReadonly = true;
+        for(Map.Entry<String,String> map:labelMap.entrySet()){
+            if(flag>9){
+                isReadonly = false;
+                
+            }
+            flag++;
+            System.out.println(isReadonly);
+            PcColumnDef newCol = new PcColumnDef(map.getValue(),map.getValue(),isReadonly);
+            this.pcColsDef.add(newCol);
+        }
+        ((PcDataTableModel)this.dataModel).setPcColsDef(this.pcColsDef);
         return labelMap;
     }
     public static List<Date> findDates(Date dBegin, Date dEnd) {  
@@ -267,10 +293,118 @@ public class BPCostBean {
             table.setRowKey(rowKey);
         }
     }
+    //保存
+    public void operation_save(ActionEvent actionEvent) {
+        DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
+        //清空临时表数据
+        String sqldelete = "DELETE FROM PRO_PLAN_COST_BODY_TEMP T WHERE T.CREATED_BY = \'"+this.curUser.getId()+"\'";
+        Statement st = trans.createStatement(DBTransaction.DEFAULT);
+        try {
+            st.executeUpdate(sqldelete);
+            trans.commit();
+            st.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        StringBuffer sql = new StringBuffer();
+        StringBuffer sql_value = new StringBuffer();
+        sql_value.append(" VALUES(");
+        sql.append("INSERT INTO PRO_PLAN_COST_BODY_TEMP(") ;
+        //构建sql语句
+        LinkedHashMap<String,String> map = this.getLabelMap();
+        int last = map.size()+1;
+        for(Map.Entry<String,String> entry : map.entrySet()){
+            sql.append(entry.getValue()+",");
+            sql_value.append("?,");
+        }
+        sql.append("ROW_ID,CONNECT_ID,CREATED_BY)");
+        sql_value.append("?,\'"+connectId+"\',"+this.curUser.getId()+")");
+        PreparedStatement stmt = trans.createPreparedStatement(sql.toString()+sql_value.toString(), 0);
+        //获取数据
+        List<Map> modelData = (List<Map>)this.dataModel.getWrappedData();
+        for(Map<String,String> rowdata : modelData){
+            if("UPDATE".equals(rowdata.get("OPERATION"))){
+                try {
+                    int i =1;
+                    for(Map.Entry<String,String> entry : map.entrySet()){
+                        stmt.setString(i++ , rowdata.get(entry.getValue()));
+                    }
+                    stmt.setString(last, rowdata.get("ROW_ID"));
+                    stmt.addBatch();
+                    stmt.executeBatch();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }        
+        }
+        trans.commit();
+        //执行校验
+        if(this.validation()){
+            this.inputPro();
+            for(Map<String,String> rowdata : modelData){
+                if("UPDATE".equals(rowdata.get("OPERATION"))){
+                    rowdata.put("OPERATION", null);
+                }
+            }
+        }else{
+            JSFUtils.addFacesErrorMessage("数据校验不通过！");
+        }
+    }
+    //校验程序
+    public boolean validation(){
+        boolean flag = true;
+        DBTransaction trans = (DBTransaction)DmsUtils.getDcmApplicationModule().getDBTransaction();
+        CallableStatement cs = trans.createCallableStatement("{CALl DMS_ZZX.BPC_VALIDATION(?,?)}", 0);
+        try {
+            cs.setString(1, this.curUser.getId());
+            cs.registerOutParameter(2, Types.VARCHAR);
+            cs.execute();
+            if("N".equals(cs.getString(2))){
+                flag = false;
+            }
+            cs.close();
+        } catch (SQLException e) {
+            flag = false;
+            e.printStackTrace();
+        }
+        return flag;
+    }
+    //导入程序
+    public void inputPro(){
+        System.out.println("导入程序");
+        DBTransaction trans = (DBTransaction)DmsUtils.getDcmApplicationModule().getDBTransaction();
+        CallableStatement cs = trans.createCallableStatement("{CALl DMS_ZZX.BPC_INPUTPRO(?)}", 0);
+        try {
+            cs.setString(1,this.curUser.getId() );
+            cs.execute();
+            trans.commit();
+            cs.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    //取消
+    public void operation_reset(ActionEvent actionEvent) {
+        DmsUtils.getDmsApplicationModule().getTransaction().rollback();
+        this.queryData();
+        this.createTableModel();
+    }
     public void setPanelaCollection(RichPanelCollection panelaCollection) {
         this.panelaCollection = panelaCollection;
     }
 
+    //选中行，修改
+    public void valueChangeLinstener(ValueChangeEvent valueChangeEvent) {
+        Map rowMap = (Map)this.dataModel.getRowData();
+        if (((PcDataTableModel)this.dataModel).getSelectedRows().size() > 1) {
+            String msg =DmsUtils.getMsg("dcm.msg.can_not_select_multiple_row");
+            JSFUtils.addFacesInformationMessage(msg);
+            return;
+        }
+        if(rowMap.get("OPERATION") == null){
+            rowMap.put("OPERATION", PcDataTableModel.getOPERATE_UPDATE());    
+        }                
+    }
     public RichPanelCollection getPanelaCollection() {
         return panelaCollection;
     }
@@ -402,4 +536,6 @@ public class BPCostBean {
     public String getConnectId() {
         return connectId;
     }
+
+   
 }

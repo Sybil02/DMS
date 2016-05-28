@@ -11,8 +11,10 @@
         <f:facet name="menus"/>
         <f:facet name="toolbar">
           <af:toolbar id="t1">
-            <af:commandButton text="#{viewBundle['dms.common.save']}" id="cb1"/>
-            <af:commandButton text="#{viewBundle['dms.common.cancel']}" id="cb2"/>
+            <af:commandButton text="#{viewBundle['dms.common.save']}" id="cb1"
+                              actionListener="#{viewScope.BPCostBean.operation_save}"/>
+            <af:commandButton text="#{viewBundle['dms.common.cancel']}" id="cb2"
+                              actionListener="#{viewScope.BPCostBean.operation_reset}"/>
           </af:toolbar>
         </f:facet>
         <f:facet name="statusbar"/>
@@ -22,9 +24,17 @@
                   selectedRowKeys="#{viewScope.BPCostBean.dataModel.selectedRows}"
                   emptyText="#{viewBundle['dms.common.nodata']}"
                   partialTriggers=":::soc2 :::soc1 :::soc3">
-          <af:column sortable="false" headerText="col1" id="c1">
-            <af:outputText value="#{row.col1}" id="ot6"/>
-          </af:column>
+            <af:forEach items="#{viewScope.BPCostBean.dataModel.pcColsDef}"
+                        var="attr" varStatus="vs">
+                  <af:column sortable="false" headerText="#{attr.columnLable}" id="c1"
+                            inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
+                                    #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
+                                    #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}"
+                             >
+                    <af:inputText value="#{row[attr.dbTableCol]}" id="ot6"  readOnly="#{attr.isReadonly}"
+                                    valueChangeListener="#{viewScope.BPCostBean.valueChangeLinstener}"/>
+                  </af:column>
+          </af:forEach>
         </af:table>
       </af:panelCollection>
     </f:facet>
