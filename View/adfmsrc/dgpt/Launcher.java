@@ -26,4 +26,15 @@ public class Launcher extends TabLauncher{
                         "/WEB-INF/dgpt/dms_htys_bh_tsk.xml#dms_htys_bh_tsk",
                         false);
     }
+    public void launcherProjectZx(ActionEvent actionEvent) {
+        _launchActivity("在执行项目",
+                        "/WEB-INF/dgpt/dms_projectzx_tsk.xml#dms_projectzx_tsk",
+                        false);
+    }
+
+    public void launcherBasepCost(ActionEvent actionEvent) {
+        _launchActivity("基准计划成本",
+                        "/WEB-INF/dgpt/dms_jzjhcb_tsk.xml#dms_jzjhcb_tsk",
+                        false);
+    }
 }

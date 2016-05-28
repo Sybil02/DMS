@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<adfc-config xmlns="http://xmlns.oracle.com/adf/controller" version="1.2">
+  <task-flow-definition id="dms_jzjhcb_tsk">
+    <default-activity id="__1">jzjhcb</default-activity>
+    <managed-bean id="__2">
+      <managed-bean-name id="__5">BPCostBean</managed-bean-name>
+      <managed-bean-class id="__3">dgpt.BPCostBean</managed-bean-class>
+      <managed-bean-scope id="__4">view</managed-bean-scope>
+    </managed-bean>
+    <view id="jzjhcb">
+      <page>/dgpt/JzjhCb.jsff</page>
+    </view>
+    <use-page-fragments/>
+  </task-flow-definition>
+</adfc-config>

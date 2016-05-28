@@ -34,7 +34,7 @@ public class HtysBean {
         super();
         this.curUser = (Person)(ADFContext.getCurrent().getSessionScope().get("cur_user"));
         this.initList();
-        ViewObject vo = DmsUtils.getDmsApplicationModule().getBhXqysVO();
+        ViewObject vo = DmsUtils.getDmsApplicationModule().getHtysBHVO();
         vo.setWhereClause("1=2");
         vo.executeQuery();
     }

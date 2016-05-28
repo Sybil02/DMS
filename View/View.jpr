@@ -672,6 +672,9 @@
             <hash>
                <url n="content-folder-url" path="adfmsrc/dcm/"/>
                <list n="pattern-filters">
+                  <string v="+dcm/PcDataDisplayBean.java"/>
+                  <string v="+dcm/PcDataTableModel.java"/>
+                  <string v="+dcm/PcColumnDef.java"/>
                   <string v="+dcm/AbstractExcel2007Writer.java"/>
                   <string v="+dcm/Excel2003WriterImpl.java"/>
                   <string v="+dcm/Excel2007WriterImpl.java"/>
@@ -764,6 +767,8 @@
             <hash>
                <url n="content-folder-url" path="adfmsrc/dgpt/"/>
                <list n="pattern-filters">
+                  <string v="+dgpt/BPCostBean.java"/>
+                  <string v="+dgpt/ProjectZxBean.java"/>
                   <string v="+dgpt/HtysBean.java"/>
                   <string v="+dgpt/HhBean.java"/>
                   <string v="+dgpt/ValuesModel.java"/>

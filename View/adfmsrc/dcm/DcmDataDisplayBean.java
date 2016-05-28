@@ -758,7 +758,7 @@ public class DcmDataDisplayBean extends TablePagination{
         templateView.executeQuery();
         Row[] rows=templateView.findByKey(new Key(new Object[]{curTemplateId,ADFContext.getCurrent().getLocale().toString()}), 1);
         if(rows.length>0){
-            this.curTempalte=new TemplateEO((DcmTemplateViewRowImpl)rows[0]); 
+            this.curTempalte=new TemplateEO((DcmTemplateViewRowImpl)rows[0]);
             
             if("Y".equals(this.curTempalte.getIsSpecial())){
                 this.special = true;
@@ -907,7 +907,7 @@ public class DcmDataDisplayBean extends TablePagination{
         }
         this.dataModel.setWrappedData(data);
     }
-    //获取数据查询语句03
+    //获取数据查询语句
     private String getQuerySql() {
         StringBuffer sql_select = new StringBuffer();
         StringBuffer sql_from = new StringBuffer();
@@ -967,7 +967,7 @@ public class DcmDataDisplayBean extends TablePagination{
             sql_where.toString();
     }
     
-    //获取数据查询语句07
+    //获取数据查询语句
     private String getExportSql() {
         StringBuffer sql_select = new StringBuffer();
         StringBuffer sql_from = new StringBuffer();
