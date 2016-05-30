@@ -22,6 +22,7 @@
                   value="#{viewScope.BPCostBean.dataModel}"
                   selectionListener="#{viewScope.BPCostBean.rowSelectionListener}"
                   selectedRowKeys="#{viewScope.BPCostBean.dataModel.selectedRows}"
+                  rowSelection="multiple" editingMode="clickToEdit"
                   emptyText="#{viewBundle['dms.common.nodata']}"
                   partialTriggers=":::soc2 :::soc1 :::soc3">
             <af:forEach items="#{viewScope.BPCostBean.dataModel.pcColsDef}"

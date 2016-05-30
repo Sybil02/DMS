@@ -1,0 +1,117 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.1"
+          xmlns:c="http://java.sun.com/jsp/jstl/core"
+          xmlns:af="http://xmlns.oracle.com/adf/faces/rich"
+          xmlns:f="http://java.sun.com/jsf/core">
+  <c:set var="viewBundle" value="#{adfBundle['dms_v']}"/>
+  <af:panelStretchLayout id="psl1" startWidth="0px">
+    <f:facet name="bottom"/>
+    <f:facet name="center">
+      <af:panelCollection id="pc1">
+        <f:facet name="menus"/>
+        <f:facet name="toolbar">
+          <af:toolbar id="t1">
+            <af:commandButton text="#{viewBundle['dcm.common.new']}" id="cb1"
+                              action="#{viewScope.HtChangeBean.operation_new}"/>
+            <af:commandButton text="#{viewBundle['dms.common.save']}" id="cb2"
+                              action="#{viewScope.HtChangeBean.operation_save}"/>
+            <af:commandButton text="#{viewBundle['dms.common.cancel']}" id="cb3"
+                              actionListener="#{viewScope.HtChangeBean.operation_reset}"/>
+            <af:commandButton text="#{viewBundle['dcm.common.delete']}" id="cb4"
+                              action="#{viewScope.HtChangeBean.operation_delete}"/>
+          </af:toolbar>
+        </f:facet>
+        <f:facet name="statusbar"/>
+        <af:table var="row" rowBandingInterval="0" id="t2"
+                  value="#{viewScope.HtChangeBean.dataModel}"
+                  selectionListener="#{viewScope.HtChangeBean.rowSelectionListener}"
+                  selectedRowKeys="#{viewScope.HtChangeBean.dataModel.selectedRows}"
+                  rowSelection="multiple" editingMode="clickToEdit"
+                  emptyText="#{viewBundle['dms.common.nodata']}"
+                  partialTriggers=":::soc1 :::soc2 :::soc3 ::cb1 ::cb2 ::cb3 ::cb4">
+            <af:forEach items="#{viewScope.HtChangeBean.dataModel.pcColsDef}"
+                        var="attr" varStatus="vs">
+                  <af:column sortable="false" headerText="#{attr.columnLable}" id="c1"
+                            inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
+                                    #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
+                                    #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}"
+                             >
+                    <af:inputText value="#{row[attr.dbTableCol]}" id="ot6" 
+                                    valueChangeListener="#{viewScope.HtChangeBean.valueChangeLinstener}"/>
+                  </af:column>
+          </af:forEach>
+        </af:table>
+      </af:panelCollection>
+    </f:facet>
+    <f:facet name="start"/>
+    <f:facet name="end"/>
+    <f:facet name="top">
+      <af:panelGroupLayout id="pgl1" layout="vertical" partialTriggers="soc1 soc2 soc3">
+        <af:panelGroupLayout id="pgl2" layout="horizontal">
+        <af:selectOneChoice 
+                              label="年" autoSubmit="true"
+                              id="soc1"
+                              value="#{viewScope.HtChangeBean.year}"
+                            valueChangeListener="#{viewScope.HtChangeBean.yearChange}">
+            <f:selectItems value="#{viewScope.HtChangeBean.yearList}" id="si1"/>
+          </af:selectOneChoice>
+          <af:panelLabelAndMessage label="实体" 
+                                   id="plam1" >
+            <af:outputText  id="ot1" value="#{viewScope.HtChangeBean.entity}"/>
+          </af:panelLabelAndMessage>
+          <af:panelLabelAndMessage label="产品线"
+                                   id="plam2">
+            <af:outputText  id="ot2" value="#{viewScope.HtChangeBean.PLine}"/>
+          </af:panelLabelAndMessage>
+          <af:selectOneChoice 
+                              label="项目名称" autoSubmit="true"
+                              id="soc2"
+                              value="#{viewScope.HtChangeBean.pname}"
+                              valueChangeListener="#{viewScope.HtChangeBean.projectChange}">
+            <f:selectItems id="si2"
+                           value="#{viewScope.HtChangeBean.pnameList}"/>
+          </af:selectOneChoice>
+          <af:commandButton text="#{viewBundle['dms.dgpt.htchange']}" id="cb5">
+            <af:showPopupBehavior popupId="p1"/>
+          </af:commandButton>
+        </af:panelGroupLayout>
+        <af:panelGroupLayout id="pgl3" layout="horizontal">
+            <af:selectOneChoice 
+                              label="版本" autoSubmit="true"
+                              id="soc3"
+                              value="#{viewScope.HtChangeBean.version}"
+                                valueChangeListener="#{viewScope.HtChangeBean.versionChange}">
+            <f:selectItems  id="si3"
+                           value="#{viewScope.HtChangeBean.versionList}"/>
+          </af:selectOneChoice>
+          <af:panelLabelAndMessage label="项目类型"
+                                   id="plam3">
+            <af:outputText id="ot3" value="#{viewScope.HtChangeBean.proType}"/>
+          </af:panelLabelAndMessage>
+          <af:panelLabelAndMessage label="行业线"
+                                   id="plam4">
+            <af:outputText 
+                           id="ot4" value="#{viewScope.HtChangeBean.HLine}"/>
+          </af:panelLabelAndMessage>
+          <af:panelLabelAndMessage label="业务线"
+                                   id="plam5">
+            <af:outputText 
+                           id="ot5" value="#{viewScope.HtChangeBean.YLine}"/>
+          </af:panelLabelAndMessage>
+        </af:panelGroupLayout>
+        <af:popup id="p1">
+          <af:panelWindow id="pw1" inlineStyle="width:300px;height:130px"
+                          title="#{viewBundle['dms.dgpt.htchange.message']}">
+            <af:inputText label="#{viewBundle['dms.dgpt.version']}" id="it1"
+                             value="#{viewScope.HtChangeBean.newVersion}"/>
+            <af:inputText label="#{viewBundle['dms.dgpt.endDate']}" id="it2"
+                          value="#{viewScope.HtChangeBean.newEnd}"/>
+            <af:outputLabel value="日期形式：YYYY_MM" id="ol1"/>
+            <af:commandButton text="#{viewBundle['dcm.common.ok']}" id="cb6"
+                              actionListener="#{viewScope.HtChangeBean.getNewVE}"/>
+          </af:panelWindow>
+        </af:popup>
+      </af:panelGroupLayout>
+    </f:facet>
+  </af:panelStretchLayout>
+</jsp:root>

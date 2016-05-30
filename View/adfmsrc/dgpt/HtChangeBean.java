@@ -4,7 +4,7 @@ import common.DmsUtils;
 
 import common.JSFUtils;
 
-import dcm.DcmQueryDescriptor;
+import dcm.DcmDataTableModel;
 import dcm.PcColumnDef;
 
 import dcm.PcDataTableModel;
@@ -31,6 +31,8 @@ import java.util.List;
 
 import java.util.Map;
 
+import java.util.UUID;
+
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
@@ -39,23 +41,18 @@ import oracle.adf.share.ADFContext;
 import oracle.adf.view.rich.component.rich.data.RichTable;
 import oracle.adf.view.rich.component.rich.output.RichPanelCollection;
 
-import oracle.adf.view.rich.model.FilterableQueryDescriptor;
-
 import oracle.jbo.server.DBTransaction;
 
 import org.apache.myfaces.trinidad.event.SelectionEvent;
 import org.apache.myfaces.trinidad.model.CollectionModel;
 import org.apache.myfaces.trinidad.model.RowKeySet;
 
-import utils.system;
-
-public class BPCostBean {
+public class HtChangeBean {
     private Person curUser;
     private RichPanelCollection panelaCollection;
     private CollectionModel dataModel;
     private List<PcColumnDef> pcColsDef = new ArrayList<PcColumnDef>();
-    private FilterableQueryDescriptor queryDescriptor=new DcmQueryDescriptor();
-    public BPCostBean() {
+    public HtChangeBean() {
         super();
         this.curUser = (Person)(ADFContext.getCurrent().getSessionScope().get("cur_user"));
         this.dataModel = new PcDataTableModel();
@@ -77,8 +74,10 @@ public class BPCostBean {
     private String pStart;
     private String pEnd;
     private String connectId;
-    public static final String TYPE_BASE="BASE";
-
+    private String newVersion;
+    private String newEnd;
+    public static final String TYPE_CHANGE="CHANGE";
+    
     private void initList(){
         this.yearList = queryYears("HLS_YEAR");
         this.pnameList = queryValues("PRO_PLAN_COST_HEADER","PROJECT_NAME");
@@ -92,7 +91,6 @@ public class BPCostBean {
         String sql = "SELECT CODE,MEANING FROM "+ source;
         List<SelectItem> values = new ArrayList<SelectItem>();
         ResultSet rs;
-
         try {
             rs = stat.executeQuery(sql);
             while(rs.next()){
@@ -134,7 +132,6 @@ public class BPCostBean {
                 return;
             }else{
                 this.queryData();
-                this.createTableModel();
             }
     }
     
@@ -145,7 +142,7 @@ public class BPCostBean {
             return;
         }else{
             this.queryData();
-            this.createTableModel();
+            this.createTableModel(pStart,pEnd);
         }
     }
     
@@ -156,44 +153,44 @@ public class BPCostBean {
             return;
         }else{
             this.queryData();
-            this.createTableModel();
         }
     }
-   //数据查询--头
-    public void queryData(){
-        DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
-        Statement stat = trans.createStatement(DBTransaction.DEFAULT);
-        String sql = "SELECT ENTITY_NAME,PRODUCT_LINE,PROJECT_TYPE,INDUSTRY_LINE,BUSINESS_LINE,CONNECT_ID,PROJECT_START,PROJECT_END"
-                    + " FROM PRO_PLAN_COST_HEADER WHERE VERSION = \'"+version+"\'";
-        sql = sql +" AND HLS_YEAR=\'"+year+"\'";
-        sql = sql + " AND PROJECT_NAME=\'"+pname+"\'";
-        
-        ResultSet rs;
-        try {
-            rs = stat.executeQuery(sql);
-            entity="";
-            pLine="";
-            proType="";
-            hLine="";
-            yLine="";
-            connectId="";
-            while(rs.next()){
-                entity = rs.getString("ENTITY_NAME");
-                pLine = rs.getString("PRODUCT_LINE");
-                proType = rs.getString("PROJECT_TYPE");
-                hLine = rs.getString("INDUSTRY_LINE");
-                yLine = rs.getString("BUSINESS_LINE");
-                connectId=rs.getString("CONNECT_ID");
-                pStart = rs.getString("PROJECT_START");
-                pEnd = rs.getString("PROJECT_END");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-    public void createTableModel(){
+    
+    //数据查询--头
+     public void queryData(){
+         DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
+         Statement stat = trans.createStatement(DBTransaction.DEFAULT);
+         String sql = "SELECT ENTITY_NAME,PRODUCT_LINE,PROJECT_TYPE,INDUSTRY_LINE,BUSINESS_LINE,CONNECT_ID,PROJECT_START,PROJECT_END"
+                     + " FROM PRO_PLAN_COST_HEADER WHERE VERSION = \'"+version+"\'";
+         sql = sql +" AND HLS_YEAR=\'"+year+"\'";
+         sql = sql + " AND PROJECT_NAME=\'"+pname+"\'";
+         ResultSet rs;
+         try {
+             rs = stat.executeQuery(sql);
+             entity="";
+             pLine="";
+             proType="";
+             hLine="";
+             yLine="";
+             connectId="";
+             while(rs.next()){
+                 entity = rs.getString("ENTITY_NAME");
+                 pLine = rs.getString("PRODUCT_LINE");
+                 proType = rs.getString("PROJECT_TYPE");
+                 hLine = rs.getString("INDUSTRY_LINE");
+                 yLine = rs.getString("BUSINESS_LINE");
+                 connectId=rs.getString("CONNECT_ID");
+                 pStart = rs.getString("PROJECT_START");
+                 pEnd = rs.getString("PROJECT_END");
+             }
+         } catch (SQLException e) {
+             e.printStackTrace();
+         }
+     }
+    
+    public void createTableModel(String startTime,String endTime){
         //行的Map
-        LinkedHashMap<String,String> labelMap = getLabelMap();
+        LinkedHashMap<String,String> labelMap = getLabelMap(startTime,endTime);
         //
         DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
         Statement stat = trans.createStatement(DBTransaction.DEFAULT);
@@ -203,7 +200,7 @@ public class BPCostBean {
             sql.append(entry.getValue()).append(",");
         }
         sql.append("ROWID AS ROW_ID FROM PRO_PLAN_COST_BODY WHERE CONNECT_ID = '").append(connectId).append("'");
-        sql.append(" AND DATA_TYPE = '").append(this.TYPE_BASE).append("'");
+        sql.append(" AND DATA_TYPE = '").append(this.TYPE_CHANGE).append("'");
         List<Map> data = new ArrayList<Map>();
         ResultSet rs;
         try {
@@ -224,7 +221,180 @@ public class BPCostBean {
         this.dataModel.setWrappedData(data);
         ((PcDataTableModel)this.dataModel).setLabelMap(labelMap);
     }
-    private LinkedHashMap<String,String> getLabelMap(){
+    
+    //选中行，修改
+    public void valueChangeLinstener(ValueChangeEvent valueChangeEvent) {
+        Map rowMap = (Map)this.dataModel.getRowData();
+        if (((PcDataTableModel)this.dataModel).getSelectedRows().size() > 1) {
+            String msg =DmsUtils.getMsg("dcm.msg.can_not_select_multiple_row");
+            JSFUtils.addFacesInformationMessage(msg);
+            return;
+        }
+        if(rowMap.get("OPERATION") == null){
+            rowMap.put("OPERATION", PcDataTableModel.OPERATE_UPDATE);    
+        }                
+    }
+    
+    //取消
+    public void operation_reset(ActionEvent actionEvent) {
+        DmsUtils.getDmsApplicationModule().getTransaction().rollback();
+        this.queryData();
+        this.createTableModel(pStart,pEnd);
+    }
+    
+    public void getNewVE(ActionEvent actionEvent) {
+        //判断时间格式
+        if(!newEnd.contains("_")){
+            JSFUtils.addFacesInformationMessage("日期格式是：YYYY_MM");
+            return;
+        }
+        //生成id
+        String s = UUID.randomUUID().toString();
+        //去除分隔符-
+        String newConnectId = s.substring(0,8)+s.substring(9,13)+s.substring(14,18)+s.substring(19,23)+s.substring(24);
+        //插入头表
+        DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
+        Statement stat = trans.createStatement(DBTransaction.DEFAULT);
+        StringBuffer sql = new StringBuffer();
+        sql.append("INSERT INTO PRO_PLAN_COST_HEADER (HLS_YEAR,ENTITY_NAME,PRODUCT_LINE,PROJECT_NAME,VERSION,PROJECT_TYPE,INDUSTRY_LINE,")
+            .append("BUSINESS_LINE,PROJECT_START,PROJECT_END,CONNECT_ID) ");
+        sql.append("VALUES('").append(year+"','").append(entity+"','").append(pLine+"','").append(pname+"','").append(newVersion+"','").append(proType+"','")
+            .append(hLine+"','").append(yLine+"','").append(pStart+"','").append(newEnd+"','").append(newConnectId).append("')");
+        try {
+            stat.execute(sql.toString());
+            trans.commit();
+            stat.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        //复制，type--》connectId
+        LinkedHashMap<String,String> labelMap = getLabelMap(pStart,pEnd);
+        StringBuffer sqlInsert = new StringBuffer();
+        StringBuffer sqlValue = new StringBuffer();
+        sqlInsert.append("INSERT INTO PRO_PLAN_COST_BODY (");
+        sqlValue.append("SELECT ");
+        for(Map.Entry<String,String> entry:labelMap.entrySet()){
+            sqlInsert.append(entry.getValue()+",");
+            sqlValue.append("T."+entry.getValue()+",");
+        }
+        sqlInsert.append("DATA_TYPE,CONNECT_ID)");
+        sqlValue.append("'"+this.TYPE_CHANGE+"','").append(newConnectId).append("\'")
+                .append(" FROM PRO_PLAN_COST_BODY T WHERE T.CONNECT_ID=\'"+connectId+"\'");
+        //显示新版本，重新构造列
+        try {
+            trans.createStatement(DBTransaction.DEFAULT).execute(sqlInsert.toString()+sqlValue.toString());
+            trans.commit();
+            trans.createStatement(DBTransaction.DEFAULT).close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        versionList.add(new SelectItem(newVersion,newVersion));
+        version = newVersion;
+        pEnd = newEnd;
+        connectId = newConnectId;
+        this.createTableModel(pStart,pEnd);
+    }
+
+    //新增
+    public void operation_new() {
+        List<Map> modelData = (List<Map>) this.dataModel.getWrappedData();
+        Map newRow = new HashMap();
+        for(PcColumnDef col : this.pcColsDef){
+            newRow.put(col.getDbTableCol(), null);
+        }
+        newRow.put("OPERATION",PcDataTableModel.OPERATE_CREATE);
+        modelData.add(0, newRow);
+    }
+    //保存
+    public void operation_save() {
+        DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
+        //清空临时表数据
+        String sqldelete = "DELETE FROM PRO_PLAN_COST_BODY_TEMP T WHERE T.CREATED_BY = \'"+this.curUser.getId()+"\'";
+        Statement st = trans.createStatement(DBTransaction.DEFAULT);
+        try {
+            st.executeUpdate(sqldelete);
+            trans.commit();
+            st.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        StringBuffer sql = new StringBuffer();
+        StringBuffer sql_value = new StringBuffer();
+        sql_value.append(" VALUES(");
+        sql.append("INSERT INTO PRO_PLAN_COST_BODY_TEMP(") ;
+        //构建sql语句
+        LinkedHashMap<String,String> map = this.getLabelMap(pStart,pEnd);
+        int last = map.size()+1;
+        for(Map.Entry<String,String> entry : map.entrySet()){
+            sql.append(entry.getValue()+",");
+            sql_value.append("?,");
+        }
+        sql.append("ROW_ID,CONNECT_ID,CREATED_BY,OPERATION)");
+        sql_value.append("?,\'"+connectId+"\',"+this.curUser.getId()+",?)");
+        PreparedStatement stmt = trans.createPreparedStatement(sql.toString()+sql_value.toString(), 0);
+        //获取数据
+        List<Map> modelData = (List<Map>)this.dataModel.getWrappedData();
+        for(Map<String,String> rowdata : modelData){
+                try {
+                    stmt.setString(last, rowdata.get("ROW_ID"));
+                    if(PcDataTableModel.OPERATE_UPDATE.equals(rowdata.get("OPERATION"))){
+                        stmt.setString(last+1,PcDataTableModel.OPERATE_UPDATE);
+                    }else if(PcDataTableModel.OPERATE_CREATE.equals(rowdata.get("OPERATION"))){
+                        stmt.setString(last+1,PcDataTableModel.OPERATE_CREATE);
+                    }else if(PcDataTableModel.OPERATE_DELETE.equals(rowdata.get("OPERATION"))){
+                        stmt.setString(last+1,PcDataTableModel.OPERATE_DELETE);
+                    }
+                    if(null!=rowdata.get("OPERATION")){
+                        int i =1;
+                        for(Map.Entry<String,String> entry : map.entrySet()){
+                            stmt.setString(i++ , rowdata.get(entry.getValue()));
+                        }
+                        stmt.addBatch();
+                        stmt.executeBatch();
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                } 
+        }
+        trans.commit();
+        //执行校验
+        try {
+            stmt.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        if(this.validation()){
+            //校验成功，执行导入
+            this.inputPro();
+            for(Map<String,String> rowdata : modelData){
+                    rowdata.put("OPERATION", null);
+            }
+            this.createTableModel(pStart, pEnd);
+        }else{
+            JSFUtils.addFacesErrorMessage("数据校验不通过！");
+        }
+    }
+    //删除
+    public void operation_delete() {
+        List<Map> modelData = (List<Map>)this.dataModel.getWrappedData();
+        RowKeySet keySet =
+            ((PcDataTableModel)this.dataModel).getSelectedRows();
+        for (Object key : keySet) {
+            Map rowData = (Map)this.dataModel.getRowData(key);
+            //若为新增操作则直接从数据集删除数据
+            if (PcDataTableModel.OPERATE_CREATE.equals(rowData.get("OPERATION"))) {
+                modelData.remove(rowData);
+            } 
+            //若为更新或数据未修改则直接将数据集数据标记为删除
+            else if (PcDataTableModel.OPERATE_UPDATE.equals(rowData.get("OPERATION")) ||
+                       null == rowData.get("OPERATION")) {
+                rowData.put("OPERATION", PcDataTableModel.OPERATE_DELETE);
+            }
+            //已经为删除状态的数据无需做任何处理
+        }
+    }
+
+    private LinkedHashMap<String,String> getLabelMap(String startTime,String endTime){
         LinkedHashMap<String,String> labelMap = new LinkedHashMap<String,String>();
         labelMap.put("KEY1", "WBS");
         labelMap.put("KEY2","WORK");
@@ -240,8 +410,8 @@ public class BPCostBean {
         Date start;
         Date end ;
         try {
-            start = sdf.parse(pStart);
-            end = sdf.parse(pEnd);
+            start = sdf.parse(startTime);
+            end = sdf.parse(endTime);
             monthList = this.findDates(start, end);
             for(int i = 0 ; i < monthList.size() ; i++){
                 labelMap.put("KEY"+(i+10), "Y"+sdf.format(monthList.get(i)));
@@ -264,6 +434,8 @@ public class BPCostBean {
         ((PcDataTableModel)this.dataModel).setPcColsDef(this.pcColsDef);
         return labelMap;
     }
+    
+    //时间段中的所有时间
     public static List<Date> findDates(Date dBegin, Date dEnd) {  
             List lDate = new ArrayList();  
             lDate.add(dBegin);  
@@ -281,80 +453,12 @@ public class BPCostBean {
             }  
             return lDate;  
         } 
-    public void rowSelectionListener(SelectionEvent selectionEvent) {
-        RichTable table = (RichTable)selectionEvent.getSource();
-        RowKeySet rks = selectionEvent.getAddedSet();
-        if (rks != null) {
-            int setSize = rks.size();
-            if (setSize == 0) {
-                return;
-            }
-            Object rowKey = rks.iterator().next();
-            table.setRowKey(rowKey);
-        }
-    }
-    //保存
-    public void operation_save(ActionEvent actionEvent) {
-        DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
-        //清空临时表数据
-        String sqldelete = "DELETE FROM PRO_PLAN_COST_BODY_TEMP T WHERE T.CREATED_BY = \'"+this.curUser.getId()+"\'";
-        Statement st = trans.createStatement(DBTransaction.DEFAULT);
-        try {
-            st.executeUpdate(sqldelete);
-            trans.commit();
-            st.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        StringBuffer sql = new StringBuffer();
-        StringBuffer sql_value = new StringBuffer();
-        sql_value.append(" VALUES(");
-        sql.append("INSERT INTO PRO_PLAN_COST_BODY_TEMP(") ;
-        //构建sql语句
-        LinkedHashMap<String,String> map = this.getLabelMap();
-        int last = map.size()+1;
-        for(Map.Entry<String,String> entry : map.entrySet()){
-            sql.append(entry.getValue()+",");
-            sql_value.append("?,");
-        }
-        sql.append("ROW_ID,CONNECT_ID,CREATED_BY)");
-        sql_value.append("?,\'"+connectId+"\',"+this.curUser.getId()+")");
-        PreparedStatement stmt = trans.createPreparedStatement(sql.toString()+sql_value.toString(), 0);
-        //获取数据
-        List<Map> modelData = (List<Map>)this.dataModel.getWrappedData();
-        for(Map<String,String> rowdata : modelData){
-            if("UPDATE".equals(rowdata.get("OPERATION"))){
-                try {
-                    int i =1;
-                    for(Map.Entry<String,String> entry : map.entrySet()){
-                        stmt.setString(i++ , rowdata.get(entry.getValue()));
-                    }
-                    stmt.setString(last, rowdata.get("ROW_ID"));
-                    stmt.addBatch();
-                    stmt.executeBatch();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }        
-        }
-        trans.commit();
-        //执行校验
-        if(this.validation()){
-            this.inputPro();
-            for(Map<String,String> rowdata : modelData){
-                if("UPDATE".equals(rowdata.get("OPERATION"))){
-                    rowdata.put("OPERATION", null);
-                }
-            }
-        }else{
-            JSFUtils.addFacesErrorMessage("数据校验不通过！");
-        }
-    }
+    
     //校验程序
     public boolean validation(){
         boolean flag = true;
         DBTransaction trans = (DBTransaction)DmsUtils.getDcmApplicationModule().getDBTransaction();
-        CallableStatement cs = trans.createCallableStatement("{CALl DMS_ZZX.BPC_VALIDATION(?,?)}", 0);
+        CallableStatement cs = trans.createCallableStatement("{CALl DMS_ZZX.CHANGE_VALIDATION(?,?)}", 0);
         try {
             cs.setString(1, this.curUser.getId());
             cs.registerOutParameter(2, Types.VARCHAR);
@@ -369,10 +473,11 @@ public class BPCostBean {
         }
         return flag;
     }
+    
     //导入程序
     public void inputPro(){
         DBTransaction trans = (DBTransaction)DmsUtils.getDcmApplicationModule().getDBTransaction();
-        CallableStatement cs = trans.createCallableStatement("{CALl DMS_ZZX.BPC_INPUTPRO(?)}", 0);
+        CallableStatement cs = trans.createCallableStatement("{CALl DMS_ZZX.CHANGE_INPUTPRO(?)}", 0);
         try {
             cs.setString(1,this.curUser.getId() );
             cs.execute();
@@ -382,30 +487,32 @@ public class BPCostBean {
             e.printStackTrace();
         }
     }
-    //取消
-    public void operation_reset(ActionEvent actionEvent) {
-        DmsUtils.getDmsApplicationModule().getTransaction().rollback();
-        this.queryData();
-        this.createTableModel();
+    public void rowSelectionListener(SelectionEvent selectionEvent) {
+        RichTable table = (RichTable)selectionEvent.getSource();
+        RowKeySet rks = selectionEvent.getAddedSet();
+        if (rks != null) {
+            int setSize = rks.size();
+            if (setSize == 0) {
+                return;
+            }
+            Object rowKey = rks.iterator().next();
+            table.setRowKey(rowKey);
+        }
     }
     public void setPanelaCollection(RichPanelCollection panelaCollection) {
         this.panelaCollection = panelaCollection;
     }
 
-    //选中行，修改
-    public void valueChangeLinstener(ValueChangeEvent valueChangeEvent) {
-        Map rowMap = (Map)this.dataModel.getRowData();
-        if (((PcDataTableModel)this.dataModel).getSelectedRows().size() > 1) {
-            String msg =DmsUtils.getMsg("dcm.msg.can_not_select_multiple_row");
-            JSFUtils.addFacesInformationMessage(msg);
-            return;
-        }
-        if(rowMap.get("OPERATION") == null){
-            rowMap.put("OPERATION", PcDataTableModel.OPERATE_UPDATE);    
-        }                
-    }
     public RichPanelCollection getPanelaCollection() {
         return panelaCollection;
+    }
+
+    public void setDataModel(CollectionModel dataModel) {
+        this.dataModel = dataModel;
+    }
+
+    public CollectionModel getDataModel() {
+        return dataModel;
     }
 
     public void setPcColsDef(List<PcColumnDef> pcColsDef) {
@@ -504,14 +611,6 @@ public class BPCostBean {
         return yLine;
     }
 
-    public void setDataModel(CollectionModel dataModel) {
-        this.dataModel = dataModel;
-    }
-
-    public CollectionModel getDataModel() {
-        return dataModel;
-    }
-
     public void setPStart(String pStart) {
         this.pStart = pStart;
     }
@@ -536,11 +635,20 @@ public class BPCostBean {
         return connectId;
     }
 
-    public void setQueryDescriptor(FilterableQueryDescriptor queryDescriptor) {
-        this.queryDescriptor = queryDescriptor;
+    public void setNewVersion(String newVersion) {
+        this.newVersion = newVersion;
     }
 
-    public FilterableQueryDescriptor getQueryDescriptor() {
-        return queryDescriptor;
+    public String getNewVersion() {
+        return newVersion;
     }
+
+    public void setNewEnd(String newEnd) {
+        this.newEnd = newEnd;
+    }
+
+    public String getNewEnd() {
+        return newEnd;
+    }
+
 }

@@ -37,4 +37,9 @@ public class Launcher extends TabLauncher{
                         "/WEB-INF/dgpt/dms_jzjhcb_tsk.xml#dms_jzjhcb_tsk",
                         false);
     }
+    public void launcherHtChange(ActionEvent actionEvent) {
+        _launchActivity("合同变更后的基准计划成本",
+                        "/WEB-INF/dgpt/dms_hychange_tsk.xml#dms_hychange_tsk",
+                        false);
+    }
 }
