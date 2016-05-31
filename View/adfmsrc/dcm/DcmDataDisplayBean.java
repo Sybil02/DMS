@@ -50,7 +50,6 @@ import java.util.UUID;
 
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
-import javax.faces.event.FacesEvent;
 import javax.faces.event.ValueChangeEvent;
 
 import javax.faces.model.SelectItem;
@@ -75,8 +74,6 @@ import oracle.jbo.RowIterator;
 import oracle.jbo.ViewCriteria;
 import oracle.jbo.ViewCriteriaRow;
 import oracle.jbo.ViewObject;
-
-import oracle.jbo.jbotester.load.SimpleDateFormatter;
 import oracle.jbo.server.DBTransaction;
 
 import org.apache.commons.lang.ObjectUtils;
@@ -88,6 +85,7 @@ import org.apache.myfaces.trinidad.model.SortCriterion;
 import org.apache.myfaces.trinidad.model.UploadedFile;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 
@@ -144,6 +142,7 @@ public class DcmDataDisplayBean extends TablePagination{
     private boolean useQuartz = false;
     private boolean batchExcel = false;
     private List<String> batchTempList;
+    private RichPopup batchErrPop;
     //初始化
     public DcmDataDisplayBean() {
         this.curUser =(Person)ADFContext.getCurrent().getSessionScope().get("cur_user");
@@ -306,13 +305,14 @@ public class DcmDataDisplayBean extends TablePagination{
             this.batchTempList = new ArrayList<String>();
             XSSFWorkbook xs;
             try {
-                xs = new XSSFWorkbook(filePath);
+                OPCPackage opcp = OPCPackage.open(filePath);
+                xs = new XSSFWorkbook(opcp);
                 int stNum = xs.getNumberOfSheets();
                 for(int i = 0;i < stNum ; i++){
                     XSSFSheet st = xs.getSheetAt(i);
                     this.vaildateSheetAuthority(st.getSheetName());
                 }
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -352,7 +352,7 @@ public class DcmDataDisplayBean extends TablePagination{
                 }
             }
             //弹出日志框
-            
+            this.showBatchLog(actionEvent);
             //刷新数据
             this.queryTemplateData();
         }else{
@@ -1638,5 +1638,18 @@ public class DcmDataDisplayBean extends TablePagination{
 
     public boolean isBatchExcel() {
         return batchExcel;
+    }
+
+    public void setBatchErrPop(RichPopup batchErrPop) {
+        this.batchErrPop = batchErrPop;
+    }
+
+    public RichPopup getBatchErrPop() {
+        return batchErrPop;
+    }
+
+    public void showBatchLog(ActionEvent actionEvent) {
+        RichPopup.PopupHints hints = new RichPopup.PopupHints();
+        this.batchErrPop.show(hints);
     }
 }
