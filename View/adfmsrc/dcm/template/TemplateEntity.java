@@ -10,15 +10,21 @@ public class TemplateEntity {
     private String temptable;
     private int columnSize;
     private String templateName;
+    private String preGrogram;
+    private String impGrogram;
+    private String afterGrogram;
     private List<ColumnDef> colsdef;
 
     public TemplateEntity(String templateId,String templateName, String temptable,
-                          int columnSize, int startLine) {
+                          int columnSize, int startLine,String preGrogram,String impGrogram,String afterGrogram) {
         this.startLine = startLine;
         this.templateId = templateId;
         this.temptable = temptable;
         this.columnSize = columnSize;
         this.templateName = templateName;
+        this.preGrogram = preGrogram;
+        this.impGrogram = impGrogram;
+        this.afterGrogram = afterGrogram;
     }
 
     public void setStartLine(int startLine) {
@@ -67,5 +73,29 @@ public class TemplateEntity {
 
     public List<ColumnDef> getColsdef() {
         return colsdef;
+    }
+
+    public void setPreGrogram(String preGrogram) {
+        this.preGrogram = preGrogram;
+    }
+
+    public String getPreGrogram() {
+        return preGrogram;
+    }
+
+    public void setImpGrogram(String impGrogram) {
+        this.impGrogram = impGrogram;
+    }
+
+    public String getImpGrogram() {
+        return impGrogram;
+    }
+
+    public void setAfterGrogram(String afterGrogram) {
+        this.afterGrogram = afterGrogram;
+    }
+
+    public String getAfterGrogram() {
+        return afterGrogram;
     }
 }
