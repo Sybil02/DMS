@@ -74,6 +74,9 @@
                                 rendered="#{viewScope.DcmDataDisplayBean.isClose eq true}"
                                 disabled="#{viewScope.DcmDataDisplayBean.isEditable eq false}"
                                 actionListener="#{viewScope.DcmDataDisplayBean.closeCombination}"/>
+              <af:commandButton text="#{viewBundle['dms.batch.import.log']}" id="cb51"
+                                rendered="#{viewScope.DcmDataDisplayBean.combinationId ne null}"
+                                actionListener="#{viewScope.DcmDataDisplayBean.showBatchLog}"/>
             </af:group>
           </af:toolbar>
         </f:facet>
@@ -159,6 +162,64 @@
       <af:panelGroupLayout layout="scroll"
                            xmlns:af="http://xmlns.oracle.com/adf/faces/rich"
                            id="pgl2">
+        <af:popup id="p5" autoCancel="disabled"
+                  binding="#{viewScope.DcmDataDisplayBean.batchErrPop}">
+          <af:panelWindow title="#{viewBundle['dcm.import_error']}" id="pw5">
+            <af:panelStretchLayout inlineStyle="width:1000px;height:370px" id="psl3">
+              <f:facet name="bottom"/>
+              <f:facet name="center">
+                <af:panelGroupLayout layout="scroll"
+                                     xmlns:af="http://xmlns.oracle.com/adf/faces/rich"
+                                     id="pgl5">
+                  <af:panelCollection styleClass="AFStretchWidth" id="pc2">
+                    <f:facet name="menus"/>
+                    <f:facet name="toolbar"/>
+                    <f:facet name="statusbar"/>
+                    <af:table value="#{bindings.DcmErrorBatchVO.collectionModel}"
+                            var="row"
+                            rows="#{bindings.DcmErrorBatchVO.rangeSize}"
+                            emptyText="#{bindings.DcmErrorBatchVO.viewable ? 'No data to display.' : 'Access Denied.'}"
+                            fetchSize="#{bindings.DcmErrorBatchVO.rangeSize}"
+                            rowBandingInterval="0"
+                            filterModel="#{bindings.DcmErrorBatchVOQuery.queryDescriptor}"
+                            queryListener="#{bindings.DcmErrorBatchVOQuery.processQuery}"
+                            filterVisible="false" varStatus="vs"
+                            selectionListener="#{bindings.DcmErrorBatchVO.collectionModel.makeCurrent}"
+                            rowSelection="multiple" id="t5">
+                    <af:column sortProperty="#{bindings.DcmErrorBatchVO.hints.SheetName.name}"
+                               filterable="true" sortable="true" width="200"
+                               headerText="#{bindings.DcmErrorBatchVO.hints.SheetName.label}"
+                               id="c10">
+                      <af:outputText value="#{row.SheetName}" id="ot11"/>
+                    </af:column>
+                    <af:column sortProperty="#{bindings.DcmErrorBatchVO.hints.Status.name}"
+                               filterable="true" sortable="true"
+                               headerText="#{bindings.DcmErrorBatchVO.hints.Status.label}"
+                               id="c9">
+                      <af:outputText value="#{row.Status}" id="ot14"/>
+                    </af:column>
+                    <af:column sortProperty="#{bindings.DcmErrorBatchVO.hints.Line.name}"
+                               filterable="true" sortable="true"
+                               headerText="#{bindings.DcmErrorBatchVO.hints.Line.label}"
+                               id="c7">
+                      <af:outputText value="#{row.Line}" id="ot12"/>
+                    </af:column>
+                    <af:column sortProperty="#{bindings.DcmErrorBatchVO.hints.Msg.name}"
+                               filterable="true" sortable="true" width="560"
+                               headerText="#{bindings.DcmErrorBatchVO.hints.Msg.label}"
+                               id="c8">
+                      <af:outputText value="#{row.Msg}" id="ot13"/>
+                    </af:column>
+                  </af:table>
+                  </af:panelCollection>
+                </af:panelGroupLayout>
+              </f:facet>
+              <f:facet name="start"/>
+              <f:facet name="end"/>
+              <f:facet name="top"/>
+            </af:panelStretchLayout>
+          </af:panelWindow>
+        </af:popup>
         <af:popup id="p1" binding="#{viewScope.DcmDataDisplayBean.errorWindow}">
           <af:panelWindow id="pw1" title="#{viewBundle['dcm.import_error']}">
             <af:panelStretchLayout id="psl2"
@@ -275,6 +336,13 @@
                                             text="#{viewBundle['dms.quartz.msg']}"/>
                 </af:gridCell>
               </af:gridRow-->
+              <af:gridRow marginTop="5px" marginBottom="5px" height="auto" rendered="#{viewScope.DcmDataDisplayBean.combinationId ne null}" id="batchGr">
+                <af:gridCell marginStart="5px" marginEnd="5px" width="auto" inlineStyle="padding-top:5px"
+                             id="gcb">
+                  <af:selectBooleanCheckbox label="#{viewBundle['dms.batch.import']}" id="sbc2"
+                                         autoSubmit="true" value="#{viewScope.DcmDataDisplayBean.batchExcel}" />
+                </af:gridCell>
+              </af:gridRow>
               <af:gridRow marginTop="5px" marginBottom="5px" height="auto"
                           id="gr3">
                 <af:gridCell halign="center" width="auto" id="gc5"
