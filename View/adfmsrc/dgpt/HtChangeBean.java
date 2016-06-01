@@ -364,6 +364,8 @@ public class HtChangeBean {
                         stmt.setString(last+1,PcDataTableModel.OPERATE_CREATE);
                     }else if(PcDataTableModel.OPERATE_DELETE.equals(rowdata.get("OPERATION"))){
                         stmt.setString(last+1,PcDataTableModel.OPERATE_DELETE);
+                    }else{
+                        stmt.setString(last+1,PcDataTableModel.OPERATE_UPDATE);
                     }
                     if(null!=rowdata.get("OPERATION")){
                         int i =1;
