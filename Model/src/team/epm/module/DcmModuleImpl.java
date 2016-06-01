@@ -295,6 +295,14 @@ public class DcmModuleImpl extends ApplicationModuleImpl implements DcmModule {
     public ViewObjectImpl getDcmUnAssignedTemplate() {
         return (ViewObjectImpl)findViewObject("DcmUnAssignedTemplate");
     }
+
+    /**
+     * Container's getter for DcmErrorBatchVO.
+     * @return DcmErrorBatchVO
+     */
+    public ViewObjectImpl getDcmErrorBatchVO() {
+        return (ViewObjectImpl)findViewObject("DcmErrorBatchVO");
+    }
 }
 
 

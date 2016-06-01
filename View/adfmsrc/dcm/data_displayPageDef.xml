@@ -7,6 +7,11 @@
     <iterator id="DcmErrorViewIterator" Binds="DcmErrorView"
               DataControl="DcmModuleDataControl" RangeSize="25"
               CacheResults="true"/>
+    <iterator Binds="DcmErrorBatchVO" RangeSize="25"
+              DataControl="DcmModuleDataControl" id="DcmErrorBatchVOIterator"/>
+    <searchRegion Binds="DcmErrorBatchVOIterator" Criteria=""
+                  Customizer="oracle.jbo.uicli.binding.JUSearchBindingCustomizer"
+                  id="DcmErrorBatchVOQuery"/>
   </executables>
   <bindings>
     <tree IterBinding="DcmErrorViewIterator" id="DcmErrorView">
@@ -19,6 +24,17 @@
           <Item Value="Level"/>
           <Item Value="CreatedBy"/>
           <Item Value="CreatedAt"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <tree IterBinding="DcmErrorBatchVOIterator" id="DcmErrorBatchVO">
+      <nodeDefinition DefName="team.epm.dcm.view.DcmErrorBatchVO"
+                      Name="DcmErrorBatchVO0">
+        <AttrNames>
+          <Item Value="SheetName"/>
+          <Item Value="Status"/>
+          <Item Value="Line"/>
+          <Item Value="Msg"/>
         </AttrNames>
       </nodeDefinition>
     </tree>
