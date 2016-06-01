@@ -580,6 +580,8 @@ public class DcmDataDisplayBean extends TablePagination{
                     trans.commit();
                     afcs.close();
                 }
+            }else{
+                this.writeBatchError(temp.getTemplateName(), "失败", "校验不通过！", "1");    
             }
         } catch (Exception e) {
             successFlag = false;
