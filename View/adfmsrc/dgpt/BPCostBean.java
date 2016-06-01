@@ -256,6 +256,11 @@ public class BPCostBean {
     }
     //一行中，列的map
     private LinkedHashMap<String,String> getLabelMap(){
+        
+        if(pStart == null || pEnd == null){
+            return new LinkedHashMap<String,String>();    
+        }
+        
         LinkedHashMap<String,String> labelMap = new LinkedHashMap<String,String>();
         labelMap.put("KEY1", "WBS");
         labelMap.put("KEY2","WORK");
