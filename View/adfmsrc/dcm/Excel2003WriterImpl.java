@@ -70,7 +70,7 @@ public class Excel2003WriterImpl {
                     if(rs.getString(col.getDbTableCol())!=null){
                         cell.setCellValue(Double.valueOf(dfm.format(Double.valueOf(rs.getString(col.getDbTableCol()))))); 
                     }else{
-                        cell.setCellType(Cell.CELL_TYPE_BLANK);        
+                        cell.setCellType(Cell.CELL_TYPE_BLANK);
                     }
                 }else{
                     cell.setCellValue(ReplaceSpecialChar.encodeString(rs.getString(col.getDbTableCol()))); 

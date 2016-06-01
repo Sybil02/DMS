@@ -6,11 +6,11 @@
   <executables>
     <variableIterator id="variables"/>
     <iterator id="DmsEnabledRoleIterator" Binds="DmsEnabledRole"
-              DataControl="DmsModuleDataControl" RangeSize="25"/>
+              DataControl="DmsModuleDataControl" RangeSize="-1"/>
     <iterator Binds="DmsRoleFunctionView" RangeSize="25"
               DataControl="DmsModuleDataControl"
               id="DmsRoleFunctionViewIterator"/>
-    <iterator Binds="DmsUnassignedFunctionView" RangeSize="25"
+    <iterator Binds="DmsUnassignedFunctionView" RangeSize="-1"
               DataControl="DmsModuleDataControl"
               id="DmsUnassignedFunctionViewIterator"/>
   </executables>

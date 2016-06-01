@@ -345,4 +345,11 @@ public class DmsModuleImpl extends ApplicationModuleImpl implements DmsModule {
     }
 
 
+    /**
+     * Container's getter for ProPlanCostView.
+     * @return ProPlanCostView
+     */
+    public ViewObjectImpl getProPlanCostView() {
+        return (ViewObjectImpl)findViewObject("ProPlanCostView");
+    }
 }

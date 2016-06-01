@@ -5,16 +5,66 @@
           xmlns:f="http://java.sun.com/jsf/core">
   <c:set var="viewBundle" value="#{adfBundle['dms_v']}"/>
     <af:panelStretchLayout id="psl1" startWidth="0px" topHeight="53px">
-      <f:facet name="bottom"/>
+      <f:facet name="bottom">
+        <af:popup id="p2" autoCancel="disabled" childCreation="deferred"
+                  binding="#{viewScope.ProjectZxBean.dataExportWnd}">
+          <af:panelWindow id="pw2"
+                          title="#{viewBundle['dms.dgpt.dataExport']}">
+            <af:panelGridLayout id="pgl5">
+              <af:gridRow marginTop="5px" height="auto" id="gr2">
+                <af:gridCell marginStart="5px" width="auto" id="gc6"
+                             inlineStyle="padding-top:5px">
+                  <af:outputText value="#{viewBundle['dms.dgpt.excel.format']}"
+                                 id="ot10"/>
+                </af:gridCell>
+                <af:gridCell marginStart="5px" marginEnd="5px" width="auto"
+                             id="gc9">
+                  <af:selectBooleanRadio text="#{viewBundle['dms.dgpt.excel.03format']}"
+                                         id="sbr3" group="excelFormat1"
+                                         simple="true"/>
+                  <af:selectBooleanRadio text="#{viewBundle['dms.dgpt.excel.07format']}"
+                                         id="sbr4" group="excelFormat1"
+                                         simple="true" autoSubmit="true"
+                                         value="#{viewScope.ProjectZxBean.isXlsx}"/>
+                </af:gridCell>
+              </af:gridRow>
+              <af:gridRow marginTop="5px" marginBottom="5px" height="auto"
+                          id="gr1">
+                <af:gridCell marginStart="5px" width="auto" columnSpan="2"
+                             halign="center" id="gc8"
+                             inlineStyle="margin-top:5px">
+                  <af:commandButton text="#{viewBundle['dcm.action.export']}"
+                                    id="cb11">
+                    <af:fileDownloadActionListener contentType="application/vnd.ms-excel"
+                                                   method="#{viewScope.ProjectZxBean.operation_export}"
+                                                   filename="#{viewScope.ProjectZxBean.exportDataExcelName}"/>
+                  </af:commandButton>
+                </af:gridCell>
+              </af:gridRow>
+            </af:panelGridLayout>
+          </af:panelWindow>
+        </af:popup>
+    </f:facet>
       <f:facet name="center">
         <af:panelCollection id="pc1">
           <f:facet name="menus"/>
           <f:facet name="toolbar">
             <af:toolbar id="t1">
+            <af:group id="g2">
               <af:commandButton text="#{viewBundle['dms.common.save']}" id="cb2"
                                 action="#{viewScope.ProjectZxBean.operation_save}"/>
               <af:commandButton text="#{viewBundle['dms.common.cancel']}" id="cb3"
                                 actionListener="#{viewScope.ProjectZxBean.reset}"/>
+            </af:group>
+            <af:group id="g1">
+              <af:commandButton text="#{viewBundle['dcm.action.export']}" id="cb7">
+                <af:showPopupBehavior popupId="::p2"/>
+              </af:commandButton>
+              <af:commandButton text="#{viewBundle['dms.dgpt.block']}" id="cb8"
+                                actionListener="#{viewScope.ProjectZxBean.beBlocked}"
+                                     disabled="#{viewScope.ProjectZxBean.isBlock}"
+                                partialTriggers="::soc1 ::soc2 ::soc3"/>
+            </af:group>
             </af:toolbar>
           </f:facet>
           <f:facet name="statusbar"/>
@@ -22,6 +72,7 @@
                   value="#{viewScope.ProjectZxBean.dataModel}"
                   selectionListener="#{viewScope.ProjectZxBean.rowSelectionListener}"
                   selectedRowKeys="#{viewScope.ProjectZxBean.dataModel.selectedRows}"
+                  rowSelection="multiple" editingMode="clickToEdit"
                   emptyText="#{viewBundle['dms.common.nodata']}"
                   partialTriggers=":::soc2 :::soc1 :::soc3">
           <af:column sortable="false" headerText="WBS" id="c2">
@@ -56,150 +107,173 @@
                                     #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
                                     #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}">
             <af:inputText value="#{viewScope.ProjectZxBean.dataModel.labelMap['M0']==null ? ' ' : row[viewScope.ProjectZxBean.dataModel.labelMap['M0']]}" id="it30"
-                          valueChangeListener="#{viewScope.ProjectZxBean.valueChangeLinstener}"/>
+                          valueChangeListener="#{viewScope.ProjectZxBean.valueChangeLinstener}"
+                          readOnly="#{ viewScope.ProjectZxBean.isBlock}"/>
           </af:column>
           <af:column sortable="false" headerText="上年11月" id="c28"
                     inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
                                     #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
                                     #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}">
             <af:inputText value="#{viewScope.ProjectZxBean.dataModel.labelMap['M1']==null ? ' ' : row[viewScope.ProjectZxBean.dataModel.labelMap['M1']]}" id="it15"
-                          valueChangeListener="#{viewScope.ProjectZxBean.valueChangeLinstener}"/>
+                          valueChangeListener="#{viewScope.ProjectZxBean.valueChangeLinstener}"
+                          readOnly="#{ viewScope.ProjectZxBean.isBlock}"/>
           </af:column>
           <af:column sortable="false" headerText="上年12月" id="c18"
                     inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
                                     #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
                                     #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}">
             <af:inputText value="#{viewScope.ProjectZxBean.dataModel.labelMap['M2']==null ? ' ' : row[viewScope.ProjectZxBean.dataModel.labelMap['M2']]}" id="it1"
-                          valueChangeListener="#{viewScope.ProjectZxBean.valueChangeLinstener}"/>
+                          valueChangeListener="#{viewScope.ProjectZxBean.valueChangeLinstener}"
+                          readOnly="#{ viewScope.ProjectZxBean.isBlock}"/>
           </af:column>
           <af:column sortable="false" headerText="本年1月" id="c11"
                     inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
                                     #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
                                     #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}">
             <af:inputText value="#{viewScope.ProjectZxBean.dataModel.labelMap['M3']==null ? ' ' : row[viewScope.ProjectZxBean.dataModel.labelMap['M3']]}" id="it10"
-                          valueChangeListener="#{viewScope.ProjectZxBean.valueChangeLinstener}"/>
+                          valueChangeListener="#{viewScope.ProjectZxBean.valueChangeLinstener}"
+                          readOnly="#{ viewScope.ProjectZxBean.isBlock}"/>
           </af:column>
           <af:column sortable="false" headerText="本年2月" id="c27"
                     inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
                                     #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
                                     #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}">
             <af:inputText value="#{viewScope.ProjectZxBean.dataModel.labelMap['M4']==null ? ' ' : row[viewScope.ProjectZxBean.dataModel.labelMap['M4']]}" id="it24"
-                          valueChangeListener="#{viewScope.ProjectZxBean.valueChangeLinstener}"/>
+                          valueChangeListener="#{viewScope.ProjectZxBean.valueChangeLinstener}"
+                          readOnly="#{ viewScope.ProjectZxBean.isBlock}"/>
           </af:column>
           <af:column sortable="false" headerText="本年3月" id="c8"
                     inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
                                     #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
                                     #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}">
             <af:inputText value="#{viewScope.ProjectZxBean.dataModel.labelMap['M5']==null ? ' ' : row[viewScope.ProjectZxBean.dataModel.labelMap['M5']]}" id="it11"
-                          valueChangeListener="#{viewScope.ProjectZxBean.valueChangeLinstener}"/>
+                          valueChangeListener="#{viewScope.ProjectZxBean.valueChangeLinstener}"
+                          readOnly="#{ viewScope.ProjectZxBean.isBlock}"/>
           </af:column>
           <af:column sortable="false" headerText="本年4月" id="c22"
                     inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
                                     #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
                                     #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}">
             <af:inputText value="#{viewScope.ProjectZxBean.dataModel.labelMap['M6']==null ? ' ' : row[viewScope.ProjectZxBean.dataModel.labelMap['M6']]}" id="it18"
-                          valueChangeListener="#{viewScope.ProjectZxBean.valueChangeLinstener}"/>
+                          valueChangeListener="#{viewScope.ProjectZxBean.valueChangeLinstener}"
+                          readOnly="#{ viewScope.ProjectZxBean.isBlock}"/>
           </af:column>
           <af:column sortable="false" headerText="本年5月" id="c6"
                     inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
                                     #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
                                     #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}">
             <af:inputText value="#{viewScope.ProjectZxBean.dataModel.labelMap['M7']==null ? ' ' : row[viewScope.ProjectZxBean.dataModel.labelMap['M7']]}" id="it13"
-                          valueChangeListener="#{viewScope.ProjectZxBean.valueChangeLinstener}"/>
+                          valueChangeListener="#{viewScope.ProjectZxBean.valueChangeLinstener}"
+                          readOnly="#{ viewScope.ProjectZxBean.isBlock}"/>
           </af:column>
           <af:column sortable="false" headerText="本年6月" id="c12"
                     inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
                                     #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
                                     #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}">
             <af:inputText value="#{viewScope.ProjectZxBean.dataModel.labelMap['M8']==null ? ' ' : row[viewScope.ProjectZxBean.dataModel.labelMap['M8']]}" id="it4"
-                          valueChangeListener="#{viewScope.ProjectZxBean.valueChangeLinstener}"/>
+                          valueChangeListener="#{viewScope.ProjectZxBean.valueChangeLinstener}"
+                          readOnly="#{ viewScope.ProjectZxBean.isBlock}"/>
           </af:column>
           <af:column sortable="false" headerText="本年7月" id="c23"
                     inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
                                     #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
                                     #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}">
             <af:inputText value="#{viewScope.ProjectZxBean.dataModel.labelMap['M9']==null ? ' ' : row[viewScope.ProjectZxBean.dataModel.labelMap['M9']]}" id="it6"
-                          valueChangeListener="#{viewScope.ProjectZxBean.valueChangeLinstener}"/>
+                          valueChangeListener="#{viewScope.ProjectZxBean.valueChangeLinstener}"
+                          readOnly="#{ viewScope.ProjectZxBean.isBlock}"/>
           </af:column>
           <af:column sortable="false" headerText="本年8月" id="c15"
                     inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
                                     #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
                                     #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}">
             <af:inputText value="#{viewScope.ProjectZxBean.dataModel.labelMap['M10']==null ? '' : row[viewScope.ProjectZxBean.dataModel.labelMap['M10']]}" id="it25"
-                          valueChangeListener="#{viewScope.ProjectZxBean.valueChangeLinstener}"/>
+                          valueChangeListener="#{viewScope.ProjectZxBean.valueChangeLinstener}"
+                          readOnly="#{ viewScope.ProjectZxBean.isBlock}"/>
           </af:column>
           <af:column sortable="false" headerText="本年9月" id="c4"
                     inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
                                     #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
                                     #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}">
             <af:inputText value="#{viewScope.ProjectZxBean.dataModel.labelMap['M11']==null ? ' ' : row[viewScope.ProjectZxBean.dataModel.labelMap['M11']]}" id="it21"
-                          valueChangeListener="#{viewScope.ProjectZxBean.valueChangeLinstener}"/>
+                          valueChangeListener="#{viewScope.ProjectZxBean.valueChangeLinstener}"
+                          readOnly="#{ viewScope.ProjectZxBean.isBlock}"/>
           </af:column>
           <af:column sortable="false" headerText="本年10月" id="c13"
                     inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
                                     #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
                                     #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}">
             <af:inputText value="#{viewScope.ProjectZxBean.dataModel.labelMap['M12']==null ? ' ' : row[viewScope.ProjectZxBean.dataModel.labelMap['M12']]}" id="it19"
-                          valueChangeListener="#{viewScope.ProjectZxBean.valueChangeLinstener}"/>
+                          valueChangeListener="#{viewScope.ProjectZxBean.valueChangeLinstener}"
+                          readOnly="#{ viewScope.ProjectZxBean.isBlock}"/>
           </af:column>
           <af:column sortable="false" headerText="本年11月" id="c24"
                     inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
                                     #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
                                     #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}">
             <af:inputText value="#{viewScope.ProjectZxBean.dataModel.labelMap['M13']==null ? ' ' : row[viewScope.ProjectZxBean.dataModel.labelMap['M13']]}" id="it9"
-                          valueChangeListener="#{viewScope.ProjectZxBean.valueChangeLinstener}"/>
+                          valueChangeListener="#{viewScope.ProjectZxBean.valueChangeLinstener}"
+                          readOnly="#{ viewScope.ProjectZxBean.isBlock}"/>
           </af:column>
           <af:column sortable="false" headerText="本年12月" id="c21"
                     inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
                                     #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
                                     #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}">
             <af:inputText value="#{viewScope.ProjectZxBean.dataModel.labelMap['M14']==null ? ' ' : row[viewScope.ProjectZxBean.dataModel.labelMap['M14']]}" id="it8"
-                          valueChangeListener="#{viewScope.ProjectZxBean.valueChangeLinstener}"/>
+                          valueChangeListener="#{viewScope.ProjectZxBean.valueChangeLinstener}"
+                          readOnly="#{ viewScope.ProjectZxBean.isBlock}"/>
           </af:column>
           <af:column sortable="false" headerText="下年1月" id="c26"
                     inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
                                     #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
                                     #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}">
             <af:inputText value="#{viewScope.ProjectZxBean.dataModel.labelMap['M15']==null ? ' ' : row[viewScope.ProjectZxBean.dataModel.labelMap['M15']]}" id="it22"
-                          valueChangeListener="#{viewScope.ProjectZxBean.valueChangeLinstener}"/>
+                          valueChangeListener="#{viewScope.ProjectZxBean.valueChangeLinstener}"
+                          readOnly="#{ viewScope.ProjectZxBean.isBlock}"/>
           </af:column>
           <af:column sortable="false" headerText="下年2月" id="c31"
                     inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
                                     #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
                                     #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}">
             <af:inputText value="#{viewScope.ProjectZxBean.dataModel.labelMap['M16']==null ? ' ' : row[viewScope.ProjectZxBean.dataModel.labelMap['M16']]}" id="it2"
-                          valueChangeListener="#{viewScope.ProjectZxBean.valueChangeLinstener}"/>
+                          valueChangeListener="#{viewScope.ProjectZxBean.valueChangeLinstener}"
+                          readOnly="#{ viewScope.ProjectZxBean.isBlock}"/>
           </af:column>
           <af:column sortable="false" headerText="下年3月" id="c17"
                     inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
                                     #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
                                     #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}">
             <af:inputText value="#{viewScope.ProjectZxBean.dataModel.labelMap['M17']==null ? ' ' : row[viewScope.ProjectZxBean.dataModel.labelMap['M17']]}" id="it7"
-                          valueChangeListener="#{viewScope.ProjectZxBean.valueChangeLinstener}"/>
+                          valueChangeListener="#{viewScope.ProjectZxBean.valueChangeLinstener}"
+                          readOnly="#{ viewScope.ProjectZxBean.isBlock}"/>
           </af:column>
           <af:column sortable="false" headerText="下年4月" id="c3"
                     inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
                                     #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
                                     #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}">
             <af:inputText value="#{viewScope.ProjectZxBean.dataModel.labelMap['M18']==null ? ' ' : row[viewScope.ProjectZxBean.dataModel.labelMap['M18']]}" id="it20"
-                          valueChangeListener="#{viewScope.ProjectZxBean.valueChangeLinstener}"/>
+                          valueChangeListener="#{viewScope.ProjectZxBean.valueChangeLinstener}"
+                          readOnly="#{ viewScope.ProjectZxBean.isBlock}"/>
           </af:column>
           <af:column sortable="false" headerText="下年5月" id="c10"
                     inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
                                     #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
                                     #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}">
             <af:inputText value="#{viewScope.ProjectZxBean.dataModel.labelMap['M19']==null ? ' ' : row[viewScope.ProjectZxBean.dataModel.labelMap['M19']]}" id="it17"
-                          valueChangeListener="#{viewScope.ProjectZxBean.valueChangeLinstener}"/>
+                          valueChangeListener="#{viewScope.ProjectZxBean.valueChangeLinstener}"
+                          readOnly="#{ viewScope.ProjectZxBean.isBlock}"/>
           </af:column>
           <af:column sortable="false" headerText="下年6月" id="c9"
                     inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
                                     #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
                                     #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}">
             <af:inputText value="#{viewScope.ProjectZxBean.dataModel.labelMap['M20']==null ? ' ' : row[viewScope.ProjectZxBean.dataModel.labelMap['M20']]}" id="it31"
-                          valueChangeListener="#{viewScope.ProjectZxBean.valueChangeLinstener}"/>
+                          valueChangeListener="#{viewScope.ProjectZxBean.valueChangeLinstener}"
+                          readOnly="#{ viewScope.ProjectZxBean.isBlock}"/>
           </af:column>
           <af:column sortable="false" headerText="7月后汇总" id="c30">
-            <af:inputText value="#{row[viewScope.ProjectZxBean.dataModel.labelMap['SUM_AFTER_JUL']]}" id="it29"/>
+            <af:inputText value="#{row[viewScope.ProjectZxBean.dataModel.labelMap['SUM_AFTER_JUL']]}" id="it29"
+                          valueChangeListener="#{viewScope.ProjectZxBean.valueChangeLinstener}"
+                          readOnly="#{ viewScope.ProjectZxBean.isBlock}"/>
           </af:column>
         </af:table>
       </af:panelCollection>

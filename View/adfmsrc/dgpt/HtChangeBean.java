@@ -4,12 +4,20 @@ import common.DmsUtils;
 
 import common.JSFUtils;
 
+import dcm.DcmDataDisplayBean;
 import dcm.DcmDataTableModel;
 import dcm.PcColumnDef;
 
 import dcm.PcDataTableModel;
 
+import dcm.PcExcel2003WriterImpl;
+
+import dcm.PcExcel2007WriterImpl;
+
 import dms.login.Person;
+
+import java.io.IOException;
+import java.io.OutputStream;
 
 import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
@@ -33,11 +41,14 @@ import java.util.Map;
 
 import java.util.UUID;
 
+import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 
 import oracle.adf.share.ADFContext;
+import oracle.adf.share.logging.ADFLogger;
+import oracle.adf.view.rich.component.rich.RichPopup;
 import oracle.adf.view.rich.component.rich.data.RichTable;
 import oracle.adf.view.rich.component.rich.output.RichPanelCollection;
 
@@ -77,6 +88,12 @@ public class HtChangeBean {
     private String newVersion;
     private String newEnd;
     public static final String TYPE_CHANGE="CHANGE";
+    //日志
+    private static ADFLogger _logger =ADFLogger.createADFLogger(DcmDataDisplayBean.class);
+
+    //是否是2007及以上格式
+    private boolean isXlsx = true;
+    private RichPopup dataExportWnd;
     
     private void initList(){
         this.yearList = queryYears("HLS_YEAR");
@@ -142,7 +159,6 @@ public class HtChangeBean {
             return;
         }else{
             this.queryData();
-            this.createTableModel(pStart,pEnd);
         }
     }
     
@@ -194,13 +210,7 @@ public class HtChangeBean {
         //
         DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
         Statement stat = trans.createStatement(DBTransaction.DEFAULT);
-        StringBuffer sql = new StringBuffer();
-        sql.append("SELECT ");
-        for(Map.Entry<String,String> entry : labelMap.entrySet()){
-            sql.append(entry.getValue()).append(",");
-        }
-        sql.append("ROWID AS ROW_ID FROM PRO_PLAN_COST_BODY WHERE CONNECT_ID = '").append(connectId).append("'");
-        sql.append(" AND DATA_TYPE = '").append(this.TYPE_CHANGE).append("'");
+        String sql = this.querySql(labelMap);
         List<Map> data = new ArrayList<Map>();
         ResultSet rs;
         try {
@@ -222,6 +232,17 @@ public class HtChangeBean {
         ((PcDataTableModel)this.dataModel).setLabelMap(labelMap);
     }
     
+    //查询语句
+    private String querySql(LinkedHashMap<String,String> labelMap){
+        StringBuffer sql = new StringBuffer();
+        sql.append("SELECT ");
+        for(Map.Entry<String,String> entry : labelMap.entrySet()){
+            sql.append(entry.getValue()).append(",");
+        }
+        sql.append("ROWID AS ROW_ID FROM PRO_PLAN_COST_BODY WHERE CONNECT_ID = '").append(connectId).append("'");
+        sql.append(" AND DATA_TYPE = '").append(this.TYPE_CHANGE).append("'");
+        return sql.toString();
+    }
     //选中行，修改
     public void valueChangeLinstener(ValueChangeEvent valueChangeEvent) {
         Map rowMap = (Map)this.dataModel.getRowData();
@@ -404,7 +425,7 @@ public class HtChangeBean {
         labelMap.put("KEY6","BOM_CODE");
         labelMap.put("KEY7","UNIT");
         labelMap.put("KEY8","PLAN_COST");
-        labelMap.put("KEY9", "OCCURRED");
+        //labelMap.put("KEY9", "OCCURRED");
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy_MM");
         List<Date> monthList;
         Date start;
@@ -416,18 +437,13 @@ public class HtChangeBean {
             for(int i = 0 ; i < monthList.size() ; i++){
                 labelMap.put("KEY"+(i+10), "Y"+sdf.format(monthList.get(i)));
             }
-            labelMap.put("KEY"+(monthList.size()+10),"SUM_AFTER_JUL");
+            //labelMap.put("KEY"+(monthList.size()+10),"SUM_AFTER_JUL");
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        int flag = 1;
         boolean isReadonly = true;
+        this.pcColsDef.clear();
         for(Map.Entry<String,String> map:labelMap.entrySet()){
-            if(flag>9){
-                isReadonly = false;
-                
-            }
-            flag++;
             PcColumnDef newCol = new PcColumnDef(map.getValue(),map.getValue(),isReadonly);
             this.pcColsDef.add(newCol);
         }
@@ -487,6 +503,8 @@ public class HtChangeBean {
             e.printStackTrace();
         }
     }
+    
+    
     public void rowSelectionListener(SelectionEvent selectionEvent) {
         RichTable table = (RichTable)selectionEvent.getSource();
         RowKeySet rks = selectionEvent.getAddedSet();
@@ -651,4 +669,53 @@ public class HtChangeBean {
         return newEnd;
     }
 
+    public void setIsXlsx(boolean isXlsx) {
+        this.isXlsx = isXlsx;
+    }
+
+    public boolean isIsXlsx() {
+        return isXlsx;
+    }
+
+    //导出
+    public void operation_export(FacesContext facesContext, OutputStream outputStream) {
+        this.dataExportWnd.cancel();
+        String type = this.isXlsx ? "xlsx" : "xls";
+        try {
+            if("xls".equals(type)){
+                PcExcel2003WriterImpl writer = new PcExcel2003WriterImpl(
+                                                   this.querySql(this.getLabelMap(pStart, pEnd)),
+                                                   "合同变更后的基准计划成本",
+                                                    this.pcColsDef,
+                                                    outputStream);
+            
+                writer.writeToFile();
+            }else{
+                PcExcel2007WriterImpl writer = new PcExcel2007WriterImpl(
+                                                    this.querySql(this.getLabelMap(pStart, pEnd)),
+                                                    2,this.pcColsDef);
+                writer.process(outputStream, "合同变更后的基准计划成本");
+                outputStream.flush();
+            }
+        } catch (Exception e) {
+            this._logger.severe(e);
+        } 
+       
+    }
+    //导出文件名
+    public String getExportDataExcelName(){
+        if(isXlsx){
+            return "合同变更后的基准计划成本.xlsx";
+        }else{
+            return "合同变更后的基准计划成本.xls";
+        }
+    }
+
+    public void setDataExportWnd(RichPopup dataExportWnd) {
+        this.dataExportWnd = dataExportWnd;
+    }
+
+    public RichPopup getDataExportWnd() {
+        return dataExportWnd;
+    }
 }

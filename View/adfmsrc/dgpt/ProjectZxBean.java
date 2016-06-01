@@ -4,12 +4,18 @@ import common.DmsUtils;
 
 import common.JSFUtils;
 
+import dcm.DcmDataDisplayBean;
 import dcm.DcmDataTableModel;
 import dcm.PcColumnDef;
 
 import dcm.PcDataTableModel;
 
+import dcm.PcExcel2003WriterImpl;
+import dcm.PcExcel2007WriterImpl;
+
 import dms.login.Person;
+
+import java.io.OutputStream;
 
 import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
@@ -31,12 +37,15 @@ import java.util.List;
 
 import java.util.Map;
 
+import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 
 import oracle.adf.share.ADFContext;
 
+import oracle.adf.share.logging.ADFLogger;
+import oracle.adf.view.rich.component.rich.RichPopup;
 import oracle.adf.view.rich.component.rich.data.RichTable;
 import oracle.adf.view.rich.component.rich.output.RichPanelCollection;
 
@@ -51,6 +60,13 @@ public class ProjectZxBean {
     private RichPanelCollection panelaCollection;
     private CollectionModel dataModel;
     private List<PcColumnDef> pcColsDef = new ArrayList<PcColumnDef>();
+
+    //日志
+    private static ADFLogger _logger =ADFLogger.createADFLogger(DcmDataDisplayBean.class);
+
+    //是否是2007及以上格式
+    private boolean isXlsx = true;
+    private RichPopup dataExportWnd;
 
     public ProjectZxBean() {
         super();
@@ -75,6 +91,7 @@ public class ProjectZxBean {
     private String pEnd;
     private String connectId;
     public static final String TYPE_ZZX="ZX";
+    private String isBlock;
     
     private void initList(){
         this.yearList = queryYears("HLS_YEAR");
@@ -101,13 +118,56 @@ public class ProjectZxBean {
             start = sdf.parse(pStart);
             end = sdf.parse(pEnd);
             monthList = this.findDates(start, end);
-            for(int i = 0 ; i < monthList.size() ; i++){
+            int i ;
+            for(i=0 ; i < monthList.size()&&i<21 ; i++){
                 labelMap.put("M"+i, "Y"+sdf.format(monthList.get(i)));
             }
+            System.out.println("yueshu:"+i);
         } catch (ParseException e) {
             e.printStackTrace();
         }
         labelMap.put("SUM_AFTER_JUL","SUM_AFTER_JUL");
+        //构造列
+        boolean isReadonly = true;
+        this.pcColsDef.clear();
+        List<String> list = new ArrayList<String>();
+        list.add("WBS");
+        list.add("作业活动");
+        list.add("预算项");
+        list.add("工作中心");
+        list.add("作业类型");
+        list.add("物料编码");
+        list.add("单位");
+        list.add("计划成本");
+        list.add("已发生（截至上年9月）");
+        list.add("上年10月");
+        list.add("上年11月");
+        list.add("上年12月");
+        list.add("本年1月");
+        list.add("本年2月");
+        list.add("本年3月");
+        list.add("本年4月");
+        list.add("本年5月");
+        list.add("本年6月");
+        list.add("本年7月");
+        list.add("本年8月");
+        list.add("本年9月");
+        list.add("本年10月");
+        list.add("本年11月");
+        list.add("本年12月");
+        list.add("上年1月");
+        list.add("上年2月");
+        list.add("上年3月");
+        list.add("上年4月");
+        list.add("上年5月");
+        list.add("上年6月");
+        list.add("下年7月以后");
+        int i =0;
+        for(Map.Entry<String,String> map:labelMap.entrySet()){
+            PcColumnDef newCol = new PcColumnDef(list.get(i++),map.getValue(),isReadonly);
+            this.pcColsDef.add(newCol);
+        }
+        ((PcDataTableModel)this.dataModel).setPcColsDef(this.pcColsDef);
         return labelMap;
     }
     
@@ -117,14 +177,7 @@ public class ProjectZxBean {
         //
         DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
         Statement stat = trans.createStatement(DBTransaction.DEFAULT);
-        StringBuffer sql = new StringBuffer();
-        sql.append("SELECT ");
-        for(Map.Entry<String,String> entry : labelMap.entrySet()){
-            sql.append(entry.getValue()).append(",");
-        }
-        sql.append("ROWID AS ROW_ID FROM PRO_PLAN_COST_BODY WHERE CONNECT_ID = '").append(connectId).append("'");
-        sql.append(" AND DATA_TYPE = '").append(this.TYPE_ZZX).append("'");
-        System.out.println(sql);
+        String sql = this.querySql(labelMap);
         List<Map> data = new ArrayList<Map>();
         ResultSet rs;
         try {
@@ -174,7 +227,19 @@ public class ProjectZxBean {
         this.dataModel.setWrappedData(data);
         ((PcDataTableModel)this.dataModel).setLabelMap(labelMap);
     }
-   
+    //查询语句
+    public String querySql(LinkedHashMap<String,String> labelMap){
+        StringBuffer sql = new StringBuffer();
+        sql.append("SELECT ");
+        
+        for(Map.Entry<String,String> entry : labelMap.entrySet()){
+            sql.append(entry.getValue()).append(",");
+        }
+        sql.append("ROWID AS ROW_ID FROM PRO_PLAN_COST_BODY WHERE CONNECT_ID = '").append(connectId).append("'");
+        sql.append(" AND DATA_TYPE = '").append(this.TYPE_ZZX).append("'");
+        return sql.toString();
+    }
+   //时间段
     public static List<Date> findDates(Date dBegin, Date dEnd) {  
             List lDate = new ArrayList();  
             lDate.add(dBegin);  
@@ -188,7 +253,7 @@ public class ProjectZxBean {
             while (dEnd.after(calBegin.getTime())) {  
                 // 根据日历的规则，为给定的日历字段添加或减去指定的时间量    
                 calBegin.add(Calendar.MONTH, 1);  
-                lDate.add(calBegin.getTime());  
+                lDate.add(calBegin.getTime());
             }  
             return lDate;  
         }  
@@ -218,7 +283,7 @@ public class ProjectZxBean {
     private List<SelectItem> queryValues(String source,String col){
         DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
         Statement stat = trans.createStatement(DBTransaction.DEFAULT);
-        String sql = "SELECT "+col+" FROM "+source;
+        String sql = "SELECT DISTINCT "+col+" FROM "+source;
         List<SelectItem> values = new ArrayList<SelectItem>();
         ResultSet rs;
         try {
@@ -270,8 +335,8 @@ public class ProjectZxBean {
     public void queryData(){
         DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
         Statement stat = trans.createStatement(DBTransaction.DEFAULT);
-        String sql = "SELECT ENTITY_NAME,PRODUCT_LINE,PROJECT_TYPE,INDUSTRY_LINE,BUSINESS_LINE,CONNECT_ID,PROJECT_START,PROJECT_END"
-                    + " FROM PRO_PLAN_COST_HEADER WHERE VERSION = \'"+version+"\'";
+        String sql = "SELECT ENTITY_NAME,PRODUCT_LINE,PROJECT_TYPE,INDUSTRY_LINE,BUSINESS_LINE,CONNECT_ID,PROJECT_START,PROJECT_END,"
+                    + "IS_BLOCK FROM PRO_PLAN_COST_HEADER WHERE VERSION = \'"+version+"\'";
         sql = sql +" AND HLS_YEAR=\'"+year+"\'";
         sql = sql + " AND PROJECT_NAME=\'"+pname+"\'";
         
@@ -284,6 +349,7 @@ public class ProjectZxBean {
             hLine="";
             yLine="";
             connectId="";
+            isBlock = "false";
             while(rs.next()){
                 entity = rs.getString("ENTITY_NAME");
                 pLine = rs.getString("PRODUCT_LINE");
@@ -293,6 +359,7 @@ public class ProjectZxBean {
                 connectId=rs.getString("CONNECT_ID");
                 pStart = rs.getString("PROJECT_START");
                 pEnd = rs.getString("PROJECT_END");
+                isBlock = rs.getString("IS_BLOCK");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -326,7 +393,6 @@ public class ProjectZxBean {
         }
         StringBuffer sql = new StringBuffer();
         StringBuffer sql_value = new StringBuffer();
-        StringBuffer updateSql = new StringBuffer();
         sql_value.append(" VALUES(");
         sql.append("INSERT INTO PRO_PLAN_COST_BODY_TEMP(") ;
         LinkedHashMap<String,String> map = this.getLabelMap();
@@ -337,7 +403,6 @@ public class ProjectZxBean {
         sql.append("ROW_ID,CONNECT_ID,CREATED_BY)");
         sql_value.append("?,\'"+connectId+"\',"+this.curUser.getId()+")");
         PreparedStatement stmt = trans.createPreparedStatement(sql.toString()+sql_value.toString(), 0);
-        System.out.println(sql.toString()+sql_value.toString());
         List<Map> modelData = (List<Map>)this.dataModel.getWrappedData();
         for(Map<String,String> rowdata : modelData){
             if("UPDATE".equals(rowdata.get("OPERATION"))){
@@ -356,7 +421,6 @@ public class ProjectZxBean {
                     }
                     stmt.setString(map.size(),rowdata.get("SUM_AFTER_JUL"));
                     stmt.setString(map.size()+1, rowdata.get("ROW_ID"));
-                    System.out.println(sql.toString()+sql_value.toString());
                     stmt.addBatch();
                     stmt.executeBatch();
                 } catch (SQLException e) {
@@ -378,12 +442,10 @@ public class ProjectZxBean {
         }
     }
     public void inputPro(){
-        System.out.println("导入程序");
         DBTransaction trans = (DBTransaction)DmsUtils.getDcmApplicationModule().getDBTransaction();
         CallableStatement cs = trans.createCallableStatement("{CALl DMS_ZZX.ZZX_INPUTPRO(?)}", 0);
         try {
             cs.setString(1,this.curUser.getId() );
-            System.out.println(this.curUser.getId());
             cs.execute();
             trans.commit();
             cs.close();
@@ -428,6 +490,39 @@ public class ProjectZxBean {
         DmsUtils.getDmsApplicationModule().getTransaction().rollback();
         this.queryData();
         this.createTableModel();
+    }
+    //导出excel
+    public void operation_export(FacesContext facesContext, OutputStream outputStream) {
+        this.dataExportWnd.cancel();
+        String type = this.isXlsx ? "xlsx" : "xls";
+        try {
+            if("xls".equals(type)){
+                PcExcel2003WriterImpl writer = new PcExcel2003WriterImpl(
+                                                   this.querySql(this.getLabelMap()),
+                                                   "基准计划成本",
+                                                    this.pcColsDef,
+                                                    outputStream);
+            
+                writer.writeToFile();
+            }else{
+                PcExcel2007WriterImpl writer = new PcExcel2007WriterImpl(
+                                                    this.querySql(this.getLabelMap()),
+                                                    2,this.pcColsDef);
+                writer.process(outputStream, "基准计划成本");
+                outputStream.flush();
+            }
+        } catch (Exception e) {
+            this._logger.severe(e);
+        } 
+    }
+    
+    //导出文件名
+    public String getExportDataExcelName(){
+        if(isXlsx){
+            return "在执行项目.xlsx";
+        }else{
+            return "在执行项目.xls";
+        }
     }
     public void setYear(String year) {
         this.year = year;
@@ -565,8 +660,45 @@ public class ProjectZxBean {
         return this.connectId;
     }
 
+    public void setIsXlsx(boolean isXlsx) {
+        this.isXlsx = isXlsx;
+    }
 
+    public boolean isIsXlsx() {
+        return isXlsx;
+    }
 
+    public void setDataExportWnd(RichPopup dataExportWnd) {
+        this.dataExportWnd = dataExportWnd;
+    }
 
+    public RichPopup getDataExportWnd() {
+        return dataExportWnd;
+    }
 
+    public void setIsBlock(String isBlock) {
+        this.isBlock = isBlock;
+    }
+
+    public String getIsBlock() {
+        return isBlock;
+    }
+
+    public void beBlocked(ActionEvent actionEvent) {
+        String sql = "UPDATE PRO_PLAN_COST_HEADER SET (IS_BLOCK) = 'true' WHERE HLS_YEAR = \'"+year;
+        sql = sql + "\' AND PROJECT_NAME =\'"+pname+"\' AND VERSION=\'"+version+"\'";
+        DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
+        Statement stat = trans.createStatement(DBTransaction.DEFAULT);
+        int flag =-1;
+        try {
+            flag = stat.executeUpdate(sql);
+            trans.commit();
+            stat.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        if(flag!=-1){
+            isBlock = "true";
+        }
+    }
 }

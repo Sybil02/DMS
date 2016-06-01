@@ -14,12 +14,12 @@
           <f:facet name="navigation">
             <af:group id="g1">
               <af:panelList id="pl1">
-                <af:commandLink text="预计新签项目预算编制表-北和" id="cl1"
+                <!--af:commandLink text="预计新签项目预算编制表-北和" id="cl1"
                                 actionListener="#{backingBeanScope.Launcher.launcherBh}"/>
                 <af:commandLink text="预计新签项目预算编制表-杭和" id="cl2"
                                 actionListener="#{backingBeanScope.Launcher.launcherHh}"/>
                 <af:commandLink text="合同预算-北和" id="cl3"
-                                actionListener="#{backingBeanScope.Launcher.launcherHtysBH}"/>
+                                actionListener="#{backingBeanScope.Launcher.launcherHtysBH}"/-->
                 <af:commandLink text="在执行项目" id="cl4"
                                 actionListener="#{backingBeanScope.Launcher.launcherProjectZx}"/>
                 <af:commandLink text="基准计划成本" id="cl5"

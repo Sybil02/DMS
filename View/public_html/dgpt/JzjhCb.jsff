@@ -5,16 +5,124 @@
           xmlns:f="http://java.sun.com/jsf/core">
   <c:set var="viewBundle" value="#{adfBundle['dms_v']}"/>
   <af:panelStretchLayout id="psl1" startWidth="0px">
-    <f:facet name="bottom"/>
+    <f:facet name="bottom">
+      <af:panelGroupLayout layout="scroll"
+                           xmlns:af="http://xmlns.oracle.com/adf/faces/rich"
+                           id="pgl4">
+        <af:popup id="p2" autoCancel="disabled" childCreation="deferred"
+                  binding="#{viewScope.BPCostBean.dataExportWnd}">
+          <af:panelWindow id="pw2" title="#{viewBundle['dms.dgpt.dataExport']}">
+            <af:panelGridLayout id="pgl5">
+              <af:gridRow marginTop="5px" height="auto" id="gr2">
+                <af:gridCell marginStart="5px" width="auto" id="gc6"
+                             inlineStyle="padding-top:5px">
+                  <af:outputText value="#{viewBundle['dms.dgpt.excel.format']}"
+                                 id="ot10"/>
+                </af:gridCell>
+                <af:gridCell marginStart="5px" marginEnd="5px" width="auto"
+                             id="gc9">
+                  <af:selectBooleanRadio text="#{viewBundle['dms.dgpt.excel.03format']}"
+                                         id="sbr3" group="excelFormat1"
+                                         simple="true"/>
+                  <af:selectBooleanRadio text="#{viewBundle['dms.dgpt.excel.07format']}"
+                                         id="sbr4" group="excelFormat1"
+                                         simple="true" autoSubmit="true"
+                                         value="#{viewScope.BPCostBean.isXlsx}"/>
+                </af:gridCell>
+              </af:gridRow>
+              <af:gridRow marginTop="5px" marginBottom="5px" height="auto"
+                          id="gr1">
+                <af:gridCell marginStart="5px" width="auto" columnSpan="2"
+                             halign="center" id="gc8"
+                             inlineStyle="margin-top:5px">
+                  <af:commandButton text="#{viewBundle['dcm.action.export']}"
+                                    id="cb11">
+                    <af:fileDownloadActionListener contentType="application/vnd.ms-excel"
+                                                   method="#{viewScope.BPCostBean.operation_export}"
+                                                   filename="#{viewScope.BPCostBean.exportDataExcelName}"/>
+                  </af:commandButton>
+                </af:gridCell>
+              </af:gridRow>
+            </af:panelGridLayout>
+          </af:panelWindow>
+        </af:popup>
+        <af:popup id="p1" binding="#{viewScope.BPCostBean.errorWindow}">
+          <af:panelWindow id="pw1" title="#{viewBundle['dcm.import_error']}">
+            <af:panelStretchLayout id="psl2" inlineStyle="width:800px;height:400px">
+              <f:facet name="bottom"/>
+              <f:facet name="center">
+                <af:table value="#{bindings.ProPlanCostView.collectionModel}"
+                          var="row" rows="#{bindings.ProPlanCostView.rangeSize}"
+                          emptyText="#{bindings.ProPlanCostView.viewable ? 'No data to display.' : 'Access Denied.'}"
+                          fetchSize="#{bindings.ProPlanCostView.rangeSize}"
+                          rowBandingInterval="0" id="t3" columnStretching="column:c2">
+                  <af:column sortProperty="#{bindings.ProPlanCostView.hints.RowNum.name}"
+                             sortable="false"
+                             headerText="#{bindings.ProPlanCostView.hints.RowNum.label}"
+                             id="c3">
+                    <af:outputText value="#{row.bindings.RowNum.inputValue}"
+                                  id="it3">
+                      <af:convertNumber groupingUsed="false"
+                                        pattern="#{bindings.ProPlanCostView.hints.RowNum.format}"/>
+                    </af:outputText>
+                  </af:column>
+                  <af:column sortProperty="#{bindings.ProPlanCostView.hints.Msg.name}"
+                             sortable="false"
+                             headerText="#{bindings.ProPlanCostView.hints.Msg.label}"
+                             id="c2">
+                    <af:outputText value="#{row.bindings.Msg.inputValue}"
+                                  id="it2">
+                    </af:outputText>
+                  </af:column>
+                  <af:column sortProperty="#{bindings.ProPlanCostView.hints.CreatedAt.name}"
+                             sortable="false"
+                             headerText="#{bindings.ProPlanCostView.hints.CreatedAt.label}"
+                             id="c5">
+                    <af:outputText value="#{row.bindings.CreatedAt.inputValue}"
+                                  id="id1">
+                      <af:convertDateTime pattern="#{bindings.ProPlanCostView.hints.CreatedAt.format}"/>
+                    </af:outputText>
+                  </af:column>
+                  <af:column sortProperty="#{bindings.ProPlanCostView.hints.CreatedBy.name}"
+                             sortable="false"
+                             headerText="#{bindings.ProPlanCostView.hints.CreatedBy.label}"
+                             id="c4">
+                    <af:outputText value="#{row.bindings.CreatedBy.inputValue}"
+                                  id="it1">
+                    </af:outputText>
+                  </af:column>
+                </af:table>
+              </f:facet>
+              <f:facet name="start"/>
+              <f:facet name="end"/>
+              <f:facet name="top"/>
+            </af:panelStretchLayout>
+          </af:panelWindow>
+        </af:popup>
+      </af:panelGroupLayout>
+    </f:facet>
     <f:facet name="center">
       <af:panelCollection id="pc1">
         <f:facet name="menus"/>
         <f:facet name="toolbar">
           <af:toolbar id="t1">
+          <af:group id="grp1">
             <af:commandButton text="#{viewBundle['dms.common.save']}" id="cb1"
                               actionListener="#{viewScope.BPCostBean.operation_save}"/>
             <af:commandButton text="#{viewBundle['dms.common.cancel']}" id="cb2"
                               actionListener="#{viewScope.BPCostBean.operation_reset}"/>
+        </af:group>
+        <af:group id="g1">
+              <af:commandButton text="#{viewBundle['dcm.action.export']}" id="cb7">
+                <af:showPopupBehavior popupId="::p2"/>
+              </af:commandButton>
+              <af:commandButton text="#{viewBundle['dms.dgpt.block']}" id="cb3"
+                                actionListener="#{viewScope.BPCostBean.beBlocked}"
+                                     disabled="#{viewScope.BPCostBean.isBlock}"
+                                partialTriggers="::soc1 ::soc2 ::soc3"/>
+              <af:commandButton text="#{viewBundle['dcm.import_error']}" id="cb4"
+                                actionListener="#{viewScope.BPCostBean.errorPop}"/>
+            </af:group>
           </af:toolbar>
         </f:facet>
         <f:facet name="statusbar"/>
@@ -24,7 +132,7 @@
                   selectedRowKeys="#{viewScope.BPCostBean.dataModel.selectedRows}"
                   rowSelection="multiple" editingMode="clickToEdit"
                   emptyText="#{viewBundle['dms.common.nodata']}"
-                  partialTriggers=":::soc2 :::soc1 :::soc3">
+                  partialTriggers=":::soc1 :::soc2 :::soc3 ::cb3">
             <af:forEach items="#{viewScope.BPCostBean.dataModel.pcColsDef}"
                         var="attr" varStatus="vs">
                   <af:column sortable="false" headerText="#{attr.columnLable}" id="c1"
@@ -32,7 +140,8 @@
                                     #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
                                     #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}"
                              >
-                    <af:inputText value="#{row[attr.dbTableCol]}" id="ot6"  readOnly="#{attr.isReadonly}"
+                    <af:inputText value="#{row[attr.dbTableCol]}" id="ot6"
+                                  readOnly="#{attr.isReadonly eq 'false' ? viewScope.BPCostBean.isBlock : attr.isReadonly}"
                                     valueChangeListener="#{viewScope.BPCostBean.valueChangeLinstener}"/>
                   </af:column>
           </af:forEach>

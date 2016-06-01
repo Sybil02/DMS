@@ -1,15 +1,22 @@
 package dgpt;
 
+import common.ADFUtils;
 import common.DmsUtils;
 
 import common.JSFUtils;
 
+import dcm.DcmDataDisplayBean;
 import dcm.DcmQueryDescriptor;
 import dcm.PcColumnDef;
 
 import dcm.PcDataTableModel;
 
+import dcm.PcExcel2003WriterImpl;
+import dcm.PcExcel2007WriterImpl;
+
 import dms.login.Person;
+
+import java.io.OutputStream;
 
 import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
@@ -31,16 +38,22 @@ import java.util.List;
 
 import java.util.Map;
 
+import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 
 import oracle.adf.share.ADFContext;
+import oracle.adf.share.logging.ADFLogger;
+import oracle.adf.view.rich.component.rich.RichPopup;
 import oracle.adf.view.rich.component.rich.data.RichTable;
 import oracle.adf.view.rich.component.rich.output.RichPanelCollection;
 
 import oracle.adf.view.rich.model.FilterableQueryDescriptor;
 
+import oracle.jbo.ViewCriteria;
+import oracle.jbo.ViewCriteriaRow;
+import oracle.jbo.ViewObject;
 import oracle.jbo.server.DBTransaction;
 
 import org.apache.myfaces.trinidad.event.SelectionEvent;
@@ -55,6 +68,8 @@ public class BPCostBean {
     private CollectionModel dataModel;
     private List<PcColumnDef> pcColsDef = new ArrayList<PcColumnDef>();
     private FilterableQueryDescriptor queryDescriptor=new DcmQueryDescriptor();
+    private RichPopup errorWindow;
+
     public BPCostBean() {
         super();
         this.curUser = (Person)(ADFContext.getCurrent().getSessionScope().get("cur_user"));
@@ -78,6 +93,13 @@ public class BPCostBean {
     private String pEnd;
     private String connectId;
     public static final String TYPE_BASE="BASE";
+    private String isBlock;
+    //日志
+    private static ADFLogger _logger =ADFLogger.createADFLogger(DcmDataDisplayBean.class);
+
+    //是否是2007及以上格式
+    private boolean isXlsx = true;
+    private RichPopup dataExportWnd;
 
     private void initList(){
         this.yearList = queryYears("HLS_YEAR");
@@ -163,11 +185,10 @@ public class BPCostBean {
     public void queryData(){
         DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
         Statement stat = trans.createStatement(DBTransaction.DEFAULT);
-        String sql = "SELECT ENTITY_NAME,PRODUCT_LINE,PROJECT_TYPE,INDUSTRY_LINE,BUSINESS_LINE,CONNECT_ID,PROJECT_START,PROJECT_END"
-                    + " FROM PRO_PLAN_COST_HEADER WHERE VERSION = \'"+version+"\'";
+        String sql = "SELECT ENTITY_NAME,PRODUCT_LINE,PROJECT_TYPE,INDUSTRY_LINE,BUSINESS_LINE,CONNECT_ID,PROJECT_START,PROJECT_END,"
+                    + "IS_BLOCK FROM PRO_PLAN_COST_HEADER WHERE VERSION = \'"+version+"\'";
         sql = sql +" AND HLS_YEAR=\'"+year+"\'";
         sql = sql + " AND PROJECT_NAME=\'"+pname+"\'";
-        
         ResultSet rs;
         try {
             rs = stat.executeQuery(sql);
@@ -177,6 +198,7 @@ public class BPCostBean {
             hLine="";
             yLine="";
             connectId="";
+            isBlock = "false";
             while(rs.next()){
                 entity = rs.getString("ENTITY_NAME");
                 pLine = rs.getString("PRODUCT_LINE");
@@ -186,24 +208,19 @@ public class BPCostBean {
                 connectId=rs.getString("CONNECT_ID");
                 pStart = rs.getString("PROJECT_START");
                 pEnd = rs.getString("PROJECT_END");
+                isBlock = rs.getString("IS_BLOCK");
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
     public void createTableModel(){
-        //行的Map
-        LinkedHashMap<String,String> labelMap = getLabelMap();
+        
         //
         DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
         Statement stat = trans.createStatement(DBTransaction.DEFAULT);
-        StringBuffer sql = new StringBuffer();
-        sql.append("SELECT ");
-        for(Map.Entry<String,String> entry : labelMap.entrySet()){
-            sql.append(entry.getValue()).append(",");
-        }
-        sql.append("ROWID AS ROW_ID FROM PRO_PLAN_COST_BODY WHERE CONNECT_ID = '").append(connectId).append("'");
-        sql.append(" AND DATA_TYPE = '").append(this.TYPE_BASE).append("'");
+        LinkedHashMap<String,String> labelMap = getLabelMap();
+        String sql = this.querySql(labelMap);
         List<Map> data = new ArrayList<Map>();
         ResultSet rs;
         try {
@@ -224,6 +241,20 @@ public class BPCostBean {
         this.dataModel.setWrappedData(data);
         ((PcDataTableModel)this.dataModel).setLabelMap(labelMap);
     }
+    
+    //查询语句
+    private String querySql(LinkedHashMap<String,String> labelMap){
+        
+        StringBuffer sql = new StringBuffer();
+        sql.append("SELECT ");
+        for(Map.Entry<String,String> entry : labelMap.entrySet()){
+            sql.append(entry.getValue()).append(",");
+        }
+        sql.append("ROWID AS ROW_ID FROM PRO_PLAN_COST_BODY WHERE CONNECT_ID = '").append(connectId).append("'");
+        sql.append(" AND DATA_TYPE = '").append(this.TYPE_BASE).append("'");
+        return sql.toString();
+    }
+    //一行中，列的map
     private LinkedHashMap<String,String> getLabelMap(){
         LinkedHashMap<String,String> labelMap = new LinkedHashMap<String,String>();
         labelMap.put("KEY1", "WBS");
@@ -234,7 +265,7 @@ public class BPCostBean {
         labelMap.put("KEY6","BOM_CODE");
         labelMap.put("KEY7","UNIT");
         labelMap.put("KEY8","PLAN_COST");
-        labelMap.put("KEY9", "OCCURRED");
+        //labelMap.put("KEY9", "OCCURRED");
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy_MM");
         List<Date> monthList;
         Date start;
@@ -246,16 +277,16 @@ public class BPCostBean {
             for(int i = 0 ; i < monthList.size() ; i++){
                 labelMap.put("KEY"+(i+10), "Y"+sdf.format(monthList.get(i)));
             }
-            labelMap.put("KEY"+(monthList.size()+10),"SUM_AFTER_JUL");
+            //labelMap.put("KEY"+(monthList.size()+10),"SUM_AFTER_JUL");
         } catch (ParseException e) {
             e.printStackTrace();
         }
         int flag = 1;
         boolean isReadonly = true;
+        this.pcColsDef.clear();
         for(Map.Entry<String,String> map:labelMap.entrySet()){
-            if(flag>9){
+            if(flag>8){
                 isReadonly = false;
-                
             }
             flag++;
             PcColumnDef newCol = new PcColumnDef(map.getValue(),map.getValue(),isReadonly);
@@ -264,6 +295,8 @@ public class BPCostBean {
         ((PcDataTableModel)this.dataModel).setPcColsDef(this.pcColsDef);
         return labelMap;
     }
+    
+    //时间段
     public static List<Date> findDates(Date dBegin, Date dEnd) {  
             List lDate = new ArrayList();  
             lDate.add(dBegin);  
@@ -306,6 +339,16 @@ public class BPCostBean {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        //清空错误表数据
+        String sqlError = "DELETE FROM PRO_PLAN_COST_ERROR T WHERE T.CREATED_BY = \'"+this.curUser.getId()+"\'";
+        Statement sta = trans.createStatement(DBTransaction.DEFAULT);
+        try {
+            sta.executeUpdate(sqlError);
+            trans.commit();
+            sta.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         StringBuffer sql = new StringBuffer();
         StringBuffer sql_value = new StringBuffer();
         sql_value.append(" VALUES(");
@@ -317,10 +360,11 @@ public class BPCostBean {
             sql.append(entry.getValue()+",");
             sql_value.append("?,");
         }
-        sql.append("ROW_ID,CONNECT_ID,CREATED_BY)");
-        sql_value.append("?,\'"+connectId+"\',"+this.curUser.getId()+")");
+        sql.append("ROW_ID,CONNECT_ID,CREATED_BY,ROW_NO,DATA_TYPE)");
+        sql_value.append("?,\'"+connectId+"\',\'"+this.curUser.getId()+"\',?,\'"+this.TYPE_BASE+"\')");
         PreparedStatement stmt = trans.createPreparedStatement(sql.toString()+sql_value.toString(), 0);
         //获取数据
+        int rowNum = 1;
         List<Map> modelData = (List<Map>)this.dataModel.getWrappedData();
         for(Map<String,String> rowdata : modelData){
             if("UPDATE".equals(rowdata.get("OPERATION"))){
@@ -330,6 +374,8 @@ public class BPCostBean {
                         stmt.setString(i++ , rowdata.get(entry.getValue()));
                     }
                     stmt.setString(last, rowdata.get("ROW_ID"));
+                    stmt.setInt(last+1,rowNum);
+                    rowNum++;
                     stmt.addBatch();
                     stmt.executeBatch();
                 } catch (SQLException e) {
@@ -347,22 +393,24 @@ public class BPCostBean {
                 }
             }
         }else{
-            JSFUtils.addFacesErrorMessage("数据校验不通过！");
+            this.showErrorPop();
         }
     }
     //校验程序
     public boolean validation(){
         boolean flag = true;
         DBTransaction trans = (DBTransaction)DmsUtils.getDcmApplicationModule().getDBTransaction();
-        CallableStatement cs = trans.createCallableStatement("{CALl DMS_ZZX.BPC_VALIDATION(?,?)}", 0);
+        CallableStatement cs = trans.createCallableStatement("{CALl DMS_ZZX.BPC_VALIDATION(?,?,?)}", 0);
         try {
             cs.setString(1, this.curUser.getId());
-            cs.registerOutParameter(2, Types.VARCHAR);
+            cs.setString(2, this.TYPE_BASE.toString());
+            cs.registerOutParameter(3, Types.VARCHAR);
             cs.execute();
-            if("N".equals(cs.getString(2))){
+            if("N".equals(cs.getString(3))){
                 flag = false;
             }
             cs.close();
+            trans.commit();
         } catch (SQLException e) {
             flag = false;
             e.printStackTrace();
@@ -403,6 +451,47 @@ public class BPCostBean {
         if(rowMap.get("OPERATION") == null){
             rowMap.put("OPERATION", PcDataTableModel.OPERATE_UPDATE);    
         }                
+    }
+    //导出excel
+    public void operation_export(FacesContext facesContext, OutputStream outputStream) {
+        this.dataExportWnd.cancel();
+        String type = this.isXlsx ? "xlsx" : "xls";
+        try {
+            if("xls".equals(type)){
+                PcExcel2003WriterImpl writer = new PcExcel2003WriterImpl(
+                                                   this.querySql(this.getLabelMap()),
+                                                   "基准计划成本",
+                                                    this.pcColsDef,
+                                                    outputStream);
+            
+                writer.writeToFile();
+            }else{
+                PcExcel2007WriterImpl writer = new PcExcel2007WriterImpl(
+                                                    this.querySql(this.getLabelMap()),
+                                                    2,this.pcColsDef);
+                writer.process(outputStream, "基准计划成本");
+                outputStream.flush();
+            }
+        } catch (Exception e) {
+            this._logger.severe(e);
+        } 
+    }
+    
+    //导出文件名
+    public String getExportDataExcelName(){
+        if(isXlsx){
+            return "基准计划成本.xlsx";
+        }else{
+            return "基准计划成本.xls";
+        }
+    }
+    
+    public void showErrorPop(){
+        
+        ViewObject vo = ADFUtils.findIterator("ProPlanCostViewIterator").getViewObject();
+        vo.setNamedWhereClauseParam("dataType", this.TYPE_BASE);
+        RichPopup.PopupHints ph = new RichPopup.PopupHints();
+        this.errorWindow.show(ph);
     }
     public RichPanelCollection getPanelaCollection() {
         return panelaCollection;
@@ -542,5 +631,60 @@ public class BPCostBean {
 
     public FilterableQueryDescriptor getQueryDescriptor() {
         return queryDescriptor;
+    }
+
+    public void setIsXlsx(boolean isXlsx) {
+        this.isXlsx = isXlsx;
+    }
+
+    public boolean isIsXlsx() {
+        return isXlsx;
+    }
+
+    public void setDataExportWnd(RichPopup dataExportWnd) {
+        this.dataExportWnd = dataExportWnd;
+    }
+
+    public RichPopup getDataExportWnd() {
+        return dataExportWnd;
+    }
+
+    public void beBlocked(ActionEvent actionEvent) {
+        String sql = "UPDATE PRO_PLAN_COST_HEADER SET (IS_BLOCK) = 'true' WHERE HLS_YEAR = \'"+year;
+        sql = sql + "\' AND PROJECT_NAME =\'"+pname+"\' AND VERSION=\'"+version+"\'";
+        DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
+        Statement stat = trans.createStatement(DBTransaction.DEFAULT);
+        int flag =-1;
+        try {
+            flag = stat.executeUpdate(sql);
+            trans.commit();
+            stat.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        if(flag!=-1){
+            isBlock = "true";
+        }
+        
+    }
+
+    public void setIsBlock(String isBlock) {
+        this.isBlock = isBlock;
+    }
+
+    public String getIsBlock() {
+        return isBlock;
+    }
+
+    public void setErrorWindow(RichPopup errorWindow) {
+        this.errorWindow = errorWindow;
+    }
+
+    public RichPopup getErrorWindow() {
+        return errorWindow;
+    }
+
+    public void errorPop(ActionEvent actionEvent) {
+        this.showErrorPop();
     }
 }
