@@ -436,6 +436,11 @@ public class HtChangeBean {
 
     private LinkedHashMap<String,String> getLabelMap(String startTime,String endTime){
         LinkedHashMap<String,String> labelMap = new LinkedHashMap<String,String>();
+        
+        if(startTime == null || endTime == null){
+            return  labelMap;    
+        }
+        
         labelMap.put("KEY1", "WBS");
         labelMap.put("KEY2","WORK");
         labelMap.put("KEY3","TERM");

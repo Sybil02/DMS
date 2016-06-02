@@ -104,6 +104,11 @@ public class ProjectZxBean {
     
     private LinkedHashMap<String,String> getLabelMap(){
         LinkedHashMap<String,String> labelMap = new LinkedHashMap<String,String>();
+        
+        if(pStart == null || pEnd == null){
+            return  labelMap;    
+        }
+        
         labelMap.put("WBS", "WBS");
         labelMap.put("WORK","WORK");
         labelMap.put("TERM","TERM");
