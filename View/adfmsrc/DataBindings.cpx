@@ -48,6 +48,7 @@
       <page path="/dgpt/htys_bh.jsff" usageId="__htys_bhPageDef"/>
       <page path="/dgpt/ProjectZx.jsff" usageId="__ProjectZxPageDef"/>
       <page path="/dgpt/JzjhCb.jsff" usageId="__JzjhCbPageDef"/>
+      <page path="/dgpt/HtChange.jsff" usageId="__HtChangePageDef"/>
    </pageMap>
    <pageDefinitionUsages>
       <page id="__dynamicTabShellPageDef"
@@ -91,6 +92,7 @@
       <page id="__htys_bhPageDef" path="dgpt.htys_bhPageDef"/>
       <page id="__ProjectZxPageDef" path="dgpt.ProjectZxPageDef"/>
       <page id="__JzjhCbPageDef" path="dgpt.JzjhCbPageDef"/>
+      <page id="__HtChangePageDef" path="dgpt.HtChangePageDef"/>
    </pageDefinitionUsages>
    <dataControlUsages>
       <BC4JDataControl id="DmsModuleDataControl" Package="team.epm.module"

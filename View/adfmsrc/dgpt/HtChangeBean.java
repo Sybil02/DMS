@@ -1,5 +1,6 @@
 package dgpt;
 
+import common.ADFUtils;
 import common.DmsUtils;
 
 import common.JSFUtils;
@@ -52,6 +53,7 @@ import oracle.adf.view.rich.component.rich.RichPopup;
 import oracle.adf.view.rich.component.rich.data.RichTable;
 import oracle.adf.view.rich.component.rich.output.RichPanelCollection;
 
+import oracle.jbo.ViewObject;
 import oracle.jbo.server.DBTransaction;
 
 import org.apache.myfaces.trinidad.event.SelectionEvent;
@@ -63,6 +65,8 @@ public class HtChangeBean {
     private RichPanelCollection panelaCollection;
     private CollectionModel dataModel;
     private List<PcColumnDef> pcColsDef = new ArrayList<PcColumnDef>();
+    private RichPopup errorWindow;
+
     public HtChangeBean() {
         super();
         this.curUser = (Person)(ADFContext.getCurrent().getSessionScope().get("cur_user"));
@@ -339,6 +343,16 @@ public class HtChangeBean {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        //清空错误表数据
+        String sqlError = "DELETE FROM PRO_PLAN_COST_ERROR T WHERE T.CREATED_BY = \'"+this.curUser.getId()+"\'";
+        Statement sta = trans.createStatement(DBTransaction.DEFAULT);
+        try {
+            sta.executeUpdate(sqlError);
+            trans.commit();
+            sta.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         StringBuffer sql = new StringBuffer();
         StringBuffer sql_value = new StringBuffer();
         sql_value.append(" VALUES(");
@@ -350,14 +364,17 @@ public class HtChangeBean {
             sql.append(entry.getValue()+",");
             sql_value.append("?,");
         }
-        sql.append("ROW_ID,CONNECT_ID,CREATED_BY,OPERATION)");
-        sql_value.append("?,\'"+connectId+"\',"+this.curUser.getId()+",?)");
+        sql.append("ROW_ID,CONNECT_ID,CREATED_BY,OPERATION,DATA_TYPE,ROW_NO)");
+        sql_value.append("?,\'"+connectId+"\',"+this.curUser.getId()+",?,\'"+this.TYPE_CHANGE+"\',?)");
         PreparedStatement stmt = trans.createPreparedStatement(sql.toString()+sql_value.toString(), 0);
         //获取数据
+        int rowNum = 1;
         List<Map> modelData = (List<Map>)this.dataModel.getWrappedData();
         for(Map<String,String> rowdata : modelData){
                 try {
                     stmt.setString(last, rowdata.get("ROW_ID"));
+                    stmt.setInt(last+2,rowNum);
+                    rowNum++;
                     if(PcDataTableModel.OPERATE_UPDATE.equals(rowdata.get("OPERATION"))){
                         stmt.setString(last+1,PcDataTableModel.OPERATE_UPDATE);
                     }else if(PcDataTableModel.OPERATE_CREATE.equals(rowdata.get("OPERATION"))){
@@ -367,14 +384,14 @@ public class HtChangeBean {
                     }else{
                         stmt.setString(last+1,PcDataTableModel.OPERATE_UPDATE);
                     }
-                    if(null!=rowdata.get("OPERATION")){
+                    //if(null!=rowdata.get("OPERATION")){
                         int i =1;
                         for(Map.Entry<String,String> entry : map.entrySet()){
                             stmt.setString(i++ , rowdata.get(entry.getValue()));
                         }
                         stmt.addBatch();
                         stmt.executeBatch();
-                    }
+                    //}
                 } catch (SQLException e) {
                     e.printStackTrace();
                 } 
@@ -394,7 +411,7 @@ public class HtChangeBean {
             }
             this.createTableModel(pStart, pEnd);
         }else{
-            JSFUtils.addFacesErrorMessage("数据校验不通过！");
+            this.showErrorPop();
         }
     }
     //删除
@@ -476,15 +493,17 @@ public class HtChangeBean {
     public boolean validation(){
         boolean flag = true;
         DBTransaction trans = (DBTransaction)DmsUtils.getDcmApplicationModule().getDBTransaction();
-        CallableStatement cs = trans.createCallableStatement("{CALl DMS_ZZX.CHANGE_VALIDATION(?,?)}", 0);
+        CallableStatement cs = trans.createCallableStatement("{CALl DMS_ZZX.CHANGE_VALIDATION(?,?,?)}", 0);
         try {
             cs.setString(1, this.curUser.getId());
-            cs.registerOutParameter(2, Types.VARCHAR);
+            cs.setString(2,this.TYPE_CHANGE);
+            cs.registerOutParameter(3, Types.VARCHAR);
             cs.execute();
-            if("N".equals(cs.getString(2))){
+            if("N".equals(cs.getString(3))){
                 flag = false;
             }
             cs.close();
+            trans.commitAndSaveChangeSet();
         } catch (SQLException e) {
             flag = false;
             e.printStackTrace();
@@ -712,12 +731,31 @@ public class HtChangeBean {
             return "合同变更后的基准计划成本.xls";
         }
     }
-
+    //显示错误框
+    public void showErrorPop(){
+        ViewObject vo = ADFUtils.findIterator("ProPlanCostViewIterator").getViewObject();
+        vo.setNamedWhereClauseParam("dataType", this.TYPE_CHANGE);
+        RichPopup.PopupHints ph = new RichPopup.PopupHints();
+        vo.executeQuery();
+        this.errorWindow.show(ph);
+    }
     public void setDataExportWnd(RichPopup dataExportWnd) {
         this.dataExportWnd = dataExportWnd;
     }
 
     public RichPopup getDataExportWnd() {
         return dataExportWnd;
+    }
+
+    public void setErrorWindow(RichPopup errorWindow) {
+        this.errorWindow = errorWindow;
+    }
+
+    public RichPopup getErrorWindow() {
+        return errorWindow;
+    }
+
+    public void errorPop(ActionEvent actionEvent) {
+        this.showErrorPop();
     }
 }

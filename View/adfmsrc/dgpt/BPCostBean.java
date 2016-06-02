@@ -372,7 +372,7 @@ public class BPCostBean {
         int rowNum = 1;
         List<Map> modelData = (List<Map>)this.dataModel.getWrappedData();
         for(Map<String,String> rowdata : modelData){
-            if("UPDATE".equals(rowdata.get("OPERATION"))){
+            //if("UPDATE".equals(rowdata.get("OPERATION"))){
                 try {
                     int i =1;
                     for(Map.Entry<String,String> entry : map.entrySet()){
@@ -386,7 +386,7 @@ public class BPCostBean {
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
-            }        
+            //}        
         }
         trans.commit();
         //执行校验
@@ -495,6 +495,7 @@ public class BPCostBean {
         
         ViewObject vo = ADFUtils.findIterator("ProPlanCostViewIterator").getViewObject();
         vo.setNamedWhereClauseParam("dataType", this.TYPE_BASE);
+        vo.executeQuery();
         RichPopup.PopupHints ph = new RichPopup.PopupHints();
         this.errorWindow.show(ph);
     }

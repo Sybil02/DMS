@@ -6,10 +6,12 @@
   <c:set var="viewBundle" value="#{adfBundle['dms_v']}"/>
     <af:panelStretchLayout id="psl1" startWidth="0px" topHeight="53px">
       <f:facet name="bottom">
+      <af:panelGroupLayout layout="scroll"
+                           xmlns:af="http://xmlns.oracle.com/adf/faces/rich"
+                           id="pgl4">
         <af:popup id="p2" autoCancel="disabled" childCreation="deferred"
                   binding="#{viewScope.ProjectZxBean.dataExportWnd}">
-          <af:panelWindow id="pw2"
-                          title="#{viewBundle['dms.dgpt.dataExport']}">
+          <af:panelWindow id="pw2" title="#{viewBundle['dms.dgpt.dataExport']}">
             <af:panelGridLayout id="pgl5">
               <af:gridRow marginTop="5px" height="auto" id="gr2">
                 <af:gridCell marginStart="5px" width="auto" id="gc6"
@@ -19,9 +21,9 @@
                 </af:gridCell>
                 <af:gridCell marginStart="5px" marginEnd="5px" width="auto"
                              id="gc9">
-                  <af:selectBooleanRadio text="#{viewBundle['dms.dgpt.excel.03format']}"
+                 <!-- <af:selectBooleanRadio text="#{viewBundle['dms.dgpt.excel.03format']}"
                                          id="sbr3" group="excelFormat1"
-                                         simple="true"/>
+                                         simple="true"/>-->
                   <af:selectBooleanRadio text="#{viewBundle['dms.dgpt.excel.07format']}"
                                          id="sbr4" group="excelFormat1"
                                          simple="true" autoSubmit="true"
@@ -44,6 +46,54 @@
             </af:panelGridLayout>
           </af:panelWindow>
         </af:popup>
+        <af:popup id="p1" binding="#{viewScope.ProjectZxBean.errorWindow}">
+          <af:panelWindow id="pw1" title="#{viewBundle['dcm.import_error']}">
+            <af:panelStretchLayout id="psl2" inlineStyle="width:800px;height:400px">
+              <f:facet name="bottom"/>
+              <f:facet name="center">
+                <af:table value="#{bindings.ProPlanCostView.collectionModel}"
+                          var="row" rows="#{bindings.ProPlanCostView.rangeSize}"
+                          emptyText="#{bindings.ProPlanCostView.viewable ? 'No data to display.' : 'Access Denied.'}"
+                          fetchSize="#{bindings.ProPlanCostView.rangeSize}" rowSelection="single" 
+                          rowBandingInterval="0" id="t3" columnStretching="column:c35">
+                  <af:column sortProperty="#{bindings.ProPlanCostView.hints.RowNum.name}"
+                             sortable="false"
+                             headerText="#{bindings.ProPlanCostView.hints.RowNum.label}"
+                             id="c34">
+                    <af:outputText value="#{row.RowNum}" id="ot6">
+                      <af:convertNumber groupingUsed="false"
+                                        pattern="#{bindings.ProPlanCostView.hints.RowNum.format}"/>
+                    </af:outputText>
+                  </af:column>
+                  <af:column sortProperty="#{bindings.ProPlanCostView.hints.Msg.name}"
+                             sortable="false"
+                             headerText="#{bindings.ProPlanCostView.hints.Msg.label}"
+                             id="c35">
+                    <af:outputText value="#{row.Msg}" id="ot7"/>
+                  </af:column>
+                  <af:column sortProperty="#{bindings.ProPlanCostView.hints.CreatedAt.name}"
+                             sortable="false"
+                             headerText="#{bindings.ProPlanCostView.hints.CreatedAt.label}"
+                             id="c33">
+                    <af:outputText value="#{row.CreatedAt}" id="ot8">
+                      <af:convertDateTime pattern="#{bindings.ProPlanCostView.hints.CreatedAt.format}"/>
+                    </af:outputText>
+                  </af:column>
+                  <af:column sortProperty="#{bindings.ProPlanCostView.hints.CreatedBy.name}"
+                             sortable="false"
+                             headerText="#{bindings.ProPlanCostView.hints.CreatedBy.label}"
+                             id="c32">
+                    <af:outputText value="#{row.CreatedBy}" id="ot9"/>
+                  </af:column>
+                </af:table>
+              </f:facet>
+              <f:facet name="start"/>
+              <f:facet name="end"/>
+              <f:facet name="top"/>
+            </af:panelStretchLayout>
+          </af:panelWindow>
+        </af:popup>
+      </af:panelGroupLayout>
     </f:facet>
       <f:facet name="center">
         <af:panelCollection id="pc1">
@@ -64,6 +114,8 @@
                                 actionListener="#{viewScope.ProjectZxBean.beBlocked}"
                                      disabled="#{viewScope.ProjectZxBean.isBlock}"
                                 partialTriggers="::soc1 ::soc2 ::soc3"/>
+              <af:commandButton text="#{viewBundle['dcm.import_error']}" id="cb1"
+                                actionListener="#{viewScope.ProjectZxBean.errorPop}"/>
             </af:group>
             </af:toolbar>
           </f:facet>

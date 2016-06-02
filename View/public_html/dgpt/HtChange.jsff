@@ -32,9 +32,9 @@
                 </af:gridCell>
                 <af:gridCell marginStart="5px" marginEnd="5px" width="auto"
                              id="gc9">
-                  <af:selectBooleanRadio text="#{viewBundle['dms.dgpt.excel.03format']}"
+                  <!--<af:selectBooleanRadio text="#{viewBundle['dms.dgpt.excel.03format']}"
                                          id="sbr3" group="excelFormat1"
-                                         simple="true"/>
+                                         simple="true"/>-->
                   <af:selectBooleanRadio text="#{viewBundle['dms.dgpt.excel.07format']}"
                                          id="sbr4" group="excelFormat1"
                                          simple="true" autoSubmit="true"
@@ -57,7 +57,7 @@
             </af:panelGridLayout>
           </af:panelWindow>
         </af:popup>
-        <af:popup id="p3" >
+        <af:popup id="p3" binding="#{viewScope.HtChangeBean.errorWindow}">
           <af:panelWindow id="pw3" title="#{viewBundle['dcm.import_error']}">
             <af:panelStretchLayout id="psl2" inlineStyle="width:800px;height:400px">
               <f:facet name="bottom"/>
@@ -65,13 +65,13 @@
                 <af:table value="#{bindings.ProPlanCostView.collectionModel}"
                           var="row" rows="#{bindings.ProPlanCostView.rangeSize}"
                           emptyText="#{bindings.ProPlanCostView.viewable ? 'No data to display.' : 'Access Denied.'}"
-                          fetchSize="#{bindings.ProPlanCostView.rangeSize}"
-                          rowBandingInterval="0" id="t3">
+                          fetchSize="#{bindings.ProPlanCostView.rangeSize}" 
+                          rowBandingInterval="0" id="t3" columnStretching="column:c3">
                   <af:column sortProperty="#{bindings.ProPlanCostView.hints.RowNum.name}"
                              sortable="false"
                              headerText="#{bindings.ProPlanCostView.hints.RowNum.label}"
-                             id="c4">
-                    <af:outputText value="#{row.RowNum}" id="ot8">
+                             id="c5">
+                    <af:outputText value="#{row.RowNum}" id="ot7">
                       <af:convertNumber groupingUsed="false"
                                         pattern="#{bindings.ProPlanCostView.hints.RowNum.format}"/>
                     </af:outputText>
@@ -79,30 +79,24 @@
                   <af:column sortProperty="#{bindings.ProPlanCostView.hints.Msg.name}"
                              sortable="false"
                              headerText="#{bindings.ProPlanCostView.hints.Msg.label}"
-                             id="c5">
-                    <af:inputText value="#{row.bindings.Msg.inputValue}"
-                                  label="#{bindings.ProPlanCostView.hints.Msg.label}"
-                                  required="#{bindings.ProPlanCostView.hints.Msg.mandatory}"
-                                  columns="#{bindings.ProPlanCostView.hints.Msg.displayWidth}"
-                                  maximumLength="#{bindings.ProPlanCostView.hints.Msg.precision}"
-                                  shortDesc="#{bindings.ProPlanCostView.hints.Msg.tooltip}"
+                             id="c3">
+                    <af:outputText value="#{row.bindings.Msg.inputValue}"
                                   id="it3">
-                      <f:validator binding="#{row.bindings.Msg.validator}"/>
-                    </af:inputText>
+                    </af:outputText>
                   </af:column>
                   <af:column sortProperty="#{bindings.ProPlanCostView.hints.CreatedAt.name}"
                              sortable="false"
                              headerText="#{bindings.ProPlanCostView.hints.CreatedAt.label}"
-                             id="c3">
-                    <af:outputText value="#{row.CreatedAt}" id="ot7">
+                             id="c2">
+                    <af:outputText value="#{row.CreatedAt}" id="ot9">
                       <af:convertDateTime pattern="#{bindings.ProPlanCostView.hints.CreatedAt.format}"/>
                     </af:outputText>
                   </af:column>
                   <af:column sortProperty="#{bindings.ProPlanCostView.hints.CreatedBy.name}"
                              sortable="false"
                              headerText="#{bindings.ProPlanCostView.hints.CreatedBy.label}"
-                             id="c2">
-                    <af:outputText value="#{row.CreatedBy}" id="ot9"/>
+                             id="c4">
+                    <af:outputText value="#{row.CreatedBy}" id="ot8"/>
                   </af:column>
                 </af:table>
               </f:facet>
@@ -133,6 +127,8 @@
               <af:commandButton text="#{viewBundle['dcm.action.export']}" id="cb7">
                 <af:showPopupBehavior popupId="::p2"/>
               </af:commandButton>
+              <af:commandButton text="#{viewBundle['dcm.import_error']}" id="cb8"
+                                actionListener="#{viewScope.HtChangeBean.errorPop}"/>
             </af:group>
           </af:toolbar>
         </f:facet>

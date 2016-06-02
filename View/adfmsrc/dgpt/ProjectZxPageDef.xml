@@ -11,6 +11,8 @@
     <searchRegion Binds="PPCBodyVOIterator" Criteria=""
                   Customizer="oracle.jbo.uicli.binding.JUSearchBindingCustomizer"
                   id="PPCBodyVOQuery"/>
+    <iterator Binds="ProPlanCostView" RangeSize="25"
+              DataControl="DmsModuleDataControl" id="ProPlanCostViewIterator"/>
   </executables>
   <bindings>
     <attributeValues IterBinding="PPCHeaderVOIterator" id="EntityName">
@@ -64,6 +66,17 @@
           <Item Value="PlanCost"/>
           <Item Value="Occurred"/>
           <Item Value="SumAfterJul"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <tree IterBinding="ProPlanCostViewIterator" id="ProPlanCostView">
+      <nodeDefinition DefName="team.epm.dms.view.ProPlanCostView"
+                      Name="ProPlanCostView0">
+        <AttrNames>
+          <Item Value="RowNum"/>
+          <Item Value="Msg"/>
+          <Item Value="CreatedAt"/>
+          <Item Value="CreatedBy"/>
         </AttrNames>
       </nodeDefinition>
     </tree>

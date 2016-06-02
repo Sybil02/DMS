@@ -21,9 +21,9 @@
                 </af:gridCell>
                 <af:gridCell marginStart="5px" marginEnd="5px" width="auto"
                              id="gc9">
-                  <af:selectBooleanRadio text="#{viewBundle['dms.dgpt.excel.03format']}"
+                 <!-- <af:selectBooleanRadio text="#{viewBundle['dms.dgpt.excel.03format']}"
                                          id="sbr3" group="excelFormat1"
-                                         simple="true"/>
+                                         simple="true"/>-->
                   <af:selectBooleanRadio text="#{viewBundle['dms.dgpt.excel.07format']}"
                                          id="sbr4" group="excelFormat1"
                                          simple="true" autoSubmit="true"
@@ -54,7 +54,7 @@
                 <af:table value="#{bindings.ProPlanCostView.collectionModel}"
                           var="row" rows="#{bindings.ProPlanCostView.rangeSize}"
                           emptyText="#{bindings.ProPlanCostView.viewable ? 'No data to display.' : 'Access Denied.'}"
-                          fetchSize="#{bindings.ProPlanCostView.rangeSize}"
+                          fetchSize="#{bindings.ProPlanCostView.rangeSize}" rowSelection="single" 
                           rowBandingInterval="0" id="t3" columnStretching="column:c2">
                   <af:column sortProperty="#{bindings.ProPlanCostView.hints.RowNum.name}"
                              sortable="false"

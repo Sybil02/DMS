@@ -1,5 +1,6 @@
 package dgpt;
 
+import common.ADFUtils;
 import common.DmsUtils;
 
 import common.JSFUtils;
@@ -49,6 +50,7 @@ import oracle.adf.view.rich.component.rich.RichPopup;
 import oracle.adf.view.rich.component.rich.data.RichTable;
 import oracle.adf.view.rich.component.rich.output.RichPanelCollection;
 
+import oracle.jbo.ViewObject;
 import oracle.jbo.server.DBTransaction;
 
 import org.apache.myfaces.trinidad.event.SelectionEvent;
@@ -67,6 +69,7 @@ public class ProjectZxBean {
     //是否是2007及以上格式
     private boolean isXlsx = true;
     private RichPopup dataExportWnd;
+    private RichPopup errorWindow;
 
     public ProjectZxBean() {
         super();
@@ -382,12 +385,23 @@ public class ProjectZxBean {
     //保存操作
     public void operation_save() {
         DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
+        //删除临时表数据
         String sqldelete = "DELETE FROM PRO_PLAN_COST_BODY_TEMP T WHERE T.CREATED_BY = \'"+this.curUser.getId()+"\'";
         Statement st = trans.createStatement(DBTransaction.DEFAULT);
         try {
             st.executeUpdate(sqldelete);
             trans.commit();
             st.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        //清空错误表数据
+        String sqlError = "DELETE FROM PRO_PLAN_COST_ERROR T WHERE T.CREATED_BY = \'"+this.curUser.getId()+"\'";
+        Statement sta = trans.createStatement(DBTransaction.DEFAULT);
+        try {
+            sta.executeUpdate(sqlError);
+            trans.commit();
+            sta.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -400,12 +414,14 @@ public class ProjectZxBean {
             sql.append(entry.getValue()+",");
             sql_value.append("?,");
         }
-        sql.append("ROW_ID,CONNECT_ID,CREATED_BY)");
-        sql_value.append("?,\'"+connectId+"\',"+this.curUser.getId()+")");
+        sql.append("ROW_ID,CONNECT_ID,CREATED_BY,DATA_TYPE,ROW_NO)");
+        sql_value.append("?,\'"+connectId+"\',\'"+this.curUser.getId()+"\',\'"+this.TYPE_ZZX+"\',?)");
         PreparedStatement stmt = trans.createPreparedStatement(sql.toString()+sql_value.toString(), 0);
+        System.out.println(sql.toString()+sql_value.toString());
+        int rowNum = 1;
         List<Map> modelData = (List<Map>)this.dataModel.getWrappedData();
         for(Map<String,String> rowdata : modelData){
-            if("UPDATE".equals(rowdata.get("OPERATION"))){
+            //if("UPDATE".equals(rowdata.get("OPERATION"))){
                 try {
                     stmt.setString(1,rowdata.get("WBS"));
                     stmt.setString(2,rowdata.get("WORK"));
@@ -421,13 +437,15 @@ public class ProjectZxBean {
                     }
                     stmt.setString(map.size(),rowdata.get("SUM_AFTER_JUL"));
                     stmt.setString(map.size()+1, rowdata.get("ROW_ID"));
+                    stmt.setInt(map.size()+2, rowNum);
+                    rowNum++;
                     stmt.addBatch();
                     stmt.executeBatch();
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
             }        
-        }
+        //}
         trans.commit();
         //jiaoyan
         if(this.validation()){
@@ -438,7 +456,7 @@ public class ProjectZxBean {
                 }
             }
         }else{
-            JSFUtils.addFacesErrorMessage("数据校验不通过！");
+            this.showErrorPop();
         }
     }
     public void inputPro(){
@@ -470,15 +488,17 @@ public class ProjectZxBean {
     public boolean validation(){
         boolean flag = true;
         DBTransaction trans = (DBTransaction)DmsUtils.getDcmApplicationModule().getDBTransaction();
-        CallableStatement cs = trans.createCallableStatement("{CALl DMS_ZZX.ZZX_VALIDATION(?,?)}", 0);
+        CallableStatement cs = trans.createCallableStatement("{CALl DMS_ZZX.ZZX_VALIDATION(?,?,?)}", 0);
         try {
             cs.setString(1, this.curUser.getId());
-            cs.registerOutParameter(2, Types.VARCHAR);
+            cs.setString(2, this.TYPE_ZZX);
+            cs.registerOutParameter(3, Types.VARCHAR);
             cs.execute();
-            if("N".equals(cs.getString(2))){
+            if("N".equals(cs.getString(3))){
                 flag = false;
             }
             cs.close();
+            trans.commit();
         } catch (SQLException e) {
             flag = false;
             e.printStackTrace();
@@ -700,5 +720,24 @@ public class ProjectZxBean {
         if(flag!=-1){
             isBlock = "true";
         }
+    }
+    //显示错误框
+    public void showErrorPop(){
+        ViewObject vo = ADFUtils.findIterator("ProPlanCostViewIterator").getViewObject();
+        vo.setNamedWhereClauseParam("dataType", this.TYPE_ZZX);
+        vo.executeQuery();
+        RichPopup.PopupHints ph = new RichPopup.PopupHints();
+        this.errorWindow.show(ph);
+    }
+    public void setErrorWindow(RichPopup errorWindow) {
+        this.errorWindow = errorWindow;
+    }
+
+    public RichPopup getErrorWindow() {
+        return errorWindow;
+    }
+
+    public void errorPop(ActionEvent actionEvent) {
+        this.showErrorPop();
     }
 }
