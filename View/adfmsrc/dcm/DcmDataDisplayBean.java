@@ -1805,6 +1805,7 @@ public class DcmDataDisplayBean extends TablePagination{
     }
 
     public void showBatchLog(ActionEvent actionEvent) {
+        DmsUtils.getDcmApplicationModule().getDcmErrorBatchVO().executeQuery();
         RichPopup.PopupHints hints = new RichPopup.PopupHints();
         this.batchErrPop.show(hints);
     }

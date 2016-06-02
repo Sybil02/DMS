@@ -40,34 +40,41 @@ public class BatchExcelReader implements IRowReader{
     public void getRows(int sheetIndex, String sheetName, int curRow,
                         TreeMap<Integer, String> rowlist) {
         ReplaceSpecialChar rsc = new ReplaceSpecialChar();
-        System.out.println(sheetIndex + ":" + sheetName);
-        if (curRow >= tempList.get(sheetIndex).getStartLine() - 1&&sheetName.startsWith(tempList.get(sheetIndex).getTemplateName())) {
-            boolean isEpty = true;
-            try {
-                this.stmtList.get(sheetIndex).setString(1, sheetName);
-                this.stmtList.get(sheetIndex).setInt(2, curRow + 1);
-                for (int i = 0; i < this.tempList.get(sheetIndex).getColumnSize(); i++) {
-                    
-                    String tmpstr = rowlist.get(i);
-                    if (null == tmpstr || "".equals(tmpstr.trim())) {
-                        this.stmtList.get(sheetIndex).setString(i + 3, "");
-                    } else {
-                        isEpty = false;
-                        this.stmtList.get(sheetIndex).setString(i + 3, rsc.decodeString(tmpstr.trim()));        
-                    }
+        System.out.println(sheetIndex);
+        
+        for(int idx = 0 ; idx < this.tempList.size() ; idx++){
+            if(this.tempList.get(idx).getTemplateName().equals(sheetName)){
+                System.out.println(idx+":"+sheetName+":"+tempList.get(idx).getTemplateName());
+                if (curRow >= tempList.get(idx).getStartLine() - 1&&sheetName.startsWith(tempList.get(idx).getTemplateName())) {
+                  boolean isEpty = true;
+                  try {
+                      this.stmtList.get(idx).setString(1, sheetName);
+                      this.stmtList.get(idx).setInt(2, curRow + 1);
+                      for (int i = 0; i < this.tempList.get(idx).getColumnSize(); i++) {
+                          
+                          String tmpstr = rowlist.get(i);
+                          if (null == tmpstr || "".equals(tmpstr.trim())) {
+                              this.stmtList.get(idx).setString(i + 3, "");
+                          } else {
+                              isEpty = false;
+                              this.stmtList.get(idx).setString(i + 3, rsc.decodeString(tmpstr.trim()));        
+                          }
+                      }
+                      if (!isEpty) {
+                          this.stmtList.get(idx).addBatch();
+                      }
+                      if ((this.n + 1) % this.batchSize == 0) {
+                          this.stmtList.get(idx).executeBatch();
+                          this.trans.commit();
+                      }
+                      this.n += 1;
+                  } catch (Exception e) {
+                      this.logger.severe(e);
+                  }
                 }
-                if (!isEpty) {
-                    this.stmtList.get(sheetIndex).addBatch();
-                }
-                if ((this.n + 1) % this.batchSize == 0) {
-                    this.stmtList.get(sheetIndex).executeBatch();
-                    this.trans.commit();
-                }
-                this.n += 1;
-            } catch (Exception e) {
-                this.logger.severe(e);
-            }
+            }    
         }
+        
     }
     
     private List<PreparedStatement> initStmtList(){
