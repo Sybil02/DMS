@@ -673,15 +673,12 @@
             <hash>
                <url n="content-folder-url" path="adfmsrc/dcm/"/>
                <list n="pattern-filters">
-<<<<<<< HEAD
                   <string v="+dcm/PcExcel2007WriterImpl.java"/>
                   <string v="+dcm/PcExcel2003WriterImpl.java"/>
                   <string v="+dcm/PcDataDisplayBean.java"/>
                   <string v="+dcm/PcDataTableModel.java"/>
                   <string v="+dcm/PcColumnDef.java"/>
-=======
                   <string v="+dcm/BatchExcelReader.java"/>
->>>>>>> origin/HLSDev
                   <string v="+dcm/AbstractExcel2007Writer.java"/>
                   <string v="+dcm/Excel2003WriterImpl.java"/>
                   <string v="+dcm/Excel2007WriterImpl.java"/>
