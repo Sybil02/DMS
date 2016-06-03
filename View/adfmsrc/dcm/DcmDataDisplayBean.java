@@ -537,8 +537,8 @@ public class DcmDataDisplayBean extends TablePagination{
                 cs.setString(2, temp.getTemplateId());
                 cs.setString(3, curComRecordId);
                 //获取校验对应的临时表列
-                for (int i = 1; i <= this.colsdef.size(); i++) {
-                    if (this.colsdef.get(i -1).getDbTableCol().equals((String)row.getAttribute("DbTableCol"))) {
+                for (int i = 1; i <= temp.getColsdef().size(); i++) {
+                    if (temp.getColsdef().get(i -1).equals((String)row.getAttribute("DbTableCol"))) {
                         cs.setString(4, "COLUMN" + i);
                         break;
                     }
@@ -773,14 +773,15 @@ public class DcmDataDisplayBean extends TablePagination{
             String temptable = "";
             int startLine = 2;
             int columnSize = 0;
+            List<String> cols = new ArrayList<String>();
             String templateName = "";
             String preGro = "";
             String impGro = "";
             String afterGro = "";
             String sql = "SELECT T.ID,T.NAME,T.DATA_START_LINE,T.TMP_TABLE,T.PRE_PROGRAM,T.HANDLE_PROGRAM,T.AFTER_PROGRAM FROM DCM_TEMPLATE T WHERE T.LOCALE = '" + this.curUser.getLocale() 
                          + "' AND T.ID = '" + tempId + "'";
-            String countSql = "SELECT COUNT(1) AS COLSIZE FROM DCM_TEMPLATE_COLUMN T WHERE T.LOCALE = '" + this.curUser.getLocale()
-                         + "' AND T.TEMPLATE_ID = '" + tempId + "'";
+            String countSql = "SELECT T.DB_TABLE_COL FROM DCM_TEMPLATE_COLUMN T WHERE T.LOCALE = '" + this.curUser.getLocale()
+                                     + "' AND T.TEMPLATE_ID = '" + tempId + "' ORDER BY T.SEQ ASC";
             ResultSet rs;
             ResultSet cRs;
             try {
@@ -795,14 +796,14 @@ public class DcmDataDisplayBean extends TablePagination{
                 }
                 rs.close();
                 cRs = stat.executeQuery(countSql);
-                if(cRs.next()){
-                    columnSize = cRs.getInt("COLSIZE"); 
+                while(cRs.next()){
+                    cols.add(cRs.getString("DB_TABLE_COL"));
                 }
                 cRs.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-            TemplateEntity te = new TemplateEntity(tempId,templateName,temptable,columnSize,startLine,preGro,impGro,afterGro);
+            TemplateEntity te = new TemplateEntity(tempId,templateName,temptable,cols.size(),startLine,preGro,impGro,afterGro,cols);
             tempList.add(te);
         }
         try {
@@ -1651,6 +1652,7 @@ public class DcmDataDisplayBean extends TablePagination{
     }
 
     public void showBatchLog(ActionEvent actionEvent) {
+        DmsUtils.getDcmApplicationModule().getDcmErrorBatchVO().executeQuery();
         RichPopup.PopupHints hints = new RichPopup.PopupHints();
         this.batchErrPop.show(hints);
     }
