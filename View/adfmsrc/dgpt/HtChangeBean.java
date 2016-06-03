@@ -100,7 +100,7 @@ public class HtChangeBean {
     private RichPopup dataExportWnd;
     
     private void initList(){
-        this.yearList = queryYears("HLS_YEAR");
+        this.yearList = queryYears("HLS_YEAR_C");
         this.pnameList = queryValues("PRO_PLAN_COST_HEADER","PROJECT_NAME");
         this.versionList = queryValues("PRO_PLAN_COST_HEADER","VERSION");
     }

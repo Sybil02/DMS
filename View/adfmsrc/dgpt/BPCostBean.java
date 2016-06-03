@@ -73,6 +73,11 @@ public class BPCostBean {
     public BPCostBean() {
         super();
         this.curUser = (Person)(ADFContext.getCurrent().getSessionScope().get("cur_user"));
+        if("10000".equals(this.curUser.getId())){
+            isManager = true;
+        }else{
+            isManager = false;
+        }
         this.dataModel = new PcDataTableModel();
         List<Map> d = new ArrayList<Map>();
         this.dataModel.setWrappedData(d);
@@ -94,6 +99,7 @@ public class BPCostBean {
     private String connectId;
     public static final String TYPE_BASE="BASE";
     private String isBlock;
+    private boolean isManager;
     //日志
     private static ADFLogger _logger =ADFLogger.createADFLogger(DcmDataDisplayBean.class);
 
@@ -102,7 +108,7 @@ public class BPCostBean {
     private RichPopup dataExportWnd;
 
     private void initList(){
-        this.yearList = queryYears("HLS_YEAR");
+        this.yearList = queryYears("HLS_YEAR_C");
         this.pnameList = queryValues("PRO_PLAN_COST_HEADER","PROJECT_NAME");
         this.versionList = queryValues("PRO_PLAN_COST_HEADER","VERSION");
     }
@@ -692,5 +698,30 @@ public class BPCostBean {
 
     public void errorPop(ActionEvent actionEvent) {
         this.showErrorPop();
+    }
+    public void setIsManager(boolean isManager) {
+        this.isManager = isManager;
+    }
+
+    public boolean isIsManager() {
+        return isManager;
+    }
+
+    public void outBlock(ActionEvent actionEvent) {
+        String sql = "UPDATE PRO_PLAN_COST_HEADER SET (IS_BLOCK) = 'false' WHERE HLS_YEAR = \'"+year;
+        sql = sql + "\' AND PROJECT_NAME =\'"+pname+"\' AND VERSION=\'"+version+"\'";
+        DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
+        Statement stat = trans.createStatement(DBTransaction.DEFAULT);
+        int flag =-1;
+        try {
+            flag = stat.executeUpdate(sql);
+            trans.commit();
+            stat.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        if(flag!=-1){
+            isBlock = "false";
+        }
     }
 }

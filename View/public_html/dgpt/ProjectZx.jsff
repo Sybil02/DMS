@@ -114,6 +114,11 @@
                                 actionListener="#{viewScope.ProjectZxBean.beBlocked}"
                                      disabled="#{viewScope.ProjectZxBean.isBlock}"
                                 partialTriggers="::soc1 ::soc2 ::soc3"/>
+              <af:commandButton text="#{viewBundle['dms.dgpt.fblock']}" id="cb4"
+                                rendered="#{viewScope.ProjectZxBean.isManager}"
+                                actionListener="#{viewScope.ProjectZxBean.outBlock}"
+                                disabled="#{not viewScope.ProjectZxBean.isBlock}"
+                                partialTriggers="::soc1 ::soc2 ::soc3"/>
               <af:commandButton text="#{viewBundle['dcm.import_error']}" id="cb1"
                                 actionListener="#{viewScope.ProjectZxBean.errorPop}"/>
             </af:group>
