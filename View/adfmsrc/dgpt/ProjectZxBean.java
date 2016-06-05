@@ -133,14 +133,16 @@ public class ProjectZxBean {
             end = sdf.parse(pEnd);
             monthList = this.findDates(start, end);
             int i ;
-            for(i=0 ; i < monthList.size()&&i<21 ; i++){
+            for(i=0 ; i < monthList.size() ; i++){
                 labelMap.put("M"+i, "Y"+sdf.format(monthList.get(i)));
             }
         } catch (ParseException e) {
             e.printStackTrace();
         }
         labelMap.put("SUM_AFTER_JUL","SUM_AFTER_JUL");
-        //构造列
+        labelMap.put("LGF_NUM", "LGF_NUM");
+        labelMap.put("LGF_TYPE", "LGF_TYPE");
+        //构造列导出
         boolean isReadonly = true;
         this.pcColsDef.clear();
         List<String> list = new ArrayList<String>();
@@ -177,8 +179,13 @@ public class ProjectZxBean {
         list.add("下年7月以后");
         int i =0;
         for(Map.Entry<String,String> map:labelMap.entrySet()){
-            PcColumnDef newCol = new PcColumnDef(list.get(i++),map.getValue(),isReadonly);
-            this.pcColsDef.add(newCol);
+            if(i<31){
+                PcColumnDef newCol = new PcColumnDef(list.get(i),map.getValue(),isReadonly);
+                this.pcColsDef.add(newCol);
+            }else{
+                break;
+            }
+            i++;
         }
         ((PcDataTableModel)this.dataModel).setPcColsDef(this.pcColsDef);
         return labelMap;
@@ -197,37 +204,10 @@ public class ProjectZxBean {
             rs = stat.executeQuery(sql.toString());
             while(rs.next()){
                 Map row = new HashMap();
-                row.put("WBS", rs.getString("WBS"));
-                row.put("WORK",rs.getString("WORK"));
-                row.put("TERM",rs.getString("TERM"));
-                row.put("CENTER",rs.getString("CENTER"));
-                row.put("WORK_TYPE",rs.getString("WORK_TYPE"));
-                row.put("BOM_CODE",rs.getString("BOM_CODE"));
-                row.put("UNIT",rs.getString("UNIT"));
-                row.put("PLAN_COST",rs.getString("PLAN_COST"));
-                row.put("OCCURRED",rs.getString("OCCURRED"));
-                row.put("SUM_AFTER_JUL",rs.getString("SUM_AFTER_JUL"));
-                row.put(labelMap.get("M0"), labelMap.get("M0")==null ? "" : rs.getString(labelMap.get("M0")));
-                row.put(labelMap.get("M1"), labelMap.get("M1")==null ? "" : rs.getString(labelMap.get("M1")));
-                row.put(labelMap.get("M2"), labelMap.get("M2")==null ? "" : rs.getString(labelMap.get("M2")));
-                row.put(labelMap.get("M3"), labelMap.get("M3")==null ? "" : rs.getString(labelMap.get("M3")));
-                row.put(labelMap.get("M4"), labelMap.get("M4")==null ? "" : rs.getString(labelMap.get("M4")));
-                row.put(labelMap.get("M5"), labelMap.get("M5")==null ? "" : rs.getString(labelMap.get("M5")));
-                row.put(labelMap.get("M6"), labelMap.get("M6")==null ? "" : rs.getString(labelMap.get("M6")));
-                row.put(labelMap.get("M7"), labelMap.get("M7")==null ? "" : rs.getString(labelMap.get("M7")));
-                row.put(labelMap.get("M8"), labelMap.get("M8")==null ? "" : rs.getString(labelMap.get("M8")));
-                row.put(labelMap.get("M9"), labelMap.get("M9")==null ? "" : rs.getString(labelMap.get("M9")));
-                row.put(labelMap.get("M10"), labelMap.get("M10")==null ? "" : rs.getString(labelMap.get("M10")));
-                row.put(labelMap.get("M11"), labelMap.get("M11")==null ? "" : rs.getString(labelMap.get("M11")));
-                row.put(labelMap.get("M12"), labelMap.get("M12")==null ? "" : rs.getString(labelMap.get("M12")));
-                row.put(labelMap.get("M13"), labelMap.get("M13")==null ? "" : rs.getString(labelMap.get("M13")));
-                row.put(labelMap.get("M14"), labelMap.get("M14")==null ? "" : rs.getString(labelMap.get("M14")));
-                row.put(labelMap.get("M15"), labelMap.get("M15")==null ? "" : rs.getString(labelMap.get("M15")));
-                row.put(labelMap.get("M16"), labelMap.get("M16")==null ? "" : rs.getString(labelMap.get("M16")));
-                row.put(labelMap.get("M17"), labelMap.get("M17")==null ? "" : rs.getString(labelMap.get("M17")));
-                row.put(labelMap.get("M18"), labelMap.get("M18")==null ? "" : rs.getString(labelMap.get("M18")));
-                row.put(labelMap.get("M19"), labelMap.get("M19")==null ? "" : rs.getString(labelMap.get("M19")));
-                row.put(labelMap.get("M20"), labelMap.get("M20")==null ? "" : rs.getString(labelMap.get("M20")));
+                for(Map.Entry entry : labelMap.entrySet()){
+                    
+                    row.put(entry.getValue(),rs.getString(entry.getValue().toString()));
+                }
                 row.put("ROW_ID", rs.getString("ROW_ID"));
                 row.put("CONNECT_ID", connectId);
                 data.add(row);
@@ -248,7 +228,7 @@ public class ProjectZxBean {
         for(Map.Entry<String,String> entry : labelMap.entrySet()){
             sql.append(entry.getValue()).append(",");
         }
-        sql.append("ROWID AS ROW_ID FROM PRO_PLAN_COST_BODY WHERE CONNECT_ID = '").append(connectId).append("'");
+        sql.append("ROWID AS ROW_ID,LGF_NUM,LGF_TYPE FROM PRO_PLAN_COST_BODY WHERE CONNECT_ID = '").append(connectId).append("'");
         sql.append(" AND DATA_TYPE = '").append(this.TYPE_ZZX).append("'");
         return sql.toString();
     }
@@ -424,30 +404,20 @@ public class ProjectZxBean {
             sql.append(entry.getValue()+",");
             sql_value.append("?,");
         }
-        sql.append("ROW_ID,CONNECT_ID,CREATED_BY,DATA_TYPE,ROW_NO)");
-        sql_value.append("?,\'"+connectId+"\',\'"+this.curUser.getId()+"\',\'"+this.TYPE_ZZX+"\',?)");
+        sql.append("CONNECT_ID,CREATED_BY,DATA_TYPE,ROW_NO,ROW_ID)");
+        sql_value.append("\'"+connectId+"\',\'"+this.curUser.getId()+"\',\'"+this.TYPE_ZZX+"\',?,?)");
         PreparedStatement stmt = trans.createPreparedStatement(sql.toString()+sql_value.toString(), 0);
-        System.out.println(sql.toString()+sql_value.toString());
         int rowNum = 1;
         List<Map> modelData = (List<Map>)this.dataModel.getWrappedData();
         for(Map<String,String> rowdata : modelData){
             //if("UPDATE".equals(rowdata.get("OPERATION"))){
                 try {
-                    stmt.setString(1,rowdata.get("WBS"));
-                    stmt.setString(2,rowdata.get("WORK"));
-                    stmt.setString(3,rowdata.get("TERM"));
-                    stmt.setString(4,rowdata.get("CENTER"));
-                    stmt.setString(5,rowdata.get("WORK_TYPE"));
-                    stmt.setString(6,rowdata.get("BOM_CODE"));
-                    stmt.setString(7,rowdata.get("UNIT"));
-                    stmt.setString(8,rowdata.get("PLAN_COST"));
-                    stmt.setString(9,rowdata.get("OCCURRED"));
-                    for(int i=0;i<=(map.size()-10);i++){
-                        stmt.setString(10+i,rowdata.get(map.get("M"+i)));
+                    int i = 1;
+                    for(Map.Entry entry : map.entrySet()){
+                        stmt.setString(i++, rowdata.get(entry.getValue()));
                     }
-                    stmt.setString(map.size(),rowdata.get("SUM_AFTER_JUL"));
-                    stmt.setString(map.size()+1, rowdata.get("ROW_ID"));
-                    stmt.setInt(map.size()+2, rowNum);
+                    stmt.setInt(i, rowNum);
+                    stmt.setString(i+1, rowdata.get("ROW_ID"));
                     rowNum++;
                     stmt.addBatch();
                     stmt.executeBatch();
@@ -457,7 +427,36 @@ public class ProjectZxBean {
             }        
         //}
         trans.commit();
+        
+        //计算
+        String sqlUpdate = this.updateSql();
+        Statement stat = trans.createStatement(1);
+        int flag =-1;
+        //料工
+        try {
+            flag = stat.executeUpdate(sqlUpdate);
+            //if(flag!=-1){
+                trans.commit();
+                stat.close();
+            //}
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        //费
+        String sqlFUpdate = this.sqlFUpdate();
+        Statement stat1 = trans.createStatement(2);
+        int flag1 = -1;
+        try {
+            flag1 = stat1.executeUpdate(sqlFUpdate);
+            //if(flag1!=-1){
+                trans.commit();
+                stat1.close();
+            //}
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         //jiaoyan
+        
         if(this.validation()){
             this.inputPro();
             for(Map<String,String> rowdata : modelData){
@@ -468,6 +467,109 @@ public class ProjectZxBean {
         }else{
             this.showErrorPop();
         }
+    }
+    
+    private String updateSql(){
+        String sql = "UPDATE PRO_PLAN_COST_BODY_TEMP T SET " + 
+        "      (T.R2010_01,  T.R2010_02,  T.R2010_03,  T.R2010_04,  T.R2010_05,  T.R2010_06,  T.R2010_07,  T.R2010_08,  T.R2010_09,  T.R2010_10,  T.R2010_11,  T.R2010_12," + 
+        "      T.R2011_01,  T.R2011_02,  T.R2011_03,  T.R2011_04,  T.R2011_05,  T.R2011_06,  T.R2011_07,  T.R2011_08,  T.R2011_09,  T.R2011_10,  T.R2011_11,  T.R2011_12," + 
+        "      T.R2012_01,  T.R2012_02,  T.R2012_03,  T.R2012_04,  T.R2012_05,  T.R2012_06,  T.R2012_07,  T.R2012_08,  T.R2012_09,  T.R2012_10,  T.R2012_11,  T.R2012_12," + 
+        "      T.R2013_01,  T.R2013_02,  T.R2013_03,  T.R2013_04,  T.R2013_05,  T.R2013_06,  T.R2013_07,  T.R2013_08,  T.R2013_09,  T.R2013_10,  T.R2013_11,  T.R2013_12," + 
+        "      T.R2014_01,  T.R2014_02,  T.R2014_03,  T.R2014_04,  T.R2014_05,  T.R2014_06,  T.R2014_07,  T.R2014_08,  T.R2014_09,  T.R2014_10,  T.R2014_11,  T.R2014_12," + 
+        "      T.R2015_01,  T.R2015_02,  T.R2015_03,  T.R2015_04,  T.R2015_05,  T.R2015_06,  T.R2015_07,  T.R2015_08,  T.R2015_09,  T.R2015_10,  T.R2015_11,  T.R2015_12," + 
+        "      T.R2016_01,  T.R2016_02,  T.R2016_03,  T.R2016_04,  T.R2016_05,  T.R2016_06,  T.R2016_07,  T.R2016_08,  T.R2016_09,  T.R2016_10,  T.R2016_11,  T.R2016_12," + 
+        "      T.R2017_01,  T.R2017_02,  T.R2017_03,  T.R2017_04,  T.R2017_05,  T.R2017_06,  T.R2017_07,  T.R2017_08,  T.R2017_09,  T.R2017_10,  T.R2017_11,  T.R2017_12," + 
+        "      T.R2018_01,  T.R2018_02,  T.R2018_03,  T.R2018_04,  T.R2018_05,  T.R2018_06,  T.R2018_07,  T.R2018_08,  T.R2018_09,  T.R2018_10,  T.R2018_11,  T.R2018_12," + 
+        "      T.R2019_01,  T.R2019_02,  T.R2019_03,  T.R2019_04,  T.R2019_05,  T.R2019_06,  T.R2019_07,  T.R2019_08,  T.R2019_09,  T.R2019_10,  T.R2019_11,  T.R2019_12," + 
+        "      T.R2020_01,  T.R2020_02,  T.R2020_03,  T.R2020_04,  T.R2020_05,  T.R2020_06,  T.R2020_07,  T.R2020_08,  T.R2020_09,  T.R2020_10,  T.R2020_11,  T.R2020_12," + 
+        "      T.R2021_01,  T.R2021_02,  T.R2021_03,  T.R2021_04,  T.R2021_05,  T.R2021_06,  T.R2021_07,  T.R2021_08,  T.R2021_09,  T.R2021_10,  T.R2021_11,  T.R2021_12," + 
+        "      T.R2022_01,  T.R2022_02,  T.R2022_03,  T.R2022_04,  T.R2022_05,  T.R2022_06,  T.R2022_07,  T.R2022_08,  T.R2022_09,  T.R2022_10,  T.R2022_11,  T.R2022_12," + 
+        "      T.R2023_01,  T.R2023_02,  T.R2023_03,  T.R2023_04,  T.R2023_05,  T.R2023_06,  T.R2023_07,  T.R2023_08,  T.R2023_09,  T.R2023_10,  T.R2023_11,  T.R2023_12," + 
+        "      T.R2024_01,  T.R2024_02,  T.R2024_03,  T.R2024_04,  T.R2024_05,  T.R2024_06,  T.R2024_07,  T.R2024_08,  T.R2024_09,  T.R2024_10,  T.R2024_11,  T.R2024_12," + 
+        "      T.R2025_01,  T.R2025_02,  T.R2025_03,  T.R2025_04,  T.R2025_05,  T.R2025_06,  T.R2025_07,  T.R2025_08,  T.R2025_09,  T.R2025_10,  T.R2025_11,  T.R2025_12," + 
+        "      T.R2026_01,  T.R2026_02,  T.R2026_03,  T.R2026_04,  T.R2026_05,  T.R2026_06,  T.R2026_07,  T.R2026_08,  T.R2026_09,  T.R2026_10,  T.R2026_11,  T.R2026_12," + 
+        "      T.R2027_01,  T.R2027_02,  T.R2027_03,  T.R2027_04,  T.R2027_05,  T.R2027_06,  T.R2027_07,  T.R2027_08,  T.R2027_09,  T.R2027_10,  T.R2027_11,  T.R2027_12," + 
+        "      T.R2028_01,  T.R2028_02,  T.R2028_03,  T.R2028_04,  T.R2028_05,  T.R2028_06,  T.R2028_07,  T.R2028_08,  T.R2028_09,  T.R2028_10,  T.R2028_11,  T.R2028_12," + 
+        "      T.R2029_01,  T.R2029_02,  T.R2029_03,  T.R2029_04,  T.R2029_05,  T.R2029_06,  T.R2029_07,  T.R2029_08,  T.R2029_09,  T.R2029_10,  T.R2029_11,  T.R2029_12," + 
+        "      T.R2030_01,  T.R2030_02,  T.R2030_03,  T.R2030_04,  T.R2030_05,  T.R2030_06,  T.R2030_07,  T.R2030_08,  T.R2030_09,  T.R2030_10,  T.R2030_11,  T.R2030_12)" + 
+        "  =(SELECT " + 
+        " NVL(P.Y2010_01,0)*NVL(LGF_NUM,0),  NVL(P.Y2010_02,0)*NVL(LGF_NUM,0),  NVL(P.Y2010_03,0)*NVL(LGF_NUM,0),  NVL(P.Y2010_04,0)*NVL(LGF_NUM,0),  NVL(P.Y2010_05,0)*NVL(LGF_NUM,0),  NVL(P.Y2010_06,0)*NVL(LGF_NUM,0),  NVL(P.Y2010_07,0)*NVL(LGF_NUM,0),  NVL(P.Y2010_08,0)*NVL(LGF_NUM,0),  NVL(P.Y2010_09,0)*NVL(LGF_NUM,0),  NVL(P.Y2010_10,0)*NVL(LGF_NUM,0),  NVL(P.Y2010_11,0)*NVL(LGF_NUM,0),  NVL(P.Y2010_12,0)*NVL(LGF_NUM,0)," + 
+        " NVL(P.Y2011_01,0)*NVL(LGF_NUM,0),  NVL(P.Y2011_02,0)*NVL(LGF_NUM,0),  NVL(P.Y2011_03,0)*NVL(LGF_NUM,0),  NVL(P.Y2011_04,0)*NVL(LGF_NUM,0),  NVL(P.Y2011_05,0)*NVL(LGF_NUM,0),  NVL(P.Y2011_06,0)*NVL(LGF_NUM,0),  NVL(P.Y2011_07,0)*NVL(LGF_NUM,0),  NVL(P.Y2011_08,0)*NVL(LGF_NUM,0),  NVL(P.Y2011_09,0)*NVL(LGF_NUM,0),  NVL(P.Y2011_10,0)*NVL(LGF_NUM,0),  NVL(P.Y2011_11,0)*NVL(LGF_NUM,0),  NVL(P.Y2011_12,0)*NVL(LGF_NUM,0)," + 
+        " NVL(P.Y2012_01,0)*NVL(LGF_NUM,0),  NVL(P.Y2012_02,0)*NVL(LGF_NUM,0),  NVL(P.Y2012_03,0)*NVL(LGF_NUM,0),  NVL(P.Y2012_04,0)*NVL(LGF_NUM,0),  NVL(P.Y2012_05,0)*NVL(LGF_NUM,0),  NVL(P.Y2012_06,0)*NVL(LGF_NUM,0),  NVL(P.Y2012_07,0)*NVL(LGF_NUM,0),  NVL(P.Y2012_08,0)*NVL(LGF_NUM,0),  NVL(P.Y2012_09,0)*NVL(LGF_NUM,0),  NVL(P.Y2012_10,0)*NVL(LGF_NUM,0),  NVL(P.Y2012_11,0)*NVL(LGF_NUM,0),  NVL(P.Y2012_12,0)*NVL(LGF_NUM,0)," + 
+        " NVL(P.Y2013_01,0)*NVL(LGF_NUM,0),  NVL(P.Y2013_02,0)*NVL(LGF_NUM,0),  NVL(P.Y2013_03,0)*NVL(LGF_NUM,0),  NVL(P.Y2013_04,0)*NVL(LGF_NUM,0),  NVL(P.Y2013_05,0)*NVL(LGF_NUM,0),  NVL(P.Y2013_06,0)*NVL(LGF_NUM,0),  NVL(P.Y2013_07,0)*NVL(LGF_NUM,0),  NVL(P.Y2013_08,0)*NVL(LGF_NUM,0),  NVL(P.Y2013_09,0)*NVL(LGF_NUM,0),  NVL(P.Y2013_10,0)*NVL(LGF_NUM,0),  NVL(P.Y2013_11,0)*NVL(LGF_NUM,0),  NVL(P.Y2013_12,0)*NVL(LGF_NUM,0)," + 
+        " NVL(P.Y2014_01,0)*NVL(LGF_NUM,0),  NVL(P.Y2014_02,0)*NVL(LGF_NUM,0),  NVL(P.Y2014_03,0)*NVL(LGF_NUM,0),  NVL(P.Y2014_04,0)*NVL(LGF_NUM,0),  NVL(P.Y2014_05,0)*NVL(LGF_NUM,0),  NVL(P.Y2014_06,0)*NVL(LGF_NUM,0),  NVL(P.Y2014_07,0)*NVL(LGF_NUM,0),  NVL(P.Y2014_08,0)*NVL(LGF_NUM,0),  NVL(P.Y2014_09,0)*NVL(LGF_NUM,0),  NVL(P.Y2014_10,0)*NVL(LGF_NUM,0),  NVL(P.Y2014_11,0)*NVL(LGF_NUM,0),  NVL(P.Y2014_12,0)*NVL(LGF_NUM,0)," + 
+        " NVL(P.Y2015_01,0)*NVL(LGF_NUM,0),  NVL(P.Y2015_02,0)*NVL(LGF_NUM,0),  NVL(P.Y2015_03,0)*NVL(LGF_NUM,0),  NVL(P.Y2015_04,0)*NVL(LGF_NUM,0),  NVL(P.Y2015_05,0)*NVL(LGF_NUM,0),  NVL(P.Y2015_06,0)*NVL(LGF_NUM,0),  NVL(P.Y2015_07,0)*NVL(LGF_NUM,0),  NVL(P.Y2015_08,0)*NVL(LGF_NUM,0),  NVL(P.Y2015_09,0)*NVL(LGF_NUM,0),  NVL(P.Y2015_10,0)*NVL(LGF_NUM,0),  NVL(P.Y2015_11,0)*NVL(LGF_NUM,0),  NVL(P.Y2015_12,0)*NVL(LGF_NUM,0)," + 
+        " NVL(P.Y2016_01,0)*NVL(LGF_NUM,0),  NVL(P.Y2016_02,0)*NVL(LGF_NUM,0),  NVL(P.Y2016_03,0)*NVL(LGF_NUM,0),  NVL(P.Y2016_04,0)*NVL(LGF_NUM,0),  NVL(P.Y2016_05,0)*NVL(LGF_NUM,0),  NVL(P.Y2016_06,0)*NVL(LGF_NUM,0),  NVL(P.Y2016_07,0)*NVL(LGF_NUM,0),  NVL(P.Y2016_08,0)*NVL(LGF_NUM,0),  NVL(P.Y2016_09,0)*NVL(LGF_NUM,0),  NVL(P.Y2016_10,0)*NVL(LGF_NUM,0),  NVL(P.Y2016_11,0)*NVL(LGF_NUM,0),  NVL(P.Y2016_12,0)*NVL(LGF_NUM,0)," + 
+        " NVL(P.Y2017_01,0)*NVL(LGF_NUM,0),  NVL(P.Y2017_02,0)*NVL(LGF_NUM,0),  NVL(P.Y2017_03,0)*NVL(LGF_NUM,0),  NVL(P.Y2017_04,0)*NVL(LGF_NUM,0),  NVL(P.Y2017_05,0)*NVL(LGF_NUM,0),  NVL(P.Y2017_06,0)*NVL(LGF_NUM,0),  NVL(P.Y2017_07,0)*NVL(LGF_NUM,0),  NVL(P.Y2017_08,0)*NVL(LGF_NUM,0),  NVL(P.Y2017_09,0)*NVL(LGF_NUM,0),  NVL(P.Y2017_10,0)*NVL(LGF_NUM,0),  NVL(P.Y2017_11,0)*NVL(LGF_NUM,0),  NVL(P.Y2017_12,0)*NVL(LGF_NUM,0)," + 
+        " NVL(P.Y2018_01,0)*NVL(LGF_NUM,0),  NVL(P.Y2018_02,0)*NVL(LGF_NUM,0),  NVL(P.Y2018_03,0)*NVL(LGF_NUM,0),  NVL(P.Y2018_04,0)*NVL(LGF_NUM,0),  NVL(P.Y2018_05,0)*NVL(LGF_NUM,0),  NVL(P.Y2018_06,0)*NVL(LGF_NUM,0),  NVL(P.Y2018_07,0)*NVL(LGF_NUM,0),  NVL(P.Y2018_08,0)*NVL(LGF_NUM,0),  NVL(P.Y2018_09,0)*NVL(LGF_NUM,0),  NVL(P.Y2018_10,0)*NVL(LGF_NUM,0),  NVL(P.Y2018_11,0)*NVL(LGF_NUM,0),  NVL(P.Y2018_12,0)*NVL(LGF_NUM,0)," + 
+        " NVL(P.Y2019_01,0)*NVL(LGF_NUM,0),  NVL(P.Y2019_02,0)*NVL(LGF_NUM,0),  NVL(P.Y2019_03,0)*NVL(LGF_NUM,0),  NVL(P.Y2019_04,0)*NVL(LGF_NUM,0),  NVL(P.Y2019_05,0)*NVL(LGF_NUM,0),  NVL(P.Y2019_06,0)*NVL(LGF_NUM,0),  NVL(P.Y2019_07,0)*NVL(LGF_NUM,0),  NVL(P.Y2019_08,0)*NVL(LGF_NUM,0),  NVL(P.Y2019_09,0)*NVL(LGF_NUM,0),  NVL(P.Y2019_10,0)*NVL(LGF_NUM,0),  NVL(P.Y2019_11,0)*NVL(LGF_NUM,0),  NVL(P.Y2019_12,0)*NVL(LGF_NUM,0)," + 
+        " NVL(P.Y2020_01,0)*NVL(LGF_NUM,0),  NVL(P.Y2020_02,0)*NVL(LGF_NUM,0),  NVL(P.Y2020_03,0)*NVL(LGF_NUM,0),  NVL(P.Y2010_04,0)*NVL(LGF_NUM,0),  NVL(P.Y2020_05,0)*NVL(LGF_NUM,0),  NVL(P.Y2020_06,0)*NVL(LGF_NUM,0),  NVL(P.Y2020_07,0)*NVL(LGF_NUM,0),  NVL(P.Y2020_08,0)*NVL(LGF_NUM,0),  NVL(P.Y2020_09,0)*NVL(LGF_NUM,0),  NVL(P.Y2020_10,0)*NVL(LGF_NUM,0),  NVL(P.Y2020_11,0)*NVL(LGF_NUM,0),  NVL(P.Y2020_12,0)*NVL(LGF_NUM,0)," + 
+        " NVL(P.Y2021_01,0)*NVL(LGF_NUM,0),  NVL(P.Y2021_02,0)*NVL(LGF_NUM,0),  NVL(P.Y2021_03,0)*NVL(LGF_NUM,0),  NVL(P.Y2021_04,0)*NVL(LGF_NUM,0),  NVL(P.Y2021_05,0)*NVL(LGF_NUM,0),  NVL(P.Y2021_06,0)*NVL(LGF_NUM,0),  NVL(P.Y2021_07,0)*NVL(LGF_NUM,0),  NVL(P.Y2021_08,0)*NVL(LGF_NUM,0),  NVL(P.Y2021_09,0)*NVL(LGF_NUM,0),  NVL(P.Y2021_10,0)*NVL(LGF_NUM,0),	NVL(P.Y2021_11,0)*NVL(LGF_NUM,0),  NVL(P.Y2021_12,0)*NVL(LGF_NUM,0)," + 
+        " NVL(P.Y2022_01,0)*NVL(LGF_NUM,0),  NVL(P.Y2022_02,0)*NVL(LGF_NUM,0),	NVL(P.Y2022_03,0)*NVL(LGF_NUM,0),  NVL(P.Y2022_04,0)*NVL(LGF_NUM,0),  NVL(P.Y2022_05,0)*NVL(LGF_NUM,0),	 NVL(P.Y2022_06,0)*NVL(LGF_NUM,0),  NVL(P.Y2022_07,0)*NVL(LGF_NUM,0),  NVL(P.Y2022_08,0)*NVL(LGF_NUM,0),  NVL(P.Y2022_09,0)*NVL(LGF_NUM,0),  NVL(P.Y2022_10,0)*NVL(LGF_NUM,0),	NVL(P.Y2022_11,0)*NVL(LGF_NUM,0),  NVL(P.Y2022_12,0)*NVL(LGF_NUM,0)," + 
+        " NVL(P.Y2023_01,0)*NVL(LGF_NUM,0),  NVL(P.Y2023_02,0)*NVL(LGF_NUM,0),	NVL(P.Y2023_03,0)*NVL(LGF_NUM,0),  NVL(P.Y2023_04,0)*NVL(LGF_NUM,0),  NVL(P.Y2023_05,0)*NVL(LGF_NUM,0),	 NVL(P.Y2023_06,0)*NVL(LGF_NUM,0),  NVL(P.Y2023_07,0)*NVL(LGF_NUM,0),  NVL(P.Y2023_08,0)*NVL(LGF_NUM,0),  NVL(P.Y2023_09,0)*NVL(LGF_NUM,0),  NVL(P.Y2023_10,0)*NVL(LGF_NUM,0),	NVL(P.Y2023_11,0)*NVL(LGF_NUM,0),  NVL(P.Y2023_12,0)*NVL(LGF_NUM,0)," + 
+        " NVL(P.Y2024_01,0)*NVL(LGF_NUM,0),  NVL(P.Y2024_02,0)*NVL(LGF_NUM,0),	NVL(P.Y2024_03,0)*NVL(LGF_NUM,0),  NVL(P.Y2024_04,0)*NVL(LGF_NUM,0),  NVL(P.Y2024_05,0)*NVL(LGF_NUM,0),	 NVL(P.Y2024_06,0)*NVL(LGF_NUM,0),  NVL(P.Y2024_07,0)*NVL(LGF_NUM,0),  NVL(P.Y2024_08,0)*NVL(LGF_NUM,0),  NVL(P.Y2024_09,0)*NVL(LGF_NUM,0),  NVL(P.Y2024_10,0)*NVL(LGF_NUM,0),	NVL(P.Y2024_11,0)*NVL(LGF_NUM,0),  NVL(P.Y2024_12,0)*NVL(LGF_NUM,0)," + 
+        " NVL(P.Y2025_01,0)*NVL(LGF_NUM,0),  NVL(P.Y2025_02,0)*NVL(LGF_NUM,0),	NVL(P.Y2025_03,0)*NVL(LGF_NUM,0),  NVL(P.Y2025_04,0)*NVL(LGF_NUM,0),  NVL(P.Y2025_05,0)*NVL(LGF_NUM,0),	 NVL(P.Y2025_06,0)*NVL(LGF_NUM,0),  NVL(P.Y2025_07,0)*NVL(LGF_NUM,0),  NVL(P.Y2025_08,0)*NVL(LGF_NUM,0),  NVL(P.Y2025_09,0)*NVL(LGF_NUM,0),  NVL(P.Y2025_10,0)*NVL(LGF_NUM,0),	NVL(P.Y2025_11,0)*NVL(LGF_NUM,0),  NVL(P.Y2025_12,0)*NVL(LGF_NUM,0)," + 
+        " NVL(P.Y2026_01,0)*NVL(LGF_NUM,0),  NVL(P.Y2026_02,0)*NVL(LGF_NUM,0),	NVL(P.Y2026_03,0)*NVL(LGF_NUM,0),  NVL(P.Y2026_04,0)*NVL(LGF_NUM,0),  NVL(P.Y2026_05,0)*NVL(LGF_NUM,0),	 NVL(P.Y2026_06,0)*NVL(LGF_NUM,0),  NVL(P.Y2026_07,0)*NVL(LGF_NUM,0),  NVL(P.Y2026_08,0)*NVL(LGF_NUM,0),  NVL(P.Y2026_09,0)*NVL(LGF_NUM,0),  NVL(P.Y2026_10,0)*NVL(LGF_NUM,0),	NVL(P.Y2026_11,0)*NVL(LGF_NUM,0),  NVL(P.Y2026_12,0)*NVL(LGF_NUM,0)," + 
+        " NVL(P.Y2027_01,0)*NVL(LGF_NUM,0),  NVL(P.Y2027_02,0)*NVL(LGF_NUM,0),	NVL(P.Y2027_03,0)*NVL(LGF_NUM,0),  NVL(P.Y2027_04,0)*NVL(LGF_NUM,0),  NVL(P.Y2027_05,0)*NVL(LGF_NUM,0),	 NVL(P.Y2027_06,0)*NVL(LGF_NUM,0),  NVL(P.Y2027_07,0)*NVL(LGF_NUM,0),  NVL(P.Y2027_08,0)*NVL(LGF_NUM,0),  NVL(P.Y2027_09,0)*NVL(LGF_NUM,0),  NVL(P.Y2027_10,0)*NVL(LGF_NUM,0),	NVL(P.Y2027_11,0)*NVL(LGF_NUM,0),  NVL(P.Y2027_12,0)*NVL(LGF_NUM,0)," + 
+        " NVL(P.Y2028_01,0)*NVL(LGF_NUM,0),  NVL(P.Y2028_02,0)*NVL(LGF_NUM,0),	NVL(P.Y2028_03,0)*NVL(LGF_NUM,0),  NVL(P.Y2028_04,0)*NVL(LGF_NUM,0),  NVL(P.Y2028_05,0)*NVL(LGF_NUM,0),	 NVL(P.Y2028_06,0)*NVL(LGF_NUM,0),  NVL(P.Y2028_07,0)*NVL(LGF_NUM,0),  NVL(P.Y2028_08,0)*NVL(LGF_NUM,0),  NVL(P.Y2028_09,0)*NVL(LGF_NUM,0),  NVL(P.Y2028_10,0)*NVL(LGF_NUM,0),	NVL(P.Y2028_11,0)*NVL(LGF_NUM,0),  NVL(P.Y2028_12,0)*NVL(LGF_NUM,0)," + 
+        " NVL(P.Y2029_01,0)*NVL(LGF_NUM,0),  NVL(P.Y2029_02,0)*NVL(LGF_NUM,0),	NVL(P.Y2029_03,0)*NVL(LGF_NUM,0),  NVL(P.Y2029_04,0)*NVL(LGF_NUM,0),  NVL(P.Y2029_05,0)*NVL(LGF_NUM,0),	 NVL(P.Y2029_06,0)*NVL(LGF_NUM,0),  NVL(P.Y2029_07,0)*NVL(LGF_NUM,0),  NVL(P.Y2029_08,0)*NVL(LGF_NUM,0),  NVL(P.Y2029_09,0)*NVL(LGF_NUM,0),  NVL(P.Y2029_10,0)*NVL(LGF_NUM,0),	NVL(P.Y2029_11,0)*NVL(LGF_NUM,0),  NVL(P.Y2029_12,0)*NVL(LGF_NUM,0)," + 
+        " NVL(P.Y2030_01,0)*NVL(LGF_NUM,0),  NVL(P.Y2030_02,0)*NVL(LGF_NUM,0),	NVL(P.Y2030_03,0)*NVL(LGF_NUM,0),  NVL(P.Y2030_04,0)*NVL(LGF_NUM,0),  NVL(P.Y2030_05,0)*NVL(LGF_NUM,0),	 NVL(P.Y2030_06,0)*NVL(LGF_NUM,0),  NVL(P.Y2030_07,0)*NVL(LGF_NUM,0),  NVL(P.Y2030_08,0)*NVL(LGF_NUM,0),  NVL(P.Y2030_09,0)*NVL(LGF_NUM,0),  NVL(P.Y2030_10,0)*NVL(LGF_NUM,0),	NVL(P.Y2030_11,0)*NVL(LGF_NUM,0),  NVL(P.Y2030_12,0)*NVL(LGF_NUM,0)" + 
+        " FROM PRO_PLAN_COST_BODY_TEMP P WHERE (P.LGF_TYPE =\'L\' OR P.LGF_TYPE =\'G\') AND P.ROW_ID = T.ROW_ID AND P.DATA_TYPE=\'" +this.TYPE_ZZX+"\')"+ 
+        " WHERE EXISTS (SELECT 1 FROM PRO_PLAN_COST_BODY_TEMP P1 WHERE P1.ROW_ID = T.ROW_ID AND P1.DATA_TYPE=\'" +this.TYPE_ZZX+"\'"+
+            " AND P1.LGF_TYPE =\'L\' OR P1.LGF_TYPE =\'G\')";
+        
+        return sql;
+    }
+    
+    private String sqlFUpdate(){
+        String sql = "UPDATE PRO_PLAN_COST_BODY_TEMP T SET " + 
+        "      (T.R2010_01,  T.R2010_02,  T.R2010_03,  T.R2010_04,  T.R2010_05,  T.R2010_06,  T.R2010_07,  T.R2010_08,  T.R2010_09,  T.R2010_10,  T.R2010_11,  T.R2010_12," + 
+        "      T.R2011_01,  T.R2011_02,  T.R2011_03,  T.R2011_04,  T.R2011_05,  T.R2011_06,  T.R2011_07,  T.R2011_08,  T.R2011_09,  T.R2011_10,  T.R2011_11,  T.R2011_12," + 
+        "      T.R2012_01,  T.R2012_02,  T.R2012_03,  T.R2012_04,  T.R2012_05,  T.R2012_06,  T.R2012_07,  T.R2012_08,  T.R2012_09,  T.R2012_10,  T.R2012_11,  T.R2012_12," + 
+        "      T.R2013_01,  T.R2013_02,  T.R2013_03,  T.R2013_04,  T.R2013_05,  T.R2013_06,  T.R2013_07,  T.R2013_08,  T.R2013_09,  T.R2013_10,  T.R2013_11,  T.R2013_12," + 
+        "      T.R2014_01,  T.R2014_02,  T.R2014_03,  T.R2014_04,  T.R2014_05,  T.R2014_06,  T.R2014_07,  T.R2014_08,  T.R2014_09,  T.R2014_10,  T.R2014_11,  T.R2014_12," + 
+        "      T.R2015_01,  T.R2015_02,  T.R2015_03,  T.R2015_04,  T.R2015_05,  T.R2015_06,  T.R2015_07,  T.R2015_08,  T.R2015_09,  T.R2015_10,  T.R2015_11,  T.R2015_12," + 
+        "      T.R2016_01,  T.R2016_02,  T.R2016_03,  T.R2016_04,  T.R2016_05,  T.R2016_06,  T.R2016_07,  T.R2016_08,  T.R2016_09,  T.R2016_10,  T.R2016_11,  T.R2016_12," + 
+        "      T.R2017_01,  T.R2017_02,  T.R2017_03,  T.R2017_04,  T.R2017_05,  T.R2017_06,  T.R2017_07,  T.R2017_08,  T.R2017_09,  T.R2017_10,  T.R2017_11,  T.R2017_12," + 
+        "      T.R2018_01,  T.R2018_02,  T.R2018_03,  T.R2018_04,  T.R2018_05,  T.R2018_06,  T.R2018_07,  T.R2018_08,  T.R2018_09,  T.R2018_10,  T.R2018_11,  T.R2018_12," + 
+        "      T.R2019_01,  T.R2019_02,  T.R2019_03,  T.R2019_04,  T.R2019_05,  T.R2019_06,  T.R2019_07,  T.R2019_08,  T.R2019_09,  T.R2019_10,  T.R2019_11,  T.R2019_12," + 
+        "      T.R2020_01,  T.R2020_02,  T.R2020_03,  T.R2020_04,  T.R2020_05,  T.R2020_06,  T.R2020_07,  T.R2020_08,  T.R2020_09,  T.R2020_10,  T.R2020_11,  T.R2020_12," + 
+        "      T.R2021_01,  T.R2021_02,  T.R2021_03,  T.R2021_04,  T.R2021_05,  T.R2021_06,  T.R2021_07,  T.R2021_08,  T.R2021_09,  T.R2021_10,  T.R2021_11,  T.R2021_12," + 
+        "      T.R2022_01,  T.R2022_02,  T.R2022_03,  T.R2022_04,  T.R2022_05,  T.R2022_06,  T.R2022_07,  T.R2022_08,  T.R2022_09,  T.R2022_10,  T.R2022_11,  T.R2022_12," + 
+        "      T.R2023_01,  T.R2023_02,  T.R2023_03,  T.R2023_04,  T.R2023_05,  T.R2023_06,  T.R2023_07,  T.R2023_08,  T.R2023_09,  T.R2023_10,  T.R2023_11,  T.R2023_12," + 
+        "      T.R2024_01,  T.R2024_02,  T.R2024_03,  T.R2024_04,  T.R2024_05,  T.R2024_06,  T.R2024_07,  T.R2024_08,  T.R2024_09,  T.R2024_10,  T.R2024_11,  T.R2024_12," + 
+        "      T.R2025_01,  T.R2025_02,  T.R2025_03,  T.R2025_04,  T.R2025_05,  T.R2025_06,  T.R2025_07,  T.R2025_08,  T.R2025_09,  T.R2025_10,  T.R2025_11,  T.R2025_12," + 
+        "      T.R2026_01,  T.R2026_02,  T.R2026_03,  T.R2026_04,  T.R2026_05,  T.R2026_06,  T.R2026_07,  T.R2026_08,  T.R2026_09,  T.R2026_10,  T.R2026_11,  T.R2026_12," + 
+        "      T.R2027_01,  T.R2027_02,  T.R2027_03,  T.R2027_04,  T.R2027_05,  T.R2027_06,  T.R2027_07,  T.R2027_08,  T.R2027_09,  T.R2027_10,  T.R2027_11,  T.R2027_12," + 
+        "      T.R2028_01,  T.R2028_02,  T.R2028_03,  T.R2028_04,  T.R2028_05,  T.R2028_06,  T.R2028_07,  T.R2028_08,  T.R2028_09,  T.R2028_10,  T.R2028_11,  T.R2028_12," + 
+        "      T.R2029_01,  T.R2029_02,  T.R2029_03,  T.R2029_04,  T.R2029_05,  T.R2029_06,  T.R2029_07,  T.R2029_08,  T.R2029_09,  T.R2029_10,  T.R2029_11,  T.R2029_12," + 
+        "      T.R2030_01,  T.R2030_02,  T.R2030_03,  T.R2030_04,  T.R2030_05,  T.R2030_06,  T.R2030_07,  T.R2030_08,  T.R2030_09,  T.R2030_10,  T.R2030_11,  T.R2030_12)" + 
+        "  =(SELECT " + 
+        " NVL(P.Y2010_01,0),	NVL(P.Y2010_02,0),	NVL(P.Y2010_03,0),	NVL(P.Y2010_04,0),	NVL(P.Y2010_05,0),	NVL(P.Y2010_06,0),	NVL(P.Y2010_07,0),	NVL(P.Y2010_08,0),	NVL(P.Y2010_09,0),	NVL(P.Y2010_10,0),	NVL(P.Y2010_11,0),	NVL(P.Y2010_12,0)," + 
+        "NVL(P.Y2011_01,0),	NVL(P.Y2011_02,0),	NVL(P.Y2011_03,0),	NVL(P.Y2011_04,0),	NVL(P.Y2011_05,0),	NVL(P.Y2011_06,0),	NVL(P.Y2011_07,0),	NVL(P.Y2011_08,0),	NVL(P.Y2011_09,0),	NVL(P.Y2011_10,0),	NVL(P.Y2011_11,0),	NVL(P.Y2011_12,0)," + 
+        "NVL(P.Y2012_01,0),	NVL(P.Y2012_02,0),	NVL(P.Y2012_03,0),	NVL(P.Y2012_04,0),	NVL(P.Y2012_05,0),	NVL(P.Y2012_06,0),	NVL(P.Y2012_07,0),	NVL(P.Y2012_08,0),	NVL(P.Y2012_09,0),	NVL(P.Y2012_10,0),	NVL(P.Y2012_11,0),	NVL(P.Y2012_12,0)," + 
+        "NVL(P.Y2013_01,0),	NVL(P.Y2013_02,0),	NVL(P.Y2013_03,0),	NVL(P.Y2013_04,0),	NVL(P.Y2013_05,0),	NVL(P.Y2013_06,0),	NVL(P.Y2013_07,0),	NVL(P.Y2013_08,0),	NVL(P.Y2013_09,0),	NVL(P.Y2013_10,0),	NVL(P.Y2013_11,0),	NVL(P.Y2013_12,0)," + 
+        "NVL(P.Y2014_01,0),	NVL(P.Y2014_02,0),	NVL(P.Y2014_03,0),	NVL(P.Y2014_04,0),	NVL(P.Y2014_05,0),	NVL(P.Y2014_06,0),	NVL(P.Y2014_07,0),	NVL(P.Y2014_08,0),	NVL(P.Y2014_09,0),	NVL(P.Y2014_10,0),	NVL(P.Y2014_11,0),	NVL(P.Y2014_12,0)," + 
+        "NVL(P.Y2015_01,0),	NVL(P.Y2015_02,0),	NVL(P.Y2015_03,0),	NVL(P.Y2015_04,0),	NVL(P.Y2015_05,0),	NVL(P.Y2015_06,0),	NVL(P.Y2015_07,0),	NVL(P.Y2015_08,0),	NVL(P.Y2015_09,0),	NVL(P.Y2015_10,0),	NVL(P.Y2015_11,0),	NVL(P.Y2015_12,0)," + 
+        "NVL(P.Y2016_01,0),	NVL(P.Y2016_02,0),	NVL(P.Y2016_03,0),	NVL(P.Y2016_04,0),	NVL(P.Y2016_05,0),	NVL(P.Y2016_06,0),	NVL(P.Y2016_07,0),	NVL(P.Y2016_08,0),	NVL(P.Y2016_09,0),	NVL(P.Y2016_10,0),	NVL(P.Y2016_11,0),	NVL(P.Y2016_12,0)," + 
+        "NVL(P.Y2017_01,0),	NVL(P.Y2017_02,0),	NVL(P.Y2017_03,0),	NVL(P.Y2017_04,0),	NVL(P.Y2017_05,0),	NVL(P.Y2017_06,0),	NVL(P.Y2017_07,0),	NVL(P.Y2017_08,0),	NVL(P.Y2017_09,0),	NVL(P.Y2017_10,0),	NVL(P.Y2017_11,0),	NVL(P.Y2017_12,0)," + 
+        "NVL(P.Y2018_01,0),	NVL(P.Y2018_02,0),	NVL(P.Y2018_03,0),	NVL(P.Y2018_04,0),	NVL(P.Y2018_05,0),	NVL(P.Y2018_06,0),	NVL(P.Y2018_07,0),	NVL(P.Y2018_08,0),	NVL(P.Y2018_09,0),	NVL(P.Y2018_10,0),	NVL(P.Y2018_11,0),	NVL(P.Y2018_12,0)," + 
+        "NVL(P.Y2019_01,0),	NVL(P.Y2019_02,0),	NVL(P.Y2019_03,0),	NVL(P.Y2019_04,0),	NVL(P.Y2019_05,0),	NVL(P.Y2019_06,0),	NVL(P.Y2019_07,0),	NVL(P.Y2019_08,0),	NVL(P.Y2019_09,0),	NVL(P.Y2019_10,0),	NVL(P.Y2019_11,0),	NVL(P.Y2019_12,0)," + 
+        "NVL(P.Y2020_01,0),	NVL(P.Y2020_02,0),	NVL(P.Y2020_03,0),	NVL(P.Y2010_04,0),	NVL(P.Y2020_05,0),	NVL(P.Y2020_06,0),	NVL(P.Y2020_07,0),	NVL(P.Y2020_08,0),	NVL(P.Y2020_09,0),	NVL(P.Y2020_10,0),	NVL(P.Y2020_11,0),	NVL(P.Y2020_12,0)," + 
+        "NVL(P.Y2021_01,0),	NVL(P.Y2021_02,0),	NVL(P.Y2021_03,0),	NVL(P.Y2021_04,0),	NVL(P.Y2021_05,0),	NVL(P.Y2021_06,0),	NVL(P.Y2021_07,0),	NVL(P.Y2021_08,0),	NVL(P.Y2021_09,0),	NVL(P.Y2021_10,0),	NVL(P.Y2021_11,0),	NVL(P.Y2021_12,0)," + 
+        "NVL(P.Y2022_01,0),	NVL(P.Y2022_02,0),	NVL(P.Y2022_03,0),	NVL(P.Y2022_04,0),	NVL(P.Y2022_05,0),	NVL(P.Y2022_06,0),	NVL(P.Y2022_07,0),	NVL(P.Y2022_08,0),	NVL(P.Y2022_09,0),	NVL(P.Y2022_10,0),	NVL(P.Y2022_11,0),	NVL(P.Y2022_12,0)," + 
+        "NVL(P.Y2023_01,0),	NVL(P.Y2023_02,0),	NVL(P.Y2023_03,0),	NVL(P.Y2023_04,0),	NVL(P.Y2023_05,0),	NVL(P.Y2023_06,0),	NVL(P.Y2023_07,0),	NVL(P.Y2023_08,0),	NVL(P.Y2023_09,0),	NVL(P.Y2023_10,0),	NVL(P.Y2023_11,0),	NVL(P.Y2023_12,0)," + 
+        "NVL(P.Y2024_01,0),	NVL(P.Y2024_02,0),	NVL(P.Y2024_03,0),	NVL(P.Y2024_04,0),	NVL(P.Y2024_05,0),	NVL(P.Y2024_06,0),	NVL(P.Y2024_07,0),	NVL(P.Y2024_08,0),	NVL(P.Y2024_09,0),	NVL(P.Y2024_10,0),	NVL(P.Y2024_11,0),	NVL(P.Y2024_12,0)," + 
+        "NVL(P.Y2025_01,0),	NVL(P.Y2025_02,0),	NVL(P.Y2025_03,0),	NVL(P.Y2025_04,0),	NVL(P.Y2025_05,0),	NVL(P.Y2025_06,0),	NVL(P.Y2025_07,0),	NVL(P.Y2025_08,0),	NVL(P.Y2025_09,0),	NVL(P.Y2025_10,0),	NVL(P.Y2025_11,0),	NVL(P.Y2025_12,0)," + 
+        "NVL(P.Y2026_01,0),	NVL(P.Y2026_02,0),	NVL(P.Y2026_03,0),	NVL(P.Y2026_04,0),	NVL(P.Y2026_05,0),	NVL(P.Y2026_06,0),	NVL(P.Y2026_07,0),	NVL(P.Y2026_08,0),	NVL(P.Y2026_09,0),	NVL(P.Y2026_10,0),	NVL(P.Y2026_11,0),	NVL(P.Y2026_12,0)," + 
+        "NVL(P.Y2027_01,0),	NVL(P.Y2027_02,0),	NVL(P.Y2027_03,0),	NVL(P.Y2027_04,0),	NVL(P.Y2027_05,0),	NVL(P.Y2027_06,0),	NVL(P.Y2027_07,0),	NVL(P.Y2027_08,0),	NVL(P.Y2027_09,0),	NVL(P.Y2027_10,0),	NVL(P.Y2027_11,0),	NVL(P.Y2027_12,0)," + 
+        "NVL(P.Y2028_01,0),	NVL(P.Y2028_02,0),	NVL(P.Y2028_03,0),	NVL(P.Y2028_04,0),	NVL(P.Y2028_05,0),	NVL(P.Y2028_06,0),	NVL(P.Y2028_07,0),	NVL(P.Y2028_08,0),	NVL(P.Y2028_09,0),	NVL(P.Y2028_10,0),	NVL(P.Y2028_11,0),	NVL(P.Y2028_12,0)," + 
+        "NVL(P.Y2029_01,0),	NVL(P.Y2029_02,0),	NVL(P.Y2029_03,0),	NVL(P.Y2029_04,0),	NVL(P.Y2029_05,0),	NVL(P.Y2029_06,0),	NVL(P.Y2029_07,0),	NVL(P.Y2029_08,0),	NVL(P.Y2029_09,0),	NVL(P.Y2029_10,0),	NVL(P.Y2029_11,0),	NVL(P.Y2029_12,0)," + 
+        "NVL(P.Y2030_01,0),	NVL(P.Y2030_02,0),	NVL(P.Y2030_03,0),	NVL(P.Y2030_04,0),	NVL(P.Y2030_05,0),	NVL(P.Y2030_06,0),	NVL(P.Y2030_07,0),	NVL(P.Y2030_08,0),	NVL(P.Y2030_09,0),	NVL(P.Y2030_10,0),	NVL(P.Y2030_11,0),	NVL(P.Y2030_12,0)" + 
+        " FROM PRO_PLAN_COST_BODY_TEMP P WHERE P.LGF_TYPE =\'F\' AND P.ROW_ID = T.ROW_ID AND P.DATA_TYPE=\'" +this.TYPE_ZZX+"\')"+ 
+        " WHERE EXISTS (SELECT 1 FROM PRO_PLAN_COST_BODY_TEMP P1 WHERE P1.ROW_ID = T.ROW_ID AND P1.DATA_TYPE=\'" +this.TYPE_ZZX+"\'"+
+            " AND P1.LGF_TYPE =\'F\')";
+        return sql;
     }
     public void inputPro(){
         DBTransaction trans = (DBTransaction)DmsUtils.getDcmApplicationModule().getDBTransaction();

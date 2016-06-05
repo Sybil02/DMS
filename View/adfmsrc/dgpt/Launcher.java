@@ -31,6 +31,12 @@ public class Launcher extends TabLauncher{
                         "/WEB-INF/dgpt/dms_projectzx_tsk.xml#dms_projectzx_tsk",
                         false);
     }
+    
+    public void launcherProjectZxo(ActionEvent actionEvent) {
+        _launchActivity("在执行项目汇总",
+                        "/WEB-INF/dgpt/dms.zzxout_tsk.xml#dms.zzxout_tsk",
+                        false);
+    }
 
     public void launcherBasepCost(ActionEvent actionEvent) {
         _launchActivity("基准计划成本",
