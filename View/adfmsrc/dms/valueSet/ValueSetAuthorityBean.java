@@ -157,6 +157,9 @@ public class ValueSetAuthorityBean {
             while (itr.hasNext()) {
                 List key = (List)itr.next();
                 Row valueRow = rowSetIterator.getRow((Key)key.get(0));
+                if(valueRow == null){
+                    continue;    
+                }
                 Row row = groupValueVo.createRow();
                 row.setAttribute("GroupId", groupId);
                 row.setAttribute("ValueSetId", valueSetId);
