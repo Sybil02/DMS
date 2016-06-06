@@ -33,7 +33,7 @@
        DcmTemplate.DATA_START_LINE, 
        DcmTemplate.COMBINATION_ID, 
        DcmTemplate.CATEGORY_ID"
-  OrderBy="DcmTemplate.SEQ"
+  OrderBy="DcmTemplate.SEQ,DcmTemplate.NAME"
   RowClass="team.epm.dcm.view.DcmTemplateViewRowImpl"
   ComponentClass="team.epm.dcm.view.DcmTemplateViewImpl">
   <DesignTime>
