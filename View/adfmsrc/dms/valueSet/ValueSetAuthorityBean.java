@@ -212,15 +212,19 @@ public class ValueSetAuthorityBean {
         if(descriptor.getFilterCriteria()!=null){
             for(Object key:descriptor.getFilterCriteria().keySet()){
                 String filter = ObjectUtils.toString(descriptor.getFilterCriteria().get(key)).trim();
-                if(!filter.equals("")){
-                    ViewObject vo =
+                ViewObject vo =
                     ADFUtils.findIterator("DmsGroupValueViewIterator").getViewObject();
-
-                    vo.setWhereClause("MEANING like '%" + filter + "%'");
                     vo.executeQuery();
-
-                    AdfFacesContext.getCurrentInstance().addPartialTarget(unassignedValueTable);
-                }    
+                    Row row = vo.first();
+                    while(row!=null){
+                        if (!valueMap.get(row.getAttribute("ValueId")).toString().contains(filter)){
+                            vo.removeCurrentRowAndRetain();    
+                        } else{
+                            vo.next();
+                        }
+                        row = vo.getCurrentRow();
+                    }
+                    AdfFacesContext.getCurrentInstance().addPartialTarget(this.assignedValueTable);
             }    
         }
     }
