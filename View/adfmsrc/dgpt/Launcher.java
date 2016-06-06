@@ -33,7 +33,7 @@ public class Launcher extends TabLauncher{
     }
     
     public void launcherProjectZxo(ActionEvent actionEvent) {
-        _launchActivity("在执行项目汇总",
+        _launchActivity("在执行项目、合同预算表-料、工、费",
                         "/WEB-INF/dgpt/dms.zzxout_tsk.xml#dms.zzxout_tsk",
                         false);
     }

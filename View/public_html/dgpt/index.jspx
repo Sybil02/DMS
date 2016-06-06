@@ -22,7 +22,7 @@
                                 actionListener="#{backingBeanScope.Launcher.launcherHtysBH}"/-->
                 <af:commandLink text="在执行项目" id="cl4"
                                 actionListener="#{backingBeanScope.Launcher.launcherProjectZx}"/>
-                <af:commandLink text="在执行项目汇总" id="cl7"
+                <af:commandLink text="在执行项目、合同预算表-料、工、费" id="cl7"
                                 actionListener="#{backingBeanScope.Launcher.launcherProjectZxo}"/>
                 <af:commandLink text="基准计划成本" id="cl5"
                                 actionListener="#{backingBeanScope.Launcher.launcherBasepCost}"/>

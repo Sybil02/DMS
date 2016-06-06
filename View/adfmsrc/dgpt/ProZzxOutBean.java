@@ -92,6 +92,9 @@ public class ProZzxOutBean {
     public static final String TYPE_ZZX="ZX";
     private String isBlock;
     private boolean isManager;
+    private Date day1;
+    private Date day2;
+    private Date day3;
     
     private void initList(){
         this.yearList = queryYears("HLS_YEAR_C");
@@ -101,21 +104,14 @@ public class ProZzxOutBean {
     
     private LinkedHashMap<String,String> getLabelMap(){
         LinkedHashMap<String,String> labelMap = new LinkedHashMap<String,String>();
-        
         if(pStart == null || pEnd == null){
             return  labelMap;    
         }
-        
-        labelMap.put("WBS", "WBS");
-        labelMap.put("WORK","WORK");
-        labelMap.put("TERM","TERM");
-        labelMap.put("CENTER","CENTER");
-        labelMap.put("WORK_TYPE","WORK_TYPE");
-        labelMap.put("BOM_CODE","BOM_CODE");
-        labelMap.put("UNIT","UNIT");
-        labelMap.put("PLAN_COST","PLAN_COST");
-        labelMap.put("OCCURRED", "OCCURRED");
-        labelMap.put("LGF_TYPE", "LGF_TYPE");
+        labelMap.put("TOTAL", "TOTAL");
+        labelMap.put("FCST_COST","FCST_COST");
+        labelMap.put("WBS","WBS");
+        labelMap.put("OCCURRED","OCCURRED");
+        //CONNECT_ID
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy_MM");
         List<Date> monthList;
         Date start;
@@ -124,9 +120,13 @@ public class ProZzxOutBean {
             start = sdf.parse(pStart);
             end = sdf.parse(pEnd);
             monthList = this.findDates(start, end);
+            System.out.println("kai"+sdf.format(start));
+            System.out.println(sdf.format(day1));
+            System.out.println(sdf.format(day2));
+            System.out.println(sdf.format(day3));
             int i ;
             for(i=0 ; i < monthList.size() ; i++){
-                labelMap.put("M"+i, "R"+sdf.format(monthList.get(i)));
+                labelMap.put("M"+i, "Y"+sdf.format(monthList.get(i)));
             }
         } catch (ParseException e) {
             e.printStackTrace();
@@ -135,20 +135,33 @@ public class ProZzxOutBean {
         boolean isReadonly = true;
         this.pcColsDef.clear();
         List<String> list = new ArrayList<String>();
-        list.add("WBS");
-        list.add("作业活动");
-        list.add("预算项");
-        list.add("工作中心");
-        list.add("作业类型");
-        list.add("物料编码");
-        list.add("单位");
-        list.add("计划成本");
-        list.add("已发生");
-        list.add("料工费类型");
+        list.add("科目");
+        list.add("预计总成本");
+        list.add("上年1-10月实际");
+        list.add("上年11-12月预计");
+        list.add("本年1月");
+        list.add("本年2月");
+        list.add("本年3月");
+        list.add("本年4月");
+        list.add("本年5月");
+        list.add("本年6月");
+        list.add("本年7月");
+        list.add("本年8月");
+        list.add("本年9月");
+        list.add("本年10月");
+        list.add("本年11月");
+        list.add("本年12月");
+        list.add("下年1月");
+        list.add("下年2月");
+        list.add("下年3月");
+        list.add("下年4月");
+        list.add("下年5月");
+        list.add("下年6月");
+        list.add("下年3季度以后");
         int i =0;
         for(Map.Entry<String,String> map:labelMap.entrySet()){
             PcColumnDef newCol = null;
-            if(i<10){
+            if(i<23){
                 newCol = new PcColumnDef(list.get(i),map.getValue(),isReadonly);
             }else{
                 newCol = new PcColumnDef(map.getValue(),map.getValue(),isReadonly);
@@ -168,15 +181,32 @@ public class ProZzxOutBean {
         Statement stat = trans.createStatement(DBTransaction.DEFAULT);
         String sql = this.querySql(labelMap);
         List<Map> data = new ArrayList<Map>();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy_MM");
         ResultSet rs;
         try {
             rs = stat.executeQuery(sql.toString());
             while(rs.next()){
                 Map row = new HashMap();
-                for(Map.Entry<String,String> entry : labelMap.entrySet()){
-                    row.put(entry.getValue(), rs.getString(entry.getValue()));
+                int orthers = Integer.valueOf(rs.getString("FCST_COST"));
+                int i = 0;
+                for(Map.Entry entry : labelMap.entrySet()){
+                    
+                    if((entry.getKey().toString()).contains("M")&&i<21){
+                        System.out.println(rs.getString(entry.getValue().toString()));
+                        orthers -=Integer.valueOf(rs.getString(entry.getValue().toString()));
+                        i++;
+                    }
+                    System.out.println(orthers);
+                    row.put(entry.getValue(),rs.getString(entry.getValue().toString()));
                 }
+                orthers -= Integer.valueOf(rs.getString("OCCURRED"));
+                row.put("LAST_1_10ADJ",  Integer.valueOf(rs.getString("Y"+sdf.format(day1)))+ Integer.valueOf(rs.getString("OCCURRED")));
+                row.put("LAST_11_12FCST", Integer.valueOf(rs.getString("Y"+sdf.format(day2)))+ Integer.valueOf(rs.getString("Y"+sdf.format(day3))));
+                row.put("NEXT_ORTHERS", orthers);
+                //System.out.println(rs.getString("Y"+sdf.format(day1))+"....."+rs.getString("OCCURRED"));
+                //System.out.println("上月："+row.get("LAST_1_10ADJ"));
                 data.add(row);
+                System.out.println("------------------------------------------------");
             }
             rs.close();
             stat.close();
@@ -186,40 +216,42 @@ public class ProZzxOutBean {
         this.dataModel.setWrappedData(data);
         ((PcDataTableModel)this.dataModel).setLabelMap(labelMap);
     }
+    
     //查询语句
     public String querySql(LinkedHashMap<String,String> labelMap){
         StringBuffer sql = new StringBuffer();
         sql.append("SELECT ");
-        int i=0;
         for(Map.Entry<String,String> entry : labelMap.entrySet()){
-            if(i<10){
-                sql.append(entry.getValue()).append(",");
-            }else{
-                sql.append("SUM("+entry.getValue()+")").append(",");
-            }
-            i++;
+            sql.append(entry.getValue()).append(",");
         }
-        sql.append("ROWID AS ROW_ID FROM PRO_PLAN_COST_BODY WHERE CONNECT_ID = '").append(connectId).append("'");
+        sql.append("DATA_TYPE FROM PRO_PLAN_COST_BODY_VIEW WHERE CONNECT_ID = '").append(connectId).append("'");
         sql.append(" AND DATA_TYPE = '").append(this.TYPE_ZZX).append("'");
-        sql.append(" GROUP BY LGF_TYPE,WBS,WORK,TERM,CENTER,WORK_TYPE,BOM_CODE,UNIT,PLAN_COST,OCCURRED");
-        System.out.println(sql.toString());
+        System.out.println("select::"+sql.toString());
         return sql.toString();
     }
     //时间段
-    public static List<Date> findDates(Date dBegin, Date dEnd) {  
+    public  List<Date> findDates(Date dBegin, Date dEnd) {  
             List lDate = new ArrayList();  
             lDate.add(dBegin);  
             Calendar calBegin = Calendar.getInstance();  
             // 使用给定的 Date 设置此 Calendar 的时间    
-            calBegin.setTime(dBegin);  
+            calBegin.setTime(dBegin);
             Calendar calEnd = Calendar.getInstance();  
             // 使用给定的 Date 设置此 Calendar 的时间    
             calEnd.setTime(dEnd);  
-            // 测试此日期是否在指定日期之后    
+            // 测试此日期是否在指定日期之后   
+            day1 = calBegin.getTime();
+            int i = 1;
             while (dEnd.after(calBegin.getTime())) {  
-                // 根据日历的规则，为给定的日历字段添加或减去指定的时间量    
-                calBegin.add(Calendar.MONTH, 1);  
+                // 根据日历的规则，为给定的日历字段添加或减去指定的时间量 
+                calBegin.add(Calendar.MONTH, 1); 
+                if(i==1){
+                    day2 = calBegin.getTime();
+                }else if(i==2){
+                    day3 = calBegin.getTime();
+                }
                 lDate.add(calBegin.getTime());
+                i++;
             }  
             return lDate;  
         }  
@@ -632,5 +664,29 @@ public class ProZzxOutBean {
         if(flag!=-1){
             isBlock = "false";
         }
+    }
+
+    public void setDay1(Date day1) {
+        this.day1 = day1;
+    }
+
+    public Date getDay1() {
+        return day1;
+    }
+
+    public void setDay2(Date day2) {
+        this.day2 = day2;
+    }
+
+    public Date getDay2() {
+        return day2;
+    }
+
+    public void setDay3(Date day3) {
+        this.day3 = day3;
+    }
+
+    public Date getDay3() {
+        return day3;
     }
 }
