@@ -32,7 +32,7 @@
     <TransientExpression><![CDATA[adf.userSession.userData.userId]]></TransientExpression>
   </Variable>
   <SQLQuery>
-    <![CDATA[SELECT T5.ID "TEMPLATE_ID", T5.NAME "TEMPLATE_NAME",T4.READ_ONLY
+    <![CDATA[SELECT T5.ID "TEMPLATE_ID", T5.NAME "TEMPLATE_NAME",T4.READ_ONLY,T5.SEQ
   FROM DMS_USER          T1,
        DMS_USER_GROUP    T2,
        DMS_GROUP_ROLE    T3,
@@ -51,7 +51,8 @@
    AND T7.LOCALE = T6.LOCALE
    AND T4.Template_Id = T5.ID
    AND T5.LOCALE = :locale
-   AND T1.ID=:userId]]>
+   AND T1.ID=:userId
+   ORDER BY T5.SEQ,T5.NAME]]>
   </SQLQuery>
   <ViewAttribute
     Name="TemplateId"
@@ -97,6 +98,22 @@
     SQLType="VARCHAR">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="10"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="Seq"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="38"
+    Scale="0"
+    Type="oracle.jbo.domain.Number"
+    ColumnType="NUMBER"
+    AliasName="SEQ"
+    Expression="SEQ"
+    SQLType="NUMERIC">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="39"/>
     </DesignTime>
   </ViewAttribute>
   <ResourceBundle>
