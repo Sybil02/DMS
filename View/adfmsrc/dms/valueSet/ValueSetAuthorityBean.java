@@ -1,9 +1,8 @@
 package dms.valueSet;
 
 import common.ADFUtils;
-import common.DmsUtils;
 
-import common.JSFUtils;
+import dcm.DcmQueryDescriptor;
 
 import dms.login.Person;
 
@@ -11,8 +10,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -22,36 +19,32 @@ import java.util.Map;
 
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ValueChangeEvent;
-import javax.faces.model.SelectItem;
-
-import oracle.adf.model.BindingContext;
-import oracle.adf.model.binding.DCIteratorBinding;
 import oracle.adf.share.ADFContext;
 import oracle.adf.share.logging.ADFLogger;
 import oracle.adf.view.rich.component.rich.RichPopup;
 import oracle.adf.view.rich.component.rich.data.RichTable;
-import oracle.adf.view.rich.component.rich.input.RichSelectManyShuttle;
+import oracle.adf.view.rich.component.rich.input.RichInputText;
 import oracle.adf.view.rich.context.AdfFacesContext;
 
-import oracle.binding.BindingContainer;
+import oracle.adf.view.rich.event.QueryEvent;
 
-import oracle.jbo.ApplicationModule;
+import oracle.adf.view.rich.model.AttributeDescriptor;
+import oracle.adf.view.rich.model.QueryDescriptor;
+
 import oracle.jbo.Key;
 import oracle.jbo.Row;
 
 import oracle.jbo.RowSetIterator;
 import oracle.jbo.ViewObject;
 import oracle.jbo.server.DBTransaction;
-import oracle.jbo.uicli.binding.JUCtrlListBinding;
-
-import org.apache.commons.lang.ObjectUtils;
-import org.apache.myfaces.trinidad.event.SelectionEvent;
 
 import org.apache.myfaces.trinidad.model.RowKeySet;
 import org.apache.myfaces.trinidad.model.RowKeySetImpl;
 
-import team.epm.dms.view.DmsGroupRoleViewImpl;
-import team.epm.module.DmsModuleImpl;
+import oracle.adf.view.rich.model.AttributeDescriptor.Operator;
+import oracle.adf.view.rich.model.FilterableQueryDescriptor;
+
+import org.apache.commons.lang.ObjectUtils;
 
 public class ValueSetAuthorityBean {
     private RowKeySet selectedRows=new RowKeySetImpl(); 
@@ -61,6 +54,9 @@ public class ValueSetAuthorityBean {
     private RichTable assignedValueTable;
     private RichPopup popup;
     private RichTable unassignedValueTable;
+    private RichInputText filterValueInput;
+    //搜索
+    private FilterableQueryDescriptor queryDescriptor=new DcmQueryDescriptor();
 
     public void setAssignedValueTable(RichTable assignedValueTable) {
         this.assignedValueTable = assignedValueTable;
@@ -174,6 +170,18 @@ public class ValueSetAuthorityBean {
             AdfFacesContext.getCurrentInstance().addPartialTarget(this.unassignedValueTable);
         }
     }
+    
+    public void unassignedValueChangeListener(ValueChangeEvent valueChangeEvent) {
+        String filter = (String)valueChangeEvent.getNewValue();
+
+        ViewObject vo =
+        ADFUtils.findIterator("getDmsValueViewIterator").getViewObject();
+
+        vo.setWhereClause("MEANING like '%" + filter + "%'");
+        vo.executeQuery();
+
+        AdfFacesContext.getCurrentInstance().addPartialTarget(unassignedValueTable);
+    }
 
     public void setUnassignedValueTable(RichTable unassignedValueTable) {
         this.unassignedValueTable = unassignedValueTable;
@@ -189,5 +197,39 @@ public class ValueSetAuthorityBean {
 
     public RowKeySet getSelectedRows() {
         return selectedRows;
+    }
+
+    public void setFilterValueInput(RichInputText filterValueInput) {
+        this.filterValueInput = filterValueInput;
+    }
+
+    public RichInputText getFilterValueInput() {
+        return filterValueInput;
+    }
+
+    public void groupValueQuery(QueryEvent queryEvent) {
+        DcmQueryDescriptor descriptor =(DcmQueryDescriptor)queryEvent.getDescriptor();
+        if(descriptor.getFilterCriteria()!=null){
+            for(Object key:descriptor.getFilterCriteria().keySet()){
+                String filter = ObjectUtils.toString(descriptor.getFilterCriteria().get(key)).trim();
+                if(!filter.equals("")){
+                    ViewObject vo =
+                    ADFUtils.findIterator("DmsGroupValueViewIterator").getViewObject();
+
+                    vo.setWhereClause("MEANING like '%" + filter + "%'");
+                    vo.executeQuery();
+
+                    AdfFacesContext.getCurrentInstance().addPartialTarget(unassignedValueTable);
+                }    
+            }    
+        }
+    }
+
+    public void setQueryDescriptor(FilterableQueryDescriptor queryDescriptor) {
+        this.queryDescriptor = queryDescriptor;
+    }
+
+    public FilterableQueryDescriptor getQueryDescriptor() {
+        return queryDescriptor;
     }
 }
