@@ -776,6 +776,7 @@ public class DcmDataDisplayBean extends TablePagination{
         for(String tempId : batchTempList){
             String temptable = "";
             int startLine = 2;
+            int columnSize = 0;
             List<String> cols = new ArrayList<String>();
             String templateName = "";
             String preGro = "";
@@ -1085,7 +1086,7 @@ public class DcmDataDisplayBean extends TablePagination{
             String vsCode=(String)vsRows[0].getAttribute("Source");
             StringBuffer sql=new StringBuffer();
             sql.append("SELECT T.CODE, T.MEANING FROM \"").append(vsCode)
-                .append("\" T WHERE T.LOCALE = '").append(ADFContext.getCurrent().getLocale()).append("'  ORDER BY T.IDX ");
+            .append("\" T WHERE T.LOCALE = '").append(ADFContext.getCurrent().getLocale()).append("'  ORDER BY T.IDX,T.MEANING ");
             Statement stmt= DmsUtils.getDmsApplicationModule().getDBTransaction().createStatement(DBTransaction.DEFAULT);
             try {
                 ResultSet rs = stmt.executeQuery(sql.toString());
@@ -1405,7 +1406,7 @@ public class DcmDataDisplayBean extends TablePagination{
             sql.append(" AND T.VALUE_SET_ID = '").append(header.getValueSetId()).append("'");
             sql.append(" AND T.VALUE_ID=V.CODE)");
         }
-        sql.append(" ORDER BY V.IDX");
+        sql.append(" ORDER BY V.IDX,V.MEANING");
         PreparedStatement stat =
             dbTransaction.createPreparedStatement(sql.toString(), -1);
         try {
