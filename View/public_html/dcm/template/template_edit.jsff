@@ -202,11 +202,14 @@
                   fetchSize="#{bindings.DcmTemplateView.rangeSize}"
                   rowBandingInterval="0" id="t1" rowSelection="single"
                   editingMode="clickToEdit"
+                  filterModel="#{bindings.DcmTemplateViewQuery.queryDescriptor}"
+                  queryListener="#{bindings.DcmTemplateViewQuery.processQuery}"
+                  filterVisible="false"
                   selectionListener="#{bindings.DcmTemplateView.collectionModel.makeCurrent}"
                   partialTriggers="::cb5 :::pc1:cb9"
                   selectedRowKeys="#{bindings.DcmTemplateView.collectionModel.selectedRow}">
           <af:column sortProperty="#{bindings.DcmTemplateView.hints.Name.name}"
-                     sortable="false"
+                     sortable="false" filterable="true"
                      headerText="#{bindings.DcmTemplateView.hints.Name.label}"
                      id="c3">
             <af:inputText value="#{row.bindings.Name.inputValue}"
@@ -257,7 +260,7 @@
             </af:selectOneChoice>
           </af:column>
           <af:column sortProperty="#{bindings.DcmTemplateView.hints.DbTable.name}"
-                     sortable="false"
+                     sortable="false" filterable="true"
                      headerText="#{bindings.DcmTemplateView.hints.DbTable.label}"
                      id="c10">
             <af:inputText value="#{row.bindings.DbTable.inputValue}"
@@ -271,7 +274,7 @@
             </af:inputText>
           </af:column>
           <af:column sortProperty="#{bindings.DcmTemplateView.hints.DbView.name}"
-                     sortable="false"
+                     sortable="false" filterable="true"
                      headerText="#{bindings.DcmTemplateView.hints.DbView.label}"
                      id="c4">
             <af:inputText value="#{row.bindings.DbView.inputValue}"
@@ -299,7 +302,7 @@
             </af:inputListOfValues>
           </af:column>
           <af:column sortProperty="#{bindings.DcmTemplateView.hints.PreProgram.name}"
-                     sortable="false"
+                     sortable="false" filterable="true"
                      headerText="#{bindings.DcmTemplateView.hints.PreProgram.label}"
                      id="c5">
             <af:inputText value="#{row.bindings.PreProgram.inputValue}"
@@ -313,7 +316,7 @@
             </af:inputText>
           </af:column>
           <af:column sortProperty="#{bindings.DcmTemplateView.hints.HandleProgram.name}"
-                     sortable="false"
+                     sortable="false" filterable="true"
                      headerText="#{bindings.DcmTemplateView.hints.HandleProgram.label}"
                      id="c6">
             <af:inputText value="#{row.bindings.HandleProgram.inputValue}"
@@ -327,7 +330,7 @@
             </af:inputText>
           </af:column>
           <af:column sortProperty="#{bindings.DcmTemplateView.hints.AfterProgram.name}"
-                     sortable="false"
+                     sortable="false" filterable="true"
                      headerText="#{bindings.DcmTemplateView.hints.AfterProgram.label}"
                      id="c13">
             <af:inputText value="#{row.bindings.AfterProgram.inputValue}"

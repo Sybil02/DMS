@@ -35,7 +35,7 @@
        DcmTemplate.CATEGORY_ID, 
        DcmTemplate.IS_SPECIAL, 
        DcmTemplate.IS_CLOSE_RECORD"
-  OrderBy="DcmTemplate.SEQ"
+  OrderBy="DcmTemplate.SEQ,DcmTemplate.NAME"
   RowClass="team.epm.dcm.view.DcmTemplateViewRowImpl"
   ComponentClass="team.epm.dcm.view.DcmTemplateViewImpl">
   <DesignTime>

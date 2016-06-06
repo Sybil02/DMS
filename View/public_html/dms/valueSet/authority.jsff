@@ -13,6 +13,15 @@
                   <f:facet name="menus"/>
                   <f:facet name="toolbar">
                      <af:toolbar id="t4">
+                        <af:panelGroupLayout id="pgl1" layout="horizontal">
+                           <af:inputText label="#{viewBundle['dms.value.filterinput']}"
+                                         id="it2"
+                                         binding="#{viewScope.ValueSetAuthorityBean.filterValueInput}"
+                                         autoSubmit="true"
+                                         valueChangeListener="#{viewScope.ValueSetAuthorityBean.unassignedValueChangeListener}"
+                                         columns="10"/>
+                        </af:panelGroupLayout>
+                        <af:spacer width="30" height="10" id="s1"/>
                         <af:commandButton text="#{viewBundle['dms.common.add']}" id="cb3"
                                           actionListener="#{viewScope.ValueSetAuthorityBean.add_value_authority}"/>
                      </af:toolbar>
@@ -76,9 +85,12 @@
                       rowBandingInterval="0"
                       selectionListener="#{bindings.DmsGroupValueView.collectionModel.makeCurrent}"
                       rowSelection="multiple" id="t2"
-                      binding="#{viewScope.ValueSetAuthorityBean.assignedValueTable}">
+                      binding="#{viewScope.ValueSetAuthorityBean.assignedValueTable}"
+                      filterModel="#{viewScope.ValueSetAuthorityBean.queryDescriptor}"
+                      queryListener="#{viewScope.ValueSetAuthorityBean.groupValueQuery}" 
+                      filterVisible="false" >
                <af:column sortProperty="#{bindings.DmsGroupValueView.hints.ValueId.name}"
-                          sortable="false"
+                          sortable="false" filterable="true"
                           headerText="#{bindings.DmsGroupValueView.hints.ValueId.label}"
                           id="c1">
                   <af:outputText value="#{viewScope.ValueSetAuthorityBean.valueMap[row.ValueId]}" id="ot1"/>

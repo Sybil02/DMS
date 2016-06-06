@@ -16,6 +16,9 @@
     <iterator Binds="DcmTemplateValidationView" RangeSize="25"
               DataControl="DcmModuleDataControl"
               id="DcmTemplateValidationViewIterator"/>
+    <searchRegion id="DcmTemplateViewQuery" Criteria=""
+                  Customizer="oracle.jbo.uicli.binding.JUSearchBindingCustomizer"
+                  Binds="DcmTemplateViewIterator"/>
   </executables>
   <bindings>
     <action IterBinding="DcmTemplateViewIterator" id="CreateInsert"

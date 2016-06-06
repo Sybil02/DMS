@@ -70,6 +70,9 @@ public class UserGroupBean {
             while(itr.hasNext()){
                 List key = (List)itr.next();
                 Row usrRow = rowSetIterator.getRow((Key)key.get(0));
+                if(usrRow == null){
+                    continue;    
+                }
                 Key k=new Key(new Object[]{usrRow.getAttribute("Id")});
                 Row[] rows=vo.findByKey(k, 1);
                 if(rows!=null&&rows.length>0){
