@@ -16,6 +16,8 @@ import dms.login.Person;
 
 import java.io.OutputStream;
 
+import java.math.BigDecimal;
+
 import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -120,10 +122,6 @@ public class ProZzxOutBean {
             start = sdf.parse(pStart);
             end = sdf.parse(pEnd);
             monthList = this.findDates(start, end);
-            System.out.println("kai"+sdf.format(start));
-            System.out.println(sdf.format(day1));
-            System.out.println(sdf.format(day2));
-            System.out.println(sdf.format(day3));
             int i ;
             for(i=0 ; i < monthList.size() ; i++){
                 labelMap.put("M"+i, "Y"+sdf.format(monthList.get(i)));
@@ -131,6 +129,7 @@ public class ProZzxOutBean {
         } catch (ParseException e) {
             e.printStackTrace();
         }
+        labelMap.put("NEXT_ORTHERS","SUM_AFTER_JUL");
         //构造列
         boolean isReadonly = true;
         this.pcColsDef.clear();
@@ -187,26 +186,18 @@ public class ProZzxOutBean {
             rs = stat.executeQuery(sql.toString());
             while(rs.next()){
                 Map row = new HashMap();
-                int orthers = Integer.valueOf(rs.getString("FCST_COST"));
-                int i = 0;
                 for(Map.Entry entry : labelMap.entrySet()){
-                    
-                    if((entry.getKey().toString()).contains("M")&&i<21){
-                        System.out.println(rs.getString(entry.getValue().toString()));
-                        orthers -=Integer.valueOf(rs.getString(entry.getValue().toString()));
-                        i++;
-                    }
-                    System.out.println(orthers);
                     row.put(entry.getValue(),rs.getString(entry.getValue().toString()));
                 }
-                orthers -= Integer.valueOf(rs.getString("OCCURRED"));
-                row.put("LAST_1_10ADJ",  Integer.valueOf(rs.getString("Y"+sdf.format(day1)))+ Integer.valueOf(rs.getString("OCCURRED")));
-                row.put("LAST_11_12FCST", Integer.valueOf(rs.getString("Y"+sdf.format(day2)))+ Integer.valueOf(rs.getString("Y"+sdf.format(day3))));
-                row.put("NEXT_ORTHERS", orthers);
-                //System.out.println(rs.getString("Y"+sdf.format(day1))+"....."+rs.getString("OCCURRED"));
-                //System.out.println("上月："+row.get("LAST_1_10ADJ"));
+                Double d1 = Double.parseDouble(rs.getString("Y"+sdf.format(day1)) != null ? rs.getString("Y"+sdf.format(day1)):"0");
+                Double d2 = Double.parseDouble(rs.getString("Y"+sdf.format(day2)) != null ? rs.getString("Y"+sdf.format(day2)):"0");
+                Double d3 = Double.parseDouble(rs.getString("Y"+sdf.format(day3)) != null ? rs.getString("Y"+sdf.format(day3)):"0");
+                Double occ = Double.parseDouble(rs.getString("OCCURRED") != null ? rs.getString("OCCURRED"):"0");
+                //去掉小数点最后面的0  如 ： .0 , .10
+                row.put("LAST_1_10ADJ",  this.getPrettyNumber(""+(d1+occ)));
+                row.put("LAST_11_12FCST", this.getPrettyNumber(""+(d2+d3+occ)));
+                row.put("NEXT_ORTHERS", rs.getString("SUM_AFTER_JUL"));
                 data.add(row);
-                System.out.println("------------------------------------------------");
             }
             rs.close();
             stat.close();
@@ -215,6 +206,11 @@ public class ProZzxOutBean {
         }
         this.dataModel.setWrappedData(data);
         ((PcDataTableModel)this.dataModel).setLabelMap(labelMap);
+    }
+    
+    public static String getPrettyNumber(String number) {  
+        return BigDecimal.valueOf(Double.parseDouble(number))  
+                .stripTrailingZeros().toPlainString();  
     }
     
     //查询语句
@@ -226,7 +222,6 @@ public class ProZzxOutBean {
         }
         sql.append("DATA_TYPE FROM PRO_PLAN_COST_BODY_VIEW WHERE CONNECT_ID = '").append(connectId).append("'");
         sql.append(" AND DATA_TYPE = '").append(this.TYPE_ZZX).append("'");
-        System.out.println("select::"+sql.toString());
         return sql.toString();
     }
     //时间段
@@ -412,7 +407,6 @@ public class ProZzxOutBean {
         sql.append("ROW_ID,CONNECT_ID,CREATED_BY,DATA_TYPE,ROW_NO,LGF_NUM,LGF_TYPE)");
         sql_value.append("?,\'"+connectId+"\',\'"+this.curUser.getId()+"\',\'"+this.TYPE_ZZX+"\',?,?,?)");
         PreparedStatement stmt = trans.createPreparedStatement(sql.toString()+sql_value.toString(), 0);
-        System.out.println(sql.toString()+sql_value.toString());
         int rowNum = 1;
         List<Map> modelData = (List<Map>)this.dataModel.getWrappedData();
         for(Map<String,String> rowdata : modelData){

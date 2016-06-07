@@ -16,13 +16,10 @@
           <f:facet name="globalLinks"/>
           <f:facet name="status"/>
           <f:facet name="globalTabs">
-            <af:menuBar id="mb1" binding="#{MainPageMBean.menuBar}">
-            </af:menuBar>
+            <af:menuBar id="mb1" binding="#{MainPageMBean.menuBar}"></af:menuBar>
           </f:facet>
           <f:facet name="welcome">
-            <af:panelGroupLayout id="pgl1">
-             
-            </af:panelGroupLayout>
+            <af:panelGroupLayout id="pgl1"></af:panelGroupLayout>
           </f:facet>
           <f:facet name="innerToolbar"/>
           <f:attribute name="brandingTitle" value="#{viewBundle['dms.title']}"/>
