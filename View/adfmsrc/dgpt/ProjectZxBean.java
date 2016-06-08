@@ -205,8 +205,13 @@ public class ProjectZxBean {
             while(rs.next()){
                 Map row = new HashMap();
                 for(Map.Entry entry : labelMap.entrySet()){
-                    
-                    row.put(entry.getValue(),rs.getString(entry.getValue().toString()));
+                    if(entry.getValue().equals("PLAN_COST") || entry.getValue().equals("OCCURRED") || 
+                       entry.getValue().equals("SUM_AFTER_JUL") || entry.getValue().toString().startsWith("Y")){
+                        row.put(entry.getValue(),this.getPrettyNumber(rs.getString(entry.getValue().toString())));
+                    }else{
+                        row.put(entry.getValue(),rs.getString(entry.getValue().toString()));
+                    }
+
                 }
                 row.put("ROW_ID", rs.getString("ROW_ID"));
                 row.put("CONNECT_ID", connectId);
@@ -220,6 +225,20 @@ public class ProjectZxBean {
         this.dataModel.setWrappedData(data);
         ((PcDataTableModel)this.dataModel).setLabelMap(labelMap);
     }
+    
+    public static String getPrettyNumber(String number) {  
+        if(number == null) return "";
+        if(number.equals("0.0")){
+            number = "";    
+        }
+        if(number.startsWith(".")){
+            number = "0" + number;    
+        }
+        while(number.endsWith("0")){
+            number = number.substring(0,number.length()-1);    
+        }
+        return number;  
+    }
     //查询语句
     public String querySql(LinkedHashMap<String,String> labelMap){
         StringBuffer sql = new StringBuffer();
@@ -229,7 +248,7 @@ public class ProjectZxBean {
             sql.append(entry.getValue()).append(",");
         }
         sql.append("ROWID AS ROW_ID,LGF_NUM,LGF_TYPE FROM PRO_PLAN_COST_BODY WHERE CONNECT_ID = '").append(connectId).append("'");
-        sql.append(" AND DATA_TYPE = '").append(this.TYPE_ZZX).append("'");
+        sql.append(" AND DATA_TYPE = '").append(this.TYPE_ZZX).append("' ORDER BY WBS");
         return sql.toString();
     }
    //时间段

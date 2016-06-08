@@ -234,7 +234,11 @@ public class BPCostBean {
             while(rs.next()){
                 Map row = new HashMap();
                 for(Map.Entry<String,String> entry:labelMap.entrySet()){
-                    row.put(entry.getValue(), rs.getString(entry.getValue()));
+                    if(entry.getValue().equals("PLAN_COST") || entry.getValue().startsWith("Y")){
+                        row.put(entry.getValue(), this.getPrettyNumber(rs.getString(entry.getValue())));
+                    }else{
+                        row.put(entry.getValue(), rs.getString(entry.getValue()));
+                    }
                 }
                 row.put("ROW_ID", rs.getString("ROW_ID"));
                 data.add(row);
@@ -248,6 +252,20 @@ public class BPCostBean {
         ((PcDataTableModel)this.dataModel).setLabelMap(labelMap);
     }
     
+    public static String getPrettyNumber(String number) {  
+        if(number == null) return "";
+        if(number.equals("0.0")){
+            number = "";    
+        }
+        if(number.startsWith(".")){
+            number = "0" + number;    
+        }
+        while(number.endsWith("0")){
+            number = number.substring(0,number.length()-1);    
+        }
+        return number;  
+    }
+    
     //查询语句
     private String querySql(LinkedHashMap<String,String> labelMap){
         
@@ -257,7 +275,7 @@ public class BPCostBean {
             sql.append(entry.getValue()).append(",");
         }
         sql.append("ROWID AS ROW_ID FROM PRO_PLAN_COST_BODY WHERE CONNECT_ID = '").append(connectId).append("'");
-        sql.append(" AND DATA_TYPE = '").append(this.TYPE_BASE).append("'");
+        sql.append(" AND DATA_TYPE = '").append(this.TYPE_BASE).append("' ORDER BY WBS");
         return sql.toString();
     }
     //一行中，列的map

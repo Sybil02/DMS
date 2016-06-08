@@ -187,7 +187,7 @@ public class ProZzxOutBean {
             while(rs.next()){
                 Map row = new HashMap();
                 for(Map.Entry entry : labelMap.entrySet()){
-                    row.put(entry.getValue(),rs.getString(entry.getValue().toString()));
+                    row.put(entry.getValue(),this.getPrettyNumber(rs.getString(entry.getValue().toString())));
                 }
                 Double d1 = Double.parseDouble(rs.getString("Y"+sdf.format(day1)) != null ? rs.getString("Y"+sdf.format(day1)):"0");
                 Double d2 = Double.parseDouble(rs.getString("Y"+sdf.format(day2)) != null ? rs.getString("Y"+sdf.format(day2)):"0");
@@ -196,7 +196,7 @@ public class ProZzxOutBean {
                 //去掉小数点最后面的0  如 ： .0 , .10
                 row.put("LAST_1_10ADJ",  this.getPrettyNumber(""+(d1+occ)));
                 row.put("LAST_11_12FCST", this.getPrettyNumber(""+(d2+d3+occ)));
-                row.put("NEXT_ORTHERS", rs.getString("SUM_AFTER_JUL"));
+                row.put("NEXT_ORTHERS", this.getPrettyNumber(rs.getString("SUM_AFTER_JUL")));
                 data.add(row);
             }
             rs.close();
@@ -209,8 +209,17 @@ public class ProZzxOutBean {
     }
     
     public static String getPrettyNumber(String number) {  
-        return BigDecimal.valueOf(Double.parseDouble(number))  
-                .stripTrailingZeros().toPlainString();  
+        if(number == null) return "";
+        if(number.equals("0.0")){
+            number = "";    
+        }
+        if(number.startsWith(".")){
+            number = "0" + number;    
+        }
+        while(number.endsWith("0")){
+            number = number.substring(0,number.length()-1);    
+        }
+        return number;  
     }
     
     //查询语句
