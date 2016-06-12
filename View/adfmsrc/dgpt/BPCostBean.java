@@ -260,7 +260,7 @@ public class BPCostBean {
         if(number.startsWith(".")){
             number = "0" + number;    
         }
-        while(number.endsWith("0")){
+        while(number.contains(".")&&number.endsWith("0")){
             number = number.substring(0,number.length()-1);    
         }
         return number;  

@@ -222,7 +222,11 @@ public class HtChangeBean {
             while(rs.next()){
                 Map row = new HashMap();
                 for(Map.Entry<String,String> entry:labelMap.entrySet()){
-                    row.put(entry.getValue(), rs.getString(entry.getValue()));
+                    if(entry.getValue().equals("PLAN_COST") || entry.getValue().startsWith("Y")){
+                        row.put(entry.getValue(), this.getPrettyNumber(rs.getString(entry.getValue())));
+                    }else{
+                        row.put(entry.getValue(), rs.getString(entry.getValue()));
+                    }
                 }
                 row.put("ROW_ID", rs.getString("ROW_ID"));
                 data.add(row);
@@ -234,6 +238,20 @@ public class HtChangeBean {
         }
         this.dataModel.setWrappedData(data);
         ((PcDataTableModel)this.dataModel).setLabelMap(labelMap);
+    }
+    
+    public static String getPrettyNumber(String number) {  
+        if(number == null) return "";
+        if(number.equals("0.0")){
+            number = "";    
+        }
+        if(number.startsWith(".")){
+            number = "0" + number;    
+        }
+        while(number.contains(".")&&number.endsWith("0")){
+            number = number.substring(0,number.length()-1);    
+        }
+        return number;  
     }
     
     //查询语句
