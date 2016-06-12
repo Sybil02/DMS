@@ -771,6 +771,7 @@
             <hash>
                <url n="content-folder-url" path="adfmsrc/dgpt/"/>
                <list n="pattern-filters">
+                  <string v="+dgpt/RPCostBean.java"/>
                   <string v="+dgpt/ProZzxOutBean.java"/>
                   <string v="+dgpt/HtChangeBean.java"/>
                   <string v="+dgpt/BPCostBean.java"/>

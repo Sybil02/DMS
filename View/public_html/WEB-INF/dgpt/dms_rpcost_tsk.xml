@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<adfc-config xmlns="http://xmlns.oracle.com/adf/controller" version="1.2">
+  <task-flow-definition id="dms_rpcost_tsk">
+    <default-activity id="__1">rpcostView</default-activity>
+    <managed-bean id="__4">
+      <managed-bean-name id="__5">RPCostBean</managed-bean-name>
+      <managed-bean-class id="__2">dgpt.RPCostBean</managed-bean-class>
+      <managed-bean-scope id="__3">view</managed-bean-scope>
+    </managed-bean>
+    <view id="rpcostView">
+      <page>/dgpt/rpcostView.jsff</page>
+    </view>
+    <use-page-fragments/>
+  </task-flow-definition>
+</adfc-config>
