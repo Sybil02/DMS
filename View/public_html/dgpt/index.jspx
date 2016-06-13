@@ -28,6 +28,8 @@
                                 actionListener="#{backingBeanScope.Launcher.launcherBasepCost}"/>
                 <af:commandLink text="合同变更后的基准计划成本" id="cl6"
                                 actionListener="#{backingBeanScope.Launcher.launcherHtChange}"/>
+                <af:commandLink text="滚动计划成本" id="cl8"
+                                actionListener="#{backingBeanScope.Launcher.launcherRollChange}"/>
               </af:panelList>
             </af:group>
           </f:facet>

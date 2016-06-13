@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pageDefinition xmlns="http://xmlns.oracle.com/adfm/uimodel"
+                version="11.1.1.64.93" id="rpcostViewPageDef" Package="dgpt">
+  <parameters/>
+  <executables>
+    <variableIterator id="variables"/>
+    <iterator Binds="ProPlanCostView" RangeSize="25"
+              DataControl="DmsModuleDataControl" id="ProPlanCostViewIterator"/>
+  </executables>
+  <bindings>
+    <tree IterBinding="ProPlanCostViewIterator" id="ProPlanCostView">
+      <nodeDefinition DefName="team.epm.dms.view.ProPlanCostView"
+                      Name="ProPlanCostView0">
+        <AttrNames>
+          <Item Value="RowNum"/>
+          <Item Value="Msg"/>
+          <Item Value="CreatedAt"/>
+          <Item Value="CreatedBy"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+  </bindings>
+</pageDefinition>

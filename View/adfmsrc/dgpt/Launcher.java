@@ -48,4 +48,9 @@ public class Launcher extends TabLauncher{
                         "/WEB-INF/dgpt/dms_hychange_tsk.xml#dms_hychange_tsk",
                         false);
     }
+    public void launcherRollChange(ActionEvent actionEvent) {
+        _launchActivity("滚动计划成本",
+                        "/WEB-INF/dgpt/dms_rpcost_tsk.xml#dms_rpcost_tsk",
+                        false);
+    }
 }

@@ -221,8 +221,6 @@ public class BPCostBean {
         }
     }
     public void createTableModel(){
-        
-        //
         DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
         Statement stat = trans.createStatement(DBTransaction.DEFAULT);
         LinkedHashMap<String,String> labelMap = getLabelMap();
@@ -280,11 +278,9 @@ public class BPCostBean {
     }
     //一行中，列的map
     private LinkedHashMap<String,String> getLabelMap(){
-        
         if(pStart == null || pEnd == null){
             return new LinkedHashMap<String,String>();    
         }
-        
         LinkedHashMap<String,String> labelMap = new LinkedHashMap<String,String>();
         labelMap.put("KEY1", "WBS");
         labelMap.put("KEY2","WORK");
@@ -343,6 +339,7 @@ public class BPCostBean {
             }  
             return lDate;  
         } 
+    
     public void rowSelectionListener(SelectionEvent selectionEvent) {
         RichTable table = (RichTable)selectionEvent.getSource();
         RowKeySet rks = selectionEvent.getAddedSet();
@@ -516,7 +513,6 @@ public class BPCostBean {
     }
     
     public void showErrorPop(){
-        
         ViewObject vo = ADFUtils.findIterator("ProPlanCostViewIterator").getViewObject();
         vo.setNamedWhereClauseParam("dataType", this.TYPE_BASE);
         vo.executeQuery();
