@@ -285,7 +285,7 @@ public class ProZzxOutBean {
     private List<SelectItem> queryValues(String source,String col){
         DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
         Statement stat = trans.createStatement(DBTransaction.DEFAULT);
-        String sql = "SELECT DISTINCT "+col+" FROM "+source;
+        String sql = "SELECT DISTINCT "+col+" FROM "+source+" WHERE DATA_TYPE =\'"+this.TYPE_ZZX+"\'";
         List<SelectItem> values = new ArrayList<SelectItem>();
         ResultSet rs;
         try {
@@ -341,7 +341,7 @@ public class ProZzxOutBean {
                     + "IS_BLOCK FROM PRO_PLAN_COST_HEADER WHERE VERSION = \'"+version+"\'";
         sql = sql +" AND HLS_YEAR=\'"+year+"\'";
         sql = sql + " AND PROJECT_NAME=\'"+pname+"\'";
-        
+        sql = sql + " AND DATA_TYPE = \'"+this.TYPE_ZZX+"\'";
         ResultSet rs;
         try {
             rs = stat.executeQuery(sql);

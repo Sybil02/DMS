@@ -135,6 +135,9 @@
           <af:column sortable="false" headerText="WBS" id="c2">
             <af:inputText value="#{row[viewScope.ProjectZxBean.dataModel.labelMap['WBS']]}" id="it26" readOnly="true"/>
           </af:column>
+          <af:column id="c36" sortable="false" headerText="网络号">
+            <af:inputText value="#{row[viewScope.ProjectZxBean.dataModel.labelMap['NETWORK']]}" id="it32" readOnly="true"/>
+          </af:column>
           <af:column sortable="false" headerText="作业活动" id="c5">
             <af:inputText value="#{row[viewScope.ProjectZxBean.dataModel.labelMap['WORK']]}" id="it14" readOnly="true"/>
           </af:column>
@@ -158,6 +161,18 @@
           </af:column>
           <af:column sortable="false" headerText="已发生" id="c25">
             <af:inputText value="#{row[viewScope.ProjectZxBean.dataModel.labelMap['OCCURRED']]}" id="it23" readOnly="true"/>
+          </af:column>
+          <af:column sortable="false" headerText="预计总数量" id="c37">
+            <af:inputText value="#{row[viewScope.ProjectZxBean.dataModel.labelMap['PLAN_QUANTITY']]}" id="it33" readOnly="true"/>
+          </af:column>
+          <af:column sortable="false" headerText="预计总金额" id="c38">
+            <af:inputText value="#{row[viewScope.ProjectZxBean.dataModel.labelMap['PLAN_AMOUNT']]}" id="it34" readOnly="true"/>
+          </af:column>
+          <af:column sortable="false" headerText="已发生数量" id="c39">
+            <af:inputText value="#{row[viewScope.ProjectZxBean.dataModel.labelMap['OCCURRED_QUANTITY']]}" id="it35" readOnly="true"/>
+          </af:column>
+          <af:column sortable="false" headerText="已发生金额" id="c40">
+            <af:inputText value="#{row[viewScope.ProjectZxBean.dataModel.labelMap['OCCURRED_AMOUNT']]}" id="it36" readOnly="true"/>
           </af:column>
           <af:column sortable="false" headerText="上年10月" id="c16"
                     inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}

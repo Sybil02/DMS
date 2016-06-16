@@ -131,7 +131,7 @@ public class RPCostBean {
     private List<SelectItem> queryValues(String source,String col){
         DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
         Statement stat = trans.createStatement(DBTransaction.DEFAULT);
-        String sql = "SELECT DISTINCT "+col+" FROM "+source;
+        String sql = "SELECT DISTINCT "+col+" FROM "+source+" WHERE DATA_TYPE =\'"+this.TYPE_ROLL+"\'";
         List<SelectItem> values = new ArrayList<SelectItem>();
         ResultSet rs;
         try {
@@ -189,6 +189,7 @@ public class RPCostBean {
                      + "IS_BLOCK FROM PRO_PLAN_COST_HEADER WHERE VERSION = \'"+version+"\'";
          sql = sql +" AND HLS_YEAR=\'"+year+"\'";
          sql = sql + " AND PROJECT_NAME=\'"+pname+"\'";
+         sql = sql + " AND DATA_TYPE =\'"+this.TYPE_ROLL+"\'";
          ResultSet rs;
          try {
              rs = stat.executeQuery(sql);
@@ -240,15 +241,16 @@ public class RPCostBean {
             return new LinkedHashMap<String,String>();    
         }
         LinkedHashMap<String,String> labelMap = new LinkedHashMap<String,String>();
-        labelMap.put("KEY1", "WBS");
-        labelMap.put("KEY2","WORK");
-        labelMap.put("KEY3","TERM");
-        labelMap.put("KEY4","CENTER");
-        labelMap.put("KEY5","WORK_TYPE");
-        labelMap.put("KEY6","BOM_CODE");
-        labelMap.put("KEY7","UNIT");
-        labelMap.put("KEY8","PLAN_COST");
-        labelMap.put("KEY9", "OCCURRED");
+        labelMap.put("WBS", "WBS");
+        labelMap.put("网络号", "NETWORK");
+        labelMap.put("作业活动","WORK");
+        labelMap.put("预算项","TERM");
+        labelMap.put("工作中心","CENTER");
+        labelMap.put("作业类型","WORK_TYPE");
+        labelMap.put("物料编码","BOM_CODE");
+        labelMap.put("单位","UNIT");
+        labelMap.put("计划成本","PLAN_COST");
+        labelMap.put("已发生", "OCCURRED");
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy_MM");
         List<Date> monthList;
         Date start;
@@ -258,7 +260,7 @@ public class RPCostBean {
             end = sdf.parse(pEnd);
             monthList = this.findDates(start, end);
             for(int i = 0 ; i < monthList.size() ; i++){
-                labelMap.put("KEY"+(i+10), "Y"+sdf.format(monthList.get(i)));
+                labelMap.put(sdf.format(monthList.get(i)), "Y"+sdf.format(monthList.get(i)));
             }
             //labelMap.put("KEY"+(monthList.size()+10),"SUM_AFTER_JUL");
         } catch (ParseException e) {
@@ -320,7 +322,7 @@ public class RPCostBean {
         while(number.contains(".")&&number.endsWith("0")){
             number = number.substring(0,number.length()-1);
         }
-        return number;  
+        return number;
     }
     
     //查询语句
@@ -332,7 +334,7 @@ public class RPCostBean {
             sql.append(entry.getValue()).append(",");
         }
         sql.append("ROWID AS ROW_ID FROM PRO_PLAN_COST_BODY WHERE CONNECT_ID = '").append(connectId).append("'");
-        sql.append(" AND DATA_TYPE = '").append(this.TYPE_ROLL).append("' ORDER BY WBS");
+        sql.append(" AND DATA_TYPE = '").append(this.TYPE_ROLL).append("' ORDER BY WBS,NETWORK");
         return sql.toString();
     }
     
