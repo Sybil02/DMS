@@ -239,6 +239,8 @@ public class BPCostBean {
                     }
                 }
                 row.put("ROW_ID", rs.getString("ROW_ID"));
+                row.put("LGF_NUM", rs.getString("LGF_NUM"));
+                row.put("LGF_TYPE", rs.getString("LGF_TYPE"));
                 data.add(row);
             }
             rs.close();
@@ -272,7 +274,7 @@ public class BPCostBean {
         for(Map.Entry<String,String> entry : labelMap.entrySet()){
             sql.append(entry.getValue()).append(",");
         }
-        sql.append("ROWID AS ROW_ID FROM PRO_PLAN_COST_BODY WHERE CONNECT_ID = '").append(connectId).append("'");
+        sql.append("ROWID AS ROW_ID,LGF_NUM,LGF_TYPE FROM PRO_PLAN_COST_BODY WHERE CONNECT_ID = '").append(connectId).append("'");
         sql.append(" AND DATA_TYPE = '").append(this.TYPE_BASE).append("' ORDER BY WBS,NETWORK");
         return sql.toString();
     }
@@ -387,8 +389,10 @@ public class BPCostBean {
             sql.append(entry.getValue()+",");
             sql_value.append("?,");
         }
-        sql.append("ROW_ID,CONNECT_ID,CREATED_BY,ROW_NO,DATA_TYPE)");
-        sql_value.append("?,\'"+connectId+"\',\'"+this.curUser.getId()+"\',?,\'"+this.TYPE_BASE+"\')");
+        sql.append("ROW_ID,CONNECT_ID,CREATED_BY,ROW_NO,DATA_TYPE,");
+        sql.append("LGF_NUM,LGF_TYPE)");
+        sql_value.append("?,\'"+connectId+"\',\'"+this.curUser.getId()+"\',?,\'"+this.TYPE_BASE+"\',");
+        sql_value.append("?,?)");
         PreparedStatement stmt = trans.createPreparedStatement(sql.toString()+sql_value.toString(), 0);
         //获取数据
         int rowNum = 1;
@@ -402,6 +406,8 @@ public class BPCostBean {
                     }
                     stmt.setString(last, rowdata.get("ROW_ID"));
                     stmt.setInt(last+1,rowNum);
+                    stmt.setString(last+2, rowdata.get("LGF_NUM"));
+                    stmt.setString(last+3, rowdata.get("LGF_TYPE"));
                     rowNum++;
                     stmt.addBatch();
                     stmt.executeBatch();

@@ -238,7 +238,7 @@ public class RPCostBean {
     //一行中，列的map
     private LinkedHashMap<String,String> getLabelMap(){
         if(pStart == null || pEnd == null){
-            return new LinkedHashMap<String,String>();    
+            return new LinkedHashMap<String,String>();
         }
         LinkedHashMap<String,String> labelMap = new LinkedHashMap<String,String>();
         labelMap.put("WBS", "WBS");
@@ -251,6 +251,10 @@ public class RPCostBean {
         labelMap.put("单位","UNIT");
         labelMap.put("计划成本","PLAN_COST");
         labelMap.put("已发生", "OCCURRED");
+//        labelMap.put("预计总数量", "PLAN_QUANTITY");
+//        labelMap.put("预计总金额", "PLAN_AMOUNT");
+//        labelMap.put("已发生数量", "OCCURRED_QUANTITY");
+//        labelMap.put("已发生金额", "OCCURRED_AMOUNT");
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy_MM");
         List<Date> monthList;
         Date start;
@@ -274,7 +278,7 @@ public class RPCostBean {
                 isReadonly = false;
             }
             flag++;
-            PcColumnDef newCol = new PcColumnDef(map.getValue(),map.getValue(),isReadonly);
+            PcColumnDef newCol = new PcColumnDef(map.getKey(),map.getValue(),isReadonly);
             this.pcColsDef.add(newCol);
         }
         ((PcDataTableModel)this.dataModel).setPcColsDef(this.pcColsDef);
@@ -300,6 +304,12 @@ public class RPCostBean {
                     }
                 }
                 row.put("ROW_ID", rs.getString("ROW_ID"));
+                row.put("LGF_NUM", rs.getString("LGF_NUM"));
+                row.put("LGF_TYPE", rs.getString("LGF_TYPE"));
+                row.put("PLAN_QUANTITY", rs.getString("PLAN_QUANTITY"));
+                row.put("PLAN_AMOUNT", rs.getString("PLAN_AMOUNT"));
+                row.put("OCCURRED_QUANTITY", rs.getString("OCCURRED_QUANTITY"));
+                row.put("OCCURRED_AMOUNT", rs.getString("OCCURRED_AMOUNT"));
                 data.add(row);
             }
             rs.close();
@@ -333,10 +343,11 @@ public class RPCostBean {
         for(Map.Entry<String,String> entry : labelMap.entrySet()){
             sql.append(entry.getValue()).append(",");
         }
-        sql.append("ROWID AS ROW_ID FROM PRO_PLAN_COST_BODY WHERE CONNECT_ID = '").append(connectId).append("'");
+        sql.append("ROWID AS ROW_ID,LGF_NUM,LGF_TYPE,PLAN_QUANTITY,PLAN_AMOUNT," +
+            "OCCURRED_QUANTITY,OCCURRED_AMOUNT FROM PRO_PLAN_COST_BODY WHERE CONNECT_ID = '").append(connectId).append("'");
         sql.append(" AND DATA_TYPE = '").append(this.TYPE_ROLL).append("' ORDER BY WBS,NETWORK");
         return sql.toString();
-    }
+    }//
     
     public void rowSelectionListener(SelectionEvent selectionEvent) {
         RichTable table = (RichTable)selectionEvent.getSource();
@@ -438,8 +449,10 @@ public class RPCostBean {
             sql.append(entry.getValue()+",");
             sql_value.append("?,");
         }
-        sql.append("ROW_ID,CONNECT_ID,CREATED_BY,ROW_NO,DATA_TYPE)");
-        sql_value.append("?,\'"+connectId+"\',\'"+this.curUser.getId()+"\',?,\'"+this.TYPE_ROLL+"\')");
+        sql.append("ROW_ID,CONNECT_ID,CREATED_BY,ROW_NO,DATA_TYPE,");
+        sql.append("LGF_NUM,LGF_TYPE,PLAN_QUANTITY,PLAN_AMOUNT,OCCURRED_QUANTITY,OCCURRED_AMOUNT)");
+        sql_value.append("?,\'"+connectId+"\',\'"+this.curUser.getId()+"\',?,\'"+this.TYPE_ROLL+"\',");
+        sql_value.append("?,?,?,?,?,?)");
         PreparedStatement stmt = trans.createPreparedStatement(sql.toString()+sql_value.toString(), 0);
         //获取数据
         int rowNum = 1;
@@ -453,6 +466,12 @@ public class RPCostBean {
                     }
                     stmt.setString(last, rowdata.get("ROW_ID"));
                     stmt.setInt(last+1,rowNum);
+                    stmt.setString(last+2, rowdata.get("LGF_NUM"));
+                    stmt.setString(last+3, rowdata.get("LGF_TYPE"));
+                    stmt.setString(last+4, rowdata.get("PLAN_QUANTITY"));
+                    stmt.setString(last+5, rowdata.get("PLAN_AMOUNT"));
+                    stmt.setString(last+6, rowdata.get("OCCURRED_QUANTITY"));
+                    stmt.setString(last+7, rowdata.get("OCCURRED_AMOUNT"));
                     rowNum++;
                     stmt.addBatch();
                     stmt.executeBatch();

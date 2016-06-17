@@ -230,6 +230,8 @@ public class HtChangeBean {
                     }
                 }
                 row.put("ROW_ID", rs.getString("ROW_ID"));
+                row.put("LGF_NUM", rs.getString("LGF_NUM"));
+                row.put("LGF_TYPE", rs.getString("LGF_TYPE"));
                 data.add(row);
             }
             rs.close();
@@ -262,7 +264,7 @@ public class HtChangeBean {
         for(Map.Entry<String,String> entry : labelMap.entrySet()){
             sql.append(entry.getValue()).append(",");
         }
-        sql.append("ROWID AS ROW_ID FROM PRO_PLAN_COST_BODY WHERE CONNECT_ID = '").append(connectId).append("'");
+        sql.append("ROWID AS ROW_ID,LGF_NUM,LGF_TYPE FROM PRO_PLAN_COST_BODY WHERE CONNECT_ID = '").append(connectId).append("'");
         sql.append(" AND DATA_TYPE = '").append(this.TYPE_CHANGE).append("' ORDER BY WBS,NETWORK");
         return sql.toString();
     }
@@ -321,9 +323,9 @@ public class HtChangeBean {
             sqlInsert.append(entry.getValue()+",");
             sqlValue.append("T."+entry.getValue()+",");
         }
-        sqlInsert.append("DATA_TYPE,CONNECT_ID)");
-        sqlValue.append("'"+this.TYPE_CHANGE+"','").append(newConnectId).append("\'")
-                .append(" FROM PRO_PLAN_COST_BODY T WHERE T.CONNECT_ID=\'"+connectId+"\'");
+        sqlInsert.append("DATA_TYPE,CONNECT_ID,LGF_NUM,LGF_TYPE)");
+        sqlValue.append("'"+this.TYPE_CHANGE+"','").append(newConnectId).append("\',")
+                .append("LGF_NUM,LGF_TYPE FROM PRO_PLAN_COST_BODY T WHERE T.CONNECT_ID=\'"+connectId+"\'");
         //显示新版本，重新构造列
         try {
             trans.createStatement(DBTransaction.DEFAULT).execute(sqlInsert.toString()+sqlValue.toString());
@@ -383,8 +385,10 @@ public class HtChangeBean {
             sql.append(entry.getValue()+",");
             sql_value.append("?,");
         }
-        sql.append("ROW_ID,CONNECT_ID,CREATED_BY,OPERATION,DATA_TYPE,ROW_NO)");
-        sql_value.append("?,\'"+connectId+"\',"+this.curUser.getId()+",?,\'"+this.TYPE_CHANGE+"\',?)");
+        sql.append("ROW_ID,CONNECT_ID,CREATED_BY,OPERATION,DATA_TYPE,ROW_NO,");
+        sql.append("LGF_NUM,LGF_TYPE)");
+        sql_value.append("?,\'"+connectId+"\',"+this.curUser.getId()+",?,\'"+this.TYPE_CHANGE+"\',?,");
+        sql_value.append("?,?)");
         PreparedStatement stmt = trans.createPreparedStatement(sql.toString()+sql_value.toString(), 0);
         //获取数据
         int rowNum = 1;
@@ -393,6 +397,8 @@ public class HtChangeBean {
                 try {
                     stmt.setString(last, rowdata.get("ROW_ID"));
                     stmt.setInt(last+2,rowNum);
+                    stmt.setString(last+3, rowdata.get("LGF_NUM"));
+                    stmt.setString(last+4, rowdata.get("LGF_TYPE"));
                     rowNum++;
                     if(PcDataTableModel.OPERATE_UPDATE.equals(rowdata.get("OPERATION"))){
                         stmt.setString(last+1,PcDataTableModel.OPERATE_UPDATE);
