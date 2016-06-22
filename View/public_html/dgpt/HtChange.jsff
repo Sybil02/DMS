@@ -62,41 +62,52 @@
             <af:panelStretchLayout id="psl2" inlineStyle="width:800px;height:400px">
               <f:facet name="bottom"/>
               <f:facet name="center">
-                <af:table value="#{bindings.ProPlanCostView.collectionModel}"
-                          var="row" rows="#{bindings.ProPlanCostView.rangeSize}"
-                          emptyText="#{bindings.ProPlanCostView.viewable ? 'No data to display.' : 'Access Denied.'}"
-                          fetchSize="#{bindings.ProPlanCostView.rangeSize}" 
-                          rowBandingInterval="0" id="t3" columnStretching="column:c3">
-                  <af:column sortProperty="#{bindings.ProPlanCostView.hints.RowNum.name}"
+                <af:table value="#{bindings.ProPlanCostView1.collectionModel}"
+                          var="row"
+                          rows="#{bindings.ProPlanCostView1.rangeSize}"
+                          emptyText="#{bindings.ProPlanCostView1.viewable ? 'No data to display.' : 'Access Denied.'}"
+                          fetchSize="#{bindings.ProPlanCostView1.rangeSize}" rowSelection="single" 
+                          rowBandingInterval="0" id="t3" columnStretching="column:c6">
+                  <af:column sortProperty="#{bindings.ProPlanCostView1.hints.RowNum.name}"
                              sortable="false"
-                             headerText="#{bindings.ProPlanCostView.hints.RowNum.label}"
-                             id="c5">
-                    <af:outputText value="#{row.RowNum}" id="ot7">
+                             headerText="#{bindings.ProPlanCostView1.hints.RowNum.label}"
+                             id="c7">
+                    <af:outputText value="#{row.RowNum}" id="ot11">
                       <af:convertNumber groupingUsed="false"
-                                        pattern="#{bindings.ProPlanCostView.hints.RowNum.format}"/>
+                                        pattern="#{bindings.ProPlanCostView1.hints.RowNum.format}"/>
                     </af:outputText>
                   </af:column>
-                  <af:column sortProperty="#{bindings.ProPlanCostView.hints.Msg.name}"
+                  <af:column sortProperty="#{bindings.ProPlanCostView1.hints.Wbs.name}"
                              sortable="false"
-                             headerText="#{bindings.ProPlanCostView.hints.Msg.label}"
+                             headerText="#{bindings.ProPlanCostView1.hints.Wbs.label}"
+                             id="c5">
+                    <af:outputText value="#{row.Wbs}" id="ot8"/>
+                  </af:column>
+                  <af:column sortProperty="#{bindings.ProPlanCostView1.hints.Work.name}"
+                             sortable="false"
+                             headerText="#{bindings.ProPlanCostView1.hints.Work.label}"
                              id="c3">
-                    <af:outputText value="#{row.bindings.Msg.inputValue}"
-                                  id="it3">
-                    </af:outputText>
+                    <af:outputText value="#{row.Work}" id="ot7"/>
                   </af:column>
-                  <af:column sortProperty="#{bindings.ProPlanCostView.hints.CreatedAt.name}"
+                  <af:column sortProperty="#{bindings.ProPlanCostView1.hints.Msg.name}"
                              sortable="false"
-                             headerText="#{bindings.ProPlanCostView.hints.CreatedAt.label}"
+                             headerText="#{bindings.ProPlanCostView1.hints.Msg.label}"
+                             id="c6">
+                    <af:outputText value="#{row.Msg}" id="ot12"/>
+                  </af:column>
+                  <af:column sortProperty="#{bindings.ProPlanCostView1.hints.CreatedAt.name}"
+                             sortable="false"
+                             headerText="#{bindings.ProPlanCostView1.hints.CreatedAt.label}"
                              id="c2">
-                    <af:outputText value="#{row.CreatedAt}" id="ot9">
-                      <af:convertDateTime pattern="#{bindings.ProPlanCostView.hints.CreatedAt.format}"/>
+                    <af:outputText value="#{row.CreatedAt}" id="ot13">
+                      <af:convertDateTime pattern="#{bindings.ProPlanCostView1.hints.CreatedAt.format}"/>
                     </af:outputText>
                   </af:column>
-                  <af:column sortProperty="#{bindings.ProPlanCostView.hints.CreatedBy.name}"
+                  <af:column sortProperty="#{bindings.ProPlanCostView1.hints.CreatedBy.name}"
                              sortable="false"
-                             headerText="#{bindings.ProPlanCostView.hints.CreatedBy.label}"
+                             headerText="#{bindings.ProPlanCostView1.hints.CreatedBy.label}"
                              id="c4">
-                    <af:outputText value="#{row.CreatedBy}" id="ot8"/>
+                    <af:outputText value="#{row.CreatedBy}" id="ot9"/>
                   </af:column>
                 </af:table>
               </f:facet>

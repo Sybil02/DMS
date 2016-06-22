@@ -65,6 +65,16 @@
                                         pattern="#{bindings.ProPlanCostView.hints.RowNum.format}"/>
                     </af:outputText>
                   </af:column>
+                  <af:column sortProperty="#{bindings.ProPlanCostView.hints.Wbs.name}"
+                             headerText="#{bindings.ProPlanCostView.hints.Wbs.label}"
+                             id="c37">
+                    <af:outputText value="#{row.Wbs}" id="ot11"/>
+                  </af:column>
+                  <af:column sortProperty="#{bindings.ProPlanCostView.hints.Work.name}"
+                             headerText="#{bindings.ProPlanCostView.hints.Work.label}"
+                             id="c38">
+                    <af:outputText value="#{row.Work}" id="ot12"/>
+                  </af:column>
                   <af:column sortProperty="#{bindings.ProPlanCostView.hints.Msg.name}"
                              sortable="false"
                              headerText="#{bindings.ProPlanCostView.hints.Msg.label}"

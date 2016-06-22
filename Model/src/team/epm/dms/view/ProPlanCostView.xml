@@ -37,7 +37,7 @@
     Kind="where"
     Type="java.lang.String"/>
   <SQLQuery>
-    <![CDATA[select t.row_num,t.msg,t.created_at,t.created_by from pro_plan_cost_error t
+    <![CDATA[select t.row_num,t.wbs,t.work,t.msg,t.created_at,t.created_by from pro_plan_cost_error t
 where t.locale=:locale and t.created_by = :createdBy and data_type = :dataType]]>
   </SQLQuery>
   <ViewAttribute
@@ -57,6 +57,42 @@ where t.locale=:locale and t.created_by = :createdBy and data_type = :dataType]]
       <SchemaBasedProperties>
         <LABEL
           ResId="dcm.error.rownum"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
+<ViewAttribute
+    Name="Wbs"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="WBS"
+    SQLType="VARCHAR"
+    Precision="100"
+    Expression="WBS">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="team.epm.dms.view.ProjectZx.Wbs_LABLE"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="Work"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="WORK"
+    SQLType="VARCHAR"
+    Precision="100"
+    Expression="WORK">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="team.epm.dms.view.ProjectZx.WorkAction_LABLE"/>
       </SchemaBasedProperties>
     </Properties>
   </ViewAttribute>
@@ -90,7 +126,7 @@ where t.locale=:locale and t.created_by = :createdBy and data_type = :dataType]]
     ColumnType="DATE"
     AliasName="CREATED_AT"
     Expression="CREATED_AT"
-    SQLType="TIMESTAMP">
+    SQLType="DATE">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="7"/>
     </DesignTime>
@@ -142,8 +178,12 @@ where t.locale=:locale and t.created_by = :createdBy and data_type = :dataType]]
     ColumnType="VARCHAR2"
     AliasName="VIEW_ATTR"
     SQLType="VARCHAR"/>
+  
   <ResourceBundle>
     <PropertiesBundle
       PropertiesFile="ModelBundle"/>
   </ResourceBundle>
+  
+
 </ViewObject>
+  

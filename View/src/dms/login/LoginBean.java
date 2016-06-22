@@ -10,6 +10,13 @@ import common.MailSender;
 
 import java.io.IOException;
 
+import java.net.InetAddress;
+
+import java.net.NetworkInterface;
+import java.net.SocketException;
+
+import java.sql.Statement;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,6 +41,8 @@ import oracle.adf.view.rich.component.rich.input.RichInputText;
 
 import oracle.jbo.Row;
 import oracle.jbo.ViewObject;
+
+import oracle.jbo.server.DBTransaction;
 
 import org.apache.commons.lang.ObjectUtils;
 
@@ -70,6 +79,11 @@ public class LoginBean {
                 String encypt_pwd =DigestUtils.digestSHA1(ObjectUtils.toString(this.account).trim() +ObjectUtils.toString(this.password).trim());
                 if (pwd.equals(encypt_pwd)) {
                     //登陆成功
+                    //插入登录信息
+                    DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
+                    Statement stat = trans.createStatement(DBTransaction.DEFAULT);
+                    String sql = "";
+                    
                     this.initUserPreference(row);
                     ExternalContext ectx =FacesContext.getCurrentInstance().getExternalContext();
                     ectx.redirect(ControllerContext.getInstance().getGlobalViewActivityURL("index"));
@@ -139,6 +153,29 @@ public class LoginBean {
         }
     }
 
+    private static String getLocalMac(InetAddress ia) throws SocketException {
+        //获取网卡，获取地址
+        byte[] mac = NetworkInterface.getByInetAddress(ia).getHardwareAddress();
+        System.out.println("mac数组长度："+mac.length);
+        StringBuffer sb = new StringBuffer("");
+        for(int i=0; i<mac.length; i++) {
+                if(i!=0) {
+                        sb.append("-");
+                }
+                //字节转换为整数
+                int temp = mac[i]&0xff;
+                String str = Integer.toHexString(temp);
+                System.out.println("每8位:"+str);
+                if(str.length()==1) {
+                        sb.append("0"+str);
+                }else {
+                        sb.append(str);
+                }
+        }
+        System.out.println("本机MAC地址:"+sb.toString().toUpperCase());
+        return sb.toString().toUpperCase();
+    }
+    
     public void forgetPassword(ActionEvent actionEvent) {
         String account=ObjectUtils.toString(this.acc.getValue()).trim();
         String mail=ObjectUtils.toString(this.mail.getValue()).trim();

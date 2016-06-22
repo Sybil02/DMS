@@ -8,11 +8,13 @@
               DataControl="DmsModuleDataControl" id="ProPlanCostViewIterator"/>
   </executables>
   <bindings>
-    <tree IterBinding="ProPlanCostViewIterator" id="ProPlanCostView">
+    <tree IterBinding="ProPlanCostViewIterator" id="ProPlanCostView1">
       <nodeDefinition DefName="team.epm.dms.view.ProPlanCostView"
-                      Name="ProPlanCostView0">
+                      Name="ProPlanCostView10">
         <AttrNames>
           <Item Value="RowNum"/>
+          <Item Value="Wbs"/>
+          <Item Value="Work"/>
           <Item Value="Msg"/>
           <Item Value="CreatedAt"/>
           <Item Value="CreatedBy"/>

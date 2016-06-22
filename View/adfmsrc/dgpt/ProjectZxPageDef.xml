@@ -77,6 +77,8 @@
           <Item Value="Msg"/>
           <Item Value="CreatedAt"/>
           <Item Value="CreatedBy"/>
+          <Item Value="Wbs"/>
+          <Item Value="Work"/>
         </AttrNames>
       </nodeDefinition>
     </tree>
