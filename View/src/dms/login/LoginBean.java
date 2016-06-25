@@ -15,8 +15,12 @@ import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 
+import java.sql.SQLException;
 import java.sql.Statement;
 
+import java.text.SimpleDateFormat;
+
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -51,6 +55,8 @@ import team.epm.dms.view.DmsUserViewRowImpl;
 
 import team.epm.module.DmsModuleImpl;
 
+import utils.system;
+
 import weblogic.servlet.security.ServletAuthentication;
 
 public class LoginBean {
@@ -62,6 +68,7 @@ public class LoginBean {
     private RichInputText acc;
     private RichInputText mail;
     private RichPopup popup;
+    private String loginTime ;
 
     public LoginBean() {
     }
@@ -79,11 +86,15 @@ public class LoginBean {
                 String encypt_pwd =DigestUtils.digestSHA1(ObjectUtils.toString(this.account).trim() +ObjectUtils.toString(this.password).trim());
                 if (pwd.equals(encypt_pwd)) {
                     //登陆成功
-                    //插入登录信息
-                    DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
-                    Statement stat = trans.createStatement(DBTransaction.DEFAULT);
-                    String sql = "";
-                    
+//                    Date loginDate = new Date();
+//                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//                    this.loginTime = sdf.format(loginDate);
+//                    DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
+//                    Statement stat = trans.createStatement(DBTransaction.DEFAULT);
+//                    String sql = "INSERT INTO HLS_LOGIN_LOGOUT_LOG(LOGIN_MAN,LOGIN_TIME) " +
+//                        "VALUES ('"+this.account+"',TO_DATE('"+sdf.format(loginDate)+"','yyyy-mm-dd hh24:mi:ss'))";
+//                    stat.execute(sql);
+//                    trans.commit();
                     this.initUserPreference(row);
                     ExternalContext ectx =FacesContext.getCurrentInstance().getExternalContext();
                     ectx.redirect(ControllerContext.getInstance().getGlobalViewActivityURL("index"));
@@ -137,6 +148,26 @@ public class LoginBean {
     }
 
     public void logout(){
+//        Date logoutDate = new Date();
+//        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//        DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
+//        Statement stat = trans.createStatement(DBTransaction.DEFAULT);
+//        System.out.println(this.loginTime);
+//        String sql = "UPDATE HLS_LOGIN_LOGOUT_LOG SET (LOGOUT_TIME)= " +
+//            "(TO_DATE('"+sdf.format(logoutDate)+"','yyyy-mm-dd hh24:mi:ss')) "+
+//            "WHERE LOGIN_TIME=TO_DATE('"+this.loginTime+"','yyyy-mm-dd hh24:mi:ss')";
+//        System.out.println(sql);
+//        int i = -22;
+//        try {
+//            i = stat.executeUpdate(sql);
+//            trans.commit();
+//            stat.close();
+//        } catch (SQLException e) {
+//            _logger.severe(e);
+//        }
+//        System.out.println(i);
+//        System.out.println(logoutDate);
+//        System.out.println(sdf.format(logoutDate)+"out**********");
         ADFContext.getCurrent().getSessionScope().remove("cur_user");
         ExternalContext ectx =FacesContext.getCurrentInstance().getExternalContext();
         HttpSession session = (HttpSession)ectx.getSession(false);
@@ -150,30 +181,7 @@ public class LoginBean {
             ectx.redirect(url);
         } catch (IOException e) {
             _logger.severe(e);
-        }
-    }
-
-    private static String getLocalMac(InetAddress ia) throws SocketException {
-        //获取网卡，获取地址
-        byte[] mac = NetworkInterface.getByInetAddress(ia).getHardwareAddress();
-        System.out.println("mac数组长度："+mac.length);
-        StringBuffer sb = new StringBuffer("");
-        for(int i=0; i<mac.length; i++) {
-                if(i!=0) {
-                        sb.append("-");
-                }
-                //字节转换为整数
-                int temp = mac[i]&0xff;
-                String str = Integer.toHexString(temp);
-                System.out.println("每8位:"+str);
-                if(str.length()==1) {
-                        sb.append("0"+str);
-                }else {
-                        sb.append(str);
-                }
-        }
-        System.out.println("本机MAC地址:"+sb.toString().toUpperCase());
-        return sb.toString().toUpperCase();
+        } 
     }
     
     public void forgetPassword(ActionEvent actionEvent) {
@@ -241,5 +249,13 @@ public class LoginBean {
 
     public RichPopup getPopup() {
         return popup;
+    }
+
+    public void setLoginTime(String loginTime) {
+        this.loginTime = loginTime;
+    }
+
+    public String getLoginTime() {
+        return loginTime;
     }
 }

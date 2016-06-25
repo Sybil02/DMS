@@ -101,7 +101,7 @@ public class ProZzxOutBean {
     private void initList(){
         this.yearList = queryYears("HLS_YEAR_C");
         this.pnameList = queryValues("PRO_PLAN_COST_HEADER","PROJECT_NAME");
-        this.versionList = queryValues("PRO_PLAN_COST_HEADER","VERSION");
+        this.versionList = queryValues1("PRO_PLAN_COST_HEADER","VERSION");
     }
     
     private LinkedHashMap<String,String> getLabelMap(){
@@ -283,6 +283,35 @@ public class ProZzxOutBean {
     
     //其他下拉列表
     private List<SelectItem> queryValues(String source,String col){
+        DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
+        Statement stat = trans.createStatement(DBTransaction.DEFAULT);
+        String sql = "SELECT DISTINCT P."+col+" FROM "+source+" P WHERE P.PROJECT_NAME IN (" + 
+        "       SELECT T.PRO_CODE||'-'||T.PRO_DESC FROM SAP_DMS_PROJECT_Privilege T " +
+            "WHERE T.ATTRIBUTE3 = \'"+this.TYPE_ZZX+"\'" + 
+            "AND T.PRO_MANAGER = '"+this.curUser.getAcc()+"' OR T.PRO_DIRECTOR='"+this.curUser.getAcc()+"'" +
+//        "UNION " + 
+//        "   SELECT T1.PRO_CODE||'-'||T1.PRO_DESC FROM SAP_DMS_PROJECT_Privilege T1 " +
+//        "WHERE T1.ATTRIBUTE3 = \'"+this.TYPE_ZZX+"\' AND T1.ATTRIBUTE4='admin'"+
+//        "OR (T1.PRO_MANAGER = '"+this.curUser.getAcc()+"' OR T1.PRO_DIRECTOR='"+this.curUser.getAcc()+"')" + 
+            ") AND  DATA_TYPE =\'"+this.TYPE_ZZX+"\'";
+        List<SelectItem> values = new ArrayList<SelectItem>();
+        ResultSet rs;
+        try {
+            rs = stat.executeQuery(sql);
+            while(rs.next()){
+                SelectItem sim = new SelectItem(rs.getString(col),rs.getString(col));
+                values.add(sim);
+            }
+            rs.close();
+            stat.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return values;
+    }
+    
+    //版本下拉列表
+    private List<SelectItem> queryValues1(String source,String col){
         DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
         Statement stat = trans.createStatement(DBTransaction.DEFAULT);
         String sql = "SELECT DISTINCT "+col+" FROM "+source+" WHERE DATA_TYPE =\'"+this.TYPE_ZZX+"\'";
