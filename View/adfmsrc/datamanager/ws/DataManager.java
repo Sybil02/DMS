@@ -14,7 +14,7 @@ public class DataManager {
         super();
     }
     
-    public String insertSapBom(SapBomEntity sbe){
+    public SapBomEntity insertSapBom(SapBomEntity sbe,String msgId){
         //Connection conn = DBConnUtils.getJNDIConnectionByContainer("jdbc/DMSConnDS");
         Connection conn = DBConnUtils.getJNDIConnection("jdbc/DMSConnDS");
         String sql = "INSERT INTO HPDW.SAP_BOM_MATERIAL_DATA (CUSTOM, MCODE, MDESC, FACTORY, MTYPE, MEINS, MTYPEDESC, MRPCONTROL, MCATORY, STPRICE, PRICEUNIT, PLANPRICE, D_FLAG, NOTE1, NOTE2, " +
@@ -59,7 +59,9 @@ public class DataManager {
             conn.close();
         } catch (SQLException e) {
             e.printStackTrace();
-            return e.getMessage();
+            sbe.setIfflg("E");
+            sbe.setIfmsg(e.getMessage());
+            return sbe;
         }finally{
             try{
                 if(stat != null){
@@ -71,68 +73,8 @@ public class DataManager {
                 e.printStackTrace();    
             }
         }
-        return "SUCCESSED";    
-    }
-    
-    public String test(String custom,String mcode,String mdesc,String factory,String mtype,
-                       String meins,String mtypedesc,String mrpcontrol,String mcatory,String stprice){
-        //Connection conn = DBConnUtils.getJNDIConnectionByContainer("jdbc/DMSConnDS");
-        Connection conn = DBConnUtils.getJNDIConnection("jdbc/DMSConnDS");
-        String sql = "INSERT INTO HPDW.SAP_BOM_MATERIAL_DATA (CUSTOM, MCODE, MDESC, FACTORY, MTYPE, MEINS, MTYPEDESC, MRPCONTROL, MCATORY, STPRICE, PRICEUNIT, PLANPRICE, D_FLAG, NOTE1, NOTE2, " +
-            "NOTE3, NOTE4, NOTE5, NOTE6, NOTE7, NOTE8, NOTE9, NOTE10, NOTE11, NOTE12, NOTE13, NOTE14, NOTE15, IFFLG, IFMSG)" + 
-            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        PreparedStatement stat = null;
-        try {
-            stat = conn.prepareStatement(sql);
-            stat.setString(1, custom);
-            stat.setString(2, mcode);
-            stat.setString(3, mdesc);
-            stat.setString(4, factory);
-            stat.setString(5, mtype);
-            stat.setString(6, meins);
-            stat.setString(7, mtypedesc);
-            stat.setString(8, mrpcontrol);
-            stat.setString(9, mcatory);
-            stat.setString(10, stprice);
-            stat.setString(11, "1");
-            stat.setString(12, "1");
-            stat.setString(13, "1");
-            stat.setString(14, "1");
-            stat.setString(15, "1");
-            stat.setString(16, "1");
-            stat.setString(17, "1");
-            stat.setString(18, "1");
-            stat.setString(19, "1");
-            stat.setString(20, "1");
-            stat.setString(21, "1");
-            stat.setString(22, "1");
-            stat.setString(23, "1");
-            stat.setString(24, "1");
-            stat.setString(25, "1");
-            stat.setString(26, "1");
-            stat.setString(27, "1");
-            stat.setString(28, "1");
-            stat.setString(29, "1");
-            stat.setString(30, "1");
-            stat.executeUpdate();
-            conn.commit();
-            stat.close();
-            conn.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return e.getMessage();
-        }finally{
-            try{
-                if(stat != null){
-                    stat.close();
-                }
-                if(conn != null)
-                    conn.close();
-            }catch(Exception e){
-                e.printStackTrace();    
-            }
-        }
-        return "SUCCESSED";    
+        sbe.setIfflg("S");
+        return sbe;    
     }
     
 }

@@ -1,6 +1,11 @@
 package datamanager.ws;
 
-public class SapBomEntity {
+import java.io.Serializable;
+
+public class SapBomEntity implements Serializable{
+
+    private static final long serialVersionUID = 1L;
+
     public SapBomEntity() {
         super();
     }
