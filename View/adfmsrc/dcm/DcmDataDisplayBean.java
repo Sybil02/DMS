@@ -148,6 +148,9 @@ public class DcmDataDisplayBean extends TablePagination{
     private boolean batchExcel = false;
     private List<String> batchTempList;
     private RichPopup batchErrPop;
+    private RichPopup subPop;
+    private String subSql;
+    private String subTempId;
     //初始化
     public DcmDataDisplayBean() {
         this.curUser =(Person)ADFContext.getCurrent().getSessionScope().get("cur_user");
@@ -155,6 +158,7 @@ public class DcmDataDisplayBean extends TablePagination{
         this.initTemplate();
         this.initCombination();
         this.queryTemplateData();
+        this.initSubSql();
     }
 
     public CollectionModel getDataModel() {
@@ -1081,7 +1085,61 @@ public class DcmDataDisplayBean extends TablePagination{
             this._logger.severe(DmsUtils.getMsg("dcm.template_not_found"));
             throw new RuntimeException(DmsUtils.getMsg("dcm.template_not_found")+":tempateId:"+curTemplateId);
         }
+        
     }
+    
+    private void initSubSql(){
+        //无组合模板不提供状态显示
+        if(this.curCombiantionRecord == null || "".equals(this.curCombiantionRecord)){
+            return;    
+        }
+        
+        StringBuffer sql = new StringBuffer();
+        StringBuffer viewSql = new StringBuffer();
+        StringBuffer where_in = new StringBuffer();
+        //组合表
+        sql.append("SELECT ");
+        for( ComHeader header : this.templateHeader){
+            
+            //初始化显示Map
+            this.subVNameMap.put(header.getCode(), header.getName()); 
+            Map<String,String> valuesMap = new HashMap<String,String>();
+            
+            viewSql.append(" T.").append(header.getCode()).append(",");
+            //ORACLE IN 子句中不能超过1000个值
+            if(header.getValues().size() > 0&&header.getValues().size() <= 999){
+                where_in.append(" AND T.").append(header.getCode()).append(" IN(");
+                for(SelectItem sim : header.getValues()){
+                    where_in.append("'").append(sim.getValue()).append("',");
+                    valuesMap.put(sim.getValue().toString(), sim.getLabel());
+                } 
+                where_in.append("'')");
+            }else if(header.getValues().size() > 0&&header.getValues().size() > 999){
+                where_in.append(" AND (T.").append(header.getCode()).append(" IN(");
+                for(int i = 0 ; i < header.getValues().size() ; i++){
+                    where_in.append("'").append(header.getValues().get(i).getValue()).append("',");    
+                    if((i+1)%999==0){
+                        where_in.append("'') OR T.").append(header.getCode()).append(" IN (");
+                    }
+                    valuesMap.put(header.getValues().get(i).getValue().toString(), header.getValues().get(i).getLabel());
+                } 
+                where_in.append("''))");
+            }
+            
+            //初始化显示Map
+            this.subValuesMap.put(header.getCode(), valuesMap);
+        }
+        sql.append(viewSql).append(" S.CREATED_AT,S.CREATED_BY ").append("FROM ").append(this.curCombiantion.getCode()).append(" T")
+            .append(", DMS_SUBMIT_STATUS S WHERE T.ID = S.COM_ID(+) ").append(where_in);
+        
+        this.subSql = sql.toString();
+        
+        this.subVNameMap.put("CREATED_AT", "提交者");
+        this.subVNameMap.put("CREATED_BY", "提交时间");
+           
+    }
+    private Map<String,String> subVNameMap;
+    private Map<String,Map<String,String>> subValuesMap;
     //获取值列表
     private List<SelectItem> fetchValueList(String vsId){
         List<SelectItem> list=new ArrayList<SelectItem>();
@@ -1830,5 +1888,58 @@ public class DcmDataDisplayBean extends TablePagination{
         DmsUtils.getDcmApplicationModule().getDcmErrorBatchVO().executeQuery();
         RichPopup.PopupHints hints = new RichPopup.PopupHints();
         this.batchErrPop.show(hints);
+    }
+
+    public void setSubPop(RichPopup subPop) {
+        this.subPop = subPop;
+    }
+
+    public RichPopup getSubPop() {
+        return subPop;
+    }
+
+    public void setSubSql(String subSql) {
+        this.subSql = subSql;
+    }
+
+    public String getSubSql() {
+        return subSql;
+    }
+
+    public void setSubTempId(String subTempId) {
+        this.subTempId = subTempId;
+    }
+
+    public String getSubTempId() {
+        return this.curTempalte.getId();
+    }
+
+    public void showSubStatus(ActionEvent actionEvent) {
+        
+        //无组合模板不提供状态显示
+        if(this.curCombiantionRecord == null || "".equals(this.curCombiantionRecord)){
+            return;    
+        }
+        
+        System.out.println(this.subSql);
+        RichPopup.PopupHints hints = new RichPopup.PopupHints();
+        this.subPop.show(hints);
+        
+    }
+
+    public void setSubVNameMap(Map<String, String> subVNameMap) {
+        this.subVNameMap = subVNameMap;
+    }
+
+    public Map<String, String> getSubVNameMap() {
+        return subVNameMap;
+    }
+
+    public void setSubValuesMap(Map<String, Map<String, String>> subValuesMap) {
+        this.subValuesMap = subValuesMap;
+    }
+
+    public Map<String, Map<String, String>> getSubValuesMap() {
+        return subValuesMap;
     }
 }

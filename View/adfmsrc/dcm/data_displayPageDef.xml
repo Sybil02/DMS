@@ -12,6 +12,9 @@
     <searchRegion Binds="DcmErrorBatchVOIterator" Criteria=""
                   Customizer="oracle.jbo.uicli.binding.JUSearchBindingCustomizer"
                   id="DcmErrorBatchVOQuery"/>
+    <methodIterator Binds="getSubmitStatusVO.result"
+                    DataControl="DcmModuleDataControl" RangeSize="25"
+                    id="getSubmitStatusVOIterator"/>
   </executables>
   <bindings>
     <tree IterBinding="DcmErrorViewIterator" id="DcmErrorView">
@@ -37,6 +40,22 @@
           <Item Value="Msg"/>
         </AttrNames>
       </nodeDefinition>
+    </tree>
+    <methodAction id="getSubmitStatusVO" RequiresUpdateModel="true"
+                  Action="invokeMethod" MethodName="getSubmitStatusVO"
+                  IsViewObjectMethod="false" DataControl="DcmModuleDataControl"
+                  InstanceName="DcmModuleDataControl.dataProvider"
+                  ReturnName="data.DcmModuleDataControl.methodResults.getSubmitStatusVO_DcmModuleDataControl_dataProvider_getSubmitStatusVO_result">
+      <NamedData NDName="sql" NDValue="#{viewScope.DcmDataDisplayBean.subSql}"
+                 NDType="java.lang.String"/>
+      <NamedData NDName="templateId"
+                 NDValue="#{viewScope.DcmDataDisplayBean.subTempId}"
+                 NDType="java.lang.String"/>
+      <NamedData NDName="userId" NDValue="#{sessionScope.cur_user.id}"
+                 NDType="java.lang.String"/>
+    </methodAction>
+    <tree IterBinding="getSubmitStatusVOIterator" id="return">
+      <nodeDefinition Name="return0"/>
     </tree>
   </bindings>
 </pageDefinition>

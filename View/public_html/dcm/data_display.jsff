@@ -74,6 +74,9 @@
                                 rendered="#{viewScope.DcmDataDisplayBean.isClose eq true}"
                                 disabled="#{viewScope.DcmDataDisplayBean.isEditable eq false}"
                                 actionListener="#{viewScope.DcmDataDisplayBean.closeCombination}"/>
+              <af:commandButton text="#{viewBundle['dms.submit.status']}" id="cb12"
+                                rendered="#{viewScope.DcmDataDisplayBean.isClose eq true}"
+                                actionListener="#{viewScope.DcmDataDisplayBean.showSubStatus}"/>
               <af:commandButton text="#{viewBundle['dms.batch.import.log']}" id="cb51"
                                 rendered="#{viewScope.DcmDataDisplayBean.combinationId ne null}"
                                 actionListener="#{viewScope.DcmDataDisplayBean.showBatchLog}"/>
@@ -162,6 +165,70 @@
       <af:panelGroupLayout layout="scroll"
                            xmlns:af="http://xmlns.oracle.com/adf/faces/rich"
                            id="pgl2">
+        <!--提交状态-->
+        <af:popup id="sub_pop" autoCancel="disabled"
+                  binding="#{viewScope.DcmDataDisplayBean.subPop}"
+                  contentDelivery="lazyUncached">
+          <af:panelWindow id="sub_pw1" modal="true"
+                          title="#{viewBundle['dms.submit.status']}">
+            <af:panelStretchLayout id="sub_psl3"
+                                   inlineStyle="width:800px;height:450px">
+              <f:facet name="center">
+                <af:panelCollection id="sub_pc4"
+                                    featuresOff="wrap freeze formatMenu">
+                  <f:facet name="menus"/>
+                  <f:facet name="toolbar">
+                  </f:facet>
+                  <f:facet name="statusbar"/>
+                  <!--af:table rows="#{bindings.return.rangeSize}"
+                            fetchSize="#{bindings.return.rangeSize}"
+                            emptyText="#{viewBundle['dms.common.nodata']}"
+                            var="row" rowBandingInterval="0"
+                            value="#{bindings.return.collectionModel}"
+                            selectedRowKeys="#{pageFlowScope.TemplateBackingBean.selectedRows}"
+                            selectionListener="#{bindings.return.collectionModel.makeCurrent}"
+                            rowSelection="multiple" id="sub_t5"
+                            clientComponent="true" 
+                            filterModel="#{pageFlowScope.TemplateBackingBean.queryDescriptor}"
+                            queryListener="#{pageFlowScope.TemplateBackingBean.comRecordQueryListener}"
+                            binding="#{pageFlowScope.TemplateBackingBean.recordTable}">
+                    <af:forEach items="#{pageFlowScope.TemplateBackingBean.comheaderInfo}"
+                                var="header">
+                      <af:column headerText="#{header['label']}" sortable="false"
+                                 sortProperty="#{header['code']}" id="sub_c23"
+                                 filterable="#{header['code'] eq 'STATUS' ? false : true}">
+                        <af:outputText value="#{header['code'] eq 'STATUS' ? (row[header['code']] eq 'CLOSE' ? viewBundle['dcm.combintion_record.close'] : viewBundle['dcm.combintion_record.open']) : row[header['code']]}"
+                                       id="sub_ot1"/>
+                      </af:column>
+                    </af:forEach>
+                  </af:table-->
+                  <af:table rows="#{bindings.return.rangeSize}"
+                            fetchSize="#{bindings.return.rangeSize}"
+                            emptyText="#{bindings.return.viewable ? 'No data to display.' : 'Access Denied.'}"
+                            var="row" rowBandingInterval="0"
+                            value="#{bindings.return.collectionModel}"
+                            selectedRowKeys="#{bindings.return.collectionModel.selectedRow}"
+                            selectionListener="#{bindings.return.collectionModel.makeCurrent}"
+                            rowSelection="single" id="t6">
+                    <af:forEach items="#{bindings.return.attributeDefs}"
+                                var="def">
+                      <af:column headerText="#{bindings.return.labels[def.name]}"
+                                 sortable="true" sortProperty="#{def.name}"
+                                 id="c11">
+                        <af:outputText value="#{row[def.name]}" id="ot15"/>
+                      </af:column>
+                    </af:forEach>
+                    <af:column id="c12" sortable="true"
+                               headerText="#{viewBundle['dcm.combinationRecord.status']}">
+                      <af:outputText value="#{row[CREATED_BY] eq null ? '未提交':'已提交'}" id="ot16"/>
+                    </af:column>
+                  </af:table>
+                </af:panelCollection>
+              </f:facet>
+            </af:panelStretchLayout>
+          </af:panelWindow>
+        </af:popup>
+        <!--提交状态END-->
         <af:popup id="p5" autoCancel="disabled"
                   binding="#{viewScope.DcmDataDisplayBean.batchErrPop}">
           <af:panelWindow title="#{viewBundle['dcm.import_error']}" id="pw5">
