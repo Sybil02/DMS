@@ -70,7 +70,7 @@
                                 id="cb7">
                 <af:showPopupBehavior popupId="::p4" alignId=""/>
               </af:commandButton>
-              <af:commandButton text="#{viewBundle._U51BB_U7ED3}" id="cb5" 
+              <af:commandButton text="#{viewBundle['dms.common.submit']}" id="cb5" 
                                 rendered="#{viewScope.DcmDataDisplayBean.isClose eq true}"
                                 disabled="#{viewScope.DcmDataDisplayBean.isEditable eq false}"
                                 actionListener="#{viewScope.DcmDataDisplayBean.closeCombination}"/>

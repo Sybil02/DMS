@@ -215,7 +215,26 @@ public class DcmModuleImpl extends ApplicationModuleImpl implements DcmModule {
         }
         return vo;
     }
-
+    
+    /**
+     *获取提交状态VO
+     * @param sql
+     * @param templateId
+     * @param userId
+     * @return ViewObject
+     */
+    public ViewObject getSubmitStatusVO(String sql,String templateId ,String userId){
+        ViewObject vo = null;
+        String vName = "S"+templateId+userId;
+        vo = this.findViewObject(vName);
+        if(vo != null){
+            return vo;    
+        }else{
+            vo = this.createViewObjectFromQueryStmt(vName, sql);
+        }
+        return vo;
+    }
+    
     /**
      * Container's getter for DcmValidationQueryView.
      * @return DcmValidationQueryView

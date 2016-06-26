@@ -1790,9 +1790,24 @@ public class DcmDataDisplayBean extends TablePagination{
         } catch (SQLException e) {
             this._logger.severe(e);
         }
+        //更改状态为已提交
+        this.changeSubmitStatus("SUBMIT");
+        
         this.curCombinationRecordEditable = false;
         //刷新数据
         this.queryTemplateData();
+    }
+    
+    public void changeSubmitStatus(String type){
+        String sql = "";
+        if(type.equals("SUBMIT")){
+            sql = "INSERT INTO DMS_SUBMIT_STATUS(TEMP_ID,COM_ID,CREATED_AT,CREATED_BY) VALUES('" + this.curTempalte.getId() + "','"
+                + this.curCombiantionRecord + "',SYSDATE,'" + this.curUser.getAcc() + "-" + this.curUser.getName() + "')";
+        }else{
+            sql = "DELETE DMS_SUBMIT_STATUS T WHERE T.TEMP_ID = '" + this.curTempalte.getId() + "' AND T.COM_ID = '" + this.curCombiantionRecord + "'";
+        }
+        DmsUtils.getDcmApplicationModule().getTransaction().executeCommand(sql);
+        DmsUtils.getDcmApplicationModule().getTransaction().commit();
     }
 
     public void setBatchExcel(boolean batchExcel) {
