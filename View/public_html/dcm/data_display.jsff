@@ -212,10 +212,10 @@
                             rowSelection="single" id="t6">
                     <af:forEach items="#{bindings.return.attributeDefs}"
                                 var="def">
-                      <af:column headerText="#{bindings.return.labels[def.name]}"
+                      <af:column headerText="#{viewScope.DcmDataDisplayBean.subVNameMap[def.name]}"
                                  sortable="true" sortProperty="#{def.name}"
                                  id="c11">
-                        <af:outputText value="#{row[def.name]}" id="ot15"/>
+                        <af:outputText value="#{viewScope.DcmDataDisplayBean.subValuesMap[row[def.name]]}" id="ot15"/>
                       </af:column>
                     </af:forEach>
                     <af:column id="c12" sortable="true"

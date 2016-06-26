@@ -1093,6 +1093,8 @@ public class DcmDataDisplayBean extends TablePagination{
         if(this.curCombiantionRecord == null || "".equals(this.curCombiantionRecord)){
             return;    
         }
+        this.subVNameMap = new HashMap<String,String>();
+        this.subValuesMap = new HashMap<String,String>();
         
         StringBuffer sql = new StringBuffer();
         StringBuffer viewSql = new StringBuffer();
@@ -1103,7 +1105,6 @@ public class DcmDataDisplayBean extends TablePagination{
             
             //初始化显示Map
             this.subVNameMap.put(header.getCode(), header.getName()); 
-            Map<String,String> valuesMap = new HashMap<String,String>();
             
             viewSql.append(" T.").append(header.getCode()).append(",");
             //ORACLE IN 子句中不能超过1000个值
@@ -1111,7 +1112,7 @@ public class DcmDataDisplayBean extends TablePagination{
                 where_in.append(" AND T.").append(header.getCode()).append(" IN(");
                 for(SelectItem sim : header.getValues()){
                     where_in.append("'").append(sim.getValue()).append("',");
-                    valuesMap.put(sim.getValue().toString(), sim.getLabel());
+                    this.subValuesMap.put(sim.getValue().toString(), sim.getLabel());
                 } 
                 where_in.append("'')");
             }else if(header.getValues().size() > 0&&header.getValues().size() > 999){
@@ -1121,16 +1122,15 @@ public class DcmDataDisplayBean extends TablePagination{
                     if((i+1)%999==0){
                         where_in.append("'') OR T.").append(header.getCode()).append(" IN (");
                     }
-                    valuesMap.put(header.getValues().get(i).getValue().toString(), header.getValues().get(i).getLabel());
+                    this.subValuesMap.put(header.getValues().get(i).getValue().toString(), header.getValues().get(i).getLabel());
                 } 
                 where_in.append("''))");
             }
             
-            //初始化显示Map
-            this.subValuesMap.put(header.getCode(), valuesMap);
         }
         sql.append(viewSql).append(" S.CREATED_AT,S.CREATED_BY ").append("FROM ").append(this.curCombiantion.getCode()).append(" T")
-            .append(", DMS_SUBMIT_STATUS S WHERE T.ID = S.COM_ID(+) ").append(where_in);
+            .append(", (SELECT COM_ID,CREATED_AT,CREATED_BY FROM DMS_SUBMIT_STATUS WHERE TEMP_ID = '").append(this.curTempalte.getId())
+            .append("') S WHERE T.ID = S.COM_ID(+) ").append(where_in);
         
         this.subSql = sql.toString();
         
@@ -1139,7 +1139,7 @@ public class DcmDataDisplayBean extends TablePagination{
            
     }
     private Map<String,String> subVNameMap;
-    private Map<String,Map<String,String>> subValuesMap;
+    private Map<String,String> subValuesMap;
     //获取值列表
     private List<SelectItem> fetchValueList(String vsId){
         List<SelectItem> list=new ArrayList<SelectItem>();
@@ -1935,11 +1935,11 @@ public class DcmDataDisplayBean extends TablePagination{
         return subVNameMap;
     }
 
-    public void setSubValuesMap(Map<String, Map<String, String>> subValuesMap) {
+    public void setSubValuesMap(Map<String,String> subValuesMap) {
         this.subValuesMap = subValuesMap;
     }
 
-    public Map<String, Map<String, String>> getSubValuesMap() {
+    public Map<String, String> getSubValuesMap() {
         return subValuesMap;
     }
 }
