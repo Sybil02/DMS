@@ -118,8 +118,10 @@ public class ProjectZxBean {
         
         labelMap.put("WBS", "WBS");
         labelMap.put("NETWORK", "NETWORK");
+        labelMap.put("WORK_CODE", "WORK_CODE");
         labelMap.put("WORK","WORK");
         labelMap.put("TERM","TERM");
+        labelMap.put("COST_DETAIL", "COST_DETAIL");
         labelMap.put("CENTER","CENTER");
         labelMap.put("WORK_TYPE","WORK_TYPE");
         labelMap.put("BOM_CODE","BOM_CODE");
@@ -154,8 +156,10 @@ public class ProjectZxBean {
         List<String> list = new ArrayList<String>();
         list.add("WBS");
         list.add("网络号");
+        list.add("作业号");
         list.add("作业活动");
         list.add("预算项");
+        list.add("预算科目");
         list.add("工作中心");
         list.add("作业类型");
         list.add("物料编码");
@@ -190,7 +194,7 @@ public class ProjectZxBean {
         list.add("下年7月以后");
         int i =0;
         for(Map.Entry<String,String> map:labelMap.entrySet()){
-            if(i<35){
+            if(i<37){
                 PcColumnDef newCol = new PcColumnDef(list.get(i),map.getValue(),isReadonly);
                 this.pcColsDef.add(newCol);
             }else{
@@ -585,7 +589,6 @@ public class ProjectZxBean {
     private String getCom(){
         String text = this.year+"_"+this.entity+"_"+this.hLine+"_"+this.yLine+"_"+
                       this.pLine+"_"+this.pname+"_"+this.version+"_"+this.proType;
-        System.out.println(text);
         return text;
     }
     

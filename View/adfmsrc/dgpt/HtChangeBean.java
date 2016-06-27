@@ -505,8 +505,10 @@ public class HtChangeBean {
         }
         labelMap.put("WBS", "WBS");
         labelMap.put("网络号", "NETWORK");
+        labelMap.put("作业号", "WORK_CODE");
         labelMap.put("作业活动","WORK");
         labelMap.put("预算项","TERM");
+        labelMap.put("预算科目", "COST_DETAIL");
         labelMap.put("工作中心","CENTER");
         labelMap.put("作业类型","WORK_TYPE");
         labelMap.put("物料编码","BOM_CODE");

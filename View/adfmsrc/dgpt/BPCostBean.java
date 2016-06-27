@@ -145,7 +145,6 @@ public class BPCostBean {
             "WHERE T.ATTRIBUTE3 = \'"+this.TYPE_BASE+"\'" + 
             "AND (T.PRO_MANAGER = '"+this.curUser.getAcc()+"' OR T.PRO_DIRECTOR='"+this.curUser.getAcc()+"')" + 
             ") AND DATA_TYPE =\'"+this.TYPE_BASE+"\'";
-        System.out.println(sql);
         List<SelectItem> values = new ArrayList<SelectItem>();
         ResultSet rs;
         try {
@@ -321,14 +320,16 @@ public class BPCostBean {
         LinkedHashMap<String,String> labelMap = new LinkedHashMap<String,String>();
         labelMap.put("WBS", "WBS");
         labelMap.put("网络号", "NETWORK");
+        labelMap.put("作业号", "WORK_CODE");
         labelMap.put("作业活动","WORK");
         labelMap.put("预算项","TERM");
+        labelMap.put("预算科目", "COST_DETAIL");
         labelMap.put("工作中心","CENTER");
         labelMap.put("作业类型","WORK_TYPE");
         labelMap.put("物料编码","BOM_CODE");
         labelMap.put("单位","UNIT");
         labelMap.put("计划成本","PLAN_COST");
-        //labelMap.put("KEY9", "OCCURRED");
+        labelMap.put("累计实际成本（初始化）", "OCCURRED");
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy_MM");
         List<Date> monthList;
         Date start;
@@ -348,7 +349,7 @@ public class BPCostBean {
         boolean isReadonly = true;
         this.pcColsDef.clear();
         for(Map.Entry<String,String> map:labelMap.entrySet()){
-            if(flag>9){
+            if(flag>12){
                 isReadonly = false;
             }
             flag++;

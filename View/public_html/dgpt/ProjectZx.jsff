@@ -148,11 +148,17 @@
           <af:column id="c36" sortable="false" headerText="网络号">
             <af:inputText value="#{row[viewScope.ProjectZxBean.dataModel.labelMap['NETWORK']]}" id="it32" readOnly="true"/>
           </af:column>
+          <af:column sortable="false" headerText="作业号" id="c39">
+            <af:inputText value="#{row[viewScope.ProjectZxBean.dataModel.labelMap['WORK_CODE']]}" id="it39" readOnly="true"/>
+          </af:column>
           <af:column sortable="false" headerText="作业活动" id="c5">
             <af:inputText value="#{row[viewScope.ProjectZxBean.dataModel.labelMap['WORK']]}" id="it14" readOnly="true"/>
           </af:column>
           <af:column sortable="false" headerText="预算项" id="c19">
             <af:inputText value="#{row[viewScope.ProjectZxBean.dataModel.labelMap['TERM']]}" id="it3" readOnly="true"/>
+          </af:column>
+          <af:column sortable="false" headerText="预算科目" id="c40">
+            <af:inputText value="#{row[viewScope.ProjectZxBean.dataModel.labelMap['COST_DETAIL']]}" id="it40" readOnly="true"/>
           </af:column>
           <af:column sortable="false" headerText="工作中心" id="c29">
             <af:inputText value="#{row[viewScope.ProjectZxBean.dataModel.labelMap['CENTER']]}" id="it12" readOnly="true"/>

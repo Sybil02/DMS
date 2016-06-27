@@ -84,14 +84,14 @@ public class DmsLog {
     }
     
     public static void operationLog(String curUser,String temId,String comMsg,String operation){
-        System.out.println("operation**********log");
+        
         Date updateDate = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
         DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
         Statement stat = trans.createStatement(DBTransaction.DEFAULT);
         String sql = "INSERT INTO HLS_OPERATION_LOG (UPDATE_BY,TEMPLATE_ID,COMRECORD_MSG,OPERATION,UPDATE_TIME) "+
             "VALUES ('"+curUser+"','"+temId+"','"+comMsg+"','"+operation+"',TO_DATE('"+sdf.format(updateDate)+"','yyyy/mm/dd hh24:mi:ss'))";
-        System.out.println(sql);
+        
         try {
             stat.execute(sql);
             trans.commit();

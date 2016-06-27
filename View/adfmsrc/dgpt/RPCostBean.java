@@ -279,8 +279,10 @@ public class RPCostBean {
         LinkedHashMap<String,String> labelMap = new LinkedHashMap<String,String>();
         labelMap.put("WBS", "WBS");
         labelMap.put("网络号", "NETWORK");
+        labelMap.put("作业号", "WORK_CODE");
         labelMap.put("作业活动","WORK");
         labelMap.put("预算项","TERM");
+        labelMap.put("预算科目", "COST_DETAIL");
         labelMap.put("工作中心","CENTER");
         labelMap.put("作业类型","WORK_TYPE");
         labelMap.put("物料编码","BOM_CODE");
@@ -310,7 +312,7 @@ public class RPCostBean {
         boolean isReadonly = true;
         this.pcColsDef.clear();
         for(Map.Entry<String,String> map:labelMap.entrySet()){
-            if(flag>10){
+            if(flag>12){
                 isReadonly = false;
             }
             flag++;
