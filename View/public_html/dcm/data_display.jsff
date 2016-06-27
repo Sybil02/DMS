@@ -72,7 +72,7 @@
               </af:commandButton>
               <af:commandButton text="#{viewBundle['dms.common.submit']}" id="cb5" 
                                 rendered="#{viewScope.DcmDataDisplayBean.isClose eq true}"
-                                disabled="#{viewScope.DcmDataDisplayBean.isEditable eq false}"
+                                disabled="#{viewScope.DcmDataDisplayBean.isEditable eq false or viewScope.DcmDataDisplayBean.enableSub}"
                                 actionListener="#{viewScope.DcmDataDisplayBean.closeCombination}"/>
               <af:commandButton text="#{viewBundle['dms.submit.status']}" id="cb12"
                                 rendered="#{viewScope.DcmDataDisplayBean.isClose eq true}"

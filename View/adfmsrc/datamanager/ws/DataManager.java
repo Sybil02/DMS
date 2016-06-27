@@ -15,7 +15,6 @@ public class DataManager {
     }
     
     public SapBomEntity insertSapBom(SapBomEntity sbe,String msgId){
-        //Connection conn = DBConnUtils.getJNDIConnectionByContainer("jdbc/DMSConnDS");
         Connection conn = DBConnUtils.getJNDIConnection("jdbc/DMSConnDS");
         String sql = "INSERT INTO HPDW.SAP_BOM_MATERIAL_DATA (CUSTOM, MCODE, MDESC, FACTORY, MTYPE, MEINS, MTYPEDESC, MRPCONTROL, MCATORY, STPRICE, PRICEUNIT, PLANPRICE, D_FLAG, NOTE1, NOTE2, " +
             "NOTE3, NOTE4, NOTE5, NOTE6, NOTE7, NOTE8, NOTE9, NOTE10, NOTE11, NOTE12, NOTE13, NOTE14, NOTE15, IFFLG, IFMSG)" + 

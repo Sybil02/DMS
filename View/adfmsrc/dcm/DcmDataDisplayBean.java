@@ -152,6 +152,10 @@ public class DcmDataDisplayBean extends TablePagination{
     private String subSql;
     private String subTempId;
     private RichTable subTable;
+    private Map<String,String> subVNameMap;
+    private Map<String,String> subValuesMap;
+    //搜索
+    private FilterableQueryDescriptor subDescriptor=new DcmQueryDescriptor();
     //初始化
     public DcmDataDisplayBean() {
         this.curUser =(Person)ADFContext.getCurrent().getSessionScope().get("cur_user");
@@ -1138,11 +1142,29 @@ public class DcmDataDisplayBean extends TablePagination{
         this.subVNameMap.put("CREATED_BY", "提交者");
         this.subVNameMap.put("CREATED_AT", "提交时间");
            
+        this.enableSubmit();
     }
-    private Map<String,String> subVNameMap;
-    private Map<String,String> subValuesMap;
-    //搜索
-    private FilterableQueryDescriptor subDescriptor=new DcmQueryDescriptor();
+    
+    private boolean enableSub;
+    private void enableSubmit(){
+        this.enableSub = true;
+        DBTransaction trans =(DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
+        String sql = "SELECT 1 FROM DMS_SUBMIT_STATUS T WHERE T.TEMP_ID = '" + this.curTempalte.getId() 
+                     + "' AND T.COM_ID = '" + this.curCombiantionRecord + "'";
+        Statement stat = trans.createStatement(DBTransaction.DEFAULT);
+        ResultSet rs;
+        try {
+            rs = stat.executeQuery(sql);
+            if(!rs.next()){
+                this.enableSub = false;
+            }
+            rs.close();
+            stat.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     //获取值列表
     private List<SelectItem> fetchValueList(String vsId){
         List<SelectItem> list=new ArrayList<SelectItem>();
@@ -1572,6 +1594,9 @@ public class DcmDataDisplayBean extends TablePagination{
         this.queryTemplateData();
         AdfFacesContext adfFacesContext = AdfFacesContext.getCurrentInstance();
         adfFacesContext.addPartialTarget(this.panelaCollection);
+        //查询提交权限
+        this.enableSubmit();
+        
     }
 
     public Map getHeaderComponents() {
@@ -1990,4 +2015,11 @@ public class DcmDataDisplayBean extends TablePagination{
         return subDescriptor;
     }
 
+    public void setEnableSub(boolean enableSub) {
+        this.enableSub = enableSub;
+    }
+
+    public boolean isEnableSub() {
+        return enableSub;
+    }
 }
