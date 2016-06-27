@@ -1878,7 +1878,7 @@ public class DcmDataDisplayBean extends TablePagination{
         }
         //更改状态为已提交
         this.changeSubmitStatus("SUBMIT");
-        
+        this.enableSub = true;
         this.curCombinationRecordEditable = false;
         //刷新数据
         this.queryTemplateData();
@@ -2021,5 +2021,29 @@ public class DcmDataDisplayBean extends TablePagination{
 
     public boolean isEnableSub() {
         return enableSub;
+    }
+
+    public void resetSubmit(ActionEvent actionEvent) {
+        this.changeSubmitStatus("RESET");
+        this.enableSub = false;
+        
+        StringBuffer sql = new StringBuffer();
+        sql.append("UPDATE DCM_TEMPLATE_COMBINATION SET STATUS=\'OPEN\',UPDATED_AT=SYSDATE WHERE ")
+            .append("TEMPLATE_ID= \'").append(this.curTempalte.getId()).append("' ")
+            .append("AND COM_RECORD_ID=\'").append(this.curCombiantionRecord).append("' ");
+        try {
+            DBTransaction trans =(DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
+            PreparedStatement stat =trans.createPreparedStatement(sql.toString(), 0);
+            stat.executeUpdate();
+            trans.commit();
+            stat.close();
+        } catch (SQLException e) {
+            this._logger.severe(e);
+        }
+        
+        this.curCombinationRecordEditable = true;
+        //刷新数据
+        this.queryTemplateData();
+        
     }
 }

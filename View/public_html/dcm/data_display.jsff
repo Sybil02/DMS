@@ -72,10 +72,16 @@
               </af:commandButton>
               <af:commandButton text="#{viewBundle['dms.common.submit']}" id="cb5" 
                                 rendered="#{viewScope.DcmDataDisplayBean.isClose eq true}"
+                                partialTriggers="::pgl1"
                                 disabled="#{viewScope.DcmDataDisplayBean.isEditable eq false or viewScope.DcmDataDisplayBean.enableSub}"
                                 actionListener="#{viewScope.DcmDataDisplayBean.closeCombination}"/>
-              <af:commandButton text="#{viewBundle['dms.submit.status']}" id="cb12"
+              <af:commandButton text="#{viewBundle['dms.dgpt.fblock']}" id="cb13"
                                 rendered="#{viewScope.DcmDataDisplayBean.isClose eq true}"
+                                partialTriggers="::pgl1"
+                                disabled="#{!(viewScope.DcmDataDisplayBean.enableSub)}"
+                                actionListener="#{viewScope.DcmDataDisplayBean.resetSubmit}"/>
+              <af:commandButton text="#{viewBundle['dms.submit.status']}" id="cb12"
+                                rendered="#{viewScope.DcmDataDisplayBean.isClose eq true}" 
                                 actionListener="#{viewScope.DcmDataDisplayBean.showSubStatus}"/>
               <af:commandButton text="#{viewBundle['dms.batch.import.log']}" id="cb51"
                                 rendered="#{viewScope.DcmDataDisplayBean.combinationId ne null}"
