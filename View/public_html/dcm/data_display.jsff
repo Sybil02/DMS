@@ -209,18 +209,30 @@
                             value="#{bindings.return.collectionModel}"
                             selectedRowKeys="#{bindings.return.collectionModel.selectedRow}"
                             selectionListener="#{bindings.return.collectionModel.makeCurrent}"
+                            clientComponent="true"
+                            filterModel="#{viewScope.DcmDataDisplayBean.subDescriptor}"
+                            queryListener="#{viewScope.DcmDataDisplayBean.querySubListener}"
+                            binding="#{viewScope.DcmDataDisplayBean.subTable}"
                             rowSelection="single" id="t6">
                     <af:forEach items="#{bindings.return.attributeDefs}"
                                 var="def">
                       <af:column headerText="#{viewScope.DcmDataDisplayBean.subVNameMap[def.name]}"
-                                 sortable="true" sortProperty="#{def.name}"
+                                 sortable="false" sortProperty="#{def.name}" filterable="#{def.name ne 'CREATED_AT' and def.name ne 'CREATED_BY'}"
                                  id="c11">
-                        <af:outputText value="#{viewScope.DcmDataDisplayBean.subValuesMap[row[def.name]]}" id="ot15"/>
+                        <af:outputText value="#{viewScope.DcmDataDisplayBean.subValuesMap[row[def.name]]}" id="ot15"
+                                       rendered="#{def.name ne 'CREATED_AT' or def.name ne 'CREATED_BY'}"/>
+                        <af:outputText value="#{row[def.name]}" id="ot17"
+                                       rendered="#{def.name eq 'CREATED_AT' }">
+                            <af:convertDateTime pattern="#{bindings.DcmErrorView.hints.CreatedAt.format}"/>               
+                        </af:outputText>
+                        <af:outputText value="#{row[def.name]}" id="ot18"
+                                       rendered="#{def.name eq 'CREATED_BY' }">       
+                        </af:outputText>
                       </af:column>
                     </af:forEach>
                     <af:column id="c12" sortable="true"
                                headerText="#{viewBundle['dcm.combinationRecord.status']}">
-                      <af:outputText value="#{row[CREATED_BY] eq null ? '未提交':'已提交'}" id="ot16"/>
+                      <af:outputText value="#{row['CREATED_BY'] eq null ? '未提交':'已提交'}" id="ot16"/>
                     </af:column>
                   </af:table>
                 </af:panelCollection>

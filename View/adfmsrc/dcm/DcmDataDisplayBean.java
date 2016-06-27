@@ -151,6 +151,7 @@ public class DcmDataDisplayBean extends TablePagination{
     private RichPopup subPop;
     private String subSql;
     private String subTempId;
+    private RichTable subTable;
     //初始化
     public DcmDataDisplayBean() {
         this.curUser =(Person)ADFContext.getCurrent().getSessionScope().get("cur_user");
@@ -1134,12 +1135,14 @@ public class DcmDataDisplayBean extends TablePagination{
         
         this.subSql = sql.toString();
         
-        this.subVNameMap.put("CREATED_AT", "提交者");
-        this.subVNameMap.put("CREATED_BY", "提交时间");
+        this.subVNameMap.put("CREATED_BY", "提交者");
+        this.subVNameMap.put("CREATED_AT", "提交时间");
            
     }
     private Map<String,String> subVNameMap;
     private Map<String,String> subValuesMap;
+    //搜索
+    private FilterableQueryDescriptor subDescriptor=new DcmQueryDescriptor();
     //获取值列表
     private List<SelectItem> fetchValueList(String vsId){
         List<SelectItem> list=new ArrayList<SelectItem>();
@@ -1942,4 +1945,49 @@ public class DcmDataDisplayBean extends TablePagination{
     public Map<String, String> getSubValuesMap() {
         return subValuesMap;
     }
+
+    public void setSubTable(RichTable subTable) {
+        this.subTable = subTable;
+    }
+
+    public RichTable getSubTable() {
+        return subTable;
+    }
+
+    public void querySubListener(QueryEvent queryEvent) {
+        DcmQueryDescriptor descriptor =(DcmQueryDescriptor)queryEvent.getDescriptor();
+        if(descriptor.getFilterCriteria()!=null){
+            StringBuffer whereCaluse = new StringBuffer();
+            whereCaluse.append(" 1=1");
+            ViewObject vo=ADFUtils.findIterator("getSubmitStatusVOIterator").getViewObject();
+            //vo.clearCache();
+            for(Object key:descriptor.getFilterCriteria().keySet()){
+                if(!ObjectUtils.toString(descriptor.getFilterCriteria().get(key)).trim().equals("")){
+                    System.out.println(key.toString() + ":" + descriptor.getFilterCriteria().get(key));
+                    if(descriptor.getFilterCriteria().get(key) != null || !"".equals(descriptor.getFilterCriteria().get(key))){
+                        whereCaluse.append(" AND ").append(key).append(" IN(");
+                        for(Map.Entry<String,String> entry : this.subValuesMap.entrySet()){
+                            if(entry.getValue().contains(descriptor.getFilterCriteria().get(key).toString())) {
+                                whereCaluse.append("'").append(entry.getKey()).append("',");
+                            }  
+                        }   
+                        whereCaluse.append("'')");
+                    }
+                }
+            }
+            vo.setWhereClause(whereCaluse.toString());
+            vo.executeQuery();
+            vo.setWhereClause(null);
+            AdfFacesContext.getCurrentInstance().addPartialTarget(this.subTable);
+        }
+    }
+
+    public void setSubDescriptor(FilterableQueryDescriptor subDescriptor) {
+        this.subDescriptor = subDescriptor;
+    }
+
+    public FilterableQueryDescriptor getSubDescriptor() {
+        return subDescriptor;
+    }
+
 }
