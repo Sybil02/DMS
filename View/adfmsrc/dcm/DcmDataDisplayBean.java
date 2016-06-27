@@ -1,6 +1,7 @@
 package dcm;
 
 import common.ADFUtils;
+import common.DmsLog;
 import common.DmsUtils;
 
 import common.JSFUtils;
@@ -273,6 +274,9 @@ public class DcmDataDisplayBean extends TablePagination{
             }
             this._logger.severe(e);
         }
+        if(flag){
+            DmsLog.operationLog(this.curUser.getAcc(),this.curTempalte.getId(),this.getCurComRecordText(),"UPDATE");
+        }
         if (!flag) {
             this.showErrorPop();
         }
@@ -362,6 +366,7 @@ public class DcmDataDisplayBean extends TablePagination{
         }else{
             //进行数据处理（前置程序、校验和善后程序）
             if (this.handleData(this.isIncrement ? "INCREMENT" : "REPLACE",curComRecordId)) {
+                DmsLog.operationLog(this.curUser.getAcc(),this.curTempalte.getId(),this.getCurComRecordText(),"IMPORT");
                 String msg = DmsUtils.getMsg("dcm.inform.data_import_success");
                 JSFUtils.addFacesInformationMessage(msg);
             } else {
@@ -932,6 +937,7 @@ public class DcmDataDisplayBean extends TablePagination{
         } catch (Exception e) {
             this._logger.severe(e);
         }
+        DmsLog.operationLog(this.curUser.getAcc(),this.curTempalte.getId(),this.getCurComRecordText(),"EXPORT");
     }
     
     public void quartz_export(ActionEvent actionEvent) {

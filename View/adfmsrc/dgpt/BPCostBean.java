@@ -1,6 +1,7 @@
 package dgpt;
 
 import common.ADFUtils;
+import common.DmsLog;
 import common.DmsUtils;
 
 import common.JSFUtils;
@@ -142,8 +143,9 @@ public class BPCostBean {
         String sql = "SELECT DISTINCT P."+col+" FROM "+source+" P WHERE P.PROJECT_NAME IN (" + 
         "       SELECT T.PRO_CODE||'-'||T.PRO_DESC FROM SAP_DMS_PROJECT_Privilege T " +
             "WHERE T.ATTRIBUTE3 = \'"+this.TYPE_BASE+"\'" + 
-            "AND T.PRO_MANAGER = '"+this.curUser.getAcc()+"' OR T.PRO_DIRECTOR='"+this.curUser.getAcc()+"'" + 
+            "AND (T.PRO_MANAGER = '"+this.curUser.getAcc()+"' OR T.PRO_DIRECTOR='"+this.curUser.getAcc()+"')" + 
             ") AND DATA_TYPE =\'"+this.TYPE_BASE+"\'";
+        System.out.println(sql);
         List<SelectItem> values = new ArrayList<SelectItem>();
         ResultSet rs;
         try {
@@ -179,6 +181,13 @@ public class BPCostBean {
             e.printStackTrace();
         }
         return values;
+    }
+    
+    private String getCom(){
+        String text = this.year+"_"+this.entity+"_"+this.hLine+"_"+this.yLine+"_"+
+                      this.pLine+"_"+this.pname+"_"+this.version+"_"+this.proType;
+        System.out.println(text);
+        return text;
     }
     
     //项目名称下拉框change
@@ -446,6 +455,7 @@ public class BPCostBean {
         //执行校验
         if(this.validation()){
             this.inputPro();
+            DmsLog.operationLog(this.curUser.getAcc(),this.connectId,this.getCom(),"UPDATE");
             for(Map<String,String> rowdata : modelData){
                 if("UPDATE".equals(rowdata.get("OPERATION"))){
                     rowdata.put("OPERATION", null);
@@ -534,6 +544,7 @@ public class BPCostBean {
         } catch (Exception e) {
             this._logger.severe(e);
         } 
+        DmsLog.operationLog(this.curUser.getAcc(),this.connectId,this.getCom(),"EXPORT");
     }
     
     //导出文件名

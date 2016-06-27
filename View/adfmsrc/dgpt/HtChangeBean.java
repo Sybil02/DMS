@@ -1,6 +1,7 @@
 package dgpt;
 
 import common.ADFUtils;
+import common.DmsLog;
 import common.DmsUtils;
 
 import common.JSFUtils;
@@ -133,7 +134,7 @@ public class HtChangeBean {
         String sql = "SELECT DISTINCT P."+col+" FROM "+source+" P WHERE P.PROJECT_NAME IN (" + 
         "       SELECT T.PRO_CODE||'-'||T.PRO_DESC FROM SAP_DMS_PROJECT_Privilege T " +
             "WHERE T.ATTRIBUTE3 = \'ZX\' " + 
-            "AND T.PRO_MANAGER = '"+this.curUser.getAcc()+"' OR T.PRO_DIRECTOR='"+this.curUser.getAcc()+"'" + 
+            "AND (T.PRO_MANAGER = '"+this.curUser.getAcc()+"' OR T.PRO_DIRECTOR='"+this.curUser.getAcc()+"')" + 
 //        "UNION " + 
 //        "   SELECT T1.PRO_CODE||'-'||T1.PRO_DESC FROM SAP_DMS_PROJECT_Privilege T1 " +
 //        "WHERE T1.ATTRIBUTE3 = \'ZX\' AND T1.ATTRIBUTE4='admin'"+
@@ -461,6 +462,7 @@ public class HtChangeBean {
         if(this.validation()){
             //校验成功，执行导入
             this.inputPro();
+            DmsLog.operationLog(this.curUser.getAcc(),this.connectId,this.getCom(),"UPDATE");
             for(Map<String,String> rowdata : modelData){
                     rowdata.put("OPERATION", null);
             }
@@ -489,6 +491,12 @@ public class HtChangeBean {
         }
     }
 
+    private String getCom(){
+        String text = this.year+"_"+this.entity+"_"+this.hLine+"_"+this.yLine+"_"+
+                      this.pLine+"_"+this.pname+"_"+this.version+"_"+this.proType;
+        System.out.println(text);
+        return text;
+    }
     private LinkedHashMap<String,String> getLabelMap(String startTime,String endTime){
         LinkedHashMap<String,String> labelMap = new LinkedHashMap<String,String>();
         
@@ -781,7 +789,7 @@ public class HtChangeBean {
         } catch (Exception e) {
             this._logger.severe(e);
         } 
-       
+        DmsLog.operationLog(this.curUser.getAcc(),this.connectId,this.getCom(),"EXPORT");
     }
     //导出文件名
     public String getExportDataExcelName(){

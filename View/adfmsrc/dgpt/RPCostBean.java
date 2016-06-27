@@ -1,6 +1,7 @@
 package dgpt;
 
 import common.ADFUtils;
+import common.DmsLog;
 import common.DmsUtils;
 
 import common.JSFUtils;
@@ -134,7 +135,7 @@ public class RPCostBean {
         String sql = "SELECT DISTINCT P."+col+" FROM "+source+" P WHERE P.PROJECT_NAME IN (" + 
         "       SELECT T.PRO_CODE||'-'||T.PRO_DESC FROM SAP_DMS_PROJECT_Privilege T " +
             "WHERE T.ATTRIBUTE3 = \'"+this.TYPE_ROLL+"\'" + 
-            "AND T.PRO_MANAGER = '"+this.curUser.getAcc()+"' OR T.PRO_DIRECTOR='"+this.curUser.getAcc()+"'" + 
+            "AND (T.PRO_MANAGER = '"+this.curUser.getAcc()+"' OR T.PRO_DIRECTOR='"+this.curUser.getAcc()+"')" + 
 //        "UNION " + 
 //        "   SELECT T1.PRO_CODE||'-'||T1.PRO_DESC FROM SAP_DMS_PROJECT_Privilege T1 " +
 //        "WHERE T1.ATTRIBUTE3 = \'"+this.TYPE_ROLL+"\' AND T1.ATTRIBUTE4='admin'"+
@@ -177,6 +178,12 @@ public class RPCostBean {
         return values;
     }  
     
+    private String getCom(){
+        String text = this.year+"_"+this.entity+"_"+this.hLine+"_"+this.yLine+"_"+
+                      this.pLine+"_"+this.pname+"_"+this.version+"_"+this.proType;
+        System.out.println(text);
+        return text;
+    }
     //项目名称下拉框change
     public void projectChange(ValueChangeEvent valueChangeEvent) {
         pname =(String) valueChangeEvent.getNewValue();
@@ -513,6 +520,7 @@ public class RPCostBean {
         //执行校验
         if(this.validation()){
             this.inputPro();
+            DmsLog.operationLog(this.curUser.getAcc(),this.connectId,this.getCom(),"UPDATE");
             for(Map<String,String> rowdata : modelData){
                 if("UPDATE".equals(rowdata.get("OPERATION"))){
                     rowdata.put("OPERATION", null);
@@ -595,6 +603,7 @@ public class RPCostBean {
         } catch (Exception e) {
             this._logger.severe(e);
         } 
+        DmsLog.operationLog(this.curUser.getAcc(),this.connectId,this.getCom(),"EXPORT");
     }
     
     //导出文件名

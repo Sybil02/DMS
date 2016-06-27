@@ -2,6 +2,7 @@ package dms.login;
 
 import com.bea.security.utils.DigestUtils;
 
+import common.DmsLog;
 import common.DmsUtils;
 
 import common.JSFUtils;
@@ -61,14 +62,13 @@ import weblogic.servlet.security.ServletAuthentication;
 
 public class LoginBean {
     private String msg;
-    private String account;
+    private static String account;
     private String password;
     private static ADFLogger _logger =
         ADFLogger.createADFLogger(LoginBean.class);
     private RichInputText acc;
     private RichInputText mail;
     private RichPopup popup;
-    private String loginTime ;
 
     public LoginBean() {
     }
@@ -86,15 +86,7 @@ public class LoginBean {
                 String encypt_pwd =DigestUtils.digestSHA1(ObjectUtils.toString(this.account).trim() +ObjectUtils.toString(this.password).trim());
                 if (pwd.equals(encypt_pwd)) {
                     //登陆成功
-//                    Date loginDate = new Date();
-//                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-//                    this.loginTime = sdf.format(loginDate);
-//                    DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
-//                    Statement stat = trans.createStatement(DBTransaction.DEFAULT);
-//                    String sql = "INSERT INTO HLS_LOGIN_LOGOUT_LOG(LOGIN_MAN,LOGIN_TIME) " +
-//                        "VALUES ('"+this.account+"',TO_DATE('"+sdf.format(loginDate)+"','yyyy-mm-dd hh24:mi:ss'))";
-//                    stat.execute(sql);
-//                    trans.commit();
+                    DmsLog.loginMsg(this.account);
                     this.initUserPreference(row);
                     ExternalContext ectx =FacesContext.getCurrentInstance().getExternalContext();
                     ectx.redirect(ControllerContext.getInstance().getGlobalViewActivityURL("index"));
@@ -107,7 +99,8 @@ public class LoginBean {
             }
         }
     }
-
+    
+            
     public void setMsg(String msg) {
         this.msg = msg;
     }
@@ -148,26 +141,7 @@ public class LoginBean {
     }
 
     public void logout(){
-//        Date logoutDate = new Date();
-//        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-//        DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
-//        Statement stat = trans.createStatement(DBTransaction.DEFAULT);
-//        System.out.println(this.loginTime);
-//        String sql = "UPDATE HLS_LOGIN_LOGOUT_LOG SET (LOGOUT_TIME)= " +
-//            "(TO_DATE('"+sdf.format(logoutDate)+"','yyyy-mm-dd hh24:mi:ss')) "+
-//            "WHERE LOGIN_TIME=TO_DATE('"+this.loginTime+"','yyyy-mm-dd hh24:mi:ss')";
-//        System.out.println(sql);
-//        int i = -22;
-//        try {
-//            i = stat.executeUpdate(sql);
-//            trans.commit();
-//            stat.close();
-//        } catch (SQLException e) {
-//            _logger.severe(e);
-//        }
-//        System.out.println(i);
-//        System.out.println(logoutDate);
-//        System.out.println(sdf.format(logoutDate)+"out**********");
+        DmsLog.logoutMsg(this.account);
         ADFContext.getCurrent().getSessionScope().remove("cur_user");
         ExternalContext ectx =FacesContext.getCurrentInstance().getExternalContext();
         HttpSession session = (HttpSession)ectx.getSession(false);
@@ -251,11 +225,4 @@ public class LoginBean {
         return popup;
     }
 
-    public void setLoginTime(String loginTime) {
-        this.loginTime = loginTime;
-    }
-
-    public String getLoginTime() {
-        return loginTime;
-    }
 }
