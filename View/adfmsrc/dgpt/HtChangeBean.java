@@ -131,15 +131,24 @@ public class HtChangeBean {
     private List<SelectItem> queryValues(String source,String col){
         DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
         Statement stat = trans.createStatement(DBTransaction.DEFAULT);
-        String sql = "SELECT DISTINCT P."+col+" FROM "+source+" P WHERE P.PROJECT_NAME IN (" + 
-        "       SELECT T.PRO_CODE||'-'||T.PRO_DESC FROM SAP_DMS_PROJECT_Privilege T " +
-            "WHERE T.ATTRIBUTE3 = \'ZX\' " + 
-            "AND (T.PRO_MANAGER = '"+this.curUser.getAcc()+"' OR T.PRO_DIRECTOR='"+this.curUser.getAcc()+"')" + 
-//        "UNION " + 
-//        "   SELECT T1.PRO_CODE||'-'||T1.PRO_DESC FROM SAP_DMS_PROJECT_Privilege T1 " +
-//        "WHERE T1.ATTRIBUTE3 = \'ZX\' AND T1.ATTRIBUTE4='admin'"+
-//        "OR (T1.PRO_MANAGER = '"+this.curUser.getAcc()+"' OR T1.PRO_DIRECTOR='"+this.curUser.getAcc()+"')" + 
-        ") AND P.DATA_TYPE =\'ZX\'";
+        String sql = "";
+        if(this.curUser.getId().equals("10000")){
+            sql = "SELECT DISTINCT P."+col+" FROM "+source+" P WHERE P.PROJECT_NAME IN (" + 
+                "SELECT T.PRO_CODE||'-'||T.PRO_DESC FROM SAP_DMS_PROJECT_Privilege T " +
+                "WHERE T.ATTRIBUTE4='admin' AND T.ATTRIBUTE3='ZX') "+
+                "AND DATA_TYPE='ZX'";
+        }else{
+            sql = "SELECT DISTINCT P."+col+" FROM "+source+" P WHERE P.PROJECT_NAME IN (" + 
+            "       SELECT T.PRO_CODE||'-'||T.PRO_DESC FROM SAP_DMS_PROJECT_Privilege T " +
+                "WHERE T.ATTRIBUTE3 = \'ZX\' " + 
+                "AND (T.PRO_MANAGER = '"+this.curUser.getAcc()+"' OR T.PRO_DIRECTOR='"+this.curUser.getAcc()+"')" + 
+            //        "UNION " +
+            //        "   SELECT T1.PRO_CODE||'-'||T1.PRO_DESC FROM SAP_DMS_PROJECT_Privilege T1 " +
+            //        "WHERE T1.ATTRIBUTE3 = \'ZX\' AND T1.ATTRIBUTE4='admin'"+
+            //        "OR (T1.PRO_MANAGER = '"+this.curUser.getAcc()+"' OR T1.PRO_DIRECTOR='"+this.curUser.getAcc()+"')" +
+            ") AND P.DATA_TYPE =\'ZX\'";
+        }
+        
         List<SelectItem> values = new ArrayList<SelectItem>();
         ResultSet rs;
         try {
@@ -160,13 +169,13 @@ public class HtChangeBean {
     private List<SelectItem> queryValues1(String source,String col){
         DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
         Statement stat = trans.createStatement(DBTransaction.DEFAULT);
-        String sql = "SELECT DISTINCT "+col+" FROM "+source+" WHERE DATA_TYPE =\'ZX\'";
+        String sql = "SELECT DISTINCT "+col+",VERSION_NAME FROM "+source+" WHERE DATA_TYPE =\'ZX\'";
         List<SelectItem> values = new ArrayList<SelectItem>();
         ResultSet rs;
         try {
             rs = stat.executeQuery(sql);
             while(rs.next()){
-                SelectItem sim = new SelectItem(rs.getString(col),rs.getString(col));
+                SelectItem sim = new SelectItem(rs.getString(col),rs.getString(col)+"-"+rs.getString("VERSION_NAME"));
                 values.add(sim);
             }
             rs.close();
@@ -331,12 +340,28 @@ public class HtChangeBean {
         String newConnectId = s.substring(0,8)+s.substring(9,13)+s.substring(14,18)+s.substring(19,23)+s.substring(24);
         //插入头表
         DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
+        Statement stat1 = trans.createStatement(DBTransaction.DEFAULT);
+        String sql1 = "SELECT VERSION FROM PRO_PLAN_COST_HEADER WHERE PROJECT_NAME='"+this.pname+"' AND HLS_YEAR='"+this.year+"'"+
+            " ORDER BY VERSION DESC";
+        String versionCode = "";
+        ResultSet rs;
+        try {
+            rs = stat1.executeQuery(sql1);
+            rs.next();
+            versionCode = rs.getString("VERSION");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        char firstChar = versionCode.charAt(0);
+        int number = Integer.parseInt(versionCode.substring(1))+1;
+        String newCode = "0000"+number;
+        String newVeCode = firstChar+newCode.substring(newCode.length()-4);
         Statement stat = trans.createStatement(DBTransaction.DEFAULT);
         StringBuffer sql = new StringBuffer();
-        sql.append("INSERT INTO PRO_PLAN_COST_HEADER (HLS_YEAR,ENTITY_NAME,PRODUCT_LINE,PROJECT_NAME,VERSION,PROJECT_TYPE,INDUSTRY_LINE,")
-            .append("BUSINESS_LINE,PROJECT_START,PROJECT_END,CONNECT_ID) ");
-        sql.append("VALUES('").append(year+"','").append(entity+"','").append(pLine+"','").append(pname+"','").append(newVersion+"','").append(proType+"','")
-            .append(hLine+"','").append(yLine+"','").append(pStart+"','").append(newEnd+"','").append(newConnectId).append("')");
+        sql.append("INSERT INTO PRO_PLAN_COST_HEADER (HLS_YEAR,ENTITY_NAME,PRODUCT_LINE,PROJECT_NAME,VERSION_NAME,VERSION,PROJECT_TYPE,INDUSTRY_LINE,")
+            .append("BUSINESS_LINE,PROJECT_START,PROJECT_END,CONNECT_ID,DATA_TYPE) ");
+        sql.append("VALUES('").append(year+"','").append(entity+"','").append(pLine+"','").append(pname+"','").append(newVersion+"','").append(newVeCode+"','").append(proType+"','")
+            .append(hLine+"','").append(yLine+"','").append(pStart+"','").append(newEnd+"','").append(newConnectId).append("','ZX')");
         try {
             stat.execute(sql.toString());
             trans.commit();
@@ -494,7 +519,6 @@ public class HtChangeBean {
     private String getCom(){
         String text = this.year+"_"+this.entity+"_"+this.hLine+"_"+this.yLine+"_"+
                       this.pLine+"_"+this.pname+"_"+this.version+"_"+this.proType;
-        System.out.println(text);
         return text;
     }
     private LinkedHashMap<String,String> getLabelMap(String startTime,String endTime){

@@ -140,11 +140,20 @@ public class BPCostBean {
     private List<SelectItem> queryValues(String source,String col){
         DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
         Statement stat = trans.createStatement(DBTransaction.DEFAULT);
-        String sql = "SELECT DISTINCT P."+col+" FROM "+source+" P WHERE P.PROJECT_NAME IN (" + 
-        "       SELECT T.PRO_CODE||'-'||T.PRO_DESC FROM SAP_DMS_PROJECT_Privilege T " +
-            "WHERE T.ATTRIBUTE3 = \'"+this.TYPE_BASE+"\'" + 
-            "AND (T.PRO_MANAGER = '"+this.curUser.getAcc()+"' OR T.PRO_DIRECTOR='"+this.curUser.getAcc()+"')" + 
-            ") AND DATA_TYPE =\'"+this.TYPE_BASE+"\'";
+        String sql = "";
+        if(this.curUser.getId().equals("10000")){
+            sql = "SELECT DISTINCT P."+col+" FROM "+source+" P WHERE P.PROJECT_NAME IN (" + 
+                "SELECT T.PRO_CODE||'-'||T.PRO_DESC FROM SAP_DMS_PROJECT_Privilege T " +
+                "WHERE T.ATTRIBUTE4='admin' AND T.ATTRIBUTE3='"+this.TYPE_BASE+"') "+
+                "AND DATA_TYPE='"+this.TYPE_BASE+"'";
+        }else{
+            sql = "SELECT DISTINCT P."+col+" FROM "+source+" P WHERE P.PROJECT_NAME IN (" + 
+            "       SELECT T.PRO_CODE||'-'||T.PRO_DESC FROM SAP_DMS_PROJECT_Privilege T " +
+                "WHERE T.ATTRIBUTE3 = \'"+this.TYPE_BASE+"\'" + 
+                "AND (T.PRO_MANAGER = '"+this.curUser.getAcc()+"' OR T.PRO_DIRECTOR='"+this.curUser.getAcc()+"')" + 
+                ") AND DATA_TYPE =\'"+this.TYPE_BASE+"\'";
+        }
+        
         List<SelectItem> values = new ArrayList<SelectItem>();
         ResultSet rs;
         try {
@@ -165,13 +174,13 @@ public class BPCostBean {
     private List<SelectItem> queryValues1(String source,String col){
         DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
         Statement stat = trans.createStatement(DBTransaction.DEFAULT);
-        String sql = "SELECT DISTINCT "+col+" FROM "+source+" WHERE DATA_TYPE =\'"+this.TYPE_BASE+"\'";
+        String sql = "SELECT DISTINCT "+col+",VERSION_NAME FROM "+source+" WHERE DATA_TYPE =\'"+this.TYPE_BASE+"\'";
         List<SelectItem> values = new ArrayList<SelectItem>();
         ResultSet rs;
         try {
             rs = stat.executeQuery(sql);
             while(rs.next()){
-                SelectItem sim = new SelectItem(rs.getString(col),rs.getString(col));
+                SelectItem sim = new SelectItem(rs.getString(col),rs.getString(col)+"-"+rs.getString("VERSION_NAME"));
                 values.add(sim);
             }
             rs.close();
@@ -185,7 +194,6 @@ public class BPCostBean {
     private String getCom(){
         String text = this.year+"_"+this.entity+"_"+this.hLine+"_"+this.yLine+"_"+
                       this.pLine+"_"+this.pname+"_"+this.version+"_"+this.proType;
-        System.out.println(text);
         return text;
     }
     
