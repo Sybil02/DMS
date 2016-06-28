@@ -78,7 +78,7 @@
               <af:commandButton text="#{viewBundle['dms.dgpt.fblock']}" id="cb13"
                                 rendered="#{viewScope.DcmDataDisplayBean.isClose eq true}"
                                 partialTriggers="::pgl1"
-                                disabled="#{!(viewScope.DcmDataDisplayBean.enableSub)}"
+                                disabled="#{!(viewScope.DcmDataDisplayBean.enableSub) or sessionScope.cur_user.id ne '10000'}"
                                 actionListener="#{viewScope.DcmDataDisplayBean.resetSubmit}"/>
               <af:commandButton text="#{viewBundle['dms.submit.status']}" id="cb12"
                                 rendered="#{viewScope.DcmDataDisplayBean.isClose eq true}" 
@@ -186,28 +186,6 @@
                   <f:facet name="toolbar">
                   </f:facet>
                   <f:facet name="statusbar"/>
-                  <!--af:table rows="#{bindings.return.rangeSize}"
-                            fetchSize="#{bindings.return.rangeSize}"
-                            emptyText="#{viewBundle['dms.common.nodata']}"
-                            var="row" rowBandingInterval="0"
-                            value="#{bindings.return.collectionModel}"
-                            selectedRowKeys="#{pageFlowScope.TemplateBackingBean.selectedRows}"
-                            selectionListener="#{bindings.return.collectionModel.makeCurrent}"
-                            rowSelection="multiple" id="sub_t5"
-                            clientComponent="true" 
-                            filterModel="#{pageFlowScope.TemplateBackingBean.queryDescriptor}"
-                            queryListener="#{pageFlowScope.TemplateBackingBean.comRecordQueryListener}"
-                            binding="#{pageFlowScope.TemplateBackingBean.recordTable}">
-                    <af:forEach items="#{pageFlowScope.TemplateBackingBean.comheaderInfo}"
-                                var="header">
-                      <af:column headerText="#{header['label']}" sortable="false"
-                                 sortProperty="#{header['code']}" id="sub_c23"
-                                 filterable="#{header['code'] eq 'STATUS' ? false : true}">
-                        <af:outputText value="#{header['code'] eq 'STATUS' ? (row[header['code']] eq 'CLOSE' ? viewBundle['dcm.combintion_record.close'] : viewBundle['dcm.combintion_record.open']) : row[header['code']]}"
-                                       id="sub_ot1"/>
-                      </af:column>
-                    </af:forEach>
-                  </af:table-->
                   <af:table rows="#{bindings.return.rangeSize}"
                             fetchSize="#{bindings.return.rangeSize}"
                             emptyText="#{bindings.return.viewable ? 'No data to display.' : 'Access Denied.'}"
