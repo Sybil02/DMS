@@ -126,8 +126,14 @@ public class Odi11gIndexMBean {
                 while (paramVo.hasNext()) {
                     Row row = paramVo.next();
                     if (row.getAttribute("ValueSetId") != null) {
-                        this.initValueSetValues((String)row.getAttribute("ValueSetId"),
-                                                true);
+                        //在执行接口的项目参数需要特殊权限控制
+                        if("b34e534d18644d788850dea86aa887af".equals(row.getAttribute("ValueSetId")) 
+                           && sceneVo.getCurrentRow().getAttribute("SceneName").equals("SAP_DMS_PRO_GDPLAN_DATA")){
+                            this.initValueSetValues((String)row.getAttribute("ValueSetId"));
+                        }else{
+                            this.initValueSetValues((String)row.getAttribute("ValueSetId"),true);
+                        }
+
                     }
                 }
                 RichPopup.PopupHints hint = new RichPopup.PopupHints();
@@ -190,6 +196,27 @@ public class Odi11gIndexMBean {
                 vsList.add(item);
             }
             vo.remove();
+        }
+    }
+    
+    private void initValueSetValues(String valueSetId) {
+        DBTransaction trans = DmsUtils.getOdi11gApplicationModule().getDBTransaction();
+        Statement stat = trans.createStatement(DBTransaction.DEFAULT);
+        String sql = "SELECT T.PRO_CODE AS CODE,T.PRO_DESC AS MEANING FROM SAP_DMS_PROJECT_PRIVILEGE T "
+            + "WHERE T.PRO_MANAGER = '" + ((Person)ADFContext.getCurrent().getSessionScope().get("cur_user")).getAcc() + "'";
+        List vsList = new ArrayList();
+        this.valueList.put(valueSetId, vsList);
+        ResultSet rs;
+        try {
+            rs = stat.executeQuery(sql);
+            while(rs.next()){
+                SelectItem item = new SelectItem();
+                item.setLabel(ObjectUtils.toString(rs.getString("MEANING")));
+                item.setValue(ObjectUtils.toString(rs.getString("CODE")));
+                vsList.add(item);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
