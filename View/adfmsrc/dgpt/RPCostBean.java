@@ -143,10 +143,11 @@ public class RPCostBean {
             "       SELECT T.PRO_CODE||'-'||T.PRO_DESC FROM SAP_DMS_PROJECT_Privilege T " +
                 "WHERE T.ATTRIBUTE3 = \'"+this.TYPE_ROLL+"\'" + 
                 "AND (T.PRO_MANAGER = '"+this.curUser.getAcc()+"' OR T.PRO_DIRECTOR='"+this.curUser.getAcc()+"')" + 
-    //        "UNION " + 
-    //        "   SELECT T1.PRO_CODE||'-'||T1.PRO_DESC FROM SAP_DMS_PROJECT_Privilege T1 " +
-    //        "WHERE T1.ATTRIBUTE3 = \'"+this.TYPE_ROLL+"\' AND T1.ATTRIBUTE4='admin'"+
-    //        "OR (T1.PRO_MANAGER = '"+this.curUser.getAcc()+"' OR T1.PRO_DIRECTOR='"+this.curUser.getAcc()+"')" + 
+            "UNION " +
+            "   SELECT T1.PRO_CODE||'-'||T1.PRO_DESC FROM SAP_DMS_PROJECT_Privilege T1,DMS_USER_GROUP P " +
+            "WHERE T1.ATTRIBUTE3 = \'"+this.TYPE_ROLL+"\'"+
+            "AND P.GROUP_ID IN (SELECT GROUP_ID FROM DMS_USER_GROUP WHERE USER_ID='"+this.curUser.getId()+"')"+
+            "AND (T1.ATTRIBUTE6=P.GROUP_ID OR T1.ATTRIBUTE5=P.GROUP_ID)" +
                 ") AND DATA_TYPE =\'"+this.TYPE_ROLL+"\'";
         }
         List<SelectItem> values = new ArrayList<SelectItem>();

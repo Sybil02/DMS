@@ -310,8 +310,17 @@ public class ProjectZxBean {
     private List<SelectItem> proValues(String source,String col){
         DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
 //        Statement stat1 = trans.createStatement(DBTransaction.DEFAULT);
-//        String sql1 = "SELECT ATTRIBUTE4 FROM SAP_DMS_PROJECT_Privilege WHERE PRO_MANAGER = '"+this.curUser.getAcc()+"'";
-        
+//        String sql1 = "SELECT GROUP_ID FROM DMS_USER_GROUP WHERE USER_ID = '"+this.curUser.getId()+"'";
+//        ResultSet rs1;
+//
+//        try {
+//            rs1 = stat1.executeQuery(sql1);
+//            while(rs1.next()){
+//                
+//            }
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
         Statement stat = trans.createStatement(DBTransaction.DEFAULT);
         String sql = "";
         if(this.curUser.getId().equals("10000")){
@@ -324,11 +333,13 @@ public class ProjectZxBean {
             "       SELECT T.PRO_CODE||'-'||T.PRO_DESC FROM SAP_DMS_PROJECT_Privilege T " +
                "WHERE T.ATTRIBUTE3 = \'"+this.TYPE_ZZX+"\'" + 
                "AND (T.PRO_MANAGER = '"+this.curUser.getAcc()+"' OR T.PRO_DIRECTOR='"+this.curUser.getAcc()+"')" + 
-            //        "UNION " +
-            //        "   SELECT T1.PRO_CODE||'-'||T1.PRO_DESC FROM SAP_DMS_PROJECT_Privilege T1 " +
-            //        "WHERE T1.ATTRIBUTE3 = \'"+this.TYPE_ZZX+"\' AND T1.ATTRIBUTE4='admin'"+
-            //        "OR (T1.PRO_MANAGER = '"+this.curUser.getAcc()+"' OR T1.PRO_DIRECTOR='"+this.curUser.getAcc()+"')" +
+                    "UNION " +
+                    "   SELECT T1.PRO_CODE||'-'||T1.PRO_DESC FROM SAP_DMS_PROJECT_Privilege T1,DMS_USER_GROUP P " +
+                    "WHERE T1.ATTRIBUTE3 = \'"+this.TYPE_ZZX+"\'"+
+                    "AND P.GROUP_ID IN (SELECT GROUP_ID FROM DMS_USER_GROUP WHERE USER_ID='"+this.curUser.getId()+"')"+
+                    "AND (T1.ATTRIBUTE6=P.GROUP_ID OR T1.ATTRIBUTE5=P.GROUP_ID)" +
             ") AND P.DATA_TYPE =\'"+this.TYPE_ZZX+"\'";
+            System.out.println(sql);
         }
          
         List<SelectItem> values = new ArrayList<SelectItem>();
