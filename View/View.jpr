@@ -1080,6 +1080,15 @@
                   <url path="adfmsrc/"/>
                </list>
             </hash>
+            <hash>
+               <url n="content-folder-url" path="adfmsrc/datamanager/entity/"/>
+               <list n="pattern-filters">
+                  <string v="+datamanager/entity/"/>
+               </list>
+               <list n="url-path">
+                  <url path="adfmsrc/"/>
+               </list>
+            </hash>
          </list>
          <list n="url-path"/>
       </hash>
