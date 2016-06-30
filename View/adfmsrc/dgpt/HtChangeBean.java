@@ -191,11 +191,31 @@ public class HtChangeBean {
     //项目名称下拉框change
     public void projectChange(ValueChangeEvent valueChangeEvent) {
         pname =(String) valueChangeEvent.getNewValue();
-            if(year==null||version==null||pname==null){
-                return;
-            }else{
-                this.queryData();
+        if(year!=null&&pname!=null){
+            DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
+            Statement stat = trans.createStatement(DBTransaction.DEFAULT);
+            String sql = "SELECT DISTINCT VERSION,VERSION_NAME FROM PRO_PLAN_COST_HEADER WHERE DATA_TYPE ='BASE'"+
+                " AND PROJECT_NAME='"+pname+"' AND HLS_YEAR = '"+this.year+"'";
+            List<SelectItem> values = new ArrayList<SelectItem>();
+            ResultSet rs;
+            try {
+                rs = stat.executeQuery(sql);
+                while(rs.next()){
+                    SelectItem sim = new SelectItem(rs.getString("VERSION"),rs.getString("VERSION")+"-"+rs.getString("VERSION_NAME"));
+                    values.add(sim);
+                }
+                rs.close();
+                stat.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
+            this.versionList = values;
+        }
+        if(year==null||version==null||pname==null){
+                return;
+        }else{
+                this.queryData();
+        }
     }
     
     //版本下拉框change
@@ -307,7 +327,7 @@ public class HtChangeBean {
             sql.append(entry.getValue()).append(",");
         }
         sql.append("ROWID AS ROW_ID,LGF_NUM,LGF_TYPE FROM PRO_PLAN_COST_BODY WHERE CONNECT_ID = '").append(connectId).append("'");
-        sql.append(" AND DATA_TYPE = '").append(this.TYPE_CHANGE).append("' ORDER BY WBS,NETWORK");
+        sql.append(" AND DATA_TYPE = '").append(this.TYPE_CHANGE).append("' ORDER BY WBS,NETWORK,WORK_CODE");
         return sql.toString();
     }
     //选中行，修改
@@ -578,9 +598,9 @@ public class HtChangeBean {
             calEnd.setTime(dEnd);  
             // 测试此日期是否在指定日期之后    
             while (dEnd.after(calBegin.getTime())) {  
-                // 根据日历的规则，为给定的日历字段添加或减去指定的时间量    
-                calBegin.add(Calendar.MONTH, 1);  
-                lDate.add(calBegin.getTime());  
+                // 根据日历的规则，为给定的日历字段添加或减去指定的时间量
+                calBegin.add(Calendar.MONTH, 1);
+                lDate.add(calBegin.getTime());
             }  
             return lDate;  
         } 

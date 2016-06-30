@@ -196,12 +196,32 @@ public class RPCostBean {
     //项目名称下拉框change
     public void projectChange(ValueChangeEvent valueChangeEvent) {
         pname =(String) valueChangeEvent.getNewValue();
-            if(year==null||version==null||pname==null){
+        if(year!=null&&pname!=null){
+            DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
+            Statement stat = trans.createStatement(DBTransaction.DEFAULT);
+            String sql = "SELECT DISTINCT VERSION,VERSION_NAME FROM PRO_PLAN_COST_HEADER WHERE DATA_TYPE =\'"+this.TYPE_ROLL+"\'"+
+                " AND PROJECT_NAME='"+pname+"' AND HLS_YEAR = '"+this.year+"'";
+            List<SelectItem> values = new ArrayList<SelectItem>();
+            ResultSet rs;
+            try {
+                rs = stat.executeQuery(sql);
+                while(rs.next()){
+                    SelectItem sim = new SelectItem(rs.getString("VERSION"),rs.getString("VERSION")+"-"+rs.getString("VERSION_NAME"));
+                    values.add(sim);
+                }
+                rs.close();
+                stat.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            this.versionList = values;
+        }
+        if(year==null||version==null||pname==null){
                 return;
-            }else{
+        }else{
                 this.queryData();
                 this.createTableModel();
-            }
+        }
     }
     
     //版本下拉框change
@@ -392,7 +412,7 @@ public class RPCostBean {
         }
         sql.append("ROWID AS ROW_ID,LGF_NUM,LGF_TYPE,PLAN_QUANTITY,PLAN_AMOUNT," +
             "OCCURRED_QUANTITY,OCCURRED_AMOUNT FROM PRO_PLAN_COST_BODY WHERE CONNECT_ID = '").append(connectId).append("'");
-        sql.append(" AND DATA_TYPE = '").append(this.TYPE_ROLL).append("' ORDER BY WBS,NETWORK");
+        sql.append(" AND DATA_TYPE = '").append(this.TYPE_ROLL).append("' ORDER BY WBS,NETWORK,WORK_CODE");
         return sql.toString();
     }//
     

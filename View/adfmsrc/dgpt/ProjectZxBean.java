@@ -263,7 +263,7 @@ public class ProjectZxBean {
             sql.append(entry.getValue()).append(",");
         }
         sql.append("ROWID AS ROW_ID,LGF_NUM,LGF_TYPE FROM PRO_PLAN_COST_BODY WHERE CONNECT_ID = '").append(connectId).append("'");
-        sql.append(" AND DATA_TYPE = '").append(this.TYPE_ZZX).append("' ORDER BY WBS,NETWORK");
+        sql.append(" AND DATA_TYPE = '").append(this.TYPE_ZZX).append("' ORDER BY WBS,NETWORK,WORK_CODE");
         return sql.toString();
     }
    //时间段
@@ -309,18 +309,6 @@ public class ProjectZxBean {
     //项目名称下拉列表
     private List<SelectItem> proValues(String source,String col){
         DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
-//        Statement stat1 = trans.createStatement(DBTransaction.DEFAULT);
-//        String sql1 = "SELECT GROUP_ID FROM DMS_USER_GROUP WHERE USER_ID = '"+this.curUser.getId()+"'";
-//        ResultSet rs1;
-//
-//        try {
-//            rs1 = stat1.executeQuery(sql1);
-//            while(rs1.next()){
-//                
-//            }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
         Statement stat = trans.createStatement(DBTransaction.DEFAULT);
         String sql = "";
         if(this.curUser.getId().equals("10000")){
@@ -340,7 +328,6 @@ public class ProjectZxBean {
 //                    "AND P.GROUP_ID IN (SELECT GROUP_ID FROM DMS_USER_GROUP WHERE USER_ID='"+this.curUser.getId()+"')"+
 //                    "AND (T1.ATTRIBUTE6=P.GROUP_ID OR T1.ATTRIBUTE5=P.GROUP_ID)" +
             ") AND P.DATA_TYPE =\'"+this.TYPE_ZZX+"\'";
-            System.out.println(sql);
         }
          
         List<SelectItem> values = new ArrayList<SelectItem>();
@@ -383,12 +370,33 @@ public class ProjectZxBean {
     //项目名称下拉框change
     public void projectChange(ValueChangeEvent valueChangeEvent) {
         pname =(String) valueChangeEvent.getNewValue();
-            if(year==null||version==null||pname==null){
+        
+        if(year!=null&&pname!=null){
+            DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
+            Statement stat = trans.createStatement(DBTransaction.DEFAULT);
+            String sql = "SELECT DISTINCT VERSION,VERSION_NAME FROM PRO_PLAN_COST_HEADER WHERE DATA_TYPE =\'"+this.TYPE_ZZX+"\'"+
+                " AND PROJECT_NAME='"+pname+"' AND HLS_YEAR = '"+this.year+"'";
+            List<SelectItem> values = new ArrayList<SelectItem>();
+            ResultSet rs;
+            try {
+                rs = stat.executeQuery(sql);
+                while(rs.next()){
+                    SelectItem sim = new SelectItem(rs.getString("VERSION"),rs.getString("VERSION")+"-"+rs.getString("VERSION_NAME"));
+                    values.add(sim);
+                }
+                rs.close();
+                stat.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            this.versionList = values;
+        }
+        if(year==null||version==null||pname==null){
                 return;
-            }else{
+        }else{
                 this.queryData();
                 this.createTableModel();
-            }
+        }
     }
     
     //版本下拉框change

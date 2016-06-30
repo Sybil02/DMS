@@ -206,12 +206,32 @@ public class BPCostBean {
     //项目名称下拉框change
     public void projectChange(ValueChangeEvent valueChangeEvent) {
         pname =(String) valueChangeEvent.getNewValue();
-            if(year==null||version==null||pname==null){
+        if(year!=null&&pname!=null){
+            DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
+            Statement stat = trans.createStatement(DBTransaction.DEFAULT);
+            String sql = "SELECT DISTINCT VERSION,VERSION_NAME FROM PRO_PLAN_COST_HEADER WHERE DATA_TYPE =\'"+this.TYPE_BASE+"\'"+
+                " AND PROJECT_NAME='"+pname+"' AND HLS_YEAR = '"+this.year+"'";
+            List<SelectItem> values = new ArrayList<SelectItem>();
+            ResultSet rs;
+            try {
+                rs = stat.executeQuery(sql);
+                while(rs.next()){
+                    SelectItem sim = new SelectItem(rs.getString("VERSION"),rs.getString("VERSION")+"-"+rs.getString("VERSION_NAME"));
+                    values.add(sim);
+                }
+                rs.close();
+                stat.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            this.versionList = values;
+        }
+        if(year==null||version==null||pname==null){
                 return;
-            }else{
+        }else{
                 this.queryData();
                 this.createTableModel();
-            }
+        }
     }
     
     //版本下拉框change
@@ -323,7 +343,7 @@ public class BPCostBean {
             sql.append(entry.getValue()).append(",");
         }
         sql.append("ROWID AS ROW_ID,LGF_NUM,LGF_TYPE FROM PRO_PLAN_COST_BODY WHERE CONNECT_ID = '").append(connectId).append("'");
-        sql.append(" AND DATA_TYPE = '").append(this.TYPE_BASE).append("' ORDER BY WBS,NETWORK");
+        sql.append(" AND DATA_TYPE = '").append(this.TYPE_BASE).append("' ORDER BY WBS,NETWORK,WORK_CODE");
         return sql.toString();
     }
     //一行中，列的map
@@ -484,21 +504,41 @@ public class BPCostBean {
     public boolean validation(){
         boolean flag = true;
         DBTransaction trans = (DBTransaction)DmsUtils.getDcmApplicationModule().getDBTransaction();
-        CallableStatement cs = trans.createCallableStatement("{CALl DMS_ZZX.BPC_VALIDATION(?,?,?)}", 0);
-        try {
-            cs.setString(1, this.curUser.getId());
-            cs.setString(2, this.TYPE_BASE.toString());
-            cs.registerOutParameter(3, Types.VARCHAR);
-            cs.execute();
-            if("N".equals(cs.getString(3))){
+        if(pStart.equals(pEnd)){
+            CallableStatement cs1 = trans.createCallableStatement("{CALl DMS_ZZX.BPC_VALIDATION1(?,?,?,?)}", 0);
+            try {
+                cs1.setString(1, this.curUser.getId());
+                cs1.setString(2, this.TYPE_BASE.toString());
+                cs1.setString(3, "Y"+pStart);
+                cs1.registerOutParameter(4, Types.VARCHAR);
+                cs1.execute();
+                if("N".equals(cs1.getString(4))){
+                    flag = false;
+                }
+                cs1.close();
+                trans.commit();
+            } catch (SQLException e) {
                 flag = false;
+                e.printStackTrace();
             }
-            cs.close();
-            trans.commit();
-        } catch (SQLException e) {
-            flag = false;
-            e.printStackTrace();
+        }else{
+            CallableStatement cs = trans.createCallableStatement("{CALl DMS_ZZX.BPC_VALIDATION(?,?,?)}", 0);
+            try {
+                cs.setString(1, this.curUser.getId());
+                cs.setString(2, this.TYPE_BASE.toString());
+                cs.registerOutParameter(3, Types.VARCHAR);
+                cs.execute();
+                if("N".equals(cs.getString(3))){
+                    flag = false;
+                }
+                cs.close();
+                trans.commit();
+            } catch (SQLException e) {
+                flag = false;
+                e.printStackTrace();
+            }
         }
+        
         return flag;
     }
     //导入程序
