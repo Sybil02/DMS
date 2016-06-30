@@ -69,6 +69,11 @@ public class TabLauncher {
         //    }
 
         protected void _launchActivity(String title, String taskflowId, boolean newTab) {
+            TabContext tabContext = TabContext.getCurrentInstance();
+            int tabIndex = tabContext.getSelectedTabIndex();
+            if (tabIndex != -1) {
+                tabContext.removeTab(tabIndex);
+            }
             this._launchActivity(title, taskflowId, newTab, null);
         }
 
