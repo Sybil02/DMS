@@ -297,6 +297,11 @@ public class HtChangeBean {
                 row.put("ROW_ID", rs.getString("ROW_ID"));
                 row.put("LGF_NUM", rs.getString("LGF_NUM"));
                 row.put("LGF_TYPE", rs.getString("LGF_TYPE"));
+                row.put("PLAN_QUANTITY", rs.getString("PLAN_QUANTITY"));
+                row.put("PLAN_AMOUNT", rs.getString("PLAN_AMOUNT"));
+                row.put("OCCURRED_QUANTITY", rs.getString("OCCURRED_QUANTITY"));
+                row.put("OCCURRED_AMOUNT", rs.getString("OCCURRED_AMOUNT"));
+                row.put("OCCURRED", rs.getString("OCCURRED"));
                 data.add(row);
             }
             rs.close();
@@ -329,7 +334,8 @@ public class HtChangeBean {
         for(Map.Entry<String,String> entry : labelMap.entrySet()){
             sql.append(entry.getValue()).append(",");
         }
-        sql.append("ROWID AS ROW_ID,LGF_NUM,LGF_TYPE FROM PRO_PLAN_COST_BODY WHERE CONNECT_ID = '").append(connectId).append("'");
+        sql.append("ROWID AS ROW_ID,LGF_NUM,LGF_TYPE,PLAN_QUANTITY,PLAN_AMOUNT," + 
+        "OCCURRED_QUANTITY,OCCURRED_AMOUNT,OCCURRED FROM PRO_PLAN_COST_BODY WHERE CONNECT_ID = '").append(connectId).append("'");
         sql.append(" AND DATA_TYPE = '").append(this.TYPE_CHANGE).append("' ORDER BY WBS,NETWORK,WORK_CODE");
         return sql.toString();
     }
@@ -367,7 +373,7 @@ public class HtChangeBean {
         DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
         Statement stat1 = trans.createStatement(DBTransaction.DEFAULT);
         String sql1 = "SELECT VERSION FROM PRO_PLAN_COST_HEADER WHERE PROJECT_NAME='"+this.pname+"' AND HLS_YEAR='"+this.year+"'"+
-            " ORDER BY VERSION DESC";
+            " AND (DATA_TYPE='BASE' OR DATA_TYPE = 'CHANGE') ORDER BY VERSION DESC ";
         String versionCode = "";
         ResultSet rs;
         try {
@@ -379,8 +385,8 @@ public class HtChangeBean {
         }
         char firstChar = versionCode.charAt(0);
         int number = Integer.parseInt(versionCode.substring(1))+1;
-        String newCode = "0000"+number;
-        String newVeCode = firstChar+newCode.substring(newCode.length()-4);
+        String newCode = number+"";
+        String newVeCode = firstChar+newCode;
         Statement stat = trans.createStatement(DBTransaction.DEFAULT);
         StringBuffer sql = new StringBuffer();
         sql.append("INSERT INTO PRO_PLAN_COST_HEADER (HLS_YEAR,ENTITY_NAME,PRODUCT_LINE,PROJECT_NAME,VERSION_NAME,VERSION,PROJECT_TYPE,INDUSTRY_LINE,")
@@ -404,9 +410,10 @@ public class HtChangeBean {
             sqlInsert.append(entry.getValue()+",");
             sqlValue.append("T."+entry.getValue()+",");
         }
-        sqlInsert.append("DATA_TYPE,CONNECT_ID,LGF_NUM,LGF_TYPE)");
+        sqlInsert.append("DATA_TYPE,CONNECT_ID,LGF_NUM,LGF_TYPE,PLAN_QUANTITY,PLAN_AMOUNT,OCCURRED_QUANTITY,OCCURRED_AMOUNT,OCCURRED)");
         sqlValue.append("'"+this.TYPE_CHANGE+"','").append(newConnectId).append("\',")
-                .append("LGF_NUM,LGF_TYPE FROM PRO_PLAN_COST_BODY T WHERE T.CONNECT_ID=\'"+connectId+"\'");
+                .append("LGF_NUM,LGF_TYPE,PLAN_QUANTITY,PLAN_AMOUNT,OCCURRED_QUANTITY,OCCURRED_AMOUNT,OCCURRED ")
+            .append("FROM PRO_PLAN_COST_BODY T WHERE T.CONNECT_ID=\'"+connectId+"\'");
         //显示新版本，重新构造列
         try {
             trans.createStatement(DBTransaction.DEFAULT).execute(sqlInsert.toString()+sqlValue.toString());
@@ -415,8 +422,8 @@ public class HtChangeBean {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        versionList.add(new SelectItem(newVersion,newVersion));
-        version = newVersion;
+        versionList.add(new SelectItem(newVeCode,newVeCode+"-"+newVersion));
+        version = newVeCode;
         pEnd = newEnd;
         connectId = newConnectId;
         this.createTableModel(pStart,pEnd);
@@ -467,9 +474,9 @@ public class HtChangeBean {
             sql_value.append("?,");
         }
         sql.append("ROW_ID,CONNECT_ID,CREATED_BY,OPERATION,DATA_TYPE,ROW_NO,");
-        sql.append("LGF_NUM,LGF_TYPE)");
+        sql.append("LGF_NUM,LGF_TYPE,PLAN_QUANTITY,PLAN_AMOUNT,OCCURRED_QUANTITY,OCCURRED_AMOUNT,OCCURRED)");
         sql_value.append("?,\'"+connectId+"\',"+this.curUser.getId()+",?,\'"+this.TYPE_CHANGE+"\',?,");
-        sql_value.append("?,?)");
+        sql_value.append("?,?,?,?,?,?,?)");
         PreparedStatement stmt = trans.createPreparedStatement(sql.toString()+sql_value.toString(), 0);
         //获取数据
         int rowNum = 1;
@@ -480,6 +487,11 @@ public class HtChangeBean {
                     stmt.setInt(last+2,rowNum);
                     stmt.setString(last+3, rowdata.get("LGF_NUM"));
                     stmt.setString(last+4, rowdata.get("LGF_TYPE"));
+                    stmt.setString(last+5, rowdata.get("PLAN_QUANTITY"));
+                    stmt.setString(last+6, rowdata.get("PLAN_AMOUNT"));
+                    stmt.setString(last+7, rowdata.get("OCCURRED_QUANTITY"));
+                    stmt.setString(last+8, rowdata.get("OCCURRED_AMOUNT"));
+                    stmt.setString(last+9, rowdata.get("OCCURRED"));
                     rowNum++;
                     if(PcDataTableModel.OPERATE_UPDATE.equals(rowdata.get("OPERATION"))){
                         stmt.setString(last+1,PcDataTableModel.OPERATE_UPDATE);
