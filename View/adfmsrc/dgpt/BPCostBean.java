@@ -263,6 +263,7 @@ public class BPCostBean {
                     + "IS_BLOCK FROM PRO_PLAN_COST_HEADER WHERE VERSION = \'"+version+"\'";
         sql = sql +" AND HLS_YEAR=\'"+year+"\'";
         sql = sql + " AND PROJECT_NAME=\'"+pname+"\'";
+        sql = sql + " AND DATA_TYPE = \'"+this.TYPE_BASE+"\'";
         ResultSet rs;
         try {
             rs = stat.executeQuery(sql);
@@ -344,6 +345,7 @@ public class BPCostBean {
         }
         sql.append("ROWID AS ROW_ID,LGF_NUM,LGF_TYPE FROM PRO_PLAN_COST_BODY WHERE CONNECT_ID = '").append(connectId).append("'");
         sql.append(" AND DATA_TYPE = '").append(this.TYPE_BASE).append("' ORDER BY WBS,NETWORK,WORK_CODE");
+        
         return sql.toString();
     }
     //一行中，列的map
