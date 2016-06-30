@@ -4,7 +4,7 @@
           xmlns:af="http://xmlns.oracle.com/adf/faces/rich"
           xmlns:f="http://java.sun.com/jsf/core">
   <c:set var="viewBundle" value="#{adfBundle['dms_v']}"/>
-  <af:panelStretchLayout id="psl1" startWidth="0px">
+  <af:panelStretchLayout id="psl1" startWidth="0px" topHeight="50px">
     <f:facet name="bottom">
       <af:panelGroupLayout layout="scroll"
                            xmlns:af="http://xmlns.oracle.com/adf/faces/rich"
@@ -193,7 +193,8 @@
                               label="版本" autoSubmit="true"
                               id="soc3"
                               value="#{viewScope.BPCostBean.version}"
-                                valueChangeListener="#{viewScope.BPCostBean.versionChange}">
+                                valueChangeListener="#{viewScope.BPCostBean.versionChange}"
+                                partialTriggers="soc2">
             <f:selectItems  id="si3"
                            value="#{viewScope.BPCostBean.versionList}"/>
           </af:selectOneChoice>

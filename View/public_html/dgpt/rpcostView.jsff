@@ -178,7 +178,8 @@
           <af:selectOneChoice value="#{viewScope.RPCostBean.version}"
                               label="版本" autoSubmit="true"
                               id="soc3"
-                              valueChangeListener="#{viewScope.RPCostBean.versionChange}">
+                              valueChangeListener="#{viewScope.RPCostBean.versionChange}"
+                              partialTriggers="soc2">
             <f:selectItems value="#{viewScope.RPCostBean.versionList}" id="si3"/>
           </af:selectOneChoice>
           <af:panelLabelAndMessage label="产品线"

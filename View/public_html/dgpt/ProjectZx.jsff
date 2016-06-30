@@ -396,7 +396,8 @@
           <af:selectOneChoice value="#{viewScope.ProjectZxBean.version}"
                               label="版本" autoSubmit="true"
                               id="soc3"
-                              valueChangeListener="#{viewScope.ProjectZxBean.versionChange}">
+                              valueChangeListener="#{viewScope.ProjectZxBean.versionChange}"
+                              partialTriggers="soc2">
             <f:selectItems value="#{viewScope.ProjectZxBean.versionList}" id="si3"/>
           </af:selectOneChoice>
           <af:panelLabelAndMessage label="项目类型"

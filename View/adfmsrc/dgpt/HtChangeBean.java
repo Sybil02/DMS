@@ -217,7 +217,8 @@ public class HtChangeBean {
         if(year==null||version==null||pname==null){
                 return;
         }else{
-                this.queryData();
+            this.queryData();
+            this.createTableModel(pStart, pEnd);
         }
     }
     
@@ -228,6 +229,7 @@ public class HtChangeBean {
             return;
         }else{
             this.queryData();
+            this.createTableModel(pStart, pEnd);
         }
     }
     
@@ -238,6 +240,7 @@ public class HtChangeBean {
             return;
         }else{
             this.queryData();
+            this.createTableModel(pStart, pEnd);
         }
     }
     
@@ -353,6 +356,21 @@ public class HtChangeBean {
         this.createTableModel(pStart,pEnd);
     }
     
+    public void closeVersion(String yearStr,String pNameStr,String versionStr){
+        String sql = "UPDATE PRO_PLAN_COST_HEADER SET (IS_BLOCK) = 'true' WHERE HLS_YEAR = \'"+yearStr;
+        sql = sql + "\' AND PROJECT_NAME =\'"+pNameStr+"\' AND VERSION=\'"+versionStr+"\'";
+        DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
+        Statement stat = trans.createStatement(DBTransaction.DEFAULT);
+        int flag =-1;
+        try {
+            flag = stat.executeUpdate(sql);
+            trans.commit();
+            stat.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    
     public void getNewVE(ActionEvent actionEvent) {
         //判断时间格式
         if(!newEnd.contains("_")){
@@ -415,6 +433,10 @@ public class HtChangeBean {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        
+        //冻结基准计划成本版本
+        this.closeVersion(this.year, this.pname, this.version);
+        
         versionList.add(new SelectItem(newVersion,newVersion));
         version = newVersion;
         pEnd = newEnd;

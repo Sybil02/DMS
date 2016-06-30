@@ -202,7 +202,8 @@
                               label="版本" autoSubmit="true"
                               id="soc3"
                               value="#{viewScope.HtChangeBean.version}"
-                                valueChangeListener="#{viewScope.HtChangeBean.versionChange}">
+                                valueChangeListener="#{viewScope.HtChangeBean.versionChange}"
+                                partialTriggers="soc2">
             <f:selectItems  id="si3"
                            value="#{viewScope.HtChangeBean.versionList}"/>
           </af:selectOneChoice>
