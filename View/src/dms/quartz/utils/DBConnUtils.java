@@ -33,7 +33,7 @@ public class DBConnUtils implements Serializable {
         try {
             Connection conn = null;
             Class.forName("oracle.jdbc.driver.OracleDriver");
-            conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:XE", "dms","dms");
+            conn = DriverManager.getConnection("jdbc:oracle:thin:@172.20.101.203:1521:HYPRD", "dms","dms");
             return conn;
         } catch (Exception e) {
             e.printStackTrace();
