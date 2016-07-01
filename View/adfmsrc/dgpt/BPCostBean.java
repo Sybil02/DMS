@@ -514,24 +514,24 @@ public class BPCostBean {
     public boolean validation(){
         boolean flag = true;
         DBTransaction trans = (DBTransaction)DmsUtils.getDcmApplicationModule().getDBTransaction();
-        if(pStart.equals(pEnd)){
-            CallableStatement cs1 = trans.createCallableStatement("{CALl DMS_ZZX.BPC_VALIDATION1(?,?,?,?)}", 0);
-            try {
-                cs1.setString(1, this.curUser.getId());
-                cs1.setString(2, this.TYPE_BASE.toString());
-                cs1.setString(3, "Y"+pStart);
-                cs1.registerOutParameter(4, Types.VARCHAR);
-                cs1.execute();
-                if("N".equals(cs1.getString(4))){
-                    flag = false;
-                }
-                cs1.close();
-                trans.commit();
-            } catch (SQLException e) {
-                flag = false;
-                e.printStackTrace();
-            }
-        }else{
+//        if(pStart.equals(pEnd)){
+//            CallableStatement cs1 = trans.createCallableStatement("{CALl DMS_ZZX.BPC_VALIDATION1(?,?,?,?)}", 0);
+//            try {
+//                cs1.setString(1, this.curUser.getId());
+//                cs1.setString(2, this.TYPE_BASE.toString());
+//                cs1.setString(3, "Y"+pStart);
+//                cs1.registerOutParameter(4, Types.VARCHAR);
+//                cs1.execute();
+//                if("N".equals(cs1.getString(4))){
+//                    flag = false;
+//                }
+//                cs1.close();
+//                trans.commit();
+//            } catch (SQLException e) {
+//                flag = false;
+//                e.printStackTrace();
+//            }
+//        }else{
             CallableStatement cs = trans.createCallableStatement("{CALl DMS_ZZX.BPC_VALIDATION(?,?,?)}", 0);
             try {
                 cs.setString(1, this.curUser.getId());
@@ -547,7 +547,7 @@ public class BPCostBean {
                 flag = false;
                 e.printStackTrace();
             }
-        }
+//        }
         
         return flag;
     }
