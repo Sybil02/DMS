@@ -3,7 +3,7 @@ package datamanager.entity;
 import java.io.Serializable;
 
 public class PsOrg implements Serializable{
-    private static final long serialVersionUID = 0L;
+    private static final long serialVersionUID = -1982165202151829218L;
 
     public PsOrg() {
         super();

@@ -3,7 +3,7 @@ package datamanager.entity;
 import java.io.Serializable;
 
 public class PsMaster implements Serializable{
-    private static final long serialVersionUID = 0L;
+    private static final long serialVersionUID = 6507375184866880516L;
 
     public PsMaster() {
         super();
@@ -47,6 +47,7 @@ public class PsMaster implements Serializable{
     private String note15;
     private String ifflg;
     private String ifmsg;
+    private String msgid;
 
     public void setMandt(String mandt) {
         this.mandt = mandt;
@@ -350,5 +351,13 @@ public class PsMaster implements Serializable{
 
     public String getIfmsg() {
         return ifmsg;
+    }
+
+    public void setMsgid(String msgid) {
+        this.msgid = msgid;
+    }
+
+    public String getMsgid() {
+        return msgid;
     }
 }

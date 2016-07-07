@@ -5,7 +5,7 @@ import java.io.Serializable;
 import java.util.List;
 
 public class PsEntity implements Serializable{
-    private static final long serialVersionUID = 0L;
+    private static final long serialVersionUID = -9075897284163366106L;
 
     public PsEntity() {
         super();

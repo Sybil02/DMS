@@ -37,6 +37,16 @@ public class PsJob implements Serializable {
     private String note5;
     private String note6;
     private String note7;
+    private String note8;
+    private String note9;
+    private String note10;
+    private String note11;
+    private String note12;
+    private String note13;
+    private String note14;
+    private String note15;
+    private String ifflg;
+    private String ifmsg;
 
     public void setMandt(String mandt) {
         this.mandt = mandt;
@@ -260,5 +270,85 @@ public class PsJob implements Serializable {
 
     public String getNote7() {
         return note7;
+    }
+
+    public void setNote8(String note8) {
+        this.note8 = note8;
+    }
+
+    public String getNote8() {
+        return note8;
+    }
+
+    public void setNote9(String note9) {
+        this.note9 = note9;
+    }
+
+    public String getNote9() {
+        return note9;
+    }
+
+    public void setNote10(String note10) {
+        this.note10 = note10;
+    }
+
+    public String getNote10() {
+        return note10;
+    }
+
+    public void setNote11(String note11) {
+        this.note11 = note11;
+    }
+
+    public String getNote11() {
+        return note11;
+    }
+
+    public void setNote12(String note12) {
+        this.note12 = note12;
+    }
+
+    public String getNote12() {
+        return note12;
+    }
+
+    public void setNote13(String note13) {
+        this.note13 = note13;
+    }
+
+    public String getNote13() {
+        return note13;
+    }
+
+    public void setNote14(String note14) {
+        this.note14 = note14;
+    }
+
+    public String getNote14() {
+        return note14;
+    }
+
+    public void setNote15(String note15) {
+        this.note15 = note15;
+    }
+
+    public String getNote15() {
+        return note15;
+    }
+
+    public void setIfflg(String ifflg) {
+        this.ifflg = ifflg;
+    }
+
+    public String getIfflg() {
+        return ifflg;
+    }
+
+    public void setIfmsg(String ifmsg) {
+        this.ifmsg = ifmsg;
+    }
+
+    public String getIfmsg() {
+        return ifmsg;
     }
 }
