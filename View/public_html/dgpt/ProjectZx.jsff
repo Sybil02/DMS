@@ -103,6 +103,58 @@
             </af:panelStretchLayout>
           </af:panelWindow>
         </af:popup>
+        <af:popup id="p3" autoCancel="disabled" childCreation="deferred"
+                  binding="#{viewScope.ProjectZxBean.dataImportWnd}">
+          <af:panelWindow id="pw3"
+                          title="#{viewBundle['dcm.template.data_import']}"
+                          modal="true">
+            <af:panelGridLayout id="pgl6">
+              <af:gridRow marginTop="5px" height="auto" id="gr3">
+                <af:gridCell width="auto" id="gc1"
+                             inlineStyle="padding-top:5px">
+                  <af:outputText value="#{viewBundle['dcm.template.import_file']}"
+                                 id="ot13"/>
+                </af:gridCell>
+                <af:gridCell marginStart="5px" marginEnd="5px" width="auto"
+                             id="gc4">
+                  <af:inputFile id="if2" simple="true"
+                                columns="15"
+                                binding="#{viewScope.ProjectZxBean.fileInput}"/>
+                </af:gridCell>
+              </af:gridRow>
+              <af:gridRow marginTop="5px" marginBottom="5px" height="auto"
+                          id="gr4">
+                <af:gridCell width="auto" id="gc3"
+                             inlineStyle="padding-top:5px">
+                  <af:outputText value="#{viewBundle['dcm.template.import_type_msg']}"
+                                 id="ot14"/>
+                </af:gridCell>
+                <af:gridCell marginStart="5px" marginEnd="5px" width="auto"
+                             id="gc2">
+                  <af:selectBooleanRadio text="#{viewBundle['dcm.import.increment']}"
+                                         id="sbr5" group="handleMode"
+                                         simple="true"
+                                         value="#{viewScope.ProjectZxBean.isIncrement}"
+                                         />
+                  <af:selectBooleanRadio text="#{viewBundle['dcm.import.repalce']}"
+                                         id="sbr6" group="handleMode"
+                                         simple="true"
+                                         value="#{viewScope.ProjectZxBean.isReplaceDefault}"
+                                         />
+                </af:gridCell>
+              </af:gridRow>
+              <af:gridRow marginTop="5px" marginBottom="5px" height="auto"
+                          id="gr5">
+                <af:gridCell halign="center" width="auto" id="gc5"
+                             >
+                  <af:commandButton text="#{viewBundle['dcm.action.import']}"
+                                    id="cb9" inlineStyle="margin-top:5px"
+                                    actionListener="#{viewScope.ProjectZxBean.operation_import}"/>
+                </af:gridCell>
+              </af:gridRow>
+            </af:panelGridLayout>
+          </af:panelWindow>
+        </af:popup>
       </af:panelGroupLayout>
     </f:facet>
       <f:facet name="center">
@@ -117,6 +169,9 @@
                                 actionListener="#{viewScope.ProjectZxBean.reset}"/>
             </af:group>
             <af:group id="g1">
+              <af:commandButton text="#{viewBundle['dms.dgpt.import']}" id="cb5">
+              <af:showPopupBehavior popupId="::p3" alignId=""/>
+              </af:commandButton>
               <af:commandButton text="#{viewBundle['dcm.action.export']}" id="cb7">
                 <af:showPopupBehavior popupId="::p2"/>
               </af:commandButton>

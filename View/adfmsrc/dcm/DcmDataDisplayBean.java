@@ -304,6 +304,7 @@ public class DcmDataDisplayBean extends TablePagination{
             return;
         }
         //上传文件为空
+        
         if (null == this.fileInput.getValue()) {
             JSFUtils.addFacesErrorMessage(DmsUtils.getMsg("dcm.plz_select_import_file"));
             return;

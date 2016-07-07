@@ -7,7 +7,6 @@ import common.DmsUtils;
 import common.JSFUtils;
 
 import dcm.DcmDataDisplayBean;
-import dcm.DcmDataTableModel;
 import dcm.PcColumnDef;
 
 import dcm.PcDataTableModel;
@@ -15,8 +14,18 @@ import dcm.PcDataTableModel;
 import dcm.PcExcel2003WriterImpl;
 import dcm.PcExcel2007WriterImpl;
 
+
+import dcm.SPRowReader;
+
+
 import dms.login.Person;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 
 import java.sql.CallableStatement;
@@ -49,14 +58,19 @@ import oracle.adf.share.ADFContext;
 import oracle.adf.share.logging.ADFLogger;
 import oracle.adf.view.rich.component.rich.RichPopup;
 import oracle.adf.view.rich.component.rich.data.RichTable;
+import oracle.adf.view.rich.component.rich.input.RichInputFile;
 import oracle.adf.view.rich.component.rich.output.RichPanelCollection;
 
 import oracle.jbo.ViewObject;
 import oracle.jbo.server.DBTransaction;
 
+import org.apache.commons.lang.ObjectUtils;
 import org.apache.myfaces.trinidad.event.SelectionEvent;
 import org.apache.myfaces.trinidad.model.CollectionModel;
 import org.apache.myfaces.trinidad.model.RowKeySet;
+import org.apache.myfaces.trinidad.model.UploadedFile;
+
+import org.hexj.excelhandler.reader.ExcelReaderUtil;
 
 public class ProjectZxBean {
     private Person curUser;
@@ -69,8 +83,14 @@ public class ProjectZxBean {
 
     //是否是2007及以上格式
     private boolean isXlsx = true;
+    //页面绑定组件
     private RichPopup dataExportWnd;
     private RichPopup errorWindow;
+    
+    private Boolean isIncrement = true;
+    private RichPopup dataImportWnd;
+    private RichInputFile fileInput;
+
 
     public ProjectZxBean() {
         super();
@@ -128,10 +148,10 @@ public class ProjectZxBean {
         labelMap.put("UNIT","UNIT");
         labelMap.put("PLAN_COST","PLAN_COST");
         labelMap.put("OCCURRED", "OCCURRED");
-        labelMap.put("PLAN_QUANTITY", "PLAN_QUANTITY");
-        labelMap.put("PLAN_AMOUNT", "PLAN_AMOUNT");
-        labelMap.put("OCCURRED_QUANTITY", "OCCURRED_QUANTITY");
-        labelMap.put("OCCURRED_AMOUNT", "OCCURRED_AMOUNT");
+//        labelMap.put("PLAN_QUANTITY", "PLAN_QUANTITY");
+//        labelMap.put("PLAN_AMOUNT", "PLAN_AMOUNT");
+//        labelMap.put("OCCURRED_QUANTITY", "OCCURRED_QUANTITY");
+//        labelMap.put("OCCURRED_AMOUNT", "OCCURRED_AMOUNT");
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy_MM");
         List<Date> monthList;
         Date start;
@@ -148,8 +168,8 @@ public class ProjectZxBean {
             e.printStackTrace();
         }
         labelMap.put("SUM_AFTER_JUL","SUM_AFTER_JUL");
-        labelMap.put("LGF_NUM", "LGF_NUM");
-        labelMap.put("LGF_TYPE", "LGF_TYPE");
+//        labelMap.put("LGF_NUM", "LGF_NUM");
+//        labelMap.put("LGF_TYPE", "LGF_TYPE");
         //构造列导出
         boolean isReadonly = true;
         this.pcColsDef.clear();
@@ -166,10 +186,10 @@ public class ProjectZxBean {
         list.add("单位");
         list.add("计划成本");
         list.add("已发生（截至上年9月）");
-        list.add("预计总数量");
-        list.add("预计总金额");
-        list.add("已发生数量");
-        list.add("已发生金额");
+//        list.add("预计总数量");
+//        list.add("预计总金额");
+//        list.add("已发生数量");
+//        list.add("已发生金额");
         list.add("上年10月");
         list.add("上年11月");
         list.add("上年12月");
@@ -194,7 +214,7 @@ public class ProjectZxBean {
         list.add("下年7月以后");
         int i =0;
         for(Map.Entry<String,String> map:labelMap.entrySet()){
-            if(i<37){
+            if(i<34){
                 PcColumnDef newCol = new PcColumnDef(list.get(i),map.getValue(),isReadonly);
                 this.pcColsDef.add(newCol);
             }else{
@@ -202,6 +222,7 @@ public class ProjectZxBean {
             }
             i++;
         }
+        this.pcColsDef.add(new PcColumnDef("ROW_ID","ROW_ID",false));
         ((PcDataTableModel)this.dataModel).setPcColsDef(this.pcColsDef);
         return labelMap;
     }
@@ -262,7 +283,9 @@ public class ProjectZxBean {
         for(Map.Entry<String,String> entry : labelMap.entrySet()){
             sql.append(entry.getValue()).append(",");
         }
-        sql.append("ROWID AS ROW_ID,LGF_NUM,LGF_TYPE FROM PRO_PLAN_COST_BODY WHERE CONNECT_ID = '").append(connectId).append("'");
+        sql.append("ROWID AS ROW_ID,LGF_NUM,LGF_TYPE,PLAN_QUANTITY,PLAN_AMOUNT,")
+            .append("OCCURRED_QUANTITY,OCCURRED_AMOUNT FROM PRO_PLAN_COST_BODY WHERE CONNECT_ID = '")
+            .append(connectId).append("'");
         sql.append(" AND DATA_TYPE = '").append(this.TYPE_ZZX).append("' ORDER BY WBS,NETWORK,WORK_CODE");
         return sql.toString();
     }
@@ -469,27 +492,10 @@ public class ProjectZxBean {
     
     //保存操作
     public void operation_save() {
+        //清空临时表和错误表数据
+        this.deleteTempAndError();
+        //数据插入临时表
         DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
-        //删除临时表数据
-        String sqldelete = "DELETE FROM PRO_PLAN_COST_BODY_TEMP T WHERE T.CREATED_BY = \'"+this.curUser.getId()+"\'";
-        Statement st = trans.createStatement(DBTransaction.DEFAULT);
-        try {
-            st.executeUpdate(sqldelete);
-            trans.commit();
-            st.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        //清空错误表数据
-        String sqlError = "DELETE FROM PRO_PLAN_COST_ERROR T WHERE T.CREATED_BY = \'"+this.curUser.getId()+"\'";
-        Statement sta = trans.createStatement(DBTransaction.DEFAULT);
-        try {
-            sta.executeUpdate(sqlError);
-            trans.commit();
-            sta.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
         StringBuffer sql = new StringBuffer();
         StringBuffer sql_value = new StringBuffer();
         sql_value.append(" VALUES(");
@@ -499,8 +505,10 @@ public class ProjectZxBean {
             sql.append(entry.getValue()+",");
             sql_value.append("?,");
         }
-        sql.append("CONNECT_ID,CREATED_BY,DATA_TYPE,ROW_NO,ROW_ID)");
-        sql_value.append("\'"+connectId+"\',\'"+this.curUser.getId()+"\',\'"+this.TYPE_ZZX+"\',?,?)");
+        sql.append("CONNECT_ID,CREATED_BY,DATA_TYPE,ROW_NO,ROW_ID,");
+        sql.append("LGF_NUM,LGF_TYPE,PLAN_QUANTITY,PLAN_AMOUNT,OCCURRED_QUANTITY,OCCURRED_AMOUNT)");
+        sql_value.append("\'"+connectId+"\',\'"+this.curUser.getId()+"\',\'"+this.TYPE_ZZX+"\',?,?,");
+        sql_value.append("?,?,?,?,?,?)");
         PreparedStatement stmt = trans.createPreparedStatement(sql.toString()+sql_value.toString(), 0);
         int rowNum = 1;
         List<Map> modelData = (List<Map>)this.dataModel.getWrappedData();
@@ -513,6 +521,12 @@ public class ProjectZxBean {
                     }
                     stmt.setInt(i, rowNum);
                     stmt.setString(i+1, rowdata.get("ROW_ID"));
+                    stmt.setString(i+2, rowdata.get("LGF_NUM"));
+                    stmt.setString(i+3, rowdata.get("LGF_TYPE"));
+                    stmt.setString(i+4, rowdata.get("PLAN_QUANTITY"));
+                    stmt.setString(i+5, rowdata.get("PLAN_AMOUNT"));
+                    stmt.setString(i+6, rowdata.get("OCCURRED_QUANTITY"));
+                    stmt.setString(i+7, rowdata.get("OCCURRED_AMOUNT"));
                     rowNum++;
                     stmt.addBatch();
                     stmt.executeBatch();
@@ -534,6 +548,30 @@ public class ProjectZxBean {
             }
         }else{
             this.showErrorPop();
+        }
+    }
+    
+    public void deleteTempAndError(){
+        DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
+        //删除临时表数据
+        String sqldelete = "DELETE FROM PRO_PLAN_COST_BODY_TEMP T WHERE T.CREATED_BY = \'"+this.curUser.getId()+"\'";
+        Statement st = trans.createStatement(DBTransaction.DEFAULT);
+        try {
+            st.executeUpdate(sqldelete);
+            trans.commit();
+            st.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        //清空错误表数据
+        String sqlError = "DELETE FROM PRO_PLAN_COST_ERROR T WHERE T.CREATED_BY = \'"+this.curUser.getId()+"\'";
+        Statement sta = trans.createStatement(DBTransaction.DEFAULT);
+        try {
+            sta.executeUpdate(sqlError);
+            trans.commit();
+            sta.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
     
@@ -597,7 +635,7 @@ public class ProjectZxBean {
             if("xls".equals(type)){
                 PcExcel2003WriterImpl writer = new PcExcel2003WriterImpl(
                                                    this.querySql(this.getLabelMap()),
-                                                   "基准计划成本",
+                                                   this.connectId,
                                                     this.pcColsDef,
                                                     outputStream);
             
@@ -606,7 +644,7 @@ public class ProjectZxBean {
                 PcExcel2007WriterImpl writer = new PcExcel2007WriterImpl(
                                                     this.querySql(this.getLabelMap()),
                                                     2,this.pcColsDef);
-                writer.process(outputStream, "基准计划成本");
+                writer.process(outputStream, this.connectId);
                 outputStream.flush();
             }
         } catch (Exception e) {
@@ -624,9 +662,9 @@ public class ProjectZxBean {
     //导出文件名
     public String getExportDataExcelName(){
         if(isXlsx){
-            return "在执行项目.xlsx";
+            return "在执行项目_"+this.connectId+".xlsx";
         }else{
-            return "在执行项目.xls";
+            return "在执行项目_"+this.connectId+".xls";
         }
     }
     public void setYear(String year) {
@@ -850,5 +888,167 @@ public class ProjectZxBean {
         if(flag!=-1){
             isBlock = "false";
         }
+    }
+
+
+    public void setIsIncrement(Boolean isIncrement) {
+        this.isIncrement = isIncrement;
+    }
+
+    public Boolean getIsIncrement() {
+        return isIncrement;
+    }
+    
+    public boolean getIsReplaceDefault(){
+        return !isIncrement;
+    }
+    public void setIsReplaceDefault(boolean flag){
+       
+    }
+
+    public void operation_import(ActionEvent actionEvent) {
+        this.dataImportWnd.cancel();
+        //上传文件为空
+        
+        System.out.println(this.fileInput.getValue()+"66666666");
+        if (null == this.fileInput.getValue()) {
+            JSFUtils.addFacesErrorMessage(DmsUtils.getMsg("dcm.plz_select_import_file"));
+            return;
+        }
+        //获取文件上传路径
+        String filePath = this.uploadFile();
+        System.out.println("filePath:"+filePath);
+        this.fileInput.resetValue();
+        if (null == filePath) {
+            return;
+        }
+        
+        //读取excel数据到数据库临时表
+        //List<TemplateEntity> tempList = new ArrayList<TemplateEntity>();
+        try {
+            if (!this.handleExcel(filePath, connectId)) {
+            return;
+        }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        
+        //校验程序
+        if(this.validation_import(this.isIncrement ? "INCREMENT" : "REPLACE")){
+            System.out.println("校验通过");
+        }else {
+            //若出现错误则显示错误信息提示框
+            this.showErrorPop();
+        }
+        //刷新数据
+        this.createTableModel();
+    }
+    
+    //校验程序
+    public boolean validation_import(String operation){
+        boolean flag = true;
+        DBTransaction trans = (DBTransaction)DmsUtils.getDcmApplicationModule().getDBTransaction();
+        CallableStatement cs = trans.createCallableStatement("{CALl DMS_ZZX.ZZXIMPORT_VALIDATION(?,?,?,?)}", 0);
+        try {
+            cs.setString(1, this.curUser.getId());
+            cs.setString(2, this.TYPE_ZZX);
+            cs.setString(3,operation);
+            cs.registerOutParameter(4, Types.VARCHAR);
+            cs.execute();
+            if("N".equals(cs.getString(4))){
+                flag = false;
+            }
+            cs.close();
+            trans.commit();
+        } catch (SQLException e) {
+            flag = false;
+            e.printStackTrace();
+        }
+        return flag;
+    }
+    
+    //读取excel数据到临时表
+    private boolean handleExcel(String fileName, String curComRecordId) throws SQLException {
+        DBTransaction trans =(DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
+        String combinationRecord = ObjectUtils.toString(curComRecordId);
+        //清空已有临时表数据
+        this.deleteTempAndError();
+        SPRowReader spReader = new SPRowReader(trans,2,this.connectId,this.pcColsDef,this.curUser.getId(),this.TYPE_ZZX);
+        try {
+                ExcelReaderUtil.readExcel(spReader, fileName, true);
+                spReader.close();
+            } catch (Exception e) {
+                this._logger.severe(e);
+                JSFUtils.addFacesErrorMessage(DmsUtils.getMsg("dcm.excel_handle_error"));
+                return false;
+            }
+        return true;
+    }
+    
+    //文件上传
+    private String uploadFile() {
+        UploadedFile file = (UploadedFile)this.fileInput.getValue();
+        if (!(file.getFilename().endsWith(".xls") ||
+              file.getFilename().endsWith(".xlsx"))) {
+            String msg = DmsUtils.getMsg("dcm.file_format_error");
+            JSFUtils.addFacesErrorMessage(msg);
+            return null;
+        }
+        String fileExtension =file.getFilename().substring(file.getFilename().lastIndexOf("."));
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+        String date = dateFormat.format(new Date());
+        File dmsBaseDir = new File("DMS/UPLOAD/zazhixing" );
+        //如若文件路径不存在则创建文件目录
+        if (!dmsBaseDir.exists()) {
+            dmsBaseDir.mkdirs();
+        }
+        String fileName = "DMS/UPLOAD/" + "在执行项目" + "/";
+        try {
+            InputStream inputStream = file.getInputStream();
+            FileOutputStream outputStream = new FileOutputStream(fileName);
+            BufferedInputStream bufferedInputStream =new BufferedInputStream(inputStream);
+            BufferedOutputStream bufferedOutputStream =
+                new BufferedOutputStream(outputStream);
+            byte[] buffer = new byte[10240];
+            int bytesRead = 0;
+            while ((bytesRead = bufferedInputStream.read(buffer, 0, 10240)) !=-1) {
+                bufferedOutputStream.write(buffer, 0, bytesRead);
+            }
+            bufferedOutputStream.flush();
+            if (bufferedOutputStream != null) {
+                bufferedOutputStream.close();
+            }
+            if (bufferedInputStream != null) {
+                bufferedInputStream.close();
+            }
+            file.dispose();
+        } catch (IOException e) {
+            this._logger.severe(e);
+            String msg = DmsUtils.getMsg("dcm.file_upload_error");
+            JSFUtils.addFacesErrorMessage(msg);
+            return null;
+        }
+        return (new File(fileName)).getAbsolutePath();
+    }
+    public void setDataImportWnd(RichPopup dataImportWnd) {
+        this.dataImportWnd = dataImportWnd;
+    }
+
+    public RichPopup getDataImportWnd() {
+        return dataImportWnd;
+    }
+
+
+    public void setFileInput(RichInputFile fileInput) {
+        this.fileInput = fileInput;
+    }
+
+    public RichInputFile getFileInput() {
+        return fileInput;
+    }
+
+    public void inputFile_valueChangeListener(ValueChangeEvent event) {
+        System.out.println(event.getNewValue()+"0000000");
+        this.fileInput.setValue(event.getNewValue());
     }
 }

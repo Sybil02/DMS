@@ -399,7 +399,8 @@
                                             text="#{viewBundle['dms.quartz.msg']}"/>
                 </af:gridCell>
               </af:gridRow-->
-              <af:gridRow marginTop="5px" marginBottom="5px" height="auto" rendered="#{viewScope.DcmDataDisplayBean.combinationId ne null}" id="batchGr">
+              <af:gridRow marginTop="5px" marginBottom="5px" height="auto" 
+              rendered="#{viewScope.DcmDataDisplayBean.combinationId ne null}" id="batchGr">
                 <af:gridCell marginStart="5px" marginEnd="5px" width="auto" inlineStyle="padding-top:5px"
                              id="gcb">
                   <af:selectBooleanCheckbox label="#{viewBundle['dms.batch.import']}" id="sbc2"
