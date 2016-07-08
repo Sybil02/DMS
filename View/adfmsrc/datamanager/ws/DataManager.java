@@ -18,6 +18,12 @@ import datamanager.entity.PsWbs;
 
 import datamanager.entity.PsWbsMaster;
 
+import datamanager.entity.Staff;
+
+import datamanager.entity.StaffEntity;
+
+import datamanager.entity.StaffFp;
+
 import dms.quartz.utils.DBConnUtils;
 
 import java.sql.Connection;
@@ -39,6 +45,31 @@ import javax.jws.WebService;
 public class DataManager {
     public DataManager() {
         super();
+    }
+    
+    public List<Staff> SyncStaff(List<StaffEntity> staffList,String msgId){
+        Connection conn = DBConnUtils.getJNDIConnection("jdbc/DMSConnDS");
+        List<Staff> result = new ArrayList<Staff>();
+
+        for (StaffEntity staffEntity : staffList) {
+            try {
+                this.insertStaff(staffEntity.getStaffs(), conn, msgId);
+                this.insertStaffFp(staffEntity.getStaffFps(), conn);
+                staffEntity.getStaffs().get(0).setIfflg("S");
+                result.add(staffEntity.getStaffs().get(0));
+            } catch (SQLException e) {
+                e.printStackTrace();
+                staffEntity.getStaffs().get(0).setIfflg("E");
+                if (e.getMessage().length() > 50) {
+                    staffEntity.getStaffs().get(0).setIfmsg(e.getMessage().substring(0, 49));
+                } else {
+                    staffEntity.getStaffs().get(0).setIfmsg(e.getMessage());
+                }
+                result.add(staffEntity.getStaffs().get(0));
+            }
+
+        }
+        return result;
     }
 
     /**
@@ -308,6 +339,181 @@ public class DataManager {
             e.printStackTrace();
         }
         return hlsBomList;
+    }
+    
+    public void insertStaffFp(List<StaffFp> staffFps,Connection conn) throws SQLException {
+        String sql =
+            "INSERT INTO DMS_HR_STAFF_FP (BUKRS, PERNR, PLANS, KST01, STELL, ZLEVEL, SOBID, BTRTL, BTEXT, ZQYBZ, NOTE1, " +
+            "NOTE2, NOTE3, NOTE4, NOTE5, NOTE6, NOTE7, NOTE8, NOTE9, NOTE10, NOTE11, NOTE12, NOTE13, NOTE14, NOTE15, IFFLG, IFMSG) " +
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sqlUp =
+            "UPDATE DMS_HR_STAFF_FP SET BUKRS=?, PERNR=?, PLANS=?, KST01=?, STELL=?, ZLEVEL=?, SOBID=?, BTRTL=?, BTEXT=?, ZQYBZ=?, NOTE1=?, " +
+            "NOTE2=?, NOTE3=?, NOTE4=?, NOTE5=?, NOTE6=?, NOTE7=?, NOTE8=?, NOTE9=?, NOTE10=?, NOTE11=?, NOTE12=?, NOTE13=?, NOTE14=?, NOTE15=?, IFFLG=?, IFMSG=? " +
+            "WHERE PERNR=? AND PLANS=?";
+        PreparedStatement stat = null;
+        PreparedStatement statUp = null;
+        Statement statExs = null;
+
+        stat = conn.prepareStatement(sql);
+        statUp = conn.prepareStatement(sqlUp);
+        statExs = conn.createStatement();
+
+        for (StaffFp af : staffFps) {
+
+            Map<String, String> keyValue = new HashMap<String, String>();
+            keyValue.put("PERNR", af.getPernr());
+            keyValue.put("PLANS", af.getPlans());
+            if (!this.pkValidate(statExs, "DMS_HR_STAFF_FP", keyValue)) {
+                stat.setString(1, af.getBukrs());
+                stat.setString(2, af.getPernr());
+                stat.setString(3, af.getPlans());
+                stat.setString(4, af.getKst01());
+                stat.setString(5, af.getStell());
+                stat.setString(6, af.getZlevel());
+                stat.setString(7, af.getSobid());
+                stat.setString(8, af.getBtrtl());
+                stat.setString(9, af.getBtext());
+                stat.setString(10, af.getZqybz());
+                stat.setString(11, af.getNote1());
+                stat.setString(12, af.getNote2());
+                stat.setString(13, af.getNote3());
+                stat.setString(14, af.getNote4());
+                stat.setString(15, af.getNote5());
+                stat.setString(16, af.getNote6());
+                stat.setString(17, af.getNote7());
+                stat.setString(18, af.getNote8());
+                stat.setString(19, af.getNote9());
+                stat.setString(20, af.getNote10());
+                stat.setString(21, af.getNote11());
+                stat.setString(22, af.getNote12());
+                stat.setString(23, af.getNote13());
+                stat.setString(24, af.getNote14());
+                stat.setString(25, af.getNote15());
+                stat.setString(26, af.getIfflg());
+                stat.setString(27, af.getIfmsg());
+                stat.executeUpdate();
+            } else {
+                statUp.setString(1, af.getBukrs());
+                statUp.setString(2, af.getPernr());
+                statUp.setString(3, af.getPlans());
+                statUp.setString(4, af.getKst01());
+                statUp.setString(5, af.getStell());
+                statUp.setString(6, af.getZlevel());
+                statUp.setString(7, af.getSobid());
+                statUp.setString(8, af.getBtrtl());
+                statUp.setString(9, af.getBtext());
+                statUp.setString(10, af.getZqybz());
+                statUp.setString(11, af.getNote1());
+                statUp.setString(12, af.getNote2());
+                statUp.setString(13, af.getNote3());
+                statUp.setString(14, af.getNote4());
+                statUp.setString(15, af.getNote5());
+                statUp.setString(16, af.getNote6());
+                statUp.setString(17, af.getNote7());
+                statUp.setString(18, af.getNote8());
+                statUp.setString(19, af.getNote9());
+                statUp.setString(20, af.getNote10());
+                statUp.setString(21, af.getNote11());
+                statUp.setString(22, af.getNote12());
+                statUp.setString(23, af.getNote13());
+                statUp.setString(24, af.getNote14());
+                statUp.setString(25, af.getNote15());
+                statUp.setString(26, af.getIfflg());
+                statUp.setString(27, af.getIfmsg());
+                statUp.setString(28, af.getPernr());
+                statUp.setString(29, af.getPlans());
+                statUp.executeUpdate();
+            }
+            conn.commit();
+        }
+        stat.close();
+        statExs.close();
+        statUp.close();
+    }
+    
+    public void insertStaff(List<Staff> staffs,Connection conn,String msgId) throws SQLException {
+        String sql =
+            "INSERT INTO DMS_HR_STAFF (BUKRS, PERNR, SNAME, ZMAIL, ZMOBIL, ZPHONE, ICNUM, STAT2, NOTE1, NOTE2, NOTE3, NOTE4, " +
+            "NOTE5, NOTE6, NOTE7, NOTE8, NOTE9, NOTE10, NOTE11, NOTE12, NOTE13, NOTE14, NOTE15, IFFLG, IFMSG,MSGID) " +
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sqlUp =
+            "UPDATE DMS_HR_STAFF SET BUKRS=?, PERNR=?, SNAME=?, ZMAIL=?, ZMOBIL=?, ZPHONE=?, ICNUM=?, STAT2=?, NOTE1=?, NOTE2=?, NOTE3=?, NOTE4=?, " +
+            "NOTE5=?, NOTE6=?, NOTE7=?, NOTE8=?, NOTE9=?, NOTE10=?, NOTE11=?, NOTE12=?, NOTE13=?, NOTE14=?, NOTE15=?, IFFLG=?, IFMSG=?, MSGID=? " +
+            "WHERE PERNR=?";
+        PreparedStatement stat = null;
+        PreparedStatement statUp = null;
+        Statement statExs = null;
+
+        stat = conn.prepareStatement(sql);
+        statUp = conn.prepareStatement(sqlUp);
+        statExs = conn.createStatement();
+
+        for (Staff af : staffs) {
+
+            Map<String, String> keyValue = new HashMap<String, String>();
+            keyValue.put("PERNR", af.getPernr());
+            if (!this.pkValidate(statExs, "DMS_HR_STAFF", keyValue)) {
+                stat.setString(1, af.getBukrs());
+                stat.setString(2, af.getPernr());
+                stat.setString(3, af.getSname());
+                stat.setString(4, af.getZmail());
+                stat.setString(5, af.getZmobil());
+                stat.setString(6, af.getZphone());
+                stat.setString(7, af.getIcnum());
+                stat.setString(8, af.getStat2());
+                stat.setString(9, af.getNote1());
+                stat.setString(10, af.getNote2());
+                stat.setString(11, af.getNote3());
+                stat.setString(12, af.getNote4());
+                stat.setString(13, af.getNote5());
+                stat.setString(14, af.getNote6());
+                stat.setString(15, af.getNote7());
+                stat.setString(16, af.getNote8());
+                stat.setString(17, af.getNote9());
+                stat.setString(18, af.getNote10());
+                stat.setString(19, af.getNote11());
+                stat.setString(20, af.getNote12());
+                stat.setString(21, af.getNote13());
+                stat.setString(22, af.getNote14());
+                stat.setString(23, af.getNote15());
+                stat.setString(24, af.getIfflg());
+                stat.setString(25, af.getIfmsg());
+                stat.executeUpdate();
+            } else {
+                statUp.setString(1, af.getBukrs());
+                statUp.setString(2, af.getPernr());
+                statUp.setString(3, af.getSname());
+                statUp.setString(4, af.getZmail());
+                statUp.setString(5, af.getZmobil());
+                statUp.setString(6, af.getZphone());
+                statUp.setString(7, af.getIcnum());
+                statUp.setString(8, af.getStat2());
+                statUp.setString(9, af.getNote1());
+                statUp.setString(10, af.getNote2());
+                statUp.setString(11, af.getNote3());
+                statUp.setString(12, af.getNote4());
+                statUp.setString(13, af.getNote5());
+                statUp.setString(14, af.getNote6());
+                statUp.setString(15, af.getNote7());
+                statUp.setString(16, af.getNote8());
+                statUp.setString(17, af.getNote9());
+                statUp.setString(18, af.getNote10());
+                statUp.setString(19, af.getNote11());
+                statUp.setString(20, af.getNote12());
+                statUp.setString(21, af.getNote13());
+                statUp.setString(22, af.getNote14());
+                statUp.setString(23, af.getNote15());
+                statUp.setString(24, af.getIfflg());
+                statUp.setString(25, af.getIfmsg());
+                statUp.setString(26, af.getMsgid());
+                statUp.setString(27, af.getPernr());
+                statUp.executeUpdate();
+            }
+            conn.commit();
+        }
+        stat.close();
+        statExs.close();
+        statUp.close();
     }
 
     private void insertPsJob(List<PsJob> psJob,
