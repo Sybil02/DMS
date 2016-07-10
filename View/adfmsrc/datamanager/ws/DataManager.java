@@ -1,6 +1,7 @@
 package datamanager.ws;
 
 import datamanager.entity.CostCenter;
+import datamanager.entity.GlAccount;
 import datamanager.entity.HlsBomEntity;
 
 import datamanager.entity.Orginaze;
@@ -78,6 +79,110 @@ public class DataManager {
 
         }
         return result;
+    }
+    
+    /**
+     * 会计科目
+     * @param accList
+     * @return
+     */
+    public List<GlAccount> SyncAccount(List<GlAccount> accList){
+        Connection conn = DBConnUtils.getJNDIConnection("jdbc/DMSConnDS");
+        String sql =
+            "INSERT INTO DMS_GL_ACCOUNT (BUKRS, SAKNR, TXT20, KTOKS, XSPEB, NOTE1, NOTE2, NOTE3, NOTE4, NOTE5, " +
+            "NOTE6, NOTE7, NOTE8, NOTE9, NOTE10, NOTE11, NOTE12, NOTE13, NOTE14, NOTE15, IFFLG, IFMSG, MSGID) " +
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sqlUp =
+            "UPDATE DMS_GL_ACCOUNT SET BUKRS=?, SAKNR=?, TXT20=?, KTOKS=?, XSPEB=?, NOTE1=?, NOTE2=?, NOTE3=?, NOTE4=?, NOTE5=?, " +
+            "NOTE6=?, NOTE7=?, NOTE8=?, NOTE9=?, NOTE10=?, NOTE11=?, NOTE12=?, NOTE13=?, NOTE14=?, NOTE15=?, IFFLG=?, IFMSG=?, MSGID=? " +
+            "WHERE BUKRS=? ";
+        PreparedStatement stat = null;
+        PreparedStatement statUp = null;
+        Statement statExs = null;
+        try {
+            stat = conn.prepareStatement(sql);
+            statUp = conn.prepareStatement(sqlUp);
+            statExs = conn.createStatement();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        for (GlAccount acc : accList) {
+            try {
+                Map<String, String> keyValue = new HashMap<String, String>();
+                keyValue.put("BUKRS", acc.getBukrs());
+                if (!this.pkValidate(statExs, "DMS_GL_ACCOUNT", keyValue)) {
+                    stat.setString(1, acc.getBukrs());
+                    stat.setString(2, acc.getSaknr());
+                    stat.setString(3, acc.getTxt20());
+                    stat.setString(4, acc.getKtoks());
+                    stat.setString(5, acc.getXspeb());
+                    stat.setString(6, acc.getNote1());
+                    stat.setString(7, acc.getNote2());
+                    stat.setString(8, acc.getNote3());
+                    stat.setString(9, acc.getNote4());
+                    stat.setString(10, acc.getNote5());
+                    stat.setString(11, acc.getNote6());
+                    stat.setString(12, acc.getNote7());
+                    stat.setString(13, acc.getNote8());
+                    stat.setString(14, acc.getNote9());
+                    stat.setString(15, acc.getNote10());
+                    stat.setString(16, acc.getNote11());
+                    stat.setString(17, acc.getNote12());
+                    stat.setString(18, acc.getNote13());
+                    stat.setString(19, acc.getNote14());
+                    stat.setString(20, acc.getNote15());
+                    stat.setString(21, acc.getIfflg());
+                    stat.setString(22, acc.getIfmsg());
+                    stat.setString(23, acc.getMsgid());
+                    stat.executeUpdate();
+                } else {
+                    statUp.setString(1, acc.getBukrs());
+                    statUp.setString(2, acc.getSaknr());
+                    statUp.setString(3, acc.getTxt20());
+                    statUp.setString(4, acc.getKtoks());
+                    statUp.setString(5, acc.getXspeb());
+                    statUp.setString(6, acc.getNote1());
+                    statUp.setString(7, acc.getNote2());
+                    statUp.setString(8, acc.getNote3());
+                    statUp.setString(9, acc.getNote4());
+                    statUp.setString(10, acc.getNote5());
+                    statUp.setString(11, acc.getNote6());
+                    statUp.setString(12, acc.getNote7());
+                    statUp.setString(13, acc.getNote8());
+                    statUp.setString(14, acc.getNote9());
+                    statUp.setString(15, acc.getNote10());
+                    statUp.setString(16, acc.getNote11());
+                    statUp.setString(17, acc.getNote12());
+                    statUp.setString(18, acc.getNote13());
+                    statUp.setString(19, acc.getNote14());
+                    statUp.setString(20, acc.getNote15());
+                    statUp.setString(21, acc.getIfflg());
+                    statUp.setString(22, acc.getIfmsg());
+                    statUp.setString(23, acc.getMsgid());
+                    statUp.setString(24, acc.getBukrs());
+                    statUp.executeUpdate();
+                }
+                conn.commit();
+                acc.setIfflg("S");
+            } catch (SQLException e) {
+                e.printStackTrace();
+                acc.setIfflg("E");
+                if (e.getMessage().length() > 50) {
+                    acc.setIfmsg(e.getMessage().substring(0, 49));
+                } else {
+                    acc.setIfmsg(e.getMessage());
+                }
+            }
+        }
+        try {
+            stat.close();
+            statExs.close();
+            statUp.close();
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return accList;
     }
 
     /**
