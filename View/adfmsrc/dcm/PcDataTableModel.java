@@ -17,7 +17,7 @@ public class PcDataTableModel extends CollectionModel{
     public static final String OPERATE_UPDATE="UPDATE";
     public static final String OPERATE_DELETE="DELETE";
     private RowKeySet selectedRows=new RowKeySetImpl();
-    
+    private int size;
     public PcDataTableModel() {
     }
 
@@ -110,5 +110,13 @@ public class PcDataTableModel extends CollectionModel{
 
     public Map<String, String> getLabelMap() {
         return labelMap;
+    }
+
+    public void setSize(int size) {
+        this.size = size;
+    }
+
+    public int getSize() {
+        return this.pcColsDef.size();
     }
 }

@@ -16,9 +16,16 @@ import dcm.PcExcel2003WriterImpl;
 
 import dcm.PcExcel2007WriterImpl;
 
+import dcm.SPRowReader;
+
 import dms.login.Person;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 
 import java.sql.CallableStatement;
@@ -52,14 +59,19 @@ import oracle.adf.share.ADFContext;
 import oracle.adf.share.logging.ADFLogger;
 import oracle.adf.view.rich.component.rich.RichPopup;
 import oracle.adf.view.rich.component.rich.data.RichTable;
+import oracle.adf.view.rich.component.rich.input.RichInputFile;
 import oracle.adf.view.rich.component.rich.output.RichPanelCollection;
 
 import oracle.jbo.ViewObject;
 import oracle.jbo.server.DBTransaction;
 
+import org.apache.commons.lang.ObjectUtils;
 import org.apache.myfaces.trinidad.event.SelectionEvent;
 import org.apache.myfaces.trinidad.model.CollectionModel;
 import org.apache.myfaces.trinidad.model.RowKeySet;
+import org.apache.myfaces.trinidad.model.UploadedFile;
+
+import org.hexj.excelhandler.reader.ExcelReaderUtil;
 
 public class HtChangeBean {
     private Person curUser;
@@ -67,6 +79,8 @@ public class HtChangeBean {
     private CollectionModel dataModel;
     private List<PcColumnDef> pcColsDef = new ArrayList<PcColumnDef>();
     private RichPopup errorWindow;
+    private RichInputFile fileInput;
+    private RichPopup dataImportWnd;
 
     public HtChangeBean() {
         super();
@@ -465,26 +479,7 @@ public class HtChangeBean {
     //保存
     public void operation_save() {
         DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
-        //清空临时表数据
-        String sqldelete = "DELETE FROM PRO_PLAN_COST_BODY_TEMP T WHERE T.CREATED_BY = \'"+this.curUser.getId()+"\'";
-        Statement st = trans.createStatement(DBTransaction.DEFAULT);
-        try {
-            st.executeUpdate(sqldelete);
-            trans.commit();
-            st.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        //清空错误表数据
-        String sqlError = "DELETE FROM PRO_PLAN_COST_ERROR T WHERE T.CREATED_BY = \'"+this.curUser.getId()+"\'";
-        Statement sta = trans.createStatement(DBTransaction.DEFAULT);
-        try {
-            sta.executeUpdate(sqlError);
-            trans.commit();
-            sta.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        
         StringBuffer sql = new StringBuffer();
         StringBuffer sql_value = new StringBuffer();
         sql_value.append(" VALUES(");
@@ -566,6 +561,31 @@ public class HtChangeBean {
             this.showErrorPop();
         }
     }
+    
+    public void deleteTempAndError(){
+        DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
+        //清空临时表数据
+        String sqldelete = "DELETE FROM PRO_PLAN_COST_BODY_TEMP T WHERE T.CREATED_BY = \'"+this.curUser.getId()+"\'";
+        Statement st = trans.createStatement(DBTransaction.DEFAULT);
+        try {
+            st.executeUpdate(sqldelete);
+            trans.commit();
+            st.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        //清空错误表数据
+        String sqlError = "DELETE FROM PRO_PLAN_COST_ERROR T WHERE T.CREATED_BY = \'"+this.curUser.getId()+"\'";
+        Statement sta = trans.createStatement(DBTransaction.DEFAULT);
+        try {
+            sta.executeUpdate(sqlError);
+            trans.commit();
+            sta.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    
     //删除
     public void operation_delete() {
         List<Map> modelData = (List<Map>)this.dataModel.getWrappedData();
@@ -630,6 +650,7 @@ public class HtChangeBean {
             PcColumnDef newCol = new PcColumnDef(map.getKey(),map.getValue(),isReadonly);
             this.pcColsDef.add(newCol);
         }
+        this.pcColsDef.add(new PcColumnDef("ROW_ID","ROW_ID",false));
         ((PcDataTableModel)this.dataModel).setPcColsDef(this.pcColsDef);
         return labelMap;
     }
@@ -870,7 +891,7 @@ public class HtChangeBean {
             if("xls".equals(type)){
                 PcExcel2003WriterImpl writer = new PcExcel2003WriterImpl(
                                                    this.querySql(this.getLabelMap(pStart, pEnd)),
-                                                   "合同变更后的基准计划成本",
+                                                   this.connectId,
                                                     this.pcColsDef,
                                                     outputStream);
             
@@ -879,7 +900,7 @@ public class HtChangeBean {
                 PcExcel2007WriterImpl writer = new PcExcel2007WriterImpl(
                                                     this.querySql(this.getLabelMap(pStart, pEnd)),
                                                     2,this.pcColsDef);
-                writer.process(outputStream, "合同变更后的基准计划成本");
+                writer.process(outputStream, this.connectId);
                 outputStream.flush();
             }
         } catch (Exception e) {
@@ -890,9 +911,9 @@ public class HtChangeBean {
     //导出文件名
     public String getExportDataExcelName(){
         if(isXlsx){
-            return "合同变更后的基准计划成本.xlsx";
+            return "合同变更后的基准计划成本_"+this.connectId+".xlsx";
         }else{
-            return "合同变更后的基准计划成本.xls";
+            return "合同变更后的基准计划成本_"+this.connectId+".xls";
         }
     }
     //显示错误框
@@ -921,5 +942,173 @@ public class HtChangeBean {
 
     public void errorPop(ActionEvent actionEvent) {
         this.showErrorPop();
+    }
+
+    public void setFileInput(RichInputFile fileInput) {
+        this.fileInput = fileInput;
+    }
+
+    public RichInputFile getFileInput() {
+        return fileInput;
+    }
+
+    public void operation_import(ActionEvent actionEvent) {
+        this.dataImportWnd.cancel();
+        //表头为空
+        if(this.year==null||this.pname==null||this.version==null){
+            JSFUtils.addFacesErrorMessage("请选择表头信息");
+            return;
+        }
+        //上传文件为空
+        if (null == this.fileInput.getValue()) {
+            JSFUtils.addFacesErrorMessage(DmsUtils.getMsg("dcm.plz_select_import_file"));
+            return;
+        }
+        //获取文件上传路径
+        String filePath = this.uploadFile();
+        
+        if (null == filePath) {
+            return;
+        }
+        
+        //读取excel数据到数据库临时表
+        try {
+            if (!this.handleExcel(filePath, connectId)) {
+            return;
+        }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        this.fileInput.resetValue();
+        //校验程序
+        if(this.validation_import()){
+//            if(this.validation()){
+                this.inputPro_import();
+                this.createTableModel(pStart , newEnd);
+//            }else{
+//                this.showErrorPop();
+//            }
+            }else {
+            //若出现错误则显示错误信息提示框
+            JSFUtils.addFacesErrorMessage("WBS等字段不可修改");
+            return;
+        }
+        //刷新数据
+        this.createTableModel(pStart , newEnd);
+    }
+    //导入导入
+    public void inputPro_import(){
+        DBTransaction trans = (DBTransaction)DmsUtils.getDcmApplicationModule().getDBTransaction();
+        CallableStatement cs = trans.createCallableStatement("{CALl DMS_ZZX.CHANGEIMPORT_INPUTPRO(?,?)}", 0);
+        try {
+            cs.setString(1,this.curUser.getId() );
+            cs.setString(2,this.connectId);
+            cs.execute();
+            trans.commit();
+            cs.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    //校验程序
+    public boolean validation_import(){
+        boolean flag = true;
+        DBTransaction trans = (DBTransaction)DmsUtils.getDcmApplicationModule().getDBTransaction();
+        CallableStatement cs = trans.createCallableStatement("{CALl DMS_ZZX.ZZXIMPORT_VALIDATION(?,?,?,?)}", 0);
+        try {
+            cs.setString(1, this.curUser.getId());
+            cs.setString(2, this.TYPE_CHANGE);
+            cs.setString(3,this.connectId);
+            cs.registerOutParameter(4, Types.VARCHAR);
+            cs.execute();
+            if("N".equals(cs.getString(4))){
+                flag = false;
+            }
+            cs.close();
+            trans.commit();
+        } catch (SQLException e) {
+            flag = false;
+            e.printStackTrace();
+        }
+        return flag;
+    }
+    
+    //读取excel数据到临时表
+    private boolean handleExcel(String fileName, String curComRecordId) throws SQLException {
+        DBTransaction trans =(DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
+        
+        //清空已有临时表数据
+        this.deleteTempAndError();
+        UploadedFile file = (UploadedFile)this.fileInput.getValue();
+        String fname = file.getFilename();
+        String name = fname.substring(fname.indexOf("_")+1, fname.indexOf("."));
+        if(!name.equals(this.connectId)){
+            JSFUtils.addFacesErrorMessage("请选择正确的文件");
+            return false;
+        }
+        SPRowReader spReader = new SPRowReader(trans,2,this.connectId,this.pcColsDef,this.curUser.getId(),this.TYPE_CHANGE, name);
+        try {
+                ExcelReaderUtil.readExcel(spReader, fileName, true);
+                spReader.close();
+            } catch (Exception e) {
+                this._logger.severe(e);
+                JSFUtils.addFacesErrorMessage(DmsUtils.getMsg("dcm.excel_handle_error"));
+                return false;
+            }
+        return true;
+    }
+    
+    //文件上传
+    private String uploadFile() {
+        UploadedFile file = (UploadedFile)this.fileInput.getValue();
+        if (!(file.getFilename().endsWith(".xls") ||
+              file.getFilename().endsWith(".xlsx"))) {
+            String msg = DmsUtils.getMsg("dcm.file_format_error");
+            JSFUtils.addFacesErrorMessage(msg);
+            return null;
+        }
+        String fileExtension =file.getFilename().substring(file.getFilename().lastIndexOf("."));
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+        String date = dateFormat.format(new Date());
+        File dmsBaseDir = new File("DMS/UPLOAD/合同变更" );
+        //如若文件路径不存在则创建文件目录
+        if (!dmsBaseDir.exists()) {
+            dmsBaseDir.mkdirs();
+        }
+        String fileName = "DMS/UPLOAD/" + "合同变更" + "/"+file.getFilename();
+        try {
+            InputStream inputStream = file.getInputStream();
+            FileOutputStream outputStream = new FileOutputStream(fileName);
+            BufferedInputStream bufferedInputStream =new BufferedInputStream(inputStream);
+            BufferedOutputStream bufferedOutputStream =
+                new BufferedOutputStream(outputStream);
+            byte[] buffer = new byte[10240];
+            int bytesRead = 0;
+            while ((bytesRead = bufferedInputStream.read(buffer, 0, 10240)) !=-1) {
+                bufferedOutputStream.write(buffer, 0, bytesRead);
+            }
+            bufferedOutputStream.flush();
+            if (bufferedOutputStream != null) {
+                bufferedOutputStream.close();
+            }
+            if (bufferedInputStream != null) {
+                bufferedInputStream.close();
+            }
+            file.dispose();
+        } catch (IOException e) {
+            this._logger.severe(e);
+            String msg = DmsUtils.getMsg("dcm.file_upload_error");
+            JSFUtils.addFacesErrorMessage(msg);
+            return null;
+        }
+        return (new File(fileName)).getAbsolutePath();
+    }
+    
+    public void setDataImportWnd(RichPopup dataImportWnd) {
+        this.dataImportWnd = dataImportWnd;
+    }
+
+    public RichPopup getDataImportWnd() {
+        return dataImportWnd;
     }
 }

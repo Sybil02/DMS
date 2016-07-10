@@ -119,10 +119,11 @@
                              id="gc4">
                   <af:inputFile id="if2" simple="true"
                                 columns="15"
-                                binding="#{viewScope.ProjectZxBean.fileInput}"/>
+                                binding="#{viewScope.ProjectZxBean.fileInput}"
+                                valueChangeListener="#{viewScope.ProjectZxBean.inputFile_valueChangeListener}"/>
                 </af:gridCell>
               </af:gridRow>
-              <af:gridRow marginTop="5px" marginBottom="5px" height="auto"
+              <!--<af:gridRow marginTop="5px" marginBottom="5px" height="auto"
                           id="gr4">
                 <af:gridCell width="auto" id="gc3"
                              inlineStyle="padding-top:5px">
@@ -142,7 +143,7 @@
                                          value="#{viewScope.ProjectZxBean.isReplaceDefault}"
                                          />
                 </af:gridCell>
-              </af:gridRow>
+              </af:gridRow>-->
               <af:gridRow marginTop="5px" marginBottom="5px" height="auto"
                           id="gr5">
                 <af:gridCell halign="center" width="auto" id="gc5"

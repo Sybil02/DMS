@@ -304,13 +304,14 @@ public class DcmDataDisplayBean extends TablePagination{
             return;
         }
         //上传文件为空
-        
+        System.out.println(this.fileInput.getValue()+"777777");
         if (null == this.fileInput.getValue()) {
             JSFUtils.addFacesErrorMessage(DmsUtils.getMsg("dcm.plz_select_import_file"));
             return;
         }
         //获取文件上传路径
         String filePath = this.uploadFile();
+        System.out.println(filePath);
         this.fileInput.resetValue();
         if (null == filePath) {
             return;
@@ -862,6 +863,7 @@ public class DcmDataDisplayBean extends TablePagination{
         String combinationRecord = ObjectUtils.toString(curComRecordId);
         //清空已有零时表数据
         this.clearTmpTableAndErrTable(curComRecordId);
+        System.out.println(this.curTempalte.getDataStartLine().getValue());
         RowReader reader =new RowReader(trans, (int)this.curTempalte.getDataStartLine().getValue(), this.curTempalte.getId(),combinationRecord, this.curTempalte.getTmpTable(),
                           this.colsdef.size(), this.curUser.getId(),this.curTempalte.getName());
         try {
@@ -898,6 +900,7 @@ public class DcmDataDisplayBean extends TablePagination{
         } else {
             fileName +=this.getCurComRecordText() + "_" + this.curUser.getName() +"_" + date + fileExtension;
         }
+        System.out.println(fileName);
         try {
             InputStream inputStream = file.getInputStream();
             FileOutputStream outputStream = new FileOutputStream(fileName);

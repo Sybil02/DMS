@@ -86,7 +86,6 @@ public class ProjectZxBean {
     //页面绑定组件
     private RichPopup dataExportWnd;
     private RichPopup errorWindow;
-    
     private Boolean isIncrement = true;
     private RichPopup dataImportWnd;
     private RichInputFile fileInput;
@@ -908,23 +907,24 @@ public class ProjectZxBean {
 
     public void operation_import(ActionEvent actionEvent) {
         this.dataImportWnd.cancel();
+        //表头为空
+        if(this.year==null||this.pname==null||this.version==null){
+            JSFUtils.addFacesErrorMessage("请选择表头信息");
+            return;
+        }
         //上传文件为空
-        
-        System.out.println(this.fileInput.getValue()+"66666666");
         if (null == this.fileInput.getValue()) {
             JSFUtils.addFacesErrorMessage(DmsUtils.getMsg("dcm.plz_select_import_file"));
             return;
         }
         //获取文件上传路径
         String filePath = this.uploadFile();
-        System.out.println("filePath:"+filePath);
-        this.fileInput.resetValue();
+        
         if (null == filePath) {
             return;
         }
         
         //读取excel数据到数据库临时表
-        //List<TemplateEntity> tempList = new ArrayList<TemplateEntity>();
         try {
             if (!this.handleExcel(filePath, connectId)) {
             return;
@@ -932,27 +932,34 @@ public class ProjectZxBean {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        
+        this.fileInput.resetValue();
         //校验程序
-        if(this.validation_import(this.isIncrement ? "INCREMENT" : "REPLACE")){
-            System.out.println("校验通过");
+        if(this.validation_import()){
+                //if(this.validation()){
+                    this.inputPro_import();
+                    this.createTableModel();
+                //            }else{
+                //                this.showErrorPop();
+                //            }
         }else {
             //若出现错误则显示错误信息提示框
-            this.showErrorPop();
+            JSFUtils.addFacesErrorMessage("WBS等字段不可修改");
+            return;
+            //this.showErrorPop();
         }
         //刷新数据
         this.createTableModel();
     }
     
     //校验程序
-    public boolean validation_import(String operation){
+    public boolean validation_import(){
         boolean flag = true;
         DBTransaction trans = (DBTransaction)DmsUtils.getDcmApplicationModule().getDBTransaction();
         CallableStatement cs = trans.createCallableStatement("{CALl DMS_ZZX.ZZXIMPORT_VALIDATION(?,?,?,?)}", 0);
         try {
             cs.setString(1, this.curUser.getId());
             cs.setString(2, this.TYPE_ZZX);
-            cs.setString(3,operation);
+            cs.setString(3,this.connectId);
             cs.registerOutParameter(4, Types.VARCHAR);
             cs.execute();
             if("N".equals(cs.getString(4))){
@@ -967,13 +974,35 @@ public class ProjectZxBean {
         return flag;
     }
     
+    //导入导入
+    public void inputPro_import(){
+        DBTransaction trans = (DBTransaction)DmsUtils.getDcmApplicationModule().getDBTransaction();
+        CallableStatement cs = trans.createCallableStatement("{CALl DMS_ZZX.ZZXIMPORT_INPUTPRO(?,?)}", 0);
+        try {
+            cs.setString(1,this.curUser.getId() );
+            cs.setString(2,this.connectId);
+            cs.execute();
+            trans.commit();
+            cs.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    
     //读取excel数据到临时表
     private boolean handleExcel(String fileName, String curComRecordId) throws SQLException {
         DBTransaction trans =(DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
         String combinationRecord = ObjectUtils.toString(curComRecordId);
         //清空已有临时表数据
         this.deleteTempAndError();
-        SPRowReader spReader = new SPRowReader(trans,2,this.connectId,this.pcColsDef,this.curUser.getId(),this.TYPE_ZZX);
+        UploadedFile file = (UploadedFile)this.fileInput.getValue();
+        String fname = file.getFilename();
+        String name = fname.substring(fname.indexOf("_")+1, fname.indexOf("."));
+        if(!name.equals(this.connectId)){
+            JSFUtils.addFacesErrorMessage("请选择正确的文件");
+            return false;
+        }
+        SPRowReader spReader = new SPRowReader(trans,2,this.connectId,this.pcColsDef,this.curUser.getId(),this.TYPE_ZZX,name);
         try {
                 ExcelReaderUtil.readExcel(spReader, fileName, true);
                 spReader.close();
@@ -997,12 +1026,12 @@ public class ProjectZxBean {
         String fileExtension =file.getFilename().substring(file.getFilename().lastIndexOf("."));
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
         String date = dateFormat.format(new Date());
-        File dmsBaseDir = new File("DMS/UPLOAD/zazhixing" );
+        File dmsBaseDir = new File("DMS/UPLOAD/在执行项目" );
         //如若文件路径不存在则创建文件目录
         if (!dmsBaseDir.exists()) {
             dmsBaseDir.mkdirs();
         }
-        String fileName = "DMS/UPLOAD/" + "在执行项目" + "/";
+        String fileName = "DMS/UPLOAD/" + "在执行项目" + "/"+file.getFilename();
         try {
             InputStream inputStream = file.getInputStream();
             FileOutputStream outputStream = new FileOutputStream(fileName);
@@ -1039,16 +1068,16 @@ public class ProjectZxBean {
     }
 
 
+
+    public void inputFile_valueChangeListener(ValueChangeEvent event) {
+        this.fileInput.setValue(event.getNewValue());
+    }
+
     public void setFileInput(RichInputFile fileInput) {
         this.fileInput = fileInput;
     }
 
     public RichInputFile getFileInput() {
         return fileInput;
-    }
-
-    public void inputFile_valueChangeListener(ValueChangeEvent event) {
-        System.out.println(event.getNewValue()+"0000000");
-        this.fileInput.setValue(event.getNewValue());
     }
 }

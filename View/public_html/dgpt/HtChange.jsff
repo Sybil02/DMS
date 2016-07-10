@@ -117,6 +117,31 @@
             </af:panelStretchLayout>
           </af:panelWindow>
         </af:popup>
+        <af:popup id="p4" binding="#{viewScope.HtChangeBean.dataImportWnd}">
+          <af:panelWindow id="pw4"
+                          title="#{viewBundle['dgpt.template.data_import']}">
+            <af:panelGridLayout id="pgl6">
+              <af:gridRow marginTop="5px" height="auto" id="gr4">
+                <af:gridCell marginStart="5px" width="auto" id="gc4">
+                  <af:outputText value="#{viewBundle['dcm.plz_select_import_file']}" id="ot14"/>
+                </af:gridCell>
+                <af:gridCell marginStart="5px" marginEnd="5px" width="auto"
+                             id="gc3">
+                  <af:inputFile id="if1" columns="15" simple="true"
+                                binding="#{viewScope.HtChangeBean.fileInput}"/>
+                </af:gridCell>
+              </af:gridRow>
+              <af:gridRow marginTop="5px" marginBottom="5px" height="auto"
+                          id="gr3">
+                <af:gridCell marginStart="5px" width="auto" id="gc2"
+                             halign="center" columnSpan="2">
+                  <af:commandButton text="#{viewBundle['dms.dgpt.excel.import']}" id="cb9"
+                                    actionListener="#{viewScope.HtChangeBean.operation_import}"/>
+                </af:gridCell>
+              </af:gridRow>
+            </af:panelGridLayout>
+          </af:panelWindow>
+        </af:popup>
       </af:panelGroupLayout>
     </f:facet>
     <f:facet name="center">
@@ -135,6 +160,9 @@
                               action="#{viewScope.HtChangeBean.operation_delete}"/>
             </af:group>
             <af:group id="g1">
+              <af:commandButton text="#{viewBundle['dms.dgpt.excel.import']}" id="cb10">
+                <af:showPopupBehavior popupId="::p4"/>
+              </af:commandButton>
               <af:commandButton text="#{viewBundle['dcm.action.export']}" id="cb7">
                 <af:showPopupBehavior popupId="::p2"/>
               </af:commandButton>
@@ -157,7 +185,7 @@
                             inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
                                     #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
                                     #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}"
-                             >
+                             rendered="#{attr.dbTableCol ne &quot;ROW_ID&quot;}">
                     <af:inputText value="#{row[attr.dbTableCol]}" id="ot6" 
                                     valueChangeListener="#{viewScope.HtChangeBean.valueChangeLinstener}"/>
                   </af:column>
