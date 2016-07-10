@@ -70,7 +70,7 @@ public class SPRowReader implements IRowReader{
             boolean isEpty = true;
             try {
                 this.stmt.setString(1, this.connectId);
-                this.stmt.setInt(2, curRow + 1);
+                this.stmt.setInt(2, curRow );
                 for (int i = 0; i < this.colsdef.size(); i++) {
                     String tmpstr = rowlist.get(i);
                     if (null == tmpstr || "".equals(tmpstr.trim())) {

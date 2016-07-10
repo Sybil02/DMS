@@ -874,12 +874,26 @@ public class RPCostBean {
         this.fileInput.resetValue();
         //校验程序
         if(this.validation_import()){
-                //if(this.validation()){
+                DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
+                Statement stat = trans.createStatement(DBTransaction.DEFAULT);
+                StringBuffer sql = new StringBuffer();
+                sql.append("UPDATE PRO_PLAN_COST_BODY_TEMP T SET(T.PLAN_QUANTITY,T.PLAN_AMOUNT,T.OCCURRED_QUANTITY,T.OCCURRED_AMOUNT,T.LGF_NUM,T.LGF_TYPE) ")
+                    .append("=(SELECT P.PLAN_QUANTITY,P.PLAN_AMOUNT,P.OCCURRED_QUANTITY,P.OCCURRED_AMOUNT,P.LGF_NUM,P.LGF_TYPE FROM PRO_PLAN_COST_BODY P WHERE P.CONNECT_ID = '").append(this.connectId)
+                    .append("' AND T.ROW_ID = P.ROWID)").append(" WHERE T.CONNECT_ID='").append(this.connectId).append("'");
+               
+                try {
+                    stat.executeUpdate(sql.toString());
+                    trans.commit();
+                    stat.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+                if(this.validation()){
                     this.inputPro_import();
                     this.createTableModel();
-                //            }else{
-                //                this.showErrorPop();
-                //            }
+                            }else{
+                                this.showErrorPop();
+                            }
             }else {
             //若出现错误则显示错误信息提示框
             JSFUtils.addFacesErrorMessage("WBS等字段不可修改");
