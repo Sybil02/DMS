@@ -347,7 +347,7 @@ public class DataManager {
         return hlsBomList;
     }
     
-    public void insertStaffFp(List<StaffFp> staffFps,Connection conn) throws SQLException {
+    private void insertStaffFp(List<StaffFp> staffFps,Connection conn) throws SQLException {
         String sql =
             "INSERT INTO DMS_HR_STAFF_FP (BUKRS, PERNR, PLANS, KST01, STELL, ZLEVEL, SOBID, BTRTL, BTEXT, ZQYBZ, NOTE1, " +
             "NOTE2, NOTE3, NOTE4, NOTE5, NOTE6, NOTE7, NOTE8, NOTE9, NOTE10, NOTE11, NOTE12, NOTE13, NOTE14, NOTE15, IFFLG, IFMSG) " +
@@ -437,7 +437,7 @@ public class DataManager {
         statUp.close();
     }
     
-    public void insertStaff(List<Staff> staffs,Connection conn,String msgId) throws SQLException {
+    private void insertStaff(List<Staff> staffs,Connection conn,String msgId) throws SQLException {
         String sql =
             "INSERT INTO DMS_HR_STAFF (BUKRS, PERNR, SNAME, ZMAIL, ZMOBIL, ZPHONE, ICNUM, STAT2, NOTE1, NOTE2, NOTE3, " +
             "NOTE4, NOTE5, NOTE6, NOTE7, NOTE8, NOTE9, NOTE10, NOTE11, NOTE12, NOTE13, NOTE14, NOTE15, IFFLG, IFMSG, MSGID) " +
