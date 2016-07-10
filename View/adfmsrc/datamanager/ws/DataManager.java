@@ -47,6 +47,12 @@ public class DataManager {
         super();
     }
     
+    /**
+     * 人员主数据
+     * @param staffList
+     * @param msgId
+     * @return
+     */
     public List<Staff> SyncStaff(List<StaffEntity> staffList,String msgId){
         Connection conn = DBConnUtils.getJNDIConnection("jdbc/DMSConnDS");
         List<Staff> result = new ArrayList<Staff>();
@@ -433,8 +439,8 @@ public class DataManager {
     
     public void insertStaff(List<Staff> staffs,Connection conn,String msgId) throws SQLException {
         String sql =
-            "INSERT INTO DMS_HR_STAFF (BUKRS, PERNR, SNAME, ZMAIL, ZMOBIL, ZPHONE, ICNUM, STAT2, NOTE1, NOTE2, NOTE3, NOTE4, " +
-            "NOTE5, NOTE6, NOTE7, NOTE8, NOTE9, NOTE10, NOTE11, NOTE12, NOTE13, NOTE14, NOTE15, IFFLG, IFMSG,MSGID) " +
+            "INSERT INTO DMS_HR_STAFF (BUKRS, PERNR, SNAME, ZMAIL, ZMOBIL, ZPHONE, ICNUM, STAT2, NOTE1, NOTE2, NOTE3, " +
+            "NOTE4, NOTE5, NOTE6, NOTE7, NOTE8, NOTE9, NOTE10, NOTE11, NOTE12, NOTE13, NOTE14, NOTE15, IFFLG, IFMSG, MSGID) " +
             "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         String sqlUp =
             "UPDATE DMS_HR_STAFF SET BUKRS=?, PERNR=?, SNAME=?, ZMAIL=?, ZMOBIL=?, ZPHONE=?, ICNUM=?, STAT2=?, NOTE1=?, NOTE2=?, NOTE3=?, NOTE4=?, " +
@@ -478,6 +484,7 @@ public class DataManager {
                 stat.setString(23, af.getNote15());
                 stat.setString(24, af.getIfflg());
                 stat.setString(25, af.getIfmsg());
+                stat.setString(26, msgId);
                 stat.executeUpdate();
             } else {
                 statUp.setString(1, af.getBukrs());
@@ -505,7 +512,7 @@ public class DataManager {
                 statUp.setString(23, af.getNote15());
                 statUp.setString(24, af.getIfflg());
                 statUp.setString(25, af.getIfmsg());
-                statUp.setString(26, af.getMsgid());
+                statUp.setString(26, msgId);
                 statUp.setString(27, af.getPernr());
                 statUp.executeUpdate();
             }

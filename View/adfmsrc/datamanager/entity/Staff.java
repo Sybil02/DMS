@@ -3,7 +3,8 @@ package datamanager.entity;
 import java.io.Serializable;
 
 public class Staff implements Serializable {
-    private static final long serialVersionUID = -7843175138248139965L;
+
+    private static final long serialVersionUID = -4346405118021954826L;
 
     public Staff() {
         super();
@@ -34,7 +35,6 @@ public class Staff implements Serializable {
     private String note15;
     private String ifflg;
     private String ifmsg;
-    private String msgid;
 
     public void setBukrs(String bukrs) {
         this.bukrs = bukrs;
@@ -236,11 +236,4 @@ public class Staff implements Serializable {
         return ifmsg;
     }
 
-    public void setMsgid(String msgid) {
-        this.msgid = msgid;
-    }
-
-    public String getMsgid() {
-        return msgid;
-    }
 }

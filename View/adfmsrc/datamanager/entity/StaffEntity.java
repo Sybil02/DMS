@@ -5,7 +5,8 @@ import java.io.Serializable;
 import java.util.List;
 
 public class StaffEntity implements Serializable {
-    private static final long serialVersionUID = 5296263216341118381L;
+
+    private static final long serialVersionUID = 3832232725052521684L;
 
     public StaffEntity() {
         super();
