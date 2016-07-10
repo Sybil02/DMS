@@ -1,5 +1,6 @@
 package datamanager.ws;
 
+import datamanager.entity.CostCenter;
 import datamanager.entity.HlsBomEntity;
 
 import datamanager.entity.Orginaze;
@@ -77,6 +78,126 @@ public class DataManager {
 
         }
         return result;
+    }
+
+    /**
+     * 成本中心主数据
+     * @param ccList
+     * @return
+     */
+    public List<CostCenter> SyncCostCenter(List<CostCenter> ccList){
+        Connection conn = DBConnUtils.getJNDIConnection("jdbc/DMSConnDS");
+        String sql =
+            "INSERT INTO DMS_COST_CENTER (KOSTL, DATBI, DATAB, BKZKP, ZZBMBM, ZZBMMC, BUKRS, ABTEI, KHINR, KTEXT, ZZTXMC, ZZYWXMC, ZZHYXMC, NOTE1, " +
+            "NOTE2, NOTE3, NOTE4, NOTE5, NOTE6, NOTE7, NOTE8, NOTE9, NOTE10, NOTE11, NOTE12, NOTE13, NOTE14, NOTE15, IFFLG, IFMSG, MSGID) " +
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sqlUp =
+            "UPDATE DMS_COST_CENTER SET KOSTL=?, DATBI=?, DATAB=?, BKZKP=?, ZZBMBM=?, ZZBMMC=?, BUKRS=?, ABTEI=?, KHINR=?, KTEXT=?, ZZTXMC=?, ZZYWXMC=?, ZZHYXMC=?, NOTE1=?, " +
+            "NOTE2=?, NOTE3=?, NOTE4=?, NOTE5=?, NOTE6=?, NOTE7=?, NOTE8=?, NOTE9=?, NOTE10=?, NOTE11=?, NOTE12=?, NOTE13=?, NOTE14=?, NOTE15=?, IFFLG=?, IFMSG=?, MSGID=? " +
+            "WHERE KOSTL=? ";
+        PreparedStatement stat = null;
+        PreparedStatement statUp = null;
+        Statement statExs = null;
+        try {
+            stat = conn.prepareStatement(sql);
+            statUp = conn.prepareStatement(sqlUp);
+            statExs = conn.createStatement();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        for (CostCenter cost : ccList) {
+            try {
+                Map<String, String> keyValue = new HashMap<String, String>();
+                keyValue.put("KOSTL", cost.getKostl());
+                if (!this.pkValidate(statExs, "DMS_COST_CENTER", keyValue)) {
+                    stat.setString(1, cost.getKostl());
+                    stat.setString(2, cost.getDatbi());
+                    stat.setString(3, cost.getDatab());
+                    stat.setString(4, cost.getBkzkp());
+                    stat.setString(5, cost.getZzbmbm());
+                    stat.setString(6, cost.getZzbmmc());
+                    stat.setString(7, cost.getBukrs());
+                    stat.setString(8, cost.getAbtei());
+                    stat.setString(9, cost.getKhinr());
+                    stat.setString(10, cost.getKtext());
+                    stat.setString(11, cost.getZztxmc());
+                    stat.setString(12, cost.getZzywxmc());
+                    stat.setString(13, cost.getZzhyxmc());
+                    stat.setString(14, cost.getNote1());
+                    stat.setString(15, cost.getNote2());
+                    stat.setString(16, cost.getNote3());
+                    stat.setString(17, cost.getNote4());
+                    stat.setString(18, cost.getNote5());
+                    stat.setString(19, cost.getNote6());
+                    stat.setString(20, cost.getNote7());
+                    stat.setString(21, cost.getNote8());
+                    stat.setString(22, cost.getNote9());
+                    stat.setString(23, cost.getNote10());
+                    stat.setString(24, cost.getNote11());
+                    stat.setString(25, cost.getNote12());
+                    stat.setString(26, cost.getNote13());
+                    stat.setString(27, cost.getNote14());
+                    stat.setString(28, cost.getNote15());
+                    stat.setString(29, cost.getIfflg());
+                    stat.setString(30, cost.getIfmsg());
+                    stat.setString(31, cost.getMsgid());
+                    stat.executeUpdate();
+                } else {
+                    statUp.setString(1, cost.getKostl());
+                    statUp.setString(2, cost.getDatbi());
+                    statUp.setString(3, cost.getDatab());
+                    statUp.setString(4, cost.getBkzkp());
+                    statUp.setString(5, cost.getZzbmbm());
+                    statUp.setString(6, cost.getZzbmmc());
+                    statUp.setString(7, cost.getBukrs());
+                    statUp.setString(8, cost.getAbtei());
+                    statUp.setString(9, cost.getKhinr());
+                    statUp.setString(10, cost.getKtext());
+                    statUp.setString(11, cost.getZztxmc());
+                    statUp.setString(12, cost.getZzywxmc());
+                    statUp.setString(13, cost.getZzhyxmc());
+                    statUp.setString(14, cost.getNote1());
+                    statUp.setString(15, cost.getNote2());
+                    statUp.setString(16, cost.getNote3());
+                    statUp.setString(17, cost.getNote4());
+                    statUp.setString(18, cost.getNote5());
+                    statUp.setString(19, cost.getNote6());
+                    statUp.setString(20, cost.getNote7());
+                    statUp.setString(21, cost.getNote8());
+                    statUp.setString(22, cost.getNote9());
+                    statUp.setString(23, cost.getNote10());
+                    statUp.setString(24, cost.getNote11());
+                    statUp.setString(25, cost.getNote12());
+                    statUp.setString(26, cost.getNote13());
+                    statUp.setString(27, cost.getNote14());
+                    statUp.setString(28, cost.getNote15());
+                    statUp.setString(29, cost.getIfflg());
+                    statUp.setString(30, cost.getIfmsg());
+                    statUp.setString(31, cost.getMsgid());
+                    statUp.setString(32, cost.getKostl());
+                    statUp.executeUpdate();
+                }
+                conn.commit();
+                cost.setIfflg("S");
+            } catch (SQLException e) {
+                e.printStackTrace();
+                cost.setIfflg("E");
+                if (e.getMessage().length() > 50) {
+                    cost.setIfmsg(e.getMessage().substring(0, 49));
+                } else {
+                    cost.setIfmsg(e.getMessage());
+                }
+            }
+        }
+        try {
+            stat.close();
+            statExs.close();
+            statUp.close();
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return ccList;
     }
 
     /**
