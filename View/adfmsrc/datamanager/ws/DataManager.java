@@ -691,6 +691,10 @@ public class DataManager {
     }
     
     private void insertStaffFp(List<StaffFp> staffFps,Connection conn) throws SQLException {
+        if(staffFps == null || staffFps.size() == 0){
+            return;    
+        }
+        
         String sql =
             "INSERT INTO DMS_HR_STAFF_FP (BUKRS, PERNR, PLANS, KST01, STELL, ZLEVEL, SOBID, BTRTL, BTEXT, ZQYBZ, NOTE1, " +
             "NOTE2, NOTE3, NOTE4, NOTE5, NOTE6, NOTE7, NOTE8, NOTE9, NOTE10, NOTE11, NOTE12, NOTE13, NOTE14, NOTE15, IFFLG, IFMSG) " +
@@ -781,6 +785,10 @@ public class DataManager {
     }
     
     private void insertStaff(List<Staff> staffs,Connection conn,String msgId) throws SQLException {
+        if(staffs == null || staffs.size() == 0){
+            return;    
+        }
+        
         String sql =
             "INSERT INTO DMS_HR_STAFF (BUKRS, PERNR, SNAME, ZMAIL, ZMOBIL, ZPHONE, ICNUM, STAT2, NOTE1, NOTE2, NOTE3, " +
             "NOTE4, NOTE5, NOTE6, NOTE7, NOTE8, NOTE9, NOTE10, NOTE11, NOTE12, NOTE13, NOTE14, NOTE15, IFFLG, IFMSG, MSGID) " +
@@ -868,6 +876,10 @@ public class DataManager {
 
     private void insertPsJob(List<PsJob> psJob,
                              Connection conn) throws SQLException {
+        if(psJob == null || psJob.size() == 0){
+            return;    
+        }
+        
         String sql =
             "INSERT INTO DMS_PS_JOBS (MANDT, AUFPL, APLZL, SUMNR, ACTVT, PSPHI, LTXA1, OBJNR, AUFNR, PROJN, BUKRS, SAKTO, WAERS, FSAVD, SSEDD, ERNAM, " +
             "ERDAT, AENAM, AEDAT, VERNR, VERNA, NOTE1, NOTE2, NOTE3, NOTE4, NOTE5, NOTE6, NOTE7, NOTE8, NOTE9, NOTE10, NOTE11, NOTE12, NOTE13, NOTE14, NOTE15, IFFLG, IFMSG) " +
@@ -984,6 +996,10 @@ public class DataManager {
     }
 
     private void insertPsMaster(List<PsMaster> psMaster, Connection conn, String msgId) throws SQLException {
+        if(psMaster == null || psMaster.size() == 0){
+            return;    
+        }
+        
         String sql =
             "INSERT INTO DMS_PS_MASTER (MANDT, PSPNR, POST1, OBJNR, ERNAM, ERDAT, AENAM, AEDAT, VBUKR, PWHIE, PLFAZ, PLSEZ, PROFL, ZPS005, ZPS007, ZSD022," +
             "ZSD023, ZSD029, PROFI_TXT, ZZFXXMLX, STAT, NOTE1, NOTE2, NOTE3, NOTE4, NOTE5, NOTE6, NOTE7, NOTE8, NOTE9, NOTE10, NOTE11, NOTE12, NOTE13, NOTE14, NOTE15, IFFLG, IFMSG,MSGID) " +
@@ -1099,6 +1115,10 @@ public class DataManager {
 
     private void insertPsMilepost(List<PsMilepost> psMilepost,
                                   Connection conn) throws SQLException {
+        if(psMilepost == null || psMilepost.size() == 0){
+            return;    
+        }
+        
         String sql =
             "INSERT INTO DMS_PS_MILEPOST (MANDT, ZAEHL, KTEXT, VORNR, AUFNR, PSPNR, PSPHI, BUKRS, TEDAT, LST_ACTDT, FPROZ, NOTE1, NOTE2, " +
             "NOTE3, NOTE4, NOTE5, NOTE6, NOTE7, NOTE8, NOTE9, NOTE10, NOTE11, NOTE12, NOTE13, NOTE14, NOTE15, IFFLG, IFMSG) " +
@@ -1193,6 +1213,10 @@ public class DataManager {
     }
 
     private void insertPsNetwork(List<PsNetwork> psNetwork ,Connection conn) throws SQLException {
+        if(psNetwork == null || psNetwork.size() == 0){
+            return;    
+        }
+        
         String sql =
             "INSERT INTO DMS_PS_NETWORK (MANDT, AUFNR, KTEXT, OBJNR, PSPEL, PSPHI, BUKRS, GSTRS, GLTRS, ERDAT, ERNAM, NOTE1, NOTE2, NOTE3, NOTE4, " +
             "NOTE5, NOTE6, NOTE7, NOTE8, NOTE9, NOTE10, NOTE11, NOTE12, NOTE13, NOTE14, NOTE15, IFFLG, IFMSG) " +
@@ -1287,6 +1311,10 @@ public class DataManager {
     }
 
     private void insertPsOrg(List<PsOrg> psOrg,Connection conn) throws SQLException {
+        if(psOrg == null || psOrg.size() == 0){
+            return;    
+        }
+        
         String sql =
             "INSERT INTO DMS_PS_ORG (MANDT, PSPNR, ZROLE, VERNR, SNAME, PLFAZ, PLSEZ, ERNAM, ERDAT, NOTE1, NOTE2, NOTE3, NOTE4, NOTE5, " +
             "NOTE6, NOTE7, NOTE8, NOTE9, NOTE10, NOTE11, NOTE12, NOTE13, NOTE14, NOTE15, IFFLG, IFMSG) " +
@@ -1375,6 +1403,9 @@ public class DataManager {
     }
 
     private void insertPsWbs(List<PsWbs> psWbs,Connection conn) throws SQLException {
+        if(psWbs == null || psWbs.size() == 0){
+            return;    
+        }
         String sql =
             "INSERT INTO DMS_PS_WBS (MANDT, PSPNR, POST1, OBJNR, PSPHI, PBUKR, PSTRM, PETRM, ERNAM, ERDAT, AENAM, AEDAT, VERNR, VERNA, " +
             "NOTE1, NOTE2, NOTE3, NOTE4, NOTE5, NOTE6, NOTE7, NOTE8, NOTE9, NOTE10, NOTE11, NOTE12, NOTE13, NOTE14, NOTE15, IFFLG, IFMSG) " +
@@ -1473,6 +1504,9 @@ public class DataManager {
     }
 
     private void insertPsWbsMaster(List<PsWbsMaster> psWbsMaster,Connection conn) throws SQLException {
+        if(psWbsMaster == null || psWbsMaster.size() == 0){
+            return;    
+        }
         String sql =
             "INSERT INTO DMS_PS_WBS_MASTER (MANDT, POSNR, PSPHI, UP, DOWN, LEFT, RIGHT, NOTE1, NOTE2, NOTE3, NOTE4, " +
             "NOTE5, NOTE6, NOTE7, NOTE8, NOTE9, NOTE10, NOTE11, NOTE12, NOTE13, NOTE14, NOTE15, IFFLG, IFMSG) " +
