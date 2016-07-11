@@ -1867,6 +1867,9 @@ public class DcmDataDisplayBean extends TablePagination{
     }
 
     public void closeCombination(ActionEvent actionEvent) {
+        //保存
+        this.operation_save();
+        
         StringBuffer sql = new StringBuffer();
         sql.append("UPDATE DCM_TEMPLATE_COMBINATION SET STATUS=\'CLOSE\',UPDATED_AT=SYSDATE WHERE ")
             .append("TEMPLATE_ID= \'").append(this.curTempalte.getId()).append("' ")
