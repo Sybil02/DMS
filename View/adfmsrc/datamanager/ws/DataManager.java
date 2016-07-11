@@ -110,6 +110,7 @@ public class DataManager {
             try {
                 Map<String, String> keyValue = new HashMap<String, String>();
                 keyValue.put("BUKRS", acc.getBukrs());
+                keyValue.put("SAKNR", acc.getSaknr());
                 if (!this.pkValidate(statExs, "DMS_GL_ACCOUNT", keyValue)) {
                     stat.setString(1, acc.getBukrs());
                     stat.setString(2, acc.getSaknr());
@@ -214,6 +215,8 @@ public class DataManager {
             try {
                 Map<String, String> keyValue = new HashMap<String, String>();
                 keyValue.put("KOSTL", cost.getKostl());
+                keyValue.put("DATBI", cost.getDatbi());
+                keyValue.put("ABTEI", cost.getAbtei());
                 if (!this.pkValidate(statExs, "DMS_COST_CENTER", keyValue)) {
                     stat.setString(1, cost.getKostl());
                     stat.setString(2, cost.getDatbi());
@@ -335,6 +338,9 @@ public class DataManager {
                 Map<String, String> keyValue = new HashMap<String, String>();
                 keyValue.put("ZJGDM", org.getZjgdm());
                 keyValue.put("ZBMDM", org.getZbmdm());
+                keyValue.put("ZZRZX", org.getZzrzx());
+                keyValue.put("ZSJBM", org.getZsjbm());
+                keyValue.put("ZZGGW", org.getZzggw());
                 if (!this.pkValidate(statExs, "DMS_HR_ORG", keyValue)) {
                     stat.setString(1, org.getZjgdm());
                     stat.setString(2, org.getZbmdm());
