@@ -366,7 +366,7 @@ public class BPCostBean {
         }
         sql.append("ROWID AS ROW_ID,LGF_NUM,LGF_TYPE,PLAN_QUANTITY,PLAN_AMOUNT," +
             "OCCURRED_QUANTITY,OCCURRED_AMOUNT FROM PRO_PLAN_COST_BODY WHERE CONNECT_ID = '").append(connectId).append("'");
-        sql.append(" AND DATA_TYPE = '").append(this.TYPE_BASE).append("' ORDER BY WBS,NETWORK,WORK_CODE");
+        sql.append(" AND DATA_TYPE = '").append(this.TYPE_BASE).append("' ORDER BY WBS,NETWORK,TO_NUMBER(WORK_CODE)");
         return sql.toString();
     }
     //一行中，列的map
