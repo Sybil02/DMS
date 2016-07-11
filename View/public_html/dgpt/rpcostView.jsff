@@ -163,7 +163,8 @@
             </af:group>
             <af:group id="g2">
               <af:commandButton text="#{viewBundle['dms.dgpt.excel.import']}"
-                                id="cb6">
+                                id="cb6" disabled="#{viewScope.RPCostBean.isBlock}"
+                                partialTriggers="cb3">
                    <af:showPopupBehavior popupId="::p3"/>             
              </af:commandButton>
               <af:commandButton text="#{viewBundle['dcm.action.export']}" id="cb7">

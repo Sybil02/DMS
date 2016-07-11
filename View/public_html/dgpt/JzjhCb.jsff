@@ -146,7 +146,9 @@
                               actionListener="#{viewScope.BPCostBean.operation_reset}"/>
         </af:group>
         <af:group id="g1">
-              <af:commandButton text="#{viewBundle['dms.dgpt.excel.import']}" id="cb8">
+              <af:commandButton text="#{viewBundle['dms.dgpt.excel.import']}" id="cb8"
+                                disabled="#{viewScope.BPCostBean.isBlock}"
+                                partialTriggers="cb3">
                 <af:showPopupBehavior popupId="::p3"/>
               </af:commandButton>
               <af:commandButton text="#{viewBundle['dcm.action.export']}" id="cb7">

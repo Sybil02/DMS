@@ -170,7 +170,9 @@
                                 actionListener="#{viewScope.ProjectZxBean.reset}"/>
             </af:group>
             <af:group id="g1">
-              <af:commandButton text="#{viewBundle['dms.dgpt.import']}" id="cb5">
+              <af:commandButton text="#{viewBundle['dms.dgpt.import']}" id="cb5"
+                                disabled="#{viewScope.ProjectZxBean.isBlock}"
+                                partialTriggers="cb8">
               <af:showPopupBehavior popupId="::p3" alignId=""/>
               </af:commandButton>
               <af:commandButton text="#{viewBundle['dcm.action.export']}" id="cb7">
