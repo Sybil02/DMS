@@ -77,6 +77,7 @@ public class RPCostBean {
     private RichPopup errorWindow;
     private RichInputFile fileInput;
     private RichPopup dataImportWnd;
+    DmsLog dmsLog = new DmsLog();
 
     public RPCostBean() {
         super();
@@ -543,7 +544,7 @@ public class RPCostBean {
         //执行校验
         if(this.validation()){
             this.inputPro();
-            DmsLog.operationLog(this.curUser.getAcc(),this.connectId,this.getCom(),"UPDATE");
+            dmsLog.operationLog(this.curUser.getAcc(),this.connectId,this.getCom(),"UPDATE");
             for(Map<String,String> rowdata : modelData){
                 if("UPDATE".equals(rowdata.get("OPERATION"))){
                     rowdata.put("OPERATION", null);
@@ -650,7 +651,8 @@ public class RPCostBean {
         } catch (Exception e) {
             this._logger.severe(e);
         } 
-        DmsLog.operationLog(this.curUser.getAcc(),this.connectId,this.getCom(),"EXPORT");
+        
+        dmsLog.operationLog(this.curUser.getAcc(),this.connectId,this.getCom(),"EXPORT");
     }
     
     //导出文件名
@@ -901,6 +903,7 @@ public class RPCostBean {
         }
         //刷新数据
         this.createTableModel();
+        dmsLog.operationLog(this.curUser.getAcc(),this.connectId,this.getCom(),"IMPORT");
     }
 
     //校验程序

@@ -124,6 +124,8 @@ public class BPCostBean {
     //是否是2007及以上格式
     private boolean isXlsx = true;
     private RichPopup dataExportWnd;
+    
+    DmsLog dmsLog = new DmsLog();
 
     private void initList(){
         this.yearList = queryYears("HLS_YEAR_C");
@@ -500,7 +502,7 @@ public class BPCostBean {
         //执行校验
         if(this.validation()){
             this.inputPro();
-            DmsLog.operationLog(this.curUser.getAcc(),this.connectId,this.getCom(),"UPDATE");
+            dmsLog.operationLog(this.curUser.getAcc(),this.connectId,this.getCom(),"UPDATE");
             for(Map<String,String> rowdata : modelData){
                 if("UPDATE".equals(rowdata.get("OPERATION"))){
                     rowdata.put("OPERATION", null);
@@ -634,7 +636,7 @@ public class BPCostBean {
         } catch (Exception e) {
             this._logger.severe(e);
         } 
-        DmsLog.operationLog(this.curUser.getAcc(),this.connectId,this.getCom(),"EXPORT");
+       dmsLog.operationLog(this.curUser.getAcc(),this.connectId,this.getCom(),"EXPORT");
     }
     
     //导出文件名
@@ -917,7 +919,6 @@ public class BPCostBean {
                 sql.append("UPDATE PRO_PLAN_COST_BODY_TEMP T SET(T.PLAN_QUANTITY,T.PLAN_AMOUNT,T.OCCURRED_QUANTITY,T.OCCURRED_AMOUNT,T.LGF_NUM,T.LGF_TYPE) ")
                     .append("=(SELECT P.PLAN_QUANTITY,P.PLAN_AMOUNT,P.OCCURRED_QUANTITY,P.OCCURRED_AMOUNT,P.LGF_NUM,P.LGF_TYPE FROM PRO_PLAN_COST_BODY P WHERE P.CONNECT_ID = '").append(this.connectId)
                     .append("' AND T.ROW_ID = P.ROWID)").append(" WHERE T.CONNECT_ID='").append(this.connectId).append("'");
-                System.out.println(sql.toString());
                 try {
                     stat.executeUpdate(sql.toString());
                     trans.commit();
@@ -938,6 +939,7 @@ public class BPCostBean {
         }
         //刷新数据
         this.createTableModel();
+        dmsLog.operationLog(this.curUser.getAcc(),this.connectId,this.getCom(),"IMPORT");
     }
     
     //校验程序

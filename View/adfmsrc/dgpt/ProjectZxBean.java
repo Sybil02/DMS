@@ -121,6 +121,7 @@ public class ProjectZxBean {
     public static final String TYPE_ZZX="ZX";
     private String isBlock;
     private boolean isManager;
+    DmsLog dmsLog = new DmsLog();
     
     private void initList(){
         this.yearList = queryYears("HLS_YEAR_C");
@@ -249,6 +250,12 @@ public class ProjectZxBean {
 
                 }
                 row.put("ROW_ID", rs.getString("ROW_ID"));
+                row.put("LGF_NUM", rs.getString("LGF_NUM"));
+                row.put("LGF_TYPE", rs.getString("LGF_TYPE"));
+                row.put("PLAN_QUANTITY", rs.getString("PLAN_QUANTITY"));
+                row.put("PLAN_AMOUNT", rs.getString("PLAN_AMOUNT"));
+                row.put("OCCURRED_QUANTITY", rs.getString("OCCURRED_QUANTITY"));
+                row.put("OCCURRED_AMOUNT", rs.getString("OCCURRED_AMOUNT"));
                 row.put("CONNECT_ID", connectId);
                 data.add(row);
             }
@@ -539,7 +546,7 @@ public class ProjectZxBean {
         
         if(this.validation()){
             this.inputPro();
-            DmsLog.operationLog(this.curUser.getAcc(),this.connectId,this.getCom(),"UPDATE");
+            dmsLog.operationLog(this.curUser.getAcc(),this.connectId,this.getCom(),"UPDATE");
             for(Map<String,String> rowdata : modelData){
                 if("UPDATE".equals(rowdata.get("OPERATION"))){
                     rowdata.put("OPERATION", null);
@@ -649,7 +656,7 @@ public class ProjectZxBean {
         } catch (Exception e) {
             this._logger.severe(e);
         } 
-        DmsLog.operationLog(this.curUser.getAcc(),this.connectId,this.getCom(),"EXPORT");
+        dmsLog.operationLog(this.curUser.getAcc(),this.connectId,this.getCom(),"EXPORT");
     }
     
     private String getCom(){
@@ -963,6 +970,7 @@ public class ProjectZxBean {
         }
         //刷新数据
         this.createTableModel();
+        dmsLog.operationLog(this.curUser.getAcc(),this.connectId,this.getCom(),"IMPORT");
     }
     
     //校验程序

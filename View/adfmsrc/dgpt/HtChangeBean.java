@@ -106,6 +106,9 @@ public class HtChangeBean {
     private String connectId;
     private String newVersion;
     private String newEnd;
+    
+    DmsLog dmsLog = new DmsLog();
+    
     public static final String TYPE_CHANGE="CHANGE";
     //日志
     private static ADFLogger _logger =ADFLogger.createADFLogger(DcmDataDisplayBean.class);
@@ -552,7 +555,7 @@ public class HtChangeBean {
                 e.printStackTrace();
             }
             this.inputPro();
-            DmsLog.operationLog(this.curUser.getAcc(),this.connectId,this.getCom(),"UPDATE");
+           dmsLog.operationLog(this.curUser.getAcc(),this.connectId,this.getCom(),"UPDATE");
             for(Map<String,String> rowdata : modelData){
                     rowdata.put("OPERATION", null);
             }
@@ -906,7 +909,7 @@ public class HtChangeBean {
         } catch (Exception e) {
             this._logger.severe(e);
         } 
-        DmsLog.operationLog(this.curUser.getAcc(),this.connectId,this.getCom(),"EXPORT");
+        dmsLog.operationLog(this.curUser.getAcc(),this.connectId,this.getCom(),"EXPORT");
     }
     //导出文件名
     public String getExportDataExcelName(){
@@ -995,6 +998,7 @@ public class HtChangeBean {
         }
         //刷新数据
         this.createTableModel(pStart , newEnd);
+        dmsLog.operationLog(this.curUser.getAcc(),this.connectId,this.getCom(),"IMPORT");
     }
     //导入导入
     public void inputPro_import(){

@@ -25,6 +25,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import java.util.UUID;
+
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
@@ -62,13 +64,14 @@ import weblogic.servlet.security.ServletAuthentication;
 
 public class LoginBean {
     private String msg;
-    private static String account;
+    private String account;
     private String password;
     private static ADFLogger _logger =
         ADFLogger.createADFLogger(LoginBean.class);
     private RichInputText acc;
     private RichInputText mail;
     private RichPopup popup;
+    DmsLog dmsLog = new DmsLog();
 
     public LoginBean() {
     }
@@ -82,12 +85,16 @@ public class LoginBean {
             this.msg = DmsUtils.getMsg("login.account_not_exist");
         } else {
             String pwd = row.getPwd();
+            //生成id
+            String s = UUID.randomUUID().toString();
+            //去除分隔符-
+            String newId = s.substring(0,8)+s.substring(9,13)+s.substring(14,18)+s.substring(19,23)+s.substring(24);
             try {
                 String encypt_pwd =DigestUtils.digestSHA1(ObjectUtils.toString(this.account).trim() +ObjectUtils.toString(this.password).trim());
                 if (pwd.equals(encypt_pwd)) {
                     //登陆成功
-                    DmsLog.loginMsg(this.account);
-                    this.initUserPreference(row);
+                    dmsLog.loginMsg(this.account,newId);
+                    this.initUserPreference(row,newId);
                     ExternalContext ectx =FacesContext.getCurrentInstance().getExternalContext();
                     ectx.redirect(ControllerContext.getInstance().getGlobalViewActivityURL("index"));
                 } else {
@@ -125,8 +132,9 @@ public class LoginBean {
         return password;
     }
 
-    private void initUserPreference(DmsUserViewRowImpl user) {
+    private void initUserPreference(DmsUserViewRowImpl user,String newId) {
         ADFContext.getCurrent().getSessionScope().put("cur_user",new Person(user));
+        ADFContext.getCurrent().getSessionScope().put("newId", newId);
         user.getApplicationModule().getSession().getUserData().put("userId",user.getId());
         ADFContext.getCurrent().getSessionScope().put("userId", user.getId());  
         ViewObject vo=DmsUtils.getDmsApplicationModule().getDmsUserFunctionView();
@@ -141,8 +149,11 @@ public class LoginBean {
     }
 
     public void logout(){
-        DmsLog.logoutMsg(this.account);
+        String newId = (String)ADFContext.getCurrent().getSessionScope().get("newId");
+        dmsLog.logoutMsg(newId);
+        ADFContext.getCurrent().getSessionScope().remove("newId");
         ADFContext.getCurrent().getSessionScope().remove("cur_user");
+        
         ExternalContext ectx =FacesContext.getCurrentInstance().getExternalContext();
         HttpSession session = (HttpSession)ectx.getSession(false);
         session.invalidate();
