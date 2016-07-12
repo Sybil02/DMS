@@ -64,17 +64,22 @@ public class DataManager {
             try {
                 this.insertStaff(staffEntity.getStaffs(), conn, msgId);
                 this.insertStaffFp(staffEntity.getStaffFps(), conn);
-                staffEntity.getStaffs().get(0).setIfflg("S");
-                result.add(staffEntity.getStaffs().get(0));
+                for(int i=0;i<staffEntity.getStaffs().size();i++){
+                    staffEntity.getStaffs().get(i).setIfflg("S");
+                    result.add(staffEntity.getStaffs().get(i)); 
+                }
             } catch (SQLException e) {
                 e.printStackTrace();
-                staffEntity.getStaffs().get(0).setIfflg("E");
-                if (e.getMessage().length() > 50) {
-                    staffEntity.getStaffs().get(0).setIfmsg(e.getMessage().substring(0, 49));
-                } else {
-                    staffEntity.getStaffs().get(0).setIfmsg(e.getMessage());
+                for(int i=0;i<staffEntity.getStaffs().size();i++){
+                    staffEntity.getStaffs().get(i).setIfflg("E");
+                    if (e.getMessage().length() > 50) {
+                        staffEntity.getStaffs().get(i).setIfmsg(e.getMessage().substring(0, 49));
+                    } else {
+                        staffEntity.getStaffs().get(i).setIfmsg(e.getMessage());
+                    }
+                    result.add(staffEntity.getStaffs().get(i));
                 }
-                result.add(staffEntity.getStaffs().get(0));
+
             }
 
         }
@@ -562,17 +567,21 @@ public class DataManager {
                 this.insertPsWbs(psEntity.getPsWbs(),conn);
                 this.insertPsWbsMaster(psEntity.getPsWbsMaster(),conn);
                 this.insertPsMaster(psEntity.getPsMaster(), conn, msgId);
-                psEntity.getPsMaster().get(0).setIfflg("S");
-                result.add(psEntity.getPsMaster().get(0));
+                for(int i=0;i<psEntity.getPsMaster().size();i++){
+                    psEntity.getPsMaster().get(i).setIfflg("S");
+                    result.add(psEntity.getPsMaster().get(i));
+                }
             } catch (SQLException e) {
                 e.printStackTrace();
-                psEntity.getPsMaster().get(0).setIfflg("E");
-                if (e.getMessage().length() > 50) {
-                    psEntity.getPsMaster().get(0).setIfmsg(e.getMessage().substring(0, 49));
-                } else {
-                    psEntity.getPsMaster().get(0).setIfmsg(e.getMessage());
+                for(int i=0;i<psEntity.getPsMaster().size();i++){
+                    psEntity.getPsMaster().get(i).setIfflg("E");
+                    if (e.getMessage().length() > 50) {
+                        psEntity.getPsMaster().get(i).setIfmsg(e.getMessage().substring(0, 49));
+                    } else {
+                        psEntity.getPsMaster().get(i).setIfmsg(e.getMessage());
+                    }
+                    result.add(psEntity.getPsMaster().get(i));
                 }
-                result.add(psEntity.getPsMaster().get(0));
             }
 
         }

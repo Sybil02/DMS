@@ -1432,7 +1432,7 @@ public class DcmDataDisplayBean extends TablePagination{
                 header.setValueSetId((String)row.getAttribute("ValueSetId"));
                 header.setCode((String)row.getAttribute("Code"));
                 this.initHeaderValueList(header);
-                this.setDefaultHeaderValue(header);
+                //this.setDefaultHeaderValue(header);
                 this.templateHeader.add(header);
             }
             this.curCombiantionRecord=this.getCurCombinationRecord();
