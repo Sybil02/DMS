@@ -1004,7 +1004,7 @@ public class HtChangeBean {
         }
         this.fileInput.resetValue();
         //校验程序
-        if(this.validation_import()){
+//        if(this.validation_import()){
             if(this.validation()){
                 //删除原数据
                 Statement statDelete = trans.createStatement(DBTransaction.DEFAULT);
@@ -1032,11 +1032,11 @@ public class HtChangeBean {
             }else{
                 this.showErrorPop();
             }
-            }else {
-            //若出现错误则显示错误信息提示框
-            JSFUtils.addFacesErrorMessage("WBS等字段不可修改");
-            return;
-        }
+//            }else {
+//            //若出现错误则显示错误信息提示框
+//            JSFUtils.addFacesErrorMessage("WBS等字段不可修改");
+//            return;
+//        }
         //刷新数据
         this.createTableModel(pStart , newEnd);
         dmsLog.operationLog(this.curUser.getAcc(),this.connectId,this.getCom(),"IMPORT");
