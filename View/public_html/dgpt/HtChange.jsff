@@ -150,8 +150,8 @@
         <f:facet name="toolbar">
           <af:toolbar id="t1">
           <af:group id="grp1">
-            <af:commandButton text="#{viewBundle['dcm.common.new']}" id="cb1"
-                              action="#{viewScope.HtChangeBean.operation_new}"/>
+            <!--<af:commandButton text="#{viewBundle['dcm.common.new']}" id="cb1"
+                              action="#{viewScope.HtChangeBean.operation_new}"/>-->
             <af:commandButton text="#{viewBundle['dms.common.save']}" id="cb2"
                               action="#{viewScope.HtChangeBean.operation_save}"/>
             <af:commandButton text="#{viewBundle['dms.common.cancel']}" id="cb3"
@@ -178,7 +178,7 @@
                   selectedRowKeys="#{viewScope.HtChangeBean.dataModel.selectedRows}"
                   rowSelection="multiple" editingMode="clickToEdit"
                   emptyText="#{viewBundle['dms.common.nodata']}"
-                  partialTriggers=":::soc1 :::soc2 :::soc3 ::cb1 ::cb2 ::cb3 ::cb4">
+                  partialTriggers=":::soc1 :::soc2 :::soc3 ::cb2 ::cb3 ::cb4">
             <af:forEach items="#{viewScope.HtChangeBean.dataModel.pcColsDef}"
                         var="attr" varStatus="vs">
                   <af:column sortable="false" headerText="#{attr.columnLable}" id="c1"

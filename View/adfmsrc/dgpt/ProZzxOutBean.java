@@ -216,9 +216,10 @@ public class ProZzxOutBean {
         if(number.startsWith(".")){
             number = "0" + number;    
         }
-        while(number.contains(".")&&number.endsWith("0")){
-            number = number.substring(0,number.length()-1);
-        }
+        //显示时16.0不用去除.0
+//        while(number.contains(".")&&number.endsWith("0")){
+//            number = number.substring(0,number.length()-1);
+//        }
         return number;  
     }
     
@@ -440,88 +441,6 @@ public class ProZzxOutBean {
         }
     }
     
-    //保存操作
-    public void operation_save() {
-        DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
-        //删除临时表数据
-        String sqldelete = "DELETE FROM PRO_PLAN_COST_BODY_TEMP T WHERE T.CREATED_BY = \'"+this.curUser.getId()+"\'";
-        Statement st = trans.createStatement(DBTransaction.DEFAULT);
-        try {
-            st.executeUpdate(sqldelete);
-            trans.commit();
-            st.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        //清空错误表数据
-        String sqlError = "DELETE FROM PRO_PLAN_COST_ERROR T WHERE T.CREATED_BY = \'"+this.curUser.getId()+"\'";
-        Statement sta = trans.createStatement(DBTransaction.DEFAULT);
-        try {
-            sta.executeUpdate(sqlError);
-            trans.commit();
-            sta.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        StringBuffer sql = new StringBuffer();
-        StringBuffer sql_value = new StringBuffer();
-        sql_value.append(" VALUES(");
-        sql.append("INSERT INTO PRO_PLAN_COST_BODY_TEMP(") ;
-        LinkedHashMap<String,String> map = this.getLabelMap();
-        for(Map.Entry<String,String> entry : map.entrySet()){
-            sql.append(entry.getValue()+",");
-            sql_value.append("?,");
-        }
-        sql.append("ROW_ID,CONNECT_ID,CREATED_BY,DATA_TYPE,ROW_NO,LGF_NUM,LGF_TYPE)");
-        sql_value.append("?,\'"+connectId+"\',\'"+this.curUser.getId()+"\',\'"+this.TYPE_ZZX+"\',?,?,?)");
-        PreparedStatement stmt = trans.createPreparedStatement(sql.toString()+sql_value.toString(), 0);
-        int rowNum = 1;
-        List<Map> modelData = (List<Map>)this.dataModel.getWrappedData();
-        for(Map<String,String> rowdata : modelData){
-            //if("UPDATE".equals(rowdata.get("OPERATION"))){
-                try {
-                    stmt.setString(1,rowdata.get("WBS"));
-                    stmt.setString(2,rowdata.get("WORK"));
-                    stmt.setString(3,rowdata.get("TERM"));
-                    stmt.setString(4,rowdata.get("CENTER"));
-                    stmt.setString(5,rowdata.get("WORK_TYPE"));
-                    stmt.setString(6,rowdata.get("BOM_CODE"));
-                    stmt.setString(7,rowdata.get("UNIT"));
-                    stmt.setString(8,rowdata.get("PLAN_COST"));
-                    stmt.setString(9,rowdata.get("OCCURRED"));
-                    for(int i=0;i<=(map.size()-10);i++){
-                        stmt.setString(10+i,rowdata.get(map.get("M"+i)));
-                    }
-                    stmt.setString(map.size(),rowdata.get("SUM_AFTER_JUL"));
-                    stmt.setString(map.size()+1, rowdata.get("ROW_ID"));
-                    stmt.setString(map.size()+4,rowdata.get("LGF_TYPE"));
-                    stmt.setInt(map.size()+2, rowNum);
-                    rowNum++;
-                    stmt.setString(map.size()+3,rowdata.get("LGF_NUM"));
-                    stmt.addBatch();
-                    stmt.executeBatch();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }        
-        //}
-        trans.commit();
-        //jiaoyan
-        
-    }
-    
-    public void inputPro(){
-        DBTransaction trans = (DBTransaction)DmsUtils.getDcmApplicationModule().getDBTransaction();
-        CallableStatement cs = trans.createCallableStatement("{CALl DMS_ZZX.ZZX_INPUTPRO(?)}", 0);
-        try {
-            cs.setString(1,this.curUser.getId() );
-            cs.execute();
-            trans.commit();
-            cs.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
     //选中行，修改
     public void valueChangeLinstener(ValueChangeEvent valueChangeEvent) {
         Map rowMap = (Map)this.dataModel.getRowData();
@@ -684,48 +603,12 @@ public class ProZzxOutBean {
         return isBlock;
     }
 
-    public void beBlocked(ActionEvent actionEvent) {
-        String sql = "UPDATE PRO_PLAN_COST_HEADER SET (IS_BLOCK) = 'true' WHERE HLS_YEAR = \'"+year;
-        sql = sql + "\' AND PROJECT_NAME =\'"+pname+"\' AND VERSION=\'"+version+"\'";
-        DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
-        Statement stat = trans.createStatement(DBTransaction.DEFAULT);
-        int flag =-1;
-        try {
-            flag = stat.executeUpdate(sql);
-            trans.commit();
-            stat.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        if(flag!=-1){
-            isBlock = "true";
-        }
-    }
-
     public void setIsManager(boolean isManager) {
         this.isManager = isManager;
     }
 
     public boolean isIsManager() {
         return isManager;
-    }
-
-    public void outBlock(ActionEvent actionEvent) {
-        String sql = "UPDATE PRO_PLAN_COST_HEADER SET (IS_BLOCK) = 'false' WHERE HLS_YEAR = \'"+year;
-        sql = sql + "\' AND PROJECT_NAME =\'"+pname+"\' AND VERSION=\'"+version+"\'";
-        DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
-        Statement stat = trans.createStatement(DBTransaction.DEFAULT);
-        int flag =-1;
-        try {
-            flag = stat.executeUpdate(sql);
-            trans.commit();
-            stat.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        if(flag!=-1){
-            isBlock = "false";
-        }
     }
 
     public void setDay1(Date day1) {

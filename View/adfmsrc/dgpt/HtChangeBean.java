@@ -316,6 +316,8 @@ public class HtChangeBean {
                     }
                 }
                 row.put("ROW_ID", rs.getString("ROW_ID"));
+                row.put("ACC_CODE",rs.getString("ACC_CODE"));
+                row.put("CENTER_CODE",rs.getString("CENTER_CODE"));
                 row.put("LGF_NUM", rs.getString("LGF_NUM"));
                 row.put("LGF_TYPE", rs.getString("LGF_TYPE"));
                 row.put("PLAN_QUANTITY", rs.getString("PLAN_QUANTITY"));
@@ -355,7 +357,7 @@ public class HtChangeBean {
         for(Map.Entry<String,String> entry : labelMap.entrySet()){
             sql.append(entry.getValue()).append(",");
         }
-        sql.append("ROWID AS ROW_ID,LGF_NUM,LGF_TYPE,PLAN_QUANTITY,PLAN_AMOUNT," + 
+        sql.append("ROWID AS ROW_ID,ACC_CODE,CENTER_CODE,LGF_NUM,LGF_TYPE,PLAN_QUANTITY,PLAN_AMOUNT," + 
         "OCCURRED_QUANTITY,OCCURRED_AMOUNT,OCCURRED FROM PRO_PLAN_COST_BODY WHERE CONNECT_ID = '").append(connectId).append("'");
         sql.append(" AND DATA_TYPE = '").append(this.TYPE_CHANGE).append("' ORDER BY WBS,NETWORK,TO_NUMBER(WORK_CODE)");
         return sql.toString();
@@ -446,8 +448,8 @@ public class HtChangeBean {
             sqlInsert.append(entry.getValue()+",");
             sqlValue.append("T."+entry.getValue()+",");
         }
-        sqlInsert.append("DATA_TYPE,CONNECT_ID,LGF_NUM,LGF_TYPE,PLAN_QUANTITY,PLAN_AMOUNT,OCCURRED_QUANTITY,OCCURRED_AMOUNT,OCCURRED)");
-        sqlValue.append("'"+this.TYPE_CHANGE+"','").append(newConnectId).append("\',")
+        sqlInsert.append("DATA_TYPE,CONNECT_ID,ACC_CODE,CENTER_CODE,LGF_NUM,LGF_TYPE,PLAN_QUANTITY,PLAN_AMOUNT,OCCURRED_QUANTITY,OCCURRED_AMOUNT,OCCURRED)");
+        sqlValue.append("'"+this.TYPE_CHANGE+"','").append(newConnectId).append("\',ACC_CODE,CENTER_CODE,")
                 .append("LGF_NUM,LGF_TYPE,PLAN_QUANTITY,PLAN_AMOUNT,OCCURRED_QUANTITY,OCCURRED_AMOUNT,OCCURRED ")
             .append("FROM PRO_PLAN_COST_BODY T WHERE T.CONNECT_ID=\'"+connectId+"\'");
         //显示新版本，重新构造列
@@ -497,7 +499,7 @@ public class HtChangeBean {
             sql_value.append("?,");
         }
         sql.append("ROW_ID,CONNECT_ID,CREATED_BY,OPERATION,DATA_TYPE,ROW_NO,");
-        sql.append("LGF_NUM,LGF_TYPE,PLAN_QUANTITY,PLAN_AMOUNT,OCCURRED_QUANTITY,OCCURRED_AMOUNT,OCCURRED)");
+        sql.append("LGF_NUM,LGF_TYPE,PLAN_QUANTITY,PLAN_AMOUNT,OCCURRED_QUANTITY,OCCURRED_AMOUNT,OCCURRED,ACC_CODE,CENTER_CODE)");
         sql_value.append("?,\'"+connectId+"\',"+this.curUser.getId()+",?,\'"+this.TYPE_CHANGE+"\',?,");
         sql_value.append("?,?,?,?,?,?,?)");
         PreparedStatement stmt = trans.createPreparedStatement(sql.toString()+sql_value.toString(), 0);
@@ -515,6 +517,9 @@ public class HtChangeBean {
                     stmt.setString(last+7, rowdata.get("OCCURRED_QUANTITY"));
                     stmt.setString(last+8, rowdata.get("OCCURRED_AMOUNT"));
                     stmt.setString(last+9, rowdata.get("OCCURRED"));
+                    stmt.setString(last+10, rowdata.get("ACC_CODE"));
+                    stmt.setString(last+11, rowdata.get("CENTER_CODE"));
+                    
                     rowNum++;
                     if(PcDataTableModel.OPERATE_UPDATE.equals(rowdata.get("OPERATION"))){
                         stmt.setString(last+1,PcDataTableModel.OPERATE_UPDATE);
@@ -659,6 +664,8 @@ public class HtChangeBean {
         }
         this.pcColsDef.add(new PcColumnDef("ROW_ID","ROW_ID",false));
         this.pcColsEx.add(new PcColumnDef("ROW_ID","ROW_ID",false));
+        this.pcColsEx.add((new PcColumnDef("ACC_CODE","ACC_CODE",false)));
+        this.pcColsEx.add(new PcColumnDef("CENTER_CODE","CENTER_CODE",false));
         this.pcColsEx.add(new PcColumnDef("LGF_NUM","LGF_NUM",false));
         this.pcColsEx.add(new PcColumnDef("LGF_TYPE","LGF_TYPE",false));
         this.pcColsEx.add(new PcColumnDef("PLAN_QUANTITY","PLAN_QUANTITY",false));
@@ -968,6 +975,7 @@ public class HtChangeBean {
     }
 
     public void operation_import(ActionEvent actionEvent) {
+        DBTransaction trans = (DBTransaction)DmsUtils.getDcmApplicationModule().getDBTransaction();
         this.dataImportWnd.cancel();
         //表头为空
         if(this.year==null||this.pname==null||this.version==null){
@@ -998,8 +1006,29 @@ public class HtChangeBean {
         //校验程序
         if(this.validation_import()){
             if(this.validation()){
+                //删除原数据
+                Statement statDelete = trans.createStatement(DBTransaction.DEFAULT);
+                String sqlDelete = "DELETE FROM PRO_PLAN_COST_BODY WHERE CONNECT_ID='"+this.connectId+"'";
+                try {
+                    statDelete.executeUpdate(sqlDelete);
+                    trans.commit();
+                    statDelete.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+                //更新表头数据类型
+                Statement statUpdate = trans.createStatement(DBTransaction.DEFAULT);
+                String sqlUpdate = "UPDATE PRO_PLAN_COST_HEADER SET(DATA_TYPE) = 'BASE' WHERE CONNECT_ID = '"+this.connectId+"'";
+                
+                try {
+                    statUpdate.executeUpdate(sqlUpdate);
+                    trans.commit();
+                    statUpdate.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+                //插入body表
                 this.inputPro_import();
-                this.createTableModel(pStart , newEnd);
             }else{
                 this.showErrorPop();
             }
@@ -1007,17 +1036,6 @@ public class HtChangeBean {
             //若出现错误则显示错误信息提示框
             JSFUtils.addFacesErrorMessage("WBS等字段不可修改");
             return;
-        }
-        DBTransaction trans = (DBTransaction)DmsUtils.getDcmApplicationModule().getDBTransaction();
-        Statement statUpdate = trans.createStatement(DBTransaction.DEFAULT);
-        String sqlUpdate = "UPDATE PRO_PLAN_COST_HEADER SET(DATA_TYPE) = 'BASE' WHERE CONNECT_ID = '"+this.connectId+"'";
-        
-        try {
-            statUpdate.executeUpdate(sqlUpdate);
-            trans.commit();
-            statUpdate.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
         //刷新数据
         this.createTableModel(pStart , newEnd);
