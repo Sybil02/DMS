@@ -78,6 +78,11 @@ public class DataManager {
             }
 
         }
+        try {
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return result;
     }
     
@@ -570,6 +575,11 @@ public class DataManager {
                 result.add(psEntity.getPsMaster().get(0));
             }
 
+        }
+        try {
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         return result;
     }
