@@ -78,6 +78,7 @@ public class HtChangeBean {
     private RichPanelCollection panelaCollection;
     private CollectionModel dataModel;
     private List<PcColumnDef> pcColsDef = new ArrayList<PcColumnDef>();
+    private List<PcColumnDef> pcColsEx = new ArrayList<PcColumnDef>();
     private RichPopup errorWindow;
     private RichInputFile fileInput;
     private RichPopup dataImportWnd;
@@ -481,8 +482,9 @@ public class HtChangeBean {
     }
     //保存
     public void operation_save() {
+        //清楚临时表，错误表数据
+        this.deleteTempAndError();
         DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
-        
         StringBuffer sql = new StringBuffer();
         StringBuffer sql_value = new StringBuffer();
         sql_value.append(" VALUES(");
@@ -649,11 +651,21 @@ public class HtChangeBean {
         }
         boolean isReadonly = true;
         this.pcColsDef.clear();
+        this.pcColsEx.clear();
         for(Map.Entry<String,String> map:labelMap.entrySet()){
             PcColumnDef newCol = new PcColumnDef(map.getKey(),map.getValue(),isReadonly);
             this.pcColsDef.add(newCol);
+            this.pcColsEx.add(newCol);
         }
         this.pcColsDef.add(new PcColumnDef("ROW_ID","ROW_ID",false));
+        this.pcColsEx.add(new PcColumnDef("ROW_ID","ROW_ID",false));
+        this.pcColsEx.add(new PcColumnDef("LGF_NUM","LGF_NUM",false));
+        this.pcColsEx.add(new PcColumnDef("LGF_TYPE","LGF_TYPE",false));
+        this.pcColsEx.add(new PcColumnDef("PLAN_QUANTITY","PLAN_QUANTITY",false));
+        this.pcColsEx.add(new PcColumnDef("PLAN_AMOUNT","PLAN_AMOUNT",false));
+        this.pcColsEx.add(new PcColumnDef("OCCURRED_QUANTITY","OCCURRED_QUANTITY",false));
+        this.pcColsEx.add(new PcColumnDef("OCCURRED_AMOUNT","OCCURRED_AMOUNT",false));
+        this.pcColsEx.add(new PcColumnDef("OCCURRED","OCCURRED",false));
         ((PcDataTableModel)this.dataModel).setPcColsDef(this.pcColsDef);
         return labelMap;
     }
@@ -895,14 +907,14 @@ public class HtChangeBean {
                 PcExcel2003WriterImpl writer = new PcExcel2003WriterImpl(
                                                    this.querySql(this.getLabelMap(pStart, pEnd)),
                                                    this.connectId,
-                                                    this.pcColsDef,
+                                                    this.pcColsEx,
                                                     outputStream);
             
                 writer.writeToFile();
             }else{
                 PcExcel2007WriterImpl writer = new PcExcel2007WriterImpl(
                                                     this.querySql(this.getLabelMap(pStart, pEnd)),
-                                                    2,this.pcColsDef);
+                                                    2,this.pcColsEx);
                 writer.process(outputStream, this.connectId);
                 outputStream.flush();
             }
@@ -985,16 +997,27 @@ public class HtChangeBean {
         this.fileInput.resetValue();
         //校验程序
         if(this.validation_import()){
-//            if(this.validation()){
+            if(this.validation()){
                 this.inputPro_import();
                 this.createTableModel(pStart , newEnd);
-//            }else{
-//                this.showErrorPop();
-//            }
+            }else{
+                this.showErrorPop();
+            }
             }else {
             //若出现错误则显示错误信息提示框
             JSFUtils.addFacesErrorMessage("WBS等字段不可修改");
             return;
+        }
+        DBTransaction trans = (DBTransaction)DmsUtils.getDcmApplicationModule().getDBTransaction();
+        Statement statUpdate = trans.createStatement(DBTransaction.DEFAULT);
+        String sqlUpdate = "UPDATE PRO_PLAN_COST_HEADER SET(DATA_TYPE) = 'BASE' WHERE CONNECT_ID = '"+this.connectId+"'";
+        
+        try {
+            statUpdate.executeUpdate(sqlUpdate);
+            trans.commit();
+            statUpdate.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         //刷新数据
         this.createTableModel(pStart , newEnd);
@@ -1050,7 +1073,7 @@ public class HtChangeBean {
             JSFUtils.addFacesErrorMessage("请选择正确的文件");
             return false;
         }
-        SPRowReader spReader = new SPRowReader(trans,2,this.connectId,this.pcColsDef,this.curUser.getId(),this.TYPE_CHANGE, name);
+        SPRowReader spReader = new SPRowReader(trans,2,this.connectId,this.pcColsEx,this.curUser.getId(),this.TYPE_CHANGE, name);
         try {
                 ExcelReaderUtil.readExcel(spReader, fileName, true);
                 spReader.close();
@@ -1114,5 +1137,13 @@ public class HtChangeBean {
 
     public RichPopup getDataImportWnd() {
         return dataImportWnd;
+    }
+
+    public void setPcColsEx(List<PcColumnDef> pcColsEx) {
+        this.pcColsEx = pcColsEx;
+    }
+
+    public List<PcColumnDef> getPcColsEx() {
+        return pcColsEx;
     }
 }

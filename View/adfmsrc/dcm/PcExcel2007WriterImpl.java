@@ -60,6 +60,18 @@ public class PcExcel2007WriterImpl extends AbstractExcel2007Writer{
                     createCell(i,"计划成本");
                 }else if("OCCURRED".equals(this.colsdef.get(i).getColumnLable())){
                     createCell(i,"已发生");
+                }else if("LGF_NUM".equals(this.colsdef.get(i).getColumnLable())){
+                    createCell(i,"料工费数量");
+                }else if("LGF_TYPE".equals(this.colsdef.get(i).getColumnLable())){
+                    createCell(i,"料工费类型");
+                }else if("PLAN_QUANTITY".equals(this.colsdef.get(i).getColumnLable())){
+                    createCell(i,"计划数量");
+                }else if("PLAN_AMOUNT".equals(this.colsdef.get(i).getColumnLable())){
+                    createCell(i,"计划金额");
+                }else if("OCCURRED_QUANTITY".equals(this.colsdef.get(i).getColumnLable())){
+                    createCell(i,"已发生数量");
+                }else if("OCCURRED_AMOUNT".equals(this.colsdef.get(i).getColumnLable())){
+                    createCell(i,"已发生金额");
                 }else if("SUM_AFTER_JUL".equals(this.colsdef.get(i).getColumnLable())){
                     createCell(i,"下年7月以后");
                 }else{
