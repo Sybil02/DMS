@@ -105,7 +105,7 @@ public class DataManager {
         String sqlUp =
             "UPDATE DMS_GL_ACCOUNT SET BUKRS=?, SAKNR=?, TXT20=?, KTOKS=?, XSPEB=?, NOTE1=?, NOTE2=?, NOTE3=?, NOTE4=?, NOTE5=?, " +
             "NOTE6=?, NOTE7=?, NOTE8=?, NOTE9=?, NOTE10=?, NOTE11=?, NOTE12=?, NOTE13=?, NOTE14=?, NOTE15=?, IFFLG=?, IFMSG=?, MSGID=? " +
-            "WHERE BUKRS=? ";
+            "WHERE BUKRS=? AND SAKNR = ?";
         PreparedStatement stat = null;
         PreparedStatement statUp = null;
         Statement statExs = null;
@@ -171,6 +171,7 @@ public class DataManager {
                     statUp.setString(22, acc.getIfmsg());
                     statUp.setString(23, acc.getMsgid());
                     statUp.setString(24, acc.getBukrs());
+                    statUp.setString(25, acc.getSaknr());
                     statUp.executeUpdate();
                 }
                 conn.commit();
@@ -210,7 +211,7 @@ public class DataManager {
         String sqlUp =
             "UPDATE DMS_COST_CENTER SET KOSTL=?, DATBI=?, DATAB=?, BKZKP=?, ZZBMBM=?, ZZBMMC=?, BUKRS=?, ABTEI=?, KHINR=?, KTEXT=?, ZZTXMC=?, ZZYWXMC=?, ZZHYXMC=?, NOTE1=?, " +
             "NOTE2=?, NOTE3=?, NOTE4=?, NOTE5=?, NOTE6=?, NOTE7=?, NOTE8=?, NOTE9=?, NOTE10=?, NOTE11=?, NOTE12=?, NOTE13=?, NOTE14=?, NOTE15=?, IFFLG=?, IFMSG=?, MSGID=? " +
-            "WHERE KOSTL=? ";
+            "WHERE KOSTL=? AND DATBI = ? AND ABTEI = ?";
         PreparedStatement stat = null;
         PreparedStatement statUp = null;
         Statement statExs = null;
@@ -293,6 +294,8 @@ public class DataManager {
                     statUp.setString(30, cost.getIfmsg());
                     statUp.setString(31, cost.getMsgid());
                     statUp.setString(32, cost.getKostl());
+                    statUp.setString(33, cost.getDatbi());
+                    statUp.setString(34, cost.getAbtei());
                     statUp.executeUpdate();
                 }
                 conn.commit();
@@ -332,7 +335,7 @@ public class DataManager {
         String sqlUp =
             "UPDATE DMS_HR_ORG SET ZJGDM=?, ZBMDM=?, ZBMMS=?, ZZRZX=?, ZSJBM=?, ZZGGW=?, ZQYBZ=?, NOTE1=?, NOTE2=?, NOTE3=?, NOTE4=?, NOTE5=?, " +
             "NOTE6=?, NOTE7=?, NOTE8=?, NOTE9=?, NOTE10=?, NOTE11=?, NOTE12=?, NOTE13=?, NOTE14=?, NOTE15=?, IFFLG=?, IFMSG=?, MSGID=? " +
-            "WHERE ZJGDM=? AND ZBMDM=? ";
+            "WHERE ZJGDM=? AND ZBMDM=? AND ZZRZX =? AND ZSJBM =? AND ZZGGW=?";
         PreparedStatement stat = null;
         PreparedStatement statUp = null;
         Statement statExs = null;
@@ -406,6 +409,9 @@ public class DataManager {
                     statUp.setString(25, org.getMsgid());
                     statUp.setString(26, org.getZjgdm());
                     statUp.setString(27, org.getZbmdm());
+                    statUp.setString(28, org.getZzrzx());
+                    statUp.setString(29, org.getZsjbm());
+                    statUp.setString(30, org.getZzggw());
                     statUp.executeUpdate();
                 }
                 conn.commit();
