@@ -501,7 +501,7 @@ public class HtChangeBean {
         sql.append("ROW_ID,CONNECT_ID,CREATED_BY,OPERATION,DATA_TYPE,ROW_NO,");
         sql.append("LGF_NUM,LGF_TYPE,PLAN_QUANTITY,PLAN_AMOUNT,OCCURRED_QUANTITY,OCCURRED_AMOUNT,OCCURRED,ACC_CODE,CENTER_CODE)");
         sql_value.append("?,\'"+connectId+"\',"+this.curUser.getId()+",?,\'"+this.TYPE_CHANGE+"\',?,");
-        sql_value.append("?,?,?,?,?,?,?)");
+        sql_value.append("?,?,?,?,?,?,?,?,?)");
         PreparedStatement stmt = trans.createPreparedStatement(sql.toString()+sql_value.toString(), 0);
         //获取数据
         int rowNum = 1;
@@ -543,12 +543,13 @@ public class HtChangeBean {
                 } 
         }
         trans.commit();
-        //执行校验
+        
         try {
             stmt.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        //执行校验
         if(this.validation()){
             //校验成功，执行导入
             Statement statUpdate = trans.createStatement(DBTransaction.DEFAULT);
@@ -663,7 +664,7 @@ public class HtChangeBean {
             this.pcColsEx.add(newCol);
         }
         this.pcColsDef.add(new PcColumnDef("ROW_ID","ROW_ID",false));
-        this.pcColsEx.add(new PcColumnDef("ROW_ID","ROW_ID",false));
+//        this.pcColsEx.add(new PcColumnDef("ROW_ID","ROW_ID",false));
         this.pcColsEx.add((new PcColumnDef("ACC_CODE","ACC_CODE",false)));
         this.pcColsEx.add(new PcColumnDef("CENTER_CODE","CENTER_CODE",false));
         this.pcColsEx.add(new PcColumnDef("LGF_NUM","LGF_NUM",false));

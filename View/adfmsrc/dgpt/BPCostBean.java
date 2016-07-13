@@ -928,14 +928,15 @@ public class BPCostBean {
                 }
             if(this.validation()){
                 this.inputPro_import();
-                this.createTableModel();
+//                this.createTableModel();
             }else{
                 this.showErrorPop();
             }
             }else {
             //若出现错误则显示错误信息提示框
-            JSFUtils.addFacesErrorMessage("WBS等字段不可修改");
-            return;
+            //JSFUtils.addFacesErrorMessage("WBS等字段不可修改");
+            this.showErrorPop();
+//            return;
         }
         //刷新数据
         this.createTableModel();

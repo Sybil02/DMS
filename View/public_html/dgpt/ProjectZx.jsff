@@ -56,7 +56,7 @@
                           emptyText="#{bindings.ProPlanCostView.viewable ? 'No data to display.' : 'Access Denied.'}"
                           fetchSize="#{bindings.ProPlanCostView.rangeSize}" rowSelection="single" 
                           rowBandingInterval="0" id="t3" columnStretching="column:c35">
-                  <af:column sortProperty="#{bindings.ProPlanCostView.hints.RowNum.name}"
+                  <!--<af:column sortProperty="#{bindings.ProPlanCostView.hints.RowNum.name}"
                              sortable="false"
                              headerText="#{bindings.ProPlanCostView.hints.RowNum.label}"
                              id="c34">
@@ -64,7 +64,7 @@
                       <af:convertNumber groupingUsed="false"
                                         pattern="#{bindings.ProPlanCostView.hints.RowNum.format}"/>
                     </af:outputText>
-                  </af:column>
+                  </af:column>-->
                   <af:column sortProperty="#{bindings.ProPlanCostView.hints.Wbs.name}"
                              headerText="#{bindings.ProPlanCostView.hints.Wbs.label}"
                              id="c37">
