@@ -1102,9 +1102,9 @@ public class DcmDataDisplayBean extends TablePagination{
     
     private void initSubSql(){
         //无组合模板不提供状态显示
-        if(this.curCombiantionRecord == null || "".equals(this.curCombiantionRecord)){
-            return;    
-        }
+//        if(this.curCombiantionRecord == null || "".equals(this.curCombiantionRecord)){
+//            return;    
+//        }
         this.subVNameMap = new HashMap<String,String>();
         this.subValuesMap = new HashMap<String,String>();
         
@@ -1432,7 +1432,7 @@ public class DcmDataDisplayBean extends TablePagination{
                 header.setValueSetId((String)row.getAttribute("ValueSetId"));
                 header.setCode((String)row.getAttribute("Code"));
                 this.initHeaderValueList(header);
-                //this.setDefaultHeaderValue(header);
+//                this.setDefaultHeaderValue(header);
                 this.templateHeader.add(header);
             }
             this.curCombiantionRecord=this.getCurCombinationRecord();
