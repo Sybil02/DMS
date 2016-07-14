@@ -408,7 +408,7 @@ public class RPCostBean {
             number = "0" + number;
         }
         while(number.contains(".")&&number.endsWith("0")){
-            number = number.substring(0,number.length()-1);
+            number = number.substring(0,number.length()-2);
         }
         return number;
     }

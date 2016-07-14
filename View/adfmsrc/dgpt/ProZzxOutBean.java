@@ -217,9 +217,9 @@ public class ProZzxOutBean {
             number = "0" + number;    
         }
         //显示时16.0不用去除.0
-//        while(number.contains(".")&&number.endsWith("0")){
-//            number = number.substring(0,number.length()-1);
-//        }
+        while(number.contains(".")&&number.endsWith("0")){
+            number = number.substring(0,number.length()-2);
+        }
         return number;  
     }
     
