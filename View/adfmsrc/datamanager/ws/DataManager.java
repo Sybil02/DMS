@@ -64,19 +64,29 @@ public class DataManager {
             try {
                 this.insertStaff(staffEntity.getStaffs(), conn, msgId);
                 this.insertStaffFp(staffEntity.getStaffFps(), conn);
-                staffEntity.getStaffs().get(0).setIfflg("S");
-                result.add(staffEntity.getStaffs().get(0));
+                for(int i=0;i<staffEntity.getStaffs().size();i++){
+                    staffEntity.getStaffs().get(i).setIfflg("S");
+                    result.add(staffEntity.getStaffs().get(i)); 
+                }
             } catch (SQLException e) {
                 e.printStackTrace();
-                staffEntity.getStaffs().get(0).setIfflg("E");
-                if (e.getMessage().length() > 50) {
-                    staffEntity.getStaffs().get(0).setIfmsg(e.getMessage().substring(0, 49));
-                } else {
-                    staffEntity.getStaffs().get(0).setIfmsg(e.getMessage());
+                for(int i=0;i<staffEntity.getStaffs().size();i++){
+                    staffEntity.getStaffs().get(i).setIfflg("E");
+                    if (e.getMessage().length() > 50) {
+                        staffEntity.getStaffs().get(i).setIfmsg(e.getMessage().substring(0, 49));
+                    } else {
+                        staffEntity.getStaffs().get(i).setIfmsg(e.getMessage());
+                    }
+                    result.add(staffEntity.getStaffs().get(i));
                 }
-                result.add(staffEntity.getStaffs().get(0));
+
             }
 
+        }
+        try {
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         return result;
     }
@@ -95,7 +105,7 @@ public class DataManager {
         String sqlUp =
             "UPDATE DMS_GL_ACCOUNT SET BUKRS=?, SAKNR=?, TXT20=?, KTOKS=?, XSPEB=?, NOTE1=?, NOTE2=?, NOTE3=?, NOTE4=?, NOTE5=?, " +
             "NOTE6=?, NOTE7=?, NOTE8=?, NOTE9=?, NOTE10=?, NOTE11=?, NOTE12=?, NOTE13=?, NOTE14=?, NOTE15=?, IFFLG=?, IFMSG=?, MSGID=? " +
-            "WHERE BUKRS=? ";
+            "WHERE BUKRS=? AND SAKNR = ?";
         PreparedStatement stat = null;
         PreparedStatement statUp = null;
         Statement statExs = null;
@@ -161,6 +171,7 @@ public class DataManager {
                     statUp.setString(22, acc.getIfmsg());
                     statUp.setString(23, acc.getMsgid());
                     statUp.setString(24, acc.getBukrs());
+                    statUp.setString(25, acc.getSaknr());
                     statUp.executeUpdate();
                 }
                 conn.commit();
@@ -200,7 +211,7 @@ public class DataManager {
         String sqlUp =
             "UPDATE DMS_COST_CENTER SET KOSTL=?, DATBI=?, DATAB=?, BKZKP=?, ZZBMBM=?, ZZBMMC=?, BUKRS=?, ABTEI=?, KHINR=?, KTEXT=?, ZZTXMC=?, ZZYWXMC=?, ZZHYXMC=?, NOTE1=?, " +
             "NOTE2=?, NOTE3=?, NOTE4=?, NOTE5=?, NOTE6=?, NOTE7=?, NOTE8=?, NOTE9=?, NOTE10=?, NOTE11=?, NOTE12=?, NOTE13=?, NOTE14=?, NOTE15=?, IFFLG=?, IFMSG=?, MSGID=? " +
-            "WHERE KOSTL=? ";
+            "WHERE KOSTL=? AND DATBI = ? AND ABTEI = ?";
         PreparedStatement stat = null;
         PreparedStatement statUp = null;
         Statement statExs = null;
@@ -283,6 +294,8 @@ public class DataManager {
                     statUp.setString(30, cost.getIfmsg());
                     statUp.setString(31, cost.getMsgid());
                     statUp.setString(32, cost.getKostl());
+                    statUp.setString(33, cost.getDatbi());
+                    statUp.setString(34, cost.getAbtei());
                     statUp.executeUpdate();
                 }
                 conn.commit();
@@ -322,7 +335,7 @@ public class DataManager {
         String sqlUp =
             "UPDATE DMS_HR_ORG SET ZJGDM=?, ZBMDM=?, ZBMMS=?, ZZRZX=?, ZSJBM=?, ZZGGW=?, ZQYBZ=?, NOTE1=?, NOTE2=?, NOTE3=?, NOTE4=?, NOTE5=?, " +
             "NOTE6=?, NOTE7=?, NOTE8=?, NOTE9=?, NOTE10=?, NOTE11=?, NOTE12=?, NOTE13=?, NOTE14=?, NOTE15=?, IFFLG=?, IFMSG=?, MSGID=? " +
-            "WHERE ZJGDM=? AND ZBMDM=? ";
+            "WHERE ZJGDM=? AND ZBMDM=? AND ZZRZX =? AND ZSJBM =? AND ZZGGW=?";
         PreparedStatement stat = null;
         PreparedStatement statUp = null;
         Statement statExs = null;
@@ -396,6 +409,9 @@ public class DataManager {
                     statUp.setString(25, org.getMsgid());
                     statUp.setString(26, org.getZjgdm());
                     statUp.setString(27, org.getZbmdm());
+                    statUp.setString(28, org.getZzrzx());
+                    statUp.setString(29, org.getZsjbm());
+                    statUp.setString(30, org.getZzggw());
                     statUp.executeUpdate();
                 }
                 conn.commit();
@@ -557,19 +573,28 @@ public class DataManager {
                 this.insertPsWbs(psEntity.getPsWbs(),conn);
                 this.insertPsWbsMaster(psEntity.getPsWbsMaster(),conn);
                 this.insertPsMaster(psEntity.getPsMaster(), conn, msgId);
-                psEntity.getPsMaster().get(0).setIfflg("S");
-                result.add(psEntity.getPsMaster().get(0));
+                for(int i=0;i<psEntity.getPsMaster().size();i++){
+                    psEntity.getPsMaster().get(i).setIfflg("S");
+                    result.add(psEntity.getPsMaster().get(i));
+                }
             } catch (SQLException e) {
                 e.printStackTrace();
-                psEntity.getPsMaster().get(0).setIfflg("E");
-                if (e.getMessage().length() > 50) {
-                    psEntity.getPsMaster().get(0).setIfmsg(e.getMessage().substring(0, 49));
-                } else {
-                    psEntity.getPsMaster().get(0).setIfmsg(e.getMessage());
+                for(int i=0;i<psEntity.getPsMaster().size();i++){
+                    psEntity.getPsMaster().get(i).setIfflg("E");
+                    if (e.getMessage().length() > 50) {
+                        psEntity.getPsMaster().get(i).setIfmsg(e.getMessage().substring(0, 49));
+                    } else {
+                        psEntity.getPsMaster().get(i).setIfmsg(e.getMessage());
+                    }
+                    result.add(psEntity.getPsMaster().get(i));
                 }
-                result.add(psEntity.getPsMaster().get(0));
             }
 
+        }
+        try {
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         return result;
     }

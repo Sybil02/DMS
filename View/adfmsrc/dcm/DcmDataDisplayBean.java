@@ -145,6 +145,8 @@ public class DcmDataDisplayBean extends TablePagination{
     private boolean useQuartz = false;
     //和利时特殊模板
     private boolean special = false;
+    //组合状态是否禁用
+    private boolean defultOpenCom = false;
     private boolean batchExcel = false;
     private List<String> batchTempList;
     private RichPopup batchErrPop;
@@ -163,7 +165,10 @@ public class DcmDataDisplayBean extends TablePagination{
         this.initTemplate();
         this.initCombination();
         this.queryTemplateData();
-        this.initSubSql();
+        //提交状态
+        if("Y".equals(this.curTempalte.getIsCloseRecord())){
+            this.initSubSql();
+        }
     }
 
     public CollectionModel getDataModel() {
@@ -1062,7 +1067,10 @@ public class DcmDataDisplayBean extends TablePagination{
             this.curTempalte=new TemplateEO((DcmTemplateViewRowImpl)rows[0]);
             
             if("Y".equals(this.curTempalte.getIsSpecial())){
-                this.special = true;
+                //特殊页面功能禁用，所以模板默认false
+                this.special = false;
+                //组合默认全部打开
+                this.defultOpenCom = true;
             }else{
                 this.special = false;
             }
@@ -1102,7 +1110,7 @@ public class DcmDataDisplayBean extends TablePagination{
     
     private void initSubSql(){
         //无组合模板不提供状态显示
-        if(this.curCombiantionRecord == null || "".equals(this.curCombiantionRecord)){
+        if(null == this.curTempalte.getCombinationId()){
             return;    
         }
         this.subVNameMap = new HashMap<String,String>();
@@ -1163,7 +1171,12 @@ public class DcmDataDisplayBean extends TablePagination{
         try {
             rs = stat.executeQuery(sql);
             if(!rs.next()){
+                //不存在，可提交,可编辑
                 this.enableSub = false;
+                this.curCombinationRecordEditable = true;
+            }else{
+                //存在，不可编辑
+                this.curCombinationRecordEditable = false;
             }
             rs.close();
             stat.close();
@@ -1432,7 +1445,7 @@ public class DcmDataDisplayBean extends TablePagination{
                 header.setValueSetId((String)row.getAttribute("ValueSetId"));
                 header.setCode((String)row.getAttribute("Code"));
                 this.initHeaderValueList(header);
-                this.setDefaultHeaderValue(header);
+//                this.setDefaultHeaderValue(header);
                 this.templateHeader.add(header);
             }
             this.curCombiantionRecord=this.getCurCombinationRecord();
@@ -1442,6 +1455,10 @@ public class DcmDataDisplayBean extends TablePagination{
     private void setCurCombinationRecordEditable(){
         if(this.curCombiantionRecord==null){
             this.curCombinationRecordEditable=false;
+        }else if(this.defultOpenCom){
+            this.curCombinationRecordEditable=true;
+            //默认值之后判断是否可提交，可编辑
+            //this.enableSubmit();
         }else{
             boolean flag=true;
             StringBuffer sql=new StringBuffer();
@@ -1602,8 +1619,9 @@ public class DcmDataDisplayBean extends TablePagination{
         AdfFacesContext adfFacesContext = AdfFacesContext.getCurrentInstance();
         adfFacesContext.addPartialTarget(this.panelaCollection);
         //查询提交权限
-        this.enableSubmit();
-        
+        if("Y".equals(this.curTempalte.getIsCloseRecord())){
+            this.enableSubmit();
+        }
     }
 
     public Map getHeaderComponents() {
@@ -1953,13 +1971,16 @@ public class DcmDataDisplayBean extends TablePagination{
     }
 
     public void showSubStatus(ActionEvent actionEvent) {
+        //是否有提交
+        if(!"Y".equals(this.curTempalte.getIsCloseRecord())){
+            return;
+        }
         
         //无组合模板不提供状态显示
         if(this.curCombiantionRecord == null || "".equals(this.curCombiantionRecord)){
             return;    
         }
         
-        System.out.println(this.subSql);
         RichPopup.PopupHints hints = new RichPopup.PopupHints();
         this.subPop.show(hints);
         

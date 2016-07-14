@@ -607,6 +607,8 @@
     LOVName="LOV_IsSpecial">
     <Properties>
       <SchemaBasedProperties>
+        <LABEL
+          ResId="dcm.combination.status"/>
         <CONTROLTYPE
           Value="choice"/>
       </SchemaBasedProperties>
