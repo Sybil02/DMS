@@ -213,10 +213,11 @@ public class ProZzxOutBean {
         if(number.equals("0.0")){
             number = "";    
         }
+        //.4==>0.4
         if(number.startsWith(".")){
             number = "0" + number;    
         }
-        //显示时16.0不用去除.0
+        //16.0==>16
         while(number.contains(".")&&number.endsWith("0")){
             number = number.substring(0,number.length()-2);
         }

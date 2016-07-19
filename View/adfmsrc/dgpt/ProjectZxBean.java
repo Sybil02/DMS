@@ -89,6 +89,8 @@ public class ProjectZxBean {
     private Boolean isIncrement = true;
     private RichPopup dataImportWnd;
     private RichInputFile fileInput;
+    private RichPopup statusWindow;
+    private RichPopup adminBlockPop;
 
 
     public ProjectZxBean() {
@@ -247,7 +249,6 @@ public class ProjectZxBean {
                     }else{
                         row.put(entry.getValue(),rs.getString(entry.getValue().toString()));
                     }
-
                 }
                 row.put("ROW_ID", rs.getString("ROW_ID"));
                 row.put("LGF_NUM", rs.getString("LGF_NUM"));
@@ -348,17 +349,8 @@ public class ProjectZxBean {
         }else{
             sql = "SELECT DISTINCT P."+col+" FROM "+source+" P WHERE P.PROJECT_NAME IN (" + 
             "SELECT T.PRO_CODE||'-'||T.PRO_DESC FROM SAP_DMS_PROJECT_PRIVILEGE_V T WHERE ID = '"+this.curUser.getId()+"'"+
-//            "       SELECT T.PRO_CODE||'-'||T.PRO_DESC FROM SAP_DMS_PROJECT_Privilege T " +
-//               "WHERE T.ATTRIBUTE3 = \'"+this.TYPE_ZZX+"\'" + 
-//               "AND (T.PRO_MANAGER = '"+this.curUser.getAcc()+"' OR T.PRO_DIRECTOR='"+this.curUser.getAcc()+"')" + 
-//                    "UNION " +
-//                    "   SELECT T1.PRO_CODE||'-'||T1.PRO_DESC FROM SAP_DMS_PROJECT_Privilege T1,DMS_USER_GROUP P " +
-//                    "WHERE T1.ATTRIBUTE3 = \'"+this.TYPE_ZZX+"\'"+
-//                    "AND P.GROUP_ID IN (SELECT GROUP_ID FROM DMS_USER_GROUP WHERE USER_ID='"+this.curUser.getId()+"')"+
-//                    "AND (T1.ATTRIBUTE6=P.GROUP_ID OR T1.ATTRIBUTE5=P.GROUP_ID)" +
             ") AND P.DATA_TYPE =\'"+this.TYPE_ZZX+"\'";
         }
-         
         List<SelectItem> values = new ArrayList<SelectItem>();
         ResultSet rs;
         try {
@@ -858,6 +850,24 @@ public class ProjectZxBean {
         RichPopup.PopupHints ph = new RichPopup.PopupHints();
         this.errorWindow.show(ph);
     }
+    //显示冻结状态信息
+    public void showBlockStatusPop(){
+            ViewObject vo = ADFUtils.findIterator("PTBlockStatusIterator").getViewObject();
+            vo.setNamedWhereClauseParam("dataType", this.TYPE_ZZX);
+            vo.setNamedWhereClauseParam("userId", this.curUser.getId());
+            vo.executeQuery();
+            RichPopup.PopupHints ph = new RichPopup.PopupHints();
+            this.statusWindow.show(ph);
+    }
+    //显示admin用户冻结状态信息
+    public void showAdminStatusPop(){
+        ViewObject vo = ADFUtils.findIterator("adminBlockStatusIterator").getViewObject();
+        vo.setNamedWhereClauseParam("dataType", this.TYPE_ZZX);
+        vo.setNamedWhereClauseParam("userAcc", this.curUser.getAcc());
+        vo.executeQuery();
+        RichPopup.PopupHints ph = new RichPopup.PopupHints();
+        this.adminBlockPop.show(ph);
+    }
     public void setErrorWindow(RichPopup errorWindow) {
         this.errorWindow = errorWindow;
     }
@@ -1013,7 +1023,6 @@ public class ProjectZxBean {
     //读取excel数据到临时表
     private boolean handleExcel(String fileName, String curComRecordId) throws SQLException {
         DBTransaction trans =(DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
-        String combinationRecord = ObjectUtils.toString(curComRecordId);
         //清空已有临时表数据
         this.deleteTempAndError();
         UploadedFile file = (UploadedFile)this.fileInput.getValue();
@@ -1100,5 +1109,30 @@ public class ProjectZxBean {
 
     public RichInputFile getFileInput() {
         return fileInput;
+    }
+
+    public void blockStatusPop(ActionEvent actionEvent) {
+        if(this.curUser.getId().equals("10000")){
+            this.showAdminStatusPop();
+        }else{
+            this.showBlockStatusPop();
+        }
+        
+    }
+
+    public void setStatusWindow(RichPopup statusWindow) {
+        this.statusWindow = statusWindow;
+    }
+
+    public RichPopup getStatusWindow() {
+        return statusWindow;
+    }
+
+    public void setAdminBlockPop(RichPopup adminBlockPop) {
+        this.adminBlockPop = adminBlockPop;
+    }
+
+    public RichPopup getAdminBlockPop() {
+        return adminBlockPop;
     }
 }

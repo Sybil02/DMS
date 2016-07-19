@@ -375,7 +375,8 @@ public class RPCostBean {
             while(rs.next()){
                 Map row = new HashMap();
                 for(Map.Entry<String,String> entry:labelMap.entrySet()){
-                    if(entry.getValue().equals("PLAN_COST") || entry.getValue().startsWith("Y") || entry.getValue().equals("OCCURRED")){
+                    if(entry.getValue().equals("PLAN_COST") || entry.getValue().startsWith("Y")
+                       || entry.getValue().equals("OCCURRED")){
                         row.put(entry.getValue(), this.getPrettyNumber(rs.getString(entry.getValue())));
                     }else{
                         row.put(entry.getValue(), rs.getString(entry.getValue()));

@@ -62,8 +62,6 @@ import oracle.adf.view.rich.component.rich.output.RichPanelCollection;
 
 import oracle.adf.view.rich.model.FilterableQueryDescriptor;
 
-import oracle.jbo.ViewCriteria;
-import oracle.jbo.ViewCriteriaRow;
 import oracle.jbo.ViewObject;
 import oracle.jbo.server.DBTransaction;
 
@@ -87,7 +85,8 @@ public class BPCostBean {
     private RichPopup errorWindow;
     private RichInputFile fileInput;
     private RichPopup dataImportWnd;
-
+    private RichPopup statusWindow;
+    private RichPopup adminBlockPop;
     public BPCostBean() {
         super();
         this.curUser = (Person)(ADFContext.getCurrent().getSessionScope().get("cur_user"));
@@ -168,14 +167,6 @@ public class BPCostBean {
         }else{
             sql = "SELECT DISTINCT P."+col+" FROM "+source+" P WHERE P.PROJECT_NAME IN (" + 
             "SELECT T.PRO_CODE||'-'||T.PRO_DESC FROM SAP_DMS_PROJECT_PRIVILEGE_V T WHERE ID = '"+this.curUser.getId()+"'"+
-//            "       SELECT T.PRO_CODE||'-'||T.PRO_DESC FROM SAP_DMS_PROJECT_Privilege T " +
-//                "WHERE T.ATTRIBUTE3 = \'"+this.TYPE_BASE+"\'" + 
-//                "AND (T.PRO_MANAGER = '"+this.curUser.getAcc()+"' OR T.PRO_DIRECTOR='"+this.curUser.getAcc()+"')" + 
-//            "UNION " +
-//            "   SELECT T1.PRO_CODE||'-'||T1.PRO_DESC FROM SAP_DMS_PROJECT_Privilege T1,DMS_USER_GROUP P " +
-//            "WHERE T1.ATTRIBUTE3 = \'"+this.TYPE_BASE+"\'"+
-//            "AND P.GROUP_ID IN (SELECT GROUP_ID FROM DMS_USER_GROUP WHERE USER_ID='"+this.curUser.getId()+"')"+
-//            "AND (T1.ATTRIBUTE6=P.GROUP_ID OR T1.ATTRIBUTE5=P.GROUP_ID)" +
                 ") AND DATA_TYPE =\'"+this.TYPE_BASE+"\'";
         }
         
@@ -320,7 +311,8 @@ public class BPCostBean {
             while(rs.next()){
                 Map row = new HashMap();
                 for(Map.Entry<String,String> entry:labelMap.entrySet()){
-                    if(entry.getValue().equals("PLAN_COST") || entry.getValue().startsWith("Y")){
+                    if(entry.getValue().equals("PLAN_COST") || entry.getValue().startsWith("Y") ||
+                       entry.getValue().equals("OCCURRED") ){
                         row.put(entry.getValue(), this.getPrettyNumber(rs.getString(entry.getValue())));
                     }else{
                         row.put(entry.getValue(), rs.getString(entry.getValue()));
@@ -541,24 +533,6 @@ public class BPCostBean {
     public boolean validation(){
         boolean flag = true;
         DBTransaction trans = (DBTransaction)DmsUtils.getDcmApplicationModule().getDBTransaction();
-//        if(pStart.equals(pEnd)){
-//            CallableStatement cs1 = trans.createCallableStatement("{CALl DMS_ZZX.BPC_VALIDATION1(?,?,?,?)}", 0);
-//            try {
-//                cs1.setString(1, this.curUser.getId());
-//                cs1.setString(2, this.TYPE_BASE.toString());
-//                cs1.setString(3, "Y"+pStart);
-//                cs1.registerOutParameter(4, Types.VARCHAR);
-//                cs1.execute();
-//                if("N".equals(cs1.getString(4))){
-//                    flag = false;
-//                }
-//                cs1.close();
-//                trans.commit();
-//            } catch (SQLException e) {
-//                flag = false;
-//                e.printStackTrace();
-//            }
-//        }else{
             CallableStatement cs = trans.createCallableStatement("{CALl DMS_ZZX.BPC_VALIDATION(?,?,?)}", 0);
             try {
                 cs.setString(1, this.curUser.getId());
@@ -1015,9 +989,7 @@ public class BPCostBean {
             JSFUtils.addFacesErrorMessage(msg);
             return null;
         }
-        String fileExtension =file.getFilename().substring(file.getFilename().lastIndexOf("."));
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
-        String date = dateFormat.format(new Date());
         File dmsBaseDir = new File("DMS/UPLOAD/基准计划成本" );
         //如若文件路径不存在则创建文件目录
         if (!dmsBaseDir.exists()) {
@@ -1052,11 +1024,54 @@ public class BPCostBean {
         return (new File(fileName)).getAbsolutePath();
     }
 
+    //显示冻结状态信息
+    public void showBlockStatusPop(){
+            ViewObject vo = ADFUtils.findIterator("PTBlockStatusIterator").getViewObject();
+            vo.setNamedWhereClauseParam("dataType", this.TYPE_BASE);
+            vo.setNamedWhereClauseParam("userId", this.curUser.getId());
+            vo.executeQuery();
+            RichPopup.PopupHints ph = new RichPopup.PopupHints();
+            this.statusWindow.show(ph);
+    }
+    //显示admin用户冻结状态信息
+    public void showAdminStatusPop(){
+        ViewObject vo = ADFUtils.findIterator("adminBlockStatusIterator").getViewObject();
+        vo.setNamedWhereClauseParam("dataType", this.TYPE_BASE);
+        vo.setNamedWhereClauseParam("userAcc", this.curUser.getAcc());
+        vo.executeQuery();
+        RichPopup.PopupHints ph = new RichPopup.PopupHints();
+        this.adminBlockPop.show(ph);
+    }
+    
     public void setDataImportWnd(RichPopup dataImportWnd) {
         this.dataImportWnd = dataImportWnd;
     }
 
     public RichPopup getDataImportWnd() {
         return dataImportWnd;
+    }
+
+    public void setStatusWindow(RichPopup statusWindow) {
+        this.statusWindow = statusWindow;
+    }
+
+    public RichPopup getStatusWindow() {
+        return statusWindow;
+    }
+
+    public void setAdminBlockPop(RichPopup adminBlockPop) {
+        this.adminBlockPop = adminBlockPop;
+    }
+
+    public RichPopup getAdminBlockPop() {
+        return adminBlockPop;
+    }
+
+    public void blockStatusPop(ActionEvent actionEvent) {
+        if(this.curUser.getId().equals("10000")){
+            this.showAdminStatusPop();
+        }else{
+            this.showBlockStatusPop();
+        }
     }
 }

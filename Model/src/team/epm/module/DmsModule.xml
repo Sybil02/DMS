@@ -104,6 +104,12 @@
   <ViewUsage
     Name="ProPlanCostView"
     ViewObjectName="team.epm.dms.view.ProPlanCostView"/>
+  <ViewUsage
+    Name="PTBlockStatus"
+    ViewObjectName="team.epm.dms.view.PTBlockStatus"/>
+  <ViewUsage
+    Name="adminBlockStatus"
+    ViewObjectName="team.epm.dms.view.adminBlockStatus"/>
   <ViewLinkUsage
     Name="DmsGroupedRoleLnk"
     ViewLinkObjectName="team.epm.dms.DmsGroupedRoleLnk"
@@ -138,6 +144,22 @@
     <PropertiesBundle
       PropertiesFile="ModelBundle"/>
   </ResourceBundle>
+  <ClientInterface>
+    <Method
+      Name="getDmsValueView">
+      <Return
+        Type="oracle.jbo.ViewObject"/>
+      <Parameter
+        Name="valueSetSrc"
+        Type="java.lang.String"/>
+      <Parameter
+        Name="valueSetId"
+        Type="java.lang.String"/>
+      <Parameter
+        Name="groupId"
+        Type="java.lang.String"/>
+    </Method>
+  </ClientInterface>
   <ClientInterface>
     <Method
       Name="getDmsValueView">

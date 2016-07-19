@@ -32,5 +32,23 @@
         </AttrNames>
       </nodeDefinition>
     </tree>
+    <tree IterBinding="ProPlanCostViewIterator" id="ProPlanCostView2">
+      <nodeDefinition DefName="team.epm.dms.view.ProPlanCostView"
+                      Name="ProPlanCostView20">
+        <AttrNames>
+          <Item Value="Network"/>
+          <Item Value="WorkCode"/>
+          <Item Value="Work"/>
+          <Item Value="Term"/>
+          <Item Value="CostDetail"/>
+          <Item Value="Center"/>
+          <Item Value="WorkType"/>
+          <Item Value="BomCode"/>
+          <Item Value="Msg"/>
+          <Item Value="CreatedAt"/>
+          <Item Value="CreatedBy"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
   </bindings>
 </pageDefinition>

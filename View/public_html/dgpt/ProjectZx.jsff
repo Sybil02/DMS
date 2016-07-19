@@ -2,7 +2,8 @@
 <jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.1"
           xmlns:c="http://java.sun.com/jsp/jstl/core"
           xmlns:af="http://xmlns.oracle.com/adf/faces/rich"
-          xmlns:f="http://java.sun.com/jsf/core">
+          xmlns:f="http://java.sun.com/jsf/core"
+          xmlns:x="http://java.sun.com/jsp/jstl/xml">
   <c:set var="viewBundle" value="#{adfBundle['dms_v']}"/>
     <af:panelStretchLayout id="psl1" startWidth="0px" topHeight="53px">
       <f:facet name="bottom">
@@ -51,49 +52,83 @@
             <af:panelStretchLayout id="psl2" inlineStyle="width:800px;height:400px">
               <f:facet name="bottom"/>
               <f:facet name="center">
-                <af:table value="#{bindings.ProPlanCostView.collectionModel}"
-                          var="row" rows="#{bindings.ProPlanCostView.rangeSize}"
-                          emptyText="#{bindings.ProPlanCostView.viewable ? 'No data to display.' : 'Access Denied.'}"
-                          fetchSize="#{bindings.ProPlanCostView.rangeSize}" rowSelection="single" 
-                          rowBandingInterval="0" id="t3" columnStretching="column:c35">
-                  <!--<af:column sortProperty="#{bindings.ProPlanCostView.hints.RowNum.name}"
+                <af:table value="#{bindings.ProPlanCostView1.collectionModel}"
+                          var="row"
+                          rows="#{bindings.ProPlanCostView1.rangeSize}"
+                          emptyText="#{bindings.ProPlanCostView1.viewable ? 'No data to display.' : 'Access Denied.'}"
+                          fetchSize="#{bindings.ProPlanCostView1.rangeSize}"
+                          rowBandingInterval="0"
+                          selectedRowKeys="#{bindings.ProPlanCostView1.collectionModel.selectedRow}"
+                          selectionListener="#{bindings.ProPlanCostView1.collectionModel.makeCurrent}"
+                          rowSelection="single" id="t3"
+                          columnStretching="column:c45">
+                  <af:column sortProperty="#{bindings.ProPlanCostView1.hints.Network.name}"
                              sortable="false"
-                             headerText="#{bindings.ProPlanCostView.hints.RowNum.label}"
-                             id="c34">
-                    <af:outputText value="#{row.RowNum}" id="ot6">
-                      <af:convertNumber groupingUsed="false"
-                                        pattern="#{bindings.ProPlanCostView.hints.RowNum.format}"/>
-                    </af:outputText>
-                  </af:column>-->
-                  <af:column sortProperty="#{bindings.ProPlanCostView.hints.Wbs.name}"
-                             headerText="#{bindings.ProPlanCostView.hints.Wbs.label}"
-                             id="c37">
-                    <af:outputText value="#{row.Wbs}" id="ot11"/>
-                  </af:column>
-                  <af:column sortProperty="#{bindings.ProPlanCostView.hints.Work.name}"
-                             headerText="#{bindings.ProPlanCostView.hints.Work.label}"
-                             id="c38">
-                    <af:outputText value="#{row.Work}" id="ot12"/>
-                  </af:column>
-                  <af:column sortProperty="#{bindings.ProPlanCostView.hints.Msg.name}"
-                             sortable="false"
-                             headerText="#{bindings.ProPlanCostView.hints.Msg.label}"
-                             id="c35">
-                    <af:outputText value="#{row.Msg}" id="ot7"/>
-                  </af:column>
-                  <af:column sortProperty="#{bindings.ProPlanCostView.hints.CreatedAt.name}"
-                             sortable="false"
-                             headerText="#{bindings.ProPlanCostView.hints.CreatedAt.label}"
+                             headerText="#{bindings.ProPlanCostView1.hints.Network.label}"
                              id="c33">
-                    <af:outputText value="#{row.CreatedAt}" id="ot8">
-                      <af:convertDateTime pattern="#{bindings.ProPlanCostView.hints.CreatedAt.format}"/>
+                    <af:outputText value="#{row.Network}" id="ot7"/>
+                  </af:column>
+                  <af:column sortProperty="#{bindings.ProPlanCostView1.hints.WorkCode.name}"
+                             sortable="false"
+                             headerText="#{bindings.ProPlanCostView1.hints.WorkCode.label}"
+                             id="c41">
+                    <af:outputText value="#{row.WorkCode}" id="ot9"/>
+                  </af:column>
+                  <af:column sortProperty="#{bindings.ProPlanCostView1.hints.Work.name}"
+                             sortable="false"
+                             headerText="#{bindings.ProPlanCostView1.hints.Work.label}"
+                             id="c43">
+                    <af:outputText value="#{row.Work}" id="ot6"/>
+                  </af:column>
+                  <af:column sortProperty="#{bindings.ProPlanCostView1.hints.Term.name}"
+                             sortable="false"
+                             headerText="#{bindings.ProPlanCostView1.hints.Term.label}"
+                             id="c32">
+                    <af:outputText value="#{row.Term}" id="ot12"/>
+                  </af:column>
+                  <af:column sortProperty="#{bindings.ProPlanCostView1.hints.CostDetail.name}"
+                             sortable="false"
+                             headerText="#{bindings.ProPlanCostView1.hints.CostDetail.label}"
+                             id="c44">
+                    <af:outputText value="#{row.CostDetail}" id="ot11"/>
+                  </af:column>
+                  <af:column sortProperty="#{bindings.ProPlanCostView1.hints.Center.name}"
+                             sortable="false"
+                             headerText="#{bindings.ProPlanCostView1.hints.Center.label}"
+                             id="c37">
+                    <af:outputText value="#{row.Center}" id="ot17"/>
+                  </af:column>
+                  <af:column sortProperty="#{bindings.ProPlanCostView1.hints.WorkType.name}"
+                             sortable="false"
+                             headerText="#{bindings.ProPlanCostView1.hints.WorkType.label}"
+                             id="c46">
+                    <af:outputText value="#{row.WorkType}" id="ot15"/>
+                  </af:column>
+                  <af:column sortProperty="#{bindings.ProPlanCostView1.hints.BomCode.name}"
+                             sortable="false"
+                             headerText="#{bindings.ProPlanCostView1.hints.BomCode.label}"
+                             id="c38">
+                    <af:outputText value="#{row.BomCode}" id="ot14"/>
+                  </af:column>
+                  <af:column sortProperty="#{bindings.ProPlanCostView1.hints.Msg.name}"
+                             sortable="false"
+                             headerText="#{bindings.ProPlanCostView1.hints.Msg.label}"
+                             id="c45">
+                    <af:outputText value="#{row.Msg}" id="ot19"/>
+                  </af:column>
+                  <af:column sortProperty="#{bindings.ProPlanCostView1.hints.CreatedAt.name}"
+                             sortable="false"
+                             headerText="#{bindings.ProPlanCostView1.hints.CreatedAt.label}"
+                             id="c34">
+                    <af:outputText value="#{row.CreatedAt}" id="ot18">
+                      <af:convertDateTime pattern="#{bindings.ProPlanCostView1.hints.CreatedAt.format}"/>
                     </af:outputText>
                   </af:column>
-                  <af:column sortProperty="#{bindings.ProPlanCostView.hints.CreatedBy.name}"
+                  <af:column sortProperty="#{bindings.ProPlanCostView1.hints.CreatedBy.name}"
                              sortable="false"
-                             headerText="#{bindings.ProPlanCostView.hints.CreatedBy.label}"
-                             id="c32">
-                    <af:outputText value="#{row.CreatedBy}" id="ot9"/>
+                             headerText="#{bindings.ProPlanCostView1.hints.CreatedBy.label}"
+                             id="c35">
+                    <af:outputText value="#{row.CreatedBy}" id="ot8"/>
                   </af:column>
                 </af:table>
               </f:facet>
@@ -156,6 +191,100 @@
             </af:panelGridLayout>
           </af:panelWindow>
         </af:popup>
+        <af:popup id="p4" binding="#{viewScope.ProjectZxBean.statusWindow}">
+          <af:panelWindow id="pw4"  
+                          title="#{viewBundle['dms.dgpt.block_status.select']}">
+            <af:panelCollection id="pc3"  inlineStyle="width:800px;height:400px">
+              <f:facet name="menus"/>
+              <f:facet name="toolbar"/>
+              <f:facet name="statusbar"/>
+              <af:table value="#{bindings.PTBlockStatus.collectionModel}"
+                        var="row" rows="#{bindings.PTBlockStatus.rangeSize}"
+                        emptyText="#{bindings.PTBlockStatus.viewable ? 'No data to display.' : 'Access Denied.'}"
+                        fetchSize="#{bindings.PTBlockStatus.rangeSize}"
+                        rowBandingInterval="0"
+                        filterModel="#{bindings.PTBlockStatusQuery.queryDescriptor}"
+                        queryListener="#{bindings.PTBlockStatusQuery.processQuery}"
+                        filterVisible="false" varStatus="vs"
+                        selectedRowKeys="#{bindings.PTBlockStatus.collectionModel.selectedRow}"
+                        selectionListener="#{bindings.PTBlockStatus.collectionModel.makeCurrent}"
+                        rowSelection="single" id="t4"
+                        columnStretching="column:c48">
+                <af:column sortProperty="#{bindings.PTBlockStatus.hints.Meaning.name}"
+                           filterable="true" sortable="false"
+                           headerText="#{bindings.PTBlockStatus.hints.Meaning.label}"
+                           id="c42">
+                  <af:outputText value="#{row.Meaning}" id="ot16"/>
+                </af:column>
+                <af:column sortProperty="#{bindings.PTBlockStatus.hints.ProjectName.name}"
+                           filterable="true" sortable="false"
+                           headerText="#{bindings.PTBlockStatus.hints.ProjectName.label}"
+                           id="c48">
+                  <af:outputText value="#{row.ProjectName}" id="ot20"/>
+                </af:column>
+                <af:column sortProperty="#{bindings.PTBlockStatus.hints.Version.name}"
+                           filterable="true" sortable="false"
+                           headerText="#{bindings.PTBlockStatus.hints.Version.label}"
+                           id="c49">
+                  <af:outputText value="#{row.Version}" id="ot21"/>
+                </af:column>
+                <af:column sortProperty="#{bindings.PTBlockStatus.hints.IsBlock.name}"
+                           filterable="true" sortable="false"
+                           headerText="#{bindings.PTBlockStatus.hints.IsBlock.label}"
+                           id="c47">
+                  <af:outputText value="#{row.IsBlock eq 'true' ? '是':'否'}" id="ot22"/>
+                </af:column>
+              </af:table>
+            </af:panelCollection>
+          </af:panelWindow>
+        </af:popup>
+        <af:popup id="p5" binding="#{viewScope.ProjectZxBean.adminBlockPop}">
+          <af:panelWindow id="pw5" 
+                          title="#{viewBundle['dms.dgpt.block_status.select']}">
+            <af:panelCollection id="pc2"  inlineStyle="width:800px;height:400px">
+              <f:facet name="menus"/>
+              <f:facet name="toolbar"/>
+              <f:facet name="statusbar"/>
+              <af:table value="#{bindings.adminBlockStatus.collectionModel}"
+                        var="row" rows="#{bindings.adminBlockStatus.rangeSize}"
+                        emptyText="#{bindings.adminBlockStatus.viewable ? 'No data to display.' : 'Access Denied.'}"
+                        fetchSize="#{bindings.adminBlockStatus.rangeSize}"
+                        rowBandingInterval="0"
+                        filterModel="#{bindings.adminBlockStatusQuery.queryDescriptor}"
+                        queryListener="#{bindings.adminBlockStatusQuery.processQuery}"
+                        filterVisible="false" varStatus="vs"
+                        selectedRowKeys="#{bindings.adminBlockStatus.collectionModel.selectedRow}"
+                        selectionListener="#{bindings.adminBlockStatus.collectionModel.makeCurrent}"
+                        rowSelection="single" id="t5"
+                        columnStretching="column:c51">
+                <af:column sortProperty="#{bindings.adminBlockStatus.hints.Meaning.name}"
+                           filterable="true" sortable="false"
+                           headerText="#{bindings.adminBlockStatus.hints.Meaning.label}"
+                           id="c50">
+                  <af:outputText value="#{row.Meaning}" id="ot24"/>
+                </af:column>
+                <af:column sortProperty="#{bindings.adminBlockStatus.hints.ProjectName.name}"
+                           filterable="true" sortable="false"
+                           headerText="#{bindings.adminBlockStatus.hints.ProjectName.label}"
+                           id="c51">
+                  <af:outputText value="#{row.ProjectName}" id="ot23"/>
+                </af:column>
+                <af:column sortProperty="#{bindings.adminBlockStatus.hints.Version.name}"
+                           filterable="true" sortable="false"
+                           headerText="#{bindings.adminBlockStatus.hints.Version.label}"
+                           id="c53">
+                  <af:outputText value="#{row.Version}" id="ot26"/>
+                </af:column>
+                <af:column sortProperty="#{bindings.adminBlockStatus.hints.IsBlock.name}"
+                           filterable="true" sortable="false"
+                           headerText="#{bindings.adminBlockStatus.hints.IsBlock.label}"
+                           id="c52">
+                  <af:outputText value="#{row.IsBlock eq 'true' ? '是':'否'}" id="ot25"/>
+                </af:column>
+              </af:table>
+            </af:panelCollection>
+          </af:panelWindow>
+        </af:popup>
       </af:panelGroupLayout>
     </f:facet>
       <f:facet name="center">
@@ -182,6 +311,8 @@
                                 actionListener="#{viewScope.ProjectZxBean.beBlocked}"
                                      disabled="#{viewScope.ProjectZxBean.isBlock}"
                                 partialTriggers="::soc1 ::soc2 ::soc3"/>
+              <af:commandButton text="#{viewBundle['dms.dgpt.block.status']}" id="cb6"
+                                actionListener="#{viewScope.ProjectZxBean.blockStatusPop}"/>
               <af:commandButton text="#{viewBundle['dms.dgpt.fblock']}" id="cb4"
                                 rendered="#{viewScope.ProjectZxBean.isManager}"
                                 actionListener="#{viewScope.ProjectZxBean.outBlock}"

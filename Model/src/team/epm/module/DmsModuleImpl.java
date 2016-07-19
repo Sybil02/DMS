@@ -352,4 +352,20 @@ public class DmsModuleImpl extends ApplicationModuleImpl implements DmsModule {
     public ViewObjectImpl getProPlanCostView() {
         return (ViewObjectImpl)findViewObject("ProPlanCostView");
     }
+
+    /**
+     * Container's getter for PTBlockStatus1.
+     * @return PTBlockStatus1
+     */
+    public ViewObjectImpl getPTBlockStatus() {
+        return (ViewObjectImpl)findViewObject("PTBlockStatus");
+    }
+
+    /**
+     * Container's getter for adminBlockStatus1.
+     * @return adminBlockStatus1
+     */
+    public ViewObjectImpl getadminBlockStatus() {
+        return (ViewObjectImpl)findViewObject("adminBlockStatus");
+    }
 }
