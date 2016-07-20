@@ -254,7 +254,7 @@ public class DmsModuleImpl extends ApplicationModuleImpl implements DmsModule {
 
     
     public ViewObject getDmsValueView(String valueSetSrc,String valueSetId,String groupId){
-        String voName="DmsVs"+valueSetSrc;
+        String voName=valueSetSrc+groupId;
         ViewObject vo=this.getApplicationModule().findViewObject(voName);
         if(vo==null&&valueSetSrc!=null){
             String sql="select t.code,t.meaning from \""+valueSetSrc.toUpperCase()+"\" t where t.locale='"
