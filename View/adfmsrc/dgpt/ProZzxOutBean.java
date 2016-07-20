@@ -395,6 +395,7 @@ public class ProZzxOutBean {
             this.createTableModel();
         }
     }
+    //刷新表头数据
     public void queryData(){
         DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
         Statement stat = trans.createStatement(DBTransaction.DEFAULT);

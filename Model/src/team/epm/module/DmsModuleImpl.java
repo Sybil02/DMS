@@ -368,4 +368,12 @@ public class DmsModuleImpl extends ApplicationModuleImpl implements DmsModule {
     public ViewObjectImpl getadminBlockStatus() {
         return (ViewObjectImpl)findViewObject("adminBlockStatus");
     }
+
+    /**
+     * Container's getter for DmsBlockStatusVO.
+     * @return DmsBlockStatusVO
+     */
+    public ViewObjectImpl getDmsBlockStatusVO() {
+        return (ViewObjectImpl)findViewObject("DmsBlockStatusVO");
+    }
 }

@@ -9,7 +9,8 @@
   BindingStyle="OracleName"
   CustomQuery="true"
   PageIterMode="Full"
-  UseGlueCode="false">
+  UseGlueCode="false"
+  OrderBy="&quot;MEANING&quot;,&quot;VERSION&quot;,&quot;PROJECT_NAME&quot;">
   <DesignTime>
     <Attr Name="_isExpertMode" Value="true"/>
   </DesignTime>
@@ -28,7 +29,7 @@
     Kind="where"
     Type="java.lang.String"/>
   <SQLQuery>
-    <![CDATA[SELECT P1.MEANING,P.PROJECT_NAME,P.IS_BLOCK,P.VERSION FROM PRO_PLAN_COST_HEADER P,HLS_YEAR_C P1 WHERE P.PROJECT_NAME IN 
+    <![CDATA[SELECT P1.MEANING,P.PROJECT_NAME,DECODE(P.IS_BLOCK,'true','已冻结','未冻结') IS_BLOCK,P.VERSION||'-'||P.VERSION_NAME VERSION FROM PRO_PLAN_COST_HEADER P,HLS_YEAR_C P1 WHERE P.PROJECT_NAME IN 
 (SELECT T.PRO_CODE||'-'||T.PRO_DESC FROM SAP_DMS_PROJECT_Privilege T WHERE T.ATTRIBUTE4=:userAcc AND T.ATTRIBUTE3=:dataType)
  AND DATA_TYPE=:dataType AND P1.CODE = P.HLS_YEAR]]>
   </SQLQuery>
@@ -100,14 +101,14 @@
     IsUpdateable="false"
     IsPersistent="false"
     PrecisionRule="true"
-    Precision="100"
+    Precision="201"
     Type="java.lang.String"
     ColumnType="VARCHAR2"
     AliasName="VERSION"
     Expression="VERSION"
     SQLType="VARCHAR">
     <DesignTime>
-      <Attr Name="_DisplaySize" Value="100"/>
+      <Attr Name="_DisplaySize" Value="201"/>
     </DesignTime>
     <Properties>
       <SchemaBasedProperties>

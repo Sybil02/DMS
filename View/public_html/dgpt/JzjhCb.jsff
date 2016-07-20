@@ -203,7 +203,7 @@
                            filterable="true" sortable="false"
                            headerText="#{bindings.adminBlockStatus.hints.IsBlock.label}"
                            id="c16">
-                  <af:outputText value="#{row.IsBlock eq 'true' ? '是':'否'}" id="ot23"/>
+                  <af:outputText value="#{row.IsBlock}" id="ot23"/>
                 </af:column>
               </af:table>
             </af:panelCollection>
@@ -250,7 +250,7 @@
                            filterable="true" sortable="false"
                            headerText="#{bindings.PTBlockStatus.hints.IsBlock.label}"
                            id="c20">
-                  <af:outputText value="#{row.IsBlock eq 'true' ? '是':'否'}" id="ot24"/>
+                  <af:outputText value="#{row.isBlock}" id="ot24"/>
                 </af:column>
               </af:table>
             </af:panelCollection>
@@ -271,7 +271,7 @@
         </af:group>
         <af:group id="g1">
               <af:commandButton text="#{viewBundle['dms.dgpt.excel.import']}" id="cb8"
-                                disabled="#{viewScope.BPCostBean.isBlock}"
+                                disabled="#{viewScope.BPCostBean.isBlock or not viewScope.BPCostBean.isEDITABLE}"
                                 partialTriggers="cb3">
                 <af:showPopupBehavior popupId="::p3"/>
               </af:commandButton>
@@ -310,7 +310,8 @@
                                     #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}"
                              rendered="#{attr.dbTableCol ne &quot;ROW_ID&quot;}">
                     <af:inputText value="#{row[attr.dbTableCol]}" id="ot6"
-                                  readOnly="#{attr.isReadonly eq 'false' ? viewScope.BPCostBean.isBlock : attr.isReadonly}"
+                                  readOnly="#{attr.isReadonly eq 'false' ? 
+                                  viewScope.BPCostBean.isBlock or not viewScope.BPCostBean.isEDITABLE: attr.isReadonly}"
                                     valueChangeListener="#{viewScope.BPCostBean.valueChangeLinstener}"/>
                   </af:column>
           </af:forEach>

@@ -98,8 +98,10 @@ public class ProjectZxBean {
         this.curUser = (Person)(ADFContext.getCurrent().getSessionScope().get("cur_user"));
         if("10000".equals(this.curUser.getId())){
             isManager = true;
+            isEDITABLE = true;
         }else{
             isManager = false;
+            isEDITABLE = false;
         }
         this.dataModel = new PcDataTableModel();
         List<Map> d = new ArrayList<Map>();
@@ -124,6 +126,7 @@ public class ProjectZxBean {
     private String isBlock;
     private boolean isManager;
     DmsLog dmsLog = new DmsLog();
+    private boolean isEDITABLE ;
     
     private void initList(){
         this.yearList = queryYears("HLS_YEAR_C");
@@ -267,6 +270,7 @@ public class ProjectZxBean {
         }
         this.dataModel.setWrappedData(data);
         ((PcDataTableModel)this.dataModel).setLabelMap(labelMap);
+        this.selectIsEditable();
     }
     
     public static String getPrettyNumber(String number) {  
@@ -665,166 +669,8 @@ public class ProjectZxBean {
             return "在执行项目_"+this.connectId+".xls";
         }
     }
-    public void setYear(String year) {
-        this.year = year;
-    }
-
-    public String getYear() {
-        return year;
-    }
-
-    public void setYearList(List<SelectItem> yearList) {
-        this.yearList = yearList;
-    }
-
-    public List<SelectItem> getYearList() {
-        return yearList;
-    }
-
-    public void setEntity(String entity) {
-        this.entity = entity;
-    }
-
-    public String getEntity() {
-        return entity;
-    }
-
-    public void setPLine(String pLine) {
-        this.pLine = pLine;
-    }
-
-    public String getPLine() {
-        return pLine;
-    }
-
-    public void setPname(String pname) {
-        this.pname = pname;
-    }
-
-    public String getPname() {
-        return pname;
-    }
-
-    public void setPnameList(List<SelectItem> pnameList) {
-        this.pnameList = pnameList;
-    }
-
-    public List<SelectItem> getPnameList() {
-        return pnameList;
-    }
-
-    public void setVersion(String version) {
-        this.version = version;
-    }
-
-    public String getVersion() {
-        return version;
-    }
-
-    public void setVersionList(List<SelectItem> versionList) {
-        this.versionList = versionList;
-    }
-
-    public List<SelectItem> getVersionList() {
-        return versionList;
-    }
-
-    public void setProType(String proType) {
-        this.proType = proType;
-    }
-
-    public String getProType() {
-        return proType;
-    }
-
-    public void setHLine(String hLine) {
-        this.hLine = hLine;
-    }
-
-    public String getHLine() {
-        return hLine;
-    }
-
-    public void setYLine(String yLine) {
-        this.yLine = yLine;
-    }
-
-    public String getYLine() {
-        return yLine;
-    }
-
-    public void setPanelaCollection(RichPanelCollection panelaCollection) {
-        this.panelaCollection = panelaCollection;
-    }
-
-    public RichPanelCollection getPanelaCollection() {
-        return panelaCollection;
-    }
-
-    public void setDataModel(CollectionModel dataModel) {
-        this.dataModel = dataModel;
-    }
-
-    public CollectionModel getDataModel() {
-        return this.dataModel;
-    }
-
-    public void setPcColsDef(List<PcColumnDef> pcColsDef) {
-        this.pcColsDef = pcColsDef;
-    }
-
-    public List<PcColumnDef> getPcColsDef() {
-        return pcColsDef;
-    }
-
-    public void setPStart(String pStart) {
-        this.pStart = pStart;
-    }
-
-    public String getPStart() {
-        return this.pStart;
-    }
-
-    public void setPEnd(String pEnd) {
-        this.pEnd = pEnd;
-    }
-
-    public String getPEnd() {
-        return pEnd;
-    }
-
-    public void setConnectId(String connectId) {
-        this.connectId = connectId;
-    }
-
-    public String getConnectId() {
-        return this.connectId;
-    }
-
-    public void setIsXlsx(boolean isXlsx) {
-        this.isXlsx = isXlsx;
-    }
-
-    public boolean isIsXlsx() {
-        return isXlsx;
-    }
-
-    public void setDataExportWnd(RichPopup dataExportWnd) {
-        this.dataExportWnd = dataExportWnd;
-    }
-
-    public RichPopup getDataExportWnd() {
-        return dataExportWnd;
-    }
-
-    public void setIsBlock(String isBlock) {
-        this.isBlock = isBlock;
-    }
-
-    public String getIsBlock() {
-        return isBlock;
-    }
-
+    
+    //更改为冻结状态
     public void beBlocked(ActionEvent actionEvent) {
         String sql = "UPDATE PRO_PLAN_COST_HEADER SET (IS_BLOCK) = 'true' WHERE HLS_YEAR = \'"+year;
         sql = sql + "\' AND PROJECT_NAME =\'"+pname+"\' AND VERSION=\'"+version+"\'";
@@ -868,26 +714,7 @@ public class ProjectZxBean {
         RichPopup.PopupHints ph = new RichPopup.PopupHints();
         this.adminBlockPop.show(ph);
     }
-    public void setErrorWindow(RichPopup errorWindow) {
-        this.errorWindow = errorWindow;
-    }
-
-    public RichPopup getErrorWindow() {
-        return errorWindow;
-    }
-
-    public void errorPop(ActionEvent actionEvent) {
-        this.showErrorPop();
-    }
-
-    public void setIsManager(boolean isManager) {
-        this.isManager = isManager;
-    }
-
-    public boolean isIsManager() {
-        return isManager;
-    }
-
+    //用户解冻，更改冻结状态
     public void outBlock(ActionEvent actionEvent) {
         String sql = "UPDATE PRO_PLAN_COST_HEADER SET (IS_BLOCK) = 'false' WHERE HLS_YEAR = \'"+year;
         sql = sql + "\' AND PROJECT_NAME =\'"+pname+"\' AND VERSION=\'"+version+"\'";
@@ -904,22 +731,6 @@ public class ProjectZxBean {
         if(flag!=-1){
             isBlock = "false";
         }
-    }
-
-
-    public void setIsIncrement(Boolean isIncrement) {
-        this.isIncrement = isIncrement;
-    }
-
-    public Boolean getIsIncrement() {
-        return isIncrement;
-    }
-    
-    public boolean getIsReplaceDefault(){
-        return !isIncrement;
-    }
-    public void setIsReplaceDefault(boolean flag){
-       
     }
 
     public void operation_import(ActionEvent actionEvent) {
@@ -1089,6 +900,230 @@ public class ProjectZxBean {
         }
         return (new File(fileName)).getAbsolutePath();
     }
+    //显示项目冻结状态框
+    public void blockStatusPop(ActionEvent actionEvent) {
+        if(this.curUser.getId().equals("10000")){
+            this.showAdminStatusPop();
+        }else{
+            this.showBlockStatusPop();
+        }
+    }
+
+    //查询是否为可编辑此项目
+    public void selectIsEditable(){
+        DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
+        Statement stat = trans.createStatement(DBTransaction.DEFAULT);
+        String sql = "SELECT EDITABLE FROM SAP_DMS_PROJECT_PRIVILEGE_V WHERE ID = '"+this.curUser.getId()+"' " +
+            "AND PRO_CODE ||'-'||PRO_DESC = '"+this.pname+"'";
+        ResultSet rs;
+        try {
+            rs = stat.executeQuery(sql);
+            while(rs.next()){
+                if("Y".equals(rs.getString("EDITABLE"))){
+                    isEDITABLE= true;
+                    break;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    
+    public void setYear(String year) {
+        this.year = year;
+    }
+
+    public String getYear() {
+        return year;
+    }
+
+    public void setYearList(List<SelectItem> yearList) {
+        this.yearList = yearList;
+    }
+
+    public List<SelectItem> getYearList() {
+        return yearList;
+    }
+
+    public void setEntity(String entity) {
+        this.entity = entity;
+    }
+
+    public String getEntity() {
+        return entity;
+    }
+
+    public void setPLine(String pLine) {
+        this.pLine = pLine;
+    }
+
+    public String getPLine() {
+        return pLine;
+    }
+
+    public void setPname(String pname) {
+        this.pname = pname;
+    }
+
+    public String getPname() {
+        return pname;
+    }
+
+    public void setPnameList(List<SelectItem> pnameList) {
+        this.pnameList = pnameList;
+    }
+
+    public List<SelectItem> getPnameList() {
+        return pnameList;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersionList(List<SelectItem> versionList) {
+        this.versionList = versionList;
+    }
+
+    public List<SelectItem> getVersionList() {
+        return versionList;
+    }
+
+    public void setProType(String proType) {
+        this.proType = proType;
+    }
+
+    public String getProType() {
+        return proType;
+    }
+
+    public void setHLine(String hLine) {
+        this.hLine = hLine;
+    }
+
+    public String getHLine() {
+        return hLine;
+    }
+
+    public void setYLine(String yLine) {
+        this.yLine = yLine;
+    }
+
+    public String getYLine() {
+        return yLine;
+    }
+
+    public void setPanelaCollection(RichPanelCollection panelaCollection) {
+        this.panelaCollection = panelaCollection;
+    }
+
+    public RichPanelCollection getPanelaCollection() {
+        return panelaCollection;
+    }
+
+    public void setDataModel(CollectionModel dataModel) {
+        this.dataModel = dataModel;
+    }
+
+    public CollectionModel getDataModel() {
+        return this.dataModel;
+    }
+
+    public void setPcColsDef(List<PcColumnDef> pcColsDef) {
+        this.pcColsDef = pcColsDef;
+    }
+
+    public List<PcColumnDef> getPcColsDef() {
+        return pcColsDef;
+    }
+
+    public void setPStart(String pStart) {
+        this.pStart = pStart;
+    }
+
+    public String getPStart() {
+        return this.pStart;
+    }
+
+    public void setPEnd(String pEnd) {
+        this.pEnd = pEnd;
+    }
+
+    public String getPEnd() {
+        return pEnd;
+    }
+
+    public void setConnectId(String connectId) {
+        this.connectId = connectId;
+    }
+
+    public String getConnectId() {
+        return this.connectId;
+    }
+
+    public void setIsXlsx(boolean isXlsx) {
+        this.isXlsx = isXlsx;
+    }
+
+    public boolean isIsXlsx() {
+        return isXlsx;
+    }
+
+    public void setDataExportWnd(RichPopup dataExportWnd) {
+        this.dataExportWnd = dataExportWnd;
+    }
+
+    public RichPopup getDataExportWnd() {
+        return dataExportWnd;
+    }
+
+    public void setIsBlock(String isBlock) {
+        this.isBlock = isBlock;
+    }
+
+    public String getIsBlock() {
+        return isBlock;
+    }
+    
+    public void setErrorWindow(RichPopup errorWindow) {
+        this.errorWindow = errorWindow;
+    }
+
+    public RichPopup getErrorWindow() {
+        return errorWindow;
+    }
+
+    public void errorPop(ActionEvent actionEvent) {
+        this.showErrorPop();
+    }
+
+    public void setIsManager(boolean isManager) {
+        this.isManager = isManager;
+    }
+
+    public boolean isIsManager() {
+        return isManager;
+    }
+    public void setIsIncrement(Boolean isIncrement) {
+        this.isIncrement = isIncrement;
+    }
+
+    public Boolean getIsIncrement() {
+        return isIncrement;
+    }
+    
+    public boolean getIsReplaceDefault(){
+        return !isIncrement;
+    }
+    public void setIsReplaceDefault(boolean flag){
+       
+    }
+    
     public void setDataImportWnd(RichPopup dataImportWnd) {
         this.dataImportWnd = dataImportWnd;
     }
@@ -1096,8 +1131,6 @@ public class ProjectZxBean {
     public RichPopup getDataImportWnd() {
         return dataImportWnd;
     }
-
-
 
     public void inputFile_valueChangeListener(ValueChangeEvent event) {
         this.fileInput.setValue(event.getNewValue());
@@ -1110,16 +1143,6 @@ public class ProjectZxBean {
     public RichInputFile getFileInput() {
         return fileInput;
     }
-
-    public void blockStatusPop(ActionEvent actionEvent) {
-        if(this.curUser.getId().equals("10000")){
-            this.showAdminStatusPop();
-        }else{
-            this.showBlockStatusPop();
-        }
-        
-    }
-
     public void setStatusWindow(RichPopup statusWindow) {
         this.statusWindow = statusWindow;
     }
@@ -1134,5 +1157,13 @@ public class ProjectZxBean {
 
     public RichPopup getAdminBlockPop() {
         return adminBlockPop;
+    }
+
+    public void setIsEDITABLE(boolean isEDITABLE) {
+        this.isEDITABLE = isEDITABLE;
+    }
+    
+    public boolean isIsEDITABLE() {
+        return isEDITABLE;
     }
 }
