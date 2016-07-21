@@ -62,6 +62,7 @@ import oracle.adf.share.ADFContext;
 import oracle.adf.share.logging.ADFLogger;
 import oracle.adf.view.rich.component.rich.RichPopup;
 import oracle.adf.view.rich.component.rich.data.RichTable;
+import oracle.adf.view.rich.component.rich.input.RichInputComboboxListOfValues;
 import oracle.adf.view.rich.component.rich.input.RichInputFile;
 import oracle.adf.view.rich.component.rich.input.RichSelectOneChoice;
 
@@ -133,7 +134,7 @@ public class DcmDataDisplayBean extends TablePagination{
     private static ADFLogger _logger =ADFLogger.createADFLogger(DcmDataDisplayBean.class);
     //页面绑定组件
     private RichInputFile fileInput;
-    private Map headerComponents = new LinkedHashMap();
+    private RichInputComboboxListOfValues comIclovs;
     private RichPanelCollection panelaCollection;
     private Person curUser;
     private RichPopup errorWindow;
@@ -1604,37 +1605,38 @@ public class DcmDataDisplayBean extends TablePagination{
         return fileInput;
     }
     //选择不同的组合时的处理逻辑
-    public void headerSelectChangeListener(ValueChangeEvent valueChangeEvent) {
-//        RichSelectOneChoice header =
-//            (RichSelectOneChoice)valueChangeEvent.getSource();
-//        int i = 0;
-//        for (Object key : this.headerComponents.keySet()) {
-//            //找到当前表头
-//            if (header.equals(this.headerComponents.get(key))) {
-//                this.templateHeader.get(i).setValue((String)valueChangeEvent.getNewValue());
-//            }
-//            i++;
-//        }
-//        this.curCombiantionRecord=this.getCurCombinationRecord();
-//        this.setCurCombinationRecordEditable();
-//        this.setCurPage(1);
-//        
-//        //切换组合时重置显示属性
-//        for(ColumnDef col : this.colsdef){
-//            col.setDataNotNull("N");    
-//        }
-//        
-//        this.queryTemplateData();
-//        AdfFacesContext adfFacesContext = AdfFacesContext.getCurrentInstance();
-//        adfFacesContext.addPartialTarget(this.panelaCollection);
-//        //查询提交权限
-//        if("Y".equals(this.curTempalte.getIsCloseRecord())){
-//            this.enableSubmit();
-//        }
-    }
-
-    public Map getHeaderComponents() {
-        return headerComponents;
+    public void headerSelectChangeListener(ValueChangeEvent event) {
+        
+        for(ComHeader ch : this.templateHeader){
+            if(ch.getName().equals(this.comIclovs.getLabel())){
+                if("".equals(event.getNewValue()) || event.getNewValue() == null){
+                    ch.setValue("");
+                }else{
+                    for(SelectItem sim : ch.getValues()){
+                        if(sim.getLabel().equals(event.getNewValue())){
+                            ch.setValue(sim.getValue().toString());    
+                        }    
+                    }  
+                }
+            }    
+        }
+        
+        this.curCombiantionRecord=this.getCurCombinationRecord();
+        this.setCurCombinationRecordEditable();
+        this.setCurPage(1);
+        
+        //切换组合时重置显示属性
+        for(ColumnDef col : this.colsdef){
+            col.setDataNotNull("N");    
+        }
+        
+        this.queryTemplateData();
+        AdfFacesContext adfFacesContext = AdfFacesContext.getCurrentInstance();
+        adfFacesContext.addPartialTarget(this.panelaCollection);
+        //查询提交权限
+        if("Y".equals(this.curTempalte.getIsCloseRecord())){
+            this.enableSubmit();
+        }
     }
 
     public void setPanelaCollection(RichPanelCollection panelaCollection) {
@@ -2085,5 +2087,13 @@ public class DcmDataDisplayBean extends TablePagination{
         //刷新数据
         this.queryTemplateData();
         
+    }
+
+    public void setComIclovs(RichInputComboboxListOfValues comIclovs) {
+        this.comIclovs = comIclovs;
+    }
+
+    public RichInputComboboxListOfValues getComIclovs() {
+        return comIclovs;
     }
 }

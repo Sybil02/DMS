@@ -27,8 +27,8 @@
                                                 autoSubmit="true" clientComponent="true"
                                                 validator="#{vs.comLov.listOfValuesModel.validate}"
                                                 model="#{vs.comLov.listOfValuesModel}"
-                                                popupTitle="Search and Result Dialog"
                                                 id="iclov2"
+                                                binding="#{viewScope.DcmDataDisplayBean.comIclovs}"
                                                 valueChangeListener="#{viewScope.DcmDataDisplayBean.headerSelectChangeListener}"
                                               usage="auto">
                     <af:autoSuggestBehavior suggestedItems="#{vs.comLov.listOfValuesModel.suggest}"/>
