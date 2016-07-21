@@ -8,6 +8,9 @@ import common.JSFUtils;
 
 import common.TablePagination;
 
+import common.lov.DmsComBoxLov;
+import common.lov.ValueSetRow;
+
 import dcm.combinantion.CombinationEO;
 
 import dcm.template.TemplateEO;
@@ -1524,12 +1527,18 @@ public class DcmDataDisplayBean extends TablePagination{
             dbTransaction.createPreparedStatement(sql.toString(), -1);
         try {
             ResultSet rs = stat.executeQuery();
+            List<ValueSetRow> list = new ArrayList<ValueSetRow>(); 
             while (rs.next()) {
                 SelectItem item = new SelectItem();
                 item.setLabel(rs.getString("MEANING"));
                 item.setValue(rs.getString("CODE"));
                 values.add(item);
+                //模糊搜索框
+                ValueSetRow vsr = new ValueSetRow(rs.getString("CODE"),rs.getString("MEANING"),rs.getString("CODE"));
+                list.add(vsr);
             }
+            DmsComBoxLov dcl = new DmsComBoxLov(list);
+            header.setComLov(dcl);
         } catch (SQLException e) {
             this._logger.severe(e);
         }   
@@ -1596,32 +1605,32 @@ public class DcmDataDisplayBean extends TablePagination{
     }
     //选择不同的组合时的处理逻辑
     public void headerSelectChangeListener(ValueChangeEvent valueChangeEvent) {
-        RichSelectOneChoice header =
-            (RichSelectOneChoice)valueChangeEvent.getSource();
-        int i = 0;
-        for (Object key : this.headerComponents.keySet()) {
-            //找到当前表头
-            if (header.equals(this.headerComponents.get(key))) {
-                this.templateHeader.get(i).setValue((String)valueChangeEvent.getNewValue());
-            }
-            i++;
-        }
-        this.curCombiantionRecord=this.getCurCombinationRecord();
-        this.setCurCombinationRecordEditable();
-        this.setCurPage(1);
-        
-        //切换组合时重置显示属性
-        for(ColumnDef col : this.colsdef){
-            col.setDataNotNull("N");    
-        }
-        
-        this.queryTemplateData();
-        AdfFacesContext adfFacesContext = AdfFacesContext.getCurrentInstance();
-        adfFacesContext.addPartialTarget(this.panelaCollection);
-        //查询提交权限
-        if("Y".equals(this.curTempalte.getIsCloseRecord())){
-            this.enableSubmit();
-        }
+//        RichSelectOneChoice header =
+//            (RichSelectOneChoice)valueChangeEvent.getSource();
+//        int i = 0;
+//        for (Object key : this.headerComponents.keySet()) {
+//            //找到当前表头
+//            if (header.equals(this.headerComponents.get(key))) {
+//                this.templateHeader.get(i).setValue((String)valueChangeEvent.getNewValue());
+//            }
+//            i++;
+//        }
+//        this.curCombiantionRecord=this.getCurCombinationRecord();
+//        this.setCurCombinationRecordEditable();
+//        this.setCurPage(1);
+//        
+//        //切换组合时重置显示属性
+//        for(ColumnDef col : this.colsdef){
+//            col.setDataNotNull("N");    
+//        }
+//        
+//        this.queryTemplateData();
+//        AdfFacesContext adfFacesContext = AdfFacesContext.getCurrentInstance();
+//        adfFacesContext.addPartialTarget(this.panelaCollection);
+//        //查询提交权限
+//        if("Y".equals(this.curTempalte.getIsCloseRecord())){
+//            this.enableSubmit();
+//        }
     }
 
     public Map getHeaderComponents() {

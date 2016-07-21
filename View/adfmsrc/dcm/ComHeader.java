@@ -1,5 +1,7 @@
 package dcm;
 
+import common.lov.DmsComBoxLov;
+
 import java.util.List;
 
 import javax.faces.model.SelectItem;
@@ -12,6 +14,7 @@ public class ComHeader {
     private String code;
     private List<SelectItem> values;
     private String value;
+    private DmsComBoxLov comLov;
 
     public void setValueSetId(String valueSetId) {
         this.valueSetId = valueSetId;
@@ -67,5 +70,13 @@ public class ComHeader {
 
     public String getValue() {
         return value;
+    }
+
+    public void setComLov(DmsComBoxLov comLov) {
+        this.comLov = comLov;
+    }
+
+    public DmsComBoxLov getComLov() {
+        return comLov;
     }
 }
