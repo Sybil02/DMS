@@ -53,4 +53,9 @@ public class Launcher extends TabLauncher{
                         "/WEB-INF/dgpt/dms_rpcost_tsk.xml#dms_rpcost_tsk",
                         false);
     }
+    public void launcherHtkpChange(ActionEvent actionEvent) {
+        _launchActivity("年度预算-合同开票回款（在执行）",
+                        "/WEB-INF/dgpt/dms_htkpreturn_tsk.xml#dms_htkpreturn_tsk",
+                        false);
+    }
 }

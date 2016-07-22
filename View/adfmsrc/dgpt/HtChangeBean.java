@@ -554,7 +554,6 @@ public class HtChangeBean {
             //校验成功，执行导入
             Statement statUpdate = trans.createStatement(DBTransaction.DEFAULT);
             String sqlUpdate = "UPDATE PRO_PLAN_COST_HEADER SET(DATA_TYPE) = 'BASE' WHERE CONNECT_ID = '"+this.connectId+"'";
-           
             try {
                 statUpdate.executeUpdate(sqlUpdate);
                 trans.commit();
@@ -722,9 +721,10 @@ public class HtChangeBean {
     //导入程序
     public void inputPro(){
         DBTransaction trans = (DBTransaction)DmsUtils.getDcmApplicationModule().getDBTransaction();
-        CallableStatement cs = trans.createCallableStatement("{CALl DMS_ZZX.CHANGE_INPUTPRO(?)}", 0);
+        CallableStatement cs = trans.createCallableStatement("{CALl DMS_ZZX.CHANGE_INPUTPRO(?,?)}", 0);
         try {
             cs.setString(1,this.curUser.getId() );
+            cs.setString(2, this.connectId);
             cs.execute();
             trans.commit();
             cs.close();

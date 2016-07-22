@@ -176,7 +176,6 @@ public class ProjectZxBean {
 //        labelMap.put("LGF_NUM", "LGF_NUM");
 //        labelMap.put("LGF_TYPE", "LGF_TYPE");
         //构造列导出
-        boolean isReadonly = true;
         this.pcColsDef.clear();
         List<String> list = new ArrayList<String>();
         list.add("WBS");
@@ -210,17 +209,17 @@ public class ProjectZxBean {
         list.add("本年10月");
         list.add("本年11月");
         list.add("本年12月");
-        list.add("上年1月");
-        list.add("上年2月");
-        list.add("上年3月");
-        list.add("上年4月");
-        list.add("上年5月");
-        list.add("上年6月");
+        list.add("下年1月");
+        list.add("下年2月");
+        list.add("下年3月");
+        list.add("下年4月");
+        list.add("下年5月");
+        list.add("下年6月");
         list.add("下年7月以后");
         int i =0;
         for(Map.Entry<String,String> map:labelMap.entrySet()){
             if(i<34){
-                PcColumnDef newCol = new PcColumnDef(list.get(i),map.getValue(),isReadonly);
+                PcColumnDef newCol = new PcColumnDef(list.get(i),map.getValue(),false);
                 this.pcColsDef.add(newCol);
             }else{
                 break;

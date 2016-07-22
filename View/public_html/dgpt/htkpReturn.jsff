@@ -1,0 +1,382 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.1"
+          xmlns:c="http://java.sun.com/jsp/jstl/core"
+          xmlns:af="http://xmlns.oracle.com/adf/faces/rich"
+          xmlns:f="http://java.sun.com/jsf/core">
+  <c:set var="viewBundle" value="#{adfBundle['dms_v']}"/>
+  <af:panelStretchLayout id="psl1" startWidth="0px" endWidth="4px"
+                         topHeight="33px">
+    <f:facet name="bottom">
+      <af:panelGroupLayout id="pgl2">
+        <af:popup id="p1" binding="#{viewScope.htkpReturnBean.dataExportWnd}">
+          <af:panelWindow id="pw1"
+                          title="#{viewBundle['dms.dgpt.dataExport']}">
+            <af:panelGridLayout id="pgl3">
+              <af:gridRow marginTop="5px" height="auto" id="gr2">
+                <af:gridCell marginStart="5px" width="auto" id="gc2">
+                  <af:outputText value="#{viewBundle['dms.dgpt.excel.format']}" id="ot6"/>
+                </af:gridCell>
+                <af:gridCell marginStart="5px" marginEnd="5px" width="auto"
+                             id="gc1">
+                  <af:selectBooleanRadio text="#{viewBundle['dms.dgpt.excel.07format']}" id="sbr1"
+                                        simple="true" autoSubmit="true"
+                                         value="#{viewScope.htkpReturnBean.isXlsx}"/>
+                </af:gridCell>
+              </af:gridRow>
+              <af:gridRow marginTop="5px" marginBottom="5px" height="auto"
+                          id="gr1">
+                <af:gridCell marginStart="5px" width="auto" id="gc4"
+                             columnSpan="2" halign="center">
+                  <af:commandButton text="#{viewBundle['dcm.action.export']}" id="cb7">
+                  <af:fileDownloadActionListener contentType="application/vnd.ms-excel"
+                                                 method="#{viewScope.htkpReturnBean.operation_export}"
+                                                 filename="#{viewScope.htkpReturnBean.exportDataExcelName}"/>
+                  </af:commandButton>
+                </af:gridCell>
+              </af:gridRow>
+            </af:panelGridLayout>
+          </af:panelWindow>
+        </af:popup>
+        <af:popup id="p2">
+          <af:panelWindow id="pw2"
+                          title="#{viewBundle['dgpt.template.data_import']}">
+            <af:panelGridLayout id="pgl4">
+              <af:gridRow marginTop="5px" height="auto" id="gr3">
+                <af:gridCell marginStart="5px" width="auto" id="gc3">
+                  <af:outputText value="#{viewBundle['dcm.plz_select_import_file']}" id="ot7"/>
+                </af:gridCell>
+                <af:gridCell marginStart="5px" marginEnd="5px" width="auto"
+                             id="gc6">
+                  <af:inputFile id="if1"/>
+                </af:gridCell>
+              </af:gridRow>
+              <af:gridRow marginTop="5px" marginBottom="5px" height="auto"
+                          id="gr4">
+                <af:gridCell marginStart="5px" width="auto" id="gc7"
+                             columnSpan="2" halign="center">
+                  <af:commandButton text="#{viewBundle['dms.dgpt.excel.import']}" id="cb8"/>
+                </af:gridCell>
+              </af:gridRow>
+            </af:panelGridLayout>
+          </af:panelWindow>
+        </af:popup>
+      </af:panelGroupLayout>
+    </f:facet>
+    <f:facet name="center">
+      <af:panelCollection id="pc1">
+        <f:facet name="menus"/>
+        <f:facet name="toolbar">
+          <af:toolbar id="t1">
+            <af:group id="g1">
+              <af:commandButton text="#{viewBundle['dcm.common.new']}" id="cb1"
+                                actionListener="#{viewScope.htkpReturnBean.operation_new}"/>
+                                <!-- #{bindings.CreateInsert.execute}-->
+              <af:commandButton text="#{viewBundle['dms.common.save']}" id="cb2"
+                                actionListener="#{viewScope.htkpReturnBean.operation_save}"/>
+              <af:commandButton text="#{viewBundle['dcm.common.delete']}" id="cb3"
+                                actionListener="#{viewScope.htkpReturnBean.operation_delete}"/>
+              <af:commandButton text="#{viewBundle['dcm.action.reset']}" id="cb4"
+                                actionListener="#{viewScope.htkpReturnBean.reset}"/>
+            </af:group>
+            <af:group id="g2">
+              <af:commandButton text="#{viewBundle['dms.dgpt.excel.import']}" id="cb5">
+                <af:showPopupBehavior popupId="::p2"/>
+              </af:commandButton>
+              <af:commandButton text="#{viewBundle['dcm.action.export']}" id="cb6">
+                <af:showPopupBehavior popupId="::p1"/>
+              </af:commandButton>
+            </af:group>
+          </af:toolbar>
+        </f:facet>
+        <f:facet name="statusbar"/>
+        <af:table var="row" rowBandingInterval="0" id="t2"
+                  selectionListener="#{viewScope.htkpReturnBean.rowSelectionListener}"
+                  selectedRowKeys="#{viewScope.htkpReturnBean.dataModel.selectedRows}"
+                  rowSelection="multiple" editingMode="clickToEdit"
+                  emptyText="#{viewBundle['dms.common.nodata']}"
+                  partialTriggers=":::soc1 :::soc2 :::soc3 ::cb1 ::cb2 ::cb3 ::cb4"
+                  value="#{viewScope.htkpReturnBean.dataModel}">
+          <af:column sortable="false"
+                            inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
+                                    #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
+                                    #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}"
+                     headerText="#{viewBundle['dms.dgpt.htkp.htkpDetail']}" id="c8">
+            <af:inputText value="#{row[viewScope.htkpReturnBean.dataModel.labelMap['合同开票回款明细']]}"
+                            id="it1"/>
+          </af:column>
+          <af:column sortable="false"
+                            inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
+                                    #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
+                                    #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}"
+                     headerText="#{viewBundle['dms.dgpt.htkp.taxRate']}" id="c33">
+            <af:inputText value="#{row[viewScope.htkpReturnBean.dataModel.labelMap['开票计划税率']]}" 
+                            id="it2"/>
+          </af:column>
+          <af:column sortable="false"
+                            inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
+                                    #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
+                                    #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}"
+                     headerText="#{viewBundle['dms.dgpt.htkp.responsible']}" id="c2">
+            <af:inputText value="#{row[viewScope.htkpReturnBean.dataModel.labelMap['回款责任人']]}" 
+                            id="it3"/>
+          </af:column>
+          <af:column sortable="false"
+                            inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
+                                    #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
+                                    #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}"
+                     headerText="#{viewBundle['dms.dgpt.htkp.entity']}" id="c10">
+            <af:inputText value="#{row[viewScope.htkpReturnBean.dataModel.labelMap['实体']]}"
+                            id="it4" readOnly="true"/>
+          </af:column>
+          <af:column sortable="false"
+                            inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
+                                    #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
+                                    #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}"
+                     headerText="#{viewBundle['dms.dgpt.htkp.industryLine']}" id="c14">
+            <af:inputText value="#{row[viewScope.htkpReturnBean.dataModel.labelMap['行业线']]}" 
+                          readOnly="true"
+                            id="it5"/>
+          </af:column>
+          <af:column sortable="false"
+                            inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
+                                    #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
+                                    #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}"
+                     headerText="#{viewBundle['dms.dgpt.htkp.businessLine']}" id="c3">
+            <af:inputText value="#{row[viewScope.htkpReturnBean.dataModel.labelMap['业务线']]}"
+                          readOnly="true"
+                            id="it6"/>
+          </af:column>
+          <af:column sortable="false"
+                            inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
+                                    #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
+                                    #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}"
+                     headerText="#{viewBundle['dms.dgpt.htkp.productLine']}" id="c12">
+            <af:inputText value="#{row[viewScope.htkpReturnBean.dataModel.labelMap['产品线']]}" 
+                          readOnly="true"
+                            id="it7"/>
+          </af:column>
+          <af:column sortable="false"
+                            inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
+                                    #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
+                                    #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}"
+                     headerText="#{viewBundle['dms.dgpt.htkp.prjectType']}" id="c17">
+            <af:inputText value="#{row[viewScope.htkpReturnBean.dataModel.labelMap['合同类型']]}" 
+                          readOnly="true"
+                            id="it8"/>
+          </af:column>
+          <af:column sortable="false"
+                            inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
+                                    #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
+                                    #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}"
+                     headerText="#{viewBundle['dms.dgpt.htkp.occurCost']}" id="c23">
+            <af:inputText value="#{row[viewScope.htkpReturnBean.dataModel.labelMap['已发生']]}" 
+                            id="it28"/>
+          </af:column>
+          <af:column sortable="false"
+                            inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
+                                    #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
+                                    #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}"
+                     headerText="#{viewBundle['dms.dgpt.htkp.last10']}" id="c11">
+            <af:inputText value="#{row[viewScope.htkpReturnBean.dataModel.labelMap['上年10月']]}" 
+                            id="it9"/>
+          </af:column>
+          <af:column sortable="false"
+                            inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
+                                    #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
+                                    #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}"
+                     headerText="#{viewBundle['dms.dgpt.htkp.last11']}" id="c25">
+            <af:inputText value="#{row[viewScope.htkpReturnBean.dataModel.labelMap['上年11月']]}" 
+                            id="it10"/>
+          </af:column>
+          <af:column sortable="false"
+                            inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
+                                    #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
+                                    #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}"
+                     headerText="#{viewBundle['dms.dgpt.htkp.last12']}" id="c21">
+            <af:inputText value="#{row[viewScope.htkpReturnBean.dataModel.labelMap['上年12月']]}" 
+                            id="it11"/>
+          </af:column>
+          <af:column sortable="false"
+                            inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
+                                    #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
+                                    #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}"
+                     headerText="#{viewBundle['dms.dgpt.htkp.cur1']}" id="c13">
+            <af:inputText value="#{row[viewScope.htkpReturnBean.dataModel.labelMap['本年1月']]}" 
+                            id="it12"/>
+          </af:column>
+          <af:column sortable="false"
+                            inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
+                                    #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
+                                    #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}"
+                     headerText="#{viewBundle['dms.dgpt.htkp.cur2']}" id="c29">
+            <af:inputText value="#{row[viewScope.htkpReturnBean.dataModel.labelMap['本年2月']]}" 
+                            id="it13"/>
+          </af:column>
+          <af:column sortable="false"
+                            inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
+                                    #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
+                                    #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}"
+                     headerText="#{viewBundle['dms.dgpt.htkp.cur3']}" id="c18">
+            <af:inputText value="#{row[viewScope.htkpReturnBean.dataModel.labelMap['本年3月']]}" 
+                            id="it14"/>
+          </af:column>
+          <af:column sortable="false"
+                            inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
+                                    #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
+                                    #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}"
+                     headerText="#{viewBundle['dms.dgpt.htkp.cur4']}" id="c31">
+            <af:inputText value="#{row[viewScope.htkpReturnBean.dataModel.labelMap['本年4月']]}" 
+                            id="it33"/>
+          </af:column>
+          <af:column sortable="false"
+                            inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
+                                    #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
+                                    #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}"
+                     headerText="#{viewBundle['dms.dgpt.htkp.cur5']}" id="c1">
+            <af:inputText value="#{row[viewScope.htkpReturnBean.dataModel.labelMap['本年5月']]}"
+                            id="it15"/>
+          </af:column>
+          <af:column sortable="false"
+                            inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
+                                    #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
+                                    #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}"
+                     headerText="#{viewBundle['dms.dgpt.htkp.cur6']}" id="c7">
+            <af:inputText value="#{row[viewScope.htkpReturnBean.dataModel.labelMap['本年6月']]}" 
+                            id="it16"/>
+          </af:column>
+          <af:column sortable="false"
+                            inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
+                                    #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
+                                    #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}"
+                     headerText="#{viewBundle['dms.dgpt.htkp.cur7']}" id="c22">
+            <af:inputText value="#{row[viewScope.htkpReturnBean.dataModel.labelMap['本年7月']]}" 
+                            id="it17"/>
+          </af:column>
+          <af:column sortable="false"
+                            inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
+                                    #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
+                                    #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}"
+                     headerText="#{viewBundle['dms.dgpt.htkp.cur8']}" id="c32">
+            <af:inputText value="#{row[viewScope.htkpReturnBean.dataModel.labelMap['本年8月']]}" 
+                            id="it18"/>
+          </af:column>
+          <af:column sortable="false"
+                            inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
+                                    #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
+                                    #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}"
+                     headerText="#{viewBundle['dms.dgpt.htkp.cur9']}" id="c26">
+            <af:inputText value="#{row[viewScope.htkpReturnBean.dataModel.labelMap['本年9月']]}" 
+                            id="it19"/>
+          </af:column>
+          <af:column sortable="false"
+                            inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
+                                    #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
+                                    #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}"
+                     headerText="#{viewBundle['dms.dgpt.htkp.cur10']}" id="c16">
+            <af:inputText value="#{row[viewScope.htkpReturnBean.dataModel.labelMap['本年10月']]}" 
+                            id="it32"/>
+          </af:column>
+          <af:column sortable="false"
+                            inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
+                                    #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
+                                    #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}"
+                     headerText="#{viewBundle['dms.dgpt.htkp.cur11']}" id="c30">
+            <af:inputText value="#{row[viewScope.htkpReturnBean.dataModel.labelMap['本年11月']]}" 
+                            id="it20"/>
+          </af:column>
+          <af:column sortable="false"
+                            inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
+                                    #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
+                                    #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}"
+                     headerText="#{viewBundle['dms.dgpt.htkp.cur12']}" id="c9">
+            <af:inputText value="#{row[viewScope.htkpReturnBean.dataModel.labelMap['本年12月']]}" 
+                            id="it21"/>
+          </af:column>
+          <af:column sortable="false"
+                            inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
+                                    #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
+                                    #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}"
+                     headerText="#{viewBundle['dms.dgpt.htkp.next1']}" id="c20">
+            <af:inputText value="#{row[viewScope.htkpReturnBean.dataModel.labelMap['下年1月']]}" 
+                            id="it22"/>
+          </af:column>
+          <af:column sortable="false"
+                            inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
+                                    #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
+                                    #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}"
+                     headerText="#{viewBundle['dms.dgpt.htkp.next2']}" id="c4">
+            <af:inputText value="#{row[viewScope.htkpReturnBean.dataModel.labelMap['下年2月']]}" 
+                            id="it23"/>
+          </af:column>
+          <af:column sortable="false"
+                            inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
+                                    #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
+                                    #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}"
+                     headerText="#{viewBundle['dms.dgpt.htkp.next3']}" id="c27">
+            <af:inputText value="#{row[viewScope.htkpReturnBean.dataModel.labelMap['下年3月']]}" 
+                            id="it24"/>
+          </af:column>
+          <af:column sortable="false"
+                            inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
+                                    #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
+                                    #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}"
+                     headerText="#{viewBundle['dms.dgpt.htkp.next4']}" id="c6">
+            <af:inputText value="#{row[viewScope.htkpReturnBean.dataModel.labelMap['下年4月']]}" 
+                            id="it31"/>
+          </af:column>
+          <af:column sortable="false"
+                            inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
+                                    #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
+                                    #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}"
+                     headerText="#{viewBundle['dms.dgpt.htkp.next5']}" id="c28">
+            <af:inputText value="#{row[viewScope.htkpReturnBean.dataModel.labelMap['下年5月']]}" 
+                            id="it25"/>
+          </af:column>
+          <af:column sortable="false"
+                            inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
+                                    #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
+                                    #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}"
+                     headerText="#{viewBundle['dms.dgpt.htkp.next6']}" id="c15">
+            <af:inputText value="#{row[viewScope.htkpReturnBean.dataModel.labelMap['下年6月']]}"
+                            id="it26"/>
+          </af:column>
+          <af:column sortable="false"
+                            inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
+                                    #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
+                                    #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}"
+                     headerText="#{viewBundle['dms.dgpt.htkp.nextOhters']}" id="c19">
+            <af:inputText value="#{row[viewScope.htkpReturnBean.dataModel.labelMap['下年7月以后']]}"
+                            id="it27"/>
+          </af:column>
+        </af:table>
+      </af:panelCollection>
+    </f:facet>
+    <f:facet name="start"/>
+    <f:facet name="end"/>
+    <f:facet name="top">
+      <af:panelGroupLayout id="pgl1" layout="horizontal">
+        <af:selectOneChoice label="#{viewBundle['dms.dgpt.htkp.year']}"
+                            value="#{viewScope.htkpReturnBean.year}" autoSubmit="true"
+                            id="soc1"
+                            valueChangeListener="#{viewScope.htkpReturnBean.yearChange}">
+          <f:selectItems value="#{viewScope.htkpReturnBean.yearList}" id="si1"/>
+        </af:selectOneChoice>
+        <af:selectOneChoice label="#{viewBundle['dms.dgpt.htkp.pname']}"
+                            id="soc2" value="#{viewScope.htkpReturnBean.PName}"
+                            autoSubmit="true"
+                            valueChangeListener="#{viewScope.htkpReturnBean.pnameChange}">
+          <f:selectItems value="#{viewScope.htkpReturnBean.PNameList}"
+                         id="si2"/>
+        </af:selectOneChoice>
+        <af:selectOneChoice label="#{viewBundle['dms.dgpt.htkp.version']}"
+                            id="soc3"
+                            value="#{viewScope.htkpReturnBean.version}"
+                            autoSubmit="true"
+                            valueChangeListener="#{viewScope.htkpReturnBean.versionChange}">
+          <f:selectItems value="#{viewScope.htkpReturnBean.versionList}"
+                         id="si3"/>
+        </af:selectOneChoice>
+      </af:panelGroupLayout>
+    </f:facet>
+  </af:panelStretchLayout>
+</jsp:root>

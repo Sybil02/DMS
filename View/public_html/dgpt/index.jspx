@@ -30,6 +30,8 @@
                                 actionListener="#{backingBeanScope.Launcher.launcherHtChange}"/>
                 <af:commandLink text="滚动计划成本" id="cl8"
                                 actionListener="#{backingBeanScope.Launcher.launcherRollChange}"/>
+                <af:commandLink text="年度预算-合同开票回款（在执行）" id="cl9"
+                                actionListener="#{backingBeanScope.Launcher.launcherHtkpChange}"/>
               </af:panelList>
             </af:group>
           </f:facet>

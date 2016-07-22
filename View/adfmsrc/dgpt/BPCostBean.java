@@ -873,7 +873,6 @@ public class BPCostBean {
         Statement stat = trans.createStatement(DBTransaction.DEFAULT);
         String sql = "SELECT EDITABLE FROM SAP_DMS_PROJECT_PRIVILEGE_V WHERE ID = '"+this.curUser.getId()+"' " +
             "AND PRO_CODE ||'-'||PRO_DESC = '"+this.pname+"'";
-        System.out.println(sql);
         ResultSet rs;
         try {
             rs = stat.executeQuery(sql);
