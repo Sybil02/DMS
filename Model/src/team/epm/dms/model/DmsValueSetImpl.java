@@ -123,6 +123,16 @@ public class DmsValueSetImpl extends DmsEntityImpl {
                 obj.setIdx((Number)value);
             }
         }
+        ,
+        DisplayLength {
+            public Object get(DmsValueSetImpl obj) {
+                return obj.getDisplayLength();
+            }
+
+            public void put(DmsValueSetImpl obj, Object value) {
+                obj.setDisplayLength((Number)value);
+            }
+        }
         ;
         private static AttributesEnum[] vals = null;
         private static final int firstIndex = 0;
@@ -162,6 +172,7 @@ public class DmsValueSetImpl extends DmsEntityImpl {
     public static final int UPDATEDBY = AttributesEnum.UpdatedBy.index();
     public static final int CREATEDBY = AttributesEnum.CreatedBy.index();
     public static final int IDX = AttributesEnum.Idx.index();
+    public static final int DISPLAYLENGTH = AttributesEnum.DisplayLength.index();
 
     /**
      * This is the default constructor (do not remove).
@@ -322,6 +333,22 @@ public class DmsValueSetImpl extends DmsEntityImpl {
      */
     public void setIdx(Number value) {
         setAttributeInternal(IDX, value);
+    }
+
+    /**
+     * Gets the attribute value for DisplayLength, using the alias name DisplayLength.
+     * @return the DisplayLength
+     */
+    public Number getDisplayLength() {
+        return (Number)getAttributeInternal(DISPLAYLENGTH);
+    }
+
+    /**
+     * Sets <code>value</code> as the attribute value for DisplayLength.
+     * @param value value to set the DisplayLength
+     */
+    public void setDisplayLength(Number value) {
+        setAttributeInternal(DISPLAYLENGTH, value);
     }
 
     /**

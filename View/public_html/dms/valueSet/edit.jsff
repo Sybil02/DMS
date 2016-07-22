@@ -80,6 +80,20 @@
               <f:validator binding="#{row.bindings.Code.validator}"/>
             </af:inputText>
           </af:column>
+          <af:column headerText="#{bindings.DmsValueSetView.hints.DisplayLength.label}"
+                     id="c5">
+            <af:inputText value="#{row.bindings.DisplayLength.inputValue}"
+                          label="#{bindings.DmsValueSetView.hints.DisplayLength.label}"
+                          required="#{bindings.DmsValueSetView.hints.DisplayLength.mandatory}"
+                          columns="#{bindings.DmsValueSetView.hints.DisplayLength.displayWidth}"
+                          maximumLength="#{bindings.DmsValueSetView.hints.DisplayLength.precision}"
+                          shortDesc="#{bindings.DmsValueSetView.hints.DisplayLength.tooltip}"
+                          id="it3">
+              <f:validator binding="#{row.bindings.DisplayLength.validator}"/>
+              <af:convertNumber groupingUsed="false"
+                                pattern="#{bindings.DmsValueSetView.hints.DisplayLength.format}"/>
+            </af:inputText>
+          </af:column>
           <af:column sortProperty="#{bindings.DmsValueSetView.hints.UpdatedAt.name}"
                        filterable="false" sortable="true"
                        headerText="#{bindings.DmsValueSetView.hints.UpdatedAt.label}"

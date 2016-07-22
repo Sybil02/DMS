@@ -129,6 +129,16 @@ public class DmsValueSetViewRowImpl extends ViewRowImpl {
             }
         }
         ,
+        DisplayLength {
+            public Object get(DmsValueSetViewRowImpl obj) {
+                return obj.getDisplayLength();
+            }
+
+            public void put(DmsValueSetViewRowImpl obj, Object value) {
+                obj.setDisplayLength((Number)value);
+            }
+        }
+        ,
         DmsGroupValueView {
             public Object get(DmsValueSetViewRowImpl obj) {
                 return obj.getDmsGroupValueView();
@@ -198,6 +208,7 @@ public class DmsValueSetViewRowImpl extends ViewRowImpl {
     public static final int CREATEDBY = AttributesEnum.CreatedBy.index();
     public static final int VALUESETID = AttributesEnum.ValueSetId.index();
     public static final int IDX = AttributesEnum.Idx.index();
+    public static final int DISPLAYLENGTH = AttributesEnum.DisplayLength.index();
     public static final int DMSGROUPVALUEVIEW = AttributesEnum.DmsGroupValueView.index();
     public static final int LKP_LANG = AttributesEnum.LKP_LANG.index();
     public static final int LSV_USER = AttributesEnum.LSV_USER.index();
@@ -391,6 +402,22 @@ public class DmsValueSetViewRowImpl extends ViewRowImpl {
      */
     public void setIdx(Number value) {
         setAttributeInternal(IDX, value);
+    }
+
+    /**
+     * Gets the attribute value for DISPLAY_LENGTH using the alias name DisplayLength.
+     * @return the DISPLAY_LENGTH
+     */
+    public Number getDisplayLength() {
+        return (Number) getAttributeInternal(DISPLAYLENGTH);
+    }
+
+    /**
+     * Sets <code>value</code> as attribute value for DISPLAY_LENGTH using the alias name DisplayLength.
+     * @param value value to set the DISPLAY_LENGTH
+     */
+    public void setDisplayLength(Number value) {
+        setAttributeInternal(DISPLAYLENGTH, value);
     }
 
     /**

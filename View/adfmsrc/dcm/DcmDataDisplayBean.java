@@ -1448,6 +1448,7 @@ public class DcmDataDisplayBean extends TablePagination{
                 header.setSrcTable((String)row.getAttribute("Source"));
                 header.setValueSetId((String)row.getAttribute("ValueSetId"));
                 header.setCode((String)row.getAttribute("Code"));
+                header.setLength(Integer.parseInt(row.getAttribute("DisplayLength").toString()));
                 this.initHeaderValueList(header);
 //                this.setDefaultHeaderValue(header);
                 this.templateHeader.add(header);

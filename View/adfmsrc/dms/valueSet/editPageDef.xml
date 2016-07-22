@@ -20,6 +20,7 @@
           <Item Value="UpdatedAt"/>
           <Item Value="UpdatedBy"/>
           <Item Value="Code"/>
+          <Item Value="DisplayLength"/>
         </AttrNames>
       </nodeDefinition>
     </tree>

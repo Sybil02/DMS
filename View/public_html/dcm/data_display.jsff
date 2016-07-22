@@ -27,7 +27,7 @@
                                                 autoSubmit="true" clientComponent="true"
                                                 validator="#{vs.comLov.listOfValuesModel.validate}"
                                                 model="#{vs.comLov.listOfValuesModel}"
-                                                id="iclov2"
+                                                id="iclov2" columns="#{vs.length}"
                                                 binding="#{viewScope.DcmDataDisplayBean.comIclovs}"
                                                 valueChangeListener="#{viewScope.DcmDataDisplayBean.headerSelectChangeListener}"
                                               usage="auto">

@@ -15,6 +15,7 @@ public class ComHeader {
     private List<SelectItem> values;
     private String value;
     private DmsComBoxLov comLov;
+    private int length;
 
     public void setValueSetId(String valueSetId) {
         this.valueSetId = valueSetId;
@@ -78,5 +79,13 @@ public class ComHeader {
 
     public DmsComBoxLov getComLov() {
         return comLov;
+    }
+
+    public void setLength(int length) {
+        this.length = length;
+    }
+
+    public int getLength() {
+        return length;
     }
 }
