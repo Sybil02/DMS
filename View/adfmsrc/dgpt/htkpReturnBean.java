@@ -1,10 +1,12 @@
 package dgpt;
 
 import common.ADFUtils;
+import common.DmsLog;
 import common.DmsUtils;
 
 import common.JSFUtils;
 
+import dcm.HtkpRowReader;
 import dcm.PcColumnDef;
 
 import dcm.PcDataTableModel;
@@ -12,8 +14,16 @@ import dcm.PcDataTableModel;
 import dcm.PcExcel2003WriterImpl;
 import dcm.PcExcel2007WriterImpl;
 
+import dcm.SPRowReader;
+
 import dms.login.Person;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 
 import java.sql.CallableStatement;
@@ -24,7 +34,10 @@ import java.sql.Statement;
 
 import java.sql.Types;
 
+import java.text.SimpleDateFormat;
+
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -41,6 +54,8 @@ import oracle.adf.share.ADFContext;
 import oracle.adf.view.rich.component.rich.RichPopup;
 import oracle.adf.view.rich.component.rich.data.RichTable;
 
+import oracle.adf.view.rich.component.rich.input.RichInputFile;
+
 import oracle.jbo.Row;
 import oracle.jbo.ViewObject;
 import oracle.jbo.server.DBTransaction;
@@ -51,9 +66,15 @@ import org.apache.commons.lang.ObjectUtils;
 import org.apache.myfaces.trinidad.event.SelectionEvent;
 import org.apache.myfaces.trinidad.model.CollectionModel;
 import org.apache.myfaces.trinidad.model.RowKeySet;
+import org.apache.myfaces.trinidad.model.UploadedFile;
+
+import org.hexj.excelhandler.reader.ExcelReaderUtil;
 
 public class htkpReturnBean {
     private RichPopup dataExportWnd;
+    private RichInputFile fileInput;
+    private RichPopup dataImportWnd;
+    private RichPopup errorWindow;
 
     public htkpReturnBean() {
         super();
@@ -80,6 +101,7 @@ public class htkpReturnBean {
     private List<PcColumnDef> pcColsDef = new ArrayList<PcColumnDef>();
     //是否是2007及以上格式
     private boolean isXlsx = true;
+    DmsLog dmsLog = new DmsLog();
 
     public void initList(){
         this.versionList = queryValues("version");
@@ -210,7 +232,7 @@ public class htkpReturnBean {
             PcColumnDef newCol = new PcColumnDef(map.getKey(),map.getValue(),isReadonly);
             this.pcColsDef.add(newCol);
         }
-        //this.pcColsDef.add(new PcColumnDef("ROW_ID","ROW_ID",false));
+        this.pcColsDef.add(new PcColumnDef("ROW_ID","ROW_ID",false));
         ((PcDataTableModel)this.dataModel).setPcColsDef(this.pcColsDef);
         return labelMap;
     }
@@ -334,11 +356,13 @@ public class htkpReturnBean {
         List<Map> modelData = (List<Map>)this.dataModel.getWrappedData();
         if(this.validation()){
             this.inputPro();
+            dmsLog.operationLog(this.curUser.getAcc(),this.connectId,this.getCom(),"UPDATE");
             for(Map<String,String> rowdata : modelData){
                 rowdata.put("OPERATION", null);
             }
         }else{
             JSFUtils.addFacesErrorMessage("校验不通过");
+            this.showErrorPop();
         }
     }
     //新增行
@@ -389,7 +413,10 @@ public class htkpReturnBean {
         DmsUtils.getDmsApplicationModule().getTransaction().rollback();
         this.createTableModel();
     }
-    
+    private String getCom(){
+        String text = this.year+"_"+this.pName+"_"+this.version;
+        return text;
+    }
     public void copyToTemp(){
         DBTransaction trans = (DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
         StringBuffer sql = new StringBuffer();
@@ -472,7 +499,6 @@ public class htkpReturnBean {
             flag = false;
             e.printStackTrace();
         }
-        System.out.println("校验程序"+flag);
         return flag;
     }
     
@@ -502,7 +528,6 @@ public class htkpReturnBean {
                                                    this.connectId,
                                                     this.pcColsDef,
                                                     outputStream);
-            
                 writer.writeToFile();
             }else{
                 PcExcel2007WriterImpl writer = new PcExcel2007WriterImpl(
@@ -514,6 +539,7 @@ public class htkpReturnBean {
         } catch (Exception e) {
             e.printStackTrace();
         } 
+        dmsLog.operationLog(this.curUser.getAcc(),this.connectId,this.getCom(),"EXPORT");
     }
     //导出文件名
     public String getExportDataExcelName(){
@@ -523,7 +549,145 @@ public class htkpReturnBean {
             return "年度预算-合同开票回款（在执行）_"+this.connectId+".xls";
         }
     }
+    //导入
+    public void operation_import(ActionEvent actionEvent) {
+        DBTransaction trans = (DBTransaction)DmsUtils.getDcmApplicationModule().getDBTransaction();
+        this.dataImportWnd.cancel();
+        //表头为空
+        if(this.year==null||this.pName==null||this.version==null){
+            JSFUtils.addFacesErrorMessage("请选择表头信息");
+            return;
+        }
+        //上传文件为空
+        if (null == this.fileInput.getValue()) {
+            JSFUtils.addFacesErrorMessage(DmsUtils.getMsg("dcm.plz_select_import_file"));
+            return;
+        }
+        //获取文件上传路径
+        String filePath = this.uploadFile();
+        
+        if (null == filePath) {
+            return;
+        }
+        
+        //读取excel数据到数据库临时表
+        try {
+            if (!this.handleExcel(filePath, connectId)) {
+            return;
+        }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        this.fileInput.resetValue();
+        if(this.validation()){
+            //如果校验成功，调用导入程序
+            this.import_inputPro();
+            dmsLog.operationLog(this.curUser.getAcc(),this.connectId,this.getCom(),"IMPORT");
+        }else{
+            JSFUtils.addFacesErrorMessage("校验不通过");
+            //显示错误窗口
+            this.showErrorPop();
+        }
+        this.createTableModel();     
+    }
     
+    //导入程序
+    public void import_inputPro(){
+        DBTransaction trans = (DBTransaction)DmsUtils.getDcmApplicationModule().getDBTransaction();
+        CallableStatement cs = trans.createCallableStatement("{CALl DMS_ZZX.HTKPRETURNIMPORT_INPUTPRO(?,?)}", 0);
+        try {
+            cs.setString(1,this.curUser.getId() );
+            cs.setString(2,this.connectId);
+            cs.execute();
+            trans.commit();
+            cs.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    //文件上传
+    private String uploadFile() {
+        UploadedFile file = (UploadedFile)this.fileInput.getValue();
+        if (!(file.getFilename().endsWith(".xls") ||
+              file.getFilename().endsWith(".xlsx"))) {
+            String msg = DmsUtils.getMsg("dcm.file_format_error");
+            JSFUtils.addFacesErrorMessage(msg);
+            return null;
+        }
+        String fileExtension =file.getFilename().substring(file.getFilename().lastIndexOf("."));
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+        String date = dateFormat.format(new Date());
+        File dmsBaseDir = new File("DMS/UPLOAD/合同开票回款" );
+        //如若文件路径不存在则创建文件目录
+        if (!dmsBaseDir.exists()) {
+            dmsBaseDir.mkdirs();
+        }
+        String fileName = "DMS/UPLOAD/" + "合同开票回款" + "/"+file.getFilename();
+        try {
+            InputStream inputStream = file.getInputStream();
+            FileOutputStream outputStream = new FileOutputStream(fileName);
+            BufferedInputStream bufferedInputStream =new BufferedInputStream(inputStream);
+            BufferedOutputStream bufferedOutputStream =
+                new BufferedOutputStream(outputStream);
+            byte[] buffer = new byte[10240];
+            int bytesRead = 0;
+            while ((bytesRead = bufferedInputStream.read(buffer, 0, 10240)) !=-1) {
+                bufferedOutputStream.write(buffer, 0, bytesRead);
+            }
+            bufferedOutputStream.flush();
+            if (bufferedOutputStream != null) {
+                bufferedOutputStream.close();
+            }
+            if (bufferedInputStream != null) {
+                bufferedInputStream.close();
+            }
+            file.dispose();
+        } catch (IOException e) {
+            e.printStackTrace();
+            String msg = DmsUtils.getMsg("dcm.file_upload_error");
+            JSFUtils.addFacesErrorMessage(msg);
+            return null;
+        }
+        return (new File(fileName)).getAbsolutePath();
+    }
+    
+    //读取excel数据到临时表
+    private boolean handleExcel(String fileName, String curComRecordId) throws SQLException {
+        DBTransaction trans =(DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
+        //清空已有临时表数据
+        this.deleteTemp();
+        UploadedFile file = (UploadedFile)this.fileInput.getValue();
+        String fname = file.getFilename();
+        String name = fname.substring(fname.indexOf("_")+1, fname.indexOf("."));
+        if(!name.equals(this.connectId)){
+            JSFUtils.addFacesErrorMessage("请选择正确的文件");
+            return false;
+        }
+        HtkpRowReader spReader = new HtkpRowReader(trans,2,this.connectId,this.pcColsDef,this.curUser.getId(), name);
+        try {
+                ExcelReaderUtil.readExcel(spReader, fileName, true);
+                spReader.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+                JSFUtils.addFacesErrorMessage(DmsUtils.getMsg("dcm.excel_handle_error"));
+                return false;
+            }
+        return true;
+    }
+
+    public void errorPop(ActionEvent actionEvent) {
+        this.showErrorPop();
+    }
+    
+    //显示错误框
+    public void showErrorPop(){
+        ViewObject vo = ADFUtils.findIterator("ProPlanCostViewIterator").getViewObject();
+        vo.setNamedWhereClauseParam("dataType", "RETURN");
+        RichPopup.PopupHints ph = new RichPopup.PopupHints();
+        vo.executeQuery();
+        this.errorWindow.show(ph);
+    }
     public void setYear(String year) {
         this.year = year;
     }
@@ -651,4 +815,29 @@ public class htkpReturnBean {
     public RichPopup getDataExportWnd() {
         return dataExportWnd;
     }
+
+    public void setFileInput(RichInputFile fileInput) {
+        this.fileInput = fileInput;
+    }
+
+    public RichInputFile getFileInput() {
+        return fileInput;
+    }
+
+    public void setDataImportWnd(RichPopup dataImportWnd) {
+        this.dataImportWnd = dataImportWnd;
+    }
+
+    public RichPopup getDataImportWnd() {
+        return dataImportWnd;
+    }
+
+    public void setErrorWindow(RichPopup errorWindow) {
+        this.errorWindow = errorWindow;
+    }
+
+    public RichPopup getErrorWindow() {
+        return errorWindow;
+    }
+
 }

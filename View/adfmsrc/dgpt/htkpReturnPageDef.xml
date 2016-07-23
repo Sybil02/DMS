@@ -4,6 +4,20 @@
   <parameters/>
   <executables>
     <variableIterator id="variables"/>
+    <iterator Binds="ProPlanCostView" RangeSize="25"
+              DataControl="DmsModuleDataControl" id="ProPlanCostViewIterator"/>
   </executables>
-  <bindings/>
+  <bindings>
+    <tree IterBinding="ProPlanCostViewIterator" id="ProPlanCostView">
+      <nodeDefinition DefName="team.epm.dms.view.ProPlanCostView"
+                      Name="ProPlanCostView0">
+        <AttrNames>
+          <Item Value="RowNum"/>
+          <Item Value="Msg"/>
+          <Item Value="CreatedAt"/>
+          <Item Value="CreatedBy"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+  </bindings>
 </pageDefinition>

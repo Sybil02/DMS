@@ -37,7 +37,7 @@
             </af:panelGridLayout>
           </af:panelWindow>
         </af:popup>
-        <af:popup id="p2">
+        <af:popup id="p2" binding="#{viewScope.htkpReturnBean.dataImportWnd}">
           <af:panelWindow id="pw2"
                           title="#{viewBundle['dgpt.template.data_import']}">
             <af:panelGridLayout id="pgl4">
@@ -47,17 +47,70 @@
                 </af:gridCell>
                 <af:gridCell marginStart="5px" marginEnd="5px" width="auto"
                              id="gc6">
-                  <af:inputFile id="if1"/>
+                  <af:inputFile id="if1" simple="true"
+                                binding="#{viewScope.htkpReturnBean.fileInput}"/>
                 </af:gridCell>
               </af:gridRow>
               <af:gridRow marginTop="5px" marginBottom="5px" height="auto"
                           id="gr4">
                 <af:gridCell marginStart="5px" width="auto" id="gc7"
                              columnSpan="2" halign="center">
-                  <af:commandButton text="#{viewBundle['dms.dgpt.excel.import']}" id="cb8"/>
+                  <af:commandButton text="#{viewBundle['dms.dgpt.excel.import']}" id="cb8"
+                                    actionListener="#{viewScope.htkpReturnBean.operation_import}"/>
                 </af:gridCell>
               </af:gridRow>
             </af:panelGridLayout>
+          </af:panelWindow>
+        </af:popup>
+        <af:popup id="p3" binding="#{viewScope.htkpReturnBean.errorWindow}">
+          <af:panelWindow id="pw3" title="#{viewBundle['dcm.import_error']}">
+            <af:panelStretchLayout id="psl2" inlineStyle="width:800px;height:400px">
+              <f:facet name="bottom"/>
+              <f:facet name="center">
+                <af:table value="#{bindings.ProPlanCostView.collectionModel}"
+                          var="row" rows="#{bindings.ProPlanCostView.rangeSize}"
+                          emptyText="#{bindings.ProPlanCostView.viewable ? 'No data to display.' : 'Access Denied.'}"
+                          fetchSize="#{bindings.ProPlanCostView.rangeSize}"
+                          rowBandingInterval="0"
+                          selectedRowKeys="#{bindings.ProPlanCostView.collectionModel.selectedRow}"
+                          selectionListener="#{bindings.ProPlanCostView.collectionModel.makeCurrent}"
+                          rowSelection="single" id="t3"
+                          columnStretching="column:c34">
+                  <af:column sortProperty="#{bindings.ProPlanCostView.hints.RowNum.name}"
+                             sortable="false"
+                             headerText="#{bindings.ProPlanCostView.hints.RowNum.label}"
+                             id="c35">
+                    <af:outputText value="#{row.RowNum}" id="ot1">
+                      <af:convertNumber groupingUsed="false"
+                                        pattern="#{bindings.ProPlanCostView.hints.RowNum.format}"/>
+                    </af:outputText>
+                  </af:column>
+                  <af:column sortProperty="#{bindings.ProPlanCostView.hints.Msg.name}"
+                             sortable="false"
+                             headerText="#{bindings.ProPlanCostView.hints.Msg.label}"
+                             id="c34">
+                    <af:outputText value="#{row.Msg}" id="ot2"/>
+                  </af:column>
+                  <af:column sortProperty="#{bindings.ProPlanCostView.hints.CreatedAt.name}"
+                             sortable="false"
+                             headerText="#{bindings.ProPlanCostView.hints.CreatedAt.label}"
+                             id="c5">
+                    <af:outputText value="#{row.CreatedAt}" id="ot3">
+                      <af:convertDateTime pattern="#{bindings.ProPlanCostView.hints.CreatedAt.format}"/>
+                    </af:outputText>
+                  </af:column>
+                  <af:column sortProperty="#{bindings.ProPlanCostView.hints.CreatedBy.name}"
+                             sortable="false"
+                             headerText="#{bindings.ProPlanCostView.hints.CreatedBy.label}"
+                             id="c24">
+                    <af:outputText value="#{row.CreatedBy}" id="ot4"/>
+                  </af:column>
+                </af:table>
+              </f:facet>
+              <f:facet name="start"/>
+              <f:facet name="end"/>
+              <f:facet name="top"/>
+            </af:panelStretchLayout>
           </af:panelWindow>
         </af:popup>
       </af:panelGroupLayout>
@@ -84,6 +137,9 @@
               </af:commandButton>
               <af:commandButton text="#{viewBundle['dcm.action.export']}" id="cb6">
                 <af:showPopupBehavior popupId="::p1"/>
+              </af:commandButton>
+              <af:commandButton text="#{viewBundle['dcm.import_error']}" id="cb9"
+                                actionListener="#{viewScope.htkpReturnBean.errorPop}">
               </af:commandButton>
             </af:group>
           </af:toolbar>
