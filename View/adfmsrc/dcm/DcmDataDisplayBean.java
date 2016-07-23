@@ -727,7 +727,7 @@ public class DcmDataDisplayBean extends TablePagination{
     public void copyBatchError(String tempId){
         DBTransaction trans = (DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
         Statement stat = trans.createStatement(DBTransaction.DEFAULT);
-        String sql = "INSERT INTO DCM_ERROR_BATCH SELECT T.SHEET_NAME,'校验错误',T.ROW_NUM,'2',T.CREATED_BY,T.LOCALE,T.MSG FROM DCM_ERROR T "
+        String sql = "INSERT INTO DCM_ERROR_BATCH SELECT T.SHEET_NAME,'校验错误',T.ROW_NUM,'2',T.CREATED_BY,T.LOCALE,T.MSG,SYSDATE FROM DCM_ERROR T "
             + "WHERE T.TEMPLATE_ID = '" + tempId + "' AND T.COM_RECORD_ID = '" + this.curCombiantionRecord + "'";
         try {
             stat.executeUpdate(sql);
@@ -741,8 +741,8 @@ public class DcmDataDisplayBean extends TablePagination{
     public void writeBatchError(String sheetName,String status,String msg,String level){
         DBTransaction trans = (DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
         Statement stat = trans.createStatement(DBTransaction.DEFAULT);
-        String sql = "INSERT INTO DCM_ERROR_BATCH(SHEET_NAME,STATUS,ERROR_LEVEL,CREATED_BY,LOCALE,MSG) VALUES('"
-             + sheetName + "','" + status + "','" + level + "','" + this.curUser.getId() + "','" + this.curUser.getLocale() + "','" + msg + "')";
+        String sql = "INSERT INTO DCM_ERROR_BATCH(SHEET_NAME,STATUS,ERROR_LEVEL,CREATED_BY,LOCALE,MSG,CREATED_AT) VALUES('"
+             + sheetName + "','" + status + "','" + level + "','" + this.curUser.getId() + "','" + this.curUser.getLocale() + "','" + msg + "',SYSDATE)";
         try {
             stat.executeUpdate(sql);
             trans.commit();

@@ -281,12 +281,23 @@
                       <af:outputText value="#{row.Line}" id="ot12"/>
                     </af:column>
                     <af:column sortProperty="#{bindings.DcmErrorBatchVO.hints.Msg.name}"
-                               filterable="true" sortable="true" width="560"
+                               filterable="true" sortable="true" width="450"
                                headerText="#{bindings.DcmErrorBatchVO.hints.Msg.label}"
                                id="c8">
                       <af:outputText value="#{row.Msg}" id="ot13"/>
                     </af:column>
-                  </af:table>
+                      <af:column headerText="#{bindings.DcmErrorBatchVO.hints.CreatedAt.label}" width="130"
+                                 id="c13">
+                        <af:inputDate value="#{row.bindings.CreatedAt.inputValue}"
+                                      label="#{bindings.DcmErrorBatchVO.hints.CreatedAt.label}"
+                                      required="#{bindings.DcmErrorBatchVO.hints.CreatedAt.mandatory}"
+                                      shortDesc="#{bindings.DcmErrorBatchVO.hints.CreatedAt.tooltip}"
+                                      id="id1">
+                          <f:validator binding="#{row.bindings.CreatedAt.validator}"/>
+                          <af:convertDateTime pattern="#{bindings.DcmErrorBatchVO.hints.CreatedAt.format}"/>
+                        </af:inputDate>
+                      </af:column>
+                    </af:table>
                   </af:panelCollection>
                 </af:panelGroupLayout>
               </f:facet>

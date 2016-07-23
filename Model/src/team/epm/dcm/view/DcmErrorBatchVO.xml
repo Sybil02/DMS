@@ -32,7 +32,7 @@
     <TransientExpression><![CDATA[adf.context.locale]]></TransientExpression>
   </Variable>
   <SQLQuery>
-    <![CDATA[SELECT T.SHEET_NAME,T.STATUS,T.LINE,T.MSG FROM DCM_ERROR_BATCH T 
+    <![CDATA[SELECT T.SHEET_NAME,T.STATUS,T.LINE,T.MSG,T.CREATED_AT FROM DCM_ERROR_BATCH T 
 WHERE T.CREATED_BY =:userId AND T.LOCALE =:locale ORDER BY T.ERROR_LEVEL,T.SHEET_NAME]]>
   </SQLQuery>
   <ViewAttribute
@@ -116,6 +116,30 @@ WHERE T.CREATED_BY =:userId AND T.LOCALE =:locale ORDER BY T.ERROR_LEVEL,T.SHEET
       <SchemaBasedProperties>
         <LABEL
           ResId="dcm.error.message"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="CreatedAt"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Type="oracle.jbo.domain.Date"
+    ColumnType="DATE"
+    AliasName="CREATED_AT"
+    Expression="CREATED_AT"
+    SQLType="DATE">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="7"/>
+    </DesignTime>
+    <Properties>
+      <SchemaBasedProperties>
+        <FMT_FORMATTER
+          ResId="team.epm.dcm.view.DcmErrorBatchVO.CreatedAt_FMT_FORMATTER"/>
+        <FMT_FORMAT
+          ResId="team.epm.dcm.view.DcmErrorBatchVO.CreatedAt_FMT_FORMAT"/>
+        <LABEL
+          ResId="team.epm.dcm.view.DcmCombinationView.CreatedAt_LABEL"/>
       </SchemaBasedProperties>
     </Properties>
   </ViewAttribute>
