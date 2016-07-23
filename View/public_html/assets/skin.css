@@ -16,6 +16,9 @@ All rights reserved. */
    font-family: Microsoft YaHei;
 }
 
+af|inputComboboxListOfValues::search{
+    display: none;
+}
 
 /**
  * Default Font Size, e.g.
