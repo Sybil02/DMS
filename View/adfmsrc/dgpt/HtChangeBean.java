@@ -6,6 +6,10 @@ import common.DmsUtils;
 
 import common.JSFUtils;
 
+import common.lov.DmsComBoxLov;
+
+import common.lov.ValueSetRow;
+
 import dcm.DcmDataDisplayBean;
 import dcm.DcmDataTableModel;
 import dcm.PcColumnDef;
@@ -97,6 +101,7 @@ public class HtChangeBean {
     private String pLine;
     private String pname;
     private List<SelectItem> pnameList;
+    private DmsComBoxLov proLov;
     private String version;
     private List<SelectItem> versionList;
     private String proType;
@@ -121,7 +126,17 @@ public class HtChangeBean {
     private void initList(){
         this.yearList = queryYears("HLS_YEAR_C");
         this.pnameList = queryValues("PRO_PLAN_COST_HEADER","PROJECT_NAME");
+        this.initProLov(pnameList);
         this.versionList = queryValues1("PRO_PLAN_COST_HEADER","VERSION");
+    }
+    
+    private void initProLov(List<SelectItem> pnameList){
+        List<ValueSetRow> vsl = new ArrayList<ValueSetRow>();
+        for(SelectItem sim : pnameList){
+            ValueSetRow vsr = new ValueSetRow(sim.getLabel(),sim.getLabel(),sim.getLabel());
+            vsl.add(vsr);
+        }
+        this.proLov = new DmsComBoxLov(vsl);
     }
 
     //年份下拉列表
@@ -1164,5 +1179,13 @@ public class HtChangeBean {
 
     public List<PcColumnDef> getPcColsEx() {
         return pcColsEx;
+    }
+
+    public void setProLov(DmsComBoxLov proLov) {
+        this.proLov = proLov;
+    }
+
+    public DmsComBoxLov getProLov() {
+        return proLov;
     }
 }
