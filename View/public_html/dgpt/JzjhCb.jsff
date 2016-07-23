@@ -350,7 +350,7 @@
                                                 autoSubmit="true" clientComponent="true"
                                                 validator="#{viewScope.BPCostBean.proLov.listOfValuesModel.validate}"
                                                 model="#{viewScope.BPCostBean.proLov.listOfValuesModel}"
-                                                id="iclov2" columns="20"
+                                                id="iclov2" columns="80"
                                                 valueChangeListener="#{viewScope.BPCostBean.projectChange}"
                                               usage="auto">
                     <af:autoSuggestBehavior suggestedItems="#{viewScope.BPCostBean.proLov.listOfValuesModel.suggest}"/>
