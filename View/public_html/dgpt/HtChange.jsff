@@ -184,17 +184,23 @@
             <!--<af:commandButton text="#{viewBundle['dcm.common.new']}" id="cb1"
                               action="#{viewScope.HtChangeBean.operation_new}"/>-->
             <af:commandButton text="#{viewBundle['dms.common.save']}" id="cb2"
-                              action="#{viewScope.HtChangeBean.operation_save}"/>
+                              action="#{viewScope.HtChangeBean.operation_save}"
+                              disabled="#{viewScope.HtChangeBean.isSelected}"
+                              partialTriggers="::soc1 ::iclov2 ::soc3"/>
             <af:commandButton text="#{viewBundle['dms.common.cancel']}" id="cb3"
                               actionListener="#{viewScope.HtChangeBean.operation_reset}"/>
             <af:commandButton text="#{viewBundle['dcm.common.delete']}" id="cb4"
                               action="#{viewScope.HtChangeBean.operation_delete}"/>
             </af:group>
             <af:group id="g1">
-              <af:commandButton text="#{viewBundle['dms.dgpt.excel.import']}" id="cb10">
+              <af:commandButton text="#{viewBundle['dms.dgpt.excel.import']}" id="cb10"
+                                disabled="#{viewScope.HtChangeBean.isSelected}"
+                              partialTriggers="::soc1 ::iclov2 ::soc3">
                 <af:showPopupBehavior popupId="::p4"/>
               </af:commandButton>
-              <af:commandButton text="#{viewBundle['dcm.action.export']}" id="cb7">
+              <af:commandButton text="#{viewBundle['dcm.action.export']}" id="cb7"
+                                disabled="#{viewScope.HtChangeBean.isSelected}"
+                              partialTriggers="::soc1 ::iclov2 ::soc3">
                 <af:showPopupBehavior popupId="::p2"/>
               </af:commandButton>
               <af:commandButton text="#{viewBundle['dcm.import_error']}" id="cb8"

@@ -82,6 +82,7 @@ public class htkpReturnBean {
         this.dataModel = new PcDataTableModel();
         List<Map> d = new ArrayList<Map>();
         this.dataModel.setWrappedData(d);
+        isSelected = true;
         this.initList();
     }
     private Person curUser;
@@ -101,6 +102,7 @@ public class htkpReturnBean {
     private List<PcColumnDef> pcColsDef = new ArrayList<PcColumnDef>();
     //是否是2007及以上格式
     private boolean isXlsx = true;
+    private boolean isSelected;
     DmsLog dmsLog = new DmsLog();
     //表体下拉框列表
     private List<SelectItem> detailList;
@@ -327,6 +329,7 @@ public class htkpReturnBean {
         if(year==null||pName==null||version==null){
             return;
         }
+        isSelected = false;
         this.createTableModel();
     }
 
@@ -335,6 +338,7 @@ public class htkpReturnBean {
         if(year==null||pName==null||version==null){
             return;
         }
+        isSelected = false;
         this.createTableModel();
     }
 
@@ -343,6 +347,7 @@ public class htkpReturnBean {
         if(year==null||pName==null||version==null){
             return;
         }
+        isSelected = false;
         this.createTableModel();
     }
     //调整数字显示格式
@@ -381,7 +386,7 @@ public class htkpReturnBean {
         List<Map> modelData = (List<Map>)this.dataModel.getWrappedData();
         if(this.validation()){
             this.inputPro();
-            dmsLog.operationLog(this.curUser.getAcc(),this.connectId,this.getCom(),"UPDATE");
+            dmsLog.operationLog(this.curUser.getAcc(),"RETURN_"+this.connectId,this.getCom(),"UPDATE");
             for(Map<String,String> rowdata : modelData){
                 rowdata.put("OPERATION", null);
             }
@@ -580,7 +585,7 @@ public class htkpReturnBean {
         } catch (Exception e) {
             e.printStackTrace();
         } 
-        dmsLog.operationLog(this.curUser.getAcc(),this.connectId,this.getCom(),"EXPORT");
+        dmsLog.operationLog(this.curUser.getAcc(),"RETURN_"+this.connectId,this.getCom(),"EXPORT");
     }
     //导出文件名
     public String getExportDataExcelName(){
@@ -624,7 +629,7 @@ public class htkpReturnBean {
             //如果校验成功，调用导入程序
             this.import_inputPro();
             this.after();
-            dmsLog.operationLog(this.curUser.getAcc(),this.connectId,this.getCom(),"IMPORT");
+            dmsLog.operationLog(this.curUser.getAcc(),"RETURN_"+this.connectId,this.getCom(),"IMPORT");
         }else{
             //JSFUtils.addFacesErrorMessage("校验不通过");
             //显示错误窗口
@@ -896,5 +901,13 @@ public class htkpReturnBean {
 
     public List<SelectItem> getTaxList() {
         return taxList;
+    }
+
+    public void setIsSelected(boolean isSelected) {
+        this.isSelected = isSelected;
+    }
+
+    public boolean isIsSelected() {
+        return isSelected;
     }
 }

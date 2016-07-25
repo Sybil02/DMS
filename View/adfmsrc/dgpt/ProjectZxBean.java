@@ -107,6 +107,7 @@ public class ProjectZxBean {
             isManager = false;
             isEDITABLE = false;
         }
+        isSelected = true;
         this.dataModel = new PcDataTableModel();
         List<Map> d = new ArrayList<Map>();
         this.dataModel.setWrappedData(d);
@@ -132,6 +133,7 @@ public class ProjectZxBean {
     private boolean isManager;
     DmsLog dmsLog = new DmsLog();
     private boolean isEDITABLE ;
+    private boolean isSelected;
     
     private void initList(){
         this.yearList = queryYears("HLS_YEAR_C");
@@ -433,8 +435,9 @@ public class ProjectZxBean {
         if(year==null||version==null||pname==null){
                 return;
         }else{
-                this.queryData();
-                this.createTableModel();
+            isSelected = false;
+            this.queryData();
+            this.createTableModel();
         }
     }
     
@@ -444,6 +447,7 @@ public class ProjectZxBean {
         if(year==null||version==null||pname==null){
             return;
         }else{
+            isSelected = false;
             this.queryData();
             this.createTableModel();
         }
@@ -455,6 +459,7 @@ public class ProjectZxBean {
         if(year==null||version==null||pname==null){
             return;
         }else{
+            isSelected = false;
             this.queryData();
             this.createTableModel();
         }
@@ -556,7 +561,7 @@ public class ProjectZxBean {
         
         if(this.validation()){
             this.inputPro();
-            dmsLog.operationLog(this.curUser.getAcc(),this.connectId,this.getCom(),"UPDATE");
+            dmsLog.operationLog(this.curUser.getAcc(),this.TYPE_ZZX+"_"+this.connectId,this.getCom(),"UPDATE");
             for(Map<String,String> rowdata : modelData){
                 if("UPDATE".equals(rowdata.get("OPERATION"))){
                     rowdata.put("OPERATION", null);
@@ -666,7 +671,7 @@ public class ProjectZxBean {
         } catch (Exception e) {
             this._logger.severe(e);
         } 
-        dmsLog.operationLog(this.curUser.getAcc(),this.connectId,this.getCom(),"EXPORT");
+        dmsLog.operationLog(this.curUser.getAcc(),this.TYPE_ZZX+"_"+this.connectId,this.getCom(),"EXPORT");
     }
     
     private String getCom(){
@@ -794,9 +799,9 @@ public class ProjectZxBean {
             if(this.validation()){
                 this.inputPro_import();
 //                this.createTableModel();
-                        }else{
-                            this.showErrorPop();
-                        }
+            }else{
+                this.showErrorPop();
+            }
         }else {
             //若出现错误则显示错误信息提示框
             //JSFUtils.addFacesErrorMessage("WBS等字段不可修改");
@@ -804,7 +809,7 @@ public class ProjectZxBean {
         }
         //刷新数据
         this.createTableModel();
-        dmsLog.operationLog(this.curUser.getAcc(),this.connectId,this.getCom(),"IMPORT");
+        dmsLog.operationLog(this.curUser.getAcc(),this.TYPE_ZZX+"_"+this.connectId,this.getCom(),"IMPORT");
     }
     
     //校验程序
@@ -1187,5 +1192,13 @@ public class ProjectZxBean {
 
     public DmsComBoxLov getProLov() {
         return proLov;
+    }
+
+    public void setIsSelected(boolean isSelected) {
+        this.isSelected = isSelected;
+    }
+
+    public boolean isIsSelected() {
+        return isSelected;
     }
 }

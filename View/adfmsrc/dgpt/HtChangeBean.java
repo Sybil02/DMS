@@ -86,6 +86,7 @@ public class HtChangeBean {
     private RichPopup errorWindow;
     private RichInputFile fileInput;
     private RichPopup dataImportWnd;
+    private boolean isSelected;
 
     public HtChangeBean() {
         super();
@@ -93,6 +94,7 @@ public class HtChangeBean {
         this.dataModel = new PcDataTableModel();
         List<Map> d = new ArrayList<Map>();
         this.dataModel.setWrappedData(d);
+        isSelected = true;
         this.initList();
     }
     private String year;
@@ -250,6 +252,7 @@ public class HtChangeBean {
         if(year==null||version==null||pname==null){
                 return;
         }else{
+            isSelected = false;
             this.queryData();
             this.createTableModel(pStart, pEnd);
         }
@@ -261,6 +264,7 @@ public class HtChangeBean {
         if(year==null||version==null||pname==null){
             return;
         }else{
+            isSelected = false;
             this.queryData();
             this.createTableModel(pStart, pEnd);
         }
@@ -272,6 +276,7 @@ public class HtChangeBean {
         if(year==null||version==null||pname==null){
             return;
         }else{
+            isSelected = false;
             this.queryData();
             this.createTableModel(pStart, pEnd);
         }
@@ -577,7 +582,7 @@ public class HtChangeBean {
                 e.printStackTrace();
             }
             this.inputPro();
-           dmsLog.operationLog(this.curUser.getAcc(),this.connectId,this.getCom(),"UPDATE");
+           dmsLog.operationLog(this.curUser.getAcc(),"CHANGE_"+this.connectId,this.getCom(),"UPDATE");
             for(Map<String,String> rowdata : modelData){
                     rowdata.put("OPERATION", null);
             }
@@ -944,7 +949,7 @@ public class HtChangeBean {
         } catch (Exception e) {
             this._logger.severe(e);
         } 
-        dmsLog.operationLog(this.curUser.getAcc(),this.connectId,this.getCom(),"EXPORT");
+        dmsLog.operationLog(this.curUser.getAcc(),"CHANGE_"+this.connectId,this.getCom(),"EXPORT");
     }
     //导出文件名
     public String getExportDataExcelName(){
@@ -1055,7 +1060,7 @@ public class HtChangeBean {
 //        }
         //刷新数据
         this.createTableModel(pStart , newEnd);
-        dmsLog.operationLog(this.curUser.getAcc(),this.connectId,this.getCom(),"IMPORT");
+        dmsLog.operationLog(this.curUser.getAcc(),"CHANGE_"+this.connectId,this.getCom(),"IMPORT");
     }
     //导入导入
     public void inputPro_import(){
@@ -1187,5 +1192,13 @@ public class HtChangeBean {
 
     public DmsComBoxLov getProLov() {
         return proLov;
+    }
+
+    public void setIsSelected(boolean isSelected) {
+        this.isSelected = isSelected;
+    }
+
+    public boolean isIsSelected() {
+        return isSelected;
     }
 }

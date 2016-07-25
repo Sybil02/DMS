@@ -188,7 +188,9 @@
           <af:toolbar id="t1">
             <af:group id="g1">
               <af:commandButton text="#{viewBundle['dms.common.save']}" id="cb1"
-                                actionListener="#{viewScope.RPCostBean.operation_save}"/>
+                                actionListener="#{viewScope.RPCostBean.operation_save}"
+                                partialTriggers="::soc1 ::iclov2 ::soc3"
+                                disabled="#{viewScope.RPCostBean.isSelected}"/>
               <af:commandButton text="#{viewBundle['dms.common.cancel']}" id="cb2"
                                 actionListener="#{viewScope.RPCostBean.operation_reset}"/>
             </af:group>
@@ -198,7 +200,9 @@
                                 partialTriggers="cb3">
                    <af:showPopupBehavior popupId="::p3"/>             
              </af:commandButton>
-              <af:commandButton text="#{viewBundle['dcm.action.export']}" id="cb7">
+              <af:commandButton text="#{viewBundle['dcm.action.export']}" id="cb7"
+                                partialTriggers="::soc1 ::iclov2 ::soc3"
+                                disabled="#{viewScope.RPCostBean.isSelected}">
                 <af:showPopupBehavior popupId="::p2"/>
               </af:commandButton>
               <af:commandButton text="#{viewBundle['dms.dgpt.block']}" id="cb3"

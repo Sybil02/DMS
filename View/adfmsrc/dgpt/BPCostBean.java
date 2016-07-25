@@ -91,6 +91,7 @@ public class BPCostBean {
     private RichPopup dataImportWnd;
     private RichPopup statusWindow;
     private RichPopup adminBlockPop;
+    private boolean isSelected;
     public BPCostBean() {
         super();
         this.curUser = (Person)(ADFContext.getCurrent().getSessionScope().get("cur_user"));
@@ -101,6 +102,7 @@ public class BPCostBean {
             isManager = false;
             isEDITABLE = false;
         }
+        isSelected = true;
         this.dataModel = new PcDataTableModel();
         List<Map> d = new ArrayList<Map>();
         this.dataModel.setWrappedData(d);
@@ -257,8 +259,9 @@ public class BPCostBean {
         if(year==null||version==null||pname==null){
                 return;
         }else{
-                this.queryData();
-                this.createTableModel();
+            isSelected = false;
+            this.queryData();
+            this.createTableModel();
         }
     }
     
@@ -268,6 +271,7 @@ public class BPCostBean {
         if(year==null||version==null||pname==null){
             return;
         }else{
+            isSelected = false;
             this.queryData();
             this.createTableModel();
         }
@@ -279,6 +283,7 @@ public class BPCostBean {
         if(year==null||version==null||pname==null){
             return;
         }else{
+            isSelected = false;
             this.queryData();
             this.createTableModel();
         }
@@ -513,7 +518,7 @@ public class BPCostBean {
         //执行校验
         if(this.validation()){
             this.inputPro();
-            dmsLog.operationLog(this.curUser.getAcc(),this.connectId,this.getCom(),"UPDATE");
+            dmsLog.operationLog(this.curUser.getAcc(),this.TYPE_BASE+"_"+this.connectId,this.getCom(),"UPDATE");
             for(Map<String,String> rowdata : modelData){
                 if("UPDATE".equals(rowdata.get("OPERATION"))){
                     rowdata.put("OPERATION", null);
@@ -629,7 +634,7 @@ public class BPCostBean {
         } catch (Exception e) {
             this._logger.severe(e);
         } 
-       dmsLog.operationLog(this.curUser.getAcc(),this.connectId,this.getCom(),"EXPORT");
+       dmsLog.operationLog(this.curUser.getAcc(),this.TYPE_BASE+"_"+this.connectId,this.getCom(),"EXPORT");
     }
     
     //导出文件名
@@ -744,7 +749,7 @@ public class BPCostBean {
         }
         //刷新数据
         this.createTableModel();
-        dmsLog.operationLog(this.curUser.getAcc(),this.connectId,this.getCom(),"IMPORT");
+        dmsLog.operationLog(this.curUser.getAcc(),this.TYPE_BASE+"_"+this.connectId,this.getCom(),"IMPORT");
     }
     
     //校验程序
@@ -1128,5 +1133,13 @@ public class BPCostBean {
 
     public DmsComBoxLov getProLov() {
         return proLov;
+    }
+
+    public void setIsSelected(boolean isSelected) {
+        this.isSelected = isSelected;
+    }
+
+    public boolean isIsSelected() {
+        return isSelected;
     }
 }

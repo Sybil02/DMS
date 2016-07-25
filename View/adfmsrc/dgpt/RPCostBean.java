@@ -83,6 +83,7 @@ public class RPCostBean {
     private RichPopup dataImportWnd;
     DmsLog dmsLog = new DmsLog();
     private boolean isEDITABLE ;
+    private boolean isSelected;
 
     public RPCostBean() {
         super();
@@ -94,6 +95,7 @@ public class RPCostBean {
             isManager = false;
             isEDITABLE = false;
         }
+        isSelected = true;
         this.dataModel = new PcDataTableModel();
         List<Map> d = new ArrayList<Map>();
         this.dataModel.setWrappedData(d);
@@ -247,8 +249,9 @@ public class RPCostBean {
         if(year==null||version==null||pname==null){
                 return;
         }else{
-                this.queryData();
-                this.createTableModel();
+            isSelected = false;
+            this.queryData();
+            this.createTableModel();
         }
     }
     
@@ -258,6 +261,7 @@ public class RPCostBean {
         if(year==null||version==null||pname==null){
             return;
         }else{
+            isSelected = false;
             this.queryData();
             this.createTableModel();
         }
@@ -269,6 +273,7 @@ public class RPCostBean {
         if(year==null||version==null||pname==null){
             return;
         }else{
+            isSelected = false;
             this.queryData();
             this.createTableModel();
         }
@@ -582,7 +587,7 @@ public class RPCostBean {
         //执行校验
         if(this.validation()){
             this.inputPro();
-            dmsLog.operationLog(this.curUser.getAcc(),this.connectId,this.getCom(),"UPDATE");
+            dmsLog.operationLog(this.curUser.getAcc(),this.TYPE_ROLL+"_"+this.connectId,this.getCom(),"UPDATE");
             for(Map<String,String> rowdata : modelData){
                 if("UPDATE".equals(rowdata.get("OPERATION"))){
                     rowdata.put("OPERATION", null);
@@ -690,7 +695,7 @@ public class RPCostBean {
             this._logger.severe(e);
         } 
         
-        dmsLog.operationLog(this.curUser.getAcc(),this.connectId,this.getCom(),"EXPORT");
+        dmsLog.operationLog(this.curUser.getAcc(),this.TYPE_ROLL+"_"+this.connectId,this.getCom(),"EXPORT");
     }
     
     //导出文件名
@@ -942,7 +947,7 @@ public class RPCostBean {
         }
         //刷新数据
         this.createTableModel();
-        dmsLog.operationLog(this.curUser.getAcc(),this.connectId,this.getCom(),"IMPORT");
+        dmsLog.operationLog(this.curUser.getAcc(),this.TYPE_ROLL+"_"+this.connectId,this.getCom(),"IMPORT");
     }
 
     //校验程序
@@ -1081,5 +1086,13 @@ public class RPCostBean {
 
     public boolean isIsEDITABLE() {
         return isEDITABLE;
+    }
+
+    public void setIsSelected(boolean isSelected) {
+        this.isSelected = isSelected;
+    }
+
+    public boolean isIsSelected() {
+        return isSelected;
     }
 }
