@@ -189,7 +189,6 @@ public class htkpReturnBean {
             qSql.append(entry.getValue()).append(",");
         }
         qSql.append("ROWID AS ROW_ID FROM CONT_INVOICE_RETURN_BUDGET_5 WHERE COM_RECORD_ID='").append(this.connectId).append("'");
-        System.out.println(qSql.toString());
         return qSql.toString();
     }
     
@@ -431,7 +430,6 @@ public class htkpReturnBean {
         }
         sql.append("CREATED_BY,ROW_ID,ROW_NUM,OPERATION,COM_RECORD_ID)");
         sql_value.append("'"+this.curUser.getId()+"',?,?,?,'"+this.connectId+"')");
-        System.out.println(sql.toString()+sql_value.toString());
         PreparedStatement stmt = trans.createPreparedStatement(sql.toString()+sql_value.toString(), 0);
         //获取数据
         int rowNum = 1;
@@ -472,7 +470,6 @@ public class htkpReturnBean {
         Statement stat = trans.createStatement(DBTransaction.DEFAULT);
         String sql = "DELETE FROM CONT_INVOICE_RETURN_BUDGET_5_T WHERE COM_RECORD_ID='"+this.connectId+"' " +
             "AND CREATED_BY='"+this.curUser.getId()+"'";
-        System.out.println(sql);
         try {
             stat.executeUpdate(sql);
             stat.close();
