@@ -377,11 +377,4 @@ public class DmsModuleImpl extends ApplicationModuleImpl implements DmsModule {
         return (ViewObjectImpl)findViewObject("DmsBlockStatusVO");
     }
 
-    /**
-     * Container's getter for DmsHtkpReturnVO.
-     * @return DmsHtkpReturnVO
-     */
-    public ViewObjectImpl getDmsHtkpReturnVO() {
-        return (ViewObjectImpl)findViewObject("DmsHtkpReturnVO");
-    }
 }

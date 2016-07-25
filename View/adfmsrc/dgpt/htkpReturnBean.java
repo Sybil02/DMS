@@ -102,11 +102,16 @@ public class htkpReturnBean {
     //是否是2007及以上格式
     private boolean isXlsx = true;
     DmsLog dmsLog = new DmsLog();
+    //表体下拉框列表
+    private List<SelectItem> detailList;
+    private List<SelectItem> taxList;
 
     public void initList(){
         this.versionList = queryValues("version");
         this.yearList = queryValues("year");
         this.pNameList = queryPname();
+        this.detailList = queryList("HLS_CONTRACT_DETAIL_C");
+        this.taxList = queryList("HLS_TAX_RATE_C");
     }
     //表头，版本和年份
     public List<SelectItem> queryValues(String mark){
@@ -149,7 +154,7 @@ public class htkpReturnBean {
         }else{
             sql = "SELECT DISTINCT C.BH_USER_PRO_C1 CODE,B.MEANING FROM DCM_COMBINATION_17 C,BH_USER_PRO_C1 B WHERE B.MEANING IN" +
                 "(SELECT T.PRO_CODE||'-'||T.PRO_DESC FROM SAP_DMS_PROJECT_PRIVILEGE_V T " +
-                " WHERE T.ID = 'a9f3429fab254da4b30709f847664125' AND T.ATTRIBUTE3='ZX')" +
+                " WHERE T.ID = '"+this.curUser.getId()+"' AND T.ATTRIBUTE3='ZX')" +
                 "AND C.BH_USER_PRO_C1 = B.CODE";
         }
         ResultSet rs;
@@ -166,6 +171,27 @@ public class htkpReturnBean {
         }
         return values;
     }
+    
+    public List<SelectItem> queryList(String source){
+        DBTransaction trans = (DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
+        Statement stat = trans.createStatement(DBTransaction.DEFAULT);
+        String sql = "SELECT CODE,MEANING FROM "+ source;
+        List<SelectItem> values = new ArrayList<SelectItem>();
+        ResultSet rs;
+        try {
+            rs = stat.executeQuery(sql);
+            while(rs.next()){
+                SelectItem sim = new SelectItem(rs.getString("CODE"),rs.getString("MEANING"));
+                values.add(sim);
+            }
+            rs.close();
+            stat.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return values;
+    }
+    
     //查询数据
     public String queryData(LinkedHashMap<String,String> labelMap){
         DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
@@ -359,10 +385,12 @@ public class htkpReturnBean {
             for(Map<String,String> rowdata : modelData){
                 rowdata.put("OPERATION", null);
             }
+            this.after();
         }else{
-            JSFUtils.addFacesErrorMessage("校验不通过");
+            //JSFUtils.addFacesErrorMessage("校验不通过");
             this.showErrorPop();
         }
+        this.createTableModel();
     }
     //新增行
     public void operation_new(ActionEvent actionEvent) {
@@ -513,6 +541,22 @@ public class htkpReturnBean {
             e.printStackTrace();
         }
     }
+    
+    //导入程序
+    public void after(){
+        DBTransaction trans = (DBTransaction)DmsUtils.getDcmApplicationModule().getDBTransaction();
+        CallableStatement cs = trans.createCallableStatement("{CALl DMS_ZZX.HTKPRETURN_AFTER(?,?)}", 0);
+        try {
+            cs.setString(1,this.curUser.getId() );
+            cs.setString(2,this.connectId);
+            cs.execute();
+            trans.commit();
+            cs.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    
     //导出
     public void operation_export(FacesContext facesContext,
                                  OutputStream outputStream) {
@@ -579,9 +623,10 @@ public class htkpReturnBean {
         if(this.validation()){
             //如果校验成功，调用导入程序
             this.import_inputPro();
+            this.after();
             dmsLog.operationLog(this.curUser.getAcc(),this.connectId,this.getCom(),"IMPORT");
         }else{
-            JSFUtils.addFacesErrorMessage("校验不通过");
+            //JSFUtils.addFacesErrorMessage("校验不通过");
             //显示错误窗口
             this.showErrorPop();
         }
@@ -837,4 +882,19 @@ public class htkpReturnBean {
         return errorWindow;
     }
 
+    public void setDetailList(List<SelectItem> detailList) {
+        this.detailList = detailList;
+    }
+
+    public List<SelectItem> getDetailList() {
+        return detailList;
+    }
+
+    public void setTaxList(List<SelectItem> taxList) {
+        this.taxList = taxList;
+    }
+
+    public List<SelectItem> getTaxList() {
+        return taxList;
+    }
 }

@@ -82,14 +82,17 @@ public class RPCostBean {
     private RichInputFile fileInput;
     private RichPopup dataImportWnd;
     DmsLog dmsLog = new DmsLog();
+    private boolean isEDITABLE ;
 
     public RPCostBean() {
         super();
         this.curUser = (Person)(ADFContext.getCurrent().getSessionScope().get("cur_user"));
         if("10000".equals(this.curUser.getId())){
             isManager = true;
+            isEDITABLE = true;
         }else{
             isManager = false;
+            isEDITABLE = false;
         }
         this.dataModel = new PcDataTableModel();
         List<Map> d = new ArrayList<Map>();
@@ -413,8 +416,27 @@ public class RPCostBean {
         }
         this.dataModel.setWrappedData(data);
         ((PcDataTableModel)this.dataModel).setLabelMap(labelMap);
+        this.selectIsEditable();
     }
-    
+    //查询是否为可编辑此项目
+    public void selectIsEditable(){
+        DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
+        Statement stat = trans.createStatement(DBTransaction.DEFAULT);
+        String sql = "SELECT EDITABLE FROM SAP_DMS_PROJECT_PRIVILEGE_V WHERE ID = '"+this.curUser.getId()+"' " +
+            "AND PRO_CODE ||'-'||PRO_DESC = '"+this.pname+"'";
+        ResultSet rs;
+        try {
+            rs = stat.executeQuery(sql);
+            while(rs.next()){
+                if("Y".equals(rs.getString("EDITABLE"))){
+                    isEDITABLE= true;
+                    break;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
     public static String getPrettyNumber(String number) {  
         if(number == null) return "";
         if(number.equals("0.0")){
@@ -1051,5 +1073,13 @@ public class RPCostBean {
 
     public DmsComBoxLov getProLov() {
         return proLov;
+    }
+
+    public void setIsEDITABLE(boolean isEDITABLE) {
+        this.isEDITABLE = isEDITABLE;
+    }
+
+    public boolean isIsEDITABLE() {
+        return isEDITABLE;
     }
 }

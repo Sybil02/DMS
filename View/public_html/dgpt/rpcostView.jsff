@@ -194,7 +194,7 @@
             </af:group>
             <af:group id="g2">
               <af:commandButton text="#{viewBundle['dms.dgpt.excel.import']}"
-                                id="cb6" disabled="#{viewScope.RPCostBean.isBlock}"
+                                id="cb6" disabled="#{viewScope.RPCostBean.isBlock or not viewScope.RPCostBean.isEDITABLE}"
                                 partialTriggers="cb3">
                    <af:showPopupBehavior popupId="::p3"/>             
              </af:commandButton>
@@ -231,7 +231,8 @@
                                     #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}"
                              rendered="#{attr.dbTableCol ne &quot;ROW_ID&quot;}">
                     <af:inputText value="#{row[attr.dbTableCol]}" id="ot6"
-                                  readOnly="#{attr.isReadonly eq 'false' ? viewScope.RPCostBean.isBlock : attr.isReadonly}"
+                                  readOnly="#{attr.isReadonly eq 'false' ? 
+                                  viewScope.RPCostBean.isBlock or not viewScope.RPCostBean.isEDITABLE : attr.isReadonly}"
                                     valueChangeListener="#{viewScope.RPCostBean.valueChangeLinstener}"/>
                   </af:column>
           </af:forEach>

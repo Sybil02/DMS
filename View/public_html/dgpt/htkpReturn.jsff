@@ -150,23 +150,33 @@
                   selectedRowKeys="#{viewScope.htkpReturnBean.dataModel.selectedRows}"
                   rowSelection="multiple" editingMode="clickToEdit"
                   emptyText="#{viewBundle['dms.common.nodata']}"
-                  partialTriggers=":::soc1 :::soc2 :::soc3 ::cb1 ::cb2 ::cb3 ::cb4"
+                  partialTriggers=":::soc4 :::soc2 :::soc3 ::cb1 ::cb2 ::cb3 ::cb4"
                   value="#{viewScope.htkpReturnBean.dataModel}">
           <af:column sortable="false"
                             inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
                                     #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
                                     #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}"
                      headerText="#{viewBundle['dms.dgpt.htkp.htkpDetail']}" id="c8">
-            <af:inputText value="#{row[viewScope.htkpReturnBean.dataModel.labelMap['合同开票回款明细']]}"
-                            id="it1"/>
+            <af:selectOneChoice 
+                            value="#{row[viewScope.htkpReturnBean.dataModel.labelMap['合同开票回款明细']]}" 
+                            autoSubmit="true"
+                            id="soc6"
+                            >
+          <f:selectItems value="#{viewScope.htkpReturnBean.detailList}" id="si12"/>
+        </af:selectOneChoice>
           </af:column>
           <af:column sortable="false"
                             inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
                                     #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
                                     #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}"
                      headerText="#{viewBundle['dms.dgpt.htkp.taxRate']}" id="c33">
-            <af:inputText value="#{row[viewScope.htkpReturnBean.dataModel.labelMap['开票计划税率']]}" 
-                            id="it2"/>
+            <af:selectOneChoice 
+                            value="#{row[viewScope.htkpReturnBean.dataModel.labelMap['开票计划税率']]}" 
+                            autoSubmit="true"
+                            id="soc5"
+                            >
+          <f:selectItems value="#{viewScope.htkpReturnBean.taxList}" id="si11"/>
+        </af:selectOneChoice>
           </af:column>
           <af:column sortable="false"
                             inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
@@ -413,7 +423,7 @@
       <af:panelGroupLayout id="pgl1" layout="horizontal">
         <af:selectOneChoice label="#{viewBundle['dms.dgpt.htkp.year']}"
                             value="#{viewScope.htkpReturnBean.year}" autoSubmit="true"
-                            id="soc1"
+                            id="soc4"
                             valueChangeListener="#{viewScope.htkpReturnBean.yearChange}">
           <f:selectItems value="#{viewScope.htkpReturnBean.yearList}" id="si1"/>
         </af:selectOneChoice>
