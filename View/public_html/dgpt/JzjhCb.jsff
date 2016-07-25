@@ -281,14 +281,14 @@
               <af:commandButton text="#{viewBundle['dms.dgpt.block']}" id="cb3"
                                 actionListener="#{viewScope.BPCostBean.beBlocked}"
                                      disabled="#{viewScope.BPCostBean.isBlock}"
-                                partialTriggers="::soc1 ::soc2 ::soc3"/>
+                                partialTriggers="::soc1 ::iclov2 ::soc3"/>
               <af:commandButton text="#{viewBundle['dms.dgpt.block.status']}" id="cb9"
                                 actionListener="#{viewScope.BPCostBean.blockStatusPop}"/>
               <af:commandButton text="#{viewBundle['dms.dgpt.fblock']}" id="cb5"
                                 rendered="#{viewScope.BPCostBean.isManager}"
                                 actionListener="#{viewScope.BPCostBean.outBlock}"
                                 disabled="#{not viewScope.BPCostBean.isBlock}"
-                                partialTriggers="::soc1 ::soc2 ::soc3"/>
+                                partialTriggers="::soc1 ::iclov2 ::soc3"/>
               <af:commandButton text="#{viewBundle['dcm.import_error']}" id="cb4"
                                 actionListener="#{viewScope.BPCostBean.errorPop}"/>
             </af:group>
@@ -301,7 +301,7 @@
                   selectedRowKeys="#{viewScope.BPCostBean.dataModel.selectedRows}"
                   rowSelection="multiple" editingMode="clickToEdit"
                   emptyText="#{viewBundle['dms.common.nodata']}"
-                  partialTriggers=":::soc1 :::soc2 :::soc3 ::cb3">
+                  partialTriggers=":::soc1 :::iclov2 :::soc3 ::cb3">
             <af:forEach items="#{viewScope.BPCostBean.dataModel.pcColsDef}"
                         var="attr" varStatus="vs">
                   <af:column sortable="false" headerText="#{attr.columnLable}" id="c1"
@@ -321,7 +321,7 @@
     <f:facet name="start"/>
     <f:facet name="end"/>
     <f:facet name="top">
-      <af:panelGroupLayout id="pgl1" layout="vertical" partialTriggers="soc1 soc2 soc3">
+      <af:panelGroupLayout id="pgl1" layout="vertical">
         <af:panelGroupLayout id="pgl2" layout="horizontal">
         <af:selectOneChoice 
                               label="年" autoSubmit="true"
@@ -332,19 +332,29 @@
           </af:selectOneChoice>
           <af:panelLabelAndMessage label="实体" 
                                    id="plam1" >
-            <af:outputText  id="ot1" value="#{viewScope.BPCostBean.entity}"/>
+            <af:outputText  id="ot1" partialTriggers="iclov2 soc1 soc3" value="#{viewScope.BPCostBean.entity}"/>
           </af:panelLabelAndMessage>
           <af:panelLabelAndMessage label="产品线"
                                    id="plam2">
-            <af:outputText  id="ot2" value="#{viewScope.BPCostBean.PLine}"/>
+            <af:outputText  id="ot2" partialTriggers="iclov2 soc1 soc3" value="#{viewScope.BPCostBean.PLine}"/>
           </af:panelLabelAndMessage>
-          <af:selectOneChoice 
+          <!--af:selectOneChoice 
                               label="项目名称" autoSubmit="true"
-                              id="soc2"
+                              id="iclov2"
                               value="#{viewScope.BPCostBean.pname}"
                               valueChangeListener="#{viewScope.BPCostBean.projectChange}">
             <f:selectItems id="si2" value="#{viewScope.BPCostBean.pnameList}"/>
-          </af:selectOneChoice>
+          </af:selectOneChoice-->
+          <af:inputComboboxListOfValues label="项目名称" inlineStyle="margin-right:5px"
+                                                value="#{viewScope.BPCostBean.pname}"
+                                                autoSubmit="true" clientComponent="true"
+                                                validator="#{viewScope.BPCostBean.proLov.listOfValuesModel.validate}"
+                                                model="#{viewScope.BPCostBean.proLov.listOfValuesModel}"
+                                                id="iclov2" columns="80"
+                                                valueChangeListener="#{viewScope.BPCostBean.projectChange}"
+                                              usage="auto">
+                    <af:autoSuggestBehavior suggestedItems="#{viewScope.BPCostBean.proLov.listOfValuesModel.suggest}"/>
+          </af:inputComboboxListOfValues>
         </af:panelGroupLayout>
         <af:panelGroupLayout id="pgl3" layout="horizontal">
             <af:selectOneChoice 
@@ -352,22 +362,22 @@
                               id="soc3"
                               value="#{viewScope.BPCostBean.version}"
                                 valueChangeListener="#{viewScope.BPCostBean.versionChange}"
-                                partialTriggers="soc2">
+                                partialTriggers="iclov2 soc1">
             <f:selectItems  id="si3"
                            value="#{viewScope.BPCostBean.versionList}"/>
           </af:selectOneChoice>
           <af:panelLabelAndMessage label="项目类型"
-                                   id="plam3">
-            <af:outputText id="ot3" value="#{viewScope.BPCostBean.proType}"/>
+                                   id="plam3" >
+            <af:outputText id="ot3" partialTriggers="iclov2 soc1 soc3" value="#{viewScope.BPCostBean.proType}"/>
           </af:panelLabelAndMessage>
-          <af:panelLabelAndMessage label="行业线"
+          <af:panelLabelAndMessage label="行业线" 
                                    id="plam4">
-            <af:outputText 
+            <af:outputText partialTriggers="iclov2"
                            id="ot4" value="#{viewScope.BPCostBean.HLine}"/>
           </af:panelLabelAndMessage>
-          <af:panelLabelAndMessage label="业务线"
+          <af:panelLabelAndMessage label="业务线" 
                                    id="plam5">
-            <af:outputText 
+            <af:outputText partialTriggers="iclov2 soc1 soc3"
                            id="ot5" value="#{viewScope.BPCostBean.YLine}"/>
           </af:panelLabelAndMessage>
         </af:panelGroupLayout>

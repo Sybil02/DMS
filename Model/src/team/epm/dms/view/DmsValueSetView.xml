@@ -15,7 +15,8 @@
        DmsValueSet.UPDATED_AT, 
        DmsValueSet.UPDATED_BY, 
        DmsValueSet.CREATED_BY, 
-       DmsValueSet.IDX"
+       DmsValueSet.IDX, 
+       DmsValueSet.DISPLAY_LENGTH"
   FromList="DMS_VALUE_SET DmsValueSet"
   BindingStyle="OracleName"
   CustomQuery="false"
@@ -213,6 +214,19 @@
     EntityAttrName="Idx"
     EntityUsage="DmsValueSet"
     AliasName="IDX"/>
+  <ViewAttribute
+    Name="DisplayLength"
+    PrecisionRule="true"
+    EntityAttrName="DisplayLength"
+    EntityUsage="DmsValueSet"
+    AliasName="DISPLAY_LENGTH">
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="dms.combination.length"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <ViewCriteria
     Name="DmsValueSetViewCriteria"
     ViewObjectName="team.epm.dms.view.DmsValueSetView"
@@ -242,4 +256,8 @@
     ViewLink="team.epm.dms.DmsValuesetGValueLnk"
     Type="oracle.jbo.RowIterator"
     IsUpdateable="false"/>
+  <ResourceBundle>
+    <PropertiesBundle
+      PropertiesFile="ModelBundle"/>
+  </ResourceBundle>
 </ViewObject>

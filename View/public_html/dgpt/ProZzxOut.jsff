@@ -27,7 +27,7 @@
                   selectedRowKeys="#{viewScope.ProZzxOutBean.dataModel.selectedRows}"
                   rowSelection="multiple" editingMode="clickToEdit"
                   emptyText="#{viewBundle['dms.common.nodata']}"
-                  partialTriggers=":::soc2 :::soc1 :::soc3">
+                  partialTriggers=":::iclov2 :::soc1 :::soc3">
           <af:column sortable="false" headerText="科目" id="c19">
             <af:inputText value="#{row[viewScope.ProZzxOutBean.dataModel.labelMap['TOTAL']]}" id="it3" readOnly="true"/>
           </af:column>
@@ -141,7 +141,7 @@
     <f:facet name="start"/>
     <f:facet name="end"/>
     <f:facet name="top">
-    <af:panelGroupLayout id="pgl1" layout="vertical" partialTriggers="soc1 soc2 soc3">
+    <af:panelGroupLayout id="pgl1" layout="vertical" >
         <af:panelGroupLayout id="pgl2" layout="horizontal">
           <af:selectOneChoice value="#{viewScope.ProZzxOutBean.year}"
                               label="年" autoSubmit="true"
@@ -149,42 +149,52 @@
                               valueChangeListener="#{viewScope.ProZzxOutBean.yearChange}">
             <f:selectItems value="#{viewScope.ProZzxOutBean.yearList}" id="si1"/>
           </af:selectOneChoice>
-          <af:selectOneChoice value="#{viewScope.ProZzxOutBean.pname}"
+          <!--af:selectOneChoice value="#{viewScope.ProZzxOutBean.pname}"
                               label="项目名称" autoSubmit="true"
-                              id="soc2"
+                              id="iclov2"
                               valueChangeListener="#{viewScope.ProZzxOutBean.projectChange}">
             <f:selectItems value="#{viewScope.ProZzxOutBean.pnameList}" id="si2"/>
-          </af:selectOneChoice>
+          </af:selectOneChoice-->
+                    <af:inputComboboxListOfValues label="项目名称" inlineStyle="margin-right:5px"
+                                                value="#{viewScope.ProZzxOutBean.pname}"
+                                                autoSubmit="true" clientComponent="true"
+                                                validator="#{viewScope.ProZzxOutBean.proLov.listOfValuesModel.validate}"
+                                                model="#{viewScope.ProZzxOutBean.proLov.listOfValuesModel}"
+                                                id="iclov2" columns="80"
+                                                valueChangeListener="#{viewScope.ProZzxOutBean.projectChange}"
+                                              usage="auto">
+                    <af:autoSuggestBehavior suggestedItems="#{viewScope.ProZzxOutBean.proLov.listOfValuesModel.suggest}"/>
+          </af:inputComboboxListOfValues>
           <af:selectOneChoice value="#{viewScope.ProZzxOutBean.version}"
                               label="版本" autoSubmit="true"
                               id="soc3"
                               valueChangeListener="#{viewScope.ProZzxOutBean.versionChange}"
-                              partialTriggers="soc2">
+                              partialTriggers="iclov2">
             <f:selectItems value="#{viewScope.ProZzxOutBean.versionList}" id="si3"/>
           </af:selectOneChoice>
           <af:panelLabelAndMessage label="产品线"
                                    id="plam2">
-            <af:outputText value="#{viewScope.ProZzxOutBean.PLine}" id="ot2"/>
+            <af:outputText value="#{viewScope.ProZzxOutBean.PLine}" partialTriggers="soc1 iclov2 soc3" id="ot2"/>
           </af:panelLabelAndMessage>
         </af:panelGroupLayout>
         <af:panelGroupLayout id="pgl3" layout="horizontal">
           <af:panelLabelAndMessage label="实体"
                                    id="plam1" >
-            <af:outputText value="#{viewScope.ProZzxOutBean.entity}" id="ot1"/>
+            <af:outputText value="#{viewScope.ProZzxOutBean.entity}" partialTriggers="soc1 iclov2 soc3" id="ot1"/>
           </af:panelLabelAndMessage>
           <af:panelLabelAndMessage label="行业线"
                                    id="plam4">
-            <af:outputText value="#{viewScope.ProZzxOutBean.HLine}"
+            <af:outputText value="#{viewScope.ProZzxOutBean.HLine}" partialTriggers="soc1 iclov2 soc3"
                            id="ot4"/>
           </af:panelLabelAndMessage>
           <af:panelLabelAndMessage label="业务线"
                                    id="plam5">
-            <af:outputText value="#{viewScope.ProZzxOutBean.YLine}"
+            <af:outputText value="#{viewScope.ProZzxOutBean.YLine}" partialTriggers="soc1 iclov2 soc3"
                            id="ot5"/>
           </af:panelLabelAndMessage>
           <af:panelLabelAndMessage label="项目类型"
                                    id="plam3">
-            <af:outputText value="#{viewScope.ProZzxOutBean.proType}" id="ot3"/>
+            <af:outputText value="#{viewScope.ProZzxOutBean.proType}" partialTriggers="soc1 iclov2 soc3" id="ot3"/>
           </af:panelLabelAndMessage>
         </af:panelGroupLayout>
       </af:panelGroupLayout>

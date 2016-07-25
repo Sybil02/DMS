@@ -10,7 +10,7 @@
       <af:panelGroupLayout layout="horizontal"
                            xmlns:af="http://xmlns.oracle.com/adf/faces/rich"
                            id="pgl1" inlineStyle="padding-top:5px">
-        <af:forEach items="#{viewScope.DcmDataDisplayBean.templateHeader}"
+        <!--af:forEach items="#{viewScope.DcmDataDisplayBean.templateHeader}"
                     var="header">
           <af:selectOneChoice label="#{header.name}"
                               inlineStyle="margin-right:5px"
@@ -20,7 +20,20 @@
                               binding="#{viewScope.DcmDataDisplayBean.headerComponents[header.code]}">
             <f:selectItems value="#{header.values}"/>
           </af:selectOneChoice>
-        </af:forEach>
+        </af:forEach-->
+        <af:iterator value="#{viewScope.DcmDataDisplayBean.templateHeader}" var="vs">
+            <af:inputComboboxListOfValues label="#{vs.name}" inlineStyle="margin-right:5px"
+                                                value=""
+                                                autoSubmit="true" clientComponent="true"
+                                                validator="#{vs.comLov.listOfValuesModel.validate}"
+                                                model="#{vs.comLov.listOfValuesModel}"
+                                                id="iclov2" columns="#{vs.length}"
+                                                binding="#{viewScope.DcmDataDisplayBean.comIclovs}"
+                                                valueChangeListener="#{viewScope.DcmDataDisplayBean.headerSelectChangeListener}"
+                                              usage="auto">
+                    <af:autoSuggestBehavior suggestedItems="#{vs.comLov.listOfValuesModel.suggest}"/>
+                  </af:inputComboboxListOfValues>
+        </af:iterator>
       </af:panelGroupLayout>
     </f:facet>
     <f:facet name="center">
@@ -268,12 +281,23 @@
                       <af:outputText value="#{row.Line}" id="ot12"/>
                     </af:column>
                     <af:column sortProperty="#{bindings.DcmErrorBatchVO.hints.Msg.name}"
-                               filterable="true" sortable="true" width="560"
+                               filterable="true" sortable="true" width="450"
                                headerText="#{bindings.DcmErrorBatchVO.hints.Msg.label}"
                                id="c8">
                       <af:outputText value="#{row.Msg}" id="ot13"/>
                     </af:column>
-                  </af:table>
+                      <af:column headerText="#{bindings.DcmErrorBatchVO.hints.CreatedAt.label}" width="130"
+                                 id="c13">
+                        <af:inputDate value="#{row.bindings.CreatedAt.inputValue}"
+                                      label="#{bindings.DcmErrorBatchVO.hints.CreatedAt.label}"
+                                      required="#{bindings.DcmErrorBatchVO.hints.CreatedAt.mandatory}"
+                                      shortDesc="#{bindings.DcmErrorBatchVO.hints.CreatedAt.tooltip}"
+                                      id="id1">
+                          <f:validator binding="#{row.bindings.CreatedAt.validator}"/>
+                          <af:convertDateTime pattern="#{bindings.DcmErrorBatchVO.hints.CreatedAt.format}"/>
+                        </af:inputDate>
+                      </af:column>
+                    </af:table>
                   </af:panelCollection>
                 </af:panelGroupLayout>
               </f:facet>

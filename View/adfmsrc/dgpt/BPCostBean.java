@@ -6,6 +6,10 @@ import common.DmsUtils;
 
 import common.JSFUtils;
 
+import common.lov.DmsComBoxLov;
+
+import common.lov.ValueSetRow;
+
 import dcm.DcmDataDisplayBean;
 import dcm.DcmQueryDescriptor;
 import dcm.PcColumnDef;
@@ -126,13 +130,24 @@ public class BPCostBean {
     //是否是2007及以上格式
     private boolean isXlsx = true;
     private RichPopup dataExportWnd;
+    private DmsComBoxLov proLov;
     
     DmsLog dmsLog = new DmsLog();
 
     private void initList(){
         this.yearList = queryYears("HLS_YEAR_C");
         this.pnameList = queryValues("PRO_PLAN_COST_HEADER","PROJECT_NAME");
+        this.initProLov(pnameList);
         this.versionList = queryValues1("PRO_PLAN_COST_HEADER","VERSION");
+    }
+    
+    private void initProLov(List<SelectItem> pnameList){
+        List<ValueSetRow> vsl = new ArrayList<ValueSetRow>();
+        for(SelectItem sim : pnameList){
+            ValueSetRow vsr = new ValueSetRow(sim.getLabel(),sim.getLabel(),sim.getLabel());
+            vsl.add(vsr);
+        }
+        this.proLov = new DmsComBoxLov(vsl);
     }
 
     //年份下拉列表
@@ -1105,5 +1120,13 @@ public class BPCostBean {
 
     public RichInputFile getFileInput() {
         return fileInput;
+    }
+
+    public void setProLov(DmsComBoxLov proLov) {
+        this.proLov = proLov;
+    }
+
+    public DmsComBoxLov getProLov() {
+        return proLov;
     }
 }

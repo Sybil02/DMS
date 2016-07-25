@@ -86,8 +86,7 @@
     Type="java.lang.String"
     ColumnType="VARCHAR2"
     TableName="DMS_VALUE_SET"
-    IsNotNull="true"
-    IsUpdateable="while_insert">
+    IsNotNull="true">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="100"/>
     </DesignTime>
@@ -201,6 +200,17 @@
   <Attribute
     Name="Idx"
     ColumnName="IDX"
+    SQLType="NUMERIC"
+    Type="oracle.jbo.domain.Number"
+    ColumnType="NUMBER"
+    TableName="DMS_VALUE_SET">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="39"/>
+    </DesignTime>
+  </Attribute>
+  <Attribute
+    Name="DisplayLength"
+    ColumnName="DISPLAY_LENGTH"
     SQLType="NUMERIC"
     Type="oracle.jbo.domain.Number"
     ColumnType="NUMBER"

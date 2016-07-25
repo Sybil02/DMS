@@ -38,6 +38,7 @@
           <Item Value="Status"/>
           <Item Value="Line"/>
           <Item Value="Msg"/>
+          <Item Value="CreatedAt"/>
         </AttrNames>
       </nodeDefinition>
     </tree>

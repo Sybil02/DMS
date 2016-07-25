@@ -8,6 +8,9 @@ import common.JSFUtils;
 
 import common.TablePagination;
 
+import common.lov.DmsComBoxLov;
+import common.lov.ValueSetRow;
+
 import dcm.combinantion.CombinationEO;
 
 import dcm.template.TemplateEO;
@@ -59,6 +62,7 @@ import oracle.adf.share.ADFContext;
 import oracle.adf.share.logging.ADFLogger;
 import oracle.adf.view.rich.component.rich.RichPopup;
 import oracle.adf.view.rich.component.rich.data.RichTable;
+import oracle.adf.view.rich.component.rich.input.RichInputComboboxListOfValues;
 import oracle.adf.view.rich.component.rich.input.RichInputFile;
 import oracle.adf.view.rich.component.rich.input.RichSelectOneChoice;
 
@@ -130,7 +134,7 @@ public class DcmDataDisplayBean extends TablePagination{
     private static ADFLogger _logger =ADFLogger.createADFLogger(DcmDataDisplayBean.class);
     //页面绑定组件
     private RichInputFile fileInput;
-    private Map headerComponents = new LinkedHashMap();
+    private RichInputComboboxListOfValues comIclovs;
     private RichPanelCollection panelaCollection;
     private Person curUser;
     private RichPopup errorWindow;
@@ -723,7 +727,7 @@ public class DcmDataDisplayBean extends TablePagination{
     public void copyBatchError(String tempId){
         DBTransaction trans = (DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
         Statement stat = trans.createStatement(DBTransaction.DEFAULT);
-        String sql = "INSERT INTO DCM_ERROR_BATCH SELECT T.SHEET_NAME,'校验错误',T.ROW_NUM,'2',T.CREATED_BY,T.LOCALE,T.MSG FROM DCM_ERROR T "
+        String sql = "INSERT INTO DCM_ERROR_BATCH SELECT T.SHEET_NAME,'校验错误',T.ROW_NUM,'2',T.CREATED_BY,T.LOCALE,T.MSG,SYSDATE FROM DCM_ERROR T "
             + "WHERE T.TEMPLATE_ID = '" + tempId + "' AND T.COM_RECORD_ID = '" + this.curCombiantionRecord + "'";
         try {
             stat.executeUpdate(sql);
@@ -737,8 +741,8 @@ public class DcmDataDisplayBean extends TablePagination{
     public void writeBatchError(String sheetName,String status,String msg,String level){
         DBTransaction trans = (DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
         Statement stat = trans.createStatement(DBTransaction.DEFAULT);
-        String sql = "INSERT INTO DCM_ERROR_BATCH(SHEET_NAME,STATUS,ERROR_LEVEL,CREATED_BY,LOCALE,MSG) VALUES('"
-             + sheetName + "','" + status + "','" + level + "','" + this.curUser.getId() + "','" + this.curUser.getLocale() + "','" + msg + "')";
+        String sql = "INSERT INTO DCM_ERROR_BATCH(SHEET_NAME,STATUS,ERROR_LEVEL,CREATED_BY,LOCALE,MSG,CREATED_AT) VALUES('"
+             + sheetName + "','" + status + "','" + level + "','" + this.curUser.getId() + "','" + this.curUser.getLocale() + "','" + msg + "',SYSDATE)";
         try {
             stat.executeUpdate(sql);
             trans.commit();
@@ -1444,6 +1448,7 @@ public class DcmDataDisplayBean extends TablePagination{
                 header.setSrcTable((String)row.getAttribute("Source"));
                 header.setValueSetId((String)row.getAttribute("ValueSetId"));
                 header.setCode((String)row.getAttribute("Code"));
+                header.setLength(Integer.parseInt(row.getAttribute("DisplayLength").toString()));
                 this.initHeaderValueList(header);
 //                this.setDefaultHeaderValue(header);
                 this.templateHeader.add(header);
@@ -1524,12 +1529,18 @@ public class DcmDataDisplayBean extends TablePagination{
             dbTransaction.createPreparedStatement(sql.toString(), -1);
         try {
             ResultSet rs = stat.executeQuery();
+            List<ValueSetRow> list = new ArrayList<ValueSetRow>(); 
             while (rs.next()) {
                 SelectItem item = new SelectItem();
                 item.setLabel(rs.getString("MEANING"));
                 item.setValue(rs.getString("CODE"));
                 values.add(item);
+                //模糊搜索框
+                ValueSetRow vsr = new ValueSetRow(rs.getString("CODE"),rs.getString("MEANING"),rs.getString("CODE"));
+                list.add(vsr);
             }
+            DmsComBoxLov dcl = new DmsComBoxLov(list);
+            header.setComLov(dcl);
         } catch (SQLException e) {
             this._logger.severe(e);
         }   
@@ -1595,17 +1606,22 @@ public class DcmDataDisplayBean extends TablePagination{
         return fileInput;
     }
     //选择不同的组合时的处理逻辑
-    public void headerSelectChangeListener(ValueChangeEvent valueChangeEvent) {
-        RichSelectOneChoice header =
-            (RichSelectOneChoice)valueChangeEvent.getSource();
-        int i = 0;
-        for (Object key : this.headerComponents.keySet()) {
-            //找到当前表头
-            if (header.equals(this.headerComponents.get(key))) {
-                this.templateHeader.get(i).setValue((String)valueChangeEvent.getNewValue());
-            }
-            i++;
+    public void headerSelectChangeListener(ValueChangeEvent event) {
+        
+        for(ComHeader ch : this.templateHeader){
+            if(ch.getName().equals(this.comIclovs.getLabel())){
+                if("".equals(event.getNewValue()) || event.getNewValue() == null){
+                    ch.setValue("");
+                }else{
+                    for(SelectItem sim : ch.getValues()){
+                        if(sim.getLabel().equals(event.getNewValue())){
+                            ch.setValue(sim.getValue().toString());    
+                        }    
+                    }  
+                }
+            }    
         }
+        
         this.curCombiantionRecord=this.getCurCombinationRecord();
         this.setCurCombinationRecordEditable();
         this.setCurPage(1);
@@ -1622,10 +1638,6 @@ public class DcmDataDisplayBean extends TablePagination{
         if("Y".equals(this.curTempalte.getIsCloseRecord())){
             this.enableSubmit();
         }
-    }
-
-    public Map getHeaderComponents() {
-        return headerComponents;
     }
 
     public void setPanelaCollection(RichPanelCollection panelaCollection) {
@@ -2076,5 +2088,13 @@ public class DcmDataDisplayBean extends TablePagination{
         //刷新数据
         this.queryTemplateData();
         
+    }
+
+    public void setComIclovs(RichInputComboboxListOfValues comIclovs) {
+        this.comIclovs = comIclovs;
+    }
+
+    public RichInputComboboxListOfValues getComIclovs() {
+        return comIclovs;
     }
 }

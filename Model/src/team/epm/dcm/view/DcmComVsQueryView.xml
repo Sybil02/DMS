@@ -30,7 +30,7 @@
     Kind="where"
     Type="java.lang.String"/>
   <SQLQuery>
-    <![CDATA[select t1.combination_id,t1.value_set_id,t1.seq,t1.is_authority,t1.created_at,
+    <![CDATA[select t1.combination_id,t1.value_set_id,t1.seq,t1.is_authority,t1.created_at,t2.display_length,
 t1.updated_at,t1.updated_by,t1.created_by,t2.name,t2.source,t2.code from dcm_com_vs t1,dms_value_set t2
 where t1.value_set_id=t2.id
 and t2.locale=:locale
@@ -110,6 +110,20 @@ order by t1.seq]]>
     SQLType="DATE">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="7"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="DisplayLength"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Type="oracle.jbo.domain.Number"
+    ColumnType="NUMBER"
+    AliasName="DISPLAY_LENGTH"
+    Expression="DISPLAY_LENGTH"
+    SQLType="NUMERIC">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="39"/>
     </DesignTime>
   </ViewAttribute>
   <ViewAttribute
