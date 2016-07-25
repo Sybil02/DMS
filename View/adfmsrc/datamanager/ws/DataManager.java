@@ -100,11 +100,11 @@ public class DataManager {
         Connection conn = DBConnUtils.getJNDIConnection("jdbc/DMSConnDS");
         String sql =
             "INSERT INTO DMS_GL_ACCOUNT (BUKRS, SAKNR, TXT20, KTOKS, XSPEB, NOTE1, NOTE2, NOTE3, NOTE4, NOTE5, " +
-            "NOTE6, NOTE7, NOTE8, NOTE9, NOTE10, NOTE11, NOTE12, NOTE13, NOTE14, NOTE15, IFFLG, IFMSG, MSGID) " +
-            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            "NOTE6, NOTE7, NOTE8, NOTE9, NOTE10, NOTE11, NOTE12, NOTE13, NOTE14, NOTE15, IFFLG, IFMSG, MSGID,INSERT_DATE) " +
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,SYSDATE)";
         String sqlUp =
             "UPDATE DMS_GL_ACCOUNT SET BUKRS=?, SAKNR=?, TXT20=?, KTOKS=?, XSPEB=?, NOTE1=?, NOTE2=?, NOTE3=?, NOTE4=?, NOTE5=?, " +
-            "NOTE6=?, NOTE7=?, NOTE8=?, NOTE9=?, NOTE10=?, NOTE11=?, NOTE12=?, NOTE13=?, NOTE14=?, NOTE15=?, IFFLG=?, IFMSG=?, MSGID=? " +
+            "NOTE6=?, NOTE7=?, NOTE8=?, NOTE9=?, NOTE10=?, NOTE11=?, NOTE12=?, NOTE13=?, NOTE14=?, NOTE15=?, IFFLG=?, IFMSG=?, MSGID=? ,INSERT_DATE=SYSDATE " +
             "WHERE BUKRS=? AND SAKNR = ?";
         PreparedStatement stat = null;
         PreparedStatement statUp = null;
@@ -206,11 +206,11 @@ public class DataManager {
         Connection conn = DBConnUtils.getJNDIConnection("jdbc/DMSConnDS");
         String sql =
             "INSERT INTO DMS_COST_CENTER (KOSTL, DATBI, DATAB, BKZKP, ZZBMBM, ZZBMMC, BUKRS, ABTEI, KHINR, KTEXT, ZZTXMC, ZZYWXMC, ZZHYXMC, NOTE1, " +
-            "NOTE2, NOTE3, NOTE4, NOTE5, NOTE6, NOTE7, NOTE8, NOTE9, NOTE10, NOTE11, NOTE12, NOTE13, NOTE14, NOTE15, IFFLG, IFMSG, MSGID) " +
-            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            "NOTE2, NOTE3, NOTE4, NOTE5, NOTE6, NOTE7, NOTE8, NOTE9, NOTE10, NOTE11, NOTE12, NOTE13, NOTE14, NOTE15, IFFLG, IFMSG, MSGID,INSERT_DATE) " +
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,SYSDATE)";
         String sqlUp =
             "UPDATE DMS_COST_CENTER SET KOSTL=?, DATBI=?, DATAB=?, BKZKP=?, ZZBMBM=?, ZZBMMC=?, BUKRS=?, ABTEI=?, KHINR=?, KTEXT=?, ZZTXMC=?, ZZYWXMC=?, ZZHYXMC=?, NOTE1=?, " +
-            "NOTE2=?, NOTE3=?, NOTE4=?, NOTE5=?, NOTE6=?, NOTE7=?, NOTE8=?, NOTE9=?, NOTE10=?, NOTE11=?, NOTE12=?, NOTE13=?, NOTE14=?, NOTE15=?, IFFLG=?, IFMSG=?, MSGID=? " +
+            "NOTE2=?, NOTE3=?, NOTE4=?, NOTE5=?, NOTE6=?, NOTE7=?, NOTE8=?, NOTE9=?, NOTE10=?, NOTE11=?, NOTE12=?, NOTE13=?, NOTE14=?, NOTE15=?, IFFLG=?, IFMSG=?, MSGID=? ,INSERT_DATE=SYSDATE " +
             "WHERE KOSTL=? AND DATBI = ? AND ABTEI = ?";
         PreparedStatement stat = null;
         PreparedStatement statUp = null;
@@ -330,11 +330,11 @@ public class DataManager {
         Connection conn = DBConnUtils.getJNDIConnection("jdbc/DMSConnDS");
         String sql =
             "INSERT INTO DMS_HR_ORG (ZJGDM, ZBMDM, ZBMMS, ZZRZX, ZSJBM, ZZGGW, ZQYBZ, NOTE1, NOTE2, NOTE3, NOTE4, NOTE5, " +
-            "NOTE6, NOTE7, NOTE8, NOTE9, NOTE10, NOTE11, NOTE12, NOTE13, NOTE14, NOTE15, IFFLG, IFMSG, MSGID) " +
-            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            "NOTE6, NOTE7, NOTE8, NOTE9, NOTE10, NOTE11, NOTE12, NOTE13, NOTE14, NOTE15, IFFLG, IFMSG, MSGID,INSERT_DATE) " +
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,SYSDATE)";
         String sqlUp =
             "UPDATE DMS_HR_ORG SET ZJGDM=?, ZBMDM=?, ZBMMS=?, ZZRZX=?, ZSJBM=?, ZZGGW=?, ZQYBZ=?, NOTE1=?, NOTE2=?, NOTE3=?, NOTE4=?, NOTE5=?, " +
-            "NOTE6=?, NOTE7=?, NOTE8=?, NOTE9=?, NOTE10=?, NOTE11=?, NOTE12=?, NOTE13=?, NOTE14=?, NOTE15=?, IFFLG=?, IFMSG=?, MSGID=? " +
+            "NOTE6=?, NOTE7=?, NOTE8=?, NOTE9=?, NOTE10=?, NOTE11=?, NOTE12=?, NOTE13=?, NOTE14=?, NOTE15=?, IFFLG=?, IFMSG=?, MSGID=? ,INSERT_DATE=SYSDATE " +
             "WHERE ZJGDM=? AND ZBMDM=? AND ZZRZX =? AND ZSJBM =? AND ZZGGW=?";
         PreparedStatement stat = null;
         PreparedStatement statUp = null;
@@ -446,11 +446,11 @@ public class DataManager {
         Connection conn = DBConnUtils.getJNDIConnection("jdbc/DMSConnDS");
         String sql =
             "INSERT INTO DMS_HR_POSITION (ZJGDM, ZBMDM, ZGWDM, ZGWMS, ZSJGW, ZQYBZ, NOTE1, NOTE2, NOTE3, NOTE4, NOTE5," +
-            "NOTE6, NOTE7, NOTE8, NOTE9, NOTE10, NOTE11, NOTE12, NOTE13, NOTE14, NOTE15, IFFLG, IFMSG, MSGID, NEW_GW) " +
-            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            "NOTE6, NOTE7, NOTE8, NOTE9, NOTE10, NOTE11, NOTE12, NOTE13, NOTE14, NOTE15, IFFLG, IFMSG, MSGID, NEW_GW,INSERT_DATE) " +
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,SYSDATE)";
         String sqlUp =
             "UPDATE DMS_HR_POSITION SET ZJGDM=?, ZBMDM=?, ZGWDM=?, ZGWMS=?, ZSJGW=?, ZQYBZ=?, NOTE1=?, NOTE2=?, NOTE3=?, NOTE4=?, NOTE5=?, " +
-            " NOTE6=?, NOTE7=?, NOTE8=?, NOTE9=?, NOTE10=?, NOTE11=?, NOTE12=?, NOTE13=?, NOTE14=?, NOTE15=?, IFFLG=?, IFMSG=?, MSGID=? , NEW_GW=? " +
+            " NOTE6=?, NOTE7=?, NOTE8=?, NOTE9=?, NOTE10=?, NOTE11=?, NOTE12=?, NOTE13=?, NOTE14=?, NOTE15=?, IFFLG=?, IFMSG=?, MSGID=? , NEW_GW=?,INSERT_DATE=SYSDATE " +
             "WHERE ZJGDM=? AND ZBMDM=? AND ZGWDM=? AND ZGWMS=? AND ZSJGW=? ";
         PreparedStatement stat = null;
         PreparedStatement statUp = null;
@@ -608,11 +608,11 @@ public class DataManager {
         Connection conn = DBConnUtils.getJNDIConnection("jdbc/DMSConnDS");
         String sql =
             "INSERT INTO DMS_HLS_BOM (MATNR, MAKTX, WERKS, MTART, MEINS, MTBEZ, DISPO, ZGOOD, STPRS, PEINH, ZPLP2, " +
-            "LVORM, NOTE1, NOTE2, NOTE3, NOTE4, NOTE5, NOTE6, NOTE7, NOTE8, NOTE9, NOTE10, NOTE11, NOTE12, NOTE13, NOTE14, NOTE15, IFFLG, IFMSG, MSGID) " +
-            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            "LVORM, NOTE1, NOTE2, NOTE3, NOTE4, NOTE5, NOTE6, NOTE7, NOTE8, NOTE9, NOTE10, NOTE11, NOTE12, NOTE13, NOTE14, NOTE15, IFFLG, IFMSG, MSGID,INSERT_DATE) " +
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,SYSDATE)";
         String sqlUp =
             "UPDATE DMS_HLS_BOM SET MATNR=?, MAKTX=?, WERKS=?, MTART=?, MEINS=?, MTBEZ=?, DISPO=?, ZGOOD=?, STPRS=?, PEINH=?, ZPLP2=?,LVORM=?, NOTE1=?, NOTE2=?, NOTE3=?, NOTE4=?, NOTE5=?, NOTE6=?," +
-            " NOTE7=?, NOTE8=?, NOTE9=?, NOTE10=?, NOTE11=?, NOTE12=?, NOTE13=?, NOTE14=?, NOTE15=?, IFFLG=?, IFMSG=?, MSGID=? WHERE MATNR=? AND WERKS=?";
+            " NOTE7=?, NOTE8=?, NOTE9=?, NOTE10=?, NOTE11=?, NOTE12=?, NOTE13=?, NOTE14=?, NOTE15=?, IFFLG=?, IFMSG=?, MSGID=?,INSERT_DATE=SYSDATE WHERE MATNR=? AND WERKS=?";
         PreparedStatement stat = null;
         PreparedStatement statUp = null;
         Statement statExs = null;
@@ -722,11 +722,11 @@ public class DataManager {
         
         String sql =
             "INSERT INTO DMS_HR_STAFF_FP (BUKRS, PERNR, PLANS, KST01, STELL, ZLEVEL, SOBID, BTRTL, BTEXT, ZQYBZ, NOTE1, " +
-            "NOTE2, NOTE3, NOTE4, NOTE5, NOTE6, NOTE7, NOTE8, NOTE9, NOTE10, NOTE11, NOTE12, NOTE13, NOTE14, NOTE15, IFFLG, IFMSG) " +
-            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            "NOTE2, NOTE3, NOTE4, NOTE5, NOTE6, NOTE7, NOTE8, NOTE9, NOTE10, NOTE11, NOTE12, NOTE13, NOTE14, NOTE15, IFFLG, IFMSG,INSERT_DATE) " +
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,SYSDATE)";
         String sqlUp =
             "UPDATE DMS_HR_STAFF_FP SET BUKRS=?, PERNR=?, PLANS=?, KST01=?, STELL=?, ZLEVEL=?, SOBID=?, BTRTL=?, BTEXT=?, ZQYBZ=?, NOTE1=?, " +
-            "NOTE2=?, NOTE3=?, NOTE4=?, NOTE5=?, NOTE6=?, NOTE7=?, NOTE8=?, NOTE9=?, NOTE10=?, NOTE11=?, NOTE12=?, NOTE13=?, NOTE14=?, NOTE15=?, IFFLG=?, IFMSG=? " +
+            "NOTE2=?, NOTE3=?, NOTE4=?, NOTE5=?, NOTE6=?, NOTE7=?, NOTE8=?, NOTE9=?, NOTE10=?, NOTE11=?, NOTE12=?, NOTE13=?, NOTE14=?, NOTE15=?, IFFLG=?, IFMSG=?,INSERT_DATE=SYSDATE " +
             "WHERE PERNR=? AND PLANS=?";
         PreparedStatement stat = null;
         PreparedStatement statUp = null;
@@ -816,11 +816,11 @@ public class DataManager {
         
         String sql =
             "INSERT INTO DMS_HR_STAFF (BUKRS, PERNR, SNAME, ZMAIL, ZMOBIL, ZPHONE, ICNUM, STAT2, NOTE1, NOTE2, NOTE3, " +
-            "NOTE4, NOTE5, NOTE6, NOTE7, NOTE8, NOTE9, NOTE10, NOTE11, NOTE12, NOTE13, NOTE14, NOTE15, IFFLG, IFMSG, MSGID) " +
-            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            "NOTE4, NOTE5, NOTE6, NOTE7, NOTE8, NOTE9, NOTE10, NOTE11, NOTE12, NOTE13, NOTE14, NOTE15, IFFLG, IFMSG, MSGID,INSERT_DATE) " +
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,SYSDATE)";
         String sqlUp =
             "UPDATE DMS_HR_STAFF SET BUKRS=?, PERNR=?, SNAME=?, ZMAIL=?, ZMOBIL=?, ZPHONE=?, ICNUM=?, STAT2=?, NOTE1=?, NOTE2=?, NOTE3=?, NOTE4=?, " +
-            "NOTE5=?, NOTE6=?, NOTE7=?, NOTE8=?, NOTE9=?, NOTE10=?, NOTE11=?, NOTE12=?, NOTE13=?, NOTE14=?, NOTE15=?, IFFLG=?, IFMSG=?, MSGID=? " +
+            "NOTE5=?, NOTE6=?, NOTE7=?, NOTE8=?, NOTE9=?, NOTE10=?, NOTE11=?, NOTE12=?, NOTE13=?, NOTE14=?, NOTE15=?, IFFLG=?, IFMSG=?, MSGID=?,INSERT_DATE=SYSDATE " +
             "WHERE PERNR=?";
         PreparedStatement stat = null;
         PreparedStatement statUp = null;
@@ -907,11 +907,11 @@ public class DataManager {
         
         String sql =
             "INSERT INTO DMS_PS_JOBS (MANDT, AUFPL, APLZL, SUMNR, ACTVT, PSPHI, LTXA1, OBJNR, AUFNR, PROJN, BUKRS, SAKTO, WAERS, FSAVD, SSEDD, ERNAM, " +
-            "ERDAT, AENAM, AEDAT, VERNR, VERNA, NOTE1, NOTE2, NOTE3, NOTE4, NOTE5, NOTE6, NOTE7, NOTE8, NOTE9, NOTE10, NOTE11, NOTE12, NOTE13, NOTE14, NOTE15, IFFLG, IFMSG) " +
-            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            "ERDAT, AENAM, AEDAT, VERNR, VERNA, NOTE1, NOTE2, NOTE3, NOTE4, NOTE5, NOTE6, NOTE7, NOTE8, NOTE9, NOTE10, NOTE11, NOTE12, NOTE13, NOTE14, NOTE15, IFFLG, IFMSG,INSERT_DATE) " +
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,SYSDATE)";
         String sqlUp =
             "UPDATE DMS_PS_JOBS SET MANDT=?, AUFPL=?, APLZL=?, SUMNR=?, ACTVT=?, PSPHI=?, LTXA1=?, OBJNR=?, AUFNR=?, PROJN=?, BUKRS=?, SAKTO=?, WAERS=?, FSAVD=?, SSEDD=?, ERNAM=?,  " +
-            " ERDAT=?, AENAM=?, AEDAT=?, VERNR=?, VERNA=?, NOTE1=?, NOTE2=?, NOTE3=?, NOTE4=?, NOTE5=?, NOTE6=?, NOTE7=?, NOTE8=?, NOTE9=?, NOTE10=?, NOTE11=?, NOTE12=?, NOTE13=?, NOTE14=?, NOTE15=?, IFFLG=?, IFMSG=? " +
+            " ERDAT=?, AENAM=?, AEDAT=?, VERNR=?, VERNA=?, NOTE1=?, NOTE2=?, NOTE3=?, NOTE4=?, NOTE5=?, NOTE6=?, NOTE7=?, NOTE8=?, NOTE9=?, NOTE10=?, NOTE11=?, NOTE12=?, NOTE13=?, NOTE14=?, NOTE15=?, IFFLG=?, IFMSG=?,INSERT_DATE=SYSDATE " +
             "WHERE AUFPL=? AND APLZL=? AND PSPHI=? AND PROJN=?";
         PreparedStatement stat = null;
         PreparedStatement statUp = null;
@@ -1027,11 +1027,11 @@ public class DataManager {
         
         String sql =
             "INSERT INTO DMS_PS_MASTER (MANDT, PSPNR, POST1, OBJNR, ERNAM, ERDAT, AENAM, AEDAT, VBUKR, PWHIE, PLFAZ, PLSEZ, PROFL, ZPS005, ZPS007, ZSD022," +
-            "ZSD023, ZSD029, PROFI_TXT, ZZFXXMLX, STAT, NOTE1, NOTE2, NOTE3, NOTE4, NOTE5, NOTE6, NOTE7, NOTE8, NOTE9, NOTE10, NOTE11, NOTE12, NOTE13, NOTE14, NOTE15, IFFLG, IFMSG,MSGID) " +
-            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            "ZSD023, ZSD029, PROFI_TXT, ZZFXXMLX, STAT, NOTE1, NOTE2, NOTE3, NOTE4, NOTE5, NOTE6, NOTE7, NOTE8, NOTE9, NOTE10, NOTE11, NOTE12, NOTE13, NOTE14, NOTE15, IFFLG, IFMSG,MSGID,INSERT_DATE) " +
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,SYSDATE)";
         String sqlUp =
             "UPDATE DMS_PS_MASTER SET MANDT=?, PSPNR=?, POST1=?, OBJNR=?, ERNAM=?, ERDAT=?, AENAM=?, AEDAT=?, VBUKR=?, PWHIE=?, PLFAZ=?, PLSEZ=?, PROFL=?, ZPS005=?, ZPS007=?, ZSD022=?," +
-            " ZSD023=?, ZSD029=?, PROFI_TXT=?, ZZFXXMLX=?, STAT=?, NOTE1=?, NOTE2=?, NOTE3=?, NOTE4=?, NOTE5=?, NOTE6=?, NOTE7=?, NOTE8=?, NOTE9=?, NOTE10=?, NOTE11=?, NOTE12=?, NOTE13=?, NOTE14=?, NOTE15=?, IFFLG=?, IFMSG=?, MSGID=? " +
+            " ZSD023=?, ZSD029=?, PROFI_TXT=?, ZZFXXMLX=?, STAT=?, NOTE1=?, NOTE2=?, NOTE3=?, NOTE4=?, NOTE5=?, NOTE6=?, NOTE7=?, NOTE8=?, NOTE9=?, NOTE10=?, NOTE11=?, NOTE12=?, NOTE13=?, NOTE14=?, NOTE15=?, IFFLG=?, IFMSG=?, MSGID=?,INSERT_DATE=SYSDATE " +
             "WHERE PSPNR=? AND VBUKR=?";
         PreparedStatement stat = null;
         PreparedStatement statUp = null;
@@ -1146,11 +1146,11 @@ public class DataManager {
         
         String sql =
             "INSERT INTO DMS_PS_MILEPOST (MANDT, ZAEHL, KTEXT, VORNR, AUFNR, PSPNR, PSPHI, BUKRS, TEDAT, LST_ACTDT, FPROZ, NOTE1, NOTE2, " +
-            "NOTE3, NOTE4, NOTE5, NOTE6, NOTE7, NOTE8, NOTE9, NOTE10, NOTE11, NOTE12, NOTE13, NOTE14, NOTE15, IFFLG, IFMSG) " +
-            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            "NOTE3, NOTE4, NOTE5, NOTE6, NOTE7, NOTE8, NOTE9, NOTE10, NOTE11, NOTE12, NOTE13, NOTE14, NOTE15, IFFLG, IFMSG,INSERT_DATE) " +
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,SYSDATE)";
         String sqlUp =
             "UPDATE DMS_PS_MILEPOST SET MANDT=?, ZAEHL=?, KTEXT=?, VORNR=?, AUFNR=?, PSPNR=?, PSPHI=?, BUKRS=?, TEDAT=?, LST_ACTDT=?, FPROZ=?, NOTE1=?, NOTE2=?, " +
-            " NOTE3=?, NOTE4=?, NOTE5=?, NOTE6=?, NOTE7=?, NOTE8=?, NOTE9=?, NOTE10=?, NOTE11=?, NOTE12=?, NOTE13=?, NOTE14=?, NOTE15=?, IFFLG=?, IFMSG=? " +
+            " NOTE3=?, NOTE4=?, NOTE5=?, NOTE6=?, NOTE7=?, NOTE8=?, NOTE9=?, NOTE10=?, NOTE11=?, NOTE12=?, NOTE13=?, NOTE14=?, NOTE15=?, IFFLG=?, IFMSG=?,INSERT_DATE=SYSDATE " +
             "WHERE ZAEHL=? AND PSPNR=? AND PSPHI=?";
         PreparedStatement stat = null;
         PreparedStatement statUp = null;
@@ -1244,11 +1244,11 @@ public class DataManager {
         
         String sql =
             "INSERT INTO DMS_PS_NETWORK (MANDT, AUFNR, KTEXT, OBJNR, PSPEL, PSPHI, BUKRS, GSTRS, GLTRS, ERDAT, ERNAM, NOTE1, NOTE2, NOTE3, NOTE4, " +
-            "NOTE5, NOTE6, NOTE7, NOTE8, NOTE9, NOTE10, NOTE11, NOTE12, NOTE13, NOTE14, NOTE15, IFFLG, IFMSG) " +
-            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            "NOTE5, NOTE6, NOTE7, NOTE8, NOTE9, NOTE10, NOTE11, NOTE12, NOTE13, NOTE14, NOTE15, IFFLG, IFMSG,INSERT_DATE) " +
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,SYSDATE)";
         String sqlUp =
             "UPDATE DMS_PS_NETWORK SET MANDT=?, AUFNR=?, KTEXT=?, OBJNR=?, PSPEL=?, PSPHI=?, BUKRS=?, GSTRS=?, GLTRS=?, ERDAT=?, ERNAM=?, NOTE1=?, NOTE2=?, NOTE3=?, NOTE4=?, " +
-            " NOTE5=?, NOTE6=?, NOTE7=?, NOTE8=?, NOTE9=?, NOTE10=?, NOTE11=?, NOTE12=?, NOTE13=?, NOTE14=?, NOTE15=?, IFFLG=?, IFMSG=? " +
+            " NOTE5=?, NOTE6=?, NOTE7=?, NOTE8=?, NOTE9=?, NOTE10=?, NOTE11=?, NOTE12=?, NOTE13=?, NOTE14=?, NOTE15=?, IFFLG=?, IFMSG=?,INSERT_DATE=SYSDATE " +
             "WHERE AUFNR=? AND PSPEL=? AND PSPHI=?";
         PreparedStatement stat = null;
         PreparedStatement statUp = null;
@@ -1342,11 +1342,11 @@ public class DataManager {
         
         String sql =
             "INSERT INTO DMS_PS_ORG (MANDT, PSPNR, ZROLE, VERNR, SNAME, PLFAZ, PLSEZ, ERNAM, ERDAT, NOTE1, NOTE2, NOTE3, NOTE4, NOTE5, " +
-            "NOTE6, NOTE7, NOTE8, NOTE9, NOTE10, NOTE11, NOTE12, NOTE13, NOTE14, NOTE15, IFFLG, IFMSG) " +
-            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            "NOTE6, NOTE7, NOTE8, NOTE9, NOTE10, NOTE11, NOTE12, NOTE13, NOTE14, NOTE15, IFFLG, IFMSG,INSERT_DATE) " +
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,SYSDATE)";
         String sqlUp =
             "UPDATE DMS_PS_ORG SET MANDT=?, PSPNR=?, ZROLE=?, VERNR=?, SNAME=?, PLFAZ=?, PLSEZ=?, ERNAM=?, ERDAT=?, NOTE1=?, NOTE2=?, NOTE3=?, NOTE4=?, NOTE5=?, " +
-            " NOTE6=?, NOTE7=?, NOTE8=?, NOTE9=?, NOTE10=?, NOTE11=?, NOTE12=?, NOTE13=?, NOTE14=?, NOTE15=?, IFFLG=?, IFMSG=? " +
+            " NOTE6=?, NOTE7=?, NOTE8=?, NOTE9=?, NOTE10=?, NOTE11=?, NOTE12=?, NOTE13=?, NOTE14=?, NOTE15=?, IFFLG=?, IFMSG=?,INSERT_DATE=SYSDATE " +
             "WHERE PSPNR=? AND ZROLE=?";
         PreparedStatement stat = null;
         PreparedStatement statUp = null;
@@ -1433,11 +1433,11 @@ public class DataManager {
         }
         String sql =
             "INSERT INTO DMS_PS_WBS (MANDT, PSPNR, POST1, OBJNR, PSPHI, PBUKR, PSTRM, PETRM, ERNAM, ERDAT, AENAM, AEDAT, VERNR, VERNA, " +
-            "NOTE1, NOTE2, NOTE3, NOTE4, NOTE5, NOTE6, NOTE7, NOTE8, NOTE9, NOTE10, NOTE11, NOTE12, NOTE13, NOTE14, NOTE15, IFFLG, IFMSG) " +
-            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            "NOTE1, NOTE2, NOTE3, NOTE4, NOTE5, NOTE6, NOTE7, NOTE8, NOTE9, NOTE10, NOTE11, NOTE12, NOTE13, NOTE14, NOTE15, IFFLG, IFMSG,INSERT_DATE) " +
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,SYSDATE)";
         String sqlUp =
             "UPDATE DMS_PS_WBS SET MANDT=?, PSPNR=?, POST1=?, OBJNR=?, PSPHI=?, PBUKR=?, PSTRM=?, PETRM=?, ERNAM=?, ERDAT=?, AENAM=?, AEDAT=?, VERNR=?, VERNA=?, " +
-            " NOTE1=?, NOTE2=?, NOTE3=?, NOTE4=?, NOTE5=?, NOTE6=?, NOTE7=?, NOTE8=?, NOTE9=?, NOTE10=?, NOTE11=?, NOTE12=?, NOTE13=?, NOTE14=?, NOTE15=?, IFFLG=?, IFMSG=? " +
+            " NOTE1=?, NOTE2=?, NOTE3=?, NOTE4=?, NOTE5=?, NOTE6=?, NOTE7=?, NOTE8=?, NOTE9=?, NOTE10=?, NOTE11=?, NOTE12=?, NOTE13=?, NOTE14=?, NOTE15=?, IFFLG=?, IFMSG=?,INSERT_DATE=SYSDATE " +
             "WHERE PSPNR=? AND PSPHI=?";
         PreparedStatement stat = null;
         PreparedStatement statUp = null;
@@ -1534,11 +1534,11 @@ public class DataManager {
         }
         String sql =
             "INSERT INTO DMS_PS_WBS_MASTER (MANDT, POSNR, PSPHI, UP, DOWN, LEFT, RIGHT, NOTE1, NOTE2, NOTE3, NOTE4, " +
-            "NOTE5, NOTE6, NOTE7, NOTE8, NOTE9, NOTE10, NOTE11, NOTE12, NOTE13, NOTE14, NOTE15, IFFLG, IFMSG) " +
-            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            "NOTE5, NOTE6, NOTE7, NOTE8, NOTE9, NOTE10, NOTE11, NOTE12, NOTE13, NOTE14, NOTE15, IFFLG, IFMSG,INSERT_DATE) " +
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,SYSDATE)";
         String sqlUp =
             "UPDATE DMS_PS_WBS_MASTER SET MANDT=?, POSNR=?, PSPHI=?, UP=?, DOWN=?, LEFT=?, RIGHT=?, NOTE1=?, NOTE2=?, NOTE3=?, NOTE4=?, " +
-            " NOTE5=?, NOTE6=?, NOTE7=?, NOTE8=?, NOTE9=?, NOTE10=?, NOTE11=?, NOTE12=?, NOTE13=?, NOTE14=?, NOTE15=?, IFFLG=?, IFMSG=? " +
+            " NOTE5=?, NOTE6=?, NOTE7=?, NOTE8=?, NOTE9=?, NOTE10=?, NOTE11=?, NOTE12=?, NOTE13=?, NOTE14=?, NOTE15=?, IFFLG=?, IFMSG=?,INSERT_DATE=SYSDATE " +
             "WHERE POSNR=? AND PSPHI=?";
         PreparedStatement stat = null;
         PreparedStatement statUp = null;
