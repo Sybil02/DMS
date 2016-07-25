@@ -113,9 +113,6 @@
   <ViewUsage
     Name="DmsBlockStatusVO"
     ViewObjectName="team.epm.dms.view.DmsBlockStatusVO"/>
-  <ViewUsage
-    Name="DmsHtkpReturnVO"
-    ViewObjectName="team.epm.dms.view.DmsHtkpReturnVO"/>
   <ViewLinkUsage
     Name="DmsGroupedRoleLnk"
     ViewLinkObjectName="team.epm.dms.DmsGroupedRoleLnk"

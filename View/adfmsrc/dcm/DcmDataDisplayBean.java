@@ -1152,7 +1152,7 @@ public class DcmDataDisplayBean extends TablePagination{
             }
             
         }
-        sql.append(viewSql).append(" S.CREATED_AT,S.CREATED_BY ").append("FROM ").append(this.curCombiantion.getCode()).append(" T")
+        sql.append(viewSql).append(" S.CREATED_AT,S.CREATED_BY,DECODE(S.CREATED_BY,NULL,'未提交','已提交') AS STATUS ").append("FROM ").append(this.curCombiantion.getCode()).append(" T")
             .append(", (SELECT COM_ID,CREATED_AT,CREATED_BY FROM DMS_SUBMIT_STATUS WHERE TEMP_ID = '").append(this.curTempalte.getId())
             .append("') S WHERE T.ID = S.COM_ID(+) ").append(where_in);
         
@@ -1160,6 +1160,7 @@ public class DcmDataDisplayBean extends TablePagination{
         
         this.subVNameMap.put("CREATED_BY", "提交者");
         this.subVNameMap.put("CREATED_AT", "提交时间");
+        this.subVNameMap.put("STATUS", "状态");
            
         this.enableSubmit();
     }
@@ -2031,15 +2032,18 @@ public class DcmDataDisplayBean extends TablePagination{
             //vo.clearCache();
             for(Object key:descriptor.getFilterCriteria().keySet()){
                 if(!ObjectUtils.toString(descriptor.getFilterCriteria().get(key)).trim().equals("")){
-                    System.out.println(key.toString() + ":" + descriptor.getFilterCriteria().get(key));
                     if(descriptor.getFilterCriteria().get(key) != null || !"".equals(descriptor.getFilterCriteria().get(key))){
-                        whereCaluse.append(" AND ").append(key).append(" IN(");
-                        for(Map.Entry<String,String> entry : this.subValuesMap.entrySet()){
-                            if(entry.getValue().contains(descriptor.getFilterCriteria().get(key).toString())) {
-                                whereCaluse.append("'").append(entry.getKey()).append("',");
-                            }  
-                        }   
-                        whereCaluse.append("'')");
+                        if(key.equals("STATUS")){
+                            whereCaluse.append(" AND STATUS LIKE '%").append(descriptor.getFilterCriteria().get(key).toString()).append("%'");
+                        }else{
+                            whereCaluse.append(" AND ").append(key).append(" IN(");
+                            for(Map.Entry<String,String> entry : this.subValuesMap.entrySet()){
+                                if(entry.getValue().contains(descriptor.getFilterCriteria().get(key).toString())) {
+                                    whereCaluse.append("'").append(entry.getKey()).append("',");
+                                }  
+                            }   
+                            whereCaluse.append("'')");
+                        }
                     }
                 }
             }

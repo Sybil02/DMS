@@ -217,20 +217,20 @@
                                  sortable="false" sortProperty="#{def.name}" filterable="#{def.name ne 'CREATED_AT' and def.name ne 'CREATED_BY'}"
                                  id="c11">
                         <af:outputText value="#{viewScope.DcmDataDisplayBean.subValuesMap[row[def.name]]}" id="ot15"
-                                       rendered="#{def.name ne 'CREATED_AT' or def.name ne 'CREATED_BY'}"/>
+                                       rendered="#{def.name ne 'CREATED_AT' or def.name ne 'CREATED_BY' or def.name ne 'STATUS'}"/>
                         <af:outputText value="#{row[def.name]}" id="ot17"
                                        rendered="#{def.name eq 'CREATED_AT' }">
                             <af:convertDateTime pattern="#{bindings.DcmErrorView.hints.CreatedAt.format}"/>               
                         </af:outputText>
                         <af:outputText value="#{row[def.name]}" id="ot18"
-                                       rendered="#{def.name eq 'CREATED_BY' }">       
+                                       rendered="#{def.name eq 'CREATED_BY' or def.name eq 'STATUS'}">       
                         </af:outputText>
                       </af:column>
                     </af:forEach>
-                    <af:column id="c12" sortable="true"
+                    <!--af:column id="c12" sortable="true"
                                headerText="#{viewBundle['dcm.combinationRecord.status']}">
                       <af:outputText value="#{row['CREATED_BY'] eq null ? '未提交':'已提交'}" id="ot16"/>
-                    </af:column>
+                    </af:column-->
                   </af:table>
                 </af:panelCollection>
               </f:facet>
