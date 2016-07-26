@@ -464,6 +464,7 @@ public class ProjectZxBean {
             this.createTableModel();
         }
     }
+    
     public void queryData(){
         DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
         Statement stat = trans.createStatement(DBTransaction.DEFAULT);
@@ -558,7 +559,6 @@ public class ProjectZxBean {
         //}
         trans.commit();
         //校验
-        
         if(this.validation()){
             this.inputPro();
             dmsLog.operationLog(this.curUser.getAcc(),this.TYPE_ZZX+"_"+this.connectId,this.getCom(),"UPDATE");
@@ -919,6 +919,7 @@ public class ProjectZxBean {
         }
         return (new File(fileName)).getAbsolutePath();
     }
+    
     //显示项目冻结状态框
     public void blockStatusPop(ActionEvent actionEvent) {
         if(this.curUser.getId().equals("10000")){
@@ -947,7 +948,6 @@ public class ProjectZxBean {
             e.printStackTrace();
         }
     }
-    
     
     public void setYear(String year) {
         this.year = year;

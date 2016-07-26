@@ -82,32 +82,18 @@ import utils.system;
 
 public class BPCostBean {
     private Person curUser;
+    //页面绑定组件
     private RichPanelCollection panelaCollection;
-    private CollectionModel dataModel;
-    private List<PcColumnDef> pcColsDef = new ArrayList<PcColumnDef>();
-    private FilterableQueryDescriptor queryDescriptor=new DcmQueryDescriptor();
     private RichPopup errorWindow;
     private RichInputFile fileInput;
     private RichPopup dataImportWnd;
     private RichPopup statusWindow;
     private RichPopup adminBlockPop;
-    private boolean isSelected;
-    public BPCostBean() {
-        super();
-        this.curUser = (Person)(ADFContext.getCurrent().getSessionScope().get("cur_user"));
-        if("10000".equals(this.curUser.getId())){
-            isManager = true;
-            isEDITABLE = true;
-        }else{
-            isManager = false;
-            isEDITABLE = false;
-        }
-        isSelected = true;
-        this.dataModel = new PcDataTableModel();
-        List<Map> d = new ArrayList<Map>();
-        this.dataModel.setWrappedData(d);
-        this.initList();
-    }
+
+    private CollectionModel dataModel;
+    private List<PcColumnDef> pcColsDef = new ArrayList<PcColumnDef>();
+    private FilterableQueryDescriptor queryDescriptor=new DcmQueryDescriptor();
+    
     private String year;
     private List<SelectItem> yearList;
     private String entity;
@@ -126,15 +112,31 @@ public class BPCostBean {
     private String isBlock;
     private boolean isManager;
     private boolean isEDITABLE ;
-    //日志
-    private static ADFLogger _logger =ADFLogger.createADFLogger(DcmDataDisplayBean.class);
-
+    private boolean isSelected;
     //是否是2007及以上格式
     private boolean isXlsx = true;
+    //日志
+    private static ADFLogger _logger =ADFLogger.createADFLogger(DcmDataDisplayBean.class);
     private RichPopup dataExportWnd;
     private DmsComBoxLov proLov;
-    
     DmsLog dmsLog = new DmsLog();
+    
+    public BPCostBean() {
+        super();
+        this.curUser = (Person)(ADFContext.getCurrent().getSessionScope().get("cur_user"));
+        if("10000".equals(this.curUser.getId())){
+            isManager = true;
+            isEDITABLE = true;
+        }else{
+            isManager = false;
+            isEDITABLE = false;
+        }
+        isSelected = true;
+        this.dataModel = new PcDataTableModel();
+        List<Map> d = new ArrayList<Map>();
+        this.dataModel.setWrappedData(d);
+        this.initList();
+    }
 
     private void initList(){
         this.yearList = queryYears("HLS_YEAR_C");
@@ -159,7 +161,6 @@ public class BPCostBean {
         String sql = "SELECT CODE,MEANING FROM "+ source;
         List<SelectItem> values = new ArrayList<SelectItem>();
         ResultSet rs;
-
         try {
             rs = stat.executeQuery(sql);
             while(rs.next()){
@@ -188,8 +189,7 @@ public class BPCostBean {
             sql = "SELECT DISTINCT P."+col+" FROM "+source+" P WHERE P.PROJECT_NAME IN (" + 
             "SELECT T.PRO_CODE||'-'||T.PRO_DESC FROM SAP_DMS_PROJECT_PRIVILEGE_V T WHERE ID = '"+this.curUser.getId()+"'"+
                 ") AND DATA_TYPE =\'"+this.TYPE_BASE+"\'";
-        }
-        
+        } 
         List<SelectItem> values = new ArrayList<SelectItem>();
         ResultSet rs;
         try {
@@ -226,7 +226,7 @@ public class BPCostBean {
         }
         return values;
     }
-    
+    //获取表头信息
     private String getCom(){
         String text = this.year+"_"+this.entity+"_"+this.hLine+"_"+this.yLine+"_"+
                       this.pLine+"_"+this.pname+"_"+this.version+"_"+this.proType;
@@ -322,6 +322,7 @@ public class BPCostBean {
             e.printStackTrace();
         }
     }
+    //构建数据表
     public void createTableModel(){
         DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
         Statement stat = trans.createStatement(DBTransaction.DEFAULT);
@@ -359,7 +360,7 @@ public class BPCostBean {
         ((PcDataTableModel)this.dataModel).setLabelMap(labelMap);
         this.selectIsEditable();
     }
-    
+    //调整数字显示格式
     public static String getPrettyNumber(String number) {  
         if(number == null) return "";
         if(number.equals("0.0")){
@@ -376,7 +377,6 @@ public class BPCostBean {
     
     //查询语句
     private String querySql(LinkedHashMap<String,String> labelMap){
-        
         StringBuffer sql = new StringBuffer();
         sql.append("SELECT ");
         for(Map.Entry<String,String> entry : labelMap.entrySet()){
@@ -454,7 +454,7 @@ public class BPCostBean {
             }  
             return lDate;  
         } 
-    
+    //
     public void rowSelectionListener(SelectionEvent selectionEvent) {
         RichTable table = (RichTable)selectionEvent.getSource();
         RowKeySet rks = selectionEvent.getAddedSet();
@@ -528,7 +528,7 @@ public class BPCostBean {
             this.showErrorPop();
         }
     }
-    
+    //清空临时表和错误表
     public void deleteTempAndError(){
         DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
         //清空临时表数据
@@ -595,9 +595,6 @@ public class BPCostBean {
         this.queryData();
         this.createTableModel();
     }
-    public void setPanelaCollection(RichPanelCollection panelaCollection) {
-        this.panelaCollection = panelaCollection;
-    }
 
     //选中行，修改
     public void valueChangeLinstener(ValueChangeEvent valueChangeEvent) {
@@ -622,7 +619,6 @@ public class BPCostBean {
                                                    this.connectId,
                                                     this.pcColsDef,
                                                     outputStream);
-            
                 writer.writeToFile();
             }else{
                 PcExcel2007WriterImpl writer = new PcExcel2007WriterImpl(
@@ -868,7 +864,7 @@ public class BPCostBean {
             RichPopup.PopupHints ph = new RichPopup.PopupHints();
             this.statusWindow.show(ph);
     }
-    
+    //判断显示哪个pop
     public void blockStatusPop(ActionEvent actionEvent) {
         if(this.curUser.getId().equals("10000")){
             this.showAdminStatusPop();
@@ -938,6 +934,11 @@ public class BPCostBean {
     public boolean isIsEDITABLE() {
         return isEDITABLE;
     }
+    
+    public void setPanelaCollection(RichPanelCollection panelaCollection) {
+        this.panelaCollection = panelaCollection;
+    }
+    
     public RichPanelCollection getPanelaCollection() {
         return panelaCollection;
     }

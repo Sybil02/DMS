@@ -61,25 +61,11 @@ import org.apache.myfaces.trinidad.model.RowKeySet;
 public class ProZzxOutBean {
     private Person curUser;
     private RichPanelCollection panelaCollection;
+    
     private CollectionModel dataModel;
     private List<PcColumnDef> pcColsDef = new ArrayList<PcColumnDef>();
-
     //日志
     private static ADFLogger _logger =ADFLogger.createADFLogger(DcmDataDisplayBean.class);
-
-    public ProZzxOutBean() {
-        super();
-        this.curUser = (Person)(ADFContext.getCurrent().getSessionScope().get("cur_user"));
-        if("10000".equals(this.curUser.getId())){
-            isManager = true;
-        }else{
-            isManager = false;
-        }
-        this.dataModel = new PcDataTableModel();
-        List<Map> d = new ArrayList<Map>();
-        this.dataModel.setWrappedData(d);
-        this.initList();
-    }
     private String year;
     private List<SelectItem> yearList;
     private String entity;
@@ -102,6 +88,20 @@ public class ProZzxOutBean {
     private Date day2;
     private Date day3;
     
+    public ProZzxOutBean() {
+        super();
+        this.curUser = (Person)(ADFContext.getCurrent().getSessionScope().get("cur_user"));
+        if("10000".equals(this.curUser.getId())){
+            isManager = true;
+        }else{
+            isManager = false;
+        }
+        this.dataModel = new PcDataTableModel();
+        List<Map> d = new ArrayList<Map>();
+        this.dataModel.setWrappedData(d);
+        this.initList();
+    }
+    
     private void initList(){
         this.yearList = queryYears("HLS_YEAR_C");
         this.pnameList = queryValues("PRO_PLAN_COST_HEADER","PROJECT_NAME");
@@ -117,7 +117,7 @@ public class ProZzxOutBean {
         }
         this.proLov = new DmsComBoxLov(vsl);
     }
-    
+    //构造列的map
     private LinkedHashMap<String,String> getLabelMap(){
         LinkedHashMap<String,String> labelMap = new LinkedHashMap<String,String>();
         if(pStart == null || pEnd == null){
@@ -185,7 +185,7 @@ public class ProZzxOutBean {
         ((PcDataTableModel)this.dataModel).setPcColsDef(this.pcColsDef);
         return labelMap;
     }
-    
+    //构造数据模型
     public void createTableModel(){
         //行的Map
         LinkedHashMap<String,String> labelMap = getLabelMap();
@@ -221,7 +221,7 @@ public class ProZzxOutBean {
         this.dataModel.setWrappedData(data);
         ((PcDataTableModel)this.dataModel).setLabelMap(labelMap);
     }
-    
+    //调整数字显示格式
     public static String getPrettyNumber(String number) {  
         if(number == null) return "";
         if(number.equals("0.0")){
@@ -258,10 +258,10 @@ public class ProZzxOutBean {
             calBegin.setTime(dBegin);
             Calendar calEnd = Calendar.getInstance();  
             // 使用给定的 Date 设置此 Calendar 的时间    
-            calEnd.setTime(dEnd);  
-            // 测试此日期是否在指定日期之后   
+            calEnd.setTime(dEnd); 
             day1 = calBegin.getTime();
             int i = 1;
+            // 测试此日期是否在指定日期之后  
             while (dEnd.after(calBegin.getTime())) {  
                 // 根据日历的规则，为给定的日历字段添加或减去指定的时间量 
                 calBegin.add(Calendar.MONTH, 1); 
@@ -282,7 +282,6 @@ public class ProZzxOutBean {
         String sql = "SELECT CODE,MEANING FROM "+ source;
         List<SelectItem> values = new ArrayList<SelectItem>();
         ResultSet rs;
-
         try {
             rs = stat.executeQuery(sql);
             while(rs.next()){
@@ -469,7 +468,7 @@ public class ProZzxOutBean {
             rowMap.put("OPERATION", PcDataTableModel.getOPERATE_UPDATE());    
         }                
     }
-    
+    //取消
     public void reset(ActionEvent actionEvent) {
         DmsUtils.getDmsApplicationModule().getTransaction().rollback();
         this.queryData();

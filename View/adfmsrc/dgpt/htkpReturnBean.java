@@ -6,6 +6,10 @@ import common.DmsUtils;
 
 import common.JSFUtils;
 
+import common.lov.DmsComBoxLov;
+
+import common.lov.ValueSetRow;
+
 import dcm.HtkpRowReader;
 import dcm.PcColumnDef;
 
@@ -98,10 +102,12 @@ public class htkpReturnBean {
     private String yLine;
     private String cLine;
     private String pType;
+    private DmsComBoxLov proLov;
     private CollectionModel dataModel;
     private List<PcColumnDef> pcColsDef = new ArrayList<PcColumnDef>();
     //是否是2007及以上格式
     private boolean isXlsx = true;
+    //是否已选表头
     private boolean isSelected;
     DmsLog dmsLog = new DmsLog();
     //表体下拉框列表
@@ -112,8 +118,17 @@ public class htkpReturnBean {
         this.versionList = queryValues("version");
         this.yearList = queryValues("year");
         this.pNameList = queryPname();
+        this.initProLov(pNameList);
         this.detailList = queryList("HLS_CONTRACT_DETAIL_C");
         this.taxList = queryList("HLS_TAX_RATE_C");
+    }
+    private void initProLov(List<SelectItem> pnameList){
+        List<ValueSetRow> vsl = new ArrayList<ValueSetRow>();
+        for(SelectItem sim : pnameList){
+            ValueSetRow vsr = new ValueSetRow(sim.getLabel(),sim.getLabel(),sim.getLabel());
+            vsl.add(vsr);
+        }
+        this.proLov = new DmsComBoxLov(vsl);
     }
     //表头，版本和年份
     public List<SelectItem> queryValues(String mark){
@@ -155,8 +170,8 @@ public class htkpReturnBean {
                 " AND C.BH_USER_PRO_C1 = B.CODE";
         }else{
             sql = "SELECT DISTINCT C.BH_USER_PRO_C1 CODE,B.MEANING FROM DCM_COMBINATION_17 C,BH_USER_PRO_C1 B WHERE B.MEANING IN" +
-                "(SELECT T.PRO_CODE||'-'||T.PRO_DESC FROM SAP_DMS_PROJECT_PRIVILEGE_V T " +
-                " WHERE T.ID = '"+this.curUser.getId()+"' AND T.ATTRIBUTE3='ZX')" +
+                "(SELECT T.PRO_CODE||'-'||T.PRO_DESC FROM SAP_DMS_PROJECT_PRIVILEGE T " +
+                " WHERE T.ATTRIBUTE7 = '"+this.curUser.getId()+"' AND T.ATTRIBUTE3='ZX')" +
                 "AND C.BH_USER_PRO_C1 = B.CODE";
         }
         ResultSet rs;
@@ -263,7 +278,7 @@ public class htkpReturnBean {
         ((PcDataTableModel)this.dataModel).setPcColsDef(this.pcColsDef);
         return labelMap;
     }
-    
+    //构建数据
     public void createTableModel(){
         LinkedHashMap<String,String> labelMap = getLabelMap();
         DBTransaction trans = (DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
@@ -296,7 +311,7 @@ public class htkpReturnBean {
         this.dataModel.setWrappedData(data);
         ((PcDataTableModel)this.dataModel).setLabelMap(labelMap);
     }
-    
+    //获取行业线等信息
     public void getLine(){
         DBTransaction trans = (DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
         Statement stat = trans.createStatement(DBTransaction.DEFAULT);
@@ -323,7 +338,7 @@ public class htkpReturnBean {
             e.printStackTrace();
         }
     }
-    
+    //年下拉框值改变
     public void yearChange(ValueChangeEvent valueChangeEvent) {
         year = (String)valueChangeEvent.getNewValue();
         if(year==null||pName==null||version==null){
@@ -332,7 +347,7 @@ public class htkpReturnBean {
         isSelected = false;
         this.createTableModel();
     }
-
+    //项目下拉框值改变
     public void pnameChange(ValueChangeEvent valueChangeEvent) {
         pName = (String) valueChangeEvent.getNewValue();
         if(year==null||pName==null||version==null){
@@ -341,7 +356,7 @@ public class htkpReturnBean {
         isSelected = false;
         this.createTableModel();
     }
-
+    //版本下拉框值改变
     public void versionChange(ValueChangeEvent valueChangeEvent) {
         version = (String) valueChangeEvent.getNewValue();
         if(year==null||pName==null||version==null){
@@ -381,7 +396,7 @@ public class htkpReturnBean {
     //保存
     public void operation_save(ActionEvent actionEvent) {
         //清空临时表数据
-        this.deleteTemp();
+        this.deleteTempAndError();
         this.copyToTemp();
         List<Map> modelData = (List<Map>)this.dataModel.getWrappedData();
         if(this.validation()){
@@ -439,16 +454,17 @@ public class htkpReturnBean {
             //已经为删除状态的数据无需做任何处理
         }
     }
-    
     //取消
     public void reset(ActionEvent actionEvent) {
         DmsUtils.getDmsApplicationModule().getTransaction().rollback();
         this.createTableModel();
     }
+    //获取下拉框选择信息
     private String getCom(){
         String text = this.year+"_"+this.pName+"_"+this.version;
         return text;
     }
+    //保存到临时表
     public void copyToTemp(){
         DBTransaction trans = (DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
         StringBuffer sql = new StringBuffer();
@@ -498,7 +514,7 @@ public class htkpReturnBean {
     }
     
     //清空临时表
-    public void deleteTemp(){
+    public void deleteTempAndError(){
         DBTransaction trans = (DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
         Statement stat = trans.createStatement(DBTransaction.DEFAULT);
         String sql = "DELETE FROM CONT_INVOICE_RETURN_BUDGET_5_T WHERE COM_RECORD_ID='"+this.connectId+"' " +
@@ -507,6 +523,16 @@ public class htkpReturnBean {
             stat.executeUpdate(sql);
             stat.close();
             trans.commit();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        //清空错误表数据
+        String sqlError = "DELETE FROM PRO_PLAN_COST_ERROR T WHERE T.CREATED_BY = \'"+this.curUser.getId()+"\'";
+        Statement sta = trans.createStatement(DBTransaction.DEFAULT);
+        try {
+            sta.executeUpdate(sqlError);
+            trans.commit();
+            sta.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -587,6 +613,7 @@ public class htkpReturnBean {
         } 
         dmsLog.operationLog(this.curUser.getAcc(),"RETURN_"+this.connectId,this.getCom(),"EXPORT");
     }
+    
     //导出文件名
     public String getExportDataExcelName(){
         if(isXlsx){
@@ -595,6 +622,7 @@ public class htkpReturnBean {
             return "年度预算-合同开票回款（在执行）_"+this.connectId+".xls";
         }
     }
+    
     //导入
     public void operation_import(ActionEvent actionEvent) {
         DBTransaction trans = (DBTransaction)DmsUtils.getDcmApplicationModule().getDBTransaction();
@@ -611,7 +639,6 @@ public class htkpReturnBean {
         }
         //获取文件上传路径
         String filePath = this.uploadFile();
-        
         if (null == filePath) {
             return;
         }
@@ -635,7 +662,7 @@ public class htkpReturnBean {
             //显示错误窗口
             this.showErrorPop();
         }
-        this.createTableModel();     
+        this.createTableModel(); 
     }
     
     //导入程序
@@ -703,7 +730,7 @@ public class htkpReturnBean {
     private boolean handleExcel(String fileName, String curComRecordId) throws SQLException {
         DBTransaction trans =(DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
         //清空已有临时表数据
-        this.deleteTemp();
+        this.deleteTempAndError();
         UploadedFile file = (UploadedFile)this.fileInput.getValue();
         String fname = file.getFilename();
         String name = fname.substring(fname.indexOf("_")+1, fname.indexOf("."));
@@ -735,6 +762,7 @@ public class htkpReturnBean {
         vo.executeQuery();
         this.errorWindow.show(ph);
     }
+    
     public void setYear(String year) {
         this.year = year;
     }
@@ -909,5 +937,13 @@ public class htkpReturnBean {
 
     public boolean isIsSelected() {
         return isSelected;
+    }
+
+    public void setProLov(DmsComBoxLov proLov) {
+        this.proLov = proLov;
+    }
+
+    public DmsComBoxLov getProLov() {
+        return proLov;
     }
 }
