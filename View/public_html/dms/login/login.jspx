@@ -61,30 +61,63 @@
                   <af:commandButton text="#{viewBundle['login.login_action']}"
                                     id="login_action"
                                     inlineStyle="margin-left:108px;width:50px"
-                                    action="#{LoginBean.login}"/>
+                                    action="#{LoginBean.login}">
+                      
+                    </af:commandButton>
                 </af:panelGroupLayout>
               </f:facet>
             </af:panelFormLayout>
             </af:panelGroupLayout>
           </f:facet>
           <f:facet name="start">
-            <af:popup id="p1" autoCancel="disabled" childCreation="deferred"
-                      binding="#{LoginBean.popup}">
-              <af:panelWindow id="pw1" modal="true"
-                              title="#{viewBundle['login.forget_password']}">
-                <af:panelFormLayout id="pfl2" inlineStyle="width:230px;height:80px;">
-                  <af:inputText label="#{viewBundle['login.account']}" id="it1"
-                                binding="#{LoginBean.acc}"/>
-                  <af:inputText label="#{viewBundle['dms.user.mail']}" id="it2"
-                                binding="#{LoginBean.mail}"/>
-                  <f:facet name="footer">
-                    <af:commandButton inlineStyle="width:80px;margin-top:10px;margin-left:70px" text="#{viewBundle['login.reset_password']}" id="cb1"
-                                      actionListener="#{LoginBean.forgetPassword}"
-                                      partialSubmit="true"/>
-                  </f:facet>
-                </af:panelFormLayout>
-              </af:panelWindow>
-            </af:popup>
+            <af:panelGroupLayout layout="scroll"
+                                 xmlns:af="http://xmlns.oracle.com/adf/faces/rich"
+                                 id="pgl3">
+              <af:popup id="p1" autoCancel="disabled" childCreation="deferred"
+                        binding="#{LoginBean.popup}">
+                <af:panelWindow id="pw1" modal="true"
+                                title="#{viewBundle['login.forget_password']}">
+                  <af:panelFormLayout id="pfl2"
+                                      inlineStyle="width:230px;height:80px;">
+                    <af:inputText label="#{viewBundle['login.account']}"
+                                  id="it1" binding="#{LoginBean.acc}"/>
+                    <af:inputText label="#{viewBundle['dms.user.mail']}"
+                                  id="it2" binding="#{LoginBean.mail}"/>
+                    <f:facet name="footer">
+                      <af:commandButton inlineStyle="width:80px;margin-top:10px;margin-left:70px"
+                                        text="#{viewBundle['login.reset_password']}"
+                                        id="cb1"
+                                        actionListener="#{LoginBean.forgetPassword}"
+                                        partialSubmit="true"/>
+                    </f:facet>
+                  </af:panelFormLayout>
+                </af:panelWindow>
+              </af:popup>
+              <af:popup id="p2" binding="#{LoginBean.popupPwd}"
+                                autoCancel="disabled" childCreation="deferred">
+                <af:panelWindow id="pw2" title="#{viewBundle['dms.user.changpwd']}"
+                        modal="true">
+                  <af:panelFormLayout id="pf21">
+                    <af:inputText secret="true" label="#{viewBundle['login.password']}"
+                                  id="it5" autoSubmit="true"
+                                  binding="#{LoginBean.newPwd}"/>
+                    <af:inputText secret="true"
+                                  label="#{viewBundle['dms_user.comfirm_password']}"
+                                  id="it6" autoSubmit="true"
+                                  binding="#{LoginBean.rePwd}"/>
+                    <af:outputLabel id="o21" inlineStyle="color:red"
+                                    binding="#{LoginBean.msgt}"/>
+                    <f:facet name="footer">
+                    <af:panelGroupLayout id="pg21" layout="horizontal" halign="center">
+                        <af:commandButton text="#{viewBundle['dms.common.affirm']}" 
+                                          id="cb4"
+                                          actionListener="#{LoginBean.changePwd}"/>
+                        </af:panelGroupLayout>
+                    </f:facet>
+                  </af:panelFormLayout>
+                </af:panelWindow>
+              </af:popup>
+            </af:panelGroupLayout>
           </f:facet>
           <f:facet name="end"/>
           <f:facet name="top">

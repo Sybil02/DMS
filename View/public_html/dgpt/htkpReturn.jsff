@@ -433,23 +433,13 @@
                             valueChangeListener="#{viewScope.htkpReturnBean.yearChange}">
           <f:selectItems value="#{viewScope.htkpReturnBean.yearList}" id="si1"/>
         </af:selectOneChoice>
-        <!--af:selectOneChoice label="#{viewBundle['dms.dgpt.htkp.pname']}"
+        <af:selectOneChoice label="#{viewBundle['dms.dgpt.htkp.pname']}"
                             id="soc2" value="#{viewScope.htkpReturnBean.PName}"
                             autoSubmit="true"
                             valueChangeListener="#{viewScope.htkpReturnBean.pnameChange}">
           <f:selectItems value="#{viewScope.htkpReturnBean.PNameList}"
                          id="si2"/>
-        </af:selectOneChoice-->
-        <af:inputComboboxListOfValues label="项目名称" inlineStyle="margin-right:5px"
-                                        value="#{viewScope.htkpReturnBean.PName}"
-                                        autoSubmit="true" clientComponent="true"
-                                        validator="#{viewScope.htkpReturnBean.proLov.listOfValuesModel.validate}"
-                                        model="#{viewScope.htkpReturnBean.proLov.listOfValuesModel}"
-                                        id="iclov2" columns="80"
-                                      valueChangeListener="#{viewScope.htkpReturnBean.pnameChange}"
-                                      usage="auto">
-            <af:autoSuggestBehavior suggestedItems="#{viewScope.htkpReturnBean.proLov.listOfValuesModel.suggest}"/>
-          </af:inputComboboxListOfValues>
+        </af:selectOneChoice>
         <af:selectOneChoice label="#{viewBundle['dms.dgpt.htkp.version']}"
                             id="soc3"
                             value="#{viewScope.htkpReturnBean.version}"

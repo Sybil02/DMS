@@ -2,6 +2,7 @@ package dms.login;
 
 import com.bea.security.utils.DigestUtils;
 
+import common.ADFUtils;
 import common.DmsLog;
 import common.DmsUtils;
 
@@ -11,16 +12,9 @@ import common.MailSender;
 
 import java.io.IOException;
 
-import java.net.InetAddress;
-
-import java.net.NetworkInterface;
-import java.net.SocketException;
-
-import java.sql.SQLException;
-import java.sql.Statement;
-
 import java.text.SimpleDateFormat;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -35,6 +29,8 @@ import javax.faces.event.ActionEvent;
 import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
 
+import javax.mail.internet.ParseException;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -45,6 +41,8 @@ import oracle.adf.share.logging.ADFLogger;
 
 import oracle.adf.view.rich.component.rich.RichPopup;
 import oracle.adf.view.rich.component.rich.input.RichInputText;
+
+import oracle.adf.view.rich.component.rich.output.RichOutputLabel;
 
 import oracle.jbo.Row;
 import oracle.jbo.ViewObject;
@@ -72,7 +70,11 @@ public class LoginBean {
     private RichInputText mail;
     private RichPopup popup;
     DmsLog dmsLog = new DmsLog();
-
+    private RichPopup popupPwd;
+    private RichInputText newPwd;
+    private RichInputText rePwd;
+    private RichOutputLabel msgt;
+    private int days=0;
     public LoginBean() {
     }
 
@@ -85,11 +87,18 @@ public class LoginBean {
             this.msg = DmsUtils.getMsg("login.account_not_exist");
         } else {
             String pwd = row.getPwd();
+            SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             //生成id
             String s = UUID.randomUUID().toString();
             //去除分隔符-
             String newId = s.substring(0,8)+s.substring(9,13)+s.substring(14,18)+s.substring(19,23)+s.substring(24);
             try {
+                System.out.println(sdf.parse(row.getUpdatedAt().toString()));
+                days = daysBetween(sdf.parse(row.getUpdatedAt().toString()),new Date());
+                System.out.println(days);
+                //if(days>=90){
+                    this.showPwdPop();
+                //}
                 String encypt_pwd =DigestUtils.digestSHA1(ObjectUtils.toString(this.account).trim() +ObjectUtils.toString(this.password).trim());
                 if (pwd.equals(encypt_pwd)) {
                     //登陆成功
@@ -106,8 +115,32 @@ public class LoginBean {
             }
         }
     }
+    //action="#{LoginBean.login}"
+    //显示错误框
+    public void showPwdPop(){
+        this.newPwd.setValue("");
+        this.rePwd.setValue("");
+        this.msgt.setValue("");
+        RichPopup.PopupHints ph = new RichPopup.PopupHints();
+        this.popupPwd.show(ph);
+    }
     
-            
+    //计算两个日期之间相差的天数
+    public int daysBetween(Date smdate,Date bdate) throws ParseException    
+        {    
+            SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");  
+//            smdate=sdf.parse(sdf.format(smdate));  
+//            bdate=sdf.parse(sdf.format(bdate));  
+            Calendar cal = Calendar.getInstance();    
+            cal.setTime(smdate);    
+            long time1 = cal.getTimeInMillis();                 
+            cal.setTime(bdate);    
+            long time2 = cal.getTimeInMillis();         
+            long between_days=(time2-time1)/(1000*3600*24);  
+                
+           return Integer.parseInt(String.valueOf(between_days));           
+        }    
+    
     public void setMsg(String msg) {
         this.msg = msg;
     }
@@ -168,7 +201,12 @@ public class LoginBean {
             _logger.severe(e);
         } 
     }
-    
+    //修改密码
+    public void changePwd(ActionEvent actionEvent) {
+        // Add event code here...
+    }
+
+    //忘记密码
     public void forgetPassword(ActionEvent actionEvent) {
         String account=ObjectUtils.toString(this.acc.getValue()).trim();
         String mail=ObjectUtils.toString(this.mail.getValue()).trim();
@@ -234,6 +272,38 @@ public class LoginBean {
 
     public RichPopup getPopup() {
         return popup;
+    }
+
+    public void setPopupPwd(RichPopup popupPwd) {
+        this.popupPwd = popupPwd;
+    }
+
+    public RichPopup getPopupPwd() {
+        return popupPwd;
+    }
+
+    public void setNewPwd(RichInputText newPwd) {
+        this.newPwd = newPwd;
+    }
+
+    public RichInputText getNewPwd() {
+        return newPwd;
+    }
+
+    public void setRePwd(RichInputText rePwd) {
+        this.rePwd = rePwd;
+    }
+
+    public RichInputText getRePwd() {
+        return rePwd;
+    }
+
+    public void setMsgt(RichOutputLabel msgt) {
+        this.msgt = msgt;
+    }
+
+    public RichOutputLabel getMsgt() {
+        return msgt;
     }
 
 }
