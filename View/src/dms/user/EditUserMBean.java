@@ -5,6 +5,9 @@ import com.bea.security.utils.DigestUtils;
 import common.ADFUtils;
 import common.DmsUtils;
 
+import java.sql.ResultSet;
+import java.sql.Statement;
+
 import javax.faces.event.ActionEvent;
 
 import oracle.adf.share.logging.ADFLogger;
@@ -14,6 +17,8 @@ import oracle.adf.view.rich.component.rich.input.RichInputText;
 import oracle.adf.view.rich.component.rich.output.RichOutputLabel;
 
 import oracle.jbo.ViewObject;
+
+import oracle.jbo.server.DBTransaction;
 
 import org.apache.commons.lang.ObjectUtils;
 
@@ -57,16 +62,46 @@ public class EditUserMBean {
     public void changePwd(ActionEvent actionEvent) {
         String pwd = ObjectUtils.toString(this.pwd.getValue()).trim();
         String newPwd = ObjectUtils.toString(this.newPwd.getValue()).trim();
+        DBTransaction trans = (DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
         if (pwd.equals(newPwd)) {
             if(DmsUserImpl.isPasswordValide(newPwd)){
             ViewObject usrVo =
                 ADFUtils.findIterator("DmsUserViewIterator").getViewObject();
             String usrAcc = (String)usrVo.getCurrentRow().getAttribute("Acc");
+                String usrId = (String)usrVo.getCurrentRow().getAttribute("Id");
             String encyptPwd;
             try {
                 encyptPwd = DigestUtils.digestSHA1(usrAcc + pwd);
+                String sqlQuery = "SELECT PASSWORD FROM HLS_PASSWORD_LOG WHERE USER_ID='"+usrId+"' ORDER BY CREATED_AT";
+                Statement statQuery = trans.createStatement(DBTransaction.DEFAULT);
+                ResultSet rs = statQuery.executeQuery(sqlQuery);
+                int count=0;
+                String deletePwd="";
+                while(rs.next()){
+                    count++;
+                    if(count==1){
+                        deletePwd = rs.getString("PASSWORD");
+                    }
+                    if(rs.getString("PASSWORD").equals(encyptPwd)){
+                        this.msg.setValue("此密码在5次内使用过，请重新设置");
+                        return;
+                    }
+                }
+                Statement statDelete = trans.createStatement(DBTransaction.DEFAULT);
+                if(count>=5){
+                    String sqlDelete = "DELETE FROM HLS_PASSWORD_LOG WHERE PASSWORD='"+deletePwd+"' AND USER_ID='"+usrId+"'";
+                    statDelete.executeUpdate(sqlDelete);
+                }
                 usrVo.getCurrentRow().setAttribute("Pwd", encyptPwd);
                 usrVo.getApplicationModule().getTransaction().commit();
+                String sqlInsert = "INSERT INTO HLS_PASSWORD_LOG(USER_ID,PASSWORD,CREATED_AT) " +
+                                    "VALUES('"+usrId+"','"+encyptPwd+"',SYSDATE)";
+                Statement statInsert = trans.createStatement(DBTransaction.DEFAULT);
+                statInsert.executeUpdate(sqlInsert);
+                statQuery.close();
+                statInsert.close();
+                statDelete.close();
+                trans.commit();
                 this.popup.cancel();
             } catch (Exception e) {
                 this.logger.severe(e);

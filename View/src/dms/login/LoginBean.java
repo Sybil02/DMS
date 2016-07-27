@@ -12,6 +12,13 @@ import common.MailSender;
 
 import java.io.IOException;
 
+import java.io.UnsupportedEncodingException;
+
+import java.security.NoSuchAlgorithmException;
+
+import java.sql.ResultSet;
+import java.sql.Statement;
+
 import java.text.SimpleDateFormat;
 
 import java.util.Calendar;
@@ -51,6 +58,7 @@ import oracle.jbo.server.DBTransaction;
 
 import org.apache.commons.lang.ObjectUtils;
 
+import team.epm.dms.model.DmsUserImpl;
 import team.epm.dms.view.DmsUserViewImpl;
 import team.epm.dms.view.DmsUserViewRowImpl;
 
@@ -93,21 +101,20 @@ public class LoginBean {
             //去除分隔符-
             String newId = s.substring(0,8)+s.substring(9,13)+s.substring(14,18)+s.substring(19,23)+s.substring(24);
             try {
-                System.out.println(sdf.parse(row.getUpdatedAt().toString()));
                 days = daysBetween(sdf.parse(row.getUpdatedAt().toString()),new Date());
-                System.out.println(days);
-                //if(days>=90){
+                if(days>=90){
                     this.showPwdPop();
-                //}
-                String encypt_pwd =DigestUtils.digestSHA1(ObjectUtils.toString(this.account).trim() +ObjectUtils.toString(this.password).trim());
-                if (pwd.equals(encypt_pwd)) {
-                    //登陆成功
-                    dmsLog.loginMsg(this.account,newId);
-                    this.initUserPreference(row,newId);
-                    ExternalContext ectx =FacesContext.getCurrentInstance().getExternalContext();
-                    ectx.redirect(ControllerContext.getInstance().getGlobalViewActivityURL("index"));
-                } else {
-                    this.msg =DmsUtils.getMsg("login.username_password_error");
+                }else{
+                    String encypt_pwd =DigestUtils.digestSHA1(ObjectUtils.toString(this.account).trim() +ObjectUtils.toString(this.password).trim());
+                    if (pwd.equals(encypt_pwd)) {
+                        //登陆成功
+                        dmsLog.loginMsg(this.account,newId);
+                        this.initUserPreference(row,newId);
+                        ExternalContext ectx =FacesContext.getCurrentInstance().getExternalContext();
+                        ectx.redirect(ControllerContext.getInstance().getGlobalViewActivityURL("index"));
+                    } else {
+                        this.msg =DmsUtils.getMsg("login.username_password_error");
+                    }
                 }
             } catch (Exception e) {
                 this.msg = DmsUtils.getMsg("common.operation_failed_with_exception");
@@ -115,12 +122,9 @@ public class LoginBean {
             }
         }
     }
-    //action="#{LoginBean.login}"
+    
     //显示错误框
     public void showPwdPop(){
-        this.newPwd.setValue("");
-        this.rePwd.setValue("");
-        this.msgt.setValue("");
         RichPopup.PopupHints ph = new RichPopup.PopupHints();
         this.popupPwd.show(ph);
     }
@@ -136,8 +140,7 @@ public class LoginBean {
             long time1 = cal.getTimeInMillis();                 
             cal.setTime(bdate);    
             long time2 = cal.getTimeInMillis();         
-            long between_days=(time2-time1)/(1000*3600*24);  
-                
+            long between_days=(time2-time1)/(1000*3600*24); 
            return Integer.parseInt(String.valueOf(between_days));           
         }    
     
@@ -186,7 +189,6 @@ public class LoginBean {
         dmsLog.logoutMsg(newId);
         ADFContext.getCurrent().getSessionScope().remove("newId");
         ADFContext.getCurrent().getSessionScope().remove("cur_user");
-        
         ExternalContext ectx =FacesContext.getCurrentInstance().getExternalContext();
         HttpSession session = (HttpSession)ectx.getSession(false);
         session.invalidate();
@@ -203,7 +205,60 @@ public class LoginBean {
     }
     //修改密码
     public void changePwd(ActionEvent actionEvent) {
-        // Add event code here...
+        String pwd = ObjectUtils.toString(this.newPwd.getValue()).trim();
+        String configPwd = ObjectUtils.toString(this.rePwd.getValue()).trim();
+        DBTransaction trans = (DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
+        if(pwd.equals(configPwd)){
+            if(DmsUserImpl.isPasswordValide(pwd)){
+                DmsModuleImpl appModule=DmsUtils.getDmsApplicationModule();
+                DmsUserViewImpl dmsUserView = appModule.getDmsUserView();
+                dmsUserView.queryUserByAcc(ObjectUtils.toString(this.account).trim());
+                DmsUserViewRowImpl row = (DmsUserViewRowImpl)dmsUserView.first();
+                String userAcc = row.getAcc();
+                String encyptPwd;
+                try {
+                    encyptPwd = DigestUtils.digestSHA1(userAcc+pwd);
+                    String sqlQuery = "SELECT PASSWORD FROM HLS_PASSWORD_LOG WHERE USER_ID='"+row.getId()+"' ORDER BY CREATED_AT";
+                    Statement statQuery = trans.createStatement(DBTransaction.DEFAULT);
+                    ResultSet rs = statQuery.executeQuery(sqlQuery);
+                    int count=0;
+                    String deletePwd="";
+                    while(rs.next()){
+                        count++;
+                        if(count==1){
+                            deletePwd = rs.getString("PASSWORD");
+                        }
+                        if(rs.getString("PASSWORD").equals(encyptPwd)){
+                            this.msgt.setValue("此密码在5次内使用过，请重新设置");
+                            return;
+                        }
+                    }
+                    Statement statDelete = trans.createStatement(DBTransaction.DEFAULT);
+                    if(count>=5){
+                        String sqlDelete = "DELETE FROM HLS_PASSWORD_LOG WHERE PASSWORD='"+deletePwd+"' AND USER_ID='"+row.getId()+"'";
+                        statDelete.executeUpdate(sqlDelete);
+                    }
+                    row.setPwd(encyptPwd);
+                    appModule.getTransaction().commit();
+                    String sqlInsert = "INSERT INTO HLS_PASSWORD_LOG(USER_ID,PASSWORD,CREATED_AT) " +
+                                        "VALUES('"+row.getId()+"','"+encyptPwd+"',SYSDATE)";
+                    Statement statInsert = trans.createStatement(DBTransaction.DEFAULT);
+                    statInsert.executeUpdate(sqlInsert);
+                    statQuery.close();
+                    statInsert.close();
+                    statDelete.close();
+                    trans.commit();
+                    ExternalContext ectx =FacesContext.getCurrentInstance().getExternalContext();
+                    ectx.redirect(ControllerContext.getInstance().getGlobalViewActivityURL("/faces/login"));
+                } catch (Exception e) {
+                    this._logger.severe(e);
+                } 
+            }else{
+                this.msgt.setValue(DmsUtils.getMsg("dms.user.password_limit"));
+            }
+        }else{
+            this.msgt.setValue(DmsUtils.getMsg("dms_user.password_inconsitent"));
+        }
     }
 
     //忘记密码
@@ -228,7 +283,6 @@ public class LoginBean {
                     String newPwd=DmsUtils.getRandomString(8);
                     try {
                         row.setPwd(DigestUtils.digestSHA1(row.getAcc() +newPwd));
-                        
                         this.sendMail(row.getMail(), 
                                       DmsUtils.getMsg("login.password_reset"), 
                                       DmsUtils.getMsg("login.pwd_reset_msg")+newPwd);
