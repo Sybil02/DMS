@@ -1,6 +1,7 @@
 package dgpt;
 
 import common.ADFUtils;
+import common.DmsLog;
 import common.DmsUtils;
 import common.JSFUtils;
 
@@ -16,6 +17,8 @@ import dcm.PcExcel2003WriterImpl;
 import dcm.PcExcel2007WriterImpl;
 
 import dms.login.Person;
+
+import java.io.OutputStream;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -86,6 +89,7 @@ public class XmdbBean {
     private Date day1;
     private Date day2;
     private Date day3;
+    private String exportName;
     
     private void initList(){
         this.yearList = queryYears("HLS_YEAR_C");
@@ -105,7 +109,6 @@ public class XmdbBean {
         labelMap.put("PROJECT_TYPE", "PROJECT_TYPE");
         labelMap.put("TOTAL", "TOTAL");
         labelMap.put("FCST_COST","FCST_COST");
-        labelMap.put("WBS","WBS");
         labelMap.put("OCCURRED","OCCURRED");
         //CONNECT_ID
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy_MM");
@@ -157,15 +160,8 @@ public class XmdbBean {
         list.add("下年5月");
         list.add("下年6月");
         list.add("下年3季度以后");
-        int i =0;
-        for(Map.Entry<String,String> map:labelMap.entrySet()){
-            PcColumnDef newCol = null;
-            if(i<23){
-                newCol = new PcColumnDef(list.get(i),map.getValue(),isReadonly);
-            }else{
-                newCol = new PcColumnDef(map.getValue(),map.getValue(),isReadonly);
-            }
-            i++;
+        for(String cols : list){
+            PcColumnDef newCol = newCol = new PcColumnDef(cols,cols,isReadonly);
             this.pcColsDef.add(newCol);
         }
         ((PcDataTableModel)this.dataModel).setPcColsDef(this.pcColsDef);
@@ -296,14 +292,6 @@ public class XmdbBean {
         }else {
             sql = "SELECT DISTINCT P."+col+" FROM "+source+" P WHERE P.PROJECT_NAME IN (" + 
             "SELECT T.PRO_CODE||'-'||T.PRO_DESC FROM SAP_DMS_PROJECT_PRIVILEGE_V T WHERE ID = '"+this.curUser.getId()+"'"+
-//            "       SELECT T.PRO_CODE||'-'||T.PRO_DESC FROM SAP_DMS_PROJECT_Privilege T " +
-//                "WHERE T.ATTRIBUTE3 = \'"+this.TYPE_ZZX+"\'" + 
-//                "AND T.PRO_MANAGER = '"+this.curUser.getAcc()+"' OR T.PRO_DIRECTOR='"+this.curUser.getAcc()+"'" +
-//                "UNION " +
-//                "   SELECT T1.PRO_CODE||'-'||T1.PRO_DESC FROM SAP_DMS_PROJECT_Privilege T1,DMS_USER_GROUP P " +
-//                "WHERE T1.ATTRIBUTE3 = \'"+this.TYPE_ZZX+"\'"+
-//                "AND P.GROUP_ID IN (SELECT GROUP_ID FROM DMS_USER_GROUP WHERE USER_ID='"+this.curUser.getId()+"')"+
-//                "AND (T1.ATTRIBUTE6=P.GROUP_ID OR T1.ATTRIBUTE5=P.GROUP_ID)" +
                 ") AND  DATA_TYPE =\'"+this.TYPE_ZZX+"\'";
         }
         List<SelectItem> values = new ArrayList<SelectItem>();
@@ -533,5 +521,43 @@ public class XmdbBean {
 
     public Date getDay3() {
         return day3;
+    }
+
+    public void importData(FacesContext facesContext,
+                           OutputStream outputStream) {
+        try {
+
+            XmdbExcel2007Writer writer = new XmdbExcel2007Writer(
+                                                    this.querySql(this.getLabelMap()),
+                                                    2,this.pcColsDef);
+            writer.process(outputStream, "项目大表");
+            outputStream.flush();
+        } catch (Exception e) {
+            this._logger.severe(e);
+        } 
+        DmsLog dmsLog = new DmsLog();
+        dmsLog.operationLog(this.curUser.getAcc(),this.connectId,this.exportName,"EXPORT");
+    }
+
+    public void setExportName(String exportName) {
+        this.exportName = exportName;
+    }
+
+    public String getExportName() {
+        if(version == null || year == null){
+            return "项目大表.xlsx";    
+        }else{
+            for( SelectItem sim : yearList){
+                if(sim.getValue().equals(year)){
+                    exportName = "项目大表_"+sim.getLabel()+"_";
+                }    
+            }
+            for( SelectItem sim : versionList){
+                if(sim.getValue().equals(version)){
+                    exportName = exportName + sim.getLabel() + ".xlsx";  
+                }    
+            }
+        }
+        return exportName;
     }
 }

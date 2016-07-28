@@ -13,9 +13,12 @@
           <f:facet name="toolbar">
             <af:toolbar id="t1">
             <af:group id="g2">
-              <!--<af:commandButton text="#{viewBundle['dms.common.save']}" id="cb2"
-                                action="#{viewScope.ProjectZxBean.operation_save}"/>
-              <af:commandButton text="#{viewBundle['dms.common.cancel']}" id="cb3"
+              <af:commandButton text="#{viewBundle['dcm.action.export']}" id="cb2">
+                <af:fileDownloadActionListener contentType="application/vnd.ms-excel"
+                    method="#{viewScope.XmdbBean.importData}"
+                                               filename="#{viewScope.XmdbBean.exportName}"/>
+              </af:commandButton>
+              <!--af:commandButton text="#{viewBundle['dms.common.cancel']}" id="cb3"
                                 actionListener="#{viewScope.ProjectZxBean.reset}"/>-->
             </af:group>
             </af:toolbar>
