@@ -106,7 +106,7 @@
                                   id="it6" autoSubmit="true"
                                   binding="#{LoginBean.rePwd}"/>
                     <af:outputLabel id="o21" inlineStyle="color:red"
-                                    binding="#{LoginBean.msgt}"/>
+                                    binding="#{LoginBean.msgt}" value="密码已过期，请重新设置"/>
                     <f:facet name="footer">
                     <af:panelGroupLayout id="pg21" layout="horizontal" halign="center">
                         <af:commandButton text="#{viewBundle['dms.common.affirm']}" 

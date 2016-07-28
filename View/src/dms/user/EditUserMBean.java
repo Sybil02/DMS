@@ -68,7 +68,7 @@ public class EditUserMBean {
             ViewObject usrVo =
                 ADFUtils.findIterator("DmsUserViewIterator").getViewObject();
             String usrAcc = (String)usrVo.getCurrentRow().getAttribute("Acc");
-                String usrId = (String)usrVo.getCurrentRow().getAttribute("Id");
+            String usrId = (String)usrVo.getCurrentRow().getAttribute("Id");
             String encyptPwd;
             try {
                 encyptPwd = DigestUtils.digestSHA1(usrAcc + pwd);

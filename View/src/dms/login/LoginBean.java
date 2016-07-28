@@ -132,9 +132,6 @@ public class LoginBean {
     //计算两个日期之间相差的天数
     public int daysBetween(Date smdate,Date bdate) throws ParseException    
         {    
-            SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");  
-//            smdate=sdf.parse(sdf.format(smdate));  
-//            bdate=sdf.parse(sdf.format(bdate));  
             Calendar cal = Calendar.getInstance();    
             cal.setTime(smdate);    
             long time1 = cal.getTimeInMillis();                 

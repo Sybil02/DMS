@@ -516,6 +516,24 @@ public class ProjectZxBean {
     public void operation_save() {
         //清空临时表和错误表数据
         this.deleteTempAndError();
+        //数据存入临时表
+        this.goToTemp();
+        List<Map> modelData = (List<Map>)this.dataModel.getWrappedData();
+        //校验
+        if(this.validation()){
+            this.inputPro();
+            dmsLog.operationLog(this.curUser.getAcc(),this.TYPE_ZZX+"_"+this.connectId,this.getCom(),"UPDATE");
+            for(Map<String,String> rowdata : modelData){
+                if("UPDATE".equals(rowdata.get("OPERATION"))){
+                    rowdata.put("OPERATION", null);
+                }
+            }
+        }else{
+            this.showErrorPop();
+        }
+    }
+    
+    public void goToTemp(){
         //数据插入临时表
         DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
         StringBuffer sql = new StringBuffer();
@@ -558,20 +576,7 @@ public class ProjectZxBean {
             }        
         //}
         trans.commit();
-        //校验
-        if(this.validation()){
-            this.inputPro();
-            dmsLog.operationLog(this.curUser.getAcc(),this.TYPE_ZZX+"_"+this.connectId,this.getCom(),"UPDATE");
-            for(Map<String,String> rowdata : modelData){
-                if("UPDATE".equals(rowdata.get("OPERATION"))){
-                    rowdata.put("OPERATION", null);
-                }
-            }
-        }else{
-            this.showErrorPop();
-        }
     }
-    
     public void deleteTempAndError(){
         DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
         //删除临时表数据
@@ -691,20 +696,29 @@ public class ProjectZxBean {
     
     //更改为冻结状态
     public void beBlocked(ActionEvent actionEvent) {
-        String sql = "UPDATE PRO_PLAN_COST_HEADER SET (IS_BLOCK) = 'true' WHERE HLS_YEAR = \'"+year;
-        sql = sql + "\' AND PROJECT_NAME =\'"+pname+"\' AND VERSION=\'"+version+"\'";
-        DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
-        Statement stat = trans.createStatement(DBTransaction.DEFAULT);
-        int flag =-1;
-        try {
-            flag = stat.executeUpdate(sql);
-            trans.commit();
-            stat.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        if(flag!=-1){
-            isBlock = "true";
+        //清空临时表和错误表数据
+        this.deleteTempAndError();
+        //数据存入临时表
+        this.goToTemp();
+        if(this.validation()){
+            this.inputPro();
+            String sql = "UPDATE PRO_PLAN_COST_HEADER SET (IS_BLOCK) = 'true' WHERE HLS_YEAR = \'"+year;
+            sql = sql + "\' AND PROJECT_NAME =\'"+pname+"\' AND VERSION=\'"+version+"\'";
+            DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
+            Statement stat = trans.createStatement(DBTransaction.DEFAULT);
+            int flag =-1;
+            try {
+                flag = stat.executeUpdate(sql);
+                trans.commit();
+                stat.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            if(flag!=-1){
+                isBlock = "true";
+            }
+        }else{
+            this.showErrorPop();
         }
     }
     //显示错误框
