@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<adfc-config xmlns="http://xmlns.oracle.com/adf/controller" version="1.2">
+  <task-flow-definition id="dms_xmdb_tsk">
+    <default-activity id="__1">xmdb</default-activity>
+    <managed-bean id="__5">
+      <managed-bean-name id="__2">XmdbBean</managed-bean-name>
+      <managed-bean-class id="__4">dgpt.XmdbBean</managed-bean-class>
+      <managed-bean-scope id="__3">view</managed-bean-scope>
+    </managed-bean>
+    <view id="xmdb">
+      <page>/dgpt/xmdb.jsff</page>
+    </view>
+    <use-page-fragments/>
+  </task-flow-definition>
+</adfc-config>

@@ -32,6 +32,8 @@
                                 actionListener="#{backingBeanScope.Launcher.launcherRollChange}"/>
                 <af:commandLink text="年度预算-合同开票回款（在执行）" id="cl9"
                                 actionListener="#{backingBeanScope.Launcher.launcherHtkpChange}"/>
+                <af:commandLink text="项目大表" id="c20"
+                                actionListener="#{backingBeanScope.Launcher.launcherXmdb}"/>
               </af:panelList>
             </af:group>
           </f:facet>

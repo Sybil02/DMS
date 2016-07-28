@@ -1,0 +1,182 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.1"
+          xmlns:c="http://java.sun.com/jsp/jstl/core"
+          xmlns:af="http://xmlns.oracle.com/adf/faces/rich"
+          xmlns:f="http://java.sun.com/jsf/core">
+  <c:set value="#{adfBundle['dms_v']}" var="viewBundle"/>
+  <af:panelStretchLayout id="psl1">
+    <f:facet name="bottom">
+    </f:facet>
+    <f:facet name="center">
+        <af:panelCollection id="pc1">
+          <f:facet name="menus"/>
+          <f:facet name="toolbar">
+            <af:toolbar id="t1">
+            <af:group id="g2">
+              <!--<af:commandButton text="#{viewBundle['dms.common.save']}" id="cb2"
+                                action="#{viewScope.ProjectZxBean.operation_save}"/>
+              <af:commandButton text="#{viewBundle['dms.common.cancel']}" id="cb3"
+                                actionListener="#{viewScope.ProjectZxBean.reset}"/>-->
+            </af:group>
+            </af:toolbar>
+          </f:facet>
+          <f:facet name="statusbar"/>
+        <af:table var="row" rowBandingInterval="0" id="t2"
+                  value="#{viewScope.XmdbBean.dataModel}"
+                  selectionListener="#{viewScope.XmdbBean.rowSelectionListener}"
+                  selectedRowKeys="#{viewScope.XmdbBean.dataModel.selectedRows}"
+                  rowSelection="multiple" editingMode="clickToEdit"
+                  emptyText="#{viewBundle['dms.common.nodata']}"
+                  partialTriggers=" :::soc1 :::soc3">
+          <!-- new add -->
+          <af:column sortable="false" headerText="项目名称" id="new1">
+            <af:inputText value="#{row[viewScope.XmdbBean.dataModel.labelMap['PROJECT_NAME']]}" id="nit1" readOnly="true"/>
+          </af:column>
+          <af:column sortable="false" headerText="产品线" id="new2">
+            <af:inputText value="#{row[viewScope.XmdbBean.dataModel.labelMap['PRODUCT_LINE']]}" id="nt2" readOnly="true"/>
+          </af:column>
+          <af:column sortable="false" headerText="实体" id="new3">
+            <af:inputText value="#{row[viewScope.XmdbBean.dataModel.labelMap['ENTITY_NAME']]}" id="nt3" readOnly="true"/>
+          </af:column>
+          <af:column sortable="false" headerText="行业线" id="new4">
+            <af:inputText value="#{row[viewScope.XmdbBean.dataModel.labelMap['INDUSTRY_LINE']]}" id="nt4" readOnly="true"/>
+          </af:column>
+          <af:column sortable="false" headerText="业务线" id="new5">
+            <af:inputText value="#{row[viewScope.XmdbBean.dataModel.labelMap['BUSINESS_LINE']]}" id="nt5" readOnly="true"/>
+          </af:column>
+          <af:column sortable="false" headerText="项目类型" id="new6">
+            <af:inputText value="#{row[viewScope.XmdbBean.dataModel.labelMap['PROJECT_TYPE']]}" id="nt6" readOnly="true"/>
+          </af:column>
+          <!-- new add -->
+          <af:column sortable="false" headerText="科目" id="c19">
+            <af:inputText value="#{row[viewScope.XmdbBean.dataModel.labelMap['TOTAL']]}" id="it3" readOnly="true"/>
+          </af:column>
+          <af:column sortable="false" headerText="预计总成本" id="c1">
+            <af:inputText value="#{row[viewScope.XmdbBean.dataModel.labelMap['FCST_COST']]}" id="it16" readOnly="true"/>
+          </af:column>
+          <af:column sortable="false" headerText="上年1-10月实际" id="c2">
+            <af:inputText value="#{row['LAST_1_10ADJ']}" id="it26" readOnly="true"/>
+          </af:column>
+          <af:column sortable="false" headerText="上年11-12月预计" id="c5">
+            <af:inputText value="#{row['LAST_11_12FCST']}" id="it14" readOnly="true"/>
+          </af:column>
+          <af:column sortable="false" headerText="本年1月" id="c11">
+            <af:inputText value="#{viewScope.XmdbBean.dataModel.labelMap['M3']==null ? ' ' : row[viewScope.XmdbBean.dataModel.labelMap['M3']]}" id="it10"
+                          valueChangeListener="#{viewScope.XmdbBean.valueChangeLinstener}"
+                          readOnly="true"/>
+          </af:column>
+          <af:column sortable="false" headerText="本年2月" id="c27">
+            <af:inputText value="#{viewScope.XmdbBean.dataModel.labelMap['M4']==null ? ' ' : row[viewScope.XmdbBean.dataModel.labelMap['M4']]}" id="it24"
+                          valueChangeListener="#{viewScope.XmdbBean.valueChangeLinstener}"
+                          readOnly="true"/>
+          </af:column>
+          <af:column sortable="false" headerText="本年3月" id="c8">
+            <af:inputText value="#{viewScope.XmdbBean.dataModel.labelMap['M5']==null ? ' ' : row[viewScope.XmdbBean.dataModel.labelMap['M5']]}" id="it11"
+                          valueChangeListener="#{viewScope.XmdbBean.valueChangeLinstener}"
+                          readOnly="true"/>
+          </af:column>
+          <af:column sortable="false" headerText="本年4月" id="c22">
+            <af:inputText value="#{viewScope.XmdbBean.dataModel.labelMap['M6']==null ? ' ' : row[viewScope.XmdbBean.dataModel.labelMap['M6']]}" id="it18"
+                          valueChangeListener="#{viewScope.XmdbBean.valueChangeLinstener}"
+                          readOnly="true"/>
+          </af:column>
+          <af:column sortable="false" headerText="本年5月" id="c6">
+            <af:inputText value="#{viewScope.XmdbBean.dataModel.labelMap['M7']==null ? ' ' : row[viewScope.XmdbBean.dataModel.labelMap['M7']]}" id="it13"
+                          valueChangeListener="#{viewScope.XmdbBean.valueChangeLinstener}"
+                          readOnly="true"/>
+          </af:column>
+          <af:column sortable="false" headerText="本年6月" id="c12">
+            <af:inputText value="#{viewScope.XmdbBean.dataModel.labelMap['M8']==null ? ' ' : row[viewScope.XmdbBean.dataModel.labelMap['M8']]}" id="it4"
+                          valueChangeListener="#{viewScope.XmdbBean.valueChangeLinstener}"
+                          readOnly="true"/>
+          </af:column>
+          <af:column sortable="false" headerText="本年7月" id="c23">
+            <af:inputText value="#{viewScope.XmdbBean.dataModel.labelMap['M9']==null ? ' ' : row[viewScope.XmdbBean.dataModel.labelMap['M9']]}" id="it6"
+                          valueChangeListener="#{viewScope.XmdbBean.valueChangeLinstener}"
+                          readOnly="true"/>
+          </af:column>
+          <af:column sortable="false" headerText="本年8月" id="c15">
+            <af:inputText value="#{viewScope.XmdbBean.dataModel.labelMap['M10']==null ? '' : row[viewScope.XmdbBean.dataModel.labelMap['M10']]}" id="it25"
+                          valueChangeListener="#{viewScope.XmdbBean.valueChangeLinstener}"
+                          readOnly="true"/>
+          </af:column>
+          <af:column sortable="false" headerText="本年9月" id="c4">
+            <af:inputText value="#{viewScope.XmdbBean.dataModel.labelMap['M11']==null ? ' ' : row[viewScope.XmdbBean.dataModel.labelMap['M11']]}" id="it21"
+                          valueChangeListener="#{viewScope.XmdbBean.valueChangeLinstener}"
+                          readOnly="true"/>
+          </af:column>
+          <af:column sortable="false" headerText="本年10月" id="c13">
+            <af:inputText value="#{viewScope.XmdbBean.dataModel.labelMap['M12']==null ? ' ' : row[viewScope.XmdbBean.dataModel.labelMap['M12']]}" id="it19"
+                          valueChangeListener="#{viewScope.XmdbBean.valueChangeLinstener}"
+                          readOnly="true"/>
+          </af:column>
+          <af:column sortable="false" headerText="本年11月" id="c24">
+            <af:inputText value="#{viewScope.XmdbBean.dataModel.labelMap['M13']==null ? ' ' : row[viewScope.XmdbBean.dataModel.labelMap['M13']]}" id="it9"
+                          valueChangeListener="#{viewScope.XmdbBean.valueChangeLinstener}"
+                          readOnly="true"/>
+          </af:column>
+          <af:column sortable="false" headerText="本年12月" id="c21">
+            <af:inputText value="#{viewScope.XmdbBean.dataModel.labelMap['M14']==null ? ' ' : row[viewScope.XmdbBean.dataModel.labelMap['M14']]}" id="it8"
+                          valueChangeListener="#{viewScope.XmdbBean.valueChangeLinstener}"
+                          readOnly="true"/>
+          </af:column>
+          <af:column sortable="false" headerText="下年1月" id="c26">
+            <af:inputText value="#{viewScope.XmdbBean.dataModel.labelMap['M15']==null ? ' ' : row[viewScope.XmdbBean.dataModel.labelMap['M15']]}" id="it22"
+                          valueChangeListener="#{viewScope.XmdbBean.valueChangeLinstener}"
+                          readOnly="true"/>
+          </af:column>
+          <af:column sortable="false" headerText="下年2月" id="c31">
+            <af:inputText value="#{viewScope.XmdbBean.dataModel.labelMap['M16']==null ? ' ' : row[viewScope.XmdbBean.dataModel.labelMap['M16']]}" id="it2"
+                          valueChangeListener="#{viewScope.XmdbBean.valueChangeLinstener}"
+                          readOnly="true"/>
+          </af:column>
+          <af:column sortable="false" headerText="下年3月" id="c17">
+            <af:inputText value="#{viewScope.XmdbBean.dataModel.labelMap['M17']==null ? ' ' : row[viewScope.XmdbBean.dataModel.labelMap['M17']]}" id="it7"
+                          valueChangeListener="#{viewScope.XmdbBean.valueChangeLinstener}"
+                          readOnly="true"/>
+          </af:column>
+          <af:column sortable="false" headerText="下年4月" id="c3">
+            <af:inputText value="#{viewScope.XmdbBean.dataModel.labelMap['M18']==null ? ' ' : row[viewScope.XmdbBean.dataModel.labelMap['M18']]}" id="it20"
+                          valueChangeListener="#{viewScope.XmdbBean.valueChangeLinstener}"
+                          readOnly="true"/>
+          </af:column>
+          <af:column sortable="false" headerText="下年5月" id="c10">
+            <af:inputText value="#{viewScope.XmdbBean.dataModel.labelMap['M19']==null ? ' ' : row[viewScope.XmdbBean.dataModel.labelMap['M19']]}" id="it17"
+                          valueChangeListener="#{viewScope.XmdbBean.valueChangeLinstener}"
+                          readOnly="true"/>
+          </af:column>
+          <af:column sortable="false" headerText="下年6月" id="c9">
+            <af:inputText value="#{viewScope.XmdbBean.dataModel.labelMap['M20']==null ? ' ' : row[viewScope.XmdbBean.dataModel.labelMap['M20']]}" id="it31"
+                          valueChangeListener="#{viewScope.XmdbBean.valueChangeLinstener}"
+                          readOnly="true"/>
+          </af:column>
+          <af:column sortable="false" headerText="下年3季度以后" id="c30">
+            <af:inputText value="#{row['NEXT_ORTHERS']}" id="it29"
+                          valueChangeListener="#{viewScope.XmdbBean.valueChangeLinstener}"
+                          readOnly="true"/>
+          </af:column>
+        </af:table>
+      </af:panelCollection>
+    </f:facet>
+    <f:facet name="start"/>
+    <f:facet name="end"/>
+    <f:facet name="top">
+    <af:panelGroupLayout id="pgl1" layout="vertical" >
+        <af:panelGroupLayout id="pgl2" layout="horizontal">
+          <af:selectOneChoice value="#{viewScope.XmdbBean.year}"
+                              label="年" autoSubmit="true"
+                              id="soc1"
+                              valueChangeListener="#{viewScope.XmdbBean.yearChange}">
+            <f:selectItems value="#{viewScope.XmdbBean.yearList}" id="si1"/>
+          </af:selectOneChoice>
+          <af:selectOneChoice value="#{viewScope.XmdbBean.version}"
+                              label="版本" autoSubmit="true"
+                              id="soc3"
+                              valueChangeListener="#{viewScope.XmdbBean.versionChange}">
+            <f:selectItems value="#{viewScope.XmdbBean.versionList}" id="si3"/>
+          </af:selectOneChoice>
+        </af:panelGroupLayout>
+      </af:panelGroupLayout>
+    </f:facet>
+  </af:panelStretchLayout>
+</jsp:root>

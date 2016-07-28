@@ -58,4 +58,10 @@ public class Launcher extends TabLauncher{
                         "/WEB-INF/dgpt/dms_htkpreturn_tsk.xml#dms_htkpreturn_tsk",
                         false);
     }
+
+    public void launcherXmdb(ActionEvent actionEvent) {
+        _launchActivity("项目大表",
+                        "/WEB-INF/dgpt/dms_xmdb_tsk.xml#dms_xmdb_tsk",
+                        false);
+    }
 }
