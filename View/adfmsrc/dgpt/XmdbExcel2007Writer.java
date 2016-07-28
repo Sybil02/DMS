@@ -15,7 +15,10 @@ import java.sql.ResultSet;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+
+import java.util.Map;
 
 import oracle.adf.share.logging.ADFLogger;
 
@@ -26,66 +29,67 @@ import org.apache.commons.lang.ObjectUtils;
 public class XmdbExcel2007Writer extends AbstractExcel2007Writer{
 
     private static ADFLogger logger=ADFLogger.createADFLogger(XmdbExcel2007Writer.class);
-    private String sql;
-    private int dataStartLine;
     private List<PcColumnDef> colsdef;
-    public XmdbExcel2007Writer(String sql,int dataStartLine,List<PcColumnDef> colsdef) {
-        this.sql=sql;
-        this.dataStartLine=dataStartLine;
+    private List<Map> rows;
+    private LinkedHashMap<String,String> labelMap;
+    public XmdbExcel2007Writer(List<PcColumnDef> colsdef,List<Map> rows,LinkedHashMap<String,String> labelMap) {
         this.colsdef=colsdef;
+        this.rows = rows;
+        this.labelMap = labelMap;
     }
 
     public void generate() {
-        DBTransaction dbTransaction = null;
-        PreparedStatement stat = null;
-        ResultSet rs = null;
         try {
-            dbTransaction =(DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
-            stat =dbTransaction.createPreparedStatement(sql, -1);
-            System.out.println(sql);
-            rs = stat.executeQuery();
             //电子表格开始
             beginSheet();
-            insertRow(dataStartLine - 2);
+            insertRow(0);
             for (int i = 0; i < this.colsdef.size(); i++) {
                 createCell(i, this.colsdef.get(i).getColumnLable());
             }
             endRow();
-            int n =dataStartLine  - 1;
             DecimalFormat dfm = new DecimalFormat();
             dfm.setMaximumFractionDigits(4);
             dfm.setGroupingUsed(false);
-            while (rs.next()) {
-                int colInx = 0;
-                insertRow(n);
-                for (PcColumnDef col : this.colsdef) {            
-                    Object obj=rs.getObject(colInx+1);
-                    createCell(colInx,ObjectUtils.toString(obj));
-                    ++colInx;
-                }
-                ++n;
-                //结束行
+            
+            for(int i=0 ; i < this.rows.size() ; i++){
+                insertRow(i+1);
+                Map row = rows.get(i);
+                createCell(0,ObjectUtils.toString(row.get("PROJECT_NAME")));
+                createCell(1,ObjectUtils.toString(row.get("PRODUCT_LINE")));
+                createCell(2,ObjectUtils.toString(row.get("ENTITY_NAME")));
+                createCell(3,ObjectUtils.toString(row.get("INDUSTRY_LINE")));
+                createCell(4,ObjectUtils.toString(row.get("BUSINESS_LINE")));
+                createCell(5,ObjectUtils.toString(row.get("PROJECT_TYPE")));
+                createCell(6,ObjectUtils.toString(row.get("TOTAL")));
+                createCell(7,ObjectUtils.toString(row.get("FCST_COST")));
+                createCell(8,ObjectUtils.toString(row.get("LAST_1_10ADJ")));
+                createCell(9,ObjectUtils.toString(row.get("LAST_11_12FCST")));
+                createCell(10,ObjectUtils.toString(row.get(labelMap.get("M3"))));
+                createCell(11,ObjectUtils.toString(row.get(labelMap.get("M4"))));
+                createCell(12,ObjectUtils.toString(row.get(labelMap.get("M5"))));
+                createCell(13,ObjectUtils.toString(row.get(labelMap.get("M6"))));
+                createCell(14,ObjectUtils.toString(row.get(labelMap.get("M7"))));
+                createCell(15,ObjectUtils.toString(row.get(labelMap.get("M8"))));
+                createCell(16,ObjectUtils.toString(row.get(labelMap.get("M9"))));
+                createCell(17,ObjectUtils.toString(row.get(labelMap.get("M10"))));
+                createCell(18,ObjectUtils.toString(row.get(labelMap.get("M11"))));
+                createCell(19,ObjectUtils.toString(row.get(labelMap.get("M12"))));
+                createCell(20,ObjectUtils.toString(row.get(labelMap.get("M13"))));
+                createCell(21,ObjectUtils.toString(row.get(labelMap.get("M14"))));
+                createCell(22,ObjectUtils.toString(row.get(labelMap.get("M15"))));
+                createCell(23,ObjectUtils.toString(row.get(labelMap.get("M16"))));
+                createCell(24,ObjectUtils.toString(row.get(labelMap.get("M17"))));
+                createCell(25,ObjectUtils.toString(row.get(labelMap.get("M18"))));
+                createCell(26,ObjectUtils.toString(row.get(labelMap.get("M19"))));
+                createCell(27,ObjectUtils.toString(row.get(labelMap.get("M20"))));
+                createCell(28,ObjectUtils.toString(row.get("NEXT_ORTHERS")));
                 endRow();
             }
+            
             //电子表格结束
             endSheet();
         } catch (Exception e) {
             this.logger.severe(e);
-        }finally {
-            try {
-                if (rs != null) {
-                    rs.close();
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            } finally {
-                try {
-                    if (stat != null)
-                        stat.close();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
         }
     }
 }

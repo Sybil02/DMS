@@ -527,9 +527,7 @@ public class XmdbBean {
                            OutputStream outputStream) {
         try {
 
-            XmdbExcel2007Writer writer = new XmdbExcel2007Writer(
-                                                    this.querySql(this.getLabelMap()),
-                                                    2,this.pcColsDef);
+            XmdbExcel2007Writer writer = new XmdbExcel2007Writer(this.pcColsDef,(List<Map>)this.dataModel.getWrappedData(),this.getLabelMap());
             writer.process(outputStream, "项目大表");
             outputStream.flush();
         } catch (Exception e) {
