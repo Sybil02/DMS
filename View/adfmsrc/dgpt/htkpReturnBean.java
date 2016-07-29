@@ -164,10 +164,8 @@ public class htkpReturnBean {
         String sql = "";
         List<SelectItem> values = new ArrayList<SelectItem>();
         if("10000".equals(this.curUser.getId())){
-            sql = "SELECT DISTINCT C.BH_USER_PRO_C1 CODE,B.MEANING FROM DCM_COMBINATION_17 C,BH_USER_PRO_C1 B WHERE B.MEANING IN" +
-                "(SELECT T.PRO_CODE||'-'||T.PRO_DESC FROM SAP_DMS_PROJECT_Privilege T " +
-                " WHERE T.ATTRIBUTE4='admin' AND T.ATTRIBUTE3='ZX')" +
-                " AND C.BH_USER_PRO_C1 = B.CODE";
+            sql = "SELECT DISTINCT C.BH_USER_PRO_C1 CODE,B.MEANING FROM DCM_COMBINATION_17 C,BH_USER_PRO_C1 B WHERE " +
+                "  C.BH_USER_PRO_C1 = B.CODE";
         }else{
             sql = "SELECT DISTINCT C.BH_USER_PRO_C1 CODE,B.MEANING FROM DCM_COMBINATION_17 C,BH_USER_PRO_C1 B WHERE B.MEANING IN" +
                 "(SELECT T.PRO_CODE||'-'||T.PRO_DESC FROM SAP_DMS_PROJECT_PRIVILEGE T " +

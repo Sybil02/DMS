@@ -172,10 +172,8 @@ public class RPCostBean {
         Statement stat = trans.createStatement(DBTransaction.DEFAULT);
         String sql = "";
         if(this.curUser.getId().equals("10000")){
-            sql = "SELECT DISTINCT P."+col+" FROM "+source+" P WHERE P.PROJECT_NAME IN (" + 
-                "SELECT T.PRO_CODE||'-'||T.PRO_DESC FROM SAP_DMS_PROJECT_Privilege T " +
-                "WHERE T.ATTRIBUTE4='admin' AND T.ATTRIBUTE3='"+this.TYPE_ROLL+"') "+
-                "AND DATA_TYPE='"+this.TYPE_ROLL+"'";
+            sql = "SELECT DISTINCT P."+col+" FROM "+source+" P WHERE " + 
+                "P.DATA_TYPE='"+this.TYPE_ROLL+"'";
         }else{
             sql = "SELECT DISTINCT P."+col+" FROM "+source+" P WHERE P.PROJECT_NAME IN (" + 
                   "SELECT T.PRO_CODE||'-'||T.PRO_DESC FROM SAP_DMS_PROJECT_PRIVILEGE_V T WHERE ID = '"+this.curUser.getId()+"'"+
