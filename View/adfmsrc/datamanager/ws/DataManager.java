@@ -105,7 +105,7 @@ public class DataManager {
         String sqlUp =
             "UPDATE DMS_GL_ACCOUNT SET BUKRS=?, SAKNR=?, TXT20=?, KTOKS=?, XSPEB=?, NOTE1=?, NOTE2=?, NOTE3=?, NOTE4=?, NOTE5=?, " +
             "NOTE6=?, NOTE7=?, NOTE8=?, NOTE9=?, NOTE10=?, NOTE11=?, NOTE12=?, NOTE13=?, NOTE14=?, NOTE15=?, IFFLG=?, IFMSG=?, MSGID=? ,INSERT_DATE=SYSDATE " +
-            "WHERE BUKRS=? AND SAKNR = ?";
+            "WHERE NVL(BUKRS,0)=NVL(?,0) AND NVL(SAKNR,0) = NVL(?,0)";
         PreparedStatement stat = null;
         PreparedStatement statUp = null;
         Statement statExs = null;
@@ -211,7 +211,7 @@ public class DataManager {
         String sqlUp =
             "UPDATE DMS_COST_CENTER SET KOSTL=?, DATBI=?, DATAB=?, BKZKP=?, ZZBMBM=?, ZZBMMC=?, BUKRS=?, ABTEI=?, KHINR=?, KTEXT=?, ZZTXMC=?, ZZYWXMC=?, ZZHYXMC=?, NOTE1=?, " +
             "NOTE2=?, NOTE3=?, NOTE4=?, NOTE5=?, NOTE6=?, NOTE7=?, NOTE8=?, NOTE9=?, NOTE10=?, NOTE11=?, NOTE12=?, NOTE13=?, NOTE14=?, NOTE15=?, IFFLG=?, IFMSG=?, MSGID=? ,INSERT_DATE=SYSDATE " +
-            "WHERE KOSTL=? AND DATBI = ? AND ABTEI = ?";
+            "WHERE NVL(KOSTL,0)=NVL(?,0) AND NVL(DATBI,0) = NVL(?,0) AND NVL(ABTEI,0) = NVL(?,0)";
         PreparedStatement stat = null;
         PreparedStatement statUp = null;
         Statement statExs = null;
@@ -335,7 +335,7 @@ public class DataManager {
         String sqlUp =
             "UPDATE DMS_HR_ORG SET ZJGDM=?, ZBMDM=?, ZBMMS=?, ZZRZX=?, ZSJBM=?, ZZGGW=?, ZQYBZ=?, NOTE1=?, NOTE2=?, NOTE3=?, NOTE4=?, NOTE5=?, " +
             "NOTE6=?, NOTE7=?, NOTE8=?, NOTE9=?, NOTE10=?, NOTE11=?, NOTE12=?, NOTE13=?, NOTE14=?, NOTE15=?, IFFLG=?, IFMSG=?, MSGID=? ,INSERT_DATE=SYSDATE " +
-            "WHERE ZJGDM=? AND ZBMDM=? AND ZZRZX =? AND ZSJBM =? AND ZZGGW=?";
+            "WHERE NVL(ZJGDM,0)=NVL(?,0) AND NVL(ZBMDM,0)=NVL(?,0) AND NVL(ZZRZX,0) =NVL(?,0) AND NVL(ZSJBM,0) =NVL(?,0) AND NVL(ZZGGW,0)=NVL(?,0)";
         PreparedStatement stat = null;
         PreparedStatement statUp = null;
         Statement statExs = null;
@@ -451,7 +451,7 @@ public class DataManager {
         String sqlUp =
             "UPDATE DMS_HR_POSITION SET ZJGDM=?, ZBMDM=?, ZGWDM=?, ZGWMS=?, ZSJGW=?, ZQYBZ=?, NOTE1=?, NOTE2=?, NOTE3=?, NOTE4=?, NOTE5=?, " +
             " NOTE6=?, NOTE7=?, NOTE8=?, NOTE9=?, NOTE10=?, NOTE11=?, NOTE12=?, NOTE13=?, NOTE14=?, NOTE15=?, IFFLG=?, IFMSG=?, MSGID=? , NEW_GW=?,INSERT_DATE=SYSDATE " +
-            "WHERE ZJGDM=? AND ZBMDM=? AND ZGWDM=? AND ZGWMS=? AND ZSJGW=? ";
+            "WHERE NVL(ZJGDM,0)=NVL(?,0) AND NVL(ZBMDM,0)=NVL(?,0) AND NVL(ZGWDM,0)=NVL(?,0) AND NVL(ZGWMS,0)=NVL(?,0) AND NVL(ZSJGW,0)=NVL(?,0) ";
         PreparedStatement stat = null;
         PreparedStatement statUp = null;
         Statement statExs = null;
@@ -612,7 +612,7 @@ public class DataManager {
             "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,SYSDATE)";
         String sqlUp =
             "UPDATE DMS_HLS_BOM SET MATNR=?, MAKTX=?, WERKS=?, MTART=?, MEINS=?, MTBEZ=?, DISPO=?, ZGOOD=?, STPRS=?, PEINH=?, ZPLP2=?,LVORM=?, NOTE1=?, NOTE2=?, NOTE3=?, NOTE4=?, NOTE5=?, NOTE6=?," +
-            " NOTE7=?, NOTE8=?, NOTE9=?, NOTE10=?, NOTE11=?, NOTE12=?, NOTE13=?, NOTE14=?, NOTE15=?, IFFLG=?, IFMSG=?, MSGID=?,INSERT_DATE=SYSDATE WHERE MATNR=? AND WERKS=?";
+            " NOTE7=?, NOTE8=?, NOTE9=?, NOTE10=?, NOTE11=?, NOTE12=?, NOTE13=?, NOTE14=?, NOTE15=?, IFFLG=?, IFMSG=?, MSGID=?,INSERT_DATE=SYSDATE WHERE NVL(MATNR,0)=NVL(?,0) AND NVL(WERKS,0)=NVL(?,0)";
         PreparedStatement stat = null;
         PreparedStatement statUp = null;
         Statement statExs = null;
@@ -727,7 +727,7 @@ public class DataManager {
         String sqlUp =
             "UPDATE DMS_HR_STAFF_FP SET BUKRS=?, PERNR=?, PLANS=?, KST01=?, STELL=?, ZLEVEL=?, SOBID=?, BTRTL=?, BTEXT=?, ZQYBZ=?, NOTE1=?, " +
             "NOTE2=?, NOTE3=?, NOTE4=?, NOTE5=?, NOTE6=?, NOTE7=?, NOTE8=?, NOTE9=?, NOTE10=?, NOTE11=?, NOTE12=?, NOTE13=?, NOTE14=?, NOTE15=?, IFFLG=?, IFMSG=?,INSERT_DATE=SYSDATE " +
-            "WHERE PERNR=? AND PLANS=?";
+            "WHERE NVL(PERNR,0)=NVL(?,0) AND NVL(PLANS,0)=NVL(?,0)";
         PreparedStatement stat = null;
         PreparedStatement statUp = null;
         Statement statExs = null;
@@ -821,7 +821,7 @@ public class DataManager {
         String sqlUp =
             "UPDATE DMS_HR_STAFF SET BUKRS=?, PERNR=?, SNAME=?, ZMAIL=?, ZMOBIL=?, ZPHONE=?, ICNUM=?, STAT2=?, NOTE1=?, NOTE2=?, NOTE3=?, NOTE4=?, " +
             "NOTE5=?, NOTE6=?, NOTE7=?, NOTE8=?, NOTE9=?, NOTE10=?, NOTE11=?, NOTE12=?, NOTE13=?, NOTE14=?, NOTE15=?, IFFLG=?, IFMSG=?, MSGID=?,INSERT_DATE=SYSDATE " +
-            "WHERE PERNR=?";
+            "WHERE NVL(PERNR,0)=NVL(?,0)";
         PreparedStatement stat = null;
         PreparedStatement statUp = null;
         Statement statExs = null;
@@ -912,7 +912,7 @@ public class DataManager {
         String sqlUp =
             "UPDATE DMS_PS_JOBS SET MANDT=?, AUFPL=?, APLZL=?, SUMNR=?, ACTVT=?, PSPHI=?, LTXA1=?, OBJNR=?, AUFNR=?, PROJN=?, BUKRS=?, SAKTO=?, WAERS=?, FSAVD=?, SSEDD=?, ERNAM=?,  " +
             " ERDAT=?, AENAM=?, AEDAT=?, VERNR=?, VERNA=?, NOTE1=?, NOTE2=?, NOTE3=?, NOTE4=?, NOTE5=?, NOTE6=?, NOTE7=?, NOTE8=?, NOTE9=?, NOTE10=?, NOTE11=?, NOTE12=?, NOTE13=?, NOTE14=?, NOTE15=?, IFFLG=?, IFMSG=?,INSERT_DATE=SYSDATE " +
-            "WHERE AUFPL=? AND APLZL=? AND PSPHI=? AND PROJN=?";
+            "WHERE NVL(AUFPL,0)=NVL(?,0) AND NVL(APLZL,0)=NVL(?,0) AND NVL(PSPHI,0)=NVL(?,0) AND NVL(PROJN,0)=NVL(?,0)";
         PreparedStatement stat = null;
         PreparedStatement statUp = null;
         Statement statExs = null;
@@ -1032,7 +1032,7 @@ public class DataManager {
         String sqlUp =
             "UPDATE DMS_PS_MASTER SET MANDT=?, PSPNR=?, POST1=?, OBJNR=?, ERNAM=?, ERDAT=?, AENAM=?, AEDAT=?, VBUKR=?, PWHIE=?, PLFAZ=?, PLSEZ=?, PROFL=?, ZPS005=?, ZPS007=?, ZSD022=?," +
             " ZSD023=?, ZSD029=?, PROFI_TXT=?, ZZFXXMLX=?, STAT=?, NOTE1=?, NOTE2=?, NOTE3=?, NOTE4=?, NOTE5=?, NOTE6=?, NOTE7=?, NOTE8=?, NOTE9=?, NOTE10=?, NOTE11=?, NOTE12=?, NOTE13=?, NOTE14=?, NOTE15=?, IFFLG=?, IFMSG=?, MSGID=?,INSERT_DATE=SYSDATE " +
-            "WHERE PSPNR=? AND VBUKR=?";
+            "WHERE NVL(PSPNR,0)=NVL(?,0) AND NVL(VBUKR,0)=NVL(?,0)";
         PreparedStatement stat = null;
         PreparedStatement statUp = null;
         Statement statExs = null;
@@ -1151,7 +1151,7 @@ public class DataManager {
         String sqlUp =
             "UPDATE DMS_PS_MILEPOST SET MANDT=?, ZAEHL=?, KTEXT=?, VORNR=?, AUFNR=?, PSPNR=?, PSPHI=?, BUKRS=?, TEDAT=?, LST_ACTDT=?, FPROZ=?, NOTE1=?, NOTE2=?, " +
             " NOTE3=?, NOTE4=?, NOTE5=?, NOTE6=?, NOTE7=?, NOTE8=?, NOTE9=?, NOTE10=?, NOTE11=?, NOTE12=?, NOTE13=?, NOTE14=?, NOTE15=?, IFFLG=?, IFMSG=?,INSERT_DATE=SYSDATE " +
-            "WHERE ZAEHL=? AND PSPNR=? AND PSPHI=?";
+            "WHERE NVL(ZAEHL,0)=NVL(?,0) AND NVL(PSPNR,0)=NVL(?,0) AND NVL(PSPHI,0)=NVL(?,0)";
         PreparedStatement stat = null;
         PreparedStatement statUp = null;
         Statement statExs = null;
@@ -1249,7 +1249,7 @@ public class DataManager {
         String sqlUp =
             "UPDATE DMS_PS_NETWORK SET MANDT=?, AUFNR=?, KTEXT=?, OBJNR=?, PSPEL=?, PSPHI=?, BUKRS=?, GSTRS=?, GLTRS=?, ERDAT=?, ERNAM=?, NOTE1=?, NOTE2=?, NOTE3=?, NOTE4=?, " +
             " NOTE5=?, NOTE6=?, NOTE7=?, NOTE8=?, NOTE9=?, NOTE10=?, NOTE11=?, NOTE12=?, NOTE13=?, NOTE14=?, NOTE15=?, IFFLG=?, IFMSG=?,INSERT_DATE=SYSDATE " +
-            "WHERE AUFNR=? AND PSPEL=? AND PSPHI=?";
+            "WHERE NVL(AUFNR,0)=NVL(?,0) AND NVL(PSPEL,0)=NVL(?,0) AND NVL(PSPHI,0)=NVL(?,0)";
         PreparedStatement stat = null;
         PreparedStatement statUp = null;
         Statement statExs = null;
@@ -1347,7 +1347,7 @@ public class DataManager {
         String sqlUp =
             "UPDATE DMS_PS_ORG SET MANDT=?, PSPNR=?, ZROLE=?, VERNR=?, SNAME=?, PLFAZ=?, PLSEZ=?, ERNAM=?, ERDAT=?, NOTE1=?, NOTE2=?, NOTE3=?, NOTE4=?, NOTE5=?, " +
             " NOTE6=?, NOTE7=?, NOTE8=?, NOTE9=?, NOTE10=?, NOTE11=?, NOTE12=?, NOTE13=?, NOTE14=?, NOTE15=?, IFFLG=?, IFMSG=?,INSERT_DATE=SYSDATE " +
-            "WHERE PSPNR=? AND ZROLE=?";
+            "WHERE NVL(PSPNR,0)=NVL(?,0) AND NVL(ZROLE,0)=NVL(?,0)";
         PreparedStatement stat = null;
         PreparedStatement statUp = null;
         Statement statExs = null;
@@ -1438,7 +1438,7 @@ public class DataManager {
         String sqlUp =
             "UPDATE DMS_PS_WBS SET MANDT=?, PSPNR=?, POST1=?, OBJNR=?, PSPHI=?, PBUKR=?, PSTRM=?, PETRM=?, ERNAM=?, ERDAT=?, AENAM=?, AEDAT=?, VERNR=?, VERNA=?, " +
             " NOTE1=?, NOTE2=?, NOTE3=?, NOTE4=?, NOTE5=?, NOTE6=?, NOTE7=?, NOTE8=?, NOTE9=?, NOTE10=?, NOTE11=?, NOTE12=?, NOTE13=?, NOTE14=?, NOTE15=?, IFFLG=?, IFMSG=?,INSERT_DATE=SYSDATE " +
-            "WHERE PSPNR=? AND PSPHI=?";
+            "WHERE NVL(PSPNR,0)=NVL(?,0) AND NVL(PSPHI,0)=NVL(?,0)";
         PreparedStatement stat = null;
         PreparedStatement statUp = null;
         Statement statExs = null;
@@ -1539,7 +1539,7 @@ public class DataManager {
         String sqlUp =
             "UPDATE DMS_PS_WBS_MASTER SET MANDT=?, POSNR=?, PSPHI=?, UP=?, DOWN=?, LEFT=?, RIGHT=?, NOTE1=?, NOTE2=?, NOTE3=?, NOTE4=?, " +
             " NOTE5=?, NOTE6=?, NOTE7=?, NOTE8=?, NOTE9=?, NOTE10=?, NOTE11=?, NOTE12=?, NOTE13=?, NOTE14=?, NOTE15=?, IFFLG=?, IFMSG=?,INSERT_DATE=SYSDATE " +
-            "WHERE POSNR=? AND PSPHI=?";
+            "WHERE NVL(POSNR,0)=NVL(?,0) AND NVL(PSPHI,0)=NVL(?,0)";
         PreparedStatement stat = null;
         PreparedStatement statUp = null;
         Statement statExs = null;
@@ -1617,8 +1617,8 @@ public class DataManager {
 
     private boolean bomIsExists(Statement statExs, HlsBomEntity bom) {
         String sql =
-            "SELECT 1 FROM DMS_HLS_BOM T WHERE T.MATNR = '" + bom.getMatnr() +
-            "' AND T.WERKS = '" + bom.getWerks() + "'";
+            "SELECT 1 FROM DMS_HLS_BOM T WHERE NVL(T.MATNR,0) = NVL('" + bom.getMatnr() +
+            "',0) AND NVL(T.WERKS,0) = NVL('" + bom.getWerks() + "',0)";
         ResultSet rs;
         try {
             rs = statExs.executeQuery(sql);
@@ -1638,7 +1638,7 @@ public class DataManager {
 
         for (Map.Entry<String, String> entry : keyValue.entrySet()) {
             sql =
-sql + "AND T." + entry.getKey() + " = '" + entry.getValue() + "' ";
+sql + "AND NVL(T." + entry.getKey() + ",0) = NVL('" + entry.getValue() + "',0) ";
         }
 
         ResultSet rs;
