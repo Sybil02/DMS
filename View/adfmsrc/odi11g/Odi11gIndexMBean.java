@@ -128,7 +128,7 @@ public class Odi11gIndexMBean {
                     if (row.getAttribute("ValueSetId") != null) {
                         //在执行接口的项目参数需要特殊权限控制
                         if("b34e534d18644d788850dea86aa887af".equals(row.getAttribute("ValueSetId")) 
-                           && sceneVo.getCurrentRow().getAttribute("SceneName").equals("SAP_DMS_PRO_GDPLAN_DATA")){
+                           && sceneVo.getCurrentRow().getAttribute("SceneName").equals("CUX_SAP_DMS_GDPLAN_DATA")){
                             this.initValueSetValues((String)row.getAttribute("ValueSetId"));
                         }else{
                             this.initValueSetValues((String)row.getAttribute("ValueSetId"),true);
@@ -202,8 +202,14 @@ public class Odi11gIndexMBean {
     private void initValueSetValues(String valueSetId) {
         DBTransaction trans = DmsUtils.getOdi11gApplicationModule().getDBTransaction();
         Statement stat = trans.createStatement(DBTransaction.DEFAULT);
-        String sql = "SELECT T.PRO_CODE AS CODE,T.PRO_DESC AS MEANING FROM SAP_DMS_PROJECT_PRIVILEGE T "
-            + "WHERE T.PRO_MANAGER = '" + ((Person)ADFContext.getCurrent().getSessionScope().get("cur_user")).getAcc() + "'";
+        String curU = ((Person)ADFContext.getCurrent().getSessionScope().get("cur_user")).getAcc();
+        String sql = "";
+        if(curU.equals("admin")){
+            sql = "SELECT DISTINCT T.PRO_CODE AS CODE,T.PRO_DESC AS MEANING FROM SAP_DMS_PROJECT_PRIVILEGE T ";
+        }else{
+            sql = "SELECT DISTINCT T.PRO_CODE AS CODE,T.PRO_DESC AS MEANING FROM SAP_DMS_PROJECT_PRIVILEGE T "
+                + "WHERE T.PRO_MANAGER = '" + curU + "'";
+        }
         List vsList = new ArrayList();
         this.valueList.put(valueSetId, vsList);
         ResultSet rs;
