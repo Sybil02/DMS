@@ -82,6 +82,7 @@ public class ListOfValuesModelImpl extends ListOfValuesModel {
         List list  = new ArrayList();
         for(Object obj : _values){
             ValueSetRow vsr = (ValueSetRow)obj;
+            if(vsr.getMeaning() == null) continue;
             if(vsr.getMeaning().contains(string)){
                 SelectItem sim = new SelectItem(vsr.getMeaning(),vsr.getMeaning()); 
                 list.add(sim);

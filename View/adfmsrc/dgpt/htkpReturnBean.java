@@ -211,8 +211,9 @@ public class htkpReturnBean {
     public String queryData(LinkedHashMap<String,String> labelMap){
         DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
         Statement stat = trans.createStatement(DBTransaction.DEFAULT);
+        String name = this.pName.substring(0, pName.lastIndexOf("-"));
         String sql = "SELECT ID FROM DCM_COMBINATION_17 WHERE HLS_YEAR_C='"+this.year+"' " +
-            "AND HLS_VERSION_C='"+this.version+"' AND BH_USER_PRO_C1='"+this.pName+"'";
+            "AND HLS_VERSION_C='"+this.version+"' AND BH_USER_PRO_C1='"+name+"'";
         ResultSet rs;
         try {
             rs = stat.executeQuery(sql);
