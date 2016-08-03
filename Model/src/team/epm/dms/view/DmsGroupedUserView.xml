@@ -69,7 +69,14 @@
     <DisplayCriteria/>
   </ListBinding>
   <SQLQuery>
-    <![CDATA[SELECT T1.*, T2.NAME || '(' || T2.ACC || ')' USER_NAME
+    <![CDATA[SELECT T1.ID,
+       T1.USER_ID,
+       T1.GROUP_ID,
+       T1.CREATED_AT,
+       T1.UPDATED_AT,
+       T1.UPDATED_BY,
+       T1.CREATED_BY,
+       T2.NAME || '(' || T2.ACC || ')' USER_NAME
   FROM DMS_USER_GROUP T1, DMS_USER T2
  WHERE T1.USER_ID = T2.ID
    AND T2.ENABLE_FLAG = 'Y'

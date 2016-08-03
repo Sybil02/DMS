@@ -87,14 +87,24 @@
         <f:facet name="toolbar">
           <af:toolbar id="t1">
             <af:group id="g1">
-              <af:selectOneChoice value="#{bindings.Name.inputValue}"
+              <!--af:selectOneChoice value="#{bindings.Name.inputValue}"
                                   label="#{bindings.Name.label}"
                                   required="#{bindings.Name.hints.mandatory}"
                                   shortDesc="#{bindings.Name.hints.tooltip}"
                                   id="soc1" autoSubmit="true"
                                   valueChangeListener="#{backingBeanScope.UserGroupBean.groupChangeListener}">
                 <f:selectItems value="#{bindings.Name.items}" id="si1"/>
-              </af:selectOneChoice>
+              </af:selectOneChoice-->
+              <af:inputComboboxListOfValues label="组名称" inlineStyle="margin-right:5px"
+                                                value="#{backingBeanScope.UserGroupBean.groupName}"
+                                                autoSubmit="true" clientComponent="true"
+                                                validator="#{backingBeanScope.UserGroupBean.groupLov.listOfValuesModel.validate}"
+                                                model="#{backingBeanScope.UserGroupBean.groupLov.listOfValuesModel}"
+                                                id="iclov1" columns="50"
+                                                valueChangeListener="#{backingBeanScope.UserGroupBean.groupChangeListener}"
+                                              usage="auto">
+                    <af:autoSuggestBehavior suggestedItems="#{backingBeanScope.UserGroupBean.groupLov.listOfValuesModel.suggest}"/>
+                    </af:inputComboboxListOfValues>
             </af:group>
             <af:group id="g2">
               <af:commandButton text="#{viewBundle['dms.common.add']}" id="cb1"
