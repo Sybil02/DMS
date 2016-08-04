@@ -46,7 +46,7 @@ public class TemplateAuthorityBean {
     private String roleName;
 
     public TemplateAuthorityBean() {
-//        this.initRoleLov();
+        this.initRoleLov();
     }
 
     public void initRoleLov(){
@@ -55,7 +55,6 @@ public class TemplateAuthorityBean {
             (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
         Statement stat = trans.createStatement(DBTransaction.DEFAULT);
         String sql = "SELECT T.ID,T.ROLE_NAME FROM DMS_ROLE T WHERE T.LOCALE='"+this.person.getLocale()+"'";
-        System.out.println(sql);
         ResultSet rs;
         try {
             rs = stat.executeQuery(sql);
@@ -169,14 +168,14 @@ public class TemplateAuthorityBean {
     }
 
     public void roleChangeListener(ValueChangeEvent valueChangeEvent) {
-//        ViewObject vo = ADFUtils.findIterator("DmsEnabledRoleIterator").getViewObject();
-//        String wc = " ROLE_NAME = '" + valueChangeEvent.getNewValue() + "'";
-//        vo.setWhereClause(wc);
-//        vo.executeQuery();
-//        if (vo.hasNext()) {
-//            Row row = vo.first();
-//            vo.setCurrentRow(row);
-//        }
+        ViewObject vo = ADFUtils.findIterator("DmsEnabledRoleIterator").getViewObject();
+        String wc = " ROLE_NAME = '" + valueChangeEvent.getNewValue() + "'";
+        vo.setWhereClause(wc);
+        vo.executeQuery();
+        if (vo.hasNext()) {
+            Row row = vo.first();
+            vo.setCurrentRow(row);
+        }
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.assignedtemplateTable);    
     }
 
