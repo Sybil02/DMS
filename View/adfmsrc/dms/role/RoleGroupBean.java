@@ -86,9 +86,9 @@ public class RoleGroupBean {
                     new ValueSetRow(rs.getString("ID"), rs.getString("NAME"),
                                     rs.getString("ID"));
                 list.add(vsr);
+                this.groupName = rs.getString("NAME");
             }
             this.groupLov = new DmsComBoxLov(list);
-            this.groupName = "test组";
             ViewObject vo =
                 ADFUtils.findIterator("DmsEnabledGroupViewIterator").getViewObject();
             String wc = " NAME = '"+this.groupName+"'";

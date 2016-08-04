@@ -106,9 +106,9 @@ public class ValueSetAuthorityBean {
                     new ValueSetRow(rs.getString("ID"), rs.getString("NAME"),
                                     rs.getString("ID"));
                 list.add(vsr);
+                this.valueSetName = rs.getString("NAME");
             }
             this.valueLov = new DmsComBoxLov(list);
-            this.valueSetName = "年1";
             ViewObject vo =
                 ADFUtils.findIterator("DmsValueSetViewIterator").getViewObject();
             String wc = " NAME = '"+this.valueSetName+"'";
@@ -147,9 +147,9 @@ public class ValueSetAuthorityBean {
                     new ValueSetRow(rs.getString("ID"), rs.getString("NAME"),
                                     rs.getString("ID"));
                 list.add(vsr);
+                this.groupName = rs.getString("NAME");
             }
             this.groupLov = new DmsComBoxLov(list);
-            this.groupName = "test组";
             ViewObject vo =
                 ADFUtils.findIterator("DmsEnabledGroupViewIterator").getViewObject();
             String wc = " NAME = '"+this.groupName+"'";
