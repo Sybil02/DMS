@@ -46,6 +46,7 @@ public class TemplateAuthorityBean {
     private String roleName;
 
     public TemplateAuthorityBean() {
+//        this.initRoleLov();
     }
 
     public void initRoleLov(){
@@ -168,6 +169,14 @@ public class TemplateAuthorityBean {
     }
 
     public void roleChangeListener(ValueChangeEvent valueChangeEvent) {
+//        ViewObject vo = ADFUtils.findIterator("DmsEnabledRoleIterator").getViewObject();
+//        String wc = " ROLE_NAME = '" + valueChangeEvent.getNewValue() + "'";
+//        vo.setWhereClause(wc);
+//        vo.executeQuery();
+//        if (vo.hasNext()) {
+//            Row row = vo.first();
+//            vo.setCurrentRow(row);
+//        }
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.assignedtemplateTable);    
     }
 
