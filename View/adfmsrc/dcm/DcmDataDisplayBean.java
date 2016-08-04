@@ -46,6 +46,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -76,6 +77,7 @@ import oracle.jbo.ApplicationModule;
 import oracle.jbo.Key;
 import oracle.jbo.Row;
 import oracle.jbo.RowIterator;
+import oracle.jbo.RowSetIterator;
 import oracle.jbo.ViewCriteria;
 import oracle.jbo.ViewCriteriaRow;
 import oracle.jbo.ViewObject;
@@ -1124,7 +1126,7 @@ public class DcmDataDisplayBean extends TablePagination{
         StringBuffer viewSql = new StringBuffer();
         StringBuffer where_in = new StringBuffer();
         //组合表
-        sql.append("SELECT ");
+        sql.append("SELECT S.COM_ID,");
         for( ComHeader header : this.templateHeader){
             
             //初始化显示Map
@@ -2103,4 +2105,25 @@ public class DcmDataDisplayBean extends TablePagination{
     public RichInputComboboxListOfValues getComIclovs() {
         return comIclovs;
     }
+
+    public void unfreeze(ActionEvent actionEvent) {
+        if(this.subTable.getSelectedRowKeys() == null) return;
+        String sql = "DELETE DMS_SUBMIT_STATUS T WHERE T.TEMP_ID = '" + this.curTempalte.getId() + "' AND T.COM_ID IN (";
+        ViewObject vo = ADFUtils.findIterator("getSubmitStatusVOIterator").getViewObject();
+        RowKeySet rsk = this.subTable.getSelectedRowKeys();
+        Iterator itr = rsk.iterator();
+        while(itr.hasNext()){
+            List ls = (List)itr.next();
+            Key key =(Key)ls.get(0);
+            Row row = vo.getRow(key);
+            if(row.getAttribute("COM_ID") != null){
+                sql = sql + "'" + row.getAttribute("COM_ID") + "',";
+            }
+        }
+        sql = sql + "'')";
+        DmsUtils.getDcmApplicationModule().getTransaction().executeCommand(sql);
+        DmsUtils.getDcmApplicationModule().getTransaction().commit();
+        vo.executeQuery();
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.subTable);
+    }   
 }
