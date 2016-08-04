@@ -74,6 +74,16 @@ public class UserGroupBean {
                 list.add(vsr);
             }
             this.groupLov = new DmsComBoxLov(list);
+            this.groupName = "test组";
+            ViewObject vo =
+                ADFUtils.findIterator("DmsGroupViewIterator").getViewObject();
+            String wc = " NAME = '" + this.groupName + "'";
+            vo.setWhereClause(wc);
+            vo.executeQuery();
+            if (vo.hasNext()) {
+                Row row = vo.first();
+                vo.setCurrentRow(row);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }

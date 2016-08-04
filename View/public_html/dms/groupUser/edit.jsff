@@ -7,7 +7,7 @@
   <af:panelStretchLayout id="psl1" topHeight="0">
     <f:facet name="top">
       <af:popup id="p1" autoCancel="disabled"
-                binding="#{backingBeanScope.UserGroupBean.popup}">
+                binding="#{viewScope.UserGroupBean.popup}">
         <af:panelWindow id="pw1" title="#{viewBundle['dms.group.add_user']}"
                         modal="true">
           <af:panelCollection id="pc2" inlineStyle="width:600px">
@@ -15,7 +15,7 @@
             <f:facet name="toolbar">
               <af:toolbar id="t4">
                 <af:commandButton  text="#{viewBundle['dms.common.add']}" id="cb3"
-                                  actionListener="#{backingBeanScope.UserGroupBean.addUserToGroup}"/>
+                                  actionListener="#{viewScope.UserGroupBean.addUserToGroup}"/>
               </af:toolbar>
             </f:facet>
             <f:facet name="statusbar"/>
@@ -30,7 +30,7 @@
                       filterVisible="false" varStatus="vs"
                       selectionListener="#{bindings.DmsUnGroupedUserView.collectionModel.makeCurrent}"
                       rowSelection="multiple" id="t3"
-                      binding="#{backingBeanScope.UserGroupBean.ungroupedUserTable}">
+                      binding="#{viewScope.UserGroupBean.ungroupedUserTable}">
               <af:column sortProperty="#{bindings.DmsUnGroupedUserView.hints.Name.name}"
                          filterable="true" sortable="true"
                          headerText="#{bindings.DmsUnGroupedUserView.hints.Name.label}"
@@ -92,26 +92,26 @@
                                   required="#{bindings.Name.hints.mandatory}"
                                   shortDesc="#{bindings.Name.hints.tooltip}"
                                   id="soc1" autoSubmit="true"
-                                  valueChangeListener="#{backingBeanScope.UserGroupBean.groupChangeListener}">
+                                  valueChangeListener="#{viewScope.UserGroupBean.groupChangeListener}">
                 <f:selectItems value="#{bindings.Name.items}" id="si1"/>
               </af:selectOneChoice-->
               <af:inputComboboxListOfValues label="组名称" inlineStyle="margin-right:5px"
-                                                value="#{backingBeanScope.UserGroupBean.groupName}"
+                                                value="#{viewScope.UserGroupBean.groupName}"
                                                 autoSubmit="true" clientComponent="true"
-                                                validator="#{backingBeanScope.UserGroupBean.groupLov.listOfValuesModel.validate}"
-                                                model="#{backingBeanScope.UserGroupBean.groupLov.listOfValuesModel}"
+                                                validator="#{viewScope.UserGroupBean.groupLov.listOfValuesModel.validate}"
+                                                model="#{viewScope.UserGroupBean.groupLov.listOfValuesModel}"
                                                 id="iclov1" columns="50"
-                                                valueChangeListener="#{backingBeanScope.UserGroupBean.groupChangeListener}"
+                                                valueChangeListener="#{viewScope.UserGroupBean.groupChangeListener}"
                                               usage="auto">
-                    <af:autoSuggestBehavior suggestedItems="#{backingBeanScope.UserGroupBean.groupLov.listOfValuesModel.suggest}"/>
+                    <af:autoSuggestBehavior suggestedItems="#{viewScope.UserGroupBean.groupLov.listOfValuesModel.suggest}"/>
                     </af:inputComboboxListOfValues>
             </af:group>
             <af:group id="g2">
               <af:commandButton text="#{viewBundle['dms.common.add']}" id="cb1"
-                                actionListener="#{backingBeanScope.UserGroupBean.showAddUserPopup}"/>
+                                actionListener="#{viewScope.UserGroupBean.showAddUserPopup}"/>
               <af:commandButton text="#{viewBundle['dcm.common.delete']}"
                                 id="cb2"
-                                actionListener="#{backingBeanScope.UserGroupBean.removeUserFromGroup}"/>
+                                actionListener="#{viewScope.UserGroupBean.removeUserFromGroup}"/>
             </af:group>
           </af:toolbar>
         </f:facet>
@@ -126,7 +126,7 @@
                   filterVisible="false" varStatus="vs"
                   selectionListener="#{bindings.DmsGroupedUserView.collectionModel.makeCurrent}"
                   rowSelection="multiple" id="t2"
-                  binding="#{backingBeanScope.UserGroupBean.groupedUserTable}">
+                  binding="#{viewScope.UserGroupBean.groupedUserTable}">
           <af:column sortProperty="#{bindings.DmsGroupedUserView.hints.UserName.name}"
                      filterable="true" sortable="true"
                      headerText="#{bindings.DmsGroupedUserView.hints.UserName.label}"

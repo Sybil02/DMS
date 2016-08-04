@@ -108,6 +108,17 @@ public class ValueSetAuthorityBean {
                 list.add(vsr);
             }
             this.valueLov = new DmsComBoxLov(list);
+            this.valueSetName = "年1";
+            ViewObject vo =
+                ADFUtils.findIterator("DmsValueSetViewIterator").getViewObject();
+            String wc = " NAME = '"+this.valueSetName+"'";
+            vo.setWhereClause(wc);
+            vo.executeQuery();
+            if (vo.hasNext()) {
+                Row row = vo.first();
+                vo.setCurrentRow(row);
+                this.refreshValueMap(row);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -138,9 +149,20 @@ public class ValueSetAuthorityBean {
                 list.add(vsr);
             }
             this.groupLov = new DmsComBoxLov(list);
+            this.groupName = "test组";
+            ViewObject vo =
+                ADFUtils.findIterator("DmsEnabledGroupViewIterator").getViewObject();
+            String wc = " NAME = '"+this.groupName+"'";
+            vo.setWhereClause(wc);
+            vo.executeQuery();
+            if (vo.hasNext()) {
+                Row row = vo.first();
+                vo.setCurrentRow(row);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        
         //get vo
         //curRow.getAtt();
         //
