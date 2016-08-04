@@ -13,6 +13,9 @@
     <iterator Binds="DcmUnAssignedTemplate" RangeSize="25"
               DataControl="DcmModuleDataControl"
               id="DcmUnAssignedTemplateIterator"/>
+    <searchRegion Binds="DcmUnAssignedTemplateIterator" Criteria=""
+                  Customizer="oracle.jbo.uicli.binding.JUSearchBindingCustomizer"
+                  id="DcmUnAssignedTemplateQuery"/>
   </executables>
   <bindings>
     <list ListOperMode="navigation" IterBinding="DmsEnabledRoleIterator"

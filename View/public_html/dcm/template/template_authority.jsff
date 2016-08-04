@@ -21,40 +21,48 @@
             <f:facet name="statusbar"/>
             <af:table value="#{bindings.DcmUnAssignedTemplate.collectionModel}"
                     var="row" rows="#{bindings.DcmUnAssignedTemplate.rangeSize}"
-                    emptyText="#{viewBundle['dms.common.nodata']}"
+                    emptyText="#{bindings.DcmUnAssignedTemplate.viewable ? 'No data to display.' : 'Access Denied.'}"
                     fetchSize="#{bindings.DcmUnAssignedTemplate.rangeSize}"
                     rowBandingInterval="0"
                     selectionListener="#{bindings.DcmUnAssignedTemplate.collectionModel.makeCurrent}"
                     rowSelection="multiple" id="t2"
-                    binding="#{TemplateAuthorityBean.unassignedTemplateTable}">
-            <af:column sortProperty="#{bindings.DcmUnAssignedTemplate.hints.Name.name}"
-                       sortable="false"
-                       headerText="#{bindings.DcmUnAssignedTemplate.hints.Name.label}"
-                       id="c7">
-              <af:outputText value="#{row.Name}" id="ot1"/>
-            </af:column>
-            <af:column sortProperty="#{bindings.DcmUnAssignedTemplate.hints.UpdatedAt.name}"
-                       sortable="false"
-                       headerText="#{bindings.DcmUnAssignedTemplate.hints.UpdatedAt.label}"
-                       id="c6">
-              <af:outputText value="#{row.UpdatedAt}" id="ot4">
-                <af:convertDateTime pattern="#{bindings.DcmUnAssignedTemplate.hints.UpdatedAt.format}"/>
-              </af:outputText>
-            </af:column>
-            <af:column sortProperty="#{bindings.DcmUnAssignedTemplate.hints.UpdatedBy.name}"
-                       sortable="false"
-                       headerText="#{bindings.DcmUnAssignedTemplate.hints.UpdatedBy.label}"
-                       id="c5">
-              <af:selectOneChoice value="#{row.bindings.UpdatedBy.inputValue}"
-                                  label="#{row.bindings.UpdatedBy.label}"
-                                  required="#{bindings.DcmUnAssignedTemplate.hints.UpdatedBy.mandatory}"
-                                  shortDesc="#{bindings.DcmUnAssignedTemplate.hints.UpdatedBy.tooltip}"
-                                  id="soc3" readOnly="true">
-                <f:selectItems value="#{row.bindings.UpdatedBy.items}"
-                               id="si3"/>
-              </af:selectOneChoice>
-            </af:column>
-          </af:table>
+                    binding="#{TemplateAuthorityBean.unassignedTemplateTable}"
+                      filterVisible="false"
+                      filterModel="#{bindings.DcmUnAssignedTemplateQuery.queryDescriptor}"
+                      queryListener="#{bindings.DcmUnAssignedTemplateQuery.processQuery}"
+                      varStatus="vs">
+              <af:column sortProperty="#{bindings.DcmUnAssignedTemplate.hints.Name.name}"
+                         sortable="false"
+                         headerText="#{bindings.DcmUnAssignedTemplate.hints.Name.label}"
+                         id="c7" filterable="true">
+                <af:outputText value="#{row.Name}" id="ot1"/>
+              </af:column>
+              <af:column sortProperty="#{bindings.DcmUnAssignedTemplate.hints.UpdatedAt.name}"
+                         sortable="false"
+                         headerText="#{bindings.DcmUnAssignedTemplate.hints.UpdatedAt.label}"
+                         id="c6" filterable="false">
+                <af:outputText value="#{row.UpdatedAt}" id="ot4">
+                  <af:convertDateTime pattern="#{bindings.DcmUnAssignedTemplate.hints.UpdatedAt.format}"/>
+                </af:outputText>
+                <f:facet name="filter">
+                  <af:inputDate value="#{vs.filterCriteria.UpdatedAt}"
+                                id="id1"/>
+                </f:facet>
+              </af:column>
+              <af:column sortProperty="#{bindings.DcmUnAssignedTemplate.hints.UpdatedBy.name}"
+                         sortable="false"
+                         headerText="#{bindings.DcmUnAssignedTemplate.hints.UpdatedBy.label}"
+                         id="c5" filterable="false">
+                <af:selectOneChoice value="#{row.bindings.UpdatedBy.inputValue}"
+                                    label="#{row.bindings.UpdatedBy.label}"
+                                    required="#{bindings.DcmUnAssignedTemplate.hints.UpdatedBy.mandatory}"
+                                    shortDesc="#{bindings.DcmUnAssignedTemplate.hints.UpdatedBy.tooltip}"
+                                    id="soc3" readOnly="true">
+                  <f:selectItems value="#{row.bindings.UpdatedBy.items}"
+                                 id="si3"/>
+                </af:selectOneChoice>
+              </af:column>
+            </af:table>
           </af:panelCollection>
           
         </af:panelWindow>
