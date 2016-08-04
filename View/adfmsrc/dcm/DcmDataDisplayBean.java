@@ -1615,6 +1615,7 @@ public class DcmDataDisplayBean extends TablePagination{
                     ch.setValue("");
                 }else{
                     for(SelectItem sim : ch.getValues()){
+                        if(sim.getLabel() == null) continue;
                         if(sim.getLabel().equals(event.getNewValue())){
                             ch.setValue(sim.getValue().toString());    
                         }    
@@ -2038,6 +2039,7 @@ public class DcmDataDisplayBean extends TablePagination{
                         }else{
                             whereCaluse.append(" AND ").append(key).append(" IN(");
                             for(Map.Entry<String,String> entry : this.subValuesMap.entrySet()){
+                                if(entry.getValue() == null) continue;
                                 if(entry.getValue().contains(descriptor.getFilterCriteria().get(key).toString())) {
                                     whereCaluse.append("'").append(entry.getKey()).append("',");
                                 }  
@@ -2049,7 +2051,7 @@ public class DcmDataDisplayBean extends TablePagination{
             }
             vo.setWhereClause(whereCaluse.toString());
             vo.executeQuery();
-            vo.setWhereClause(null);
+            //vo.setWhereClause(null);
             AdfFacesContext.getCurrentInstance().addPartialTarget(this.subTable);
         }
     }
