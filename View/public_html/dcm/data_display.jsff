@@ -198,7 +198,7 @@
                   <f:facet name="menus"/>
                   <f:facet name="toolbar">
                     <af:toolbar id="t7">
-                      <af:commandButton text="#{viewBundle['dms.dgpt.fblock']}" id="cb14"
+                      <af:commandButton text="#{viewBundle['dms.dgpt.fblock']}" id="cb14" rendered="#{sessionScope.authoriedFunction['UNFREEZE'] ne null or sessionScope.cur_user.id eq '10000'}"
                                         actionListener="#{viewScope.DcmDataDisplayBean.unfreeze}"/>
                     </af:toolbar>
                   </f:facet>
