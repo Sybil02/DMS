@@ -4,12 +4,27 @@ import common.ADFUtils;
 
 import common.DmsUtils;
 
+import common.lov.DmsComBoxLov;
+
+import common.lov.ValueSetRow;
+
+import dms.login.Person;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import java.sql.Statement;
+
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ValueChangeEvent;
 
+import javax.faces.model.SelectItem;
+
+import oracle.adf.share.ADFContext;
 import oracle.adf.share.logging.ADFLogger;
 import oracle.adf.view.rich.component.rich.RichPopup;
 import oracle.adf.view.rich.component.rich.data.RichTable;
@@ -21,6 +36,7 @@ import oracle.jbo.Row;
 
 import oracle.jbo.RowSetIterator;
 import oracle.jbo.ViewObject;
+import oracle.jbo.server.DBTransaction;
 
 public class UserGroupBean {
     private static ADFLogger logger =
@@ -28,11 +44,65 @@ public class UserGroupBean {
     private RichTable groupedUserTable;
     private RichPopup popup;
     private RichTable ungroupedUserTable;
-
+    private DmsComBoxLov groupLov;
+    private String groupName;
     public UserGroupBean() {
+        this.initGroupLov();
     }
 
+    public void initGroupLov() {
+            List<SelectItem> values = new ArrayList<SelectItem>();
+            DBTransaction trans =
+                (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
+            Statement stat = trans.createStatement(DBTransaction.DEFAULT);
+            Person person = (Person)ADFContext.getCurrent().getSessionScope().get("cur_user");
+            String sql =
+                "SELECT T.ID,T.NAME FROM DMS_GROUP T WHERE T.LOCALE='" + person.getLocale() +
+                "'  AND T.ENABLE_FLAG = 'Y'";
+            ResultSet rs;
+            try {
+                rs = stat.executeQuery(sql);
+                List<ValueSetRow> list = new ArrayList<ValueSetRow>();
+                while (rs.next()) {
+                    SelectItem item = new SelectItem();
+                    item.setLabel(rs.getString("ID"));
+                    item.setValue(rs.getString("NAME"));
+                    values.add(item);
+                    //模糊搜索框
+                    ValueSetRow vsr =
+                        new ValueSetRow(rs.getString("ID"), rs.getString("NAME"),
+                                        rs.getString("ID"));
+                    list.add(vsr);
+                    this.groupName = rs.getString("NAME");
+                }
+                this.groupLov = new DmsComBoxLov(list);
+                ViewObject vo =
+                    ADFUtils.findIterator("DmsGroupViewIterator").getViewObject();
+                String wc = " NAME = '" + this.groupName + "'";
+                vo.setWhereClause(wc);
+                vo.executeQuery();
+                if (vo.hasNext()) {
+                    Row row = vo.first();
+                    vo.setCurrentRow(row);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            //get vo
+            //curRow.getAtt();
+            //
+        }
+    
     public void groupChangeListener(ValueChangeEvent valueChangeEvent) {
+        ViewObject vo =
+                ADFUtils.findIterator("DmsGroupViewIterator").getViewObject();
+            String wc = " NAME = '" + valueChangeEvent.getNewValue() + "'";
+            vo.setWhereClause(wc);
+            vo.executeQuery();
+            if (vo.hasNext()) {
+                Row row = vo.first();
+                vo.setCurrentRow(row);
+            }
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.groupedUserTable);
     }
 
@@ -125,5 +195,21 @@ public class UserGroupBean {
 
     public RichTable getUngroupedUserTable() {
         return ungroupedUserTable;
+    }
+
+    public void setGroupLov(DmsComBoxLov groupLov) {
+        this.groupLov = groupLov;
+    }
+
+    public DmsComBoxLov getGroupLov() {
+        return groupLov;
+    }
+
+    public void setGroupName(String groupName) {
+        this.groupName = groupName;
+    }
+
+    public String getGroupName() {
+        return groupName;
     }
 }

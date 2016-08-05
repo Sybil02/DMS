@@ -51,7 +51,7 @@
             <f:facet name="toolbar">
                <af:toolbar id="t1">
                   <af:group id="g1">
-                     <af:selectOneChoice value="#{bindings.GroupName.inputValue}"
+                     <!--af:selectOneChoice value="#{bindings.GroupName.inputValue}"
                                          label="#{bindings.GroupName.label}"
                                          required="#{bindings.GroupName.hints.mandatory}"
                                          shortDesc="#{bindings.GroupName.hints.tooltip}"
@@ -59,15 +59,35 @@
                                          valueChangeListener="#{viewScope.ValueSetAuthorityBean.groupChangeListener}">
                         <f:selectItems value="#{bindings.GroupName.items}"
                                        id="si1"/>
-                     </af:selectOneChoice>
-                     <af:selectOneChoice value="#{bindings.Name.inputValue}"
+                     </af:selectOneChoice-->
+                     <af:inputComboboxListOfValues label="组名称" inlineStyle="margin-right:5px"
+                                                value="#{viewScope.ValueSetAuthorityBean.groupName}"
+                                                autoSubmit="true" clientComponent="true"
+                                                validator="#{viewScope.ValueSetAuthorityBean.groupLov.listOfValuesModel.validate}"
+                                                model="#{viewScope.ValueSetAuthorityBean.groupLov.listOfValuesModel}"
+                                                id="iclov1" columns="50"
+                                                valueChangeListener="#{viewScope.ValueSetAuthorityBean.groupChangeListener}"
+                                              usage="auto">
+                    <af:autoSuggestBehavior suggestedItems="#{viewScope.ValueSetAuthorityBean.groupLov.listOfValuesModel.suggest}"/>
+                    </af:inputComboboxListOfValues>
+                     <!--af:selectOneChoice value="#{bindings.Name.inputValue}"
                                          label="#{bindings.Name.label}"
                                          required="#{bindings.Name.hints.mandatory}"
                                          shortDesc="#{bindings.Name.hints.tooltip}"
                                          id="soc2" autoSubmit="true"
                                          valueChangeListener="#{viewScope.ValueSetAuthorityBean.valuesetChangeListener}">
                         <f:selectItems value="#{bindings.Name.items}" id="si2"/>
-                     </af:selectOneChoice>
+                     </af:selectOneChoice-->
+                     <af:inputComboboxListOfValues label="值集名称" inlineStyle="margin-right:5px"
+                                                value="#{viewScope.ValueSetAuthorityBean.valueSetName}"
+                                                autoSubmit="true" clientComponent="true"
+                                                validator="#{viewScope.ValueSetAuthorityBean.valueLov.listOfValuesModel.validate}"
+                                                model="#{viewScope.ValueSetAuthorityBean.valueLov.listOfValuesModel}"
+                                                id="iclov2" columns="50"
+                                                valueChangeListener="#{viewScope.ValueSetAuthorityBean.valuesetChangeListener}"
+                                              usage="auto">
+                    <af:autoSuggestBehavior suggestedItems="#{viewScope.ValueSetAuthorityBean.valueLov.listOfValuesModel.suggest}"/>
+                    </af:inputComboboxListOfValues>
                   </af:group>
                   <af:group id="g2">
                      <af:commandButton text="#{viewBundle['dms.common.add']}" id="cb1"

@@ -7,7 +7,7 @@
   <af:panelStretchLayout id="psl1" topHeight="0">
     <f:facet name="top">
       <af:popup id="p1" autoCancel="disabled"
-                binding="#{backingBeanScope.RoleGroupBean.popup}">
+                binding="#{viewScope.RoleGroupBean.popup}">
         <af:panelWindow title="#{viewBundle['dms.group.add_role']}" id="pw1"
                         modal="true">
           <af:panelCollection id="pc2">
@@ -15,7 +15,7 @@
             <f:facet name="toolbar">
               <af:toolbar id="t3">
                 <af:commandButton text="#{viewBundle['dms.common.add']}" id="cb3"
-                                  actionListener="#{backingBeanScope.RoleGroupBean.addRoleToGroup}"/>
+                                  actionListener="#{viewScope.RoleGroupBean.addRoleToGroup}"/>
               </af:toolbar>
             </f:facet>
             <f:facet name="statusbar"/>
@@ -30,7 +30,7 @@
                       filterVisible="false" varStatus="vs"
                       selectionListener="#{bindings.DmsUnGroupedRoleView.collectionModel.makeCurrent}"
                       rowSelection="multiple" id="t4"
-                      binding="#{backingBeanScope.RoleGroupBean.unSelectedRoleTable}">
+                      binding="#{viewScope.RoleGroupBean.unSelectedRoleTable}">
               <af:column sortProperty="#{bindings.DmsUnGroupedRoleView.hints.RoleName.name}"
                          sortable="true" filterable="true"
                          headerText="#{bindings.DmsUnGroupedRoleView.hints.RoleName.label}"
@@ -69,22 +69,32 @@
         <f:facet name="toolbar">
           <af:toolbar id="t1">
             <af:group id="g1">
-              <af:selectOneChoice value="#{bindings.Name.inputValue}"
+              <!--af:selectOneChoice value="#{bindings.Name.inputValue}"
                                   label="#{bindings.Name.label}"
                                   required="#{bindings.Name.hints.mandatory}"
                                   shortDesc="#{bindings.Name.hints.tooltip}"
                                   id="soc1" autoSubmit="true"
-                                  valueChangeListener="#{backingBeanScope.RoleGroupBean.groupChangeListener}">
+                                  valueChangeListener="#{viewScope.RoleGroupBean.groupChangeListener}">
                 <f:selectItems value="#{bindings.Name.items}" id="si1"/>
-              </af:selectOneChoice>
+              </af:selectOneChoice-->
+              <af:inputComboboxListOfValues label="组名称" inlineStyle="margin-right:5px"
+                                            value="#{viewScope.RoleGroupBean.groupName}"
+                                                autoSubmit="true" clientComponent="true"
+                                                validator="#{viewScope.RoleGroupBean.groupLov.listOfValuesModel.validate}"
+                                                model="#{viewScope.RoleGroupBean.groupLov.listOfValuesModel}"
+                                                id="iclov1" columns="50"
+                                                valueChangeListener="#{viewScope.RoleGroupBean.groupChangeListener}"
+                                              usage="auto">
+                    <af:autoSuggestBehavior suggestedItems="#{viewScope.RoleGroupBean.groupLov.listOfValuesModel.suggest}"/>
+                    </af:inputComboboxListOfValues>
             </af:group>
             <af:group id="g2">
               <af:commandButton text="#{viewBundle['dms.common.add']}"
                                 id="cb1"
-                                actionListener="#{backingBeanScope.RoleGroupBean.showPopup}"/>
+                                actionListener="#{viewScope.RoleGroupBean.showPopup}"/>
               <af:commandButton text="#{viewBundle['dcm.common.delete']}"
                                 id="cb2"
-                                actionListener="#{backingBeanScope.RoleGroupBean.removeRole}"/>
+                                actionListener="#{viewScope.RoleGroupBean.removeRole}"/>
             </af:group>
           </af:toolbar>
         </f:facet>
@@ -99,7 +109,7 @@
                   filterVisible="false" varStatus="vs"
                   selectionListener="#{bindings.DmsGroupedRoleView.collectionModel.makeCurrent}"
                   rowSelection="multiple" id="t2"
-                  binding="#{backingBeanScope.RoleGroupBean.selectedRoleTable}">
+                  binding="#{viewScope.RoleGroupBean.selectedRoleTable}">
           <af:column sortProperty="#{bindings.DmsGroupedRoleView.hints.RoleName.name}"
                      filterable="true" sortable="true"
                      headerText="#{bindings.DmsGroupedRoleView.hints.RoleName.label}"

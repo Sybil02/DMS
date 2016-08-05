@@ -7,7 +7,7 @@
   <af:panelStretchLayout id="pgl2" topHeight="0">
     <f:facet name="top">
       <af:popup id="p1" autoCancel="disabled"
-                binding="#{TemplateAuthorityBean.popup}">
+                binding="#{viewScope.TemplateAuthorityBean.popup}">
         <af:panelWindow id="pw1" modal="true"
                         title="#{viewBundle['dcm.template.add_authority']}">
           <af:panelCollection id="pc1">
@@ -15,7 +15,7 @@
             <f:facet name="toolbar">
               <af:toolbar id="t3">
                 <af:commandButton text="#{viewBundle['dms.common.add']}" id="cb5"
-                                  actionListener="#{TemplateAuthorityBean.addTemplate}"/>
+                                  actionListener="#{viewScope.TemplateAuthorityBean.addTemplate}"/>
               </af:toolbar>
             </f:facet>
             <f:facet name="statusbar"/>
@@ -26,7 +26,7 @@
                     rowBandingInterval="0"
                     selectionListener="#{bindings.DcmUnAssignedTemplate.collectionModel.makeCurrent}"
                     rowSelection="multiple" id="t2"
-                    binding="#{TemplateAuthorityBean.unassignedTemplateTable}">
+                    binding="#{viewScope.TemplateAuthorityBean.unassignedTemplateTable}">
             <af:column sortProperty="#{bindings.DcmUnAssignedTemplate.hints.Name.name}"
                        sortable="false"
                        headerText="#{bindings.DcmUnAssignedTemplate.hints.Name.label}"
@@ -65,20 +65,30 @@
         <f:facet name="toolbar">
           <af:toolbar id="t7">
             <af:group id="g1">
-            <af:selectOneChoice value="#{bindings.RoleName.inputValue}"
+            <!--af:selectOneChoice value="#{bindings.RoleName.inputValue}"
                                 label="#{bindings.RoleName.label}"
                                 required="#{bindings.RoleName.hints.mandatory}"
                                 shortDesc="#{bindings.RoleName.hints.tooltip}"
                                 id="soc1" autoSubmit="true"
-                                valueChangeListener="#{TemplateAuthorityBean.roleChangeListener}">
+                                valueChangeListener="#{viewScope.TemplateAuthorityBean.roleChangeListener}">
               <f:selectItems value="#{bindings.RoleName.items}" id="si1"/>
-            </af:selectOneChoice>
+            </af:selectOneChoice-->
+            <af:inputComboboxListOfValues label="角色名称" inlineStyle="margin-right:5px"
+                                          value="#{viewScope.TemplateAuthorityBean.roleName}"
+                                                autoSubmit="true" clientComponent="true"
+                                                validator="#{viewScope.TemplateAuthorityBean.roleLov.listOfValuesModel.validate}"
+                                                model="#{viewScope.TemplateAuthorityBean.roleLov.listOfValuesModel}"
+                                                id="iclov1" columns="50"
+                                                valueChangeListener="#{viewScope.TemplateAuthorityBean.roleChangeListener}"
+                                              usage="auto">
+                    <af:autoSuggestBehavior suggestedItems="#{viewScope.TemplateAuthorityBean.roleLov.listOfValuesModel.suggest}"/>
+            </af:inputComboboxListOfValues>
             </af:group>
             <af:group id="g2">
               <af:commandButton text="#{viewBundle['dms.common.add']}" id="cb1"
-                                actionListener="#{TemplateAuthorityBean.showAddPopup}"/>
+                                actionListener="#{viewScope.TemplateAuthorityBean.showAddPopup}"/>
               <af:commandButton text="#{viewBundle['dcm.common.delete']}" id="cb2"
-                                actionListener="#{TemplateAuthorityBean.removeAuthority}"/>
+                                actionListener="#{viewScope.TemplateAuthorityBean.removeAuthority}"/>
               <af:commandButton actionListener="#{bindings.Commit.execute}"
                                 text="#{viewBundle['dms.common.save']}"
                                 id="cb3"/>
@@ -97,7 +107,7 @@
                   rowBandingInterval="0"
                   selectionListener="#{bindings.DcmRoleTemplateView.collectionModel.makeCurrent}"
                   rowSelection="multiple" id="t1"
-                  binding="#{TemplateAuthorityBean.assignedtemplateTable}">
+                  binding="#{viewScope.TemplateAuthorityBean.assignedtemplateTable}">
           <af:column sortProperty="#{bindings.DcmRoleTemplateView.hints.TemplateId.name}"
                      sortable="false"
                      headerText="#{bindings.DcmRoleTemplateView.hints.TemplateId.label}"
