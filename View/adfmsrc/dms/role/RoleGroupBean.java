@@ -71,7 +71,7 @@ public class RoleGroupBean {
         Statement stat = trans.createStatement(DBTransaction.DEFAULT);
         String sql =
             "SELECT T.ID,T.NAME FROM DMS_GROUP T WHERE T.LOCALE='" + this.person.getLocale() +
-            "'";
+            "'  AND T.ENABLE_FLAG = 'Y'";
         ResultSet rs;
         try {
             rs = stat.executeQuery(sql);

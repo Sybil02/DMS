@@ -54,7 +54,8 @@ public class TemplateAuthorityBean {
         DBTransaction trans =
             (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
         Statement stat = trans.createStatement(DBTransaction.DEFAULT);
-        String sql = "SELECT T.ID,T.ROLE_NAME FROM DMS_ROLE T WHERE T.LOCALE='"+this.person.getLocale()+"'";
+        String sql = "SELECT T.ID,T.ROLE_NAME FROM DMS_ROLE T WHERE T.LOCALE='"+this.person.getLocale()+
+                     "'  AND T.ENABLE_FLAG = 'Y'";
         ResultSet rs;
         try {
             rs = stat.executeQuery(sql);

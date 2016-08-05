@@ -222,6 +222,7 @@ public class ListOfValuesModelImpl extends ListOfValuesModel {
 
     public void validate(FacesContext facesContext, UIComponent uIComponent, Object object) {
         for (Object data : _values) {
+            if(((ValueSetRow)data).getMeaning() == null) continue;
             if (((ValueSetRow)data).getMeaning().equals(object)) {
                 return;
             }
