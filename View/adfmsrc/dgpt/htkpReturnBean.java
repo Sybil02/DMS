@@ -104,6 +104,7 @@ public class htkpReturnBean {
     private String pType;
     private DmsComBoxLov proLov;
     private CollectionModel dataModel;
+    LinkedHashMap<String,String> lineMap = new LinkedHashMap<String,String>();
     private List<PcColumnDef> pcColsDef = new ArrayList<PcColumnDef>();
     //是否是2007及以上格式
     private boolean isXlsx = true;
@@ -230,7 +231,8 @@ public class htkpReturnBean {
         for(Map.Entry<String,String> entry : labelMap.entrySet()){
             qSql.append(entry.getValue()).append(",");
         }
-        qSql.append("ROWID AS ROW_ID FROM CONT_INVOICE_RETURN_BUDGET_5 WHERE COM_RECORD_ID='").append(this.connectId).append("'");
+        qSql.append("ROW_ID FROM CONT_INVOICE_RETURN_BUDGET_5_V WHERE COM_RECORD_ID='").append(this.connectId).append("'");
+        System.out.println(qSql.toString());
         return qSql.toString();
     }
     
@@ -309,6 +311,7 @@ public class htkpReturnBean {
         }
         this.dataModel.setWrappedData(data);
         ((PcDataTableModel)this.dataModel).setLabelMap(labelMap);
+        this.getLine();
     }
     //获取行业线等信息
     public void getLine(){
@@ -331,6 +334,12 @@ public class htkpReturnBean {
                 cLine = rs.getString("PRODUCT_LINE");
                 pType = rs.getString("PROJECT_TYPE");
             }
+            
+            lineMap.put("ENTITY", entity);
+            lineMap.put("INDUSTRY_LINE", hLine);
+            lineMap.put("BUSINESS_LINE", yLine);
+            lineMap.put("PRODUCT_LINE", cLine);
+            lineMap.put("PROJECT_TYPE", pType);
             rs.close();
             stat.close();
         } catch (SQLException e) {
@@ -499,7 +508,19 @@ public class htkpReturnBean {
             //if(null!=rowdata.get("OPERATION")){
                 int i =1;
                 for(Map.Entry<String,String> entry : map.entrySet()){
-                    stmt.setString(i++ , rowdata.get(entry.getValue()));
+                    if(entry.getValue().equals("ENTITY")){
+                        stmt.setString(i++, entity);
+                    }else if(entry.getValue().equals("INDUSTRY_LINE")){
+                        stmt.setString(i++, hLine);      
+                    }else if(entry.getValue().equals("BUSINESS_LINE")){
+                        stmt.setString(i++, yLine);                                                    
+                    }else if(entry.getValue().equals("PRODUCT_LINE")){
+                        stmt.setString(i++, cLine);                                                    
+                    }else if(entry.getValue().equals("PROJECT_TYPE")){
+                        stmt.setString(i++, pType);                                                   
+                    }else{
+                        stmt.setString(i++ , rowdata.get(entry.getValue()));
+                    }
                 }
                 stmt.addBatch();
                 stmt.executeBatch();
@@ -737,7 +758,7 @@ public class htkpReturnBean {
             JSFUtils.addFacesErrorMessage("请选择正确的文件");
             return false;
         }
-        HtkpRowReader spReader = new HtkpRowReader(trans,2,this.connectId,this.pcColsDef,this.curUser.getId(), name);
+        HtkpRowReader spReader = new HtkpRowReader(trans,2,this.connectId,this.pcColsDef,this.curUser.getId(), name,this.lineMap);
         try {
                 ExcelReaderUtil.readExcel(spReader, fileName, true);
                 spReader.close();

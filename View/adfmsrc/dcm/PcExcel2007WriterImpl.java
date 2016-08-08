@@ -93,7 +93,7 @@ public class PcExcel2007WriterImpl extends AbstractExcel2007Writer{
                 int colInx = 0;
                 insertRow(n);
                 for(PcColumnDef col : this.colsdef){
-                    Object obj = "";
+                    Object obj ;
                     if(col.getColumnLable().equals("ROW_ID")){
                        obj = rs.getString(col.getDbTableCol());
                     }else{

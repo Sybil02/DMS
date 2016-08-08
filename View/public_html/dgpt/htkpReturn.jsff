@@ -123,12 +123,12 @@
             <af:group id="g1">
               <af:commandButton text="#{viewBundle['dcm.common.new']}" id="cb1"
                                 actionListener="#{viewScope.htkpReturnBean.operation_new}"
-                                partialTriggers="::soc4 ::soc2 ::soc3"
+                                partialTriggers="::soc4 ::iclov2 ::soc3"
                                 disabled="#{viewScope.htkpReturnBean.isSelected}"/>
                                 <!-- #{bindings.CreateInsert.execute}-->
               <af:commandButton text="#{viewBundle['dms.common.save']}" id="cb2"
                                 actionListener="#{viewScope.htkpReturnBean.operation_save}"
-                                partialTriggers="::soc4 ::soc2 ::soc3"
+                                partialTriggers="::soc4 ::soc3 ::iclov2"
                                 disabled="#{viewScope.htkpReturnBean.isSelected}"/>
               <af:commandButton text="#{viewBundle['dcm.common.delete']}" id="cb3"
                                 actionListener="#{viewScope.htkpReturnBean.operation_delete}"/>
@@ -140,7 +140,7 @@
                 <af:showPopupBehavior popupId="::p2"/>
               </af:commandButton>
               <af:commandButton text="#{viewBundle['dcm.action.export']}" id="cb6"
-                                partialTriggers="::soc4 ::soc2 ::soc3"
+                                partialTriggers="::soc4 ::soc3 ::iclov2"
                                 disabled="#{viewScope.htkpReturnBean.isSelected}">
                 <af:showPopupBehavior popupId="::p1"/>
               </af:commandButton>
@@ -156,13 +156,14 @@
                   selectedRowKeys="#{viewScope.htkpReturnBean.dataModel.selectedRows}"
                   rowSelection="multiple" editingMode="clickToEdit"
                   emptyText="#{viewBundle['dms.common.nodata']}"
-                  partialTriggers=":::soc4 :::soc2 :::soc3 ::cb1 ::cb2 ::cb3 ::cb4"
+                  partialTriggers="::cb1 ::cb2 ::cb3 ::cb4 :::soc4 :::soc3 :::iclov2"
                   value="#{viewScope.htkpReturnBean.dataModel}">
           <af:column sortable="false"
                             inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
                                     #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
                                     #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}"
-                     headerText="#{viewBundle['dms.dgpt.htkp.htkpDetail']}" id="c8">
+                     headerText="#{viewBundle['dms.dgpt.htkp.htkpDetail']}" id="c8"
+                     width="105">
             <af:selectOneChoice 
                             value="#{row[viewScope.htkpReturnBean.dataModel.labelMap['合同开票回款明细']]}" 
                             autoSubmit="true"
@@ -175,7 +176,8 @@
                             inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
                                     #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
                                     #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}"
-                     headerText="#{viewBundle['dms.dgpt.htkp.taxRate']}" id="c33">
+                     headerText="#{viewBundle['dms.dgpt.htkp.taxRate']}" id="c33"
+                     width="104">
             <af:selectOneChoice 
                             value="#{row[viewScope.htkpReturnBean.dataModel.labelMap['开票计划税率']]}" 
                             autoSubmit="true"
@@ -188,7 +190,8 @@
                             inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
                                     #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
                                     #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}"
-                     headerText="#{viewBundle['dms.dgpt.htkp.responsible']}" id="c2">
+                     headerText="#{viewBundle['dms.dgpt.htkp.responsible']}" id="c2"
+                     width="106">
             <af:inputText value="#{row[viewScope.htkpReturnBean.dataModel.labelMap['回款责任人']]}" 
                             id="it3"/>
           </af:column>
@@ -196,7 +199,8 @@
                             inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
                                     #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
                                     #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}"
-                     headerText="#{viewBundle['dms.dgpt.htkp.entity']}" id="c10">
+                     headerText="#{viewBundle['dms.dgpt.htkp.entity']}" id="c10"
+                     width="105">
             <af:inputText value="#{row[viewScope.htkpReturnBean.dataModel.labelMap['实体']]}"
                             id="it4" readOnly="true"/>
           </af:column>
@@ -204,7 +208,8 @@
                             inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
                                     #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
                                     #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}"
-                     headerText="#{viewBundle['dms.dgpt.htkp.industryLine']}" id="c14">
+                     headerText="#{viewBundle['dms.dgpt.htkp.industryLine']}" id="c14"
+                     width="105">
             <af:inputText value="#{row[viewScope.htkpReturnBean.dataModel.labelMap['行业线']]}" 
                           readOnly="true"
                             id="it5"/>
@@ -213,7 +218,8 @@
                             inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
                                     #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
                                     #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}"
-                     headerText="#{viewBundle['dms.dgpt.htkp.businessLine']}" id="c3">
+                     headerText="#{viewBundle['dms.dgpt.htkp.businessLine']}" id="c3"
+                     width="105">
             <af:inputText value="#{row[viewScope.htkpReturnBean.dataModel.labelMap['业务线']]}"
                           readOnly="true"
                             id="it6"/>
@@ -222,7 +228,8 @@
                             inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
                                     #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
                                     #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}"
-                     headerText="#{viewBundle['dms.dgpt.htkp.productLine']}" id="c12">
+                     headerText="#{viewBundle['dms.dgpt.htkp.productLine']}" id="c12"
+                     width="105">
             <af:inputText value="#{row[viewScope.htkpReturnBean.dataModel.labelMap['产品线']]}" 
                           readOnly="true"
                             id="it7"/>
@@ -231,7 +238,8 @@
                             inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
                                     #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
                                     #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}"
-                     headerText="#{viewBundle['dms.dgpt.htkp.prjectType']}" id="c17">
+                     headerText="#{viewBundle['dms.dgpt.htkp.prjectType']}" id="c17"
+                     width="105">
             <af:inputText value="#{row[viewScope.htkpReturnBean.dataModel.labelMap['合同类型']]}" 
                           readOnly="true"
                             id="it8"/>
@@ -240,7 +248,8 @@
                             inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
                                     #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
                                     #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}"
-                     headerText="#{viewBundle['dms.dgpt.htkp.occurCost']}" id="c23">
+                     headerText="#{viewBundle['dms.dgpt.htkp.occurCost']}" id="c23"
+                     width="105">
             <af:inputText value="#{row[viewScope.htkpReturnBean.dataModel.labelMap['已发生']]}" 
                             id="it28"/>
           </af:column>
@@ -248,7 +257,8 @@
                             inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
                                     #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
                                     #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}"
-                     headerText="#{viewBundle['dms.dgpt.htkp.last10']}" id="c11">
+                     headerText="#{viewBundle['dms.dgpt.htkp.last10']}" id="c11"
+                     width="105">
             <af:inputText value="#{row[viewScope.htkpReturnBean.dataModel.labelMap['上年10月']]}" 
                             id="it9"/>
           </af:column>
@@ -256,7 +266,8 @@
                             inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
                                     #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
                                     #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}"
-                     headerText="#{viewBundle['dms.dgpt.htkp.last11']}" id="c25">
+                     headerText="#{viewBundle['dms.dgpt.htkp.last11']}" id="c25"
+                     width="105">
             <af:inputText value="#{row[viewScope.htkpReturnBean.dataModel.labelMap['上年11月']]}" 
                             id="it10"/>
           </af:column>
@@ -264,7 +275,8 @@
                             inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
                                     #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
                                     #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}"
-                     headerText="#{viewBundle['dms.dgpt.htkp.last12']}" id="c21">
+                     headerText="#{viewBundle['dms.dgpt.htkp.last12']}" id="c21"
+                     width="105">
             <af:inputText value="#{row[viewScope.htkpReturnBean.dataModel.labelMap['上年12月']]}" 
                             id="it11"/>
           </af:column>

@@ -5,7 +5,9 @@ import common.ReplaceSpecialChar;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.TreeMap;
 
 import oracle.adf.share.logging.ADFLogger;
@@ -19,13 +21,19 @@ public class HtkpRowReader implements IRowReader{
     private String connectId;
     private PreparedStatement stmt;
     private List<PcColumnDef> colsdef;
+    private LinkedHashMap<String,String> lineMap;
     private String operator;
     private DBTransaction trans;
     private int n = 0;
     private static final int batchSize = 5000;
     private String name;
     private static ADFLogger logger=ADFLogger.createADFLogger(RowReader.class);
-
+    private String entity;
+    private String hLine;
+    private String yLine;
+    private String cLine;
+    private String pType;
+    
     /**
      * @param trans
      * @param startLine 开始
@@ -35,16 +43,34 @@ public class HtkpRowReader implements IRowReader{
      * @param data_type 数据类型
      */
     public HtkpRowReader(DBTransaction trans, int startLine,String connectId,
-                      List<PcColumnDef> colsdef, String operator,String name) {
+                      List<PcColumnDef> colsdef, String operator,String name,
+                         LinkedHashMap<String,String> lineMap) {
         this.startLine = startLine;
         this.connectId = connectId;
         this.colsdef = colsdef;
         this.operator = operator;
         this.trans = trans;
         this.name = name;
+        this.lineMap = lineMap;
+        this.getEveryLine();
         this.prepareSqlStatement();
     }
 
+    private void getEveryLine(){
+        for(Map.Entry<String,String> entry : lineMap.entrySet()){
+            if(entry.getKey().equals("ENTITY")){
+                entity = entry.getValue();
+            }else if(entry.getKey().equals("INDUSTRY_LINE")){
+                hLine = entry.getValue();     
+            }else if(entry.getKey().equals("BUSINESS_LINE")){
+                yLine = entry.getValue();                                                    
+            }else if(entry.getKey().equals("PRODUCT_LINE")){
+                cLine = entry.getValue();                                                    
+            }else if(entry.getKey().equals("PROJECT_TYPE")){
+                pType = entry.getValue();                                                   
+            }
+        }
+    }
     private void prepareSqlStatement() {
         StringBuffer sql = new StringBuffer();
         StringBuffer sqlValue = new StringBuffer();
@@ -72,7 +98,20 @@ public class HtkpRowReader implements IRowReader{
                         this.stmt.setString(i + 3, "");
                     } else {
                         isEpty = false;
-                        this.stmt.setString(i + 3, rsc.decodeString(tmpstr.trim()));        
+                        if(this.colsdef.get(i).getDbTableCol().equals("ENTITY")){
+                            this.stmt.setString(i + 3, entity);
+                        }else if(this.colsdef.get(i).getDbTableCol().equals("INDUSTRY_LINE")){
+                            this.stmt.setString(i + 3, hLine);
+                        }else if(this.colsdef.get(i).getDbTableCol().equals("BUSINESS_LINE")){
+                            this.stmt.setString(i + 3, yLine);
+                        }else if(this.colsdef.get(i).getDbTableCol().equals("PRODUCT_LINE")){
+                            this.stmt.setString(i + 3, cLine);
+                        }else if(this.colsdef.get(i).getDbTableCol().equals("PROJECT_TYPE")){
+                            this.stmt.setString(i + 3, pType);
+                        }else{
+                            this.stmt.setString(i + 3, rsc.decodeString(tmpstr.trim()));
+                        }
+                                
                     }
                 }
                 if (!isEpty) {
