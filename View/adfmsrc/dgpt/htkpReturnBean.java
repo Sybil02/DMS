@@ -232,7 +232,6 @@ public class htkpReturnBean {
             qSql.append(entry.getValue()).append(",");
         }
         qSql.append("ROW_ID FROM CONT_INVOICE_RETURN_BUDGET_5_V WHERE COM_RECORD_ID='").append(this.connectId).append("'");
-        System.out.println(qSql.toString());
         return qSql.toString();
     }
     
