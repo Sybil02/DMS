@@ -44,7 +44,8 @@
                           <af:selectOneChoice label="#{paramBean.PAlias}" autoSubmit="true"
                                                 clientComponent="true" id="soc1"
                                                  binding="#{viewScope.InfaIndexBean.paraSocMap[paramBean.PName]}" 
-                                              valueChangeListener="#{viewScope.InfaIndexBean.paramSelectListener}">
+                                              valueChangeListener="#{viewScope.InfaIndexBean.paramSelectListener}"
+                                              value="#{viewScope.InfaIndexBean.firstName}">
                             <f:selectItems value="#{paramBean.valuesList}" id="si1"/>
                           </af:selectOneChoice>
                           <af:spacer id="sph" height="10px"/>

@@ -92,6 +92,7 @@ public class InfaIndexBean {
     Map<String,RichSelectOneChoice> paraSocMap = new LinkedHashMap<String,RichSelectOneChoice>();
     private RichTable statusTable;
     private RichPopup logPop;
+    private String firstName;
     String logMessage = null ;
     
     public InfaIndexBean() {
@@ -141,7 +142,6 @@ public class InfaIndexBean {
     public void workflowExecute(ActionEvent actionEvent) {
         ViewObject vo = ADFUtils.findIterator("InfaUserWorkflowVOIterator").getViewObject();
         Row execRow = vo.getCurrentRow();
-        
         //参数
         this.paramList.clear();
         this.paraSocMap.clear();
@@ -170,6 +170,7 @@ public class InfaIndexBean {
     }
     
     private void showParamPop(){
+        this.firstName = "";
         RichPopup.PopupHints hints = new RichPopup.PopupHints();
         this.paramPop.show(hints);
     }
@@ -714,5 +715,13 @@ public class InfaIndexBean {
 
     public String getLogMessage() {
         return logMessage;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getFirstName() {
+        return firstName;
     }
 }

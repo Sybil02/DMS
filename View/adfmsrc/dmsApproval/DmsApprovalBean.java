@@ -64,7 +64,6 @@ public class DmsApprovalBean {
         Statement stat = trans.createStatement(1);
         String sql = "SELECT V.ID,V.SOURCE FROM DCM_COM_VS T,DMS_VALUE_SET V WHERE T.IS_APPROVAL = 'Y' "
             + "AND T.VALUE_SET_ID = V.ID AND V.LOCALE = 'zh_CN' AND T.COMBINATION_ID = '" + comId + "'";
-        System.out.println("entity:"+sql);
         ResultSet rs;
         String source = "";
         try {

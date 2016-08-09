@@ -150,7 +150,6 @@ public class ApprovalIndexBean {
         Statement stat = trans.createStatement(1);
         String sql = "SELECT V.ID,V.SOURCE,V.NAME,V.CODE,T.IS_APPROVAL,T.SEQ FROM DCM_COM_VS T,DMS_VALUE_SET V WHERE "
             + "T.VALUE_SET_ID = V.ID AND V.LOCALE = 'zh_CN' AND T.COMBINATION_ID = '" + combination + "' ORDER BY T.SEQ";
-        System.out.println(sql);
         ResultSet rs;
         this.paramList = new ArrayList<AppParamBean>();
         try {
@@ -186,10 +185,8 @@ public class ApprovalIndexBean {
         Statement stat = trans.createStatement(1);
         try {
         for(AppParamBean app : this.paramList){
-            System.out.println(app.getPSource());
             String sql = "SELECT T.CODE,T.MEANING FROM " + app.getPSource() + " T WHERE T.ENABLED = 'Y'" +
                 " AND T.LOCALE = '"+locale+"'";
-            System.out.println(sql);
             ResultSet rs;
             List<SelectItem> valueList = new ArrayList<SelectItem>();
             rs = stat.executeQuery(sql);
@@ -249,7 +246,6 @@ public class ApprovalIndexBean {
         for(AppParamBean app : this.paramList){
            sql = sql + "AND C." + app.getPCode() + " ='" + app.getPChoiced() + "' ";
         }
-        System.out.println(sql);
         try {
             stat.executeUpdate(sql);
             trans.commit();   
