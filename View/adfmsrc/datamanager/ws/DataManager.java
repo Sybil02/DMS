@@ -106,7 +106,7 @@ public class DataManager {
         String sqlUp =
             "UPDATE DMS_GL_ACCOUNT SET BUKRS=?, SAKNR=?, TXT20=?, KTOKS=?, XSPEB=?, NOTE1=?, NOTE2=?, NOTE3=?, NOTE4=?, NOTE5=?, " +
             "NOTE6=?, NOTE7=?, NOTE8=?, NOTE9=?, NOTE10=?, NOTE11=?, NOTE12=?, NOTE13=?, NOTE14=?, NOTE15=?, IFFLG=?, IFMSG=?, MSGID=? ,INSERT_DATE=SYSDATE " +
-            "WHERE NVL(BUKRS,0)=NVL(?,0) AND NVL(SAKNR,0) = NVL(?,0)";
+            "WHERE NVL(BUKRS,0)=NVL(?,0) AND NVL(SAKNR,0) = NVL(?,0) AND NVL(XSPEB,0) = NVL(?,0)";
         PreparedStatement stat = null;
         PreparedStatement statUp = null;
         Statement statExs = null;
@@ -122,6 +122,7 @@ public class DataManager {
                 Map<String, String> keyValue = new HashMap<String, String>();
                 keyValue.put("BUKRS", acc.getBukrs());
                 keyValue.put("SAKNR", acc.getSaknr());
+                keyValue.put("XSPEB", acc.getXspeb());
                 if (!this.pkValidate(statExs, "DMS_GL_ACCOUNT", keyValue)) {
                     stat.setString(1, acc.getBukrs());
                     stat.setString(2, acc.getSaknr());
@@ -173,6 +174,7 @@ public class DataManager {
                     statUp.setString(23, acc.getMsgid());
                     statUp.setString(24, acc.getBukrs());
                     statUp.setString(25, acc.getSaknr());
+                    statUp.setString(26, acc.getXspeb());
                     statUp.executeUpdate();
                 }
                 conn.commit();
@@ -212,7 +214,7 @@ public class DataManager {
         String sqlUp =
             "UPDATE DMS_COST_CENTER SET KOSTL=?, DATBI=?, DATAB=?, BKZKP=?, ZZBMBM=?, ZZBMMC=?, BUKRS=?, ABTEI=?, KHINR=?, KTEXT=?, ZZTXMC=?, ZZYWXMC=?, ZZHYXMC=?, NOTE1=?, " +
             "NOTE2=?, NOTE3=?, NOTE4=?, NOTE5=?, NOTE6=?, NOTE7=?, NOTE8=?, NOTE9=?, NOTE10=?, NOTE11=?, NOTE12=?, NOTE13=?, NOTE14=?, NOTE15=?, IFFLG=?, IFMSG=?, MSGID=? ,INSERT_DATE=SYSDATE " +
-            "WHERE NVL(KOSTL,0)=NVL(?,0) AND NVL(DATBI,0) = NVL(?,0) AND NVL(ABTEI,0) = NVL(?,0)";
+            "WHERE NVL(KOSTL,0)=NVL(?,0) AND NVL(BKZKP,0) = NVL(?,0) AND NVL(ABTEI,0) = NVL(?,0)";
         PreparedStatement stat = null;
         PreparedStatement statUp = null;
         Statement statExs = null;
@@ -227,7 +229,7 @@ public class DataManager {
             try {
                 Map<String, String> keyValue = new HashMap<String, String>();
                 keyValue.put("KOSTL", cost.getKostl());
-                keyValue.put("DATBI", cost.getDatbi());
+                keyValue.put("BKZKP", cost.getDatbi());
                 keyValue.put("ABTEI", cost.getAbtei());
                 if (!this.pkValidate(statExs, "DMS_COST_CENTER", keyValue)) {
                     stat.setString(1, cost.getKostl());
@@ -295,7 +297,7 @@ public class DataManager {
                     statUp.setString(30, cost.getIfmsg());
                     statUp.setString(31, cost.getMsgid());
                     statUp.setString(32, cost.getKostl());
-                    statUp.setString(33, cost.getDatbi());
+                    statUp.setString(33, cost.getBkzkp());
                     statUp.setString(34, cost.getAbtei());
                     statUp.executeUpdate();
                 }
@@ -336,7 +338,7 @@ public class DataManager {
         String sqlUp =
             "UPDATE DMS_HR_ORG SET ZJGDM=?, ZBMDM=?, ZBMMS=?, ZZRZX=?, ZSJBM=?, ZZGGW=?, ZQYBZ=?, NOTE1=?, NOTE2=?, NOTE3=?, NOTE4=?, NOTE5=?, " +
             "NOTE6=?, NOTE7=?, NOTE8=?, NOTE9=?, NOTE10=?, NOTE11=?, NOTE12=?, NOTE13=?, NOTE14=?, NOTE15=?, IFFLG=?, IFMSG=?, MSGID=? ,INSERT_DATE=SYSDATE " +
-            "WHERE NVL(ZJGDM,0)=NVL(?,0) AND NVL(ZBMDM,0)=NVL(?,0) AND NVL(ZZRZX,0) =NVL(?,0) AND NVL(ZSJBM,0) =NVL(?,0) AND NVL(ZZGGW,0)=NVL(?,0)";
+            "WHERE NVL(ZBMDM,0)=NVL(?,0) AND NVL(ZSJBM,0)=NVL(?,0) AND NVL(ZQYBZ,0) =NVL(?,0)";
         PreparedStatement stat = null;
         PreparedStatement statUp = null;
         Statement statExs = null;
@@ -350,11 +352,9 @@ public class DataManager {
         for (Orginaze org : orgs) {
             try {
                 Map<String, String> keyValue = new HashMap<String, String>();
-                keyValue.put("ZJGDM", org.getZjgdm());
                 keyValue.put("ZBMDM", org.getZbmdm());
-                keyValue.put("ZZRZX", org.getZzrzx());
                 keyValue.put("ZSJBM", org.getZsjbm());
-                keyValue.put("ZZGGW", org.getZzggw());
+                keyValue.put("ZQYBZ", org.getZqybz());
                 if (!this.pkValidate(statExs, "DMS_HR_ORG", keyValue)) {
                     stat.setString(1, org.getZjgdm());
                     stat.setString(2, org.getZbmdm());
@@ -408,11 +408,9 @@ public class DataManager {
                     statUp.setString(23, org.getIfflg());
                     statUp.setString(24, org.getIfmsg());
                     statUp.setString(25, org.getMsgid());
-                    statUp.setString(26, org.getZjgdm());
-                    statUp.setString(27, org.getZbmdm());
-                    statUp.setString(28, org.getZzrzx());
-                    statUp.setString(29, org.getZsjbm());
-                    statUp.setString(30, org.getZzggw());
+                    statUp.setString(26, org.getZbmdm());
+                    statUp.setString(27, org.getZsjbm());
+                    statUp.setString(28, org.getZqybz());
                     statUp.executeUpdate();
                 }
                 conn.commit();
@@ -452,7 +450,7 @@ public class DataManager {
         String sqlUp =
             "UPDATE DMS_HR_POSITION SET ZJGDM=?, ZBMDM=?, ZGWDM=?, ZGWMS=?, ZSJGW=?, ZQYBZ=?, NOTE1=?, NOTE2=?, NOTE3=?, NOTE4=?, NOTE5=?, " +
             " NOTE6=?, NOTE7=?, NOTE8=?, NOTE9=?, NOTE10=?, NOTE11=?, NOTE12=?, NOTE13=?, NOTE14=?, NOTE15=?, IFFLG=?, IFMSG=?, MSGID=? , NEW_GW=?,INSERT_DATE=SYSDATE " +
-            "WHERE NVL(ZJGDM,0)=NVL(?,0) AND NVL(ZBMDM,0)=NVL(?,0) AND NVL(ZGWDM,0)=NVL(?,0) AND NVL(ZGWMS,0)=NVL(?,0) AND NVL(ZSJGW,0)=NVL(?,0) ";
+            "WHERE NVL(ZGWDM,0)=NVL(?,0) AND NVL(ZQYBZ,0)=NVL(?,0) AND NVL(NOTE3,0)=NVL(?,0) ";
         PreparedStatement stat = null;
         PreparedStatement statUp = null;
         Statement statExs = null;
@@ -466,11 +464,9 @@ public class DataManager {
         for (PositionEntity position : positionList) {
             try {
                 Map<String, String> keyValue = new HashMap<String, String>();
-                keyValue.put("ZJGDM", position.getZjgdm());
-                keyValue.put("ZBMDM", position.getZbmdm());
                 keyValue.put("ZGWDM", position.getZgwdm());
-                keyValue.put("ZGWMS", position.getZgwms());
-                keyValue.put("ZSJGW", position.getZsjgw());
+                keyValue.put("ZQYBZ", position.getZqybz());
+                keyValue.put("NOTE3", position.getNote3());
                 if (!this.pkValidate(statExs, "DMS_HR_POSITION", keyValue)) {
                     stat.setString(1, position.getZjgdm());
                     stat.setString(2, position.getZbmdm());
@@ -524,11 +520,9 @@ public class DataManager {
                     statUp.setString(23, position.getIfmsg());
                     statUp.setString(24, position.getMsgid());
                     statUp.setString(25, position.getNew_gw());
-                    statUp.setString(26, position.getZjgdm());
-                    statUp.setString(27, position.getZbmdm());
-                    statUp.setString(28, position.getZgwdm());
-                    statUp.setString(29, position.getZgwms());
-                    statUp.setString(30, position.getZsjgw());
+                    statUp.setString(26, position.getZgwdm());
+                    statUp.setString(27, position.getZqybz());
+                    statUp.setString(28, position.getNote3());
                     statUp.executeUpdate();
                 }
                 conn.commit();
@@ -615,7 +609,7 @@ public class DataManager {
             "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,SYSDATE)";
         String sqlUp =
             "UPDATE DMS_HLS_BOM SET MATNR=?, MAKTX=?, WERKS=?, MTART=?, MEINS=?, MTBEZ=?, DISPO=?, ZGOOD=?, STPRS=?, PEINH=?, ZPLP2=?,LVORM=?, NOTE1=?, NOTE2=?, NOTE3=?, NOTE4=?, NOTE5=?, NOTE6=?," +
-            " NOTE7=?, NOTE8=?, NOTE9=?, NOTE10=?, NOTE11=?, NOTE12=?, NOTE13=?, NOTE14=?, NOTE15=?, IFFLG=?, IFMSG=?, MSGID=?,INSERT_DATE=SYSDATE WHERE NVL(MATNR,0)=NVL(?,0) AND NVL(WERKS,0)=NVL(?,0)";
+            " NOTE7=?, NOTE8=?, NOTE9=?, NOTE10=?, NOTE11=?, NOTE12=?, NOTE13=?, NOTE14=?, NOTE15=?, IFFLG=?, IFMSG=?, MSGID=?,INSERT_DATE=SYSDATE WHERE NVL(MATNR,0)=NVL(?,0) AND NVL(WERKS,0)=NVL(?,0) AND NVL(MTART,0)=NVL(?,0) AND NVL(LVORM,0)=NVL(?,0)";
         PreparedStatement stat = null;
         PreparedStatement statUp = null;
         Statement statExs = null;
@@ -693,6 +687,8 @@ public class DataManager {
                     statUp.setString(30, bom.getMsgid());
                     statUp.setString(31, bom.getMatnr());
                     statUp.setString(32, bom.getWerks());
+                    statUp.setString(33, bom.getMtart());
+                    statUp.setString(34, bom.getLvorm());
                     statUp.executeUpdate();
                 }
                 conn.commit();
@@ -1621,7 +1617,8 @@ public class DataManager {
     private boolean bomIsExists(Statement statExs, HlsBomEntity bom) {
         String sql =
             "SELECT 1 FROM DMS_HLS_BOM T WHERE NVL(T.MATNR,0) = NVL('" + bom.getMatnr() +
-            "',0) AND NVL(T.WERKS,0) = NVL('" + bom.getWerks() + "',0)";
+            "',0) AND NVL(T.WERKS,0) = NVL('" + bom.getWerks() + "',0) AND NVL(T.MTART,0) = NVL('"
+            + bom.getMtart() + "',0) AND NVL(T.LVORM,0) = NVL('" + bom.getLvorm() + "',0)";
         ResultSet rs;
         try {
             rs = statExs.executeQuery(sql);
