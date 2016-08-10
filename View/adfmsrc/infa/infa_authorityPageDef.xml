@@ -11,7 +11,7 @@
     <searchRegion Binds="InfaRoleWorkflowVOIterator" Criteria=""
                   Customizer="oracle.jbo.uicli.binding.JUSearchBindingCustomizer"
                   id="InfaRoleWorkflowVOQuery"/>
-    <iterator Binds="DmsEnabledRole" RangeSize="10"
+    <iterator Binds="DmsEnabledRole" RangeSize="-1"
               DataControl="InfaModuleDataControl" id="DmsEnabledRoleIterator"/>
     <iterator Binds="InfaUnauthedWorkflowVO" RangeSize="25"
               DataControl="InfaModuleDataControl"
