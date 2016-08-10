@@ -205,9 +205,9 @@ public class Odi11gIndexMBean {
         String curU = ((Person)ADFContext.getCurrent().getSessionScope().get("cur_user")).getAcc();
         String sql = "";
         if(curU.equals("admin")){
-            sql = "SELECT DISTINCT T.PRO_CODE AS CODE,T.PRO_DESC AS MEANING FROM SAP_DMS_PROJECT_PRIVILEGE T ";
+            sql = "SELECT DISTINCT T.PRO_CODE AS CODE,T.PRO_CODE||'-'||T.PRO_DESC AS MEANING FROM SAP_DMS_PROJECT_PRIVILEGE T ";
         }else{
-            sql = "SELECT DISTINCT T.PRO_CODE AS CODE,T.PRO_DESC AS MEANING FROM SAP_DMS_PROJECT_PRIVILEGE T "
+            sql = "SELECT DISTINCT T.PRO_CODE AS CODE,T.PRO_CODE||'-'||T.PRO_DESC AS MEANING FROM SAP_DMS_PROJECT_PRIVILEGE T "
                 + "WHERE T.PRO_MANAGER = '" + curU + "'";
         }
         List vsList = new ArrayList();
