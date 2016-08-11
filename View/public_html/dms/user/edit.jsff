@@ -157,7 +157,7 @@
             </af:selectOneChoice>
           </af:column>
           <af:column sortProperty="#{bindings.DmsUserView.hints.LockFlag.name}"
-                     sortable="true"
+                     sortable="true" visible="false"
                      headerText="#{bindings.DmsUserView.hints.LockFlag.label}"
                      id="c5">
             <af:selectOneChoice value="#{row.bindings.LockFlag.inputValue}"
@@ -171,7 +171,7 @@
           <af:column sortProperty="#{bindings.DmsUserView.hints.LockTime.name}"
                      sortable="true"
                      headerText="#{bindings.DmsUserView.hints.LockTime.label}"
-                     id="c1">
+                     id="c1" visible="false">
             <af:outputText value="#{row.LockTime}" id="ot5">
               <af:convertDateTime pattern="#{bindings.DmsUserView.hints.LockTime.format}"/>
             </af:outputText>
