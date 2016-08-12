@@ -101,10 +101,8 @@ public class XmdbBean {
         }
         labelMap.put("PROJECT_NAME", "PROJECT_NAME");
         labelMap.put("PRODUCT_LINE", "PRODUCT_LINE");
-        labelMap.put("ENTITY_NAME", "ENTITY_NAME");
         labelMap.put("INDUSTRY_LINE", "INDUSTRY_LINE");
         labelMap.put("BUSINESS_LINE", "BUSINESS_LINE");
-        labelMap.put("PROJECT_TYPE", "PROJECT_TYPE");
         labelMap.put("TOTAL", "TOTAL");
         labelMap.put("FCST_COST","FCST_COST");
         labelMap.put("OCCURRED","OCCURRED");
@@ -131,10 +129,8 @@ public class XmdbBean {
         List<String> list = new ArrayList<String>();
         list.add("项目名称");
         list.add("产品线");
-        list.add("实体");
         list.add("行业线");
         list.add("业务线");
-        list.add("项目类型");
         list.add("科目");
         list.add("预计总成本");
         list.add("上年1-10月实际");
@@ -228,7 +224,7 @@ public class XmdbBean {
         sql.append("DATA_TYPE FROM PRO_PLAN_ACC_TOTAL_V WHERE HLS_YEAR = '").append(year).append("'");
         sql.append(" AND VERSION = '").append(version).append("'");
         sql.append(" AND ENTITY_NAME = '").append(entity).append("'");
-        sql.append(" AND PROJECT_TYPE = '").append(type).append("'");
+        sql.append(" AND PROJECT_TYPE = '").append(type).append("' ORDER BY PROJECT_NAME");
         System.out.println(sql);
         return sql.toString();
     }
@@ -604,7 +600,7 @@ public class XmdbBean {
     }
 
     public String getExportName() {
-        if(version == null || year == null){
+        if(year==null||version==null||entity==null||type==null){
             return "项目大表.xlsx";    
         }else{
             for( SelectItem sim : yearList){
@@ -614,6 +610,16 @@ public class XmdbBean {
             }
             for( SelectItem sim : versionList){
                 if(sim.getValue().equals(version)){
+                    exportName = exportName + sim.getLabel() + "_";  
+                }    
+            }
+            for( SelectItem sim : entityList){
+                if(sim.getValue().equals(entity)){
+                    exportName = exportName + sim.getLabel() + "_";  
+                }    
+            }
+            for( SelectItem sim : typeList){
+                if(sim.getValue().equals(type)){
                     exportName = exportName + sim.getLabel() + ".xlsx";  
                 }    
             }

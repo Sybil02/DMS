@@ -38,17 +38,11 @@
           <af:column sortable="false" headerText="产品线" id="new2">
             <af:inputText value="#{row[viewScope.XmdbBean.dataModel.labelMap['PRODUCT_LINE']]}" id="nt2" readOnly="true"/>
           </af:column>
-          <af:column sortable="false" headerText="实体" id="new3">
-            <af:inputText value="#{row[viewScope.XmdbBean.dataModel.labelMap['ENTITY_NAME']]}" id="nt3" readOnly="true"/>
-          </af:column>
           <af:column sortable="false" headerText="行业线" id="new4">
             <af:inputText value="#{row[viewScope.XmdbBean.dataModel.labelMap['INDUSTRY_LINE']]}" id="nt4" readOnly="true"/>
           </af:column>
           <af:column sortable="false" headerText="业务线" id="new5">
             <af:inputText value="#{row[viewScope.XmdbBean.dataModel.labelMap['BUSINESS_LINE']]}" id="nt5" readOnly="true"/>
-          </af:column>
-          <af:column sortable="false" headerText="项目类型" id="new6">
-            <af:inputText value="#{row[viewScope.XmdbBean.dataModel.labelMap['PROJECT_TYPE']]}" id="nt6" readOnly="true"/>
           </af:column>
           <!-- new add -->
           <af:column sortable="false" headerText="科目" id="c19">
