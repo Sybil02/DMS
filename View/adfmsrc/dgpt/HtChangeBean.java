@@ -115,6 +115,7 @@ public class HtChangeBean {
     //是否是2007及以上格式
     private boolean isXlsx = true;
     private boolean isSelected;
+    private boolean isEdited;
     
     public HtChangeBean() {
         super();
@@ -123,6 +124,7 @@ public class HtChangeBean {
         List<Map> d = new ArrayList<Map>();
         this.dataModel.setWrappedData(d);
         isSelected = true;
+        isEdited = true;
         this.initList();
     }
     
@@ -251,6 +253,7 @@ public class HtChangeBean {
                 return;
         }else{
             isSelected = false;
+            isEdited = true;
             this.queryData();
             this.createTableModel(pStart, pEnd);
         }
@@ -263,6 +266,7 @@ public class HtChangeBean {
             return;
         }else{
             isSelected = false;
+            isEdited = true;
             this.queryData();
             this.createTableModel(pStart, pEnd);
         }
@@ -275,6 +279,7 @@ public class HtChangeBean {
             return;
         }else{
             isSelected = false;
+            isEdited = true;
             this.queryData();
             this.createTableModel(pStart, pEnd);
         }
@@ -377,7 +382,9 @@ public class HtChangeBean {
         }
         sql.append("ROWID AS ROW_ID,ACC_CODE,CENTER_CODE,LGF_NUM,LGF_TYPE,PLAN_QUANTITY,PLAN_AMOUNT," + 
         "OCCURRED_QUANTITY,OCCURRED_AMOUNT,OCCURRED FROM PRO_PLAN_COST_BODY WHERE CONNECT_ID = '").append(connectId).append("'");
-        sql.append(" AND DATA_TYPE = '").append(this.TYPE_CHANGE).append("' ORDER BY WBS,NETWORK,TO_NUMBER(WORK_CODE)");
+        sql.append(" AND (DATA_TYPE = '").append(this.TYPE_CHANGE).append("' OR DATA_TYPE = 'BASE')")
+            .append(" ORDER BY WBS,NETWORK,TO_NUMBER(WORK_CODE)");
+        System.out.println(sql.toString());
         return sql.toString();
     }
     //选中行，修改
@@ -403,6 +410,7 @@ public class HtChangeBean {
     public void closeVersion(String yearStr,String pNameStr,String versionStr){
         String sql = "UPDATE PRO_PLAN_COST_HEADER SET (IS_BLOCK) = 'true' WHERE HLS_YEAR = \'"+yearStr;
         sql = sql + "\' AND PROJECT_NAME =\'"+pNameStr+"\' AND VERSION=\'"+versionStr+"\'";
+        System.out.println(yearStr+"-"+pNameStr+""+versionStr);
         DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
         Statement stat = trans.createStatement(DBTransaction.DEFAULT);
         int flag =-1;
@@ -480,13 +488,15 @@ public class HtChangeBean {
         }
         
         //冻结基准计划成本版本
-        this.closeVersion(this.year, this.pname, this.version);
-        versionList.add(new SelectItem(newVersion,newVersion));
+        this.closeVersion(this.year, this.pname, newVersion);
+//        versionList.add(new SelectItem(newVersion,newVersion));
         version = newVersion;
         versionList.add(new SelectItem(newVeCode,newVeCode+"-"+newVersion));
         version = newVeCode;
         pEnd = newEnd;
         connectId = newConnectId;
+        
+        this.isEdited = false;
         this.createTableModel(pStart,pEnd);
     }
 
@@ -520,6 +530,7 @@ public class HtChangeBean {
         sql.append("LGF_NUM,LGF_TYPE,PLAN_QUANTITY,PLAN_AMOUNT,OCCURRED_QUANTITY,OCCURRED_AMOUNT,OCCURRED,ACC_CODE,CENTER_CODE)");
         sql_value.append("?,\'"+connectId+"\',"+this.curUser.getId()+",?,\'"+this.TYPE_CHANGE+"\',?,");
         sql_value.append("?,?,?,?,?,?,?,?,?)");
+        System.out.println(sql.toString()+sql_value.toString());
         PreparedStatement stmt = trans.createPreparedStatement(sql.toString()+sql_value.toString(), 0);
         //获取数据
         int rowNum = 1;
@@ -578,7 +589,7 @@ public class HtChangeBean {
                 e.printStackTrace();
             }
             this.inputPro();
-           dmsLog.operationLog(this.curUser.getAcc(),"CHANGE_"+this.connectId,this.getCom(),"UPDATE");
+           dmsLog.operationLog(this.curUser.getAcc(),this.connectId,this.getCom(),"UPDATE");
             for(Map<String,String> rowdata : modelData){
                     rowdata.put("OPERATION", null);
             }
@@ -673,7 +684,12 @@ public class HtChangeBean {
         boolean isReadonly = true;
         this.pcColsDef.clear();
         this.pcColsEx.clear();
+        int flag = 1;
         for(Map.Entry<String,String> map:labelMap.entrySet()){
+            if(flag>11){
+                isReadonly = false;
+            }
+            flag++;
             PcColumnDef newCol = new PcColumnDef(map.getKey(),map.getValue(),isReadonly);
             this.pcColsDef.add(newCol);
             this.pcColsEx.add(newCol);
@@ -737,10 +753,9 @@ public class HtChangeBean {
     //导入程序
     public void inputPro(){
         DBTransaction trans = (DBTransaction)DmsUtils.getDcmApplicationModule().getDBTransaction();
-        CallableStatement cs = trans.createCallableStatement("{CALl DMS_ZZX.CHANGE_INPUTPRO(?,?)}", 0);
+        CallableStatement cs = trans.createCallableStatement("{CALl DMS_ZZX.CHANGE_INPUTPRO(?)}", 0);
         try {
             cs.setString(1,this.curUser.getId() );
-            cs.setString(2, this.connectId);
             cs.execute();
             trans.commit();
             cs.close();
@@ -788,7 +803,7 @@ public class HtChangeBean {
         } catch (Exception e) {
             this._logger.severe(e);
         } 
-        dmsLog.operationLog(this.curUser.getAcc(),"CHANGE_"+this.connectId,this.getCom(),"EXPORT");
+        dmsLog.operationLog(this.curUser.getAcc(),this.connectId,this.getCom(),"EXPORT");
     }
     //导出文件名
     public String getExportDataExcelName(){
@@ -871,7 +886,7 @@ public class HtChangeBean {
     //        }
         //刷新数据
         this.createTableModel(pStart , newEnd);
-        dmsLog.operationLog(this.curUser.getAcc(),"CHANGE_"+this.connectId,this.getCom(),"IMPORT");
+        dmsLog.operationLog(this.curUser.getAcc(),this.connectId,this.getCom(),"IMPORT");
     }
     //excel导入导入程序
     public void inputPro_import(){
@@ -891,7 +906,7 @@ public class HtChangeBean {
     public boolean validation_import(){
         boolean flag = true;
         DBTransaction trans = (DBTransaction)DmsUtils.getDcmApplicationModule().getDBTransaction();
-        CallableStatement cs = trans.createCallableStatement("{CALl DMS_ZZX.ZZXIMPORT_VALIDATION(?,?,?,?)}", 0);
+        CallableStatement cs = trans.createCallableStatement("{CALl DMS_ZZX.CHANGEIMPORT_VALIDATION(?,?,?,?)}", 0);
         try {
             cs.setString(1, this.curUser.getId());
             cs.setString(2, this.TYPE_CHANGE);
@@ -1194,5 +1209,13 @@ public class HtChangeBean {
 
     public boolean isIsSelected() {
         return isSelected;
+    }
+
+    public void setIsEdited(boolean isEdited) {
+        this.isEdited = isEdited;
+    }
+
+    public boolean isIsEdited() {
+        return isEdited;
     }
 }

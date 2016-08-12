@@ -4,7 +4,8 @@
           xmlns:af="http://xmlns.oracle.com/adf/faces/rich"
           xmlns:f="http://java.sun.com/jsf/core">
   <c:set var="viewBundle" value="#{adfBundle['dms_v']}"/>
-  <af:panelStretchLayout id="psl1" startWidth="0px" topHeight="50px">
+  <af:panelStretchLayout id="psl1" startWidth="0px" topHeight="50px"
+                         bottomHeight="1px">
     <f:facet name="bottom">
       <af:panelGroupLayout layout="scroll"
                            xmlns:af="http://xmlns.oracle.com/adf/faces/rich"

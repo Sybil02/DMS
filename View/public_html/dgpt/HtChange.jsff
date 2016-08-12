@@ -4,7 +4,7 @@
           xmlns:af="http://xmlns.oracle.com/adf/faces/rich"
           xmlns:f="http://java.sun.com/jsf/core">
   <c:set var="viewBundle" value="#{adfBundle['dms_v']}"/>
-  <af:panelStretchLayout id="psl1" startWidth="0px">
+  <af:panelStretchLayout id="psl1" startWidth="0px" bottomHeight="4px">
     <f:facet name="bottom">
       <af:panelGroupLayout id="pgl4" layout="scroll">
         <af:popup id="p1">
@@ -185,21 +185,25 @@
                               action="#{viewScope.HtChangeBean.operation_new}"/>-->
             <af:commandButton text="#{viewBundle['dms.common.save']}" id="cb2"
                               action="#{viewScope.HtChangeBean.operation_save}"
-                              disabled="#{viewScope.HtChangeBean.isSelected}"
+                              disabled="#{viewScope.HtChangeBean.isSelected or viewScope.HtChangeBean.isEdited}"
                               partialTriggers="::soc1 ::iclov2 ::soc3"/>
             <af:commandButton text="#{viewBundle['dms.common.cancel']}" id="cb3"
-                              actionListener="#{viewScope.HtChangeBean.operation_reset}"/>
+                              actionListener="#{viewScope.HtChangeBean.operation_reset}"
+                              disabled="#{viewScope.HtChangeBean.isEdited}"
+                              partialTriggers="::soc1 ::iclov2 ::soc3"/>
             <af:commandButton text="#{viewBundle['dcm.common.delete']}" id="cb4"
-                              action="#{viewScope.HtChangeBean.operation_delete}"/>
+                              action="#{viewScope.HtChangeBean.operation_delete}"
+                              disabled="#{viewScope.HtChangeBean.isEdited}"
+                              partialTriggers="::soc1 ::iclov2 ::soc3"/>
             </af:group>
             <af:group id="g1">
               <af:commandButton text="#{viewBundle['dms.dgpt.excel.import']}" id="cb10"
-                                disabled="#{viewScope.HtChangeBean.isSelected}"
+                                disabled="#{viewScope.HtChangeBean.isSelected or viewScope.HtChangeBean.isEdited}"
                               partialTriggers="::soc1 ::iclov2 ::soc3">
                 <af:showPopupBehavior popupId="::p4"/>
               </af:commandButton>
               <af:commandButton text="#{viewBundle['dcm.action.export']}" id="cb7"
-                                disabled="#{viewScope.HtChangeBean.isSelected}"
+                                disabled="#{viewScope.HtChangeBean.isSelected or viewScope.HtChangeBean.isEdited}"
                               partialTriggers="::soc1 ::iclov2 ::soc3">
                 <af:showPopupBehavior popupId="::p2"/>
               </af:commandButton>
@@ -223,7 +227,7 @@
                                     #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
                                     #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}"
                              rendered="#{attr.dbTableCol ne &quot;ROW_ID&quot;}">
-                    <af:inputText value="#{row[attr.dbTableCol]}" id="ot6" 
+                    <af:inputText value="#{row[attr.dbTableCol]}" id="ot6"  
                                     valueChangeListener="#{viewScope.HtChangeBean.valueChangeLinstener}"/>
                   </af:column>
           </af:forEach>

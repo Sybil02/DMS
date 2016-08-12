@@ -5,7 +5,7 @@
           xmlns:f="http://java.sun.com/jsf/core">
   <c:set var="viewBundle" value="#{adfBundle['dms_v']}"/>
   <af:panelStretchLayout id="psl1" startWidth="0px" endWidth="4px"
-                         topHeight="33px">
+                         topHeight="33px" bottomHeight="2px">
     <f:facet name="bottom">
       <af:panelGroupLayout id="pgl2">
         <af:popup id="p1" binding="#{viewScope.htkpReturnBean.dataExportWnd}">
