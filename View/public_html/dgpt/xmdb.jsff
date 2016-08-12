@@ -30,7 +30,7 @@
                   selectedRowKeys="#{viewScope.XmdbBean.dataModel.selectedRows}"
                   rowSelection="multiple" editingMode="clickToEdit"
                   emptyText="#{viewBundle['dms.common.nodata']}"
-                  partialTriggers=" :::soc1 :::soc3">
+                  partialTriggers=" :::soc1 :::soc3 :::soc4 :::soc5">
           <!-- new add -->
           <af:column sortable="false" headerText="项目名称" id="new1">
             <af:inputText value="#{row[viewScope.XmdbBean.dataModel.labelMap['PROJECT_NAME']]}" id="nit1" readOnly="true"/>
@@ -177,6 +177,18 @@
                               id="soc3"
                               valueChangeListener="#{viewScope.XmdbBean.versionChange}">
             <f:selectItems value="#{viewScope.XmdbBean.versionList}" id="si3"/>
+          </af:selectOneChoice>
+          <af:selectOneChoice value="#{viewScope.XmdbBean.entity}"
+                              label="实体" autoSubmit="true"
+                              id="soc4"
+                              valueChangeListener="#{viewScope.XmdbBean.entityChange}">
+            <f:selectItems value="#{viewScope.XmdbBean.entityList}" id="si4"/>
+          </af:selectOneChoice>
+          <af:selectOneChoice value="#{viewScope.XmdbBean.type}"
+                              label="项目类型" autoSubmit="true"
+                              id="soc5"
+                              valueChangeListener="#{viewScope.XmdbBean.typeChange}">
+            <f:selectItems value="#{viewScope.XmdbBean.typeList}" id="si5"/>
           </af:selectOneChoice>
         </af:panelGroupLayout>
       </af:panelGroupLayout>

@@ -450,7 +450,7 @@ public class DataManager {
         String sqlUp =
             "UPDATE DMS_HR_POSITION SET ZJGDM=?, ZBMDM=?, ZGWDM=?, ZGWMS=?, ZSJGW=?, ZQYBZ=?, NOTE1=?, NOTE2=?, NOTE3=?, NOTE4=?, NOTE5=?, " +
             " NOTE6=?, NOTE7=?, NOTE8=?, NOTE9=?, NOTE10=?, NOTE11=?, NOTE12=?, NOTE13=?, NOTE14=?, NOTE15=?, IFFLG=?, IFMSG=?, MSGID=? , NEW_GW=?,INSERT_DATE=SYSDATE " +
-            "WHERE NVL(ZGWDM,0)=NVL(?,0) AND NVL(ZQYBZ,0)=NVL(?,0) AND NVL(NOTE3,0)=NVL(?,0) ";
+            "WHERE NVL(ZGWDM,0)=NVL(?,0) AND NVL(ZQYBZ,0)=NVL(?,0) AND NVL(NEW_GW,0)=NVL(?,0) ";
         PreparedStatement stat = null;
         PreparedStatement statUp = null;
         Statement statExs = null;
@@ -466,7 +466,7 @@ public class DataManager {
                 Map<String, String> keyValue = new HashMap<String, String>();
                 keyValue.put("ZGWDM", position.getZgwdm());
                 keyValue.put("ZQYBZ", position.getZqybz());
-                keyValue.put("NOTE3", position.getNote3());
+                keyValue.put("NEW_GW", position.getNew_gw());
                 if (!this.pkValidate(statExs, "DMS_HR_POSITION", keyValue)) {
                     stat.setString(1, position.getZjgdm());
                     stat.setString(2, position.getZbmdm());
@@ -522,7 +522,7 @@ public class DataManager {
                     statUp.setString(25, position.getNew_gw());
                     statUp.setString(26, position.getZgwdm());
                     statUp.setString(27, position.getZqybz());
-                    statUp.setString(28, position.getNote3());
+                    statUp.setString(28, position.getNew_gw());
                     statUp.executeUpdate();
                 }
                 conn.commit();

@@ -1,20 +1,13 @@
 package dgpt;
 
-import common.ADFUtils;
 import common.DmsLog;
 import common.DmsUtils;
 import common.JSFUtils;
-
-import common.lov.DmsComBoxLov;
-import common.lov.ValueSetRow;
 
 import dcm.DcmDataDisplayBean;
 import dcm.PcColumnDef;
 
 import dcm.PcDataTableModel;
-
-import dcm.PcExcel2003WriterImpl;
-import dcm.PcExcel2007WriterImpl;
 
 import dms.login.Person;
 
@@ -43,11 +36,10 @@ import javax.faces.model.SelectItem;
 
 import oracle.adf.share.ADFContext;
 import oracle.adf.share.logging.ADFLogger;
-import oracle.adf.view.rich.component.rich.RichPopup;
+
 import oracle.adf.view.rich.component.rich.data.RichTable;
 import oracle.adf.view.rich.component.rich.output.RichPanelCollection;
 
-import oracle.jbo.ViewObject;
 import oracle.jbo.server.DBTransaction;
 
 import org.apache.myfaces.trinidad.event.SelectionEvent;
@@ -80,6 +72,8 @@ public class XmdbBean {
     private List<SelectItem> yearList;
     private String version;
     private List<SelectItem> versionList;
+    private List<SelectItem> entityList;
+    private List<SelectItem> typeList;
     private String pStart;
     private String pEnd;
     private String connectId;
@@ -90,10 +84,14 @@ public class XmdbBean {
     private Date day2;
     private Date day3;
     private String exportName;
+    private String entity;
+    private String type;
     
     private void initList(){
         this.yearList = queryYears("HLS_YEAR_C");
         this.versionList = queryValues1("PRO_PLAN_COST_HEADER","VERSION");
+        this.entityList = this.queryEntity();
+        this.typeList = this.queryType();
     }
     
     private LinkedHashMap<String,String> getLabelMap(){
@@ -229,6 +227,9 @@ public class XmdbBean {
         }
         sql.append("DATA_TYPE FROM PRO_PLAN_ACC_TOTAL_V WHERE HLS_YEAR = '").append(year).append("'");
         sql.append(" AND VERSION = '").append(version).append("'");
+        sql.append(" AND ENTITY_NAME = '").append(entity).append("'");
+        sql.append(" AND PROJECT_TYPE = '").append(type).append("'");
+        System.out.println(sql);
         return sql.toString();
     }
     //时间段
@@ -310,6 +311,47 @@ public class XmdbBean {
         return values;
     }
     
+    public List<SelectItem> queryEntity(){
+        DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
+        Statement stat = trans.createStatement(DBTransaction.DEFAULT);
+        //实体
+        String sql = "SELECT VALUE_ID FROM DMS_USER_VALUE_V T WHERE T.VALUE_SET_ID = '53fdbb001ad14e16a40604c7bd3c6025' "
+            + "AND T.USER_ID = '" + this.curUser.getId() + "'";
+        List<SelectItem> entityList = new ArrayList<SelectItem>();
+        
+        ResultSet rs;
+        try {
+            rs = stat.executeQuery(sql);
+            while(rs.next()){
+                SelectItem sim = new SelectItem(rs.getString("VALUE_ID"),rs.getString("VALUE_ID"));
+                entityList.add(sim);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return entityList;
+    }
+    
+    public List<SelectItem> queryType(){
+        DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
+        Statement stat = trans.createStatement(DBTransaction.DEFAULT);
+        //项目类型
+        String sql = "SELECT VALUE_ID FROM DMS_USER_VALUE_V T WHERE T.VALUE_SET_ID = '00a2446792244432b48bfce722550630' "
+            + "AND T.USER_ID = '" + this.curUser.getId() + "'";
+        List<SelectItem> typeList = new ArrayList<SelectItem>();
+        ResultSet rs;
+        try {
+            rs = stat.executeQuery(sql);
+            while(rs.next()){
+                SelectItem sim = new SelectItem(rs.getString("VALUE_ID"),rs.getString("VALUE_ID"));
+                typeList.add(sim);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return typeList;
+    }
+    
     //版本下拉列表
     private List<SelectItem> queryValues1(String source,String col){
         DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
@@ -334,7 +376,7 @@ public class XmdbBean {
     //版本下拉框change
     public void versionChange(ValueChangeEvent valueChangeEvent) {
         version =(String) valueChangeEvent.getNewValue();
-        if(year==null||version==null){
+        if(year==null||version==null||entity==null||type==null){
             return;
         }else{
             this.setStartAndEndTime();
@@ -345,7 +387,27 @@ public class XmdbBean {
     //年下拉框change
     public void yearChange(ValueChangeEvent valueChangeEvent) {
         year = (String)valueChangeEvent.getNewValue();
-        if(year==null||version==null){
+        if(year==null||version==null||entity==null||type==null){
+            return;
+        }else{
+            this.setStartAndEndTime();
+            this.createTableModel();
+        }
+    }
+    
+    public void entityChange(ValueChangeEvent valueChangeEvent) {
+        entity = (String)valueChangeEvent.getNewValue();
+        if(year==null||version==null||entity==null||type==null){
+            return;
+        }else{
+            this.setStartAndEndTime();
+            this.createTableModel();
+        }
+    }
+
+    public void typeChange(ValueChangeEvent valueChangeEvent) {
+        type = (String)valueChangeEvent.getNewValue();
+        if(year==null||version==null||entity==null||type==null){
             return;
         }else{
             this.setStartAndEndTime();
@@ -558,4 +620,37 @@ public class XmdbBean {
         }
         return exportName;
     }
+
+    public void setEntityList(List<SelectItem> entityList) {
+        this.entityList = entityList;
+    }
+
+    public List<SelectItem> getEntityList() {
+        return entityList;
+    }
+
+    public void setTypeList(List<SelectItem> typeList) {
+        this.typeList = typeList;
+    }
+
+    public List<SelectItem> getTypeList() {
+        return typeList;
+    }
+
+    public void setEntity(String entity) {
+        this.entity = entity;
+    }
+
+    public String getEntity() {
+        return entity;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getType() {
+        return type;
+    }
+
 }
