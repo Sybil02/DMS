@@ -162,12 +162,19 @@
             </af:panelGridLayout>
           </af:panelWindow>
         </af:popup>
-        <af:popup id="p4" binding="#{viewScope.BPCostBean.adminBlockPop}">
+        <af:popup id="p4" binding="#{viewScope.BPCostBean.adminBlockPop}" autoCancel="disabled">
           <af:panelWindow id="pw4"
                           title="#{viewBundle['dms.dgpt.block_status.select']}">
             <af:panelCollection id="pc2" inlineStyle="width:800px;height:400px">
               <f:facet name="menus"/>
-              <f:facet name="toolbar"/>
+              <f:facet name="toolbar">
+              <af:toolbar id="t6">
+                  <af:group id="g2">
+                    <af:commandButton text="#{viewBundle['dms.dgpt.fblock']}" id="cb10"
+                                      actionListener="#{viewScope.BPCostBean.goUnBlock}"/>
+                  </af:group>
+                </af:toolbar>
+              </f:facet>
               <f:facet name="statusbar"/>
               <af:table value="#{bindings.adminBlockStatus.collectionModel}"
                         var="row" rows="#{bindings.adminBlockStatus.rangeSize}"
@@ -177,10 +184,10 @@
                         filterModel="#{bindings.adminBlockStatusQuery.queryDescriptor}"
                         queryListener="#{bindings.adminBlockStatusQuery.processQuery}"
                         filterVisible="false" varStatus="vs"
-                        selectedRowKeys="#{bindings.adminBlockStatus.collectionModel.selectedRow}"
                         selectionListener="#{bindings.adminBlockStatus.collectionModel.makeCurrent}"
-                        rowSelection="single" id="t4"
-                        columnStretching="column:c15">
+                        rowSelection="multiple" id="t4"
+                        columnStretching="column:c15"
+                        binding="#{viewScope.BPCostBean.subTable}">
                 <af:column sortProperty="#{bindings.adminBlockStatus.hints.Meaning.name}"
                            filterable="true" sortable="false"
                            headerText="#{bindings.adminBlockStatus.hints.Meaning.label}"
@@ -209,12 +216,20 @@
             </af:panelCollection>
           </af:panelWindow>
         </af:popup>
-        <af:popup id="p5" binding="#{viewScope.BPCostBean.statusWindow}">
+        <af:popup id="p5" binding="#{viewScope.BPCostBean.statusWindow}" autoCancel="disabled">
           <af:panelWindow id="pw5"
                           title="#{viewBundle['dms.dgpt.block_status.select']}">
             <af:panelCollection id="pc3" inlineStyle="width:800px;height:400px">
               <f:facet name="menus"/>
-              <f:facet name="toolbar"/>
+              <f:facet name="toolbar">
+                <af:toolbar id="t7">
+                  <af:group id="g3">
+                    <af:commandButton text="#{viewBundle['dms.dgpt.fblock']}" id="cb12"
+                                      rendered="#{sessionScope.authoriedFunction['UNFREEZE']}"
+                                      actionListener="#{viewScope.BPCostBean.goUnBlock2}"/>
+                  </af:group>
+                </af:toolbar>
+              </f:facet>
               <f:facet name="statusbar"/>
               <af:table value="#{bindings.PTBlockStatus.collectionModel}"
                         var="row" rows="#{bindings.PTBlockStatus.rangeSize}"
@@ -224,10 +239,10 @@
                         filterModel="#{bindings.PTBlockStatusQuery.queryDescriptor}"
                         queryListener="#{bindings.PTBlockStatusQuery.processQuery}"
                         filterVisible="false" varStatus="vs"
-                        selectedRowKeys="#{bindings.PTBlockStatus.collectionModel.selectedRow}"
                         selectionListener="#{bindings.PTBlockStatus.collectionModel.makeCurrent}"
-                        rowSelection="single" id="t5"
-                        columnStretching="column:c18">
+                        rowSelection="multiple" id="t5"
+                        columnStretching="column:c18"
+                        binding="#{viewScope.BPCostBean.subTable2}">
                 <af:column sortProperty="#{bindings.PTBlockStatus.hints.Meaning.name}"
                            filterable="true" sortable="false"
                            headerText="#{bindings.PTBlockStatus.hints.Meaning.label}"
@@ -266,15 +281,15 @@
           <af:group id="grp1">
             <af:commandButton text="#{viewBundle['dms.common.save']}" id="cb1"
                               actionListener="#{viewScope.BPCostBean.operation_save}"
-                              disabled="#{viewScope.BPCostBean.isSelected}"
+                              disabled="#{viewScope.BPCostBean.isSelected or not viewScope.BPCostBean.isEDITABLE or viewScope.BPCostBean.isBlock}"
                               partialTriggers="::soc1 ::iclov2 ::soc3"/>
             <af:commandButton text="#{viewBundle['dms.common.cancel']}" id="cb2"
                               actionListener="#{viewScope.BPCostBean.operation_reset}"/>
         </af:group>
         <af:group id="g1">
               <af:commandButton text="#{viewBundle['dms.dgpt.excel.import']}" id="cb8"
-                                disabled="#{viewScope.BPCostBean.isBlock or not viewScope.BPCostBean.isEDITABLE}"
-                                partialTriggers="cb3">
+                                disabled="#{viewScope.BPCostBean.isBlock or not viewScope.BPCostBean.isEDITABLE or viewScope.BPCostBean.isSelected}"
+                                partialTriggers="cb3 ::pc2:cb10">
                 <af:showPopupBehavior popupId="::p3"/>
               </af:commandButton>
               <af:commandButton text="#{viewBundle['dcm.action.export']}" id="cb7"
@@ -284,15 +299,15 @@
               </af:commandButton>
               <af:commandButton text="#{viewBundle['dms.dgpt.block']}" id="cb3"
                                 actionListener="#{viewScope.BPCostBean.beBlocked}"
-                                     disabled="#{viewScope.BPCostBean.isBlock}"
-                                partialTriggers="::soc1 ::iclov2 ::soc3"/>
+                                     disabled="#{viewScope.BPCostBean.isBlock or not viewScope.BPCostBean.isEDITABLE}"
+                                partialTriggers="::soc1 ::iclov2 ::soc3 ::pc2:cb10"/>
               <af:commandButton text="#{viewBundle['dms.dgpt.block.status']}" id="cb9"
                                 actionListener="#{viewScope.BPCostBean.blockStatusPop}"/>
               <af:commandButton text="#{viewBundle['dms.dgpt.fblock']}" id="cb5"
                                 rendered="#{viewScope.BPCostBean.isManager}"
                                 actionListener="#{viewScope.BPCostBean.outBlock}"
                                 disabled="#{not viewScope.BPCostBean.isBlock}"
-                                partialTriggers="::soc1 ::iclov2 ::soc3"/>
+                                partialTriggers="::soc1 ::iclov2 ::soc3 ::pc2:cb10"/>
               <af:commandButton text="#{viewBundle['dcm.import_error']}" id="cb4"
                                 actionListener="#{viewScope.BPCostBean.errorPop}"/>
             </af:group>

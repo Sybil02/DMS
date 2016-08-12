@@ -774,7 +774,7 @@ public class HtChangeBean {
             if("xls".equals(type)){
                 PcExcel2003WriterImpl writer = new PcExcel2003WriterImpl(
                                                    this.querySql(this.getLabelMap(pStart, pEnd)),
-                                                   this.connectId,
+                                                   "合同变更后的基准计划成本",
                                                     this.pcColsEx,
                                                     outputStream);
                 writer.writeToFile();
@@ -782,7 +782,7 @@ public class HtChangeBean {
                 PcExcel2007WriterImpl writer = new PcExcel2007WriterImpl(
                                                     this.querySql(this.getLabelMap(pStart, pEnd)),
                                                     2,this.pcColsEx);
-                writer.process(outputStream, this.connectId);
+                writer.process(outputStream, "合同变更后的基准计划成本");
                 outputStream.flush();
             }
         } catch (Exception e) {

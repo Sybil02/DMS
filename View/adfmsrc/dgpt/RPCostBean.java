@@ -44,6 +44,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -62,6 +63,10 @@ import oracle.adf.view.rich.component.rich.data.RichTable;
 import oracle.adf.view.rich.component.rich.input.RichInputFile;
 import oracle.adf.view.rich.component.rich.output.RichPanelCollection;
 
+import oracle.adf.view.rich.context.AdfFacesContext;
+
+import oracle.jbo.Key;
+import oracle.jbo.Row;
 import oracle.jbo.ViewObject;
 import oracle.jbo.server.DBTransaction;
 
@@ -111,7 +116,11 @@ public class RPCostBean {
     private boolean isXlsx = true;
     private Boolean isIncrement = true;
     private RichPopup dataExportWnd;
-    
+    private RichTable subTable;
+    private RichPopup adminBlockPop;
+    private RichPopup statusWindow;
+    private RichTable subTable2;
+
     public RPCostBean() {
         super();
         this.curUser = (Person)(ADFContext.getCurrent().getSessionScope().get("cur_user"));
@@ -690,7 +699,7 @@ public class RPCostBean {
             if("xls".equals(type)){
                 PcExcel2003WriterImpl writer = new PcExcel2003WriterImpl(
                                                    this.querySql(this.getLabelMap()),
-                                                   this.connectId,
+                                                   "滚动计划成本",
                                                     this.pcColsDef,
                                                     outputStream);
             
@@ -699,7 +708,7 @@ public class RPCostBean {
                 PcExcel2007WriterImpl writer = new PcExcel2007WriterImpl(
                                                     this.querySql(this.getLabelMap()),
                                                     2,this.pcColsDef);
-                writer.process(outputStream, this.connectId);
+                writer.process(outputStream, "滚动计划成本");
                 outputStream.flush();
             }
         } catch (Exception e) {
@@ -876,6 +885,98 @@ public class RPCostBean {
         }else{
             return "滚动计划成本_"+this.connectId+".xls";
         }
+    }
+    
+    //显示admin用户冻结状态信息
+    public void showAdminStatusPop(){
+        ViewObject vo = ADFUtils.findIterator("adminBlockStatusIterator").getViewObject();
+        vo.setNamedWhereClauseParam("dataType", this.TYPE_ROLL);
+    //        vo.setNamedWhereClauseParam("userAcc", this.curUser.getAcc());
+        vo.executeQuery();
+        RichPopup.PopupHints ph = new RichPopup.PopupHints();
+        this.adminBlockPop.show(ph);
+    }
+    
+    //显示冻结状态信息
+    public void showBlockStatusPop(){
+            ViewObject vo = ADFUtils.findIterator("PTBlockStatusIterator").getViewObject();
+            vo.setNamedWhereClauseParam("dataType", this.TYPE_ROLL);
+            vo.setNamedWhereClauseParam("userId", this.curUser.getId());
+            vo.executeQuery();
+            RichPopup.PopupHints ph = new RichPopup.PopupHints();
+            this.statusWindow.show(ph);
+    }
+    
+    public void blockStatusPop(ActionEvent actionEvent) {
+        if(this.curUser.getId().equals("10000")){
+            this.showAdminStatusPop();
+        }else{
+            this.showBlockStatusPop();
+        }
+    }
+
+    public void goUnBlock(ActionEvent actionEvent) {
+        if(this.subTable.getSelectedRowKeys() == null) return ;
+        RowKeySet rsk = this.subTable.getSelectedRowKeys();
+        ViewObject vo = ADFUtils.findIterator("adminBlockStatusIterator").getViewObject();
+        DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
+        Statement stat = trans.createStatement(DBTransaction.DEFAULT);
+        Iterator itr = rsk.iterator();
+        try {
+            while(itr.hasNext()){
+                List ls = (List)itr.next();
+                Key key =(Key)ls.get(0);
+                Row row = vo.getRow(key);
+                StringBuffer sql = new StringBuffer();
+                if(row.getAttribute("IsBlock").equals("已冻结")){
+                    sql.append("UPDATE PRO_PLAN_COST_HEADER SET (IS_BLOCK) = 'false' WHERE HLS_YEAR = \'"+row.getAttribute("Code"))
+                        .append("' AND PROJECT_NAME = '"+row.getAttribute("ProjectName"))
+                        .append("' AND IS_BLOCK='true' ").append("AND DATA_TYPE = '"+this.TYPE_ROLL+"'");
+                    stat.executeUpdate(sql.toString());
+                }
+                if(row.getAttribute("ProjectName").equals(this.pname)){
+                    this.isBlock = "false";
+                }
+            }
+            stat.close();
+            trans.commit();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        vo.executeQuery();
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.subTable);
+    }
+    
+    public void goUnBlock2(ActionEvent actionEvent) {
+        if(this.subTable2.getSelectedRowKeys() == null) return ;
+        RowKeySet rsk = this.subTable2.getSelectedRowKeys();
+        ViewObject vo = ADFUtils.findIterator("adminBlockStatusIterator").getViewObject();
+        DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
+        Statement stat = trans.createStatement(DBTransaction.DEFAULT);
+        Iterator itr = rsk.iterator();
+        try {
+            while(itr.hasNext()){
+                List ls = (List)itr.next();
+                Key key =(Key)ls.get(0);
+                Row row = vo.getRow(key);
+                StringBuffer sql = new StringBuffer();
+                if(row.getAttribute("IsBlock").equals("已冻结")){
+                    sql.append("UPDATE PRO_PLAN_COST_HEADER SET (IS_BLOCK) = 'false' WHERE HLS_YEAR = \'"+row.getAttribute("Code"))
+                        .append("' AND PROJECT_NAME = '"+row.getAttribute("ProjectName"))
+                        .append("' AND IS_BLOCK='true' ").append("AND DATA_TYPE = '"+this.TYPE_ROLL+"'");
+                    stat.executeUpdate(sql.toString());
+                }
+                if(row.getAttribute("ProjectName").equals(this.pname)){
+                    this.isBlock = "false";
+                }
+            }
+            stat.close();
+            trans.commit();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        vo.executeQuery();
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.subTable2);
     }
     
     public void setYear(String year) {
@@ -1100,5 +1201,37 @@ public class RPCostBean {
 
     public boolean isIsSelected() {
         return isSelected;
+    }
+
+    public void setSubTable(RichTable subTable) {
+        this.subTable = subTable;
+    }
+
+    public RichTable getSubTable() {
+        return subTable;
+    }
+
+    public void setAdminBlockPop(RichPopup adminBlockPop) {
+        this.adminBlockPop = adminBlockPop;
+    }
+
+    public RichPopup getAdminBlockPop() {
+        return adminBlockPop;
+    }
+
+    public void setStatusWindow(RichPopup statusWindow) {
+        this.statusWindow = statusWindow;
+    }
+
+    public RichPopup getStatusWindow() {
+        return statusWindow;
+    }
+
+    public void setSubTable2(RichTable subTable2) {
+        this.subTable2 = subTable2;
+    }
+
+    public RichTable getSubTable2() {
+        return subTable2;
     }
 }

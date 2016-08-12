@@ -6,6 +6,16 @@
     <variableIterator id="variables"/>
     <iterator Binds="ProPlanCostView" RangeSize="25"
               DataControl="DmsModuleDataControl" id="ProPlanCostViewIterator"/>
+    <iterator Binds="adminBlockStatus" RangeSize="25"
+              DataControl="DmsModuleDataControl" id="adminBlockStatusIterator"/>
+    <searchRegion Binds="adminBlockStatusIterator" Criteria=""
+                  Customizer="oracle.jbo.uicli.binding.JUSearchBindingCustomizer"
+                  id="adminBlockStatusQuery"/>
+    <iterator Binds="PTBlockStatus" RangeSize="25"
+              DataControl="DmsModuleDataControl" id="PTBlockStatusIterator"/>
+    <searchRegion Binds="PTBlockStatusIterator" Criteria=""
+                  Customizer="oracle.jbo.uicli.binding.JUSearchBindingCustomizer"
+                  id="PTBlockStatusQuery"/>
   </executables>
   <bindings>
     <tree IterBinding="ProPlanCostViewIterator" id="ProPlanCostView">
@@ -47,6 +57,28 @@
           <Item Value="Msg"/>
           <Item Value="CreatedAt"/>
           <Item Value="CreatedBy"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <tree IterBinding="adminBlockStatusIterator" id="adminBlockStatus">
+      <nodeDefinition DefName="team.epm.dms.view.adminBlockStatus"
+                      Name="adminBlockStatus0">
+        <AttrNames>
+          <Item Value="Meaning"/>
+          <Item Value="ProjectName"/>
+          <Item Value="Version"/>
+          <Item Value="IsBlock"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <tree IterBinding="PTBlockStatusIterator" id="PTBlockStatus">
+      <nodeDefinition DefName="team.epm.dms.view.PTBlockStatus"
+                      Name="PTBlockStatus0">
+        <AttrNames>
+          <Item Value="Meaning"/>
+          <Item Value="ProjectName"/>
+          <Item Value="Version"/>
+          <Item Value="IsBlock"/>
         </AttrNames>
       </nodeDefinition>
     </tree>

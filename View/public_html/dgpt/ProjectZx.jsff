@@ -191,12 +191,20 @@
             </af:panelGridLayout>
           </af:panelWindow>
         </af:popup>
-        <af:popup id="p4" binding="#{viewScope.ProjectZxBean.statusWindow}">
+        <af:popup id="p4" binding="#{viewScope.ProjectZxBean.statusWindow}" autoCancel="disabled">
           <af:panelWindow id="pw4"  
                           title="#{viewBundle['dms.dgpt.block_status.select']}">
             <af:panelCollection id="pc3"  inlineStyle="width:800px;height:400px">
               <f:facet name="menus"/>
-              <f:facet name="toolbar"/>
+              <f:facet name="toolbar">
+                <af:toolbar id="t7">
+                  <af:group id="g4">
+                    <af:commandButton text="#{viewBundle['dms.dgpt.fblock']}" id="cb12"
+                                      rendered="#{sessionScope.authoriedFunction['UNFREEZE']}"
+                                      actionListener="#{viewScope.ProjectZxBean.goUnBlock2}"/>
+                  </af:group>
+                </af:toolbar>
+              </f:facet>
               <f:facet name="statusbar"/>
               <af:table value="#{bindings.PTBlockStatus.collectionModel}"
                         var="row" rows="#{bindings.PTBlockStatus.rangeSize}"
@@ -206,30 +214,30 @@
                         filterModel="#{bindings.PTBlockStatusQuery.queryDescriptor}"
                         queryListener="#{bindings.PTBlockStatusQuery.processQuery}"
                         filterVisible="false" varStatus="vs"
-                        selectedRowKeys="#{bindings.PTBlockStatus.collectionModel.selectedRow}"
                         selectionListener="#{bindings.PTBlockStatus.collectionModel.makeCurrent}"
-                        rowSelection="single" id="t4"
-                        columnStretching="column:c48">
+                        rowSelection="multiple" id="t4"
+                        columnStretching="column:c48"
+                        binding="#{viewScope.ProjectZxBean.subTable2}">
                 <af:column sortProperty="#{bindings.PTBlockStatus.hints.Meaning.name}"
-                           filterable="true" sortable="false"
+                           filterable="true" sortable="true"
                            headerText="#{bindings.PTBlockStatus.hints.Meaning.label}"
                            id="c42">
                   <af:outputText value="#{row.Meaning}" id="ot16"/>
                 </af:column>
                 <af:column sortProperty="#{bindings.PTBlockStatus.hints.ProjectName.name}"
-                           filterable="true" sortable="false"
+                           filterable="true" sortable="true"
                            headerText="#{bindings.PTBlockStatus.hints.ProjectName.label}"
                            id="c48">
                   <af:outputText value="#{row.ProjectName}" id="ot20"/>
                 </af:column>
                 <af:column sortProperty="#{bindings.PTBlockStatus.hints.Version.name}"
-                           filterable="true" sortable="false"
+                           filterable="true" sortable="true"
                            headerText="#{bindings.PTBlockStatus.hints.Version.label}"
                            id="c49">
                   <af:outputText value="#{row.Version}" id="ot21"/>
                 </af:column>
                 <af:column sortProperty="#{bindings.PTBlockStatus.hints.IsBlock.name}"
-                           filterable="true" sortable="false"
+                           filterable="true" sortable="true"
                            headerText="#{bindings.PTBlockStatus.hints.IsBlock.label}"
                            id="c47">
                   <af:outputText value="#{row.IsBlock}" id="ot22"/>
@@ -238,12 +246,19 @@
             </af:panelCollection>
           </af:panelWindow>
         </af:popup>
-        <af:popup id="p5" binding="#{viewScope.ProjectZxBean.adminBlockPop}">
+        <af:popup id="p5" binding="#{viewScope.ProjectZxBean.adminBlockPop}" autoCancel="disabled">
           <af:panelWindow id="pw5" 
                           title="#{viewBundle['dms.dgpt.block_status.select']}">
             <af:panelCollection id="pc2"  inlineStyle="width:800px;height:400px">
               <f:facet name="menus"/>
-              <f:facet name="toolbar"/>
+              <f:facet name="toolbar">
+                <af:toolbar id="t6">
+                  <af:group id="g3">
+                    <af:commandButton text="#{viewBundle['dms.dgpt.fblock']}" id="cb10"
+                                      actionListener="#{viewScope.ProjectZxBean.goUnBlock}"/>
+                  </af:group>
+                </af:toolbar>
+              </f:facet>
               <f:facet name="statusbar"/>
               <af:table value="#{bindings.adminBlockStatus.collectionModel}"
                         var="row" rows="#{bindings.adminBlockStatus.rangeSize}"
@@ -253,10 +268,10 @@
                         filterModel="#{bindings.adminBlockStatusQuery.queryDescriptor}"
                         queryListener="#{bindings.adminBlockStatusQuery.processQuery}"
                         filterVisible="false" varStatus="vs"
-                        selectedRowKeys="#{bindings.adminBlockStatus.collectionModel.selectedRow}"
                         selectionListener="#{bindings.adminBlockStatus.collectionModel.makeCurrent}"
-                        rowSelection="single" id="t5"
-                        columnStretching="column:c51">
+                        rowSelection="multiple" id="t5"
+                        columnStretching="column:c51"
+                        binding="#{viewScope.ProjectZxBean.subTable}">
                 <af:column sortProperty="#{bindings.adminBlockStatus.hints.Meaning.name}"
                            filterable="true" sortable="false"
                            headerText="#{bindings.adminBlockStatus.hints.Meaning.label}"
@@ -295,15 +310,15 @@
             <af:group id="g2">
               <af:commandButton text="#{viewBundle['dms.common.save']}" id="cb2"
                                 action="#{viewScope.ProjectZxBean.operation_save}"
-                                disabled="#{viewScope.ProjectZxBean.isSelected}"
+                                disabled="#{viewScope.ProjectZxBean.isSelected or not viewScope.ProjectZxBean.isEDITABLE or viewScope.ProjectZxBean.isBlock}"
                                 partialTriggers="::soc1 ::iclov2 ::soc3"/>
               <af:commandButton text="#{viewBundle['dms.common.cancel']}" id="cb3"
                                 actionListener="#{viewScope.ProjectZxBean.reset}"/>
             </af:group>
             <af:group id="g1">
               <af:commandButton text="#{viewBundle['dms.dgpt.import']}" id="cb5"
-                                disabled="#{viewScope.ProjectZxBean.isBlock or not viewScope.ProjectZxBean.isEDITABLE}"
-                                partialTriggers="cb8">
+                                disabled="#{viewScope.ProjectZxBean.isBlock or not viewScope.ProjectZxBean.isEDITABLE or viewScope.ProjectZxBean.isSelected}"
+                                partialTriggers="cb8 ::pc2:cb10">
               <af:showPopupBehavior popupId="::p3" alignId=""/>
               </af:commandButton>
               <af:commandButton text="#{viewBundle['dcm.action.export']}" id="cb7"
@@ -313,15 +328,15 @@
               </af:commandButton>
               <af:commandButton text="#{viewBundle['dms.dgpt.block']}" id="cb8"
                                 actionListener="#{viewScope.ProjectZxBean.beBlocked}"
-                                     disabled="#{viewScope.ProjectZxBean.isBlock}"
-                                partialTriggers="::soc1 ::iclov2 ::soc3"/>
+                                     disabled="#{viewScope.ProjectZxBean.isBlock or not viewScope.ProjectZxBean.isEDITABLE}"
+                                partialTriggers="::soc1 ::iclov2 ::soc3 ::pc2:cb10"/>
               <af:commandButton text="#{viewBundle['dms.dgpt.block.status']}" id="cb6"
                                 actionListener="#{viewScope.ProjectZxBean.blockStatusPop}"/>
               <af:commandButton text="#{viewBundle['dms.dgpt.fblock']}" id="cb4"
                                 rendered="#{viewScope.ProjectZxBean.isManager}"
                                 actionListener="#{viewScope.ProjectZxBean.outBlock}"
                                 disabled="#{not viewScope.ProjectZxBean.isBlock}"
-                                partialTriggers="::soc1 ::iclov2 ::soc3"/>
+                                partialTriggers="::soc1 ::iclov2 ::soc3 ::pc2:cb10"/>
               <af:commandButton text="#{viewBundle['dcm.import_error']}" id="cb1"
                                 actionListener="#{viewScope.ProjectZxBean.errorPop}"/>
             </af:group>

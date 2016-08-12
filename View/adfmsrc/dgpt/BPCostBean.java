@@ -46,6 +46,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -64,8 +65,11 @@ import oracle.adf.view.rich.component.rich.data.RichTable;
 import oracle.adf.view.rich.component.rich.input.RichInputFile;
 import oracle.adf.view.rich.component.rich.output.RichPanelCollection;
 
+import oracle.adf.view.rich.context.AdfFacesContext;
 import oracle.adf.view.rich.model.FilterableQueryDescriptor;
 
+import oracle.jbo.Key;
+import oracle.jbo.Row;
 import oracle.jbo.ViewObject;
 import oracle.jbo.server.DBTransaction;
 
@@ -120,7 +124,9 @@ public class BPCostBean {
     private RichPopup dataExportWnd;
     private DmsComBoxLov proLov;
     DmsLog dmsLog = new DmsLog();
-    
+    private RichTable subTable;
+    private RichTable subTable2;
+
     public BPCostBean() {
         super();
         this.curUser = (Person)(ADFContext.getCurrent().getSessionScope().get("cur_user"));
@@ -620,7 +626,7 @@ public class BPCostBean {
             if("xls".equals(type)){
                 PcExcel2003WriterImpl writer = new PcExcel2003WriterImpl(
                                                    this.querySql(this.getLabelMap()),
-                                                   this.connectId,
+                                                   "基准计划成本",
                                                     this.pcColsDef,
                                                     outputStream);
                 writer.writeToFile();
@@ -628,7 +634,7 @@ public class BPCostBean {
                 PcExcel2007WriterImpl writer = new PcExcel2007WriterImpl(
                                                     this.querySql(this.getLabelMap()),
                                                     2,this.pcColsDef);
-                writer.process(outputStream, this.connectId);
+                writer.process(outputStream, "基准计划成本");
                 outputStream.flush();
             }
         } catch (Exception e) {
@@ -889,7 +895,7 @@ public class BPCostBean {
     public void showAdminStatusPop(){
         ViewObject vo = ADFUtils.findIterator("adminBlockStatusIterator").getViewObject();
         vo.setNamedWhereClauseParam("dataType", this.TYPE_BASE);
-        vo.setNamedWhereClauseParam("userAcc", this.curUser.getAcc());
+//        vo.setNamedWhereClauseParam("userAcc", this.curUser.getAcc());
         vo.executeQuery();
         RichPopup.PopupHints ph = new RichPopup.PopupHints();
         this.adminBlockPop.show(ph);
@@ -913,6 +919,70 @@ public class BPCostBean {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+    
+    public void goUnBlock(ActionEvent actionEvent) {
+        if(this.subTable.getSelectedRowKeys() == null) return ;
+        RowKeySet rsk = this.subTable.getSelectedRowKeys();
+        ViewObject vo = ADFUtils.findIterator("adminBlockStatusIterator").getViewObject();
+        DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
+        Statement stat = trans.createStatement(DBTransaction.DEFAULT);
+        Iterator itr = rsk.iterator();
+        try {
+            while(itr.hasNext()){
+                List ls = (List)itr.next();
+                Key key =(Key)ls.get(0);
+                Row row = vo.getRow(key);
+                StringBuffer sql = new StringBuffer();
+                if(row.getAttribute("IsBlock").equals("已冻结")){
+                    sql.append("UPDATE PRO_PLAN_COST_HEADER SET (IS_BLOCK) = 'false' WHERE HLS_YEAR = \'"+row.getAttribute("Code"))
+                        .append("' AND PROJECT_NAME = '"+row.getAttribute("ProjectName"))
+                        .append("' AND IS_BLOCK='true' ").append("AND DATA_TYPE = '"+this.TYPE_BASE+"'");
+                    stat.executeUpdate(sql.toString());
+                }
+                if(row.getAttribute("ProjectName").equals(this.pname)){
+                    this.isBlock = "false";
+                }
+            }
+            stat.close();
+            trans.commit();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        vo.executeQuery();
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.subTable);
+    }
+    
+    public void goUnBlock2(ActionEvent actionEvent) {
+        if(this.subTable2.getSelectedRowKeys() == null) return ;
+        RowKeySet rsk = this.subTable2.getSelectedRowKeys();
+        ViewObject vo = ADFUtils.findIterator("adminBlockStatusIterator").getViewObject();
+        DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
+        Statement stat = trans.createStatement(DBTransaction.DEFAULT);
+        Iterator itr = rsk.iterator();
+        try {
+            while(itr.hasNext()){
+                List ls = (List)itr.next();
+                Key key =(Key)ls.get(0);
+                Row row = vo.getRow(key);
+                StringBuffer sql = new StringBuffer();
+                if(row.getAttribute("IsBlock").equals("已冻结")){
+                    sql.append("UPDATE PRO_PLAN_COST_HEADER SET (IS_BLOCK) = 'false' WHERE HLS_YEAR = \'"+row.getAttribute("Code"))
+                        .append("' AND PROJECT_NAME = '"+row.getAttribute("ProjectName"))
+                        .append("' AND IS_BLOCK='true' ").append("AND DATA_TYPE = '"+this.TYPE_BASE+"'");
+                    stat.executeUpdate(sql.toString());
+                }
+                if(row.getAttribute("ProjectName").equals(this.pname)){
+                    this.isBlock = "false";
+                }
+            }
+            stat.close();
+            trans.commit();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        vo.executeQuery();
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.subTable2);
     }
     
     public void setDataImportWnd(RichPopup dataImportWnd) {
@@ -1154,5 +1224,21 @@ public class BPCostBean {
 
     public boolean isIsSelected() {
         return isSelected;
+    }
+
+    public void setSubTable(RichTable subTable) {
+        this.subTable = subTable;
+    }
+
+    public RichTable getSubTable() {
+        return subTable;
+    }
+
+    public void setSubTable2(RichTable subTable2) {
+        this.subTable2 = subTable2;
+    }
+
+    public RichTable getSubTable2() {
+        return subTable2;
     }
 }

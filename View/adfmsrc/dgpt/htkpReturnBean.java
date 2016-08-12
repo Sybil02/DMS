@@ -616,7 +616,7 @@ public class htkpReturnBean {
             if("xls".equals(type)){
                 PcExcel2003WriterImpl writer = new PcExcel2003WriterImpl(
                                                     this.queryData(this.getLabelMap()),
-                                                   this.connectId,
+                                                   "年度预算-合同开票回款（在执行）",
                                                     this.pcColsDef,
                                                     outputStream);
                 writer.writeToFile();
@@ -624,7 +624,7 @@ public class htkpReturnBean {
                 PcExcel2007WriterImpl writer = new PcExcel2007WriterImpl(
                                                     this.queryData(this.getLabelMap()),
                                                     2,this.pcColsDef);
-                writer.process(outputStream, this.connectId);
+                writer.process(outputStream, "年度预算-合同开票回款（在执行）");
                 outputStream.flush();
             }
         } catch (Exception e) {
