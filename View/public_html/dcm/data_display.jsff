@@ -91,7 +91,7 @@
               <af:commandButton text="#{viewBundle['dms.dgpt.fblock']}" id="cb13"
                                 rendered="#{viewScope.DcmDataDisplayBean.isClose eq true}"
                                 partialTriggers="::pgl1"
-                                disabled="#{!(viewScope.DcmDataDisplayBean.enableSub) or sessionScope.cur_user.id ne '10000'}"
+                                disabled="#{!(viewScope.DcmDataDisplayBean.enableSub) or (sessionScope.cur_user.id ne '10000' and sessionScope.authoriedFunction['UNFREEZE'] eq null)}"
                                 actionListener="#{viewScope.DcmDataDisplayBean.resetSubmit}"/>
               <af:commandButton text="#{viewBundle['dms.submit.status']}" id="cb12"
                                 rendered="#{viewScope.DcmDataDisplayBean.isClose eq true}" 
