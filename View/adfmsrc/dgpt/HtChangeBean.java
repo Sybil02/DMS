@@ -384,7 +384,6 @@ public class HtChangeBean {
         "OCCURRED_QUANTITY,OCCURRED_AMOUNT,OCCURRED FROM PRO_PLAN_COST_BODY WHERE CONNECT_ID = '").append(connectId).append("'");
         sql.append(" AND (DATA_TYPE = '").append(this.TYPE_CHANGE).append("' OR DATA_TYPE = 'BASE')")
             .append(" ORDER BY WBS,NETWORK,TO_NUMBER(WORK_CODE)");
-        System.out.println(sql.toString());
         return sql.toString();
     }
     //选中行，修改
@@ -410,7 +409,6 @@ public class HtChangeBean {
     public void closeVersion(String yearStr,String pNameStr,String versionStr){
         String sql = "UPDATE PRO_PLAN_COST_HEADER SET (IS_BLOCK) = 'true' WHERE HLS_YEAR = \'"+yearStr;
         sql = sql + "\' AND PROJECT_NAME =\'"+pNameStr+"\' AND VERSION=\'"+versionStr+"\'";
-        System.out.println(yearStr+"-"+pNameStr+""+versionStr);
         DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
         Statement stat = trans.createStatement(DBTransaction.DEFAULT);
         int flag =-1;
@@ -488,7 +486,7 @@ public class HtChangeBean {
         }
         
         //冻结基准计划成本版本
-        this.closeVersion(this.year, this.pname, newVersion);
+        this.closeVersion(this.year, this.pname, newVeCode);
 //        versionList.add(new SelectItem(newVersion,newVersion));
         version = newVersion;
         versionList.add(new SelectItem(newVeCode,newVeCode+"-"+newVersion));
@@ -530,7 +528,6 @@ public class HtChangeBean {
         sql.append("LGF_NUM,LGF_TYPE,PLAN_QUANTITY,PLAN_AMOUNT,OCCURRED_QUANTITY,OCCURRED_AMOUNT,OCCURRED,ACC_CODE,CENTER_CODE)");
         sql_value.append("?,\'"+connectId+"\',"+this.curUser.getId()+",?,\'"+this.TYPE_CHANGE+"\',?,");
         sql_value.append("?,?,?,?,?,?,?,?,?)");
-        System.out.println(sql.toString()+sql_value.toString());
         PreparedStatement stmt = trans.createPreparedStatement(sql.toString()+sql_value.toString(), 0);
         //获取数据
         int rowNum = 1;
