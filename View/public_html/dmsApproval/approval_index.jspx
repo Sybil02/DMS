@@ -23,9 +23,10 @@
                         <af:forEach items="#{viewScope.ApprovalIndexBean.paramList}"
                                     var="paramBean">
                           <af:selectOneChoice label="#{paramBean.PName}" autoSubmit="true"
-                                                clientComponent="true" id="soc1"
+                                                clientComponent="true" id="soc1" 
                                                  binding="#{viewScope.ApprovalIndexBean.paraSocMap[paramBean.PName]}" 
-                                              valueChangeListener="#{viewScope.ApprovalIndexBean.paramSelectListener}">
+                                              valueChangeListener="#{viewScope.ApprovalIndexBean.paramSelectListener}"
+                                              value="#{viewScope.ApprovalIndexBean.firstName}">
                             <f:selectItems value="#{paramBean.valueList}" id="si1"/>
                           </af:selectOneChoice>
                           <af:spacer id="sph" height="10px"/>
@@ -55,11 +56,11 @@
                       <af:commandButton text="#{viewBundle['dms.start']}" id="cb2"
                                         actionListener="#{viewScope.ApprovalIndexBean.startApproval}"
                                         disabled="#{viewScope.ApprovalIndexBean.disableRun}"
-                                        partialTriggers="t1"/>
+                                        partialTriggers="t1 cb12 ::cb1"/>
                       <af:spacer id="spw" width="10px"/>
                       <af:commandButton text="#{viewBundle['dms.approval.close']}" id="cb12"
                                         disabled="#{viewScope.ApprovalIndexBean.disableClose}"
-                                        partialTriggers="t1"
+                                        partialTriggers="t1 ::cb1 cb12"
                                         actionListener="#{viewScope.ApprovalIndexBean.closeApproval}"/>
                     </af:toolbar>
                   </f:facet>

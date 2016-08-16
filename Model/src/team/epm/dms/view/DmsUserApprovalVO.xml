@@ -64,8 +64,7 @@
  WHERE T.ID = R.APPROVAL_ID
    AND R.ROLE_ID = G.ROLE_ID
    AND G.GROUP_ID = U.GROUP_ID
-   AND U.USER_ID = :userId
- ORDER BY "SEQ"]]>
+   AND U.USER_ID = :userId]]>
   </SQLQuery>
   <ViewAttribute
     Name="Id"

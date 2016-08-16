@@ -53,6 +53,8 @@ public class ApprovalIndexBean {
     private String curAppId;
     private boolean disableRun = true;
     private boolean disableClose = true;
+    private String firstName;
+    private Key key ;
 
     Map<String,RichSelectOneChoice> paraSocMap = new LinkedHashMap<String,RichSelectOneChoice>();
 
@@ -63,17 +65,45 @@ public class ApprovalIndexBean {
         vo.setWhereClause(where);
         vo.executeQuery();
         vo.setWhereClause(null);
+        this.setStartStatus();
     }
     
     private List<AppParamBean> paramList;
     private List<SelectItem> entityList = new ArrayList<SelectItem>();
     private List<String> comList = new ArrayList<String>();
     
+    public void setStartStatus(){
+        DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
+        Statement stat = trans.createStatement(DBTransaction.DEFAULT);
+        Person curUser =(Person)ADFContext.getCurrent().getSessionScope().get("cur_user");
+        String sql = "SELECT T.APPROVAL_NAME,T.APPROVAL_STATUS,ENABLE_RUN FROM DMS_APPROVALFLOW_INFO T,DMS_ROLE_APPROVAL R," +
+            "DMS_GROUP_ROLE G,DMS_USER_GROUP U WHERE T.ID = R.APPROVAL_ID AND R.ROLE_ID = G.ROLE_ID " +
+            "AND G.GROUP_ID = U.GROUP_ID AND U.USER_ID = '"+curUser.getId()+"' ORDER BY \"SEQ\"";
+        try {
+            ResultSet rs = stat.executeQuery(sql);
+            if(rs.next()){
+                String enableRun = rs.getString("ENABLE_RUN");
+                Object status = rs.getString("APPROVAL_STATUS");
+                if("Y".equals(enableRun) && !"Y".equals(status)){
+                    this.disableRun = false; 
+                    this.disableClose = true;
+                }else if("Y".equals(enableRun) && !"N".equals(status)){
+                    this.disableClose = false; 
+                    this.disableRun = true;
+                }else if("N".equals(enableRun)){
+                    this.disableClose = true;
+                    this.disableRun = true;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    
     public void makeCurrentRow(SelectionEvent selectionEvent) {
         //重置StatusVO，此时查询生成entityList
         ViewObject vo = ADFUtils.findIterator("DmsApprovalStatusVOIterator").getViewObject();
         vo.executeQuery();
-        
         RichTable wfTable = (RichTable)selectionEvent.getSource();
         CollectionModel cm = (CollectionModel)wfTable.getValue();
         JUCtrlHierBinding tableBinding = (JUCtrlHierBinding)cm.getWrappedData();
@@ -145,7 +175,7 @@ public class ApprovalIndexBean {
         ViewObject vo = ADFUtils.findIterator("DmsUserApprovalVOIterator").getViewObject();
         this.combination = vo.getCurrentRow().getAttribute("ValueSetId").toString();
         this.curAppId = vo.getCurrentRow().getAttribute("Id").toString();
-        
+        key = vo.getCurrentRow().getKey();
         DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
         Statement stat = trans.createStatement(1);
         String sql = "SELECT V.ID,V.SOURCE,V.NAME,V.CODE,T.IS_APPROVAL,T.SEQ FROM DCM_COM_VS T,DMS_VALUE_SET V WHERE "
@@ -174,6 +204,8 @@ public class ApprovalIndexBean {
         }
         
         this.initValues();
+        vo.setCurrentRow(vo.getRow(key));
+        this.firstName = "";
         RichPopup.PopupHints hints = new RichPopup.PopupHints();
         this.paramPop.show(hints);
         
@@ -277,8 +309,11 @@ public class ApprovalIndexBean {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        
-        ADFUtils.findIterator("DmsUserApprovalVOIterator").getViewObject().executeQuery();
+        ViewObject vo = ADFUtils.findIterator("DmsUserApprovalVOIterator").getViewObject();
+        vo.executeQuery();
+        vo.setCurrentRow(vo.getRow(key));
+        this.disableRun = true;
+        this.disableClose = false;
         this.paramPop.cancel();
         JSFUtils.addFacesInformationMessage("启动成功！");
 
@@ -317,6 +352,7 @@ public class ApprovalIndexBean {
 
     public void closeApproval(ActionEvent actionEvent) {
         ViewObject vo = ADFUtils.findIterator("DmsUserApprovalVOIterator").getViewObject();
+        Key key = vo.getCurrentRow().getKey();
         String id = vo.getCurrentRow().getAttribute("Id").toString();
         String runId = vo.getCurrentRow().getAttribute("RunId").toString();
         //关闭组合
@@ -336,6 +372,9 @@ public class ApprovalIndexBean {
         }
         //刷新Table
         vo.executeQuery();
+        vo.setCurrentRow(vo.getRow(key));
+        this.disableRun = false;
+        this.disableClose = true;
     }
 
     public void setParamPop(RichPopup paramPop) {
@@ -384,5 +423,13 @@ public class ApprovalIndexBean {
 
     public boolean isDisableClose() {
         return disableClose;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getFirstName() {
+        return firstName;
     }
 }
