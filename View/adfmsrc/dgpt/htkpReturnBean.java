@@ -102,6 +102,11 @@ public class htkpReturnBean {
     private String yLine;
     private String cLine;
     private String pType;
+    private String entityName;
+    private String hLineName;
+    private String yLineName;
+    private String cLineName;
+    private String pTypeName;
     private DmsComBoxLov proLov;
     private CollectionModel dataModel;
     LinkedHashMap<String,String> lineMap = new LinkedHashMap<String,String>();
@@ -165,13 +170,13 @@ public class htkpReturnBean {
         String sql = "";
         List<SelectItem> values = new ArrayList<SelectItem>();
         if("10000".equals(this.curUser.getId())){
-            sql = "SELECT DISTINCT C.BH_USER_PRO_C1 CODE,B.MEANING FROM DCM_COMBINATION_17 C,BH_USER_PRO_C1 B WHERE " +
-                "  C.BH_USER_PRO_C1 = B.CODE";
+            sql = "SELECT DISTINCT C.HLS_HTKP_PROJECT_V CODE,B.MEANING FROM HTKP_COMBINATION C,HLS_HTKP_PROJECT_V B WHERE " +
+                "  C.HLS_HTKP_PROJECT_V = B.CODE";
         }else{
-            sql = "SELECT DISTINCT C.BH_USER_PRO_C1 CODE,B.MEANING FROM DCM_COMBINATION_17 C,BH_USER_PRO_C1 B WHERE B.MEANING IN" +
-                "(SELECT T.PRO_CODE||'-'||T.PRO_DESC FROM SAP_DMS_PROJECT_PRIVILEGE T " +
+            sql = "SELECT DISTINCT C.HLS_HTKP_PROJECT_V CODE,B.MEANING FROM HTKP_COMBINATION C,HLS_HTKP_PROJECT_V B WHERE  B.MEANING IN" +
+                "(SELECT T.PRO_DESC FROM SAP_DMS_PROJECT_PRIVILEGE T " +
                 " WHERE T.ATTRIBUTE7 = '"+this.curUser.getAcc()+"' AND T.ATTRIBUTE3='ZX')" +
-                "AND C.BH_USER_PRO_C1 = B.CODE";
+                "AND C.HLS_HTKP_PROJECT_V = B.CODE";
         }
         ResultSet rs;
         try {
@@ -213,8 +218,9 @@ public class htkpReturnBean {
         DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
         Statement stat = trans.createStatement(DBTransaction.DEFAULT);
         String name = this.pName.substring(0, pName.lastIndexOf("-"));
-        String sql = "SELECT ID FROM DCM_COMBINATION_17 WHERE HLS_YEAR_C='"+this.year+"' " +
-            "AND HLS_VERSION_C='"+this.version+"' AND BH_USER_PRO_C1='"+name+"'";
+        //在合同开票组合中查找id
+        String sql = "SELECT ID FROM HTKP_COMBINATION WHERE HLS_YEAR_C='"+this.year+"' " +
+            "AND HLS_VERSION_C='"+this.version+"' AND HLS_HTKP_PROJECT_V='"+name+"'";
         ResultSet rs;
         try {
             rs = stat.executeQuery(sql);
@@ -231,7 +237,34 @@ public class htkpReturnBean {
         for(Map.Entry<String,String> entry : labelMap.entrySet()){
             qSql.append(entry.getValue()).append(",");
         }
-        qSql.append("ROW_ID FROM CONT_INVOICE_RETURN_BUDGET_5_V WHERE COM_RECORD_ID='").append(this.connectId).append("'");
+        qSql.append("ROWID AS ROW_ID FROM CONT_INVOICE_RETURN_BUDGET_5 WHERE COM_RECORD_ID='").append(this.connectId).append("'");
+        return qSql.toString();
+    }
+    
+    public String queryData2(LinkedHashMap<String,String> labelMap){
+        DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
+        Statement stat = trans.createStatement(DBTransaction.DEFAULT);
+        String name = this.pName.substring(0, pName.lastIndexOf("-"));
+        //在合同开票组合中查找id
+        String sql = "SELECT ID FROM HTKP_COMBINATION WHERE HLS_YEAR_C='"+this.year+"' " +
+            "AND HLS_VERSION_C='"+this.version+"' AND HLS_HTKP_PROJECT_V='"+name+"'";
+        ResultSet rs;
+        try {
+            rs = stat.executeQuery(sql);
+            connectId = "";
+            while(rs.next()){
+                connectId = rs.getString("ID");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        //查询数据
+        StringBuffer qSql = new StringBuffer();
+        qSql.append("SELECT CONTRACT_BILLING_DETAIL,TAX_RATE,RESPONSIBLE," +
+            "ENTITY,INDUSTRY_LINE,BUSINESS_LINE,PRODUCT_LINE,PROJECT_TYPE,OCCUR_COST,LAST_OCT,LAST_NOV,LAST_DEC,")
+            .append("CUR_JAN,CUR_FEB,CUR_MAR,CUR_APR,CUR_MAY,CUR_JUN,CUR_JUL,CUR_AUG,CUR_SEP,CUR_OCT,CUR_NOV,CUR_DEC,")
+            .append("NEXT_JAN,NEXT_FEB,NEXT_MAR,NEXT_APR,NEXT_MAY,NEXT_JUN,NEXT_OTHERS,");
+        qSql.append("ROW_ID FROM cont_invoice_return_budget_5_v WHERE COM_RECORD_ID='").append(this.connectId).append("'");
         return qSql.toString();
     }
     
@@ -280,6 +313,7 @@ public class htkpReturnBean {
     }
     //构建数据
     public void createTableModel(){
+        this.getLine();
         LinkedHashMap<String,String> labelMap = getLabelMap();
         DBTransaction trans = (DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
         Statement stat = trans.createStatement(DBTransaction.DEFAULT);
@@ -291,7 +325,17 @@ public class htkpReturnBean {
             while(rs.next()){
                 Map row = new HashMap();
                 for(Map.Entry entry : labelMap.entrySet()){
-                    if(entry.getValue().equals("OCCUR_COST") || entry.getValue().toString().startsWith("LAST") || 
+                    if(entry.getValue().equals("ENTITY")){
+                        row.put(entry.getValue(), entityName);
+                    }else if(entry.getValue().equals("INDUSTRY_LINE")){
+                        row.put(entry.getValue(), hLineName);
+                    }else if(entry.getValue().equals("BUSINESS_LINE")){
+                        row.put(entry.getValue(), yLineName);
+                    }else if(entry.getValue().equals("PRODUCT_LINE")){
+                        row.put(entry.getValue(), cLineName);
+                    }else if(entry.getValue().equals("PROJECT_TYPE")){
+                        row.put(entry.getValue(), pTypeName);
+                    }else if(entry.getValue().equals("OCCUR_COST") || entry.getValue().toString().startsWith("LAST") || 
                        entry.getValue().toString().startsWith("CUR") || entry.getValue().toString().startsWith("NEXT")||
                         entry.getValue().equals("TAX_RATE") ){
                         row.put(entry.getValue(),this.getPrettyNumber(rs.getString(entry.getValue().toString())));
@@ -310,14 +354,78 @@ public class htkpReturnBean {
         }
         this.dataModel.setWrappedData(data);
         ((PcDataTableModel)this.dataModel).setLabelMap(labelMap);
-        this.getLine();
     }
     //获取行业线等信息
     public void getLine(){
+        String name = this.pName.substring(0, pName.lastIndexOf("-"));
         DBTransaction trans = (DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
         Statement stat = trans.createStatement(DBTransaction.DEFAULT);
-        String sql = "SELECT DISTINCT ENTITY,INDUSTRY_LINE,BUSINESS_LINE,PRODUCT_LINE,PROJECT_TYPE " +
-            "FROM CONT_INVOICE_RETURN_BUDGET_5 WHERE COM_RECORD_ID='"+this.connectId+"'";
+        String sql = "SELECT DISTINCT T.ENTITY_code,T.ENTITY,T.industry_line_code,T.industry_line,T.business_line_code," +
+                    "T.business_line,T.product_line_code,T.product_line,T.project_type_code,T.project_type_desc " +
+//                     "FROM HLS_HTKP_PROJECT_C T "+" WHERE T.pspnr='"+name+"'";
+                    "FROM (select pro.pspnr,pro.plfaz start_date,pro.plsez end_date," + 
+                    "       HE.ENTITY_code, HE.ENTITY," + 
+                    "       decode(pro.zsd022," + 
+                    "              null," + 
+                    "              'MC0100'," + 
+                    "              (SELECT dm.hp_code" + 
+                    "                 FROM dms.hp_dimesion_mapping dm, dms.dcm_combination_15 hd" + 
+                    "                WHERE 1 = 1" + 
+                    "                  AND dm.com_record_id = hd.id" + 
+                    "                  AND lpad(dm.sap_code, 2, 0) = pro.zsd022" + 
+                    "                  AND hd.hls_dimesion_c = 'Misc3')) industry_line_code," + 
+                    "       decode(pro.zsd022," + 
+                    "              null," + 
+                    "              '行业线缺省'," + 
+                    "              (SELECT dm.hp_desc" + 
+                    "                 FROM dms.hp_dimesion_mapping dm, dms.dcm_combination_15 hd" + 
+                    "                WHERE 1 = 1" + 
+                    "                  AND dm.com_record_id = hd.id" + 
+                    "                  AND lpad(dm.sap_code, 2, 0) = pro.zsd022" + 
+                    "                  AND hd.hls_dimesion_c = 'Misc3')) industry_line," + 
+                    "       decode(pro.zsd023," + 
+                    "              null," + 
+                    "              'BL00'," + 
+                    "              (SELECT dm.hp_code" + 
+                    "                 FROM dms.hp_dimesion_mapping dm, dms.dcm_combination_15 hd" + 
+                    "                WHERE 1 = 1" + 
+                    "                  AND dm.com_record_id = hd.id" + 
+                    "                  AND lpad(dm.sap_code, 2, 0) = pro.zsd023" + 
+                    "                  AND hd.hls_dimesion_c = 'Business Line')) business_line_code," + 
+                    "       decode(pro.zsd023," + 
+                    "              null," + 
+                    "              '业务线缺省'," + 
+                    "              (SELECT dm.hp_desc" + 
+                    "                 FROM dms.hp_dimesion_mapping dm, dms.dcm_combination_15 hd" + 
+                    "                WHERE 1 = 1" + 
+                    "                  AND dm.com_record_id = hd.id" + 
+                    "                  AND lpad(dm.sap_code, 2, 0) = pro.zsd023" + 
+                    "                  AND hd.hls_dimesion_c = 'Business Line')) business_line," + 
+                    "       decode(pro.zsd029," + 
+                    "              null," + 
+                    "              'MB0900'," + 
+                    "              (SELECT dm.hp_code" + 
+                    "                 FROM dms.hp_dimesion_mapping dm, dms.dcm_combination_15 hd" + 
+                    "                WHERE 1 = 1" + 
+                    "                  AND dm.com_record_id = hd.id" + 
+                    "                  AND lpad(dm.sap_code, 2, 0) = pro.zsd029" + 
+                    "                  AND hd.hls_dimesion_c = 'Misc2')) product_line_code, " + 
+                    "       decode(pro.zsd029," + 
+                    "              null," + 
+                    "              '产品线缺省'," + 
+                    "              (SELECT dm.hp_desc" + 
+                    "                 FROM dms.hp_dimesion_mapping dm, dms.dcm_combination_15 hd" + 
+                    "                WHERE 1 = 1" + 
+                    "                  AND dm.com_record_id = hd.id" + 
+                    "                  AND lpad(dm.sap_code, 2, 0) = pro.zsd029" + 
+                    "                  AND hd.hls_dimesion_c = 'Misc2')) product_line," + 
+                    "       pro.profl project_type_code, " + 
+                    "       pro.PROFI_TXT project_type_desc,    " + 
+                    "       pro.stat enabled_flag    " + 
+                    "  from hpdw.sap_dmspro_data pro,dms.dms_hphls_e2entity_v he" + 
+                    " where 1 = 1" + 
+                    "   AND 'E' || pro.vbukr || '1' = HE.ENTITY_code" + 
+                    "   AND pro.stat <> 5) T" +" WHERE T.pspnr='"+name+"'";
         ResultSet rs;
         try {
             rs = stat.executeQuery(sql);
@@ -327,13 +435,17 @@ public class htkpReturnBean {
             cLine = "";
             pType = "";
             while(rs.next()){
-                entity = rs.getString("ENTITY");
-                hLine = rs.getString("INDUSTRY_LINE");
-                yLine = rs.getString("BUSINESS_LINE");
-                cLine = rs.getString("PRODUCT_LINE");
-                pType = rs.getString("PROJECT_TYPE");
+                entity = rs.getString("ENTITY_code");
+                hLine = rs.getString("industry_line_code");
+                yLine = rs.getString("business_line_code");
+                cLine = rs.getString("product_line_code");
+                pType = rs.getString("project_type_code");
+                entityName = rs.getString("ENTITY");
+                hLineName = rs.getString("industry_line");
+                yLineName = rs.getString("business_line");
+                cLineName = rs.getString("product_line");
+                pTypeName = rs.getString("project_type_desc");
             }
-            
             lineMap.put("ENTITY", entity);
             lineMap.put("INDUSTRY_LINE", hLine);
             lineMap.put("BUSINESS_LINE", yLine);
@@ -426,15 +538,15 @@ public class htkpReturnBean {
         Map newRow = new HashMap();
         for(PcColumnDef col : this.pcColsDef){
             if(col.getDbTableCol().equals("ENTITY")){
-                newRow.put(col.getDbTableCol(), entity);
+                newRow.put(col.getDbTableCol(), entityName);
             }else if(col.getDbTableCol().equals("INDUSTRY_LINE")){
-                newRow.put(col.getDbTableCol(), hLine);      
+                newRow.put(col.getDbTableCol(), hLineName);      
             }else if(col.getDbTableCol().equals("BUSINESS_LINE")){
-                newRow.put(col.getDbTableCol(), yLine);                                                    
+                newRow.put(col.getDbTableCol(), yLineName);                                                    
             }else if(col.getDbTableCol().equals("PRODUCT_LINE")){
-                newRow.put(col.getDbTableCol(), cLine);                                                    
+                newRow.put(col.getDbTableCol(), cLineName);                                                    
             }else if(col.getDbTableCol().equals("PROJECT_TYPE")){
-                newRow.put(col.getDbTableCol(), pType);                                                   
+                newRow.put(col.getDbTableCol(), pTypeName);                                                   
             }else{
                 newRow.put(col.getDbTableCol(), null);
             }     
@@ -615,14 +727,14 @@ public class htkpReturnBean {
         try {
             if("xls".equals(type)){
                 PcExcel2003WriterImpl writer = new PcExcel2003WriterImpl(
-                                                    this.queryData(this.getLabelMap()),
+                                                    this.queryData2(this.getLabelMap()),
                                                    "年度预算-合同开票回款（在执行）",
                                                     this.pcColsDef,
                                                     outputStream);
                 writer.writeToFile();
             }else{
                 PcExcel2007WriterImpl writer = new PcExcel2007WriterImpl(
-                                                    this.queryData(this.getLabelMap()),
+                                                    this.queryData2(this.getLabelMap()),
                                                     2,this.pcColsDef);
                 writer.process(outputStream, "年度预算-合同开票回款（在执行）");
                 outputStream.flush();
