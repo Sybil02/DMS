@@ -116,7 +116,7 @@ public class HtChangeBean {
     private boolean isXlsx = true;
     private boolean isSelected;
     private boolean isEdited;
-    
+    private String blockedId;
     public HtChangeBean() {
         super();
         this.curUser = (Person)(ADFContext.getCurrent().getSessionScope().get("cur_user"));
@@ -406,9 +406,8 @@ public class HtChangeBean {
         this.createTableModel(pStart,pEnd);
     }
     
-    public void closeVersion(String yearStr,String pNameStr,String versionStr){
-        String sql = "UPDATE PRO_PLAN_COST_HEADER SET (IS_BLOCK) = 'true' WHERE HLS_YEAR = \'"+yearStr;
-        sql = sql + "\' AND PROJECT_NAME =\'"+pNameStr+"\' AND VERSION=\'"+versionStr+"\'";
+    public void closeVersion(String connectId){
+        String sql = "UPDATE PRO_PLAN_COST_HEADER SET (IS_BLOCK) = 'true' WHERE CONNECT_ID = \'"+connectId+"'";
         DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
         Statement stat = trans.createStatement(DBTransaction.DEFAULT);
         int flag =-1;
@@ -434,7 +433,7 @@ public class HtChangeBean {
         //插入头表
         DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
         Statement stat1 = trans.createStatement(DBTransaction.DEFAULT);
-        String sql1 = "SELECT VERSION FROM PRO_PLAN_COST_HEADER WHERE PROJECT_NAME='"+this.pname+"' AND HLS_YEAR='"+this.year+"'"+
+        String sql1 = "SELECT VERSION,CONNECT_ID FROM PRO_PLAN_COST_HEADER WHERE PROJECT_NAME='"+this.pname+"' AND HLS_YEAR='"+this.year+"'"+
             " AND (DATA_TYPE='BASE' OR DATA_TYPE = 'CHANGE') ORDER BY VERSION DESC ";
         String versionCode = "";
         ResultSet rs;
@@ -442,9 +441,11 @@ public class HtChangeBean {
             rs = stat1.executeQuery(sql1);
             rs.next();
             versionCode = rs.getString("VERSION");
+            blockedId = rs.getString("CONNECT_ID");
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        //构造新的版本
         char firstChar = versionCode.charAt(0);
         int number = Integer.parseInt(versionCode.substring(1))+1;
         String newCode = number+"";
@@ -486,7 +487,7 @@ public class HtChangeBean {
         }
         
         //冻结基准计划成本版本
-        this.closeVersion(this.year, this.pname, newVeCode);
+        this.closeVersion(blockedId);
 //        versionList.add(new SelectItem(newVersion,newVersion));
         version = newVersion;
         versionList.add(new SelectItem(newVeCode,newVeCode+"-"+newVersion));
