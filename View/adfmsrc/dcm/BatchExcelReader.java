@@ -46,7 +46,6 @@ public class BatchExcelReader implements IRowReader{
     public void getRows(int sheetIndex, String sheetName, int curRow,
                         TreeMap<Integer, String> rowlist) {
         ReplaceSpecialChar rsc = new ReplaceSpecialChar();
-        System.out.println(sheetIndex);
         
         for(int idx = 0 ; idx < this.tempList.size() ; idx++){
             if(this.tempList.get(idx).getTemplateName().equals(sheetName)){
