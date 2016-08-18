@@ -774,13 +774,14 @@ public class DcmDataDisplayBean extends TablePagination{
             int startLine = 2;
             int columnSize = 0;
             List<String> cols = new ArrayList<String>();
+            List<String> types = new ArrayList<String>();
             String templateName = "";
             String preGro = "";
             String impGro = "";
             String afterGro = "";
             String sql = "SELECT T.ID,T.NAME,T.DATA_START_LINE,T.TMP_TABLE,T.PRE_PROGRAM,T.HANDLE_PROGRAM,T.AFTER_PROGRAM FROM DCM_TEMPLATE T WHERE T.LOCALE = '" + this.curUser.getLocale() 
                          + "' AND T.ID = '" + tempId + "'";
-            String countSql = "SELECT T.DB_TABLE_COL FROM DCM_TEMPLATE_COLUMN T WHERE T.LOCALE = '" + this.curUser.getLocale()
+            String countSql = "SELECT T.DB_TABLE_COL,T.DATA_TYPE FROM DCM_TEMPLATE_COLUMN T WHERE T.LOCALE = '" + this.curUser.getLocale()
                                      + "' AND T.TEMPLATE_ID = '" + tempId + "' ORDER BY T.SEQ ASC";
             ResultSet rs;
             ResultSet cRs;
@@ -798,12 +799,13 @@ public class DcmDataDisplayBean extends TablePagination{
                 cRs = stat.executeQuery(countSql);
                 while(cRs.next()){
                     cols.add(cRs.getString("DB_TABLE_COL"));
+                    types.add(cRs.getString("DATA_TYPE"));
                 }
                 cRs.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-            TemplateEntity te = new TemplateEntity(tempId,templateName,temptable,cols.size(),startLine,preGro,impGro,afterGro,cols);
+            TemplateEntity te = new TemplateEntity(tempId,templateName,temptable,cols.size(),startLine,preGro,impGro,afterGro,cols,types);
             tempList.add(te);
         }
         try {
@@ -844,7 +846,7 @@ public class DcmDataDisplayBean extends TablePagination{
         //清空已有零时表数据
         this.clearTmpTableAndErrTable(curComRecordId);
         RowReader reader =new RowReader(trans, (int)this.curTempalte.getDataStartLine().getValue(), this.curTempalte.getId(),combinationRecord, this.curTempalte.getTmpTable(),
-                          this.colsdef.size(), this.curUser.getId(),this.curTempalte.getName());
+                          this.colsdef, this.curUser.getId(),this.curTempalte.getName());
         try {
             ExcelReaderUtil.readExcel(reader, fileName, true);
             reader.close();

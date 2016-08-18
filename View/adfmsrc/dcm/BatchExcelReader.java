@@ -9,6 +9,8 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import java.text.DecimalFormat;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeMap;
@@ -27,6 +29,7 @@ public class BatchExcelReader implements IRowReader{
     private List<TemplateEntity> tempList;
     private int n = 0;
     private static final int batchSize = 5000;
+    private DecimalFormat dfm;
     private static ADFLogger logger=ADFLogger.createADFLogger(RowReader.class);
     
     public BatchExcelReader(DBTransaction trans,String combinationRecord,String operator,List<TemplateEntity> tempList) {
@@ -34,6 +37,9 @@ public class BatchExcelReader implements IRowReader{
         this.combinationRecord = combinationRecord;
         this.operator = operator;
         this.tempList = tempList;
+        dfm = new DecimalFormat();
+        dfm.setMaximumFractionDigits(4);
+        dfm.setGroupingUsed(false);
         this.stmtList = initStmtList();
     }
 
@@ -44,21 +50,34 @@ public class BatchExcelReader implements IRowReader{
         
         for(int idx = 0 ; idx < this.tempList.size() ; idx++){
             if(this.tempList.get(idx).getTemplateName().equals(sheetName)){
-                System.out.println(idx+":"+sheetName+":"+tempList.get(idx).getTemplateName());
+                
                 if (curRow >= tempList.get(idx).getStartLine() - 1&&sheetName.startsWith(tempList.get(idx).getTemplateName())) {
                   boolean isEpty = true;
                   try {
                       this.stmtList.get(idx).setString(1, sheetName);
                       this.stmtList.get(idx).setInt(2, curRow + 1);
+                      
+                      List types = this.tempList.get(idx).getColType();
                       for (int i = 0; i < this.tempList.get(idx).getColumnSize(); i++) {
                           
                           String tmpstr = rowlist.get(i);
-                          if (null == tmpstr || "".equals(tmpstr.trim())) {
-                              this.stmtList.get(idx).setString(i + 3, "");
-                          } else {
-                              isEpty = false;
-                              this.stmtList.get(idx).setString(i + 3, rsc.decodeString(tmpstr.trim()));        
+                          
+                          if(types.get(i).equals("NUMBER")){
+                              if (null == tmpstr || "".equals(tmpstr.trim())) {
+                                  this.stmtList.get(idx).setString(i + 3, "");
+                              } else {
+                                  isEpty = false;
+                                  this.stmtList.get(idx).setString(i + 3, dfm.format(Double.parseDouble(tmpstr.trim())));
+                              }
+                          }else{
+                              if (null == tmpstr || "".equals(tmpstr.trim())) {
+                                  this.stmtList.get(idx).setString(i + 3, "");
+                              } else {
+                                  isEpty = false;
+                                  this.stmtList.get(idx).setString(i + 3, rsc.decodeString(tmpstr.trim()));        
+                              }
                           }
+
                       }
                       if (!isEpty) {
                           this.stmtList.get(idx).addBatch();
