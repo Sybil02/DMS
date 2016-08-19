@@ -42,9 +42,10 @@ public class TemplateAuthorityBean {
     private RichPopup popup;
     private Person person =
             (Person)ADFContext.getCurrent().getSessionScope().get("cur_user");
-        private DmsComBoxLov roleLov;
-        private String roleName;
+    private DmsComBoxLov roleLov;
+    private String roleName;
     public TemplateAuthorityBean() {
+        this.initRoleLov();
     }
     
     public void initRoleLov(){

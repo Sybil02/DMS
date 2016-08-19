@@ -7,7 +7,7 @@
   <af:panelStretchLayout id="psl1" topHeight="0px">
     <f:facet name="top">
       <af:popup id="p1" autoCancel="disabled"
-                binding="#{backingBeanScope.FunctionAuthorityBean.popup}">
+                binding="#{viewScope.FunctionAuthorityBean.popup}">
         <af:panelWindow id="pw1" modal="true"
                         title="#{viewBundle['dms.add_function']}">
           <af:panelCollection id="pc2">
@@ -15,7 +15,7 @@
             <f:facet name="toolbar">
               <af:toolbar id="t3">
                 <af:commandButton text="#{viewBundle['dms.common.add']}" id="cb3"
-                                  actionListener="#{backingBeanScope.FunctionAuthorityBean.add_function}"/>
+                                  actionListener="#{viewScope.FunctionAuthorityBean.add_function}"/>
               </af:toolbar>
             </f:facet>
             <f:facet name="statusbar"/>
@@ -27,7 +27,7 @@
                       rowBandingInterval="0"
                       selectionListener="#{bindings.DmsUnassignedFunctionView.collectionModel.makeCurrent}"
                       rowSelection="multiple" id="t4"
-                      binding="#{backingBeanScope.FunctionAuthorityBean.unassignedFunctionTable}">
+                      binding="#{viewScope.FunctionAuthorityBean.unassignedFunctionTable}">
               <af:column sortProperty="#{bindings.DmsUnassignedFunctionView.hints.Name.name}"
                          sortable="false"
                          headerText="#{bindings.DmsUnassignedFunctionView.hints.Name.label}"
@@ -65,18 +65,28 @@
         <f:facet name="menus"/>
         <f:facet name="toolbar">
           <af:toolbar id="t2">
-            <af:selectOneChoice value="#{bindings.RoleName.inputValue}"
+            <!--af:selectOneChoice value="#{bindings.RoleName.inputValue}"
                                 label="#{bindings.RoleName.label}"
                                 required="#{bindings.RoleName.hints.mandatory}"
                                 shortDesc="#{bindings.RoleName.hints.tooltip}"
                                 id="soc1" autoSubmit="true"
-                                valueChangeListener="#{backingBeanScope.FunctionAuthorityBean.roleChangeListener}">
+                                valueChangeListener="#{viewScope.FunctionAuthorityBean.roleChangeListener}">
               <f:selectItems value="#{bindings.RoleName.items}" id="si1"/>
-            </af:selectOneChoice>
+            </af:selectOneChoice-->
+            <af:inputComboboxListOfValues label="角色名称" inlineStyle="margin-right:5px"
+                                          value="#{viewScope.FunctionAuthorityBean.roleName}"
+                                                autoSubmit="true" clientComponent="true"
+                                                validator="#{viewScope.FunctionAuthorityBean.roleLov.listOfValuesModel.validate}"
+                                                model="#{viewScope.FunctionAuthorityBean.roleLov.listOfValuesModel}"
+                                                id="iclov1" columns="50"
+                                                valueChangeListener="#{viewScope.FunctionAuthorityBean.roleChangeListener}"
+                                              usage="auto">
+                    <af:autoSuggestBehavior suggestedItems="#{viewScope.FunctionAuthorityBean.roleLov.listOfValuesModel.suggest}"/>
+            </af:inputComboboxListOfValues>
             <af:commandButton text="#{viewBundle['dms.common.add']}" id="cb1"
-                              actionListener="#{backingBeanScope.FunctionAuthorityBean.showPopup}"/>
+                              actionListener="#{viewScope.FunctionAuthorityBean.showPopup}"/>
             <af:commandButton text="#{viewBundle['dcm.common.delete']}" id="cb2"
-                              actionListener="#{backingBeanScope.FunctionAuthorityBean.removeFunction}"/>
+                              actionListener="#{viewScope.FunctionAuthorityBean.removeFunction}"/>
           </af:toolbar>
         </f:facet>
         <f:facet name="statusbar"/>
@@ -86,7 +96,7 @@
                   fetchSize="#{bindings.DmsRoleFunctionView.rangeSize}"
                   rowBandingInterval="0" id="t1" rowSelection="multiple"
                   selectedRowKeys="#{bindings.DmsRoleFunctionView.collectionModel.selectedRow}"
-                  binding="#{backingBeanScope.FunctionAuthorityBean.assignedFunctionTable}">
+                  binding="#{viewScope.FunctionAuthorityBean.assignedFunctionTable}">
           <af:column sortProperty="#{bindings.DmsRoleFunctionView.hints.FunctionId.name}"
                      sortable="false"
                      headerText="#{viewBundle['dms.function']}"
