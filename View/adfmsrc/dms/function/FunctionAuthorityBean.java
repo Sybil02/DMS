@@ -3,6 +3,17 @@ package dms.function;
 import common.ADFUtils;
 import common.DmsUtils;
 
+import common.lov.DmsComBoxLov;
+
+import common.lov.ValueSetRow;
+
+import dms.login.Person;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import java.sql.Statement;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -23,6 +34,8 @@ import oracle.jbo.Row;
 import oracle.jbo.RowSetIterator;
 import oracle.jbo.ViewObject;
 
+import oracle.jbo.server.DBTransaction;
+
 import org.apache.commons.lang.ObjectUtils;
 import org.apache.myfaces.trinidad.event.SelectionEvent;
 
@@ -33,8 +46,62 @@ public class FunctionAuthorityBean{
     private RichTable assignedFunctionTable;
     private RichPopup popup;
     private RichTable unassignedFunctionTable;
+    private String roleName;
+    private Person person =
+            (Person)ADFContext.getCurrent().getSessionScope().get("cur_user");
+    private DmsComBoxLov roleLov;
+
+    public FunctionAuthorityBean(){
+        this.initRoleLov();
+    }
+        
+    public void initRoleLov(){
+        List<SelectItem> values = new ArrayList<SelectItem>();
+        DBTransaction trans =
+            (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
+        Statement stat = trans.createStatement(DBTransaction.DEFAULT);
+        String sql = "SELECT T.ID,T.ROLE_NAME FROM DMS_ROLE T WHERE T.LOCALE='"+this.person.getLocale()+
+                     "'  AND T.ENABLE_FLAG = 'Y'";
+        ResultSet rs;
+        try {
+            rs = stat.executeQuery(sql);
+            List<ValueSetRow> list = new ArrayList<ValueSetRow>();
+            while(rs.next()){
+                SelectItem item = new SelectItem();
+                item.setLabel(rs.getString("ID"));
+                item.setValue(rs.getString("ROLE_NAME"));
+                values.add(item);
+                //模糊搜索框
+                ValueSetRow vsr =
+                    new ValueSetRow(rs.getString("ID"), rs.getString("ROLE_NAME"),
+                                    rs.getString("ID"));
+                list.add(vsr);
+                this.roleName = rs.getString("ROLE_NAME");
+            }
+            this.roleLov = new DmsComBoxLov(list);
+            ViewObject vo = ADFUtils.findIterator("DmsEnabledRoleIterator").getViewObject();
+            String wc = " ROLE_NAME = '" + this.roleName + "'";
+            vo.setWhereClause(wc);
+            vo.executeQuery();
+            if (vo.hasNext()) {
+                Row row = vo.first();
+                vo.setCurrentRow(row);
+            }
+//            AdfFacesContext.getCurrentInstance().addPartialTarget(this.assignedtemplateTable); 
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     public void roleChangeListener(ValueChangeEvent valueChangeEvent) {
+        ViewObject vo = ADFUtils.findIterator("DmsEnabledRoleIterator").getViewObject();
+            String wc = " ROLE_NAME = '" + valueChangeEvent.getNewValue() + "'";
+            vo.setWhereClause(wc);
+            vo.executeQuery();
+            if (vo.hasNext()) {
+                Row row = vo.first();
+                vo.setCurrentRow(row);
+        }
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.assignedFunctionTable);
     }
 
@@ -112,5 +179,21 @@ public class FunctionAuthorityBean{
 
     public RichTable getUnassignedFunctionTable() {
         return unassignedFunctionTable;
+    }
+
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
+    }
+
+    public String getRoleName() {
+        return roleName;
+    }
+
+    public void setRoleLov(DmsComBoxLov roleLov) {
+        this.roleLov = roleLov;
+    }
+
+    public DmsComBoxLov getRoleLov() {
+        return roleLov;
     }
 }
