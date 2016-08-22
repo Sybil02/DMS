@@ -117,6 +117,8 @@ public class HtChangeBean {
     private boolean isSelected;
     private boolean isEdited;
     private String blockedId;
+    private String data_type;
+    
     public HtChangeBean() {
         super();
         this.curUser = (Person)(ADFContext.getCurrent().getSessionScope().get("cur_user"));
@@ -253,8 +255,12 @@ public class HtChangeBean {
                 return;
         }else{
             isSelected = false;
-            isEdited = true;
             this.queryData();
+            if("CHANGE".equals(data_type)){
+                this.isEdited = false;
+            }else{
+                this.isEdited = true;
+            }
             this.createTableModel(pStart, pEnd);
         }
     }
@@ -266,8 +272,12 @@ public class HtChangeBean {
             return;
         }else{
             isSelected = false;
-            isEdited = true;
             this.queryData();
+            if("CHANGE".equals(data_type)){
+                this.isEdited = false;
+            }else{
+                this.isEdited = true;
+            }
             this.createTableModel(pStart, pEnd);
         }
     }
@@ -279,8 +289,12 @@ public class HtChangeBean {
             return;
         }else{
             isSelected = false;
-            isEdited = true;
             this.queryData();
+            if("CHANGE".equals(data_type)){
+                this.isEdited = false;
+            }else{
+                this.isEdited = true;
+            }
             this.createTableModel(pStart, pEnd);
         }
     }
@@ -289,7 +303,7 @@ public class HtChangeBean {
      public void queryData(){
          DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
          Statement stat = trans.createStatement(DBTransaction.DEFAULT);
-         String sql = "SELECT ENTITY_NAME,PRODUCT_LINE,PROJECT_TYPE,INDUSTRY_LINE,BUSINESS_LINE,CONNECT_ID,PROJECT_START,PROJECT_END"
+         String sql = "SELECT ENTITY_NAME,PRODUCT_LINE,PROJECT_TYPE,INDUSTRY_LINE,BUSINESS_LINE,CONNECT_ID,PROJECT_START,PROJECT_END,DATA_TYPE"
                      + " FROM PRO_PLAN_COST_HEADER WHERE VERSION = \'"+version+"\'";
          sql = sql +" AND HLS_YEAR=\'"+year+"\'";
          sql = sql + " AND PROJECT_NAME=\'"+pname+"\'";
@@ -312,6 +326,7 @@ public class HtChangeBean {
                  connectId=rs.getString("CONNECT_ID");
                  pStart = rs.getString("PROJECT_START");
                  pEnd = rs.getString("PROJECT_END");
+                data_type = rs.getString("DATA_TYPE");
              }
          } catch (SQLException e) {
              e.printStackTrace();
