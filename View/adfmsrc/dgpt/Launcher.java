@@ -27,29 +27,29 @@ public class Launcher extends TabLauncher{
                         false);
     }
     public void launcherProjectZx(ActionEvent actionEvent) {
-        _launchActivity("在执行项目",
+        _launchActivity("年度预算-在执行项目",
                         "/WEB-INF/dgpt/dms_projectzx_tsk.xml#dms_projectzx_tsk",
                         false);
     }
     
     public void launcherProjectZxo(ActionEvent actionEvent) {
-        _launchActivity("在执行项目、合同预算表-料、工、费",
+        _launchActivity("年度预算-在执行项目、合同预算表-料、工、费",
                         "/WEB-INF/dgpt/dms.zzxout_tsk.xml#dms.zzxout_tsk",
                         false);
     }
 
     public void launcherBasepCost(ActionEvent actionEvent) {
-        _launchActivity("基准计划成本",
+        _launchActivity("项目预算-基准计划成本",
                         "/WEB-INF/dgpt/dms_jzjhcb_tsk.xml#dms_jzjhcb_tsk",
                         false);
     }
     public void launcherHtChange(ActionEvent actionEvent) {
-        _launchActivity("合同变更后的基准计划成本",
+        _launchActivity("项目预算-合同变更后的基准计划成本",
                         "/WEB-INF/dgpt/dms_hychange_tsk.xml#dms_hychange_tsk",
                         false);
     }
     public void launcherRollChange(ActionEvent actionEvent) {
-        _launchActivity("滚动计划成本",
+        _launchActivity("项目预算-滚动计划成本",
                         "/WEB-INF/dgpt/dms_rpcost_tsk.xml#dms_rpcost_tsk",
                         false);
     }
@@ -60,7 +60,7 @@ public class Launcher extends TabLauncher{
     }
 
     public void launcherXmdb(ActionEvent actionEvent) {
-        _launchActivity("项目大表",
+        _launchActivity("年度预算-项目大表",
                         "/WEB-INF/dgpt/dms_xmdb_tsk.xml#dms_xmdb_tsk",
                         false);
     }
