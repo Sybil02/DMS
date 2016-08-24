@@ -209,7 +209,7 @@ public class ProZzxOutBean {
                 Double occ = Double.parseDouble(rs.getString("OCCURRED") != null ? rs.getString("OCCURRED"):"0");
                 //去掉小数点最后面的0  如 ： .0 , .10
                 row.put("LAST_1_10ADJ",  this.getPrettyNumber(""+(d1+occ)));
-                row.put("LAST_11_12FCST", this.getPrettyNumber(""+(d2+d3+occ)));
+                row.put("LAST_11_12FCST", this.getPrettyNumber(""+(d2+d3)));
                 row.put("NEXT_ORTHERS", this.getPrettyNumber(rs.getString("SUM_AFTER_JUL")));
                 data.add(row);
             }
