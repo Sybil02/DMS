@@ -302,12 +302,20 @@ public class htkpReturnBean {
         labelMap.put("下年6月", "NEXT_JUN");
         labelMap.put("下年7月以后", "NEXT_OTHERS");
         boolean isReadonly = false;
+        int flag = 1;
         this.pcColsDef.clear();
         for(Map.Entry<String,String> map:labelMap.entrySet()){
-            PcColumnDef newCol = new PcColumnDef(map.getKey(),map.getValue(),isReadonly);
-            this.pcColsDef.add(newCol);
+            if(flag<=8){
+                PcColumnDef newCol = new PcColumnDef(map.getKey(),map.getValue(),isReadonly,"");
+                this.pcColsDef.add(newCol);
+            }else{
+                PcColumnDef newCol = new PcColumnDef(map.getKey(),map.getValue(),isReadonly,"NUMBER");
+                this.pcColsDef.add(newCol);
+            }
+            flag++;
+            
         }
-        this.pcColsDef.add(new PcColumnDef("ROW_ID","ROW_ID",false));
+        this.pcColsDef.add(new PcColumnDef("ROW_ID","ROW_ID",false,""));
         ((PcDataTableModel)this.dataModel).setPcColsDef(this.pcColsDef);
         return labelMap;
     }
