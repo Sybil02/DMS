@@ -155,7 +155,7 @@ public class XmdbBean {
         list.add("下年6月");
         list.add("下年3季度以后");
         for(String cols : list){
-            PcColumnDef newCol = newCol = new PcColumnDef(cols,cols,isReadonly);
+            PcColumnDef newCol = newCol = new PcColumnDef(cols,cols,isReadonly,"");
             this.pcColsDef.add(newCol);
         }
         ((PcDataTableModel)this.dataModel).setPcColsDef(this.pcColsDef);

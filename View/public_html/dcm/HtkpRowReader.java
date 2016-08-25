@@ -5,6 +5,8 @@ import common.ReplaceSpecialChar;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+import java.text.DecimalFormat;
+
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,6 +35,7 @@ public class HtkpRowReader implements IRowReader{
     private String yLine;
     private String cLine;
     private String pType;
+    private DecimalFormat dfm;
     
     /**
      * @param trans
@@ -52,6 +55,9 @@ public class HtkpRowReader implements IRowReader{
         this.trans = trans;
         this.name = name;
         this.lineMap = lineMap;
+        dfm = new DecimalFormat();
+        dfm.setMaximumFractionDigits(4);
+        dfm.setGroupingUsed(false);
         this.getEveryLine();
         this.prepareSqlStatement();
     }
@@ -94,25 +100,46 @@ public class HtkpRowReader implements IRowReader{
                 this.stmt.setInt(2, curRow );
                 for (int i = 0; i < this.colsdef.size(); i++) {
                     String tmpstr = rowlist.get(i);
-                    if (null == tmpstr || "".equals(tmpstr.trim())) {
-                        this.stmt.setString(i + 3, "");
-                    } else {
-                        isEpty = false;
-                        if(this.colsdef.get(i).getDbTableCol().equals("ENTITY")){
-                            this.stmt.setString(i + 3, entity);
-                        }else if(this.colsdef.get(i).getDbTableCol().equals("INDUSTRY_LINE")){
-                            this.stmt.setString(i + 3, hLine);
-                        }else if(this.colsdef.get(i).getDbTableCol().equals("BUSINESS_LINE")){
-                            this.stmt.setString(i + 3, yLine);
-                        }else if(this.colsdef.get(i).getDbTableCol().equals("PRODUCT_LINE")){
-                            this.stmt.setString(i + 3, cLine);
-                        }else if(this.colsdef.get(i).getDbTableCol().equals("PROJECT_TYPE")){
-                            this.stmt.setString(i + 3, pType);
-                        }else{
-                            this.stmt.setString(i + 3, rsc.decodeString(tmpstr.trim()));
+                    if(this.colsdef.get(i).getDataType().equals("NUMBER")){
+                        if (null == tmpstr || "".equals(tmpstr.trim())) {
+                            this.stmt.setString(i + 3, "");
+                        } else {
+                            isEpty = false;
+                            if(this.colsdef.get(i).getDbTableCol().equals("ENTITY")){
+                                this.stmt.setString(i + 3, entity);
+                            }else if(this.colsdef.get(i).getDbTableCol().equals("INDUSTRY_LINE")){
+                                this.stmt.setString(i + 3, hLine);
+                            }else if(this.colsdef.get(i).getDbTableCol().equals("BUSINESS_LINE")){
+                                this.stmt.setString(i + 3, yLine);
+                            }else if(this.colsdef.get(i).getDbTableCol().equals("PRODUCT_LINE")){
+                                this.stmt.setString(i + 3, cLine);
+                            }else if(this.colsdef.get(i).getDbTableCol().equals("PROJECT_TYPE")){
+                                this.stmt.setString(i + 3, pType);
+                            }else{
+                                this.stmt.setString(i + 3, dfm.format(Double.parseDouble(tmpstr.trim())));
+                            }       
                         }
-                                
+                    }else{
+                        if (null == tmpstr || "".equals(tmpstr.trim())) {
+                            this.stmt.setString(i + 3, "");
+                        } else {
+                            isEpty = false;
+                            if(this.colsdef.get(i).getDbTableCol().equals("ENTITY")){
+                                this.stmt.setString(i + 3, entity);
+                            }else if(this.colsdef.get(i).getDbTableCol().equals("INDUSTRY_LINE")){
+                                this.stmt.setString(i + 3, hLine);
+                            }else if(this.colsdef.get(i).getDbTableCol().equals("BUSINESS_LINE")){
+                                this.stmt.setString(i + 3, yLine);
+                            }else if(this.colsdef.get(i).getDbTableCol().equals("PRODUCT_LINE")){
+                                this.stmt.setString(i + 3, cLine);
+                            }else if(this.colsdef.get(i).getDbTableCol().equals("PROJECT_TYPE")){
+                                this.stmt.setString(i + 3, pType);
+                            }else{
+                                this.stmt.setString(i + 3, rsc.decodeString(tmpstr.trim()));
+                            }         
+                        }
                     }
+                    
                 }
                 if (!isEpty) {
                     this.stmt.addBatch();

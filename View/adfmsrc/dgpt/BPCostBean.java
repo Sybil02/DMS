@@ -431,12 +431,18 @@ public class BPCostBean {
             if(flag>12){
                 isReadonly = false;
             }
+            if(flag<=10){
+                PcColumnDef newCol = new PcColumnDef(map.getKey(),map.getValue(),isReadonly,"");
+                this.pcColsDef.add(newCol);
+            }else{
+                PcColumnDef newCol = new PcColumnDef(map.getKey(),map.getValue(),isReadonly,"NUMBER");
+                this.pcColsDef.add(newCol);
+            }
             flag++;
-            PcColumnDef newCol = new PcColumnDef(map.getKey(),map.getValue(),isReadonly);
-            this.pcColsDef.add(newCol);
+            
         }
         ((PcDataTableModel)this.dataModel).setPcColsDef(this.pcColsDef);
-        this.pcColsDef.add(new PcColumnDef("ROW_ID","ROW_ID",false));
+        this.pcColsDef.add(new PcColumnDef("ROW_ID","ROW_ID",false,""));
         return labelMap;
     }
     

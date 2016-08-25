@@ -10,6 +10,7 @@ public class PcColumnDef {
         this.locale=row.getLocale();
         this.columnLable=row.getColumnLabel();
         this.dbTableCol= row.getDbTableCol();
+        this.dataType = row.getDataType();
         
     }
     
@@ -18,11 +19,13 @@ public class PcColumnDef {
     private String columnLable;
     private String dbTableCol;
     private boolean isReadonly;
+    private String dataType;
 
-    public PcColumnDef(String columnLable, String dbTableCol,boolean isReadonly) {
+    public PcColumnDef(String columnLable, String dbTableCol,boolean isReadonly,String dataType) {
         this.columnLable = columnLable;
         this.dbTableCol = dbTableCol;
         this.isReadonly = isReadonly;
+        this.dataType = dataType;
     }
 
 
@@ -64,5 +67,13 @@ public class PcColumnDef {
 
     public boolean isIsReadonly() {
         return isReadonly;
+    }
+
+    public void setDataType(String dataType) {
+        this.dataType = dataType;
+    }
+
+    public String getDataType() {
+        return dataType;
     }
 }

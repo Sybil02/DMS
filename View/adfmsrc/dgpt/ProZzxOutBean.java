@@ -175,9 +175,9 @@ public class ProZzxOutBean {
         for(Map.Entry<String,String> map:labelMap.entrySet()){
             PcColumnDef newCol = null;
             if(i<23){
-                newCol = new PcColumnDef(list.get(i),map.getValue(),isReadonly);
+                newCol = new PcColumnDef(list.get(i),map.getValue(),isReadonly,"");
             }else{
-                newCol = new PcColumnDef(map.getValue(),map.getValue(),isReadonly);
+                newCol = new PcColumnDef(map.getValue(),map.getValue(),isReadonly,"");
             }
             i++;
             this.pcColsDef.add(newCol);

@@ -5,6 +5,8 @@ import common.ReplaceSpecialChar;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+import java.text.DecimalFormat;
+
 import java.util.List;
 import java.util.TreeMap;
 
@@ -27,6 +29,7 @@ public class SPRowReader implements IRowReader{
     private static final int batchSize = 5000;
     private String data_type;
     private String name;
+    private DecimalFormat dfm;
     private static ADFLogger logger=ADFLogger.createADFLogger(RowReader.class);
 
     /**
@@ -46,6 +49,9 @@ public class SPRowReader implements IRowReader{
         this.trans = trans;
         this.data_type=data_type;
         this.name = name;
+        dfm = new DecimalFormat();
+        dfm.setMaximumFractionDigits(4);
+        dfm.setGroupingUsed(false);
         this.prepareSqlStatement();
     }
 
@@ -71,13 +77,22 @@ public class SPRowReader implements IRowReader{
                 this.stmt.setString(1, this.connectId);
                 this.stmt.setInt(2, curRow );
                 for (int i = 0; i < this.colsdef.size(); i++) {
-                    String tmpstr = rowlist.get(i);
+                String tmpstr = rowlist.get(i);
+                if(this.colsdef.get(i).getDataType().equals("NUMBER")){
+                    if (null == tmpstr || "".equals(tmpstr.trim())) {
+                        this.stmt.setString(i + 3, "");
+                    } else {
+                        isEpty = false;
+                        this.stmt.setString(i + 3, dfm.format(Double.parseDouble(tmpstr.trim())));        
+                    }
+                }else{
                     if (null == tmpstr || "".equals(tmpstr.trim())) {
                         this.stmt.setString(i + 3, "");
                     } else {
                         isEpty = false;
                         this.stmt.setString(i + 3, rsc.decodeString(tmpstr.trim()));        
                     }
+                }
                 }
                 if (!isEpty) {
                     this.stmt.addBatch();

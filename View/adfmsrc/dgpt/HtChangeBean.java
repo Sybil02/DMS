@@ -702,22 +702,28 @@ public class HtChangeBean {
             if(flag>11){
                 isReadonly = false;
             }
+            if(flag<=10){
+                PcColumnDef newCol = new PcColumnDef(map.getKey(),map.getValue(),isReadonly,"");
+                this.pcColsDef.add(newCol);
+                this.pcColsEx.add(newCol);
+            }else{
+                PcColumnDef newCol = new PcColumnDef(map.getKey(),map.getValue(),isReadonly,"NUMBER");
+                this.pcColsDef.add(newCol);
+                this.pcColsEx.add(newCol);
+            }
             flag++;
-            PcColumnDef newCol = new PcColumnDef(map.getKey(),map.getValue(),isReadonly);
-            this.pcColsDef.add(newCol);
-            this.pcColsEx.add(newCol);
         }
-        this.pcColsDef.add(new PcColumnDef("ROW_ID","ROW_ID",false));
+        this.pcColsDef.add(new PcColumnDef("ROW_ID","ROW_ID",false,""));
 //        this.pcColsEx.add(new PcColumnDef("ROW_ID","ROW_ID",false));
-        this.pcColsEx.add((new PcColumnDef("ACC_CODE","ACC_CODE",false)));
-        this.pcColsEx.add(new PcColumnDef("CENTER_CODE","CENTER_CODE",false));
-        this.pcColsEx.add(new PcColumnDef("LGF_NUM","LGF_NUM",false));
-        this.pcColsEx.add(new PcColumnDef("LGF_TYPE","LGF_TYPE",false));
-        this.pcColsEx.add(new PcColumnDef("PLAN_QUANTITY","PLAN_QUANTITY",false));
-        this.pcColsEx.add(new PcColumnDef("PLAN_AMOUNT","PLAN_AMOUNT",false));
-        this.pcColsEx.add(new PcColumnDef("OCCURRED_QUANTITY","OCCURRED_QUANTITY",false));
-        this.pcColsEx.add(new PcColumnDef("OCCURRED_AMOUNT","OCCURRED_AMOUNT",false));
-        this.pcColsEx.add(new PcColumnDef("OCCURRED","OCCURRED",false));
+        this.pcColsEx.add((new PcColumnDef("ACC_CODE","ACC_CODE",false,"")));
+        this.pcColsEx.add(new PcColumnDef("CENTER_CODE","CENTER_CODE",false,""));
+        this.pcColsEx.add(new PcColumnDef("LGF_NUM","LGF_NUM",false,"NUMBER"));
+        this.pcColsEx.add(new PcColumnDef("LGF_TYPE","LGF_TYPE",false,""));
+        this.pcColsEx.add(new PcColumnDef("PLAN_QUANTITY","PLAN_QUANTITY",false,"NUMBER"));
+        this.pcColsEx.add(new PcColumnDef("PLAN_AMOUNT","PLAN_AMOUNT",false,"NUMBER"));
+        this.pcColsEx.add(new PcColumnDef("OCCURRED_QUANTITY","OCCURRED_QUANTITY",false,"NUMBER"));
+        this.pcColsEx.add(new PcColumnDef("OCCURRED_AMOUNT","OCCURRED_AMOUNT",false,"NUMBER"));
+        this.pcColsEx.add(new PcColumnDef("OCCURRED","OCCURRED",false,"NUMBER"));
         ((PcDataTableModel)this.dataModel).setPcColsDef(this.pcColsDef);
         return labelMap;
     }

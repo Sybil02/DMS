@@ -242,15 +242,18 @@ public class ProjectZxBean {
         list.add("下年7月以后");
         int i =0;
         for(Map.Entry<String,String> map:labelMap.entrySet()){
-            if(i<34){
-                PcColumnDef newCol = new PcColumnDef(list.get(i),map.getValue(),false);
+            if(i<10){
+                PcColumnDef newCol = new PcColumnDef(list.get(i),map.getValue(),false,"");
+                this.pcColsDef.add(newCol);
+            }else if(i>=10&&i<34){
+                PcColumnDef newCol = new PcColumnDef(list.get(i),map.getValue(),false,"NUMBER");
                 this.pcColsDef.add(newCol);
             }else{
                 break;
             }
             i++;
         }
-        this.pcColsDef.add(new PcColumnDef("ROW_ID","ROW_ID",false));
+        this.pcColsDef.add(new PcColumnDef("ROW_ID","ROW_ID",false,""));
         ((PcDataTableModel)this.dataModel).setPcColsDef(this.pcColsDef);
         return labelMap;
     }
