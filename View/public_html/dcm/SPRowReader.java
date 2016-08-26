@@ -83,14 +83,14 @@ public class SPRowReader implements IRowReader{
                         this.stmt.setString(i + 3, "");
                     } else {
                         isEpty = false;
-                        this.stmt.setString(i + 3, dfm.format(Double.parseDouble(tmpstr.trim())));        
+                        this.stmt.setString(i + 3, dfm.format(Double.parseDouble(tmpstr.trim())));
                     }
                 }else{
                     if (null == tmpstr || "".equals(tmpstr.trim())) {
                         this.stmt.setString(i + 3, "");
                     } else {
                         isEpty = false;
-                        this.stmt.setString(i + 3, rsc.decodeString(tmpstr.trim()));        
+                        this.stmt.setString(i + 3, rsc.decodeString(tmpstr.trim())); 
                     }
                 }
                 }

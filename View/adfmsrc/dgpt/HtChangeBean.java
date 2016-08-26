@@ -116,6 +116,7 @@ public class HtChangeBean {
     private boolean isXlsx = true;
     private boolean isSelected;
     private boolean isEdited;
+    private boolean isChange;
     private String blockedId;
     private String data_type;
     
@@ -127,6 +128,7 @@ public class HtChangeBean {
         this.dataModel.setWrappedData(d);
         isSelected = true;
         isEdited = true;
+        isChange = true;
         this.initList();
     }
     
@@ -258,8 +260,10 @@ public class HtChangeBean {
             this.queryData();
             if("CHANGE".equals(data_type)){
                 this.isEdited = false;
+                this.isChange = false;
             }else{
                 this.isEdited = true;
+                this.isChange = false;
             }
             this.createTableModel(pStart, pEnd);
         }
@@ -275,8 +279,10 @@ public class HtChangeBean {
             this.queryData();
             if("CHANGE".equals(data_type)){
                 this.isEdited = false;
+                this.isChange = false;
             }else{
                 this.isEdited = true;
+                this.isChange = true;
             }
             this.createTableModel(pStart, pEnd);
         }
@@ -292,8 +298,10 @@ public class HtChangeBean {
             this.queryData();
             if("CHANGE".equals(data_type)){
                 this.isEdited = false;
+                this.isChange = false;
             }else{
                 this.isEdited = true;
+                this.isChange = true;
             }
             this.createTableModel(pStart, pEnd);
         }
@@ -511,6 +519,7 @@ public class HtChangeBean {
         connectId = newConnectId;
         
         this.isEdited = false;
+        this.isChange = false;
         this.createTableModel(pStart,pEnd);
     }
 
@@ -524,7 +533,7 @@ public class HtChangeBean {
         newRow.put("OPERATION",PcDataTableModel.OPERATE_CREATE);
         modelData.add(0, newRow);
     }
-    //保存
+    //保存并更改
     public void operation_save() {
         //清楚临时表，错误表数据
         this.deleteTempAndError();
@@ -611,6 +620,95 @@ public class HtChangeBean {
             this.showErrorPop();
         }
     }
+    
+    //保存数据，不变更数据类型
+    public void operation_baocun(ActionEvent actionEvent) {
+        //清楚临时表，错误表数据
+        this.deleteTempAndError();
+        DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
+        StringBuffer sql = new StringBuffer();
+        StringBuffer sql_value = new StringBuffer();
+        sql_value.append(" VALUES(");
+        sql.append("INSERT INTO PRO_PLAN_COST_BODY_TEMP(") ;
+        //构建sql语句
+        LinkedHashMap<String,String> map = this.getLabelMap(pStart,pEnd);
+        int last = map.size()+1;
+        for(Map.Entry<String,String> entry : map.entrySet()){
+            sql.append(entry.getValue()+",");
+            sql_value.append("?,");
+        }
+        sql.append("ROW_ID,CONNECT_ID,CREATED_BY,OPERATION,DATA_TYPE,ROW_NO,");
+        sql.append("LGF_NUM,LGF_TYPE,PLAN_QUANTITY,PLAN_AMOUNT,OCCURRED_QUANTITY,OCCURRED_AMOUNT,OCCURRED,ACC_CODE,CENTER_CODE)");
+        sql_value.append("?,\'"+connectId+"\',"+this.curUser.getId()+",?,\'"+this.TYPE_CHANGE+"\',?,");
+        sql_value.append("?,?,?,?,?,?,?,?,?)");
+        PreparedStatement stmt = trans.createPreparedStatement(sql.toString()+sql_value.toString(), 0);
+        //获取数据
+        int rowNum = 1;
+        List<Map> modelData = (List<Map>)this.dataModel.getWrappedData();
+        for(Map<String,String> rowdata : modelData){
+                try {
+                    stmt.setString(last, rowdata.get("ROW_ID"));
+                    stmt.setInt(last+2,rowNum);
+                    stmt.setString(last+3, rowdata.get("LGF_NUM"));
+                    stmt.setString(last+4, rowdata.get("LGF_TYPE"));
+                    stmt.setString(last+5, rowdata.get("PLAN_QUANTITY"));
+                    stmt.setString(last+6, rowdata.get("PLAN_AMOUNT"));
+                    stmt.setString(last+7, rowdata.get("OCCURRED_QUANTITY"));
+                    stmt.setString(last+8, rowdata.get("OCCURRED_AMOUNT"));
+                    stmt.setString(last+9, rowdata.get("OCCURRED"));
+                    stmt.setString(last+10, rowdata.get("ACC_CODE"));
+                    stmt.setString(last+11, rowdata.get("CENTER_CODE"));
+                    rowNum++;
+                    if(PcDataTableModel.OPERATE_UPDATE.equals(rowdata.get("OPERATION"))){
+                        stmt.setString(last+1,PcDataTableModel.OPERATE_UPDATE);
+                    }else if(PcDataTableModel.OPERATE_CREATE.equals(rowdata.get("OPERATION"))){
+                        stmt.setString(last+1,PcDataTableModel.OPERATE_CREATE);
+                    }else if(PcDataTableModel.OPERATE_DELETE.equals(rowdata.get("OPERATION"))){
+                        stmt.setString(last+1,PcDataTableModel.OPERATE_DELETE);
+                    }else{
+                        stmt.setString(last+1,PcDataTableModel.OPERATE_UPDATE);
+                    }
+                    //if(null!=rowdata.get("OPERATION")){
+                        int i =1;
+                        for(Map.Entry<String,String> entry : map.entrySet()){
+                            stmt.setString(i++ , rowdata.get(entry.getValue()));
+                        }
+                        stmt.addBatch();
+                        stmt.executeBatch();
+                    //}
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                } 
+        }
+        trans.commit();
+        try {
+            stmt.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        //执行校验
+        if(this.validation()){
+            //校验成功，执行导入
+//            Statement statUpdate = trans.createStatement(DBTransaction.DEFAULT);
+//            String sqlUpdate = "UPDATE PRO_PLAN_COST_HEADER SET(DATA_TYPE) = 'BASE' WHERE CONNECT_ID = '"+this.connectId+"'";
+//            try {
+//                statUpdate.executeUpdate(sqlUpdate);
+//                trans.commit();
+//                statUpdate.close();
+//            } catch (SQLException e) {
+//                e.printStackTrace();
+//            }
+            this.inputPro();
+           dmsLog.operationLog(this.curUser.getAcc(),"C_"+this.connectId,this.getCom(),"UPDATE");
+            for(Map<String,String> rowdata : modelData){
+                    rowdata.put("OPERATION", null);
+            }
+            this.createTableModel(pStart, pEnd);
+        }else{
+            this.showErrorPop();
+        }
+    }
+    
     //清空临时表和错误表数据
     public void deleteTempAndError(){
         DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
@@ -882,17 +980,17 @@ public class HtChangeBean {
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
-                //更新表头数据类型
-                Statement statUpdate = trans.createStatement(DBTransaction.DEFAULT);
-                String sqlUpdate = "UPDATE PRO_PLAN_COST_HEADER SET(DATA_TYPE) = 'BASE' WHERE CONNECT_ID = '"+this.connectId+"'";
-                
-                try {
-                    statUpdate.executeUpdate(sqlUpdate);
-                    trans.commit();
-                    statUpdate.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
+                //更新表头数据类型--暂不更改，仅点击保存并更改按钮时，更改数据类型
+//                Statement statUpdate = trans.createStatement(DBTransaction.DEFAULT);
+//                String sqlUpdate = "UPDATE PRO_PLAN_COST_HEADER SET(DATA_TYPE) = 'BASE' WHERE CONNECT_ID = '"+this.connectId+"'";
+//                
+//                try {
+//                    statUpdate.executeUpdate(sqlUpdate);
+//                    trans.commit();
+//                    statUpdate.close();
+//                } catch (SQLException e) {
+//                    e.printStackTrace();
+//                }
                 //插入body表
                 this.inputPro_import();
             }else{
@@ -1236,5 +1334,13 @@ public class HtChangeBean {
 
     public boolean isIsEdited() {
         return isEdited;
+    }
+
+    public void setIsChange(boolean isChange) {
+        this.isChange = isChange;
+    }
+
+    public boolean isIsChange() {
+        return isChange;
     }
 }

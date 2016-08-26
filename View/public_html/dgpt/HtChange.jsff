@@ -183,7 +183,11 @@
           <af:group id="grp1">
             <!--<af:commandButton text="#{viewBundle['dcm.common.new']}" id="cb1"
                               action="#{viewScope.HtChangeBean.operation_new}"/>-->
-            <af:commandButton text="#{viewBundle['dms.common.save']}" id="cb2"
+              <af:commandButton text="#{viewBundle['dms.common.save']}" id="cb1"
+                                actionListener="#{viewScope.HtChangeBean.operation_baocun}"
+                                disabled="#{viewScope.HtChangeBean.isSelected or viewScope.HtChangeBean.isChange}"
+                                partialTriggers="::soc1 ::iclov2 ::soc3 ::cb6"/>
+              <af:commandButton text="#{viewBundle['dms.common.save_change']}" id="cb2"
                               action="#{viewScope.HtChangeBean.operation_save}"
                               disabled="#{viewScope.HtChangeBean.isSelected or viewScope.HtChangeBean.isEdited}"
                               partialTriggers="::soc1 ::iclov2 ::soc3"/>
