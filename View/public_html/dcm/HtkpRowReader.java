@@ -122,6 +122,17 @@ public class HtkpRowReader implements IRowReader{
                     }else{
                         if (null == tmpstr || "".equals(tmpstr.trim())) {
                             this.stmt.setString(i + 3, "");
+                                if(this.colsdef.get(i).getDbTableCol().equals("ENTITY")){
+                                    this.stmt.setString(i + 3, entity);
+                                }else if(this.colsdef.get(i).getDbTableCol().equals("INDUSTRY_LINE")){
+                                    this.stmt.setString(i + 3, hLine);
+                                }else if(this.colsdef.get(i).getDbTableCol().equals("BUSINESS_LINE")){
+                                    this.stmt.setString(i + 3, yLine);
+                                }else if(this.colsdef.get(i).getDbTableCol().equals("PRODUCT_LINE")){
+                                    this.stmt.setString(i + 3, cLine);
+                                }else if(this.colsdef.get(i).getDbTableCol().equals("PROJECT_TYPE")){
+                                    this.stmt.setString(i + 3, rsc.decodeString(pType));
+                                }
                         } else {
                             isEpty = false;
                             if(this.colsdef.get(i).getDbTableCol().equals("ENTITY")){
@@ -133,7 +144,7 @@ public class HtkpRowReader implements IRowReader{
                             }else if(this.colsdef.get(i).getDbTableCol().equals("PRODUCT_LINE")){
                                 this.stmt.setString(i + 3, cLine);
                             }else if(this.colsdef.get(i).getDbTableCol().equals("PROJECT_TYPE")){
-                                this.stmt.setString(i + 3, pType);
+                                this.stmt.setString(i + 3, rsc.decodeString(pType));
                             }else{
                                 this.stmt.setString(i + 3, rsc.decodeString(tmpstr.trim()));
                             }         

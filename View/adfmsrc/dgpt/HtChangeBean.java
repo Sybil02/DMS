@@ -117,12 +117,18 @@ public class HtChangeBean {
     private boolean isSelected;
     private boolean isEdited;
     private boolean isChange;
+    private boolean isManager;
     private String blockedId;
     private String data_type;
     
     public HtChangeBean() {
         super();
         this.curUser = (Person)(ADFContext.getCurrent().getSessionScope().get("cur_user"));
+        if("10000".equals(this.curUser.getId())){
+            isManager = true;
+        }else{
+            isManager = false;
+        }
         this.dataModel = new PcDataTableModel();
         List<Map> d = new ArrayList<Map>();
         this.dataModel.setWrappedData(d);
@@ -615,6 +621,7 @@ public class HtChangeBean {
             for(Map<String,String> rowdata : modelData){
                     rowdata.put("OPERATION", null);
             }
+            this.isEdited = true;
             this.createTableModel(pStart, pEnd);
         }else{
             this.showErrorPop();
@@ -1112,6 +1119,21 @@ public class HtChangeBean {
         return (new File(fileName)).getAbsolutePath();
     }
     
+    public void outBlock(ActionEvent actionEvent) {
+        DBTransaction trans = (DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
+        Statement stat = trans.createStatement(DBTransaction.DEFAULT);
+        String sql = "UPDATE PRO_PLAN_COST_HEADER SET(DATA_TYPE) = 'CHANGE' WHERE CONNECT_ID = '"+this.connectId+"'";
+        try {
+            stat.executeUpdate(sql);
+            trans.commit();
+            stat.close();
+            this.isEdited = false;
+            this.isChange = false;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    
     public void setPanelaCollection(RichPanelCollection panelaCollection) {
         this.panelaCollection = panelaCollection;
     }
@@ -1342,5 +1364,13 @@ public class HtChangeBean {
 
     public boolean isIsChange() {
         return isChange;
+    }
+
+    public void setIsManager(boolean isManager) {
+        this.isManager = isManager;
+    }
+
+    public boolean isIsManager() {
+        return isManager;
     }
 }

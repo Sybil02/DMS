@@ -187,11 +187,16 @@
                                 actionListener="#{viewScope.HtChangeBean.operation_baocun}"
                                 disabled="#{viewScope.HtChangeBean.isSelected or viewScope.HtChangeBean.isChange}"
                                 partialTriggers="::soc1 ::iclov2 ::soc3 ::cb6"/>
-              <af:commandButton text="#{viewBundle['dms.common.save_change']}" id="cb2"
+              <af:commandButton text="#{viewBundle['dms.dgpt.block']}" id="cb2"
                               action="#{viewScope.HtChangeBean.operation_save}"
                               disabled="#{viewScope.HtChangeBean.isSelected or viewScope.HtChangeBean.isEdited}"
                               partialTriggers="::soc1 ::iclov2 ::soc3"/>
-            <af:commandButton text="#{viewBundle['dms.common.cancel']}" id="cb3"
+              <af:commandButton text="#{viewBundle['dms.dgpt.fblock']}" id="cb12"
+                                rendered="#{sessionScope.authoriedFunction['UNFREEZE'] or viewScope.HtChangeBean.isManager}"
+                                actionListener="#{viewScope.HtChangeBean.outBlock}"
+                                partialTriggers="::soc1 ::iclov2 ::soc3"
+                                disabled="#{viewScope.HtChangeBean.isSelected or not viewScope.HtChangeBean.isEdited}"/>
+              <af:commandButton text="#{viewBundle['dms.common.cancel']}" id="cb3"
                               actionListener="#{viewScope.HtChangeBean.operation_reset}"
                               disabled="#{viewScope.HtChangeBean.isEdited}"
                               partialTriggers="::soc1 ::iclov2 ::soc3"/>
@@ -207,7 +212,7 @@
                 <af:showPopupBehavior popupId="::p4"/>
               </af:commandButton>
               <af:commandButton text="#{viewBundle['dcm.action.export']}" id="cb7"
-                                disabled="#{viewScope.HtChangeBean.isSelected or viewScope.HtChangeBean.isEdited}"
+                                disabled="#{viewScope.HtChangeBean.isSelected}"
                               partialTriggers="::soc1 ::iclov2 ::soc3">
                 <af:showPopupBehavior popupId="::p2"/>
               </af:commandButton>

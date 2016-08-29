@@ -170,13 +170,13 @@ public class htkpReturnBean {
         String sql = "";
         List<SelectItem> values = new ArrayList<SelectItem>();
         if("10000".equals(this.curUser.getId())){
-            sql = "SELECT DISTINCT C.HLS_HTKP_PROJECT_V CODE,B.MEANING FROM HTKP_COMBINATION C,HLS_HTKP_PROJECT_V B WHERE " +
-                "  C.HLS_HTKP_PROJECT_V = B.CODE";
+            sql = "SELECT DISTINCT C.BH_USER_PRO_C1 CODE,B.MEANING FROM DCM_COMBINATION_17 C,HLS_HTKP_PROJECT_V B WHERE " +
+                "  C.BH_USER_PRO_C1 = B.CODE";
         }else{
-            sql = "SELECT DISTINCT C.HLS_HTKP_PROJECT_V CODE,B.MEANING FROM HTKP_COMBINATION C,HLS_HTKP_PROJECT_V B WHERE  B.MEANING IN" +
+            sql = "SELECT DISTINCT C.BH_USER_PRO_C1 CODE,B.MEANING FROM DCM_COMBINATION_17 C,HLS_HTKP_PROJECT_V B WHERE  B.MEANING IN" +
                 "(SELECT T.PRO_CODE || '-' || T.PRO_DESC FROM SAP_DMS_PROJECT_PRIVILEGE T " +
                 " WHERE T.ATTRIBUTE7 = '"+this.curUser.getAcc()+"' AND T.ATTRIBUTE3='ZX')" +
-                "AND C.HLS_HTKP_PROJECT_V = B.CODE";
+                "AND C.BH_USER_PRO_C1 = B.CODE";
         }
         ResultSet rs;
         try {
@@ -219,8 +219,8 @@ public class htkpReturnBean {
         Statement stat = trans.createStatement(DBTransaction.DEFAULT);
         String name = this.pName.substring(0, pName.lastIndexOf("-"));
         //在合同开票组合中查找id
-        String sql = "SELECT ID FROM HTKP_COMBINATION WHERE HLS_YEAR_C='"+this.year+"' " +
-            "AND HLS_VERSION_C='"+this.version+"' AND HLS_HTKP_PROJECT_V='"+name+"'";
+        String sql = "SELECT ID FROM DCM_COMBINATION_17 WHERE HLS_YEAR_C='"+this.year+"' " +
+            "AND HLS_VERSION_C='"+this.version+"' AND BH_USER_PRO_C1='"+name+"'";
         ResultSet rs;
         try {
             rs = stat.executeQuery(sql);
@@ -246,8 +246,8 @@ public class htkpReturnBean {
         Statement stat = trans.createStatement(DBTransaction.DEFAULT);
         String name = this.pName.substring(0, pName.lastIndexOf("-"));
         //在合同开票组合中查找id
-        String sql = "SELECT ID FROM HTKP_COMBINATION WHERE HLS_YEAR_C='"+this.year+"' " +
-            "AND HLS_VERSION_C='"+this.version+"' AND HLS_HTKP_PROJECT_V='"+name+"'";
+        String sql = "SELECT ID FROM DCM_COMBINATION_17 WHERE HLS_YEAR_C='"+this.year+"' " +
+            "AND HLS_VERSION_C='"+this.version+"' AND BH_USER_PRO_C1='"+name+"'";
         ResultSet rs;
         try {
             rs = stat.executeQuery(sql);
@@ -371,69 +371,99 @@ public class htkpReturnBean {
         String sql = "SELECT DISTINCT T.ENTITY_code,T.ENTITY,T.industry_line_code,T.industry_line,T.business_line_code," +
                     "T.business_line,T.product_line_code,T.product_line,T.project_type_code,T.project_type_desc " +
 //                     "FROM HLS_HTKP_PROJECT_C T "+" WHERE T.pspnr='"+name+"'";
-                    "FROM (select pro.pspnr,pro.plfaz start_date,pro.plsez end_date," + 
-                    "       HE.ENTITY_code, HE.ENTITY," + 
-                    "       decode(pro.zsd022," + 
-                    "              null," + 
-                    "              'MC0100'," + 
-                    "              (SELECT dm.hp_code" + 
-                    "                 FROM dms.hp_dimesion_mapping dm, dms.dcm_combination_15 hd" + 
-                    "                WHERE 1 = 1" + 
-                    "                  AND dm.com_record_id = hd.id" + 
-                    "                  AND lpad(dm.sap_code, 2, 0) = pro.zsd022" + 
-                    "                  AND hd.hls_dimesion_c = 'Misc3')) industry_line_code," + 
-                    "       decode(pro.zsd022," + 
-                    "              null," + 
-                    "              '行业线缺省'," + 
-                    "              (SELECT dm.hp_desc" + 
-                    "                 FROM dms.hp_dimesion_mapping dm, dms.dcm_combination_15 hd" + 
-                    "                WHERE 1 = 1" + 
-                    "                  AND dm.com_record_id = hd.id" + 
-                    "                  AND lpad(dm.sap_code, 2, 0) = pro.zsd022" + 
-                    "                  AND hd.hls_dimesion_c = 'Misc3')) industry_line," + 
-                    "       decode(pro.zsd023," + 
-                    "              null," + 
-                    "              'BL00'," + 
-                    "              (SELECT dm.hp_code" + 
-                    "                 FROM dms.hp_dimesion_mapping dm, dms.dcm_combination_15 hd" + 
-                    "                WHERE 1 = 1" + 
-                    "                  AND dm.com_record_id = hd.id" + 
-                    "                  AND lpad(dm.sap_code, 2, 0) = pro.zsd023" + 
-                    "                  AND hd.hls_dimesion_c = 'Business Line')) business_line_code," + 
-                    "       decode(pro.zsd023," + 
-                    "              null," + 
-                    "              '业务线缺省'," + 
-                    "              (SELECT dm.hp_desc" + 
-                    "                 FROM dms.hp_dimesion_mapping dm, dms.dcm_combination_15 hd" + 
-                    "                WHERE 1 = 1" + 
-                    "                  AND dm.com_record_id = hd.id" + 
-                    "                  AND lpad(dm.sap_code, 2, 0) = pro.zsd023" + 
-                    "                  AND hd.hls_dimesion_c = 'Business Line')) business_line," + 
-                    "       decode(pro.zsd029," + 
-                    "              null," + 
-                    "              'MB0900'," + 
-                    "              (SELECT dm.hp_code" + 
-                    "                 FROM dms.hp_dimesion_mapping dm, dms.dcm_combination_15 hd" + 
-                    "                WHERE 1 = 1" + 
-                    "                  AND dm.com_record_id = hd.id" + 
-                    "                  AND lpad(dm.sap_code, 2, 0) = pro.zsd029" + 
-                    "                  AND hd.hls_dimesion_c = 'Misc2')) product_line_code, " + 
-                    "       decode(pro.zsd029," + 
-                    "              null," + 
-                    "              '产品线缺省'," + 
-                    "              (SELECT dm.hp_desc" + 
-                    "                 FROM dms.hp_dimesion_mapping dm, dms.dcm_combination_15 hd" + 
-                    "                WHERE 1 = 1" + 
-                    "                  AND dm.com_record_id = hd.id" + 
-                    "                  AND lpad(dm.sap_code, 2, 0) = pro.zsd029" + 
-                    "                  AND hd.hls_dimesion_c = 'Misc2')) product_line," + 
-                    "       pro.profl project_type_code, " + 
-                    "       pro.PROFI_TXT project_type_desc,    " + 
-                    "       pro.stat enabled_flag    " + 
-                    "  from hpdw.sap_dmspro_data pro,dms.dms_hphls_e2entity_v he" + 
-                    " where 1 = 1" + 
-                    "   AND 'E' || pro.vbukr || '1' = HE.ENTITY_code" + 
-                    "   AND pro.stat <> 5) T" +" WHERE T.pspnr='"+name+"'";
+                    "  FROM (select pro.pspnr,\n" + 
+                    "               pro.plfaz start_date, \n" + 
+                    "               pro.plsez end_date, \n" + 
+                    "               HE.ENTITY_code, \n" + 
+                    "               HE.ENTITY,\n" + 
+                    "               decode(pro.zsd022,\n" + 
+                    "                      null,\n" + 
+                    "                      'MC0100',\n" + 
+                    "                      (SELECT dm.hp_code\n" + 
+                    "                         FROM dms.hp_dimesion_mapping dm,\n" + 
+                    "                              dms.dcm_combination_15  hd\n" + 
+                    "                        WHERE 1 = 1\n" + 
+                    "                          AND dm.com_record_id = hd.id\n" + 
+                    "                          AND lpad(dm.sap_code, 2, 0) = pro.zsd022\n" + 
+                    "                          AND hd.hls_dimesion_c = 'Misc3')) industry_line_code, \n" + 
+                    "               decode(pro.zsd022,\n" + 
+                    "                      null,\n" + 
+                    "                      '行业线缺省',\n" + 
+                    "                      (SELECT dm.hp_desc\n" + 
+                    "                         FROM dms.hp_dimesion_mapping dm,\n" + 
+                    "                              dms.dcm_combination_15  hd\n" + 
+                    "                        WHERE 1 = 1\n" + 
+                    "                          AND dm.com_record_id = hd.id\n" + 
+                    "                          AND lpad(dm.sap_code, 2, 0) = pro.zsd022\n" + 
+                    "                          AND hd.hls_dimesion_c = 'Misc3')) industry_line, \n" + 
+                    "               decode(pro.zsd023,\n" + 
+                    "                      null,\n" + 
+                    "                      'BL00',\n" + 
+                    "                      (SELECT dm.hp_code\n" + 
+                    "                         FROM dms.hp_dimesion_mapping dm,\n" + 
+                    "                              dms.dcm_combination_15  hd\n" + 
+                    "                        WHERE 1 = 1\n" + 
+                    "                          AND dm.com_record_id = hd.id\n" + 
+                    "                          AND lpad(dm.sap_code, 2, 0) = pro.zsd023\n" + 
+                    "                          AND hd.hls_dimesion_c = 'Business Line')) business_line_code, \n" + 
+                    "               decode(pro.zsd023,\n" + 
+                    "                      null,\n" + 
+                    "                      '业务线缺省',\n" + 
+                    "                      (SELECT dm.hp_desc\n" + 
+                    "                         FROM dms.hp_dimesion_mapping dm,\n" + 
+                    "                              dms.dcm_combination_15  hd\n" + 
+                    "                        WHERE 1 = 1\n" + 
+                    "                          AND dm.com_record_id = hd.id\n" + 
+                    "                          AND lpad(dm.sap_code, 2, 0) = pro.zsd023\n" + 
+                    "                          AND hd.hls_dimesion_c = 'Business Line')) business_line, \n" + 
+                    "               decode(pro.zsd029,\n" + 
+                    "                      null,\n" + 
+                    "                      'MB0900',\n" + 
+                    "                      (SELECT dm.hp_code\n" + 
+                    "                         FROM dms.hp_dimesion_mapping dm,\n" + 
+                    "                              dms.dcm_combination_15  hd\n" + 
+                    "                        WHERE 1 = 1\n" + 
+                    "                          AND dm.com_record_id = hd.id\n" + 
+                    "                          AND lpad(dm.sap_code, 2, 0) = pro.zsd029\n" + 
+                    "                          AND hd.hls_dimesion_c = 'Misc2')) product_line_code,\n" + 
+                    "               decode(pro.zsd029,\n" + 
+                    "                      null,\n" + 
+                    "                      '产品线缺省',\n" + 
+                    "                      (SELECT dm.hp_desc\n" + 
+                    "                         FROM dms.hp_dimesion_mapping dm,\n" + 
+                    "                              dms.dcm_combination_15  hd\n" + 
+                    "                        WHERE 1 = 1\n" + 
+                    "                          AND dm.com_record_id = hd.id\n" + 
+                    "                          AND lpad(dm.sap_code, 2, 0) = pro.zsd029\n" + 
+                    "                          AND hd.hls_dimesion_c = 'Misc2')) product_line, \n" + 
+                    "               decode(pro.profl,\n" + 
+                    "                      null,\n" + 
+                    "                      null,\n" + 
+                    "                      (SELECT dm.hp_code\n" + 
+                    "                       --INTO l_header.productline\n" + 
+                    "                         FROM dms.hp_dimesion_mapping dm,\n" + 
+                    "                              dms.dcm_combination_15  hd\n" + 
+                    "                        WHERE 1 = 1\n" + 
+                    "                          AND dm.com_record_id = hd.id\n" + 
+                    "                          AND dm.sap_code = pro.profl\n" + 
+                    "                          AND hd.hls_dimesion_c = 'Misc1')) project_type_code, \n" + 
+                    "               decode(pro.PROFI_TXT,\n" + 
+                    "                      null,\n" + 
+                    "                      null,\n" + 
+                    "                      (SELECT dm.hp_desc\n" + 
+                    "                       --INTO l_header.productline\n" + 
+                    "                         FROM dms.hp_dimesion_mapping dm,\n" + 
+                    "                              dms.dcm_combination_15  hd\n" + 
+                    "                        WHERE 1 = 1\n" + 
+                    "                          AND dm.com_record_id = hd.id\n" + 
+                    "                          AND dm.sap_code = pro.profl\n" + 
+                    "                          AND hd.hls_dimesion_c = 'Misc1')) project_type_desc, \n" + 
+                    "               pro.stat enabled_flag \n" + 
+                    "          from hpdw.sap_dmspro_data pro, dms.dms_hphls_e2entity_v he\n" + 
+                    "         where 1 = 1\n" + 
+                    "           AND 'E' || pro.vbukr || '1' = HE.ENTITY_code\n" + 
+                    "           AND pro.stat <> 5) T"+" WHERE T.pspnr='"+name+"'";
+//                    "   AND pro.stat <> 5) T" +" WHERE T.pspnr='"+name+"'";
         ResultSet rs;
         try {
             rs = stat.executeQuery(sql);
