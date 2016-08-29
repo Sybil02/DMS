@@ -6,6 +6,10 @@ import common.DmsUtils;
 
 import common.JSFUtils;
 
+import common.lov.DmsComBoxLov;
+
+import common.lov.ValueSetRow;
+
 import dms.login.Person;
 
 import java.net.MalformedURLException;
@@ -140,7 +144,7 @@ public class Odi11gIndexMBean {
                 this.popup.show(hint);
             } else {
                 //没有参数
-                this.run(sceneVo.getCurrentRow(), new HashMap());
+                this.run(sceneVo.getCurrentRow(), new HashMap(),new HashMap());
             }
         }
     }
@@ -186,14 +190,13 @@ public class Odi11gIndexMBean {
                 DmsUtils.getDmsApplicationModule().createViewObjectFromQueryStmt(null,
                                                                                  sql.toString());
             vo.executeQuery();
-            List vsList = new ArrayList();
-            this.valueList.put(valueSetId, vsList);
+            List<ValueSetRow> vsList = new ArrayList<ValueSetRow>();
+            DmsComBoxLov lov = new DmsComBoxLov(vsList);
+            this.valueList.put(valueSetId, lov);
             while (vo.hasNext()) {
                 Row row = vo.next();
-                SelectItem item = new SelectItem();
-                item.setLabel(ObjectUtils.toString(row.getAttribute("MEANING")));
-                item.setValue(ObjectUtils.toString(row.getAttribute("CODE")));
-                vsList.add(item);
+                ValueSetRow vsr = new ValueSetRow(ObjectUtils.toString(row.getAttribute("CODE")),ObjectUtils.toString(row.getAttribute("MEANING")),ObjectUtils.toString(row.getAttribute("CODE")));
+                vsList.add(vsr);
             }
             vo.remove();
         }
@@ -210,16 +213,15 @@ public class Odi11gIndexMBean {
             sql = "SELECT DISTINCT T.PRO_CODE AS CODE,T.PRO_CODE||'-'||T.PRO_DESC AS MEANING FROM SAP_DMS_PROJECT_PRIVILEGE T "
                 + "WHERE T.PRO_MANAGER = '" + curU + "'";
         }
-        List vsList = new ArrayList();
-        this.valueList.put(valueSetId, vsList);
+        List<ValueSetRow> vsList = new ArrayList<ValueSetRow>();
+        DmsComBoxLov lov = new DmsComBoxLov(vsList);
+        this.valueList.put(valueSetId, lov);
         ResultSet rs;
         try {
             rs = stat.executeQuery(sql);
             while(rs.next()){
-                SelectItem item = new SelectItem();
-                item.setLabel(ObjectUtils.toString(rs.getString("MEANING")));
-                item.setValue(ObjectUtils.toString(rs.getString("CODE")));
-                vsList.add(item);
+                ValueSetRow vsr = new ValueSetRow(rs.getString("CODE"),rs.getString("MEANING"),rs.getString("CODE"));
+                vsList.add(vsr);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -277,7 +279,7 @@ public class Odi11gIndexMBean {
         return odiCredentialType;
     }
 
-    private void run(Row sceneRow, Map params) throws MalformedURLException {
+    private void run(Row sceneRow, Map params,Map paramsCode) throws MalformedURLException {
         StringBuffer parmStr = new StringBuffer();
         for (Object v : params.values()) {
             parmStr.append("#").append(v);
@@ -314,10 +316,10 @@ public class Odi11gIndexMBean {
             scenarioRequestType.setSessionName("DMS-" + sceneName);
             scenarioRequestType.setSynchronous(false);
             //处理参数
-            for (Object key : params.keySet()) {
+            for (Object key : paramsCode.keySet()) {
                 VariableType var = new VariableType();
                 var.setName((String)key);
-                var.setValue((String)params.get(key));
+                var.setValue((String)paramsCode.get(key));
                 scenarioRequestType.getVariables().add(var);
             }
             odiStartScenRequest.setRequest(scenarioRequestType);
@@ -530,10 +532,17 @@ public class Odi11gIndexMBean {
         Row[] rows =
             ADFUtils.findIterator("Odi11SceneParamExViewIterator").getAllRowsInRange();
         Map params = new LinkedHashMap();
+        Map paramsCode = new LinkedHashMap();
         for (Row row : rows) {
             params.put(row.getAttribute("PName"), row.getAttribute("value"));
+            DmsComBoxLov lov = (DmsComBoxLov)valueList.get(row.getAttribute("ValueSetId"));
+            for(ValueSetRow vsr : lov.getValueList()){
+                if(vsr.getMeaning().equals(row.getAttribute("value"))){
+                    paramsCode.put(row.getAttribute("PName"),vsr.getCode()); 
+                }
+            }
         }
-        this.run(sceneVo.getCurrentRow(), params);
+        this.run(sceneVo.getCurrentRow(), params,paramsCode);
     }
 
     public void setParamTable(RichTable paramTable) {
