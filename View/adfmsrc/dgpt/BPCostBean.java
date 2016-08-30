@@ -401,6 +401,7 @@ public class BPCostBean {
         labelMap.put("网络号", "NETWORK");
         labelMap.put("作业号", "WORK_CODE");
         labelMap.put("作业活动","WORK");
+        labelMap.put("预算项编码", "TERM_CODE");
         labelMap.put("预算项","TERM");
         labelMap.put("预算科目", "COST_DETAIL");
         labelMap.put("工作中心","CENTER");
@@ -428,10 +429,10 @@ public class BPCostBean {
         boolean isReadonly = true;
         this.pcColsDef.clear();
         for(Map.Entry<String,String> map:labelMap.entrySet()){
-            if(flag>12){
+            if(flag>13){
                 isReadonly = false;
             }
-            if(flag<=10){
+            if(flag<=11){
                 PcColumnDef newCol = new PcColumnDef(map.getKey(),map.getValue(),isReadonly,"");
                 this.pcColsDef.add(newCol);
             }else{
