@@ -363,6 +363,9 @@
           <af:column sortable="false" headerText="作业活动" id="c5">
             <af:inputText value="#{row[viewScope.ProjectZxBean.dataModel.labelMap['WORK']]}" id="it14" readOnly="true"/>
           </af:column>
+          <af:column id="c54" sortable="false" headerText="预算项编码">
+            <af:inputText readOnly='true' id="it33" value="#{row[viewScope.ProjectZxBean.dataModel.labelMap['TERM_CODE']]}"/>
+          </af:column>
           <af:column sortable="false" headerText="预算项" id="c19">
             <af:inputText value="#{row[viewScope.ProjectZxBean.dataModel.labelMap['TERM']]}" id="it3" readOnly="true"/>
           </af:column>

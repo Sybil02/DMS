@@ -169,6 +169,7 @@ public class ProjectZxBean {
         labelMap.put("NETWORK", "NETWORK");
         labelMap.put("WORK_CODE", "WORK_CODE");
         labelMap.put("WORK","WORK");
+        labelMap.put("TERM_CODE", "TERM_CODE");
         labelMap.put("TERM","TERM");
         labelMap.put("COST_DETAIL", "COST_DETAIL");
         labelMap.put("CENTER","CENTER");
@@ -206,6 +207,7 @@ public class ProjectZxBean {
         list.add("网络号");
         list.add("作业号");
         list.add("作业活动");
+        list.add("预算项编码");
         list.add("预算项");
         list.add("预算科目");
         list.add("工作中心");
@@ -242,10 +244,10 @@ public class ProjectZxBean {
         list.add("下年7月以后");
         int i =0;
         for(Map.Entry<String,String> map:labelMap.entrySet()){
-            if(i<10){
+            if(i<11){
                 PcColumnDef newCol = new PcColumnDef(list.get(i),map.getValue(),false,"");
                 this.pcColsDef.add(newCol);
-            }else if(i>=10&&i<34){
+            }else if(i>=11&&i<34){
                 PcColumnDef newCol = new PcColumnDef(list.get(i),map.getValue(),false,"NUMBER");
                 this.pcColsDef.add(newCol);
             }else{

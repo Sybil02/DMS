@@ -50,7 +50,7 @@ public class SPRowReader implements IRowReader{
         this.data_type=data_type;
         this.name = name;
         dfm = new DecimalFormat();
-        dfm.setMaximumFractionDigits(4);
+        dfm.setMaximumFractionDigits(6);
         dfm.setGroupingUsed(false);
         this.prepareSqlStatement();
     }
