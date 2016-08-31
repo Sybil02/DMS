@@ -7,6 +7,10 @@ import common.JSFUtils;
 
 import dms.quartz.core.QuartzSchedulerSingleton;
 
+import java.text.ParseException;
+
+import java.util.Date;
+
 import javax.faces.event.ActionEvent;
 
 import oracle.adf.share.ADFContext;
@@ -16,6 +20,7 @@ import oracle.jbo.ViewObject;
 
 import oracle.jbo.server.ViewRowImpl;
 
+import org.quartz.CronExpression;
 import org.quartz.CronScheduleBuilder;
 import org.quartz.CronTrigger;
 import org.quartz.JobBuilder;
@@ -51,13 +56,41 @@ public class TempTimerBean {
         
         for (Row tRow : timerVo.getAllRowsInRange()) {
             ViewRowImpl row = (ViewRowImpl)tRow;
+            if(!CronExpression.isValidExpression(row.getAttribute("TimerCron").toString())){
+                JSFUtils.addFacesErrorMessage("Cron表达式无效！");
+                return;
+            }
             if (row.getEntities()[0].getEntityState() == 0) {
                 row.setAttribute("JobName",
                                  "MAIL-" + java.util.UUID.randomUUID().toString().replace("-",
                                                                                           ""));
+                try {
+                    CronExpression exp = new CronExpression(row.getAttribute("TimerCron").toString());
+                    Date nowTime = new Date();
+                    Date nextTime = exp.getNextValidTimeAfter(nowTime);
+                    if(nextTime == null){
+                        JSFUtils.addFacesErrorMessage(row.getAttribute("TimerCron").toString() + "-Cron表达式下次触发时间已过期，请重新配置！");
+                        return;
+                    }
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+    
                 //0：新增   新建调度作业
                 this.createJob(row);
             } else if (row.getEntities()[0].getEntityState() == 2) {
+                try {
+                    CronExpression exp = new CronExpression(row.getAttribute("TimerCron").toString());
+                    Date nowTime = new Date();
+                    Date nextTime = exp.getNextValidTimeAfter(nowTime);
+                    if(nextTime == null){
+                        JSFUtils.addFacesErrorMessage(row.getAttribute("TimerCron").toString() + "-Cron表达式下次触发时间已过期，请重新配置！");
+                        return;
+                    }
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                
                 //2: 修改   修改作业tigger
                 this.modifyJob(row);
             }
