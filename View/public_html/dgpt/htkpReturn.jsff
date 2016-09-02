@@ -181,9 +181,9 @@
             <af:selectOneChoice 
                             value="#{row[viewScope.htkpReturnBean.dataModel.labelMap['开票计划税率']]}" 
                             autoSubmit="true"
-                            id="soc5"
+                            id="soc5" readOnly="true"
                             >
-          <f:selectItems value="#{viewScope.htkpReturnBean.taxList}" id="si11"/>
+          <f:selectItems value="#{viewScope.htkpReturnBean.taxList}" id="si11" />
         </af:selectOneChoice>
           </af:column>
           <af:column sortable="false"
@@ -193,7 +193,7 @@
                      headerText="#{viewBundle['dms.dgpt.htkp.responsible']}" id="c2"
                      width="106">
             <af:inputText value="#{row[viewScope.htkpReturnBean.dataModel.labelMap['回款责任人']]}" 
-                            id="it3"/>
+                            id="it3" readOnly="true"/>
           </af:column>
           <af:column sortable="false"
                             inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}

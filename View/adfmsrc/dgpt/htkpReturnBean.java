@@ -217,7 +217,7 @@ public class htkpReturnBean {
     public String queryData(LinkedHashMap<String,String> labelMap){
         DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
         Statement stat = trans.createStatement(DBTransaction.DEFAULT);
-        String name = this.pName.substring(0, pName.lastIndexOf("-"));
+        String name = this.pName.substring(0, pName.indexOf("-",pName.indexOf("-")+1));
         //在合同开票组合中查找id
         String sql = "SELECT ID FROM DCM_COMBINATION_17 WHERE HLS_YEAR_C='"+this.year+"' " +
             "AND HLS_VERSION_C='"+this.version+"' AND BH_USER_PRO_C1='"+name+"'";
@@ -244,7 +244,7 @@ public class htkpReturnBean {
     public String queryData2(LinkedHashMap<String,String> labelMap){
         DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
         Statement stat = trans.createStatement(DBTransaction.DEFAULT);
-        String name = this.pName.substring(0, pName.lastIndexOf("-"));
+        String name = this.pName.substring(0, pName.indexOf("-",pName.indexOf("-")+1));
         //在合同开票组合中查找id
         String sql = "SELECT ID FROM DCM_COMBINATION_17 WHERE HLS_YEAR_C='"+this.year+"' " +
             "AND HLS_VERSION_C='"+this.version+"' AND BH_USER_PRO_C1='"+name+"'";
@@ -365,7 +365,7 @@ public class htkpReturnBean {
     }
     //获取行业线等信息
     public void getLine(){
-        String name = this.pName.substring(0, pName.lastIndexOf("-"));
+        String name = this.pName.substring(0, pName.indexOf("-",pName.indexOf("-")+1));
         DBTransaction trans = (DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
         Statement stat = trans.createStatement(DBTransaction.DEFAULT);
         String sql = "SELECT DISTINCT T.ENTITY_code,T.ENTITY,T.industry_line_code,T.industry_line,T.business_line_code," +
@@ -742,13 +742,16 @@ public class htkpReturnBean {
         }
     }
     
-    //导入程序
+    //善后程序
     public void after(){
         DBTransaction trans = (DBTransaction)DmsUtils.getDcmApplicationModule().getDBTransaction();
-        CallableStatement cs = trans.createCallableStatement("{CALl DMS_ZZX.HTKPRETURN_AFTER(?,?)}", 0);
+        String name = this.pName.substring(0, pName.indexOf("-",pName.indexOf("-")+1));
+        //项目名称
+        CallableStatement cs = trans.createCallableStatement("{CALl DMS_ZZX.HTKPRETURN_AFTER(?,?,?)}", 0);
         try {
             cs.setString(1,this.curUser.getId() );
             cs.setString(2,this.connectId);
+            cs.setString(3, name);
             cs.execute();
             trans.commit();
             cs.close();
