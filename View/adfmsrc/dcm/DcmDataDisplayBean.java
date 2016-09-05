@@ -841,7 +841,7 @@ public class DcmDataDisplayBean extends TablePagination{
         try {
             rs = stat.executeQuery();
             DecimalFormat dfm = new DecimalFormat();
-            dfm.setMaximumFractionDigits(4);
+            dfm.setMaximumFractionDigits(10);
             dfm.setGroupingUsed(false);
             SimpleDateFormat format=new SimpleDateFormat("yyyy/MM/dd");//"yyyy-MM-dd hh:mm:ss"
             while (rs.next()) {

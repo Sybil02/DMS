@@ -53,7 +53,7 @@ public class Excel2003WriterImpl {
         }
         int n = (int)this.curTempalte.getDataStartLine().getValue() - 1;
         DecimalFormat dfm = new DecimalFormat();
-        dfm.setMaximumFractionDigits(4);
+        dfm.setMaximumFractionDigits(10);
         dfm.setGroupingUsed(false);
         while (rs.next()) {
             int colInx = 0;
