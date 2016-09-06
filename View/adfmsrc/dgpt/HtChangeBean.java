@@ -67,6 +67,7 @@ import oracle.adf.view.rich.component.rich.input.RichInputFile;
 import oracle.adf.view.rich.component.rich.output.RichPanelCollection;
 
 import oracle.jbo.ViewObject;
+import oracle.jbo.jbotester.load.SimpleDateFormatter;
 import oracle.jbo.server.DBTransaction;
 
 import org.apache.commons.lang.ObjectUtils;
@@ -76,6 +77,8 @@ import org.apache.myfaces.trinidad.model.RowKeySet;
 import org.apache.myfaces.trinidad.model.UploadedFile;
 
 import org.hexj.excelhandler.reader.ExcelReaderUtil;
+
+import utils.system;
 
 public class HtChangeBean {
     private Person curUser;
@@ -455,7 +458,20 @@ public class HtChangeBean {
             JSFUtils.addFacesInformationMessage("日期格式是：YYYY_MM");
             return;
         }
+        SimpleDateFormat sdf =  new SimpleDateFormat("yyyy_MM");
+        Date newEndDate;
+        Date pEndDate;
         //生成id
+        try {
+            newEndDate = sdf.parse(newEnd);
+            pEndDate = sdf.parse(pEnd);
+            if(pEndDate.after(newEndDate)){
+                JSFUtils.addFacesInformationMessage("填写日期应在"+pEnd+"之后");
+                return;
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         String s = UUID.randomUUID().toString();
         //去除分隔符-
         String newConnectId = s.substring(0,8)+s.substring(9,13)+s.substring(14,18)+s.substring(19,23)+s.substring(24);
@@ -805,9 +821,9 @@ public class HtChangeBean {
         this.pcColsEx.clear();
         int flag = 1;
         for(Map.Entry<String,String> map:labelMap.entrySet()){
-            if(flag>11){
-                isReadonly = false;
-            }
+//            if(flag>11){
+//                isReadonly = false;
+//            }
             if(flag<=11){
                 PcColumnDef newCol = new PcColumnDef(map.getKey(),map.getValue(),isReadonly,"");
                 this.pcColsDef.add(newCol);
