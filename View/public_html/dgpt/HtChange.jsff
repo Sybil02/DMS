@@ -236,7 +236,7 @@
                                     #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
                                     #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}"
                              rendered="#{attr.dbTableCol ne &quot;ROW_ID&quot;}">
-                    <af:inputText value="#{row[attr.dbTableCol]}" id="ot6"  
+                    <af:inputText value="#{row[attr.dbTableCol]}" id="ot6"  readOnly="#{attr.isReadonly}"
                                     valueChangeListener="#{viewScope.HtChangeBean.valueChangeLinstener}"/>
                   </af:column>
           </af:forEach>

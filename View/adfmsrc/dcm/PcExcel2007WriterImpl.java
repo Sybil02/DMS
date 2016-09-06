@@ -86,7 +86,7 @@ public class PcExcel2007WriterImpl extends AbstractExcel2007Writer{
             endRow();
             int n = dataStartLine - 1;
             DecimalFormat dfm = new DecimalFormat();
-            dfm.setMaximumFractionDigits(4);
+            dfm.setMaximumFractionDigits(6);
             dfm.setGroupingUsed(false);
             ReplaceSpecialChar rsc = new ReplaceSpecialChar();
             while(rs.next()){
