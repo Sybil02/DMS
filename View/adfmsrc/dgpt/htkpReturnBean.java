@@ -175,7 +175,7 @@ public class htkpReturnBean {
         }else{
             sql = "SELECT DISTINCT C.BH_USER_PRO_C1 CODE,B.MEANING FROM DCM_COMBINATION_17 C,HLS_HTKP_PROJECT_V B WHERE  B.MEANING IN" +
                 "(SELECT T.PRO_CODE || '-' || T.PRO_DESC FROM SAP_DMS_PROJECT_PRIVILEGE T " +
-                " WHERE T.ATTRIBUTE7 = '"+this.curUser.getAcc()+"' AND T.ATTRIBUTE3='ZX')" +
+                " WHERE T.ATTRIBUTE7 = '"+this.curUser.getAcc()+"') " +
                 "AND C.BH_USER_PRO_C1 = B.CODE";
         }
         ResultSet rs;
