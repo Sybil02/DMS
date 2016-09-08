@@ -58,8 +58,13 @@ public class SPRowReader implements IRowReader{
     private void prepareSqlStatement() {
         StringBuffer sql = new StringBuffer();
         StringBuffer sqlValue = new StringBuffer();
-        sql.append("INSERT INTO PRO_PLAN_COST_BODY_TEMP (CREATED_BY,CONNECT_ID,DATA_TYPE,ROW_NO");
-        sqlValue.append(") VALUES('"+this.operator+"',?,'"+this.data_type+"',?");
+        if(this.data_type.equals("CHANGE")){
+            sql.append("INSERT INTO PRO_PLAN_COST_BODY_TEMP (CREATED_BY,CONNECT_ID,ROW_NO");
+            sqlValue.append(") VALUES('"+this.operator+"',?,?");
+        }else{
+            sql.append("INSERT INTO PRO_PLAN_COST_BODY_TEMP (CREATED_BY,CONNECT_ID,DATA_TYPE,ROW_NO");
+            sqlValue.append(") VALUES('"+this.operator+"',?,'"+this.data_type+"',?");
+        }
         for(int i=0;i<this.colsdef.size();i++){
             sql.append(","+this.colsdef.get(i).getDbTableCol());
             sqlValue.append(",?");

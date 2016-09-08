@@ -235,8 +235,8 @@
                             inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
                                     #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
                                     #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}"
-                             rendered="#{attr.dbTableCol ne &quot;ROW_ID&quot;}">
-                    <af:inputText value="#{row[attr.dbTableCol]}" id="ot6"  readOnly="#{attr.isReadonly}"
+                             rendered="#{ (attr.dbTableCol ne &quot;ROW_ID&quot;) and (attr.dbTableCol ne &quot;DATA_TYPE&quot;)}">
+                    <af:inputText value="#{row[attr.dbTableCol]}" id="ot6"  
                                     valueChangeListener="#{viewScope.HtChangeBean.valueChangeLinstener}"/>
                   </af:column>
           </af:forEach>
