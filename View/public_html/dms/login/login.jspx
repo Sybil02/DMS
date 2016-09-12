@@ -16,16 +16,16 @@
                                -o-background-size: 100% 100%; 
                                -webkit-background-size: 100% 100%; 
                                background-size: 100% 100%; 
-                               -moz-border-image: url(../images/login-bg.png) 0; 
+                               -moz-border-image: url(../images/login-bg.jpg) 0; 
                                background-repeat:no-repeat; 
                                background-image:none; 
-                               filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../images/login-bg.png', sizingMethod='scale'); 
-                               background:url(../images/login-bg.png);
+                               filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../images/login-bg.jpg', sizingMethod='scale'); 
+                               background:url(../images/login-bg.jpg);
                                background-repeat:repeat-x; min-height:400px;
-                               -webkit-background-size: contain;
-                               -moz-background-size: contain;
-                               -o-background-size: contain;
-                               background-size: contain;">
+                               -webkit-background-size: 100% 90%;
+                               -moz-background-size: 100% 90%;
+                               -o-background-size: 100% 90%;
+                               background-size: 100% 90%;">
           <f:facet name="bottom">
             <af:panelGroupLayout id="pgl2" 
                                  inlineStyle="background-color:#185E87; text-align:center; vertical-align:middle;">
