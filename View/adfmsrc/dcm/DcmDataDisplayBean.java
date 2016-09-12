@@ -1074,7 +1074,7 @@ public class DcmDataDisplayBean extends TablePagination{
             if("Y".equals(this.curTempalte.getIsSpecial())){
                 //特殊页面功能禁用，所以模板默认false
                 this.special = false;
-                //组合默认全部打开
+                //IsSpecial=Y 禁用组合，组合默认全部打开
                 this.defultOpenCom = true;
             }else{
                 this.special = false;
@@ -1177,11 +1177,15 @@ public class DcmDataDisplayBean extends TablePagination{
         try {
             rs = stat.executeQuery(sql);
             if(!rs.next()){
-                //不存在，可提交,可编辑
+                //不存在，可提交
                 this.enableSub = false;
-                this.curCombinationRecordEditable = true;
+                //如果是禁用组合，可编辑
+                if("Y".equals(this.curTempalte.getIsSpecial())){
+                    this.curCombinationRecordEditable = true;
+                }
+
             }else{
-                //存在，不可编辑
+                //存在，不可提交，不可编辑
                 this.curCombinationRecordEditable = false;
             }
             rs.close();
@@ -1463,6 +1467,7 @@ public class DcmDataDisplayBean extends TablePagination{
         if(this.curCombiantionRecord==null){
             this.curCombinationRecordEditable=false;
         }else if(this.defultOpenCom){
+            //组合禁用，默认打开组合
             this.curCombinationRecordEditable=true;
             //默认值之后判断是否可提交，可编辑
             //this.enableSubmit();
