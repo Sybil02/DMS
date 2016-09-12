@@ -65,7 +65,9 @@ public class TimerMailJob implements Job,Serializable{
 //                + "WHERE T.ID = DR.TEMPLATE_ID AND DR.ROLE_ID = GR.ROLE_ID AND GR.GROUP_ID = UR.GROUP_ID AND UR.USER_ID = DU.ID "
 //                + "AND T.LOCALE = DU.LOCALE AND T.LOCALE = '" + locale + "' AND DR.READ_ONLY = 'N' AND T.ID = '" + tempId + "'";
             
-            String msql2 = "SELECT T.TEMPLATE_ID AS NAME,D.ACC,D.MAIL FROM WC_TEMPLATE_USER T,DMS_USER D WHERE T.USER_ID = D.NAME";
+            String msql2 = "SELECT T.TEMPLATE_ID AS NAME,D.ACC,D.MAIL FROM WC_TEMPLATE_USER T,DMS_USER D,DCM_TEMPLATE TEMP " +
+                            "WHERE T.USER_ID = D.NAME AND T.TEMPLATE_ID=TEMP.NAME " +
+                            "AND TEMP.LOCALE='" + locale + "' AND TEMP.ID='" + tempId + "'";
             ResultSet rsm = stat.executeQuery(msql2);
             while(rsm.next()){
                 String email = rsm.getString("MAIL");
