@@ -148,6 +148,7 @@ public class DataManager {
                     stat.setString(22, acc.getIfmsg());
                     stat.setString(23, acc.getMsgid());
                     stat.executeUpdate();
+                    conn.commit();
                 } else {
                     statUp.setString(1, acc.getBukrs());
                     statUp.setString(2, acc.getSaknr());
@@ -264,6 +265,7 @@ public class DataManager {
                     stat.setString(30, cost.getIfmsg());
                     stat.setString(31, cost.getMsgid());
                     stat.executeUpdate();
+                    conn.commit();
                 } else {
                     statUp.setString(1, cost.getKostl());
                     statUp.setString(2, cost.getDatbi());
@@ -382,6 +384,7 @@ public class DataManager {
                     stat.setString(24, org.getIfmsg());
                     stat.setString(25, org.getMsgid());
                     stat.executeUpdate();
+                    conn.commit();
                 } else {
                     statUp.setString(1, org.getZjgdm());
                     statUp.setString(2, org.getZbmdm());
@@ -494,6 +497,7 @@ public class DataManager {
                     stat.setString(24, position.getMsgid());
                     stat.setString(25, position.getNew_gw());
                     stat.executeUpdate();
+                    conn.commit();
                 } else {
                     statUp.setString(1, position.getZjgdm());
                     statUp.setString(2, position.getZbmdm());
@@ -654,6 +658,7 @@ public class DataManager {
                     stat.setString(29, bom.getIfmsg());
                     stat.setString(30, bom.getMsgid());
                     stat.executeUpdate();
+                    conn.commit();
                 } else {
                     statUp.setString(1, bom.getMatnr());
                     statUp.setString(2, bom.getMaktx());
@@ -769,6 +774,7 @@ public class DataManager {
                 stat.setString(26, af.getIfflg());
                 stat.setString(27, af.getIfmsg());
                 stat.executeUpdate();
+                conn.commit();
             } else {
                 statUp.setString(1, af.getBukrs());
                 statUp.setString(2, af.getPernr());
@@ -861,6 +867,7 @@ public class DataManager {
                 stat.setString(25, af.getIfmsg());
                 stat.setString(26, msgId);
                 stat.executeUpdate();
+                conn.commit();
             } else {
                 statUp.setString(1, af.getBukrs());
                 statUp.setString(2, af.getPernr());
