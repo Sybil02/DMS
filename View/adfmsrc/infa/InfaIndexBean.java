@@ -625,7 +625,7 @@ public class InfaIndexBean {
         vc.addElement(vr);
         vo.applyViewCriteria(vc);
         vo.executeQuery();
-        vo.getViewCriteriaManager().setApplyViewCriteriaName(null);
+        //vo.getViewCriteriaManager().setApplyViewCriteriaName(null);
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.statusTable);
         
         RichPopup.PopupHints hints = new RichPopup.PopupHints();
