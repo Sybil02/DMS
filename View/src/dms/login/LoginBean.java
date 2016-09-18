@@ -119,7 +119,7 @@ public class LoginBean {
             Row row=vo.next();
             authoriedFunction.put(row.getAttribute("FunctionId"), row.getAttribute("FunctionName"));
         }
-        ADFContext.getCurrent().getSessionScope().put("authoriedFunction",authoriedFunction);       
+        ADFContext.getCurrent().getSessionScope().put("authoriedFunction",authoriedFunction);
     }
 
     public void logout(){
