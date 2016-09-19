@@ -1393,6 +1393,7 @@ public class DcmDataDisplayBean extends TablePagination{
         this.queryTemplateData();
         AdfFacesContext adfFacesContext = AdfFacesContext.getCurrentInstance();
         adfFacesContext.addPartialTarget(this.panelaCollection);
+        //
     }
 
     public Map getHeaderComponents() {

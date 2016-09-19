@@ -91,6 +91,7 @@ public class TemplateBackingBean {
                 sql.append("select upper(t.COLUMN_NAME) \"COL_NAME\",upper(t.DATA_TYPE) \"COL_TYPE\",t.COLUMN_ID \"COL_ID\" from user_tab_columns t");
                 sql.append(" where upper(t.TABLE_NAME)=upper('").append(template.getAttribute("DbTable")).append("')");
                 sql.append(" order by t.COLUMN_ID");
+                System.out.println(sql.toString());
                 try {
                     ResultSet rs = stmt.executeQuery(sql.toString());
                     while (rs.next()) {
