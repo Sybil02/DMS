@@ -747,11 +747,13 @@ public class htkpReturnBean {
         DBTransaction trans = (DBTransaction)DmsUtils.getDcmApplicationModule().getDBTransaction();
         String name = this.pName.substring(0, pName.indexOf("-",pName.indexOf("-")+1));
         //项目名称
-        CallableStatement cs = trans.createCallableStatement("{CALl DMS_ZZX.HTKPRETURN_AFTER(?,?,?)}", 0);
+        CallableStatement cs = trans.createCallableStatement("{CALl DMS_ZZX.HTKPRETURN_AFTER(?,?,?,?,?)}", 0);
         try {
             cs.setString(1,this.curUser.getId() );
             cs.setString(2,this.connectId);
             cs.setString(3, name);
+            cs.setString(4,year);
+            cs.setString(5,version);
             cs.execute();
             trans.commit();
             cs.close();

@@ -417,7 +417,7 @@ public class HtChangeBean {
         sql.append("ROWID AS ROW_ID,ACC_CODE,CENTER_CODE,LGF_NUM,LGF_TYPE,PLAN_QUANTITY,PLAN_AMOUNT," + 
         "OCCURRED_QUANTITY,OCCURRED_AMOUNT,OCCURRED,DATA_TYPE FROM PRO_PLAN_COST_BODY WHERE CONNECT_ID = '").append(connectId).append("'")
 //        sql.append(" AND (DATA_TYPE = '").append(this.TYPE_CHANGE).append("' OR DATA_TYPE = 'BASE')")
-            .append(" ORDER BY WBS,NETWORK,TO_NUMBER(WORK_CODE)");
+            .append(" ORDER BY DATA_TYPE,WBS,NETWORK,TO_NUMBER(WORK_CODE)");
         return sql.toString();
     }
     //选中行，修改
@@ -1006,20 +1006,22 @@ public class HtChangeBean {
             e.printStackTrace();
         }
         this.fileInput.resetValue();
+        
+        //删除原有新增数据,否则校验报错
+        Statement statDelete = trans.createStatement(DBTransaction.DEFAULT);
+        String sqlDelete = "DELETE FROM PRO_PLAN_COST_BODY WHERE CONNECT_ID='"+this.connectId+"'" +
+            " AND DATA_TYPE IS NULL";
+        try {
+            statDelete.executeUpdate(sqlDelete);
+            trans.commit();
+            statDelete.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         //校验程序
             if(this.validation_import()){
                 if(this.validation()){
-                    //删除原数据
-                    Statement statDelete = trans.createStatement(DBTransaction.DEFAULT);
-                    String sqlDelete = "DELETE FROM PRO_PLAN_COST_BODY WHERE CONNECT_ID='"+this.connectId+"'" +
-                        " AND DATA_TYPE IS NULL";
-                    try {
-                        statDelete.executeUpdate(sqlDelete);
-                        trans.commit();
-                        statDelete.close();
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
+                    
                     //插入body表
                     this.inputPro_import();
                 }else{
