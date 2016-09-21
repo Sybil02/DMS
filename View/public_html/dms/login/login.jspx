@@ -16,11 +16,11 @@
                                -o-background-size: 100% 100%; 
                                -webkit-background-size: 100% 100%; 
                                background-size: 100% 100%; 
-                               -moz-border-image: url(../images/login-bg.jpg) 0; 
+                               -moz-border-image: url(../images/login-bg.png) 0; 
                                background-repeat:no-repeat; 
                                background-image:none; 
-                               filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../images/login-bg.jpg', sizingMethod='scale'); 
-                               background:url(../images/login-bg.jpg);
+                               filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../images/login-bg.png', sizingMethod='scale'); 
+                               background:url(../images/login-bg.png);
                                background-repeat:repeat-x; min-height:400px;
                                -webkit-background-size: 100% 90%;
                                -moz-background-size: 100% 90%;
