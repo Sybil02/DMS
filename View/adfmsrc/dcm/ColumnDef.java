@@ -174,11 +174,19 @@ public class ColumnDef {
         return valueSetId;
     }
 
+    public void setComLov(DmsComBoxLov comLov) {
+        this.comLov = comLov;
     }
 
+    public DmsComBoxLov getComLov() {
+        return comLov;
     }
 
+    public void setDataNotNull(String dataNotNull) {
+        this.dataNotNull = dataNotNull;
     }
 
+    public String getDataNotNull() {
+        return dataNotNull;
     }
 }
