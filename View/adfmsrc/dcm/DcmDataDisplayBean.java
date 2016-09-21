@@ -7,6 +7,9 @@ import common.JSFUtils;
 
 import common.TablePagination;
 
+import common.lov.DmsComBoxLov;
+import common.lov.ValueSetRow;
+
 import dcm.combinantion.CombinationEO;
 
 import dcm.template.TemplateEO;
@@ -58,6 +61,7 @@ import oracle.adf.share.ADFContext;
 import oracle.adf.share.logging.ADFLogger;
 import oracle.adf.view.rich.component.rich.RichPopup;
 import oracle.adf.view.rich.component.rich.data.RichTable;
+import oracle.adf.view.rich.component.rich.input.RichInputComboboxListOfValues;
 import oracle.adf.view.rich.component.rich.input.RichInputFile;
 import oracle.adf.view.rich.component.rich.input.RichSelectOneChoice;
 
@@ -127,6 +131,7 @@ public class DcmDataDisplayBean extends TablePagination{
     private static ADFLogger _logger =ADFLogger.createADFLogger(DcmDataDisplayBean.class);
     //页面绑定组件
     private RichInputFile fileInput;
+    private RichInputComboboxListOfValues comIclovs;
     private Map headerComponents = new LinkedHashMap();
     private RichPanelCollection panelaCollection;
     private Person curUser;
@@ -143,6 +148,7 @@ public class DcmDataDisplayBean extends TablePagination{
     private boolean batchExcel = false;
     private List<String> batchTempList;
     private RichPopup batchErrPop;
+    private String testName;
     //初始化
     public DcmDataDisplayBean() {
         this.curUser =(Person)ADFContext.getCurrent().getSessionScope().get("cur_user");
@@ -1122,6 +1128,7 @@ public class DcmDataDisplayBean extends TablePagination{
             while (rs.next()) {
                 Map row = new HashMap();
                 for (ColumnDef col : this.colsdef) {
+                    System.out.println(col.getValueSetId());
                     Object obj=rs.getObject(col.getDbTableCol().toUpperCase());
                     if(obj instanceof java.util.Date){
                         if(obj != null){
@@ -1229,6 +1236,7 @@ public class DcmDataDisplayBean extends TablePagination{
                 header.setSrcTable((String)row.getAttribute("Source"));
                 header.setValueSetId((String)row.getAttribute("ValueSetId"));
                 header.setCode((String)row.getAttribute("Code"));
+//                header.setLength(Integer.parseInt(row.getAttribute("DisplayLength").toString()));
                 this.initHeaderValueList(header);
                 this.setDefaultHeaderValue(header);
                 this.templateHeader.add(header);
@@ -1237,6 +1245,44 @@ public class DcmDataDisplayBean extends TablePagination{
             this.setCurCombinationRecordEditable();
         }
     }
+    
+    private void initHeaderValueList(ComHeader header){
+            List<SelectItem> values = new ArrayList<SelectItem>();
+            DBTransaction dbTransaction =(DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
+            StringBuffer sql = new StringBuffer();
+            sql.append("SELECT V.CODE,V.MEANING FROM \"");
+            sql.append(header.getSrcTable()).append("\" V");
+            sql.append(" WHERE V.LOCALE='").append(this.curUser.getLocale()).append("'");
+            if ("Y".equals(header.getIsAuthority())) {
+                sql.append(" AND EXISTS(SELECT 1 FROM ");
+                sql.append(" DMS_USER_VALUE_V T");
+                sql.append(" WHERE T.USER_ID = '").append(this.curUser.getId()).append("'");
+                sql.append(" AND T.VALUE_SET_ID = '").append(header.getValueSetId()).append("'");
+                sql.append(" AND T.VALUE_ID=V.CODE)");
+            }
+            sql.append(" ORDER BY V.IDX,V.MEANING");
+            PreparedStatement stat =
+                dbTransaction.createPreparedStatement(sql.toString(), -1);
+            try {
+                ResultSet rs = stat.executeQuery();
+                List<ValueSetRow> list = new ArrayList<ValueSetRow>(); 
+                while (rs.next()) {
+                    SelectItem item = new SelectItem();
+                    item.setLabel(rs.getString("MEANING"));
+                    item.setValue(rs.getString("CODE"));
+                    values.add(item);
+                    //模糊搜索框
+                    ValueSetRow vsr = new ValueSetRow(rs.getString("CODE"),rs.getString("MEANING"),rs.getString
+    ("CODE"));
+                    list.add(vsr);
+                }
+                DmsComBoxLov dcl = new DmsComBoxLov(list);
+                header.setComLov(dcl);
+            } catch (SQLException e) {
+                this._logger.severe(e);
+            }   
+            header.setValues(values);
+        }
     private void setCurCombinationRecordEditable(){
         if(this.curCombiantionRecord==null){
             this.curCombinationRecordEditable=false;
@@ -1286,36 +1332,36 @@ public class DcmDataDisplayBean extends TablePagination{
             this.curCombinationRecordEditable=flag;
         }
     }
-    private void initHeaderValueList(ComHeader header){
-        List<SelectItem> values = new ArrayList<SelectItem>();
-        DBTransaction dbTransaction =(DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
-        StringBuffer sql = new StringBuffer();
-        sql.append("SELECT V.CODE,V.MEANING FROM \"");
-        sql.append(header.getSrcTable()).append("\" V");
-        sql.append(" WHERE V.LOCALE='").append(this.curUser.getLocale()).append("'");
-        if ("Y".equals(header.getIsAuthority())) {
-            sql.append(" AND EXISTS(SELECT 1 FROM ");
-            sql.append(" DMS_USER_VALUE_V T");
-            sql.append(" WHERE T.USER_ID = '").append(this.curUser.getId()).append("'");
-            sql.append(" AND T.VALUE_SET_ID = '").append(header.getValueSetId()).append("'");
-            sql.append(" AND T.VALUE_ID=V.CODE)");
-        }
-        sql.append(" ORDER BY V.IDX,V.MEANING");
-        PreparedStatement stat =
-            dbTransaction.createPreparedStatement(sql.toString(), -1);
-        try {
-            ResultSet rs = stat.executeQuery();
-            while (rs.next()) {
-                SelectItem item = new SelectItem();
-                item.setLabel(rs.getString("MEANING"));
-                item.setValue(rs.getString("CODE"));
-                values.add(item);
-            }
-        } catch (SQLException e) {
-            this._logger.severe(e);
-        }   
-        header.setValues(values);
-    }
+//    private void initHeaderValueList(ComHeader header){
+//        List<SelectItem> values = new ArrayList<SelectItem>();
+//        DBTransaction dbTransaction =(DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
+//        StringBuffer sql = new StringBuffer();
+//        sql.append("SELECT V.CODE,V.MEANING FROM \"");
+//        sql.append(header.getSrcTable()).append("\" V");
+//        sql.append(" WHERE V.LOCALE='").append(this.curUser.getLocale()).append("'");
+//        if ("Y".equals(header.getIsAuthority())) {
+//            sql.append(" AND EXISTS(SELECT 1 FROM ");
+//            sql.append(" DMS_USER_VALUE_V T");
+//            sql.append(" WHERE T.USER_ID = '").append(this.curUser.getId()).append("'");
+//            sql.append(" AND T.VALUE_SET_ID = '").append(header.getValueSetId()).append("'");
+//            sql.append(" AND T.VALUE_ID=V.CODE)");
+//        }
+//        sql.append(" ORDER BY V.IDX,V.MEANING");
+//        PreparedStatement stat =
+//            dbTransaction.createPreparedStatement(sql.toString(), -1);
+//        try {
+//            ResultSet rs = stat.executeQuery();
+//            while (rs.next()) {
+//                SelectItem item = new SelectItem();
+//                item.setLabel(rs.getString("MEANING"));
+//                item.setValue(rs.getString("CODE"));
+//                values.add(item);
+//            }
+//        } catch (SQLException e) {
+//            this._logger.severe(e);
+//        }   
+//        header.setValues(values);
+//    }
     private void setDefaultHeaderValue(ComHeader header){
         DBTransaction dbTransaction =(DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
         StringBuffer sql = new StringBuffer();
@@ -1350,6 +1396,8 @@ public class DcmDataDisplayBean extends TablePagination{
             ResultSet rs = stat.executeQuery();
             if (rs.next()) {
                 header.setValue(rs.getString("CODE"));
+                header.setMeaning(rs.getString("MEANING"));
+                header.setLength(rs.getString("MEANING").length());
             }
         } catch (SQLException e) {
             this._logger.severe(e);
@@ -1376,24 +1424,52 @@ public class DcmDataDisplayBean extends TablePagination{
         return fileInput;
     }
     //选择不同的组合时的处理逻辑
-    public void headerSelectChangeListener(ValueChangeEvent valueChangeEvent) {
-        RichSelectOneChoice header =
-            (RichSelectOneChoice)valueChangeEvent.getSource();
-        int i = 0;
-        for (Object key : this.headerComponents.keySet()) {
-            //找到当前表头
-            if (header.equals(this.headerComponents.get(key))) {
-                this.templateHeader.get(i).setValue((String)valueChangeEvent.getNewValue());
-            }
-            i++;
+    public void headerSelectChangeListener(ValueChangeEvent event) {
+//        RichSelectOneChoice header =
+//            (RichSelectOneChoice)valueChangeEvent.getSource();
+//        int i = 0;
+//        for (Object key : this.headerComponents.keySet()) {
+//            //找到当前表头
+//            if (header.equals(this.headerComponents.get(key))) {
+//                this.templateHeader.get(i).setValue((String)valueChangeEvent.getNewValue());
+//            }
+//            i++;
+//        }
+//        this.curCombiantionRecord=this.getCurCombinationRecord();
+//        this.setCurCombinationRecordEditable();
+//        this.setCurPage(1);
+//        this.queryTemplateData();
+//        AdfFacesContext adfFacesContext = AdfFacesContext.getCurrentInstance();
+//        adfFacesContext.addPartialTarget(this.panelaCollection);
+//        //
+        for(ComHeader ch : this.templateHeader){
+            if(ch.getName().equals(this.comIclovs.getLabel())){
+                if("".equals(event.getNewValue()) || event.getNewValue() == null){
+                    ch.setValue("");
+                }else{
+                    for(SelectItem sim : ch.getValues()){
+                        if(sim.getLabel() == null) continue;
+                        if(sim.getLabel().equals(event.getNewValue())){
+                            ch.setValue(sim.getValue().toString());    
+                        }    
+                    }  
+                }
+            }    
         }
+        
         this.curCombiantionRecord=this.getCurCombinationRecord();
         this.setCurCombinationRecordEditable();
         this.setCurPage(1);
+        
+        //切换组合时重置显示属性
+        for(ColumnDef col : this.colsdef){
+            col.setDataNotNull("N");    
+        }
+        
         this.queryTemplateData();
         AdfFacesContext adfFacesContext = AdfFacesContext.getCurrentInstance();
         adfFacesContext.addPartialTarget(this.panelaCollection);
-        //
+        
     }
 
     public Map getHeaderComponents() {
@@ -1658,5 +1734,21 @@ public class DcmDataDisplayBean extends TablePagination{
         DmsUtils.getDcmApplicationModule().getDcmErrorBatchVO().executeQuery();
         RichPopup.PopupHints hints = new RichPopup.PopupHints();
         this.batchErrPop.show(hints);
+    }
+
+    public void setComIclovs(RichInputComboboxListOfValues comIclovs) {
+        this.comIclovs = comIclovs;
+    }
+
+    public RichInputComboboxListOfValues getComIclovs() {
+        return comIclovs;
+    }
+
+    public void setTestName(String testName) {
+        this.testName = testName;
+    }
+
+    public String getTestName() {
+        return testName;
     }
 }
