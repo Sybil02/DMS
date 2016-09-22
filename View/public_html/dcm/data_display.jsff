@@ -152,40 +152,6 @@
                             rendered="#{attr.valueSetId eq null}"
                             readOnly="#{(viewScope.DcmDataDisplayBean.isEditable and (attr.readonly eq 'N')) eq false}"
                             valueChangeListener="#{viewScope.DcmDataDisplayBean.valueChangeListener}"/>
-              <!--af:selectOneChoice label="#{attr.columnLabel}"
-                                  value="#{row[attr.dbTableCol]}"
-                                  valueChangeListener="#{viewScope.DcmDataDisplayBean.valueChangeListener}"
-                                  id="soc2"
-                                  readOnly="#{(viewScope.DcmDataDisplayBean.isEditable and (attr.readonly eq 'N')) eq false}"
-                                  rendered="#{attr.valueSetId ne null}">
-                <f:selectItems value="#{viewScope.DcmDataDisplayBean.valueSet[attr.valueSetId]}"
-                               id="si2"/>
-              </af:selectOneChoice-->
-              <af:inputComboboxListOfValues label="#{attr.columnLabel}" inlineStyle="margin-right:5px"
-                                          value="#{row[attr.dbTableCol]}"
-                                                autoSubmit="true" clientComponent="true"
-                                                validator="#{attr.comLov.listOfValuesModel.validate}"
-                                                model="#{attr.comLov.listOfValuesModel}"
-                                                id="iclov3" 
-                                                readOnly="#{(viewScope.DcmDataDisplayBean.isEditable and (attr.readonly eq 'N')) eq false}"
-                                                rendered="#{attr.valueSetId ne null}"
-                                              usage="auto">
-                    <af:autoSuggestBehavior suggestedItems="#{attr.comLov.listOfValuesModel.suggest}"/>
-                  </af:inputComboboxListOfValues>
-            </af:column>
-          </af:forEach>
-          <!--af:iterator value="#{viewScope.DcmDataDisplayBean.dataModel.colsdef}" var="attr" varStatus="vs">
-            <af:column sortable="true" headerText="#{attr.columnLabel}"
-                       sortProperty="#{attr.dbTableCol}"
-                       visible="#{attr.visible eq 'Y'}"
-                       inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
-                                    #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
-                                    #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}"
-                       filterable="#{attr.dataType ne 'DATE'}">
-              <af:inputText value="#{row[attr.dbTableCol]}"
-                            rendered="#{attr.valueSetId eq null}"
-                            readOnly="#{(viewScope.DcmDataDisplayBean.isEditable and (attr.readonly eq 'N')) eq false}"
-                            valueChangeListener="#{viewScope.DcmDataDisplayBean.valueChangeListener}"/>
               <af:selectOneChoice label="#{attr.columnLabel}"
                                   value="#{row[attr.dbTableCol]}"
                                   valueChangeListener="#{viewScope.DcmDataDisplayBean.valueChangeListener}"
@@ -195,8 +161,19 @@
                 <f:selectItems value="#{viewScope.DcmDataDisplayBean.valueSet[attr.valueSetId]}"
                                id="si2"/>
               </af:selectOneChoice>
+              <!--af:inputComboboxListOfValues label="#{attr.columnLabel}" inlineStyle="margin-right:5px"
+                                          value="#{row[attr.dbTableCol]}"
+                                                autoSubmit="true" clientComponent="true"
+                                                validator="#{attr.comLov.listOfValuesModel.validate}"
+                                                model="#{attr.comLov.listOfValuesModel}"
+                                                id="iclov3" 
+                                                readOnly="#{(viewScope.DcmDataDisplayBean.isEditable and (attr.readonly eq 'N')) eq false}"
+                                                rendered="#{attr.valueSetId ne null}"
+                                              usage="auto">
+                    <af:autoSuggestBehavior suggestedItems="#{attr.comLov.listOfValuesModel.suggest}"/>
+                  </af:inputComboboxListOfValues-->
             </af:column>
-        </af:iterator-->
+          </af:forEach>
         </af:table>
       </af:panelCollection>
     </f:facet>

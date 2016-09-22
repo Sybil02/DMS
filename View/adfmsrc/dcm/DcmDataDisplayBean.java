@@ -1128,7 +1128,6 @@ public class DcmDataDisplayBean extends TablePagination{
             while (rs.next()) {
                 Map row = new HashMap();
                 for (ColumnDef col : this.colsdef) {
-                    System.out.println(col.getValueSetId());
                     Object obj=rs.getObject(col.getDbTableCol().toUpperCase());
                     if(obj instanceof java.util.Date){
                         if(obj != null){

@@ -41,7 +41,6 @@ public class ColumnDef {
     private String templateId;
     private String valueSetId;
     private String dataNotNull;
-    private DmsComBoxLov comLov;
 
     public ColumnDef(String columnLabel, String dbTableCol, String isPk,
                      String readonly, String dataType, String visible, String valueSetId) {
@@ -173,15 +172,7 @@ public class ColumnDef {
     public String getValueSetId() {
         return valueSetId;
     }
-
-    public void setComLov(DmsComBoxLov comLov) {
-        this.comLov = comLov;
-    }
-
-    public DmsComBoxLov getComLov() {
-        return comLov;
-    }
-
+    
     public void setDataNotNull(String dataNotNull) {
         this.dataNotNull = dataNotNull;
     }
