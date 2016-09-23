@@ -55,7 +55,6 @@ public class InfaAuthrityBean {
         Statement stat = trans.createStatement(DBTransaction.DEFAULT);
         String sql = "SELECT T.ID,T.ROLE_NAME FROM DMS_ROLE T WHERE T.LOCALE='"+this.person.getLocale()+
                     "'  AND T.ENABLE_FLAG = 'Y' ORDER BY T.ROLE_NAME";
-        System.out.println(sql);
         ResultSet rs ;
         try {
             rs = stat.executeQuery(sql);

@@ -78,14 +78,15 @@
                                 autoSubmit="true">
               <f:selectItems value="#{bindings.RoleName.items}" id="si1"/>
             </af:selectOneChoice-->
-            <af:inputComboboxListOfValues label="角色名称" inlineStyle="margin-right:5px"
+              <af:inputComboboxListOfValues label="角色名称" inlineStyle="margin-right:5px"
                                             id="iclov1" columns="50"
                                             autoSubmit="true" clientComponent="true"
                                             value="#{viewScope.SceneAuthorityBean.roleName}"
                                             validator="#{viewScope.SceneAuthorityBean.roleLov.listOfValuesModel.validate}"
-                                            model="#{viewScope.SceneAuthorityBean.roleLov.listOfValuesModel}">
-                    <af:autoSuggestBehavior suggestedItems="#{viewScope.SceneAuthorityBean.roleLov.listOfValuesModel.suggest}"/>
-              </af:inputComboboxListOfValues>
+                                            model="#{viewScope.SceneAuthorityBean.roleLov.listOfValuesModel}"
+                                            valueChangeListener="#{viewScope.SceneAuthorityBean.roleChangeListener}">
+                     <af:autoSuggestBehavior suggestedItems="#{viewScope.SceneAuthorityBean.roleLov.listOfValuesModel.suggest}"/>                       
+             </af:inputComboboxListOfValues> 
             </af:group>
             <af:group id="g2">
               <af:commandButton text="#{viewBundle['dms.common.add']}" id="cb1"

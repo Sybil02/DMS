@@ -20,12 +20,12 @@ import java.util.List;
 
 import javax.faces.event.ActionEvent;
 
+import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 
 import oracle.adf.share.ADFContext;
 import oracle.adf.view.rich.component.rich.RichPopup;
 import oracle.adf.view.rich.component.rich.data.RichTable;
-import oracle.adf.view.rich.component.rich.nav.RichCommandButton;
 
 import oracle.adf.view.rich.context.AdfFacesContext;
 
@@ -45,6 +45,7 @@ public class SceneAuthorityBean {
     private DmsComBoxLov roleLov;
 
     public SceneAuthorityBean() {
+        super();
         this.initinitRoleLov();
     }
 
@@ -54,7 +55,6 @@ public class SceneAuthorityBean {
         Statement stat = trans.createStatement(DBTransaction.DEFAULT);
         String sql = "SELECT T.ID,T.ROLE_NAME FROM DMS_ROLE T WHERE T.LOCALE='"+this.person.getLocale()+
                     "'  AND T.ENABLE_FLAG = 'Y' ORDER BY T.ROLE_NAME";
-        System.out.println(sql);
         ResultSet rs ;
         try {
             rs = stat.executeQuery(sql);
@@ -77,7 +77,7 @@ public class SceneAuthorityBean {
                 Row row = vo.first();
                 vo.setCurrentRow(row);
             }
-        //            AdfFacesContext.getCurrentInstance().addPartialTarget(this.authedTable);
+//        AdfFacesContext.getCurrentInstance().addPartialTarget(this.assignedScene);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -172,5 +172,17 @@ public class SceneAuthorityBean {
 
     public DmsComBoxLov getRoleLov() {
         return roleLov;
+    }
+
+    public void roleChangeListener(ValueChangeEvent valueChangeEvent) {
+        ViewObject vo = ADFUtils.findIterator("DmsEnabledRoleIterator").getViewObject();
+        String wc = " ROLE_NAME = '" + valueChangeEvent.getNewValue() + "'";
+        vo.setWhereClause(wc);
+        vo.executeQuery();
+        if (vo.hasNext()) {
+            Row row = vo.first();
+            vo.setCurrentRow(row);
+        }
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.assignedScene);
     }
 }
