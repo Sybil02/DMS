@@ -39,7 +39,7 @@
                     <af:panelWindow id="pw2"
                                     title="#{viewBundle['odi11g.scene.param']}">
                       <af:panelGroupLayout  id="pgl3" layout="vertical">
-                        <af:forEach items="#{viewScope.InfaIndexBean.paramList}"
+                        <!--af:forEach items="#{viewScope.InfaIndexBean.paramList}"
                                     var="paramBean">
                           <af:selectOneChoice label="#{paramBean.PAlias}" autoSubmit="true"
                                                 clientComponent="true" id="soc1"
@@ -48,7 +48,21 @@
                             <f:selectItems value="#{paramBean.valuesList}" id="si1"/>
                           </af:selectOneChoice>
                           <af:spacer id="sph" height="10px"/>
-                        </af:forEach>
+                        </af:forEach-->
+                        <af:iterator value="#{viewScope.InfaIndexBean.paramList}" id="t0001"
+                                    var="paramBean">
+                            <af:inputComboboxListOfValues label="#{paramBean.PAlias}" inlineStyle="margin-right:5px"
+                                                autoSubmit="true" clientComponent="true"
+                                                validator="#{paramBean.comLov.listOfValuesModel.validate}"
+                                                binding="#{viewScope.InfaIndexBean.inputCombLov}"
+                                                model="#{paramBean.comLov.listOfValuesModel}"
+                                                id="iclov2" columns="32" 
+                                                valueChangeListener="#{viewScope.InfaIndexBean.paramSelectListener}"
+                                               usage="auto">
+                                <af:autoSuggestBehavior suggestedItems="#{paramBean.comLov.listOfValuesModel.suggest}"/>
+                            </af:inputComboboxListOfValues>
+                          <af:spacer id="sph" height="10px"/>
+                        </af:iterator>
                         <af:commandButton text="#{viewBundle['odi11g.scene.execute']}" id="cb1"
                                           actionListener="#{viewScope.InfaIndexBean.workflowExecByParam}"/>
                       </af:panelGroupLayout>

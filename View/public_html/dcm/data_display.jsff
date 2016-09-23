@@ -348,14 +348,14 @@
                                          rendered="#{viewScope.DcmDataDisplayBean.canReplaceImport}"/>
                 </af:gridCell>
               </af:gridRow>
-              <!--af:gridRow marginTop="5px" marginBottom="5px" height="auto" id="grq">
+              <af:gridRow marginTop="5px" marginBottom="5px" height="auto" id="grq">
                 <af:gridCell marginStart="5px" marginEnd="5px" width="auto" inlineStyle="padding-top:5px"
                              id="gcq">
                   <af:selectBooleanCheckbox label="#{viewBundle['dms.quartz.import']}" id="sbc1"
                                          autoSubmit="true" value="#{viewScope.DcmDataDisplayBean.useQuartz}"
                                             text="#{viewBundle['dms.quartz.msg']}"/>
                 </af:gridCell>
-              </af:gridRow-->
+              </af:gridRow>
               <af:gridRow marginTop="5px" marginBottom="5px" height="auto" rendered="#{viewScope.DcmDataDisplayBean.combinationId ne null}" id="batchGr">
                 <af:gridCell marginStart="5px" marginEnd="5px" width="auto" inlineStyle="padding-top:5px"
                              id="gcb">
@@ -410,14 +410,14 @@
                                                    filename="#{viewScope.DcmDataDisplayBean.exportDataExcelName}"/>
                   </af:commandButton>
                 </af:gridCell>
-                <!--af:gridCell marginStart="3px" width="auto" columnSpan="1"
+                <af:gridCell marginStart="3px" width="auto" columnSpan="1"
                              halign="center" id="qgc8"
                              inlineStyle="margin-top:3px">
                   <af:commandButton text="#{viewBundle['dms.quartz.export']}" 
                                     id="qcb11"
                                     actionListener="#{viewScope.DcmDataDisplayBean.quartz_export}">
                   </af:commandButton>
-                </af:gridCell-->
+                </af:gridCell>
               </af:gridRow>
             </af:panelGridLayout>
           </af:panelWindow>

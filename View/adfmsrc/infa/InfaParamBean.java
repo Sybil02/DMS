@@ -1,8 +1,15 @@
 package infa;
 
+import common.lov.DmsComBoxLov;
+
+import java.util.LinkedHashMap;
 import java.util.List;
 
+import java.util.Map;
+
 import javax.faces.model.SelectItem;
+
+import oracle.adf.view.rich.component.rich.input.RichInputComboboxListOfValues;
 
 public class InfaParamBean {
     private String pAlias;
@@ -10,8 +17,9 @@ public class InfaParamBean {
     private String pScope;
     private String pSource;
     private List<SelectItem> valuesList;
-    
+    private DmsComBoxLov comLov;
     private String choiceValue;
+    private RichInputComboboxListOfValues inputCbLov;
     
     public InfaParamBean() {
         super();
@@ -70,5 +78,21 @@ public class InfaParamBean {
 
     public String getChoiceValue() {
         return choiceValue;
+    }
+
+    public void setComLov(DmsComBoxLov comLov) {
+        this.comLov = comLov;
+    }
+
+    public DmsComBoxLov getComLov() {
+        return comLov;
+    }
+
+    public void setInputCbLov(RichInputComboboxListOfValues inputCbLov) {
+        this.inputCbLov = inputCbLov;
+    }
+
+    public RichInputComboboxListOfValues getInputCbLov() {
+        return inputCbLov;
     }
 }

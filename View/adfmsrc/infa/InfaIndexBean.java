@@ -5,6 +5,9 @@ import common.ADFUtils;
 import common.DmsUtils;
 import common.JSFUtils;
 
+import common.lov.DmsComBoxLov;
+import common.lov.ValueSetRow;
+
 import dms.login.Person;
 
 import infa.dataintegration.types.DIServerDate;
@@ -23,8 +26,6 @@ import infa.dataintegration.types.TypeStartWorkflowExRequest;
 import infa.dataintegration.types.TypeStartWorkflowExResponse;
 import infa.dataintegration.types.VoidRequest;
 import infa.dataintegration.types.WorkflowDetails;
-import infa.dataintegration.types.WorkflowRequest;
-import infa.dataintegration.ws.DataIntegrationClient;
 import infa.dataintegration.ws.DataIntegrationInterface;
 
 import infa.dataintegration.ws.Fault;
@@ -47,9 +48,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
+
 
 import java.util.Map;
 
@@ -67,6 +68,7 @@ import oracle.adf.view.rich.component.rich.RichPopup;
 import oracle.adf.view.rich.component.rich.data.RichTable;
 import oracle.adf.view.rich.component.rich.data.RichTree;
 
+import oracle.adf.view.rich.component.rich.input.RichInputComboboxListOfValues;
 import oracle.adf.view.rich.component.rich.input.RichSelectOneChoice;
 import oracle.adf.view.rich.context.AdfFacesContext;
 
@@ -89,11 +91,12 @@ public class InfaIndexBean {
     private RichPopup paramPop;
     
     List<InfaParamBean> paramList = new ArrayList<InfaParamBean>();
-    Map<String,RichSelectOneChoice> paraSocMap = new LinkedHashMap<String,RichSelectOneChoice>();
+    Map<String,RichSelectOneChoice > paraSocMap = new LinkedHashMap<String,RichSelectOneChoice >();
     private RichTable statusTable;
     private RichPopup logPop;
     String logMessage = null ;
-    
+    private RichInputComboboxListOfValues inputCombLov;
+
     public InfaIndexBean() {
         super();
     }
@@ -175,31 +178,27 @@ public class InfaIndexBean {
     }
     
     public void paramSelectListener(ValueChangeEvent valueChangeEvent) {
-        System.out.println(valueChangeEvent.getNewValue()+"........");
-        
-        RichSelectOneChoice pSoc =
-            (RichSelectOneChoice)valueChangeEvent.getSource();
-        for(Object key : this.paraSocMap.keySet()){
-            if(pSoc.equals(this.paraSocMap.get(key))){
-                for(InfaParamBean ipb : this.paramList){
-                    if(ipb.getPName().equals(key.toString())){
-                        ipb.setChoiceValue(valueChangeEvent.getNewValue().toString());
+        String labelName = this.inputCombLov.getLabel();
+        for(InfaParamBean ipb : this.paramList){
+            if(labelName.equals(ipb.getPAlias())){
+                DmsComBoxLov lov = ipb.getComLov();
+                for(ValueSetRow vsr : lov.getValueList()){
+                    if(vsr.getMeaning().equals(valueChangeEvent.getNewValue())){
+                        ipb.setChoiceValue(vsr.getCode());
                     }
                 }
-                
-            }  
+            }
         }
-        
     }
     
     private ParameterArray getParameter(){
         ParameterArray paraArray = new ParameterArray();
-            
         for(InfaParamBean ipb : this.paramList){
             Parameter pam = new Parameter();
             pam.setName(ipb.getPName());
             pam.setScope(ipb.getPScope());
             pam.setValue(ipb.getChoiceValue());
+            System.out.println(ipb.getPName()+"==="+ipb.getPScope()+"==="+ipb.getChoiceValue());
             paraArray.getParameters().add(pam);
         }
             
@@ -422,7 +421,6 @@ public class InfaIndexBean {
         vr.setConjunction(vr.VC_CONJ_AND);
         vc.addElement(vr);
         vo.applyViewCriteria(vc);
-
         System.out.println(vo.getQuery());
         vo.executeQuery();
 
@@ -446,13 +444,12 @@ public class InfaIndexBean {
         sql.append("WHERE I.VS_ID = V.ID AND I.LOCALE = V.LOCALE ");
         sql.append("AND I.LOCALE = '").append(locale).append("' ");
         sql.append("AND I.ID = '").append(pId).append("'");
-        
         ResultSet rs = null;
         try {
             rs = stat.executeQuery(sql.toString());
             if(rs.next()){
                 InfaParamBean ipb = new InfaParamBean(rs.getString("P_ALIAS"),rs.getString("P_NAME"),rs.getString("P_SCOPE"),rs.getString("SOURCE"));
-                ipb.setValuesList(this.getValues(rs.getString("VS_ID"),rs.getString("SOURCE")));
+                ipb.setValuesList(this.getValues(rs.getString("VS_ID"),rs.getString("SOURCE"),ipb));
                 this.paramList.add(ipb);
             }
             rs.close();
@@ -463,7 +460,7 @@ public class InfaIndexBean {
         }
     }
     
-    private List<SelectItem> getValues(String valueSetId,String source){
+    private List<SelectItem> getValues(String valueSetId,String source,InfaParamBean ipb){
         StringBuffer sql = new StringBuffer();
         sql.append("SELECT T.CODE,T.MEANING FROM \"").append(source).append("\" T").append("  WHERE T.LOCALE='").append(ADFContext.getCurrent().getLocale()).append("'");
         sql.append("  AND EXISTS (SELECT 1 FROM DMS_USER_VALUE_V V")
@@ -479,14 +476,19 @@ public class InfaIndexBean {
                                                                              sql.toString());
         vo.executeQuery();
         List<SelectItem> vsList = new ArrayList<SelectItem>();
+        List<ValueSetRow> list = new ArrayList<ValueSetRow>();
         while (vo.hasNext()) {
             Row row = vo.next();
             SelectItem item = new SelectItem();
             item.setLabel(ObjectUtils.toString(row.getAttribute("MEANING")));
             item.setValue(ObjectUtils.toString(row.getAttribute("CODE")));
             vsList.add(item);
+            ValueSetRow vsr = new ValueSetRow(ObjectUtils.toString(row.getAttribute("CODE")),
+                        ObjectUtils.toString(row.getAttribute("MEANING")),ObjectUtils.toString(row.getAttribute("CODE")));
+            list.add(vsr);
         }
-        
+        DmsComBoxLov dcl = new DmsComBoxLov(list);
+        ipb.setComLov(dcl);
         vo.remove();
         
         return vsList;
@@ -639,14 +641,6 @@ public class InfaIndexBean {
         return paramList;
     }
 
-    public void setParaSocMap(Map<String, RichSelectOneChoice> paraSocMap) {
-        this.paraSocMap = paraSocMap;
-    }
-
-    public Map<String, RichSelectOneChoice> getParaSocMap() {
-        return paraSocMap;
-    }
-
     public void setParamPop(RichPopup paramPop) {
         this.paramPop = paramPop;
     }
@@ -714,5 +708,21 @@ public class InfaIndexBean {
 
     public String getLogMessage() {
         return logMessage;
+    }
+
+    public void setParaSocMap(Map<String, RichSelectOneChoice > paraSocMap) {
+        this.paraSocMap = paraSocMap;
+    }
+
+    public Map<String, RichSelectOneChoice > getParaSocMap() {
+        return paraSocMap;
+    }
+
+    public void setInputCombLov(RichInputComboboxListOfValues inputCombLov) {
+        this.inputCombLov = inputCombLov;
+    }
+
+    public RichInputComboboxListOfValues getInputCombLov() {
+        return inputCombLov;
     }
 }

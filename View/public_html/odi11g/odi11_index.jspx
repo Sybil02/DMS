@@ -74,13 +74,26 @@
                           </af:column>
                           <af:column headerText="#{bindings.Odi11SceneParamExView.hints.value.label}"
                                      id="c5">
-                            <af:selectOneChoice value="#{row.bindings.value.inputValue}"
+                            <!--af:selectOneChoice value="#{row.bindings.value.inputValue}"
                                                 rendered="#{row.bindings.ValueSetId.inputValue ne null}"
                                                 label="#{bindings.Odi11SceneParamExView.hints.value.label}"
                                                 id="soc2">
                               <f:selectItems value="#{viewScope.Odi11gIndexMBean.valueList[row.bindings.ValueSetId.inputValue]}"
                                              id="si2"/>
                             </af:selectOneChoice>
+                            <af:inputText label="#{bindings.Odi11SceneParamExView.hints.value.label}"
+                                          id="it1"
+                                          rendered="#{row.bindings.ValueSetId.inputValue eq null}"
+                                          value="#{row.bindings.value.inputValue}"/-->
+                            <af:inputComboboxListOfValues label="#{bindings.Odi11SceneParamExView.hints.value.label}" inlineStyle="margin-right:5px"
+                                                value="#{row.bindings.value.inputValue}"
+                                                autoSubmit="true" clientComponent="true"
+                                                validator="#{viewScope.Odi11gIndexMBean.valueList[row.bindings.ValueSetId.inputValue].listOfValuesModel.validate}"
+                                                model="#{viewScope.Odi11gIndexMBean.valueList[row.bindings.ValueSetId.inputValue].listOfValuesModel}"
+                                                id="iclov2" columns="32" rendered="#{row.bindings.ValueSetId.inputValue ne null}"
+                                               usage="auto">
+                                <af:autoSuggestBehavior suggestedItems="#{viewScope.Odi11gIndexMBean.valueList[row.bindings.ValueSetId.inputValue].listOfValuesModel.suggest}"/>
+                            </af:inputComboboxListOfValues>
                             <af:inputText label="#{bindings.Odi11SceneParamExView.hints.value.label}"
                                           id="it1"
                                           rendered="#{row.bindings.ValueSetId.inputValue eq null}"

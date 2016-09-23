@@ -6,6 +6,9 @@ import common.DmsUtils;
 
 import common.JSFUtils;
 
+import common.lov.DmsComBoxLov;
+import common.lov.ValueSetRow;
+
 import dms.login.Person;
 
 import java.net.MalformedURLException;
@@ -26,6 +29,7 @@ import java.util.Map;
 
 import javax.faces.event.ActionEvent;
 
+import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 
 import javax.xml.namespace.QName;
@@ -134,7 +138,7 @@ public class Odi11gIndexMBean {
                 this.popup.show(hint);
             } else {
                 //没有参数
-                this.run(sceneVo.getCurrentRow(), new HashMap());
+                this.run(sceneVo.getCurrentRow(), new HashMap(),new HashMap());
             }
         }
     }
@@ -158,6 +162,37 @@ public class Odi11gIndexMBean {
     //获取值集数据
 
     private void initValueSetValues(String valueSetId, boolean isAuth) {
+//        Row vsRow[] =
+//            DmsUtils.getDmsApplicationModule().getDmsValueSetView().findByKey(new Key(new Object[] { valueSetId,
+//                                                                                                     ADFContext.getCurrent().getLocale().toString() }),
+//                                                                              1);
+//        if (vsRow != null && vsRow.length > 0) {
+//            String source = (String)vsRow[0].getAttribute("Source");
+//            StringBuffer sql = new StringBuffer();
+//            sql.append("SELECT T.CODE,T.MEANING FROM \"").append(source).append("\" T").append("  WHERE T.LOCALE='").append(ADFContext.getCurrent().getLocale()).append("'");
+//            if (isAuth) {
+//                sql.append("  AND EXISTS (SELECT 1 FROM DMS_USER_VALUE_V V")
+//                    .append("  WHERE V.USER_ID = '")
+//                    .append(((Person)ADFContext.getCurrent().getSessionScope().get("cur_user")).getId())
+//                    .append("'")
+//                    .append("  AND V.VALUE_SET_ID='")
+//                    .append(valueSetId).append("'")
+//                    .append("  AND V.VALUE_ID = T.CODE)");
+//            }
+//            sql.append(" AND T.ENABLED='Y'  ORDER BY T.IDX");
+//            ViewObject vo =
+//                DmsUtils.getDmsApplicationModule().createViewObjectFromQueryStmt(null,
+//                                                                                 sql.toString());
+//            vo.executeQuery();
+//            List vsList = new ArrayList();
+//            this.valueList.put(valueSetId, vsList);
+//                while (vo.hasNext()) {
+//                    Row row = vo.next();
+//                    ValueSetRow vsr = new ValueSetRow(ObjectUtils.toString(row.getAttribute("CODE")),ObjectUtils.toString(row.getAttribute("MEANING")),ObjectUtils.toString(row.getAttribute("CODE")));
+//                    vsList.add(vsr);
+//                }
+//                vo.remove();
+//        }
         Row vsRow[] =
             DmsUtils.getDmsApplicationModule().getDmsValueSetView().findByKey(new Key(new Object[] { valueSetId,
                                                                                                      ADFContext.getCurrent().getLocale().toString() }),
@@ -180,19 +215,18 @@ public class Odi11gIndexMBean {
                 DmsUtils.getDmsApplicationModule().createViewObjectFromQueryStmt(null,
                                                                                  sql.toString());
             vo.executeQuery();
-            List vsList = new ArrayList();
-            this.valueList.put(valueSetId, vsList);
+            List<ValueSetRow> vsList = new ArrayList<ValueSetRow>();
+            DmsComBoxLov lov = new DmsComBoxLov(vsList);
+            this.valueList.put(valueSetId, lov);
             while (vo.hasNext()) {
                 Row row = vo.next();
-                SelectItem item = new SelectItem();
-                item.setLabel(ObjectUtils.toString(row.getAttribute("MEANING")));
-                item.setValue(ObjectUtils.toString(row.getAttribute("CODE")));
-                vsList.add(item);
+                ValueSetRow vsr = new ValueSetRow(ObjectUtils.toString(row.getAttribute("CODE")),ObjectUtils.toString(row.getAttribute("MEANING")),ObjectUtils.toString(row.getAttribute("CODE")));
+                vsList.add(vsr);
             }
             vo.remove();
         }
     }
-
+    
     private RequestPortType getRequestPortType(Row sceneRow) throws MalformedURLException {
         String agentId =
             ObjectUtils.toString(sceneRow.getAttribute("AgentId"));
@@ -244,7 +278,7 @@ public class Odi11gIndexMBean {
         return odiCredentialType;
     }
 
-    private void run(Row sceneRow, Map params) throws MalformedURLException {
+    private void run(Row sceneRow, Map params,Map paramsCode) throws MalformedURLException {
         StringBuffer parmStr = new StringBuffer();
         for (Object v : params.values()) {
             parmStr.append("#").append(v);
@@ -281,10 +315,10 @@ public class Odi11gIndexMBean {
             scenarioRequestType.setSessionName("DMS-" + sceneName);
             scenarioRequestType.setSynchronous(false);
             //处理参数
-            for (Object key : params.keySet()) {
+            for (Object key : paramsCode.keySet()) {
                 VariableType var = new VariableType();
                 var.setName((String)key);
-                var.setValue((String)params.get(key));
+                var.setValue((String)paramsCode.get(key));
                 scenarioRequestType.getVariables().add(var);
             }
             odiStartScenRequest.setRequest(scenarioRequestType);
@@ -332,7 +366,6 @@ public class Odi11gIndexMBean {
         String sql = "INSERT INTO DMS_JOB_DETAILS(JOB_ID,JOB_TYPE,JOB_OBJECT,JOB_STATUS,CREATED_AT,CREATED_BY,FILE_NAME,JOB_LOG,END_TIME,FILE_PATH) "
             + "VALUES('" + jobId + "','ODI','" + sceneName + "','R',SYSDATE,'" + curUser.getName()
             + "','" + args + "','','','','" + idNum + "')" ;
-        System.out.println(sql);
         DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
         Statement stat = trans.createStatement(1);
 
@@ -497,10 +530,17 @@ public class Odi11gIndexMBean {
         Row[] rows =
             ADFUtils.findIterator("Odi11SceneParamExViewIterator").getAllRowsInRange();
         Map params = new LinkedHashMap();
+        Map paramsCode = new LinkedHashMap();
         for (Row row : rows) {
             params.put(row.getAttribute("PName"), row.getAttribute("value"));
+            DmsComBoxLov lov = (DmsComBoxLov)valueList.get(row.getAttribute("ValueSetId"));
+            for(ValueSetRow vsr : lov.getValueList()){
+                if(vsr.getMeaning().equals(row.getAttribute("value"))){
+                    paramsCode.put(row.getAttribute("PName"),vsr.getCode()); 
+                }
+            }
         }
-        this.run(sceneVo.getCurrentRow(), params);
+        this.run(sceneVo.getCurrentRow(), params,paramsCode);
     }
 
     public void setParamTable(RichTable paramTable) {
@@ -557,5 +597,10 @@ public class Odi11gIndexMBean {
 
     public RichPopup getExceptionPopup() {
         return exceptionPopup;
+    }
+
+    public void test(ValueChangeEvent valueChangeEvent) {
+        System.out.println(valueChangeEvent.getNewValue());
+        
     }
 }
