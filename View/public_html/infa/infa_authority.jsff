@@ -12,20 +12,28 @@
         <f:facet name="toolbar">
             <af:toolbar id="tb1">
             <af:group id="g1">
-              <af:selectOneChoice value="#{bindings.RoleName.inputValue}"
+              <!--af:selectOneChoice value="#{bindings.RoleName.inputValue}"
                                   label="#{bindings.RoleName.label}"
                                   required="#{bindings.RoleName.hints.mandatory}"
                                   shortDesc="#{bindings.RoleName.hints.tooltip}"
                                   autoSubmit="true"
                                   id="soc1">
                 <f:selectItems value="#{bindings.RoleName.items}" id="si1"/>
-              </af:selectOneChoice>
+              </af:selectOneChoice-->
+              <af:inputComboboxListOfValues label="角色名称" inlineStyle="margin-right:5px"
+                                            id="iclov1" columns="50"
+                                            autoSubmit="true" clientComponent="true"
+                                            value="#{viewScope.InfaAuthrityBean.roleName}"
+                                            validator="#{viewScope.InfaAuthrityBean.roleLov.listOfValuesModel.validate}"
+                                            model="#{viewScope.InfaAuthrityBean.roleLov.listOfValuesModel}">
+                    <af:autoSuggestBehavior suggestedItems="#{viewScope.InfaAuthrityBean.roleLov.listOfValuesModel.suggest}"/>
+              </af:inputComboboxListOfValues>
             </af:group>
             <af:group id="g2">
               <af:commandButton text="#{viewBundle['dms.common.add']}" id="cb1"
-                                actionListener="#{backingBeanScope.InfaAuthrityBean.showAddPop}"/>
+                                actionListener="#{viewScope.InfaAuthrityBean.showAddPop}"/>
               <af:commandButton text="#{viewBundle['dcm.common.delete']}" id="cb2"
-                                actionListener="#{backingBeanScope.InfaAuthrityBean.remove}"/>
+                                actionListener="#{viewScope.InfaAuthrityBean.remove}"/>
             </af:group>
             </af:toolbar>
         </f:facet>
@@ -39,8 +47,8 @@
                   queryListener="#{bindings.InfaRoleWorkflowVOQuery.processQuery}"
                   filterVisible="false" varStatus="vs"
                   selectionListener="#{bindings.InfaRoleWorkflowVO.collectionModel.makeCurrent}"
-                  rowSelection="multiple" id="t1" partialTriggers="::soc1"
-                  binding="#{backingBeanScope.InfaAuthrityBean.authedTable}">
+                  rowSelection="multiple" id="t1" partialTriggers="::iclov1"
+                  binding="#{viewScope.InfaAuthrityBean.authedTable}">
           <af:column sortProperty="#{bindings.InfaRoleWorkflowVO.hints.WorkflowId.name}" sortable="true"
                      headerText="#{bindings.InfaRoleWorkflowVO.hints.WorkflowId.label}"
                      id="c2">
@@ -77,7 +85,7 @@
     <f:facet name="end"/>
     <f:facet name="top">
         <af:popup id="p1" autoCancel="disabled"
-                  binding="#{backingBeanScope.InfaAuthrityBean.workflowPop}">
+                  binding="#{viewScope.InfaAuthrityBean.workflowPop}">
           <af:panelWindow id="pw1"
                           title="#{viewBundle['infa.authority.object']}">
             <af:panelCollection id="pc2">
@@ -86,7 +94,7 @@
                 <af:toolbar id="t3">
                   <af:group id="g3">
                     <af:commandButton text="#{viewBundle['dms.common.add']}" id="cb3"
-                                      actionListener="#{backingBeanScope.InfaAuthrityBean.addWf}"/>
+                                      actionListener="#{viewScope.InfaAuthrityBean.addWf}"/>
                   </af:group>
                 </af:toolbar>
               </f:facet>
@@ -102,7 +110,7 @@
                         filterVisible="false" varStatus="vs"
                         selectionListener="#{bindings.InfaUnauthedWorkflowVO.collectionModel.makeCurrent}"
                         rowSelection="multiple" id="t2"
-                        binding="#{backingBeanScope.InfaAuthrityBean.unAuthedTable}">
+                        binding="#{viewScope.InfaAuthrityBean.unAuthedTable}">
                 <af:column sortProperty="#{bindings.InfaUnauthedWorkflowVO.hints.WorkflowAlias.name}"
                            filterable="true" sortable="true"
                            headerText="#{bindings.InfaUnauthedWorkflowVO.hints.WorkflowAlias.label}"

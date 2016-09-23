@@ -11,7 +11,7 @@
     <managed-bean id="__7">
       <managed-bean-name id="__4">SceneAuthorityBean</managed-bean-name>
       <managed-bean-class id="__5">odi11g.scene.SceneAuthorityBean</managed-bean-class>
-      <managed-bean-scope id="__6">backingBean</managed-bean-scope>
+      <managed-bean-scope id="__6">view</managed-bean-scope>
     </managed-bean>
     <view id="scene_authority">
       <page>/odi11g/scene/scene_authority.jsff</page>

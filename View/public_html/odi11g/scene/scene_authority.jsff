@@ -7,7 +7,7 @@
   <af:panelStretchLayout id="psl1" topHeight="0">
     <f:facet name="top">
       <af:popup id="p1" autoCancel="disabled" childCreation="deferred"
-                binding="#{backingBeanScope.SceneAuthorityBean.popup}">
+                binding="#{viewScope.SceneAuthorityBean.popup}">
         <af:panelWindow id="pw1" modal="true"
                         title="#{viewBundle['odi11g.roleScene.add']}">
           <af:panelStretchLayout id="psl2">
@@ -17,7 +17,7 @@
                 <f:facet name="toolbar">
                   <af:toolbar id="t4">
                     <af:commandButton text="#{viewBundle['dms.common.add']}" id="cb3"
-                                      actionListener="#{backingBeanScope.SceneAuthorityBean.addScene}"/>
+                                      actionListener="#{viewScope.SceneAuthorityBean.addScene}"/>
                   </af:toolbar>
                 </f:facet>
                 <f:facet name="statusbar"/>
@@ -29,7 +29,7 @@
                           rowBandingInterval="0"
                           selectionListener="#{bindings.Odi11UnauthedSceneView.collectionModel.makeCurrent}"
                           rowSelection="multiple" id="t3"
-                          binding="#{backingBeanScope.SceneAuthorityBean.unassignedScene}">
+                          binding="#{viewScope.SceneAuthorityBean.unassignedScene}">
                   <af:column sortProperty="#{bindings.Odi11UnauthedSceneView.hints.SceneAlias.name}"
                              sortable="false"
                              headerText="#{bindings.Odi11UnauthedSceneView.hints.SceneAlias.label}"
@@ -70,20 +70,28 @@
         <f:facet name="toolbar">
           <af:toolbar id="t1">
             <af:group id="g1">
-            <af:selectOneChoice value="#{bindings.RoleName.inputValue}"
+            <!--af:selectOneChoice value="#{bindings.RoleName.inputValue}"
                                 label="#{bindings.RoleName.label}"
                                 required="#{bindings.RoleName.hints.mandatory}"
                                 shortDesc="#{bindings.RoleName.hints.tooltip}"
                                 id="soc1"
                                 autoSubmit="true">
               <f:selectItems value="#{bindings.RoleName.items}" id="si1"/>
-            </af:selectOneChoice>
+            </af:selectOneChoice-->
+            <af:inputComboboxListOfValues label="角色名称" inlineStyle="margin-right:5px"
+                                            id="iclov1" columns="50"
+                                            autoSubmit="true" clientComponent="true"
+                                            value="#{viewScope.SceneAuthorityBean.roleName}"
+                                            validator="#{viewScope.SceneAuthorityBean.roleLov.listOfValuesModel.validate}"
+                                            model="#{viewScope.SceneAuthorityBean.roleLov.listOfValuesModel}">
+                    <af:autoSuggestBehavior suggestedItems="#{viewScope.SceneAuthorityBean.roleLov.listOfValuesModel.suggest}"/>
+              </af:inputComboboxListOfValues>
             </af:group>
             <af:group id="g2">
               <af:commandButton text="#{viewBundle['dms.common.add']}" id="cb1"
-                                actionListener="#{backingBeanScope.SceneAuthorityBean.showAddPopup}"/>
+                                actionListener="#{viewScope.SceneAuthorityBean.showAddPopup}"/>
               <af:commandButton text="#{viewBundle['dcm.common.delete']}" id="cb2"
-                                actionListener="#{backingBeanScope.SceneAuthorityBean.remove}"/>
+                                actionListener="#{viewScope.SceneAuthorityBean.remove}"/>
             </af:group>
           </af:toolbar>
         </f:facet>
@@ -92,10 +100,10 @@
                   var="row" rows="#{bindings.Odi11RoleSceneView.rangeSize}"
                   emptyText="#{viewBundle['dms.common.nodata']}"
                   fetchSize="#{bindings.Odi11RoleSceneView.rangeSize}"
-                  rowBandingInterval="0" partialTriggers="::soc1"
+                  rowBandingInterval="0" partialTriggers="::iclov1"
                   selectionListener="#{bindings.Odi11RoleSceneView.collectionModel.makeCurrent}"
                   rowSelection="multiple" id="t2"
-                  binding="#{backingBeanScope.SceneAuthorityBean.assignedScene}">
+                  binding="#{viewScope.SceneAuthorityBean.assignedScene}">
           <af:column sortProperty="#{bindings.Odi11RoleSceneView.hints.SceneId.name}"
                      sortable="false"
                      headerText="#{bindings.Odi11RoleSceneView.hints.SceneId.label}"
