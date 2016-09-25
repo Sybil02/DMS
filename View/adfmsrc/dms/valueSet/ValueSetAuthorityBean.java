@@ -85,7 +85,7 @@ public class ValueSetAuthorityBean {
             Statement stat = trans.createStatement(DBTransaction.DEFAULT);
             String sql =
                 "SELECT T.ID,T.NAME FROM DMS_VALUE_SET T WHERE T.LOCALE='" +
-                this.person.getLocale() + "'";
+                this.person.getLocale() + "' ORDER BY T.NAME";
             ResultSet rs;
             try {
                 rs = stat.executeQuery(sql);
@@ -126,7 +126,7 @@ public class ValueSetAuthorityBean {
             Statement stat = trans.createStatement(DBTransaction.DEFAULT);
             String sql =
                 "SELECT T.ID,T.NAME FROM DMS_GROUP T WHERE T.LOCALE='" + this.person.getLocale() +
-                "' AND T.ENABLE_FLAG = 'Y'";
+                "' AND T.ENABLE_FLAG = 'Y' ORDER BY T.NAME";
             ResultSet rs;
             try {
                 rs = stat.executeQuery(sql);

@@ -58,7 +58,7 @@ public class UserGroupBean {
             Person person = (Person)ADFContext.getCurrent().getSessionScope().get("cur_user");
             String sql =
                 "SELECT T.ID,T.NAME FROM DMS_GROUP T WHERE T.LOCALE='" + person.getLocale() +
-                "'  AND T.ENABLE_FLAG = 'Y'";
+                "'  AND T.ENABLE_FLAG = 'Y' ORDER BY T.NAME";
             ResultSet rs;
             try {
                 rs = stat.executeQuery(sql);
