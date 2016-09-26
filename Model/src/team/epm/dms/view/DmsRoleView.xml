@@ -22,7 +22,8 @@
   Where="DmsRole.LOCALE=:locale"
   ComponentClass="team.epm.dms.view.DmsRoleViewImpl"
   ComponentInterface="team.epm.dms.view.common.DmsRoleView"
-  ClientProxyName="team.epm.dms.view.client.DmsRoleViewClient">
+  ClientProxyName="team.epm.dms.view.client.DmsRoleViewClient"
+  OrderBy="DmsRole.ROLE_NAME">
   <DesignTime>
     <Attr Name="_codeGenFlag2" Value="Coll|VarAccess"/>
   </DesignTime>
@@ -254,6 +255,13 @@
     <PropertiesBundle
       PropertiesFile="ModelBundle"/>
   </ResourceBundle>
+  <ClientInterface>
+    <Method
+      Name="fetchEnabledRole">
+      <Return
+        Type="oracle.jbo.RowSet"/>
+    </Method>
+  </ClientInterface>
   <ClientInterface>
     <Method
       Name="fetchEnabledRole">

@@ -21,7 +21,8 @@
   UseGlueCode="false"
   Where="DcmCombination.LOCALE=:locale"
   ComponentClass="team.epm.dcm.view.DcmCombinationViewImpl"
-  RowClass="team.epm.dcm.view.DcmCombinationViewRowImpl">
+  RowClass="team.epm.dcm.view.DcmCombinationViewRowImpl"
+  OrderBy="DcmCombination.NAME">
   <DesignTime>
     <Attr Name="_codeGenFlag2" Value="Access|Coll|VarAccess"/>
     <Attr Name="_isCodegen" Value="true"/>
