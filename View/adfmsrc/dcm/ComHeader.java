@@ -9,6 +9,7 @@ public class ComHeader {
     private String name;
     private String srcTable;
     private String isAuthority;
+    private String isApproval;
     private String code;
     private List<SelectItem> values;
     private String value;
@@ -67,5 +68,13 @@ public class ComHeader {
 
     public String getValue() {
         return value;
+    }
+
+    public void setIsApproval(String isApproval) {
+        this.isApproval = isApproval;
+    }
+
+    public String getIsApproval() {
+        return isApproval;
     }
 }

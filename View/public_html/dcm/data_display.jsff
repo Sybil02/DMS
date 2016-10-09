@@ -72,22 +72,24 @@
               </af:commandButton>
             </af:group>
             <af:group id="g8">
-              <af:commandButton text="#{viewBundle['dms.approval.commit']}" id="cb14"
+              <af:commandButton text="#{viewBundle['dms.approval.commit']}" id="cb14" rendered="#{viewScope.DcmDataDisplayBean.appFlag}"
               disabled="#{(viewScope.DcmDataDisplayBean.isEditable eq false) or viewScope.DcmDataDisplayBean.commitEnable}"
                                 actionListener="#{viewScope.DcmDataDisplayBean.commitApproval}"/>
             </af:group>
             <af:group id="g6">
               <af:commandButton text="#{viewBundle['dms.approval.pass']}" id="cb12" 
-                                partialTriggers="::pgl1"
+                                partialTriggers="::pgl1" rendered="#{viewScope.DcmDataDisplayBean.appFlag}"
                                 actionListener="#{viewScope.DcmDataDisplayBean.approvalPass}"
                                 disabled="#{viewScope.DcmDataDisplayBean.appEnable}"/>
               <af:commandButton text="#{viewBundle['dms.approval.refuse']}" id="cb5" partialSubmit="true"
+                                rendered="#{viewScope.DcmDataDisplayBean.appFlag}"
                                 disabled="#{viewScope.DcmDataDisplayBean.appEnable}">
                 <af:showPopupBehavior popupId="::pop9" triggerType="click"/>
               </af:commandButton>
             </af:group>
             <af:group id="g7">
               <af:commandButton text="#{viewBundle['dms.approval.back']}" id="cb13" partialSubmit="true"
+                                rendered="#{viewScope.DcmDataDisplayBean.appFlag}"
                                 disabled="#{viewScope.DcmDataDisplayBean.backEnable}">
                 <af:showPopupBehavior popupId="::pop9" triggerType="click"/>
               </af:commandButton>

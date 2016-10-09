@@ -30,7 +30,7 @@
     Kind="where"
     Type="java.lang.String"/>
   <SQLQuery>
-    <![CDATA[select t1.combination_id,t1.value_set_id,t1.seq,t1.is_authority,t1.created_at,
+    <![CDATA[select t1.combination_id,t1.value_set_id,t1.seq,t1.is_authority,t1.is_approval,t1.created_at,
 t1.updated_at,t1.updated_by,t1.created_by,t2.name,t2.source,t2.code from dcm_com_vs t1,dms_value_set t2
 where t1.value_set_id=t2.id
 and t2.locale=:locale
@@ -93,6 +93,21 @@ order by t1.seq]]>
     ColumnType="VARCHAR2"
     AliasName="IS_AUTHORITY"
     Expression="IS_AUTHORITY"
+    SQLType="VARCHAR">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="10"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="IsApproval"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="10"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="IS_APPROVAL"
+    Expression="IS_APPROVAL"
     SQLType="VARCHAR">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="10"/>

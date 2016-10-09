@@ -55,11 +55,11 @@
                     <af:toolbar id="t3">
                       <af:commandButton text="#{viewBundle['dms.start']}" id="cb2"
                                         actionListener="#{viewScope.ApprovalIndexBean.startApproval}"
-                                        disabled="#{viewScope.ApprovalIndexBean.disableRun}"
+                                        disabled="true"
                                         partialTriggers="t1 cb12 ::cb1"/>
                       <af:spacer id="spw" width="10px"/>
                       <af:commandButton text="#{viewBundle['dms.approval.close']}" id="cb12"
-                                        disabled="#{viewScope.ApprovalIndexBean.disableClose}"
+                                        disabled="true"
                                         partialTriggers="t1 ::cb1 cb12"
                                         actionListener="#{viewScope.ApprovalIndexBean.closeApproval}"/>
                     </af:toolbar>
