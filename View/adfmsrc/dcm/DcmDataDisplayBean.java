@@ -64,6 +64,7 @@ import oracle.adf.view.rich.component.rich.data.RichTable;
 import oracle.adf.view.rich.component.rich.input.RichInputFile;
 import oracle.adf.view.rich.component.rich.input.RichSelectOneChoice;
 
+import oracle.adf.view.rich.component.rich.nav.RichCommandButton;
 import oracle.adf.view.rich.component.rich.output.RichPanelCollection;
 import oracle.adf.view.rich.context.AdfFacesContext;
 
@@ -145,6 +146,7 @@ public class DcmDataDisplayBean extends TablePagination{
     private FilterableQueryDescriptor queryDescriptor=new DcmQueryDescriptor();
     private Map filters;
     private boolean useQuartz = false;
+    private RichCommandButton backBtn;
     //初始化
     public DcmDataDisplayBean() {
         this.curUser =(Person)ADFContext.getCurrent().getSessionScope().get("cur_user");
@@ -1491,7 +1493,10 @@ public class DcmDataDisplayBean extends TablePagination{
         this.initApprovalStatus();
         //启动第一审批人
         this.startNextApproval();
-
+        //刷新按钮
+        //this.commitEnable();
+        this.approvalEnable();
+        //this.backEnable();
     }
     
     public void initApprovalStatus(){
@@ -1552,6 +1557,10 @@ public class DcmDataDisplayBean extends TablePagination{
         }
         //开启下一审批人
         this.startNextApproval();
+        //refresh button
+        //this.commitEnable();
+        //this.approvalEnable();
+        this.backEnable();
     }
     
     public void startNextApproval(){
@@ -1630,6 +1639,7 @@ public class DcmDataDisplayBean extends TablePagination{
 
     public void approvalRefuse(ActionEvent actionEvent) {
         this.appEnable = true;
+        this.backEnable = true;
         Statement stmt = DmsUtils.getDcmApplicationModule().getDBTransaction().createStatement(DBTransaction.DEFAULT);
         //查询提交者
         String proposer = "";
@@ -1656,12 +1666,19 @@ public class DcmDataDisplayBean extends TablePagination{
         }
         //发送邮件
         this.sendEmail("REFUSE",proposer);
+        //refresh button
+        this.commitEnable();
+        //this.approvalEnable();
+        //this.backEnable();
     }
 
     public void approvalBack(ActionEvent actionEvent) {
-        this.appEnable = true;
         // 同拒绝
         this.approvalRefuse(actionEvent);
+        //refresh button
+        this.commitEnable();
+        //this.approvalEnable();
+        //this.backEnable();
     }
 
     public void setAppEnable(boolean appEnable) {
@@ -1702,5 +1719,13 @@ public class DcmDataDisplayBean extends TablePagination{
 
     public boolean isAppFlag() {
         return appFlag;
+    }
+
+    public void setBackBtn(RichCommandButton backBtn) {
+        this.backBtn = backBtn;
+    }
+
+    public RichCommandButton getBackBtn() {
+        return backBtn;
     }
 }
