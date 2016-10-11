@@ -352,6 +352,7 @@
                 <af:gridCell marginStart="5px" marginEnd="5px" width="auto" inlineStyle="padding-top:5px"
                              id="gcq">
                   <af:selectBooleanCheckbox label="#{viewBundle['dms.quartz.import']}" id="sbc1"
+                                         rendered="false"
                                          autoSubmit="true" value="#{viewScope.DcmDataDisplayBean.useQuartz}"
                                             text="#{viewBundle['dms.quartz.msg']}"/>
                 </af:gridCell>
@@ -414,7 +415,7 @@
                              halign="center" id="qgc8"
                              inlineStyle="margin-top:3px">
                   <af:commandButton text="#{viewBundle['dms.quartz.export']}" 
-                                    id="qcb11"
+                                    id="qcb11" rendered="false"
                                     actionListener="#{viewScope.DcmDataDisplayBean.quartz_export}">
                   </af:commandButton>
                 </af:gridCell>
