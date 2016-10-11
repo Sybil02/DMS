@@ -104,3 +104,7 @@ af|inputText:read-only::content {
     font-family: Microsoft YaHei;
     color: black;
 }
+
+af|inputComboboxListOfValues::search{
+    display: none;
+}
