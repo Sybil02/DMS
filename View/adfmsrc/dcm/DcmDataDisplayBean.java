@@ -1235,7 +1235,7 @@ public class DcmDataDisplayBean extends TablePagination{
                 header.setSrcTable((String)row.getAttribute("Source"));
                 header.setValueSetId((String)row.getAttribute("ValueSetId"));
                 header.setCode((String)row.getAttribute("Code"));
-//                header.setLength(Integer.parseInt(row.getAttribute("DisplayLength").toString()));
+                header.setLength(Integer.parseInt(row.getAttribute("DisplayLength").toString()));
                 this.initHeaderValueList(header);
                 this.setDefaultHeaderValue(header);
                 this.templateHeader.add(header);
@@ -1396,7 +1396,7 @@ public class DcmDataDisplayBean extends TablePagination{
             if (rs.next()) {
                 header.setValue(rs.getString("CODE"));
                 header.setMeaning(rs.getString("MEANING"));
-                header.setLength(rs.getString("MEANING").length());
+//                header.setLength(header.getLength());
             }
         } catch (SQLException e) {
             this._logger.severe(e);

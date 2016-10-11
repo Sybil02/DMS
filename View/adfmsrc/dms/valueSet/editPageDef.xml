@@ -17,9 +17,10 @@
         <AttrNames>
           <Item Value="Name"/>
           <Item Value="Source"/>
+          <Item Value="Code"/>
+          <Item Value="DisplayLength"/>
           <Item Value="UpdatedAt"/>
           <Item Value="UpdatedBy"/>
-          <Item Value="Code"/>
         </AttrNames>
       </nodeDefinition>
     </tree>

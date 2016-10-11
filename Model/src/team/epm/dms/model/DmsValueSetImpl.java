@@ -3,6 +3,7 @@ package team.epm.dms.model;
 import oracle.jbo.AttributeList;
 import oracle.jbo.Key;
 import oracle.jbo.domain.Date;
+import oracle.jbo.domain.Number;
 import oracle.jbo.server.AttributeDefImpl;
 import oracle.jbo.server.EntityDefImpl;
 import oracle.jbo.server.EntityImpl;
@@ -112,6 +113,16 @@ public class DmsValueSetImpl extends DmsEntityImpl {
                 obj.setCreatedBy((String)value);
             }
         }
+        ,
+        DisplayLength {
+            public Object get(DmsValueSetImpl obj) {
+                return obj.getDisplayLength();
+            }
+
+            public void put(DmsValueSetImpl obj, Object value) {
+                obj.setDisplayLength((Number)value);
+            }
+        }
         ;
         private static AttributesEnum[] vals = null;
         private static final int firstIndex = 0;
@@ -150,6 +161,7 @@ public class DmsValueSetImpl extends DmsEntityImpl {
     public static final int UPDATEDAT = AttributesEnum.UpdatedAt.index();
     public static final int UPDATEDBY = AttributesEnum.UpdatedBy.index();
     public static final int CREATEDBY = AttributesEnum.CreatedBy.index();
+    public static final int DISPLAYLENGTH = AttributesEnum.DisplayLength.index();
 
     /**
      * This is the default constructor (do not remove).
@@ -294,6 +306,22 @@ public class DmsValueSetImpl extends DmsEntityImpl {
      */
     public void setCreatedBy(String value) {
         setAttributeInternal(CREATEDBY, value);
+    }
+
+    /**
+     * Gets the attribute value for DisplayLength, using the alias name DisplayLength.
+     * @return the DisplayLength
+     */
+    public Number getDisplayLength() {
+        return (Number)getAttributeInternal(DISPLAYLENGTH);
+    }
+
+    /**
+     * Sets <code>value</code> as the attribute value for DisplayLength.
+     * @param value value to set the DisplayLength
+     */
+    public void setDisplayLength(Number value) {
+        setAttributeInternal(DISPLAYLENGTH, value);
     }
 
     /**

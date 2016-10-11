@@ -14,7 +14,8 @@
        DmsValueSet.CREATED_AT, 
        DmsValueSet.UPDATED_AT, 
        DmsValueSet.UPDATED_BY, 
-       DmsValueSet.CREATED_BY"
+       DmsValueSet.CREATED_BY, 
+       DmsValueSet.DISPLAY_LENGTH"
   FromList="DMS_VALUE_SET DmsValueSet"
   BindingStyle="OracleName"
   CustomQuery="false"
@@ -206,6 +207,12 @@
     SQLType="VARCHAR">
     <TransientExpression><![CDATA[Id]]></TransientExpression>
   </ViewAttribute>
+  <ViewAttribute
+    Name="DisplayLength"
+    PrecisionRule="true"
+    EntityAttrName="DisplayLength"
+    EntityUsage="DmsValueSet"
+    AliasName="DISPLAY_LENGTH"/>
   <ViewCriteria
     Name="DmsValueSetViewCriteria"
     ViewObjectName="team.epm.dms.view.DmsValueSetView"
