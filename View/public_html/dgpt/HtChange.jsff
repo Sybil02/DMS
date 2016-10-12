@@ -291,7 +291,7 @@
                               id="soc3"
                               value="#{viewScope.HtChangeBean.version}"
                                 valueChangeListener="#{viewScope.HtChangeBean.versionChange}"
-                                partialTriggers="iclov2">
+                                partialTriggers="iclov2 soc1">
             <f:selectItems  id="si3"
                            value="#{viewScope.HtChangeBean.versionList}"/>
           </af:selectOneChoice>

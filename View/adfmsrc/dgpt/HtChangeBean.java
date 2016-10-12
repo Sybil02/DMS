@@ -300,6 +300,27 @@ public class HtChangeBean {
     //年下拉框change
     public void yearChange(ValueChangeEvent valueChangeEvent) {
         year = (String)valueChangeEvent.getNewValue();
+        if(year!=null&&pname!=null){
+            DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
+            Statement stat = trans.createStatement(DBTransaction.DEFAULT);
+            String sql = "SELECT DISTINCT VERSION,VERSION_NAME FROM PRO_PLAN_COST_HEADER WHERE "+
+                " PROJECT_NAME='"+pname+"' AND HLS_YEAR = '"+this.year+"'" +
+                " AND (DATA_TYPE ='BASE' OR DATA_TYPE='CHANGE')";
+            List<SelectItem> values = new ArrayList<SelectItem>();
+            ResultSet rs;
+            try {
+                rs = stat.executeQuery(sql);
+                while(rs.next()){
+                    SelectItem sim = new SelectItem(rs.getString("VERSION"),rs.getString("VERSION")+"-"+rs.getString("VERSION_NAME"));
+                    values.add(sim);
+                }
+                rs.close();
+                stat.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            this.versionList = values;
+        }
         if(year==null||version==null||pname==null){
             return;
         }else{

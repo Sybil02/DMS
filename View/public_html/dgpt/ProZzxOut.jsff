@@ -169,7 +169,7 @@
                               label="版本" autoSubmit="true"
                               id="soc3"
                               valueChangeListener="#{viewScope.ProZzxOutBean.versionChange}"
-                              partialTriggers="iclov2">
+                              partialTriggers="iclov2 soc1">
             <f:selectItems value="#{viewScope.ProZzxOutBean.versionList}" id="si3"/>
           </af:selectOneChoice>
           <af:panelLabelAndMessage label="产品线"
