@@ -31,7 +31,7 @@ public class TemplateTreeModel  extends ChildPropertyTreeModel {
     private Map authoriedTemplate=new HashMap();
     public TemplateTreeModel() {
         super();
-        
+
         ViewObject vo=DmsUtils.getDcmApplicationModule().getDcmUserTemplateView();
         vo.executeQuery();
         while(vo.hasNext()){

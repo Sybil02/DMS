@@ -40,8 +40,7 @@
                     filterVisible="false" varStatus="vs"
                     selectedRowKeys="#{bindings.DmsValueSetView.collectionModel.selectedRow}"
                     selectionListener="#{bindings.DmsValueSetView.collectionModel.makeCurrent}"
-                    rowSelection="single" id="t1" editingMode="clickToEdit"
-                    partialTriggers="::cb1">
+                    rowSelection="single" id="t1" editingMode="clickToEdit">
           <af:column sortProperty="#{bindings.DmsValueSetView.hints.Name.name}"
                      filterable="true" sortable="true"
                      headerText="#{bindings.DmsValueSetView.hints.Name.label}"
