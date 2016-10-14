@@ -52,7 +52,13 @@ public class ColumnDef {
         this.visible = visible;
         this.valueSetId = valueSetId;
     }
-
+    
+    public ColumnDef(String columnLabel,String dbTableCol,String dataType){
+        this.columnLabel = columnLabel;
+        this.dbTableCol = dbTableCol;
+        this.dataType = dataType;
+    }
+    
     public void setId(String id) {
         this.id = id;
     }

@@ -6,34 +6,116 @@
   <c:set var="viewBundle" value="#{adfBundle['dms_v']}"/>
   <af:panelStretchLayout id="psl1" topHeight="0">
     <f:facet name="top">
-      <af:popup id="p1" autoCancel="disabled"
-                binding="#{backingBeanScope.EditUserMBean.popup}">
-        <af:panelWindow id="pw1" title="#{viewBundle['dms.user.changpwd']}"
-                        modal="true">
-          <af:panelFormLayout id="pfl1">
-            <af:inputText secret="true" label="#{viewBundle['login.password']}"
-                          id="it5"
-                          binding="#{backingBeanScope.EditUserMBean.pwd}"/>
-            <af:inputText secret="true"
-                          label="#{viewBundle['dms_user.comfirm_password']}"
-                          id="it6"
-                          binding="#{backingBeanScope.EditUserMBean.newPwd}"/>
-            <af:outputLabel id="ol1" inlineStyle="color:red"
-                            binding="#{backingBeanScope.EditUserMBean.msg}"/>
-            <f:facet name="footer">
-              <af:panelGroupLayout id="pgl1" layout="horizontal" halign="center">
-                <af:commandButton text="#{viewBundle['dms.common.affirm']}" 
-                                  id="cb4"
-                                  actionListener="#{backingBeanScope.EditUserMBean.changePwd}"/>
-                <af:spacer width="20" id="spc01"/>
-                <af:commandButton text="#{viewBundle['dms.common.cancel']}"
-                                  id="cb5"
-                                  actionListener="#{backingBeanScope.EditUserMBean.hidePopup}"/>
-              </af:panelGroupLayout>
-            </f:facet>
-          </af:panelFormLayout>
-        </af:panelWindow>
-      </af:popup>
+      <af:panelGroupLayout layout="scroll"
+                           xmlns:af="http://xmlns.oracle.com/adf/faces/rich"
+                           id="pgl2">
+        <af:popup id="p1" autoCancel="disabled"
+                  binding="#{backingBeanScope.EditUserMBean.popup}">
+          <af:panelWindow id="pw1" title="#{viewBundle['dms.user.changpwd']}"
+                          modal="true">
+            <af:panelFormLayout id="pfl1">
+              <af:inputText secret="true"
+                            label="#{viewBundle['login.password']}" id="it5"
+                            binding="#{backingBeanScope.EditUserMBean.pwd}"/>
+              <af:inputText secret="true"
+                            label="#{viewBundle['dms_user.comfirm_password']}"
+                            id="it6"
+                            binding="#{backingBeanScope.EditUserMBean.newPwd}"/>
+              <af:outputLabel id="ol1" inlineStyle="color:red"
+                              binding="#{backingBeanScope.EditUserMBean.msg}"/>
+              <f:facet name="footer">
+                <af:panelGroupLayout id="pgl1" layout="horizontal"
+                                     halign="center">
+                  <af:commandButton text="#{viewBundle['dms.common.affirm']}"
+                                    id="cb4"
+                                    actionListener="#{backingBeanScope.EditUserMBean.changePwd}"/>
+                  <af:spacer width="20" id="spc01"/>
+                  <af:commandButton text="#{viewBundle['dms.common.cancel']}"
+                                    id="cb5"
+                                    actionListener="#{backingBeanScope.EditUserMBean.hidePopup}"/>
+                </af:panelGroupLayout>
+              </f:facet>
+            </af:panelFormLayout>
+          </af:panelWindow>
+        </af:popup>
+        <af:popup id="p2" autoCancel="disabled" childCreation="deferred"
+                  binding="#{backingBeanScope.EditUserMBean.dataExportWnd}">
+          <af:panelWindow id="pw2"
+                          title="#{viewBundle['dcm.template.data_export']}"
+                          modal="true">
+              <af:panelGridLayout id="pgl4">
+              <af:gridRow marginTop="5px" height="auto" id="gr4">
+                <af:gridCell marginStart="5px" width="auto" id="gc6"
+                             inlineStyle="padding-top:5px">
+                  <af:outputText value="#{viewBundle['dcm.template.excel_type']}"
+                                 id="ot10"/>
+                </af:gridCell>
+                <af:gridCell marginStart="5px" marginEnd="5px" width="auto"
+                             id="gc9">
+                  <af:selectBooleanRadio text="#{viewBundle['dcm.export.07format']}"
+                                         id="sbr4" group="excelFormat1"
+                                         simple="true" autoSubmit="true"
+                                         value="#{backingBeanScope.EditUserMBean.isXlsx}"/>
+                </af:gridCell>
+              </af:gridRow>
+              <af:gridRow marginTop="5px" marginBottom="5px" height="auto"
+                          id="gr5">
+                <af:gridCell marginStart="5px" width="auto" columnSpan="2"
+                             halign="center" id="gc8"
+                             inlineStyle="margin-top:5px">
+                  <af:commandButton text="#{viewBundle['dcm.action.export']}"
+                                    id="cb11">
+                    
+                        <af:fileDownloadActionListener contentType="application/vnd.ms-excel"
+                                             method="#{backingBeanScope.EditUserMBean.userExport}"
+                                             filename="#{backingBeanScope.EditUserMBean.exportDataExcelName}"/>
+                  </af:commandButton>
+                </af:gridCell>
+                <af:gridCell marginStart="3px" width="auto" columnSpan="1"
+                             halign="center" id="qgc8"
+                             inlineStyle="margin-top:3px">
+                  <af:commandButton text="#{viewBundle['dms.quartz.export']}" 
+                                    id="qcb11" rendered="false"
+                                    actionListener="#{viewScope.DcmDataDisplayBean.quartz_export}">
+                  </af:commandButton>
+                </af:gridCell>
+              </af:gridRow>
+            </af:panelGridLayout>            
+         </af:panelWindow>
+        </af:popup>
+        <af:popup id="p3"
+                  binding="#{backingBeanScope.EditUserMBean.dataImportWnd}"
+                  autoCancel="disabled" childCreation="deferred">
+          <af:panelWindow id="pw3"
+                          title="#{viewBundle['dcm.template.data_import']}"
+                          modal="true">
+            <af:panelGridLayout id="pgl3">
+              <af:gridRow marginTop="5px" height="auto" id="gr2">
+                <af:gridCell width="auto" id="gc1"
+                             inlineStyle="padding-top:5px">
+                  <af:outputText value="#{viewBundle['dcm.template.import_file']}"
+                                 id="ot9"/>
+                </af:gridCell>
+                <af:gridCell marginStart="5px" marginEnd="5px" width="auto"
+                             id="gc4">
+                  <af:inputFile id="if2" simple="true"
+                                binding="#{backingBeanScope.EditUserMBean.fileInput}"
+                                columns="15"/>
+                </af:gridCell>
+              </af:gridRow>
+              <af:gridRow marginTop="5px" marginBottom="5px" height="auto"
+                          id="gr3">
+                <af:gridCell halign="center" width="auto" id="gc5"
+                             columnSpan="2">
+                  <af:commandButton text="#{viewBundle['dcm.action.import']}"
+                                    id="cb9" inlineStyle="margin-top:5px"
+                                    actionListener="#{backingBeanScope.EditUserMBean.operation_import}"/>
+                </af:gridCell>
+              </af:gridRow>
+            </af:panelGridLayout>       
+          </af:panelWindow>
+        </af:popup>
+      </af:panelGroupLayout>
     </f:facet>
     <f:facet name="center">
       <af:panelCollection id="pc1">
@@ -50,6 +132,12 @@
             <af:commandButton actionListener="#{bindings.Commit.execute}"
                               text="#{viewBundle['dms.common.save']}" id="cb3"
                               partialTriggers="t1"/>
+            <af:commandToolbarButton text="#{viewBundle['dms.user.import']}" id="ctb1">
+              <af:showPopupBehavior popupId="::p3"/>
+            </af:commandToolbarButton>
+            <af:commandToolbarButton text="#{viewBundle['dms.user.export']}" id="ctb2">
+              <af:showPopupBehavior popupId="::p2"/>
+            </af:commandToolbarButton>
           </af:toolbar>
         </f:facet>
         <f:facet name="statusbar"/>

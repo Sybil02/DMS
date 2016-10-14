@@ -74,7 +74,11 @@ public class Excel2007WriterImpl extends AbstractExcel2007Writer {
                     }else{
                         obj=ObjectUtils.toString(obj);
                         obj = rsc.encodeString(obj.toString());
-                        createCell(colInx,(String)obj);
+                        if(col.getDbTableCol().equals("PWD")){
+                            createCell(colInx,"******");
+                        }else{
+                            createCell(colInx,(String)obj);
+                        }
                     }
                     ++colInx;
                 }
