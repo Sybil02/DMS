@@ -8,6 +8,25 @@
   <jsp:directive.page contentType="text/html;charset=UTF-8"/>
   <f:view>
     <af:document id="d1" title="#{viewBundle['title.login']}">
+      <c:if test="${param._sso=='true'}">
+        <af:resource type="javascript">
+            var username="${param.username}";
+            var password="${param.password}";
+            if(username == null || username == ''){
+                alert('用户名不能为空！');
+            }
+            if(password == null || password == ''){
+                alert('密码不能为空！');
+            }
+                setTimeout(function(){
+                    document.getElementById('login_account::content').setAttribute("value",username);
+                    document.getElementById('login_password::content').setAttribute("value",password);
+                    document.getElementById("login_action").click();//提交表单，做登陆操作
+                },1000);
+                
+        </af:resource> 
+        
+      </c:if>
       <af:form id="f1" defaultCommand="login_action">
         <af:panelStretchLayout id="psl1" startWidth="28%" endWidth="0px"
                                topHeight="56%" bottomHeight="14%"
@@ -71,9 +90,9 @@
               <af:panelWindow id="pw1" modal="true"
                               title="#{viewBundle['login.forget_password']}">
                 <af:panelFormLayout id="pfl2" inlineStyle="width:230px;height:80px;">
-                  <af:inputText label="#{viewBundle['login.account']}" id="it1"
+                  <af:inputText label="#{viewBundle['login.account']}" autoComplete="off" id="it1"
                                 binding="#{LoginBean.acc}"/>
-                  <af:inputText label="#{viewBundle['dms.user.mail']}" id="it2"
+                  <af:inputText label="#{viewBundle['dms.user.mail']}" autoComplete="off" id="it2"
                                 binding="#{LoginBean.mail}"/>
                   <f:facet name="footer">
                     <af:commandButton inlineStyle="width:80px;margin-top:10px;margin-left:70px" text="#{viewBundle['login.reset_password']}" id="cb1"
