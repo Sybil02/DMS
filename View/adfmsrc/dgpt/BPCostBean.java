@@ -1293,7 +1293,6 @@ public class BPCostBean {
         String s = UUID.randomUUID().toString();
         String sql = "SELECT COUNT(1) COUNT FROM PRO_PLAN_COST_HEADER T WHERE T.HLS_YEAR = '"+this.year+"' " +
             "AND T.PROJECT_NAME = '"+this.pname+"' AND T.DATA_TYPE = 'ROLL'";
-        System.out.println(sql);
         String sqlConnect = "SELECT T.CONNECT_ID FROM PRO_PLAN_COST_HEADER T WHERE T.HLS_YEAR = '"+this.year+"' " +
             "AND T.PROJECT_NAME = '"+this.pname+"' AND T.DATA_TYPE = 'ROLL'";
         DBTransaction trans = (DBTransaction)DmsUtils.getDcmApplicationModule().getDBTransaction();
@@ -1315,7 +1314,6 @@ public class BPCostBean {
                 ResultSet rsConnect = stat.executeQuery(sqlConnect);
                 while(rsConnect.next()){
                     this.delConnect = rsConnect.getString("CONNECT_ID");
-                    System.out.println(this.delConnect);
                 }
                 this.showPopupActionListener(actionEvent, "将覆盖滚动计划成本第一版本，覆盖后不可撤回", 
                                              "#{viewScope.BPCostBean.coverFirst}");
@@ -1396,9 +1394,7 @@ public class BPCostBean {
             cs.setString(4, this.delConnect);
             cs.registerOutParameter(5, Types.VARCHAR);
             cs.execute();
-            System.out.println(cs.getString(5));
             if("N".equals(cs.getString(5))){
-                System.out.println(flag);
                 flag = false;
             }
             trans.commit();
@@ -1407,7 +1403,6 @@ public class BPCostBean {
             flag = false;
             e.printStackTrace();
         }
-        System.out.println("end:"+flag);
         return flag;
     }
 
