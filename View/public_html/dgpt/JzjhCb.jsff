@@ -4,7 +4,7 @@
           xmlns:af="http://xmlns.oracle.com/adf/faces/rich"
           xmlns:f="http://java.sun.com/jsf/core">
   <c:set var="viewBundle" value="#{adfBundle['dms_v']}"/>
-  <af:panelStretchLayout id="psl1" startWidth="0px" topHeight="50px"
+  <af:panelStretchLayout id="psl1" startWidth="0px" topHeight="49px"
                          bottomHeight="1px">
     <f:facet name="bottom">
       <af:panelGroupLayout layout="scroll"
@@ -272,6 +272,31 @@
             </af:panelCollection>
           </af:panelWindow>
         </af:popup>
+        <!--af:popup id="p6">
+          <af:panelWindow id="pw6" title="#{viewBundle['dgpt.bpcost.param']}">
+            <af:selectOneChoice label="#{viewBundle['dgpt.bpcost.year']}"
+                                id="soc2"
+                                value="#{viewScope.BPCostBean.copyYear}">
+              <f:selectItems value="#{viewScope.BPCostBean.yearList}" id="si2"/>
+            </af:selectOneChoice>
+            <af:inputComboboxListOfValues label="#{viewBundle['dgpt.bpcost.project']}"
+                                          inlineStyle="margin-right:5px"
+                                          value="#{viewScope.BPCostBean.copyPname}"
+                                          autoSubmit="true" clientComponent="true"
+                                          validator="#{viewScope.BPCostBean.proLov.listOfValuesModel.validate}"
+                                        model="#{viewScope.BPCostBean.proLov.listOfValuesModel}"
+                                        columns="80" id="iclov1" usage="auto">
+                        <af:autoSuggestBehavior suggestedItems="#{viewScope.BPCostBean.proLov.listOfValuesModel.suggest}"/>
+            </af:inputComboboxListOfValues>
+            <af:selectOneChoice label="#{viewBundle['dms.dgpt.htkp.version']}"
+                                id="soc4"
+                                value="#{viewScope.BPCostBean.copyVersion}">
+              <f:selectItems value="#{viewScope.BPCostBean.versionList}"
+                             id="si4"/>
+            </af:selectOneChoice>
+            <af:commandButton text="#{viewBundle['dcm.common.ok']}" id="cb14"/>
+          </af:panelWindow>
+        </af:popup-->
       </af:panelGroupLayout>
     </f:facet>
     <f:facet name="center">
@@ -400,6 +425,10 @@
             <af:outputText partialTriggers="iclov2 soc1 soc3"
                            id="ot5" value="#{viewScope.BPCostBean.YLine}"/>
           </af:panelLabelAndMessage>
+          <af:commandButton text="#{viewBundle['BPCOST.COPYTO.RPCOST']}" id="cb13"
+                            actionListener="#{viewScope.BPCostBean.copyToRpcost}"
+                            disabled="#{not viewScope.BPCostBean.isBlock or viewScope.BPCostBean.isSelected}"
+                            partialTriggers="soc1 iclov2 soc3"/>
         </af:panelGroupLayout>
       </af:panelGroupLayout>
     </f:facet>

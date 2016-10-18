@@ -52,6 +52,17 @@ import java.util.List;
 
 import java.util.Map;
 
+import java.util.UUID;
+
+import javax.el.ELContext;
+
+import javax.el.ExpressionFactory;
+
+import javax.el.MethodExpression;
+
+import javax.faces.application.Application;
+import javax.faces.application.FacesMessage;
+import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ValueChangeEvent;
@@ -59,13 +70,16 @@ import javax.faces.model.SelectItem;
 
 import oracle.adf.share.ADFContext;
 import oracle.adf.share.logging.ADFLogger;
+import oracle.adf.view.rich.component.rich.RichDialog;
 import oracle.adf.view.rich.component.rich.RichPanelWindow;
 import oracle.adf.view.rich.component.rich.RichPopup;
 import oracle.adf.view.rich.component.rich.data.RichTable;
 import oracle.adf.view.rich.component.rich.input.RichInputFile;
+import oracle.adf.view.rich.component.rich.output.RichOutputText;
 import oracle.adf.view.rich.component.rich.output.RichPanelCollection;
 
 import oracle.adf.view.rich.context.AdfFacesContext;
+import oracle.adf.view.rich.event.DialogEvent;
 import oracle.adf.view.rich.model.FilterableQueryDescriptor;
 
 import oracle.jbo.Key;
@@ -81,6 +95,8 @@ import org.apache.myfaces.trinidad.model.RowKeySet;
 import org.apache.myfaces.trinidad.model.UploadedFile;
 
 import org.hexj.excelhandler.reader.ExcelReaderUtil;
+
+import sun.print.DialogTypeSelection;
 
 import utils.system;
 
@@ -126,6 +142,10 @@ public class BPCostBean {
     DmsLog dmsLog = new DmsLog();
     private RichTable subTable;
     private RichTable subTable2;
+    
+    //复制到滚动计划成本
+    private String newConnectId;
+    private String delConnect="";
 
     public BPCostBean() {
         super();
@@ -1268,4 +1288,127 @@ public class BPCostBean {
     public RichTable getSubTable2() {
         return subTable2;
     }
+
+    public void copyToRpcost(ActionEvent actionEvent) {
+        String s = UUID.randomUUID().toString();
+        String sql = "SELECT COUNT(1) COUNT FROM PRO_PLAN_COST_HEADER T WHERE T.HLS_YEAR = '"+this.year+"' " +
+            "AND T.PROJECT_NAME = '"+this.pname+"' AND T.DATA_TYPE = 'ROLL'";
+        System.out.println(sql);
+        String sqlConnect = "SELECT T.CONNECT_ID FROM PRO_PLAN_COST_HEADER T WHERE T.HLS_YEAR = '"+this.year+"' " +
+            "AND T.PROJECT_NAME = '"+this.pname+"' AND T.DATA_TYPE = 'ROLL'";
+        DBTransaction trans = (DBTransaction)DmsUtils.getDcmApplicationModule().getDBTransaction();
+        Statement stat = trans.createStatement(DBTransaction.DEFAULT);
+        ResultSet rs;
+        try {
+            rs = stat.executeQuery(sql);
+            int count = -1;
+            while(rs.next()){
+                count = Integer.parseInt(rs.getString("COUNT"));
+            }
+            if(count==0){
+                //滚动计划成本没有任何一版数据，则直接同步
+                this.newConnectId = s.substring(0,8)+s.substring(9,13)+s.substring(14,18)+s.substring(19,23)+s.substring(24);
+                if(this.copyValidate("COPY")){
+                    this.popupMessage("info", "复制成功");
+                }
+            }else if(count==1){  
+                ResultSet rsConnect = stat.executeQuery(sqlConnect);
+                while(rsConnect.next()){
+                    this.delConnect = rsConnect.getString("CONNECT_ID");
+                    System.out.println(this.delConnect);
+                }
+                this.showPopupActionListener(actionEvent, "将覆盖滚动计划成本第一版本，覆盖后不可撤回", 
+                                             "#{viewScope.BPCostBean.coverFirst}");
+            }else if(count>=2){
+                this.popupMessage("error", "滚动计划成本第二版本已存在，不可同步");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public void coverFirst(DialogEvent dialogEvent){
+        if (dialogEvent.getOutcome().equals(DialogEvent.Outcome.ok)) {
+            String s = UUID.randomUUID().toString();
+            this.newConnectId = s.substring(0,8)+s.substring(9,13)+s.substring(14,18)+s.substring(19,23)+s.substring(24);
+            //先复制，后删除
+            if(this.copyValidate("DELETE")){
+                this.popupMessage("info", "复制成功");
+            }
+        }
+    }
+    
+    /**
+         * 创建Popup、Dialog及弹出该Popup
+         * @param actionEvent
+         * @param msg
+         * @param exp
+         */
+        public void showPopupActionListener(ActionEvent actionEvent, String msg, String exp) {
+            UIComponent comp = actionEvent.getComponent().getParent();
+            RichPopup popup = new RichPopup();
+            RichDialog dialog = new RichDialog();
+            dialog.setTitle("提示");
+            RichOutputText opText = new RichOutputText();
+            opText.setValue(msg);
+            dialog.getChildren().add(opText);
+            FacesContext fctx = FacesContext.getCurrentInstance();
+            ELContext elctx = fctx.getELContext();
+            Application jsfApp = fctx.getApplication();
+            ExpressionFactory exprFactory = jsfApp.getExpressionFactory();
+            MethodExpression methodExpr = null;
+            methodExpr = exprFactory.createMethodExpression(elctx, exp, null, new Class[] { DialogEvent.class });
+            dialog.setDialogListener(methodExpr);
+            popup.getChildren().add(dialog);
+            comp.getChildren().add(popup);
+            
+            RichPopup.PopupHints ph = new RichPopup.PopupHints();
+            popup.show(ph);
+        }
+    
+    /**
+        * 弹出提示窗口
+        * @param level 级别（默认info）
+        * @param detail 提示信息。
+        */
+     public static void popupMessage(String level,String detail){        
+       FacesMessage fm = new FacesMessage(null,detail);//默认级别为info
+       fm.setSummary("系统提示：");
+       if("info".equals(level))
+         fm.setSeverity(fm.SEVERITY_INFO);
+       else if("warn".equals(level))
+         fm.setSeverity(fm.SEVERITY_WARN);
+       else if("error".equals(level))
+         fm.setSeverity(fm.SEVERITY_ERROR);
+       else if("fatal".equals(fm.SEVERITY_FATAL))
+         fm.setSeverity(fm.SEVERITY_FATAL);
+       FacesContext.getCurrentInstance().addMessage(null, fm);
+       }
+    
+    public boolean copyValidate(String flags){
+        boolean flag=true;
+        DBTransaction trans = (DBTransaction)DmsUtils.getDcmApplicationModule().getDBTransaction();
+        CallableStatement cs = trans.createCallableStatement("{CALl DMS_ZZX.BPCOST_TORPCOST(?,?,?,?,?)}", 0);
+        try {
+            cs.setString(1,this.connectId );
+            cs.setString(2,this.newConnectId);
+            cs.setString(3, flags);
+            cs.setString(4, this.delConnect);
+            cs.registerOutParameter(5, Types.VARCHAR);
+            cs.execute();
+            System.out.println(cs.getString(5));
+            if("N".equals(cs.getString(5))){
+                System.out.println(flag);
+                flag = false;
+            }
+            trans.commit();
+            cs.close();
+        } catch (SQLException e) {
+            flag = false;
+            e.printStackTrace();
+        }
+        System.out.println("end:"+flag);
+        return flag;
+    }
+
 }
