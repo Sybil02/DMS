@@ -155,7 +155,7 @@ public class DcmDataDisplayBean extends TablePagination{
         this.queryAppFlag();
         this.initCombination();
         this.queryTemplateData();
-
+        this.initStatusSql();
     }
 
     public CollectionModel getDataModel() {
@@ -1354,6 +1354,7 @@ public class DcmDataDisplayBean extends TablePagination{
     private boolean commitEnable = true;
     private boolean appFlag = false;
     private String reason = "";
+    private String appStatusSql = "";
     
     public void queryAppFlag(){
         //查询模板是否配置了审批
@@ -1727,5 +1728,36 @@ public class DcmDataDisplayBean extends TablePagination{
 
     public RichCommandButton getBackBtn() {
         return backBtn;
+    }
+    
+    private void initStatusSql(){
+        //组合表
+        String comSource = this.curCombiantion.getCode();
+        //拼接sql
+        StringBuffer sql = new StringBuffer();
+        StringBuffer fromStr = new StringBuffer();
+        StringBuffer whereStr = new StringBuffer();
+        sql.append("SELECT C.ID");
+        fromStr.append(" FROM ");
+        whereStr.append(" WHERE 1=1 AND ");
+        int i = 1;
+        for(ComHeader header : this.templateHeader){
+            sql.append(",V").append(i).append(".MEANING");
+            fromStr.append(header.getSrcTable()).append(" V").append(i).append(",");
+            whereStr.append("C.").append(header.getCode()).append("=V").append(i).append(".CODE AND ");
+            whereStr.append("V").append(i).append(".LOCALE = 'zh_CN' AND ");
+            i++;
+        }
+        sql.append(",DECODE(A.APPROVAL_STATUS,'N','审批中','Y','审批通过','CLOSE','待审批','REFUSE','审批拒绝') AS STATUS,");
+        sql.append("(SELECT NAME FROM DMS_USER U WHERE U.ID = A.PERSON_ID AND U.LOCALE = 'zh_CN') AS PERSON_ID,");
+        sql.append("(SELECT NAME FROM DMS_USER U1 WHERE U1.ID = A.PROPOSER AND U1.LOCALE = 'zh_CN') AS PROPOSER,A.SEQ ");
+        fromStr.append(comSource).append(" C,APPROVAL_TEMPLATE_STATUS A ");
+        whereStr.append("A.COM_ID = C.ID AND A.TEMPLATE_ID = '").append(this.curTempalte.getId()).append("'");
+        whereStr.append(" ORDER BY A.COM_ID,A.SEQ");
+        this.appStatusSql = sql.append(fromStr).append(whereStr).toString();
+    }
+
+    public void showAppStatus(ActionEvent actionEvent) {
+        this.initStatusSql();
     }
 }

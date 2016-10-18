@@ -97,6 +97,10 @@
                                 binding="#{viewScope.DcmDataDisplayBean.backBtn}">
                 <af:showPopupBehavior popupId="::pop9" triggerType="click"/>
               </af:commandButton>
+              <af:commandButton text="#{viewBundle['dms.approval.status.pass']}"
+                        rendered="#{viewScope.DcmDataDisplayBean.appFlag}" 
+                        id="cb15"
+                                actionListener="#{viewScope.DcmDataDisplayBean.showAppStatus}"/>
             </af:group>
           </af:toolbar>
         </f:facet>
