@@ -304,6 +304,19 @@ public class DcmModuleImpl extends ApplicationModuleImpl implements DcmModule {
     public DcmTemplateCombinationVOImpl getDcmTemplateCombinationVO() {
         return (DcmTemplateCombinationVOImpl)findViewObject("DcmTemplateCombinationVO");
     }
+    
+    public ViewObject getAppStatusVO(String sql,String tempId){
+        ViewObject vo = null;
+        String vName = "APP"+tempId;
+        vo = this.findViewObject(vName);
+        if(vo != null){
+            return vo;    
+        }else{
+            vo = this.createViewObjectFromQueryStmt(vName, sql);
+        }
+        return vo;
+    }
+    
 }
 
 

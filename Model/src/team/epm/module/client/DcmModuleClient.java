@@ -23,4 +23,10 @@ public class DcmModuleClient extends ApplicationModuleImpl implements DcmModule 
             this.riInvokeExportedMethod(this,"getCombinationRecordView",new String [] {"java.lang.String","java.lang.String"},new Object[] {templateId, combinationId});
         return (ViewObject)_ret;
     }
+
+    public ViewObject getAppStatusVO(String sql, String tempId) {
+        Object _ret =
+            this.riInvokeExportedMethod(this,"getAppStatusVO",new String [] {"java.lang.String","java.lang.String"},new Object[] {sql, tempId});
+        return (ViewObject)_ret;
+    }
 }

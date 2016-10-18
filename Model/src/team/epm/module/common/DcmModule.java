@@ -9,4 +9,6 @@ import oracle.jbo.ViewObject;
 public interface DcmModule extends ApplicationModule {
     ViewObject getCombinationRecordView(String templateId,
                                         String combinationId);
+
+    ViewObject getAppStatusVO(String sql, String tempId);
 }

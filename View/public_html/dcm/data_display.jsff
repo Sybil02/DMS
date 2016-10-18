@@ -97,7 +97,7 @@
                                 binding="#{viewScope.DcmDataDisplayBean.backBtn}">
                 <af:showPopupBehavior popupId="::pop9" triggerType="click"/>
               </af:commandButton>
-              <af:commandButton text="#{viewBundle['dms.approval.status.pass']}"
+              <af:commandButton text="#{viewBundle['dms.approval.stus']}"
                         rendered="#{viewScope.DcmDataDisplayBean.appFlag}" 
                         id="cb15"
                                 actionListener="#{viewScope.DcmDataDisplayBean.showAppStatus}"/>
@@ -410,6 +410,46 @@
             <af:spacer width="350px" id="sp2"/>
             <af:commandButton text="#{viewBundle['dcm.common.ok']}" id="cb18"
                               actionListener="#{viewScope.DcmDataDisplayBean.approvalRefuse}"/>
+          </af:panelWindow>
+        </af:popup>
+        <!--审批状态-->
+        <af:popup id="app_pop" autoCancel="disabled"
+                  binding="#{viewScope.DcmDataDisplayBean.appPop}"
+                  contentDelivery="lazyUncached">
+          <af:panelWindow id="sub_pw1" modal="true"
+                          title="#{viewBundle['dms.approval.stus']}">
+            <af:panelStretchLayout id="sub_psl3"
+                                   inlineStyle="width:800px;height:450px">
+              <f:facet name="center">
+                <af:panelCollection id="sub_pc4"
+                                    featuresOff="wrap freeze formatMenu">
+                  <f:facet name="menus"/>
+                  <f:facet name="toolbar">
+                  </f:facet>
+                  <f:facet name="statusbar"/>
+                  <af:table rows="#{bindings.return.rangeSize}"
+                            fetchSize="#{bindings.return.rangeSize}"
+                            emptyText="#{bindings.return.viewable ? 'No data to display.' : 'Access Denied.'}"
+                            var="row" rowBandingInterval="0"
+                            value="#{bindings.return.collectionModel}"
+                            filterModel="#{viewScope.DcmDataDisplayBean.appDescriptor}"  
+                            selectedRowKeys="#{bindings.return.collectionModel.selectedRow}"
+                            selectionListener="#{bindings.return.collectionModel.makeCurrent}"
+                            rowSelection="single" id="t5"
+                            queryListener="#{viewScope.DcmDataDisplayBean.queryAppListener}"
+                            binding="#{viewScope.DcmDataDisplayBean.appTable}">
+                    <af:forEach items="#{bindings.return.attributeDefs}"
+                                var="def">
+                      <af:column headerText="#{viewScope.DcmDataDisplayBean.appLabelMap[def.name]}"
+                                 sortable="false" sortProperty="#{def.name}" filterable="true"
+                                 id="c7">
+                        <af:outputText value="#{row[def.name]}" id="ot11"/>
+                      </af:column>
+                    </af:forEach>
+                  </af:table>
+                </af:panelCollection>
+              </f:facet>
+            </af:panelStretchLayout>
           </af:panelWindow>
         </af:popup>
       </af:panelGroupLayout>

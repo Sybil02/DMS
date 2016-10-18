@@ -144,9 +144,12 @@ public class DcmDataDisplayBean extends TablePagination{
     private List<SortCriterion> sortCriterions;
     //搜索
     private FilterableQueryDescriptor queryDescriptor=new DcmQueryDescriptor();
+    private FilterableQueryDescriptor appDescriptor=new DcmQueryDescriptor();
     private Map filters;
     private boolean useQuartz = false;
     private RichCommandButton backBtn;
+    private RichPopup appPop;
+    private RichTable appTable;
     //初始化
     public DcmDataDisplayBean() {
         this.curUser =(Person)ADFContext.getCurrent().getSessionScope().get("cur_user");
@@ -1355,6 +1358,8 @@ public class DcmDataDisplayBean extends TablePagination{
     private boolean appFlag = false;
     private String reason = "";
     private String appStatusSql = "";
+    private String tempId = "";
+    private Map<String,String> appLabelMap = new HashMap<String,String>();
     
     public void queryAppFlag(){
         //查询模板是否配置了审批
@@ -1731,6 +1736,11 @@ public class DcmDataDisplayBean extends TablePagination{
     }
     
     private void initStatusSql(){
+        this.appLabelMap.put("ID", "组合ID");
+        this.appLabelMap.put("STATUS", "状态");
+        this.appLabelMap.put("PERSON_ID", "审批人");
+        this.appLabelMap.put("PROPOSER", "提交人");
+        this.appLabelMap.put("SEQ", "序列");
         //组合表
         String comSource = this.curCombiantion.getCode();
         //拼接sql
@@ -1742,10 +1752,11 @@ public class DcmDataDisplayBean extends TablePagination{
         whereStr.append(" WHERE 1=1 AND ");
         int i = 1;
         for(ComHeader header : this.templateHeader){
-            sql.append(",V").append(i).append(".MEANING");
+            sql.append(",V").append(i).append(".MEANING MEAN").append(i);
             fromStr.append(header.getSrcTable()).append(" V").append(i).append(",");
             whereStr.append("C.").append(header.getCode()).append("=V").append(i).append(".CODE AND ");
             whereStr.append("V").append(i).append(".LOCALE = 'zh_CN' AND ");
+            this.appLabelMap.put("MEAN"+i, header.getName());
             i++;
         }
         sql.append(",DECODE(A.APPROVAL_STATUS,'N','审批中','Y','审批通过','CLOSE','待审批','REFUSE','审批拒绝') AS STATUS,");
@@ -1755,9 +1766,78 @@ public class DcmDataDisplayBean extends TablePagination{
         whereStr.append("A.COM_ID = C.ID AND A.TEMPLATE_ID = '").append(this.curTempalte.getId()).append("'");
         whereStr.append(" ORDER BY A.COM_ID,A.SEQ");
         this.appStatusSql = sql.append(fromStr).append(whereStr).toString();
+        this.tempId = this.curTempalte.getId();
     }
 
     public void showAppStatus(ActionEvent actionEvent) {
-        this.initStatusSql();
+        RichPopup.PopupHints hints = new RichPopup.PopupHints();
+        this.appPop.show(hints);
+    }
+
+    public void setAppPop(RichPopup appPop) {
+        this.appPop = appPop;
+    }
+
+    public RichPopup getAppPop() {
+        return appPop;
+    }
+
+    public void setAppStatusSql(String appStatusSql) {
+        this.appStatusSql = appStatusSql;
+    }
+
+    public String getAppStatusSql() {
+        return appStatusSql;
+    }
+
+    public void setTempId(String tempId) {
+        this.tempId = tempId;
+    }
+
+    public String getTempId() {
+        return tempId;
+    }
+
+    public void setAppDescriptor(FilterableQueryDescriptor appDescriptor) {
+        this.appDescriptor = appDescriptor;
+    }
+
+    public FilterableQueryDescriptor getAppDescriptor() {
+        return appDescriptor;
+    }
+
+    public void queryAppListener(QueryEvent queryEvent) {
+        DcmQueryDescriptor descriptor =(DcmQueryDescriptor)queryEvent.getDescriptor();  
+        if(descriptor.getFilterCriteria()!=null){
+            ViewObject vo=ADFUtils.findIterator("getAppStatusVOIterator").getViewObject();
+            vo.getViewCriteriaManager().setApplyViewCriteriaNames(null);
+            ViewCriteria vc=vo.createViewCriteria();
+            ViewCriteriaRow vcr=vc.createViewCriteriaRow();
+            for(Object key:descriptor.getFilterCriteria().keySet()){
+                if(!ObjectUtils.toString(descriptor.getFilterCriteria().get(key)).trim().equals("")){
+                    vcr.setAttribute(key.toString(), "%"+descriptor.getFilterCriteria().get(key)+"%");             
+                }
+            }
+            vc.addRow(vcr);
+            vo.applyViewCriteria(vc);
+            vo.executeQuery();
+            AdfFacesContext.getCurrentInstance().addPartialTarget(this.appTable);
+        }
+    }
+
+    public void setAppTable(RichTable appTable) {
+        this.appTable = appTable;
+    }
+
+    public RichTable getAppTable() {
+        return appTable;
+    }
+
+    public void setAppLabelMap(Map<String, String> appLabelMap) {
+        this.appLabelMap = appLabelMap;
+    }
+
+    public Map<String, String> getAppLabelMap() {
+        return appLabelMap;
     }
 }
