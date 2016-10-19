@@ -1,5 +1,7 @@
 package dcm;
 
+import com.bea.security.utils.DigestUtils;
+
 import common.ReplaceSpecialChar;
 
 import java.sql.PreparedStatement;
@@ -33,7 +35,6 @@ public class UserRowReader implements IRowReader{
         dfm = new DecimalFormat();
         dfm.setMaximumFractionDigits(6);
         dfm.setGroupingUsed(false);
-        System.out.println("rowreader....");
         this.prepareSqlStatement();
     }
     
@@ -58,9 +59,9 @@ public class UserRowReader implements IRowReader{
             System.out.println("guoguoguoguo");
             boolean isEpty = true;
                         try {
+                            String uAcc = "";
                             for (int i = 0; i < this.colsdef.size(); i++) {
                             String tmpstr = rowlist.get(i);
-                                System.out.println("***"+rsc.decodeString(tmpstr.trim()));
                             if(this.colsdef.get(i).getDataType().equals("NUMBER")){
                                 if (null == tmpstr || "".equals(tmpstr.trim())) {
                                     this.stmt.setString(i + 1, "");
@@ -73,7 +74,18 @@ public class UserRowReader implements IRowReader{
                                     this.stmt.setString(i + 1, "");
                                 } else {
                                     isEpty = false;
-                                    this.stmt.setString(i + 1, rsc.decodeString(tmpstr.trim())); 
+                                    if(this.colsdef.get(i).getDbTableCol().equals("ACC")){
+                                        uAcc = tmpstr.trim();
+                                    }
+                                    if(this.colsdef.get(i).getDbTableCol().equals("PWD")&&(!"******".equals(tmpstr.trim()))){
+                                        System.out.println("当前Acc:"+uAcc);
+                                        System.out.println("当前密码:"+tmpstr.trim());
+                                        String encyptPwd = DigestUtils.digestSHA1(uAcc + tmpstr.trim());
+                                        System.out.println(encyptPwd);
+                                        this.stmt.setString(i + 1, rsc.decodeString(encyptPwd));
+                                    }else{   
+                                        this.stmt.setString(i + 1, rsc.decodeString(tmpstr.trim())); 
+                                    }
                                 }
                             }
                             }

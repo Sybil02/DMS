@@ -23,7 +23,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import java.sql.CallableStatement;
 import java.sql.SQLException;
+
+import java.sql.Statement;
+
+import java.sql.Types;
 
 import java.text.SimpleDateFormat;
 
@@ -146,7 +151,9 @@ public class EditUserMBean {
     }
 
     public LinkedHashMap<String,String> initColsdef(){
+        this.colsdef.clear();
         LinkedHashMap<String,String> labelMap = new LinkedHashMap<String,String>();
+        labelMap.put("ID", "ID");
         labelMap.put("ACC", "账号");
         labelMap.put("NAME", "姓名");
         labelMap.put("PWD", "密码");
@@ -198,7 +205,7 @@ public class EditUserMBean {
             writer.process(outputStream, "用户管理");
             outputStream.flush();
         } catch (Exception e) {
-            e.printStackTrace();
+            this.logger.severe(e);
         }
     }
     
@@ -259,9 +266,15 @@ public class EditUserMBean {
                 return;
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            this.logger.severe(e);
         }
         this.fileInput.resetValue();
+        if(this.input_import()){
+            System.out.println("导入成功");
+            ViewObject usrVo =
+                ADFUtils.findIterator("DmsUserViewIterator").getViewObject();
+            usrVo.getCurrentRow().refresh(usrVo.QUERY_MODE_SCAN_DATABASE_TABLES);
+        }
     }
     
     //文件上传
@@ -302,7 +315,7 @@ public class EditUserMBean {
             }
             file.dispose();
         } catch (IOException e) {
-            e.printStackTrace();
+            this.logger.severe(e);
             String msg = DmsUtils.getMsg("dcm.file_upload_error");
             JSFUtils.addFacesErrorMessage(msg);
             return null;
@@ -315,6 +328,12 @@ public class EditUserMBean {
             DBTransaction trans =(DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
             //清空已有临时表数据
 //            this.deleteTempAndError();
+            String sql = "DELETE FROM DMS_USER_TEMP WHERE UPDATED_BY='"+this.person.getId()+"'";
+            System.out.println(sql);
+            Statement stat = trans.createStatement(DBTransaction.DEFAULT);
+            stat.executeUpdate(sql);
+            stat.close();
+            trans.commit();
             UploadedFile file = (UploadedFile)this.fileInput.getValue();
             System.out.println(file);
             String fname = file.getFilename();
@@ -328,10 +347,29 @@ public class EditUserMBean {
                     ExcelReaderUtil.readExcel(userReader, fileName, true);
                     userReader.close();
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    this.logger.severe(e);
                     JSFUtils.addFacesErrorMessage(DmsUtils.getMsg("dcm.excel_handle_error"));
                     return false;
                 }
             return true;
         }
+        
+    public boolean input_import(){
+        boolean flag = true;
+        DBTransaction trans = (DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
+        CallableStatement cs = trans.createCallableStatement("{CALL DMS_SETTING.USER_IMPORT(?,?)}", 0);
+        try {
+            cs.setString(1, this.person.getId());
+            cs.registerOutParameter(2, Types.VARCHAR);
+            cs.execute();
+            if("N".equals(cs.getString(2))){
+                flag = false;
+            }
+        } catch (SQLException e) {
+            flag = false;
+            this.logger.severe(e);
+            JSFUtils.addFacesInformationMessage("ssss:"+e.getMessage());
+        }
+        return flag;
+    }
 }

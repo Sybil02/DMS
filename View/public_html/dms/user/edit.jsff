@@ -151,7 +151,7 @@
                   selectedRowKeys="#{bindings.DmsUserView.collectionModel.selectedRow}"
                   selectionListener="#{bindings.DmsUserView.collectionModel.makeCurrent}"
                   rowSelection="single" id="t1"
-                  editingMode="clickToEdit" partialTriggers="::cb1">
+                  editingMode="clickToEdit" partialTriggers="::cb1 :::cb9">
           <af:column sortProperty="#{bindings.DmsUserView.hints.Acc.name}"
                      sortable="true" filterable="true"
                      headerText="#{bindings.DmsUserView.hints.Acc.label}"
