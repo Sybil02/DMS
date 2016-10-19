@@ -2,6 +2,7 @@ package dcm;
 
 import com.bea.security.utils.DigestUtils;
 
+import common.JSFUtils;
 import common.ReplaceSpecialChar;
 
 import java.sql.PreparedStatement;
@@ -54,9 +55,7 @@ public class UserRowReader implements IRowReader{
     public void getRows(int sheetIndex, String sheetName, int curRow,
                         TreeMap<Integer, String> rowlist) {
         ReplaceSpecialChar rsc = new ReplaceSpecialChar();
-        System.out.println(sheetName);
         if(curRow >= this.startLine - 1&&sheetName.startsWith("用户管理")){
-            System.out.println("guoguoguoguo");
             boolean isEpty = true;
                         try {
                             String uAcc = "";
@@ -78,10 +77,7 @@ public class UserRowReader implements IRowReader{
                                         uAcc = tmpstr.trim();
                                     }
                                     if(this.colsdef.get(i).getDbTableCol().equals("PWD")&&(!"******".equals(tmpstr.trim()))){
-                                        System.out.println("当前Acc:"+uAcc);
-                                        System.out.println("当前密码:"+tmpstr.trim());
                                         String encyptPwd = DigestUtils.digestSHA1(uAcc + tmpstr.trim());
-                                        System.out.println(encyptPwd);
                                         this.stmt.setString(i + 1, rsc.decodeString(encyptPwd));
                                     }else{   
                                         this.stmt.setString(i + 1, rsc.decodeString(tmpstr.trim())); 
@@ -103,13 +99,17 @@ public class UserRowReader implements IRowReader{
         }
     }
     
-    public void close() {
+    public boolean close() {
+        boolean flag = true;
             try {
                 this.stmt.executeBatch();
                 this.stmt.close();
                 this.trans.commit();
             } catch (SQLException e) {
-                e.printStackTrace();
+//                e.printStackTrace();
+                JSFUtils.addFacesErrorMessage("ssss:"+e.getMessage());
+                flag = false;
             }
-        }
+        return flag;
+    }
 }

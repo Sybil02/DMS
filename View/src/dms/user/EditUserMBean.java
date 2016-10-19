@@ -270,7 +270,6 @@ public class EditUserMBean {
         }
         this.fileInput.resetValue();
         if(this.input_import()){
-            System.out.println("导入成功");
             ViewObject usrVo =
                 ADFUtils.findIterator("DmsUserViewIterator").getViewObject();
             usrVo.getCurrentRow().refresh(usrVo.QUERY_MODE_SCAN_DATABASE_TABLES);
@@ -329,13 +328,11 @@ public class EditUserMBean {
             //清空已有临时表数据
 //            this.deleteTempAndError();
             String sql = "DELETE FROM DMS_USER_TEMP WHERE UPDATED_BY='"+this.person.getId()+"'";
-            System.out.println(sql);
             Statement stat = trans.createStatement(DBTransaction.DEFAULT);
             stat.executeUpdate(sql);
             stat.close();
             trans.commit();
             UploadedFile file = (UploadedFile)this.fileInput.getValue();
-            System.out.println(file);
             String fname = file.getFilename();
             String name = fname.substring(fname.indexOf("_")+1, fname.indexOf("."));
             if(!name.equals("用户管理")){
@@ -345,7 +342,9 @@ public class EditUserMBean {
             UserRowReader userReader = new UserRowReader(trans,2,this.colsdef,this.person.getId());
             try {
                     ExcelReaderUtil.readExcel(userReader, fileName, true);
-                    userReader.close();
+                if(!userReader.close()){
+                    return false;
+                }
                 } catch (Exception e) {
                     this.logger.severe(e);
                     JSFUtils.addFacesErrorMessage(DmsUtils.getMsg("dcm.excel_handle_error"));
@@ -368,7 +367,6 @@ public class EditUserMBean {
         } catch (SQLException e) {
             flag = false;
             this.logger.severe(e);
-            JSFUtils.addFacesInformationMessage("ssss:"+e.getMessage());
         }
         return flag;
     }
