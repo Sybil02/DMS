@@ -79,7 +79,7 @@ public class UserRowReader implements IRowReader{
                                     if(this.colsdef.get(i).getDbTableCol().equals("PWD")&&(!"******".equals(tmpstr.trim()))){
                                         String encyptPwd = DigestUtils.digestSHA1(uAcc + tmpstr.trim());
                                         this.stmt.setString(i + 1, rsc.decodeString(encyptPwd));
-                                    }else{   
+                                    }else{
                                         this.stmt.setString(i + 1, rsc.decodeString(tmpstr.trim())); 
                                     }
                                 }

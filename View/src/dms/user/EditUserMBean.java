@@ -272,7 +272,7 @@ public class EditUserMBean {
         if(this.input_import()){
             ViewObject usrVo =
                 ADFUtils.findIterator("DmsUserViewIterator").getViewObject();
-            usrVo.getCurrentRow().refresh(usrVo.QUERY_MODE_SCAN_DATABASE_TABLES);
+            usrVo.executeQuery();
         }
     }
     
@@ -326,7 +326,6 @@ public class EditUserMBean {
         private boolean handleExcel(String fileName) throws SQLException {
             DBTransaction trans =(DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
             //清空已有临时表数据
-//            this.deleteTempAndError();
             String sql = "DELETE FROM DMS_USER_TEMP WHERE UPDATED_BY='"+this.person.getId()+"'";
             Statement stat = trans.createStatement(DBTransaction.DEFAULT);
             stat.executeUpdate(sql);
