@@ -102,20 +102,21 @@ public class LoginBean {
             String newId = s.substring(0,8)+s.substring(9,13)+s.substring(14,18)+s.substring(19,23)+s.substring(24);
             try {
                 days = daysBetween(sdf.parse(row.getUpdatedAt().toString()),new Date());
-                if(days>=90){
-                    this.showPwdPop();
-                }else{
-                    String encypt_pwd =DigestUtils.digestSHA1(ObjectUtils.toString(this.account).trim() +ObjectUtils.toString(this.password).trim());
-                    if (pwd.equals(encypt_pwd)) {
-                        //登陆成功
+                String encypt_pwd =DigestUtils.digestSHA1(ObjectUtils.toString(this.account).trim() +ObjectUtils.toString(this.password).trim());
+                if (pwd.equals(encypt_pwd)) {
+                    //登陆成功
+                    if(days>=90){
+                        this.showPwdPop();
+                    }else{
                         dmsLog.loginMsg(this.account,newId);
                         this.initUserPreference(row,newId);
                         ExternalContext ectx =FacesContext.getCurrentInstance().getExternalContext();
                         ectx.redirect(ControllerContext.getInstance().getGlobalViewActivityURL("index"));
-                    } else {
-                        this.msg =DmsUtils.getMsg("login.username_password_error");
                     }
+                } else {
+                    this.msg =DmsUtils.getMsg("login.username_password_error");
                 }
+                
             } catch (Exception e) {
                 this.msg = DmsUtils.getMsg("common.operation_failed_with_exception");
                 this._logger.severe(e);
@@ -212,6 +213,8 @@ public class LoginBean {
                 dmsUserView.queryUserByAcc(ObjectUtils.toString(this.account).trim());
                 DmsUserViewRowImpl row = (DmsUserViewRowImpl)dmsUserView.first();
                 String userAcc = row.getAcc();
+                dmsUserView.getApplicationModule().getSession().getUserData().put("userId",row.getId());
+                String oldPwd = row.getPwd();
                 String encyptPwd;
                 try {
                     encyptPwd = DigestUtils.digestSHA1(userAcc+pwd);
@@ -220,6 +223,10 @@ public class LoginBean {
                     ResultSet rs = statQuery.executeQuery(sqlQuery);
                     int count=0;
                     String deletePwd="";
+                    if(oldPwd.equals(encyptPwd)){
+                        this.msgt.setValue("新密码与正在使用的密码相同");
+                        return;
+                    }
                     while(rs.next()){
                         count++;
                         if(count==1){
