@@ -158,7 +158,9 @@ public class DcmDataDisplayBean extends TablePagination{
         this.queryAppFlag();
         this.initCombination();
         this.queryTemplateData();
-        this.initStatusSql();
+        if(this.appFlag){
+            this.initStatusSql();
+        }
     }
 
     public CollectionModel getDataModel() {
@@ -1755,6 +1757,8 @@ public class DcmDataDisplayBean extends TablePagination{
             sql.append(",V").append(i).append(".MEANING MEAN").append(i);
             fromStr.append(header.getSrcTable()).append(" V").append(i).append(",");
             whereStr.append("C.").append(header.getCode()).append("=V").append(i).append(".CODE AND ");
+            whereStr.append("EXISTS ( SELECT 1 FROM DMS_USER_VALUE_V WHERE USER_ID = '").append(this.curUser.getId()).append("' ");
+            whereStr.append(" AND VALUE_SET_ID = '").append(header.getValueSetId()).append("' AND VALUE_ID = V").append(i).append(".CODE) AND ");
             whereStr.append("V").append(i).append(".LOCALE = 'zh_CN' AND ");
             this.appLabelMap.put("MEAN"+i, header.getName());
             i++;
@@ -1766,6 +1770,7 @@ public class DcmDataDisplayBean extends TablePagination{
         whereStr.append("A.COM_ID = C.ID AND A.TEMPLATE_ID = '").append(this.curTempalte.getId()).append("'");
         whereStr.append(" ORDER BY A.COM_ID,A.SEQ");
         this.appStatusSql = sql.append(fromStr).append(whereStr).toString();
+        System.out.println(this.appStatusSql);
         this.tempId = this.curTempalte.getId();
     }
 
