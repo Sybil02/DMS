@@ -82,7 +82,12 @@ public class RowReader implements IRowReader {
                             this.stmt.setString(i + 3, "");
                         } else {
                             isEpty = false;
-                            this.stmt.setString(i + 3, dfm.format(Double.parseDouble(tmpstr.trim())));        
+                            try{
+                                this.stmt.setString(i + 3, dfm.format(Double.parseDouble(tmpstr.trim())));  
+                            }catch(NumberFormatException ex){
+                                //数字列出现非数值时，不报错，直接将值导入临时表，在校验程序部分再处理。
+                                this.stmt.setString(i + 3, tmpstr.trim());
+                            }
                         }
                     }else{
                         if (null == tmpstr || "".equals(tmpstr.trim())) {

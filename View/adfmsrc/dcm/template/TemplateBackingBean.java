@@ -177,6 +177,7 @@ public class TemplateBackingBean {
         for (Object obj : this.recordTable.getSelectedRowKeys()) {
             Key key = (Key)((List)obj).get(0);
             Row row = rowSetIterator.getRow(key);
+            if(row == null) return;
             String comRecordId = (String)row.getAttribute("ID");
             String tid = (String)row.getAttribute("TID");
             String status = (String)row.getAttribute("STATUS");
@@ -211,6 +212,7 @@ public class TemplateBackingBean {
         for (Object obj : this.recordTable.getSelectedRowKeys()) {
             Key key = (Key)((List)obj).get(0);
             Row row = rowSetIterator.getRow(key);
+            if(row == null) return;
             String tid = (String)row.getAttribute("TID");
             String status = (String)row.getAttribute("STATUS");
             if (tid != null && "OPEN".equals(status)) {
