@@ -71,14 +71,6 @@
                                              filename="#{backingBeanScope.EditUserMBean.exportDataExcelName}"/>
                   </af:commandButton>
                 </af:gridCell>
-                <af:gridCell marginStart="3px" width="auto" columnSpan="1"
-                             halign="center" id="qgc8"
-                             inlineStyle="margin-top:3px">
-                  <af:commandButton text="#{viewBundle['dms.quartz.export']}" 
-                                    id="qcb11" rendered="false"
-                                    actionListener="#{viewScope.DcmDataDisplayBean.quartz_export}">
-                  </af:commandButton>
-                </af:gridCell>
               </af:gridRow>
             </af:panelGridLayout>            
          </af:panelWindow>

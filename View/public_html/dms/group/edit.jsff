@@ -5,7 +5,77 @@
           xmlns:c="http://java.sun.com/jsp/jstl/core">
   <c:set var="viewBundle" value="#{adfBundle['dms_v']}"/>
   <af:panelStretchLayout id="psl1">
-    <f:facet name="bottom"/>
+    <f:facet name="bottom">
+      <af:panelGroupLayout layout="scroll"
+                           xmlns:af="http://xmlns.oracle.com/adf/faces/rich"
+                           id="pgl2">
+        <af:popup id="p1"
+                  binding="#{backingBeanScope.EditGroupBean.dataExportWnd}"
+                  autoCancel="disabled" childCreation="deferred">
+          <af:panelWindow id="pw1"
+                          title="#{viewBundle['dcm.template.data_export']}"
+                          modal="true">
+            <af:panelGridLayout id="pgl1">
+              <af:gridRow marginTop="5px" height="auto" id="gr2">
+                <af:gridCell marginStart="5px" width="auto" id="gc1"
+                             inlineStyle="padding-top:5px">
+                  <af:outputText value="#{viewBundle['dcm.template.excel_type']}"
+                                 id="ot1"/>
+                </af:gridCell>
+                <af:gridCell marginStart="5px" marginEnd="5px" width="auto"
+                             id="gc2">
+                  <af:selectBooleanRadio text="#{viewBundle['dcm.export.07format']}"
+                                         id="sbr1" group="group1" simple="true"
+                                         autoSubmit="true"
+                                         value="#{backingBeanScope.EditGroupBean.isXlsx}"/>
+                </af:gridCell>
+              </af:gridRow>
+              <af:gridRow marginTop="5px" marginBottom="5px" height="auto"
+                          id="gr1">
+                <af:gridCell marginStart="5px" width="auto" id="gc3"
+                             halign="center" valign="middle"
+                             inlineStyle="margin-top:5px">
+                  <af:commandButton text="#{viewBundle['dcm.action.export']}"
+                                    id="cb6">
+                    <af:fileDownloadActionListener filename="#{backingBeanScope.EditGroupBean.exportDataExcelName}"
+                                                   contentType="application/vnd.ms-excel"
+                                                   method="#{backingBeanScope.EditGroupBean.groupExport}"/>
+                  </af:commandButton>
+                </af:gridCell>
+              </af:gridRow>
+            </af:panelGridLayout>
+          </af:panelWindow>
+        </af:popup>
+        <af:popup id="p2"
+                  binding="#{backingBeanScope.EditGroupBean.dataImportWnd}"
+                  autoCancel="disabled" childCreation="deferred">
+          <af:panelWindow id="pw2"
+                          title="#{viewBundle['dcm.template.data_import']}"
+                          modal="true">
+            <af:panelGridLayout id="pgl3">
+              <af:gridRow marginTop="5px" height="auto" id="gr4">
+                <af:gridCell marginStart="5px" width="auto" id="gc5">
+                  <af:outputText value="#{viewBundle['dcm.plz_select_import_file']}" id="ot3"/>
+                </af:gridCell>
+                <af:gridCell marginStart="5px" marginEnd="5px" width="auto"
+                             id="gc7">
+                  <af:inputFile id="if1"
+                                binding="#{backingBeanScope.EditGroupBean.inputFile}"/>
+                </af:gridCell>
+              </af:gridRow>
+              <af:gridRow marginTop="5px" marginBottom="5px" height="auto"
+                          id="gr3">
+                <af:gridCell marginStart="5px" width="auto" id="gc6"
+                             halign="center" valign="middle">
+                  <af:commandButton text="#{viewBundle['dms.group.import']}" id="cb7" inlineStyle="margin-top:5px"
+                                    actionListener="#{backingBeanScope.EditGroupBean.operation_import}"/>
+                </af:gridCell>
+              </af:gridRow>
+            </af:panelGridLayout>
+          </af:panelWindow>
+        </af:popup>
+      </af:panelGroupLayout>
+    </f:facet>
     <f:facet name="center">
       <af:panelCollection id="pc1">
         <f:facet name="menus"/>
@@ -23,6 +93,12 @@
                               text="#{viewBundle['dms.common.save']}"
                               id="cb3"
                               partialTriggers="t1"/>
+            <af:commandButton text="#{viewBundle['dms.group.import']}" id="cb4">
+              <af:showPopupBehavior popupId="::p2"/>
+            </af:commandButton>
+            <af:commandButton text="#{viewBundle['dms.user.export']}" id="cb5">
+              <af:showPopupBehavior popupId="::p1"/>
+            </af:commandButton>
           </af:toolbar>
         </f:facet>
         <f:facet name="statusbar"/>
