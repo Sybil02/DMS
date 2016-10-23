@@ -1,15 +1,13 @@
-package dms.group;
+package dms.role;
 
 import common.ADFUtils;
 import common.DmsUtils;
 import common.JSFUtils;
 
 import dcm.ColumnDef;
-
 import dcm.Excel2007WriterImpl;
 
 import dcm.GroupRoleRowReader;
-import dcm.UserRowReader;
 
 import dms.login.Person;
 
@@ -19,7 +17,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.LineNumberReader;
 import java.io.OutputStream;
 
 import java.sql.CallableStatement;
@@ -33,9 +30,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedHashMap;
-
 import java.util.List;
-
 import java.util.Map;
 
 import javax.faces.context.FacesContext;
@@ -53,7 +48,8 @@ import org.apache.myfaces.trinidad.model.UploadedFile;
 
 import org.hexj.excelhandler.reader.ExcelReaderUtil;
 
-public class EditGroupBean {
+public class EditRoleBean {
+
     private Person person = (Person)(ADFContext.getCurrent().getSessionScope().get("cur_user"));
     //是否是2007及以上格式
     private boolean isXlsx = true;
@@ -62,13 +58,13 @@ public class EditGroupBean {
     private RichPopup dataImportWnd;
     private RichInputFile inputFile;
 
-
-    public EditGroupBean() {
+    public EditRoleBean() {
         this.initColsdef();
     }
+    
 
-    public void groupExport(FacesContext facesContext,
-                            OutputStream outputStream) {
+    public void roleExport(FacesContext facesContext,
+                           OutputStream outputStream) {
         this.dataExportWnd.cancel();
         LinkedHashMap<String,String> labelMap = this.initColsdef();
         StringBuffer sql = new StringBuffer();
@@ -80,13 +76,13 @@ public class EditGroupBean {
                 sql.append(map.getKey()).append(",");
             }
         }
-        sql.append("ID FROM DMS_GROUP WHERE LOCALE='").append(ADFContext.getCurrent().getLocale())
-            .append("' ORDER BY NAME");
+        sql.append("ID FROM DMS_ROLE WHERE LOCALE='").append(ADFContext.getCurrent().getLocale())
+            .append("' ORDER BY ROLE_NAME");
         try {
             Excel2007WriterImpl writer = new Excel2007WriterImpl(
                                                                 sql.toString(),
                                                                 2,this.colsdef);
-            writer.process(outputStream, "用户组编辑");
+            writer.process(outputStream, "角色维护");
             outputStream.flush();
         } catch (Exception e) {
             e.printStackTrace();
@@ -97,7 +93,7 @@ public class EditGroupBean {
         this.colsdef.clear();
         LinkedHashMap<String,String> labelMap = new LinkedHashMap<String,String>();
         labelMap.put("ID", "ID");
-        labelMap.put("NAME", "组名称");
+        labelMap.put("ROLE_NAME", "组名称");
         labelMap.put("ENABLE_FLAG", "有效");
         labelMap.put("UPDATED_AT", "更新时间");
         labelMap.put("UPDATED_BY", "更新人");
@@ -112,10 +108,10 @@ public class EditGroupBean {
         }
         return labelMap;
     }
-
+    
     //获取导出数据时的文件名
     public String getExportDataExcelName() {
-        return "用户组编辑"+".xlsx";
+        return "角色维护"+".xlsx";
     }
     
 
@@ -141,9 +137,9 @@ public class EditGroupBean {
         }
         this.inputFile.resetValue();
         if(this.input_import()){
-            ViewObject groupVo =
-                ADFUtils.findIterator("DmsGroupViewIterator").getViewObject();
-            groupVo.executeQuery();
+            ViewObject roleVo =
+                ADFUtils.findIterator("DmsRoleViewIterator").getViewObject();
+            roleVo.executeQuery();
         }
     }
     
@@ -197,7 +193,7 @@ public class EditGroupBean {
     private boolean handleExcel(String fileName) throws SQLException {
         DBTransaction trans =(DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
         //清空已有临时表数据
-        String sql = "DELETE FROM DMS_GROUP_ROLE_TEMP WHERE CREATED_BY='"+this.person.getId()+"' AND DATA_TYPE = 'GROUP'";
+        String sql = "DELETE FROM DMS_GROUP_ROLE_TEMP WHERE CREATED_BY='"+this.person.getId()+"' AND DATA_TYPE = 'ROLE'";
         Statement stat = trans.createStatement(DBTransaction.DEFAULT);
         stat.executeUpdate(sql);
         stat.close();
@@ -205,11 +201,11 @@ public class EditGroupBean {
         UploadedFile file = (UploadedFile)this.inputFile.getValue();
         String fname = file.getFilename();
         String name = fname.substring(fname.indexOf("_")+1, fname.indexOf("."));
-        if(!name.equals("用户组编辑")){
+        if(!name.equals("角色维护")){
             JSFUtils.addFacesErrorMessage("请选择正确的文件");
             return false;
         }
-        GroupRoleRowReader groupRoleReader = new GroupRoleRowReader(trans,2,this.colsdef,this.person.getId(),"GROUP","用户组编辑");
+        GroupRoleRowReader groupRoleReader = new GroupRoleRowReader(trans,2,this.colsdef,this.person.getId(),"ROLE","角色维护");
         try {
                 ExcelReaderUtil.readExcel(groupRoleReader, fileName, true);
             if(!groupRoleReader.close()){
@@ -226,7 +222,7 @@ public class EditGroupBean {
     public boolean input_import(){
         boolean flag = true;
         DBTransaction trans = (DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
-        CallableStatement cs = trans.createCallableStatement("{CALL DMS_SETTING.GROUP_IMPORT(?,?)}", 0);
+        CallableStatement cs = trans.createCallableStatement("{CALL DMS_SETTING.ROLE_IMPORT(?,?)}", 0);
         try {
             cs.setString(1, this.person.getId());
             cs.registerOutParameter(2, Types.VARCHAR);
@@ -240,7 +236,7 @@ public class EditGroupBean {
         }
         return flag;
     }
-    
+
     public void setIsXlsx(boolean isXlsx) {
         this.isXlsx = isXlsx;
     }
@@ -255,14 +251,6 @@ public class EditGroupBean {
 
     public RichPopup getDataExportWnd() {
         return dataExportWnd;
-    }
-
-    public void setColsdef(List<ColumnDef> colsdef) {
-        this.colsdef = colsdef;
-    }
-
-    public List<ColumnDef> getColsdef() {
-        return colsdef;
     }
 
     public void setDataImportWnd(RichPopup dataImportWnd) {

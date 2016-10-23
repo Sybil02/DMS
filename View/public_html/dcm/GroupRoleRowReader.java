@@ -26,14 +26,17 @@ public class GroupRoleRowReader implements IRowReader{
     private String operator;
     private DecimalFormat dfm;
     private String dataType;
+    private String name;
     
     public GroupRoleRowReader(DBTransaction trans,int startLine,
-                              List<ColumnDef> colsdef,String operator,String dataType) {
+                              List<ColumnDef> colsdef,String operator,String dataType,String name) {
+        System.out.println("rowreader");
         this.trans = trans;
         this.startLine = startLine;
         this.colsdef = colsdef;
         this.operator = operator;
         this.dataType = dataType;
+        this.name = name;
         dfm = new DecimalFormat();
         dfm.setMaximumFractionDigits(6);
         dfm.setGroupingUsed(false);
@@ -50,14 +53,13 @@ public class GroupRoleRowReader implements IRowReader{
             sqlValue.append(",?");
         }
         sqlValue.append(")");
-        System.out.println(sql.toString()+sqlValue.toString());
         stmt = this.trans.createPreparedStatement(sql.toString()+sqlValue.toString(), 0);
     }
 
     public void getRows(int sheetIndex, String sheetName, int curRow,
                         TreeMap<Integer, String> rowlist) {
         ReplaceSpecialChar rsc = new ReplaceSpecialChar();
-        if(curRow >= this.startLine - 1&&sheetName.startsWith("用户组编辑")){
+        if(curRow >= this.startLine - 1&&sheetName.startsWith(this.name)){
             boolean isEpty = true;
                         try {
                             for (int i = 0; i < this.colsdef.size(); i++) {
@@ -74,7 +76,6 @@ public class GroupRoleRowReader implements IRowReader{
                                     this.stmt.setString(i + 1, "");
                                 } else {
                                     isEpty = false;
-                                    System.out.println(tmpstr.trim());
                                     this.stmt.setString(i + 1, rsc.decodeString(tmpstr.trim())); 
                                 }
                             }

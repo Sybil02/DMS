@@ -639,6 +639,7 @@
             <hash>
                <url n="content-folder-url" path="adfmsrc/dms/role/"/>
                <list n="pattern-filters">
+                  <string v="+dms/role/EditRoleBean.java"/>
                   <string v="+dms/role/RoleGroupBean.java"/>
                </list>
                <list n="url-path">

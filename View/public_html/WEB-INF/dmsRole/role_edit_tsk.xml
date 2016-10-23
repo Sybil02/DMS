@@ -8,6 +8,11 @@
     <data-control-scope id="__2">
       <isolated/>
     </data-control-scope>
+    <managed-bean id="__7">
+      <managed-bean-name id="__5">EditRoleBean</managed-bean-name>
+      <managed-bean-class id="__6">dms.role.EditRoleBean</managed-bean-class>
+      <managed-bean-scope id="__4">backingBean</managed-bean-scope>
+    </managed-bean>
     <view id="role_edit">
       <page>/dms/role/role_edit.jsff</page>
     </view>
