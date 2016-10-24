@@ -12,6 +12,8 @@ import java.text.DecimalFormat;
 import java.util.List;
 import java.util.TreeMap;
 
+import java.util.UUID;
+
 import oracle.jbo.server.DBTransaction;
 
 import org.hexj.excelhandler.reader.IRowReader;
@@ -30,7 +32,6 @@ public class GroupRoleRowReader implements IRowReader{
     
     public GroupRoleRowReader(DBTransaction trans,int startLine,
                               List<ColumnDef> colsdef,String operator,String dataType,String name) {
-        System.out.println("rowreader");
         this.trans = trans;
         this.startLine = startLine;
         this.colsdef = colsdef;
@@ -73,10 +74,14 @@ public class GroupRoleRowReader implements IRowReader{
                                 }
                             }else{
                                 if (null == tmpstr || "".equals(tmpstr.trim())) {
-                                    this.stmt.setString(i + 1, "");
+                                    if(this.colsdef.get(i).getDbTableCol().equals("ID")){
+                                        this.stmt.setString(i+1, UUID.randomUUID().toString().replace("-", ""));
+                                    }else{
+                                        this.stmt.setString(i + 1, "");
+                                    }
                                 } else {
                                     isEpty = false;
-                                    this.stmt.setString(i + 1, rsc.decodeString(tmpstr.trim())); 
+                                    this.stmt.setString(i + 1, rsc.decodeString(tmpstr.trim()));
                                 }
                             }
                             }
