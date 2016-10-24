@@ -60,6 +60,8 @@ import oracle.adf.view.rich.component.rich.data.RichTable;
 
 import oracle.adf.view.rich.component.rich.input.RichInputFile;
 
+import oracle.adf.view.rich.component.rich.input.RichSelectOneChoice;
+
 import oracle.jbo.Row;
 import oracle.jbo.ViewObject;
 import oracle.jbo.server.DBTransaction;
@@ -91,6 +93,7 @@ public class htkpReturnBean {
     }
     private Person curUser;
     private String year;
+    private String yearNeed;
     private List<SelectItem> yearList;
     private String pName;
     private List<SelectItem> pNameList;
@@ -498,6 +501,19 @@ public class htkpReturnBean {
     //年下拉框值改变
     public void yearChange(ValueChangeEvent valueChangeEvent) {
         year = (String)valueChangeEvent.getNewValue();
+        DBTransaction trans = (DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
+        Statement stat = trans.createStatement(DBTransaction.DEFAULT);
+        String sql = "SELECT MEANING FROM HLS_YEAR_C WHERE CODE = '"+this.year+"'";
+        ResultSet rs;
+        try {
+            rs = stat.executeQuery(sql);
+            while(rs.next()){
+                this.yearNeed = rs.getString("MEANING");
+            }
+            stat.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         if(year==null||pName==null||version==null){
             return;
         }
@@ -752,7 +768,7 @@ public class htkpReturnBean {
             cs.setString(1,this.curUser.getId() );
             cs.setString(2,this.connectId);
             cs.setString(3, name);
-            cs.setString(4,year);
+            cs.setString(4,this.yearNeed);
             cs.setString(5,version);
             cs.execute();
             trans.commit();
