@@ -89,7 +89,12 @@ public class LoginBean {
         dmsUserView.queryUserByAcc(ObjectUtils.toString(this.account).trim());
         DmsUserViewRowImpl row = (DmsUserViewRowImpl)dmsUserView.first();
         if (row == null) {
-            this.msg = DmsUtils.getMsg("login.account_not_exist");
+            ExternalContext ectx =FacesContext.getCurrentInstance().getExternalContext();
+            try {
+                ectx.redirect("/hdms/faces/loginError.html");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         } else {
             String pwd = row.getPwd();
             try {
@@ -100,7 +105,8 @@ public class LoginBean {
                     ExternalContext ectx =FacesContext.getCurrentInstance().getExternalContext();
                     ectx.redirect(ControllerContext.getInstance().getGlobalViewActivityURL("index"));
                 } else {
-                    this.msg =DmsUtils.getMsg("login.username_password_error");
+                    ExternalContext ectx =FacesContext.getCurrentInstance().getExternalContext();
+                    ectx.redirect("/hdms/faces/loginError.html");
                 }
             } catch (Exception e) {
                 this.msg = DmsUtils.getMsg("common.operation_failed_with_exception");

@@ -33,8 +33,9 @@ public class CheckLoginPhaseListener implements PagePhaseListener {
             Map<String,String> params = fctx.getExternalContext().getRequestParameterMap();
             //获取当前请求的VIEW
             String curView = fctx.getViewRoot().getViewId();
+            System.out.println("Source}}}}}}}}}}}}"+curView);
             //如果不是登陆页面则判断用户是否已经登录            
-            if (!"/login".equals(curView)) {
+            if (!"/login".equals(curView)&&!"/loginError.html".equals(curView)) {
                 Object cur_user=ADFContext.getCurrent().getSessionScope().get("cur_user");
                 if (cur_user==null) {
                     ExternalContext ectx = fctx.getExternalContext();
@@ -57,7 +58,7 @@ public class CheckLoginPhaseListener implements PagePhaseListener {
                     LoginBean loginBean = new LoginBean();
                     loginBean.setAccount(userName);
                     loginBean.setPassword(pwd);
-                    loginBean.login();
+                    loginBean.autoLogin();
                 }
             }
         }
