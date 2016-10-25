@@ -371,102 +371,9 @@ public class htkpReturnBean {
         String name = this.pName.substring(0, pName.indexOf("-",pName.indexOf("-")+1));
         DBTransaction trans = (DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
         Statement stat = trans.createStatement(DBTransaction.DEFAULT);
-        String sql = "SELECT DISTINCT T.ENTITY_code,T.ENTITY,T.industry_line_code,T.industry_line,T.business_line_code," +
+        String sql = "SELECT DISTINCT T.S_ENTITY,T.S_Entity_Name,T.industry_line_code,T.industry_line,T.business_line_code," +
                     "T.business_line,T.product_line_code,T.product_line,T.project_type_code,T.project_type_desc " +
-//                     "FROM HLS_HTKP_PROJECT_C T "+" WHERE T.pspnr='"+name+"'";
-                    "  FROM (select pro.pspnr,\n" + 
-                    "               pro.plfaz start_date, \n" + 
-                    "               pro.plsez end_date, \n" + 
-                    "               HE.ENTITY_code, \n" + 
-                    "               HE.ENTITY,\n" + 
-                    "               decode(pro.zsd022,\n" + 
-                    "                      null,\n" + 
-                    "                      'MC0100',\n" + 
-                    "                      (SELECT dm.hp_code\n" + 
-                    "                         FROM dms.hp_dimesion_mapping dm,\n" + 
-                    "                              dms.dcm_combination_15  hd\n" + 
-                    "                        WHERE 1 = 1\n" + 
-                    "                          AND dm.com_record_id = hd.id\n" + 
-                    "                          AND lpad(dm.sap_code, 2, 0) = pro.zsd022\n" + 
-                    "                          AND hd.hls_dimesion_c = 'Misc3')) industry_line_code, \n" + 
-                    "               decode(pro.zsd022,\n" + 
-                    "                      null,\n" + 
-                    "                      '行业线缺省',\n" + 
-                    "                      (SELECT dm.hp_desc\n" + 
-                    "                         FROM dms.hp_dimesion_mapping dm,\n" + 
-                    "                              dms.dcm_combination_15  hd\n" + 
-                    "                        WHERE 1 = 1\n" + 
-                    "                          AND dm.com_record_id = hd.id\n" + 
-                    "                          AND lpad(dm.sap_code, 2, 0) = pro.zsd022\n" + 
-                    "                          AND hd.hls_dimesion_c = 'Misc3')) industry_line, \n" + 
-                    "               decode(pro.zsd023,\n" + 
-                    "                      null,\n" + 
-                    "                      'BL00',\n" + 
-                    "                      (SELECT dm.hp_code\n" + 
-                    "                         FROM dms.hp_dimesion_mapping dm,\n" + 
-                    "                              dms.dcm_combination_15  hd\n" + 
-                    "                        WHERE 1 = 1\n" + 
-                    "                          AND dm.com_record_id = hd.id\n" + 
-                    "                          AND lpad(dm.sap_code, 2, 0) = pro.zsd023\n" + 
-                    "                          AND hd.hls_dimesion_c = 'Business Line')) business_line_code, \n" + 
-                    "               decode(pro.zsd023,\n" + 
-                    "                      null,\n" + 
-                    "                      '业务线缺省',\n" + 
-                    "                      (SELECT dm.hp_desc\n" + 
-                    "                         FROM dms.hp_dimesion_mapping dm,\n" + 
-                    "                              dms.dcm_combination_15  hd\n" + 
-                    "                        WHERE 1 = 1\n" + 
-                    "                          AND dm.com_record_id = hd.id\n" + 
-                    "                          AND lpad(dm.sap_code, 2, 0) = pro.zsd023\n" + 
-                    "                          AND hd.hls_dimesion_c = 'Business Line')) business_line, \n" + 
-                    "               decode(pro.zsd029,\n" + 
-                    "                      null,\n" + 
-                    "                      'MB0900',\n" + 
-                    "                      (SELECT dm.hp_code\n" + 
-                    "                         FROM dms.hp_dimesion_mapping dm,\n" + 
-                    "                              dms.dcm_combination_15  hd\n" + 
-                    "                        WHERE 1 = 1\n" + 
-                    "                          AND dm.com_record_id = hd.id\n" + 
-                    "                          AND lpad(dm.sap_code, 2, 0) = pro.zsd029\n" + 
-                    "                          AND hd.hls_dimesion_c = 'Misc2')) product_line_code,\n" + 
-                    "               decode(pro.zsd029,\n" + 
-                    "                      null,\n" + 
-                    "                      '产品线缺省',\n" + 
-                    "                      (SELECT dm.hp_desc\n" + 
-                    "                         FROM dms.hp_dimesion_mapping dm,\n" + 
-                    "                              dms.dcm_combination_15  hd\n" + 
-                    "                        WHERE 1 = 1\n" + 
-                    "                          AND dm.com_record_id = hd.id\n" + 
-                    "                          AND lpad(dm.sap_code, 2, 0) = pro.zsd029\n" + 
-                    "                          AND hd.hls_dimesion_c = 'Misc2')) product_line, \n" + 
-                    "               decode(pro.profl,\n" + 
-                    "                      null,\n" + 
-                    "                      null,\n" + 
-                    "                      (SELECT dm.hp_code\n" + 
-                    "                       --INTO l_header.productline\n" + 
-                    "                         FROM dms.hp_dimesion_mapping dm,\n" + 
-                    "                              dms.dcm_combination_15  hd\n" + 
-                    "                        WHERE 1 = 1\n" + 
-                    "                          AND dm.com_record_id = hd.id\n" + 
-                    "                          AND dm.sap_code = pro.profl\n" + 
-                    "                          AND hd.hls_dimesion_c = 'Misc1')) project_type_code, \n" + 
-                    "               decode(pro.PROFI_TXT,\n" + 
-                    "                      null,\n" + 
-                    "                      null,\n" + 
-                    "                      (SELECT dm.hp_desc\n" + 
-                    "                       --INTO l_header.productline\n" + 
-                    "                         FROM dms.hp_dimesion_mapping dm,\n" + 
-                    "                              dms.dcm_combination_15  hd\n" + 
-                    "                        WHERE 1 = 1\n" + 
-                    "                          AND dm.com_record_id = hd.id\n" + 
-                    "                          AND dm.sap_code = pro.profl\n" + 
-                    "                          AND hd.hls_dimesion_c = 'Misc1')) project_type_desc, \n" + 
-                    "               pro.stat enabled_flag \n" + 
-                    "          from hpdw.sap_dmspro_data pro, dms.dms_hphls_e2entity_v he\n" + 
-                    "         where 1 = 1\n" + 
-                    "           AND 'E' || pro.vbukr || '1' = HE.ENTITY_code\n" + 
-                    "           AND pro.stat <> 5) T"+" WHERE T.pspnr='"+name+"'";
-//                    "   AND pro.stat <> 5) T" +" WHERE T.pspnr='"+name+"'";
+                     "FROM HLS_HTKP_ALL T "+" WHERE T.pspnr='"+name+"'";
         ResultSet rs;
         try {
             rs = stat.executeQuery(sql);
@@ -475,13 +382,18 @@ public class htkpReturnBean {
             yLine = "";
             cLine = "";
             pType = "";
+            entityName = "";
+            hLineName = "";
+            yLineName = "";
+            cLineName = "";
+            pTypeName = "";
             while(rs.next()){
-                entity = rs.getString("ENTITY_code");
+                entity = rs.getString("S_ENTITY");
                 hLine = rs.getString("industry_line_code");
                 yLine = rs.getString("business_line_code");
                 cLine = rs.getString("product_line_code");
                 pType = rs.getString("project_type_code");
-                entityName = rs.getString("ENTITY");
+                entityName = rs.getString("S_Entity_Name");
                 hLineName = rs.getString("industry_line");
                 yLineName = rs.getString("business_line");
                 cLineName = rs.getString("product_line");
