@@ -42,13 +42,16 @@ public class UserRowReader implements IRowReader{
     private void prepareSqlStatement(){
         StringBuffer sql = new StringBuffer();
         StringBuffer sqlValue = new StringBuffer();
-        sql.append("INSERT INTO DMS_USER_TEMP (UPDATED_AT,UPDATED_BY");
-        sqlValue.append(") VALUES(SYSDATE,").append(this.operator);
+        sql.append("INSERT INTO DCM_TEMPTABLE20 (CREATED_AT,UPDATED_AT,CREATED_BY,UPDATED_BY,");
+        sqlValue.append(") VALUES(SYSDATE,SYSDATE,").append(this.operator+",").append(this.operator+",");
+        sql.append("COLUMN1");
+        sqlValue.append("\'USERINPUT\'");
         for(int i=0;i<this.colsdef.size();i++){
-            sql.append(",").append(this.colsdef.get(i).getDbTableCol());
+            sql.append(",COLUMN"+(i+2));
             sqlValue.append(",?");
         }
         sqlValue.append(")");
+        System.out.println(sql.toString()+sqlValue.toString());
         stmt = this.trans.createPreparedStatement(sql.toString()+sqlValue.toString(), 0);
     }
     

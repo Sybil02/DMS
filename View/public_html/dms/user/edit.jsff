@@ -95,6 +95,19 @@
                                 columns="15"/>
                 </af:gridCell>
               </af:gridRow>
+              <af:gridRow id="gr1">
+                <af:gridCell id="gc2" width="auto" marginStart="5px">
+                  <af:outputText value="#{viewBundle['dcm.template.import_type_msg']}" id="ot1"/>
+                </af:gridCell>
+                <af:gridCell id="gc3" width="auto" marginStart="5px"
+                             marginEnd="5px">
+                  <af:selectBooleanRadio text="#{viewBundle['dcm.import.increment']}" id="sbr1"
+                                         group="InputType1" simple="true"
+                                         value="#{backingBeanScope.EditUserMBean.isCrement}"/>
+                  <af:selectBooleanRadio text="#{viewBundle['dcm.import.repalce']}" id="sbr2"
+                                         group="InputType1" simple="true"/>
+                </af:gridCell>
+              </af:gridRow>
               <af:gridRow marginTop="5px" marginBottom="5px" height="auto"
                           id="gr3">
                 <af:gridCell halign="center" width="auto" id="gc5"

@@ -112,6 +112,7 @@
               <af:commandButton text="#{viewBundle['dcm.common.delete']}"
                                 id="cb2"
                                 actionListener="#{viewScope.UserGroupBean.removeUserFromGroup}"/>
+              <af:commandButton text="#{viewBundle['dms.group.import']}" id="cb4"/>
             </af:group>
           </af:toolbar>
         </f:facet>

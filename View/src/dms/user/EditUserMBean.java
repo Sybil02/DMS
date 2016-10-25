@@ -76,6 +76,8 @@ public class EditUserMBean {
     private RichPopup dataExportWnd;
     private RichPopup dataImportWnd;
     private RichInputFile fileInput;
+    //是否增量
+    private boolean isCrement = true;
 
     public EditUserMBean() {
         this.initColsdef();
@@ -153,7 +155,6 @@ public class EditUserMBean {
     public LinkedHashMap<String,String> initColsdef(){
         this.colsdef.clear();
         LinkedHashMap<String,String> labelMap = new LinkedHashMap<String,String>();
-        labelMap.put("ID", "ID");
         labelMap.put("ACC", "账号");
         labelMap.put("NAME", "姓名");
         labelMap.put("PWD", "密码");
@@ -247,6 +248,7 @@ public class EditUserMBean {
     }
 
     public void operation_import(ActionEvent actionEvent) {
+        System.out.println(this.isCrement);
         this.dataImportWnd.cancel();
         //上传文件为空
         if (null == this.fileInput.getValue()) {
@@ -268,11 +270,20 @@ public class EditUserMBean {
             this.logger.severe(e);
         }
         this.fileInput.resetValue();
-        if(this.input_import()){
-            ViewObject usrVo =
-                ADFUtils.findIterator("DmsUserViewIterator").getViewObject();
-            usrVo.executeQuery();
+        if(this.isCrement){
+            if(this.input_increment()){
+                ViewObject usrVo =
+                    ADFUtils.findIterator("DmsUserViewIterator").getViewObject();
+                usrVo.executeQuery();
+            }
+        }else{
+            if(this.input_import()){
+                ViewObject usrVo =
+                    ADFUtils.findIterator("DmsUserViewIterator").getViewObject();
+                usrVo.executeQuery();
+            }
         }
+        
     }
     
     //文件上传
@@ -325,7 +336,8 @@ public class EditUserMBean {
         private boolean handleExcel(String fileName) throws SQLException {
             DBTransaction trans =(DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
             //清空已有临时表数据
-            String sql = "DELETE FROM DMS_USER_TEMP WHERE UPDATED_BY='"+this.person.getId()+"'";
+            String sql = "DELETE FROM DCM_TEMPTABLE20 WHERE COLUMN1='USERINPUT'" +
+                "AND UPDATED_BY='"+this.person.getId()+"'";
             Statement stat = trans.createStatement(DBTransaction.DEFAULT);
             stat.executeUpdate(sql);
             stat.close();
@@ -351,6 +363,23 @@ public class EditUserMBean {
             return true;
         }
         
+        public boolean input_increment(){
+            boolean flag = true;
+            DBTransaction trans = (DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
+            CallableStatement cs = trans.createCallableStatement("{CALL DMS_SETTING.USER_INCREMENT(?,?)}", 0);
+            try {
+                cs.setString(1, this.person.getId());
+                cs.registerOutParameter(2, Types.VARCHAR);
+                cs.execute();
+                if("N".equals(cs.getString(2))){
+                    flag = false;
+                }
+            } catch (SQLException e) {
+                flag = false;
+                this.logger.severe(e);
+            }
+            return flag;
+        }
     public boolean input_import(){
         boolean flag = true;
         DBTransaction trans = (DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
@@ -367,5 +396,13 @@ public class EditUserMBean {
             this.logger.severe(e);
         }
         return flag;
+    }
+
+    public void setIsCrement(boolean isCrement) {
+        this.isCrement = isCrement;
+    }
+
+    public boolean isIsCrement() {
+        return isCrement;
     }
 }
