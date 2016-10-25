@@ -1,7 +1,9 @@
-package dcm;
+package dms.group;
 
 import common.JSFUtils;
 import common.ReplaceSpecialChar;
+
+import dcm.ColumnDef;
 
 import java.sql.PreparedStatement;
 
@@ -112,3 +114,4 @@ public class GroupRoleRowReader implements IRowReader{
         return flag;
     }
 }
+

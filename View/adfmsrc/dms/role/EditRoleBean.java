@@ -7,7 +7,7 @@ import common.JSFUtils;
 import dcm.ColumnDef;
 import dcm.Excel2007WriterImpl;
 
-import dcm.GroupRoleRowReader;
+import dms.group.GroupRoleRowReader;
 
 import dms.login.Person;
 
