@@ -1,6 +1,10 @@
 package common;
 
+import dms.login.LoginBean;
+
 import java.io.IOException;
+
+import java.util.Map;
 
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
@@ -25,6 +29,8 @@ public class CheckLoginPhaseListener implements PagePhaseListener {
     public void afterPhase(PagePhaseEvent pagePhaseEvent) {
         if (pagePhaseEvent.getPhaseId() == Lifecycle.PREPARE_RENDER_ID) {
             FacesContext fctx = FacesContext.getCurrentInstance();
+            //获取request参数
+            Map<String,String> params = fctx.getExternalContext().getRequestParameterMap();
             //获取当前请求的VIEW
             String curView = fctx.getViewRoot().getViewId();
             //如果不是登陆页面则判断用户是否已经登录            
@@ -42,6 +48,16 @@ public class CheckLoginPhaseListener implements PagePhaseListener {
                     } catch (IOException e) {
                         _logger.severe(e);
                     }
+                }
+            }else{
+                String _sso = params.get("_sso");
+                String userName = params.get("username");
+                String pwd = params.get("password");
+                if("true".equals(_sso)){
+                    LoginBean loginBean = new LoginBean();
+                    loginBean.setAccount(userName);
+                    loginBean.setPassword(pwd);
+                    loginBean.login();
                 }
             }
         }

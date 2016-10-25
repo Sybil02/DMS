@@ -82,6 +82,32 @@ public class LoginBean {
             }
         }
     }
+    
+    public void autoLogin(){
+        DmsModuleImpl appModule=DmsUtils.getDmsApplicationModule();
+        DmsUserViewImpl dmsUserView = appModule.getDmsUserView();
+        dmsUserView.queryUserByAcc(ObjectUtils.toString(this.account).trim());
+        DmsUserViewRowImpl row = (DmsUserViewRowImpl)dmsUserView.first();
+        if (row == null) {
+            this.msg = DmsUtils.getMsg("login.account_not_exist");
+        } else {
+            String pwd = row.getPwd();
+            try {
+                String encypt_pwd =DigestUtils.digestSHA1(ObjectUtils.toString(this.account).trim() +ObjectUtils.toString(this.password).trim());
+                if (pwd.equals(encypt_pwd)) {
+                    //登陆成功
+                    this.initUserPreference(row);
+                    ExternalContext ectx =FacesContext.getCurrentInstance().getExternalContext();
+                    ectx.redirect(ControllerContext.getInstance().getGlobalViewActivityURL("index"));
+                } else {
+                    this.msg =DmsUtils.getMsg("login.username_password_error");
+                }
+            } catch (Exception e) {
+                this.msg = DmsUtils.getMsg("common.operation_failed_with_exception");
+                this._logger.severe(e);
+            }
+        }
+    }
 
     public void setMsg(String msg) {
         this.msg = msg;
