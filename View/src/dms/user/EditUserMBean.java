@@ -248,7 +248,6 @@ public class EditUserMBean {
     }
 
     public void operation_import(ActionEvent actionEvent) {
-        System.out.println(this.isCrement);
         this.dataImportWnd.cancel();
         //上传文件为空
         if (null == this.fileInput.getValue()) {
@@ -377,6 +376,7 @@ public class EditUserMBean {
             } catch (SQLException e) {
                 flag = false;
                 this.logger.severe(e);
+                JSFUtils.addFacesErrorMessage(e.getMessage());
             }
             return flag;
         }
@@ -394,6 +394,7 @@ public class EditUserMBean {
         } catch (SQLException e) {
             flag = false;
             this.logger.severe(e);
+            JSFUtils.addFacesErrorMessage(e.getMessage());
         }
         return flag;
     }

@@ -57,6 +57,8 @@ public class EditRoleBean {
     private List<ColumnDef> colsdef = new ArrayList<ColumnDef>();
     private RichPopup dataImportWnd;
     private RichInputFile inputFile;
+    //是否增量
+    private boolean isCrement = true;
 
     public EditRoleBean() {
         this.initColsdef();
@@ -92,7 +94,6 @@ public class EditRoleBean {
     public LinkedHashMap<String,String> initColsdef(){
         this.colsdef.clear();
         LinkedHashMap<String,String> labelMap = new LinkedHashMap<String,String>();
-        labelMap.put("ID", "ID");
         labelMap.put("ROLE_NAME", "组名称");
         labelMap.put("ENABLE_FLAG", "有效");
         labelMap.put("UPDATED_AT", "更新时间");
@@ -136,11 +137,20 @@ public class EditRoleBean {
             e.printStackTrace();
         }
         this.inputFile.resetValue();
-        if(this.input_import()){
-            ViewObject roleVo =
-                ADFUtils.findIterator("DmsRoleViewIterator").getViewObject();
-            roleVo.executeQuery();
+        if(this.isCrement){
+            if(this.input_increment()){
+                ViewObject roleVo =
+                    ADFUtils.findIterator("DmsRoleViewIterator").getViewObject();
+                roleVo.executeQuery();
+            }
+        }else{
+            if(this.input_import()){
+                ViewObject roleVo =
+                    ADFUtils.findIterator("DmsRoleViewIterator").getViewObject();
+                roleVo.executeQuery();
+            }
         }
+        
     }
     
     //文件上传
@@ -193,7 +203,7 @@ public class EditRoleBean {
     private boolean handleExcel(String fileName) throws SQLException {
         DBTransaction trans =(DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
         //清空已有临时表数据
-        String sql = "DELETE FROM DMS_GROUP_ROLE_TEMP WHERE CREATED_BY='"+this.person.getId()+"' AND DATA_TYPE = 'ROLE'";
+        String sql = "DELETE FROM DCM_TEMPTABLE20 WHERE COLUMN1 = 'ROLEINPUT'";
         Statement stat = trans.createStatement(DBTransaction.DEFAULT);
         stat.executeUpdate(sql);
         stat.close();
@@ -205,7 +215,8 @@ public class EditRoleBean {
             JSFUtils.addFacesErrorMessage("请选择正确的文件");
             return false;
         }
-        GroupRoleRowReader groupRoleReader = new GroupRoleRowReader(trans,2,this.colsdef,this.person.getId(),"ROLE","角色维护");
+        GroupRoleRowReader groupRoleReader = new GroupRoleRowReader(trans,2,this.colsdef,
+                                                                    this.person.getId(),"ROLEINPUT","角色维护");
         try {
                 ExcelReaderUtil.readExcel(groupRoleReader, fileName, true);
             if(!groupRoleReader.close()){
@@ -233,6 +244,26 @@ public class EditRoleBean {
         } catch (SQLException e) {
             flag = false;
             e.printStackTrace();
+            JSFUtils.addFacesErrorMessage(DmsUtils.getMsg(e.getMessage()));
+        }
+        return flag;
+    }
+    
+    public boolean input_increment(){
+        boolean flag = true;
+        DBTransaction trans = (DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
+        CallableStatement cs = trans.createCallableStatement("{CALL DMS_SETTING.ROLE_INCREMENT(?,?)}", 0);
+        try {
+            cs.setString(1, this.person.getId());
+            cs.registerOutParameter(2, Types.VARCHAR);
+            cs.execute();
+            if("N".equals(cs.getString(2))){
+                flag = false;
+            }
+        } catch (SQLException e) {
+            flag = false;
+            e.printStackTrace();
+            JSFUtils.addFacesErrorMessage(DmsUtils.getMsg(e.getMessage()));
         }
         return flag;
     }
@@ -269,4 +300,11 @@ public class EditRoleBean {
         return inputFile;
     }
 
+    public void setIsCrement(boolean isCrement) {
+        this.isCrement = isCrement;
+    }
+
+    public boolean isIsCrement() {
+        return isCrement;
+    }
 }

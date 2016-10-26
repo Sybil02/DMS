@@ -57,6 +57,8 @@ public class EditGroupBean {
     private List<ColumnDef> colsdef = new ArrayList<ColumnDef>();
     private RichPopup dataImportWnd;
     private RichInputFile inputFile;
+    //是否增量
+    private boolean isCrement = true;
 
 
     public EditGroupBean() {
@@ -92,7 +94,6 @@ public class EditGroupBean {
     public LinkedHashMap<String,String> initColsdef(){
         this.colsdef.clear();
         LinkedHashMap<String,String> labelMap = new LinkedHashMap<String,String>();
-        labelMap.put("ID", "ID");
         labelMap.put("NAME", "组名称");
         labelMap.put("ENABLE_FLAG", "有效");
         labelMap.put("UPDATED_AT", "更新时间");
@@ -136,10 +137,18 @@ public class EditGroupBean {
             e.printStackTrace();
         }
         this.inputFile.resetValue();
-        if(this.input_import()){
-            ViewObject groupVo =
-                ADFUtils.findIterator("DmsGroupViewIterator").getViewObject();
-            groupVo.executeQuery();
+        if(this.isCrement){
+            if(this.input_increment()){
+                ViewObject groupVo =
+                    ADFUtils.findIterator("DmsGroupViewIterator").getViewObject();
+                groupVo.executeQuery();
+            }
+        }else{
+            if(this.input_import()){
+                ViewObject groupVo =
+                    ADFUtils.findIterator("DmsGroupViewIterator").getViewObject();
+                groupVo.executeQuery();
+            }
         }
     }
     
@@ -193,7 +202,7 @@ public class EditGroupBean {
     private boolean handleExcel(String fileName) throws SQLException {
         DBTransaction trans =(DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
         //清空已有临时表数据
-        String sql = "DELETE FROM DMS_GROUP_ROLE_TEMP WHERE CREATED_BY='"+this.person.getId()+"' AND DATA_TYPE = 'GROUP'";
+        String sql = "DELETE FROM DCM_TEMPTABLE20 WHERE COLUMN1 = 'GROUPINPUT'";
         Statement stat = trans.createStatement(DBTransaction.DEFAULT);
         stat.executeUpdate(sql);
         stat.close();
@@ -205,7 +214,7 @@ public class EditGroupBean {
             JSFUtils.addFacesErrorMessage("请选择正确的文件");
             return false;
         }
-        GroupRoleRowReader groupRoleReader = new GroupRoleRowReader(trans,2,this.colsdef,this.person.getId(),"GROUP","用户组编辑");
+        GroupRoleRowReader groupRoleReader = new GroupRoleRowReader(trans,2,this.colsdef,this.person.getId(),"GROUPINPUT","用户组编辑");
         try {
                 ExcelReaderUtil.readExcel(groupRoleReader, fileName, true);
             if(!groupRoleReader.close()){
@@ -233,6 +242,26 @@ public class EditGroupBean {
         } catch (SQLException e) {
             flag = false;
             e.printStackTrace();
+            JSFUtils.addFacesErrorMessage(e.getMessage());
+        }
+        return flag;
+    }
+    
+    public boolean input_increment(){
+        boolean flag = true;
+        DBTransaction trans = (DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
+        CallableStatement cs = trans.createCallableStatement("{CALL DMS_SETTING.GROUP_INCREMENT(?,?)}", 0);
+        try {
+            cs.setString(1, this.person.getId());
+            cs.registerOutParameter(2, Types.VARCHAR);
+            cs.execute();
+            if("N".equals(cs.getString(2))){
+                flag = false;
+            }
+        } catch (SQLException e) {
+            flag = false;
+            e.printStackTrace();
+            JSFUtils.addFacesErrorMessage(e.getMessage());
         }
         return flag;
     }
@@ -277,4 +306,11 @@ public class EditGroupBean {
         return inputFile;
     }
 
+    public void setIsCrement(boolean isCrement) {
+        this.isCrement = isCrement;
+    }
+
+    public boolean isIsCrement() {
+        return isCrement;
+    }
 }

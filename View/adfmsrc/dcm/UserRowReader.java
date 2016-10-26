@@ -51,7 +51,6 @@ public class UserRowReader implements IRowReader{
             sqlValue.append(",?");
         }
         sqlValue.append(")");
-        System.out.println(sql.toString()+sqlValue.toString());
         stmt = this.trans.createPreparedStatement(sql.toString()+sqlValue.toString(), 0);
     }
     

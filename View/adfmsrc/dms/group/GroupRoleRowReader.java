@@ -49,10 +49,12 @@ public class GroupRoleRowReader implements IRowReader{
     private void prepareSqlStatement(){
         StringBuffer sql = new StringBuffer();
         StringBuffer sqlValue = new StringBuffer();
-        sql.append("INSERT INTO DMS_GROUP_ROLE_TEMP (DATA_TYPE,CREATED_BY");
-        sqlValue.append(") VALUES('").append(this.dataType).append("',").append(this.operator);
+        sql.append("INSERT INTO DCM_TEMPTABLE20 (CREATED_AT,UPDATED_AT,CREATED_BY,UPDATED_BY,");
+        sqlValue.append(") VALUES(SYSDATE,SYSDATE,").append(this.operator+",").append(this.operator+",");
+        sql.append("COLUMN1");
+        sqlValue.append("\'").append(this.dataType).append("\'");
         for(int i=0;i<this.colsdef.size();i++){
-            sql.append(",").append(this.colsdef.get(i).getDbTableCol());
+            sql.append(",COLUMN"+(i+2));
             sqlValue.append(",?");
         }
         sqlValue.append(")");

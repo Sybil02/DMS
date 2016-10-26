@@ -62,11 +62,25 @@
                                 binding="#{backingBeanScope.EditRoleBean.inputFile}"/>
                 </af:gridCell>
               </af:gridRow>
+              <af:gridRow id="gr5">
+                <af:gridCell id="gc6" width="auto" 
+                             halign="center">
+                  <af:outputText value="#{viewBundle['dcm.template.import_type_msg']}" id="ot4"/>
+                </af:gridCell>
+                <af:gridCell id="gc8">
+                  <af:selectBooleanRadio text="#{viewBundle['dcm.import.increment']}" id="sbr2"
+                                         group="InputType1"
+                                         value="#{backingBeanScope.EditRoleBean.isCrement}"
+                                         simple="true"/>
+                  <af:selectBooleanRadio text="#{viewBundle['dcm.import.repalce']}" id="sbr3"
+                                         group="InputType1" simple="true"/>
+                </af:gridCell>
+              </af:gridRow>
               <af:gridRow marginTop="5px" marginBottom="5px" height="auto"
                           id="gr3">
-                <af:gridCell marginStart="5px" marginEnd="5px" width="auto"
-                             id="gc5" halign="center">
-                  <af:commandButton text="#{viewBundle['dcm.action.import']}" id="cb7"
+                <af:gridCell  width="auto" id="gc5" halign="center"
+                             columnSpan="2">
+                  <af:commandButton text="#{viewBundle['dcm.action.import']}" id="cb7" inlineStyle="margin-top:5px"
                                     actionListener="#{backingBeanScope.EditRoleBean.operation_import}"/>
                 </af:gridCell>
               </af:gridRow>
