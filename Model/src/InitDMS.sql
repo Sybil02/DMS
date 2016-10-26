@@ -262,10 +262,28 @@ values('103000','zh_CN','ODI11G接口',sysdate,sysdate,'10000','10000','odi11_in
 insert into dms_function(id,locale,name,created_at,updated_at,updated_by,created_by,action,category,seq,p_function_id)
 values('103000','en','ODI11G Interface',sysdate,sysdate,'10000','10000','odi11_index','General',103000,null);
 
-insert into dms_function(id,locale,name,created_at,updated_at,updated_by,created_by,action,category,seq,p_function_id)
-values('104000','zh_CN','底稿平台',sysdate,sysdate,'10000','10000','dgptIndex','通用',104000,null);
-insert into dms_function(id,locale,name,created_at,updated_at,updated_by,created_by,action,category,seq,p_function_id)
-values('104000','en','Papers Platform',sysdate,sysdate,'10000','10000','dgptIndex','General',104000,null);
+--ADD BY WTG
+
+insert into DMS_FUNCTION (ID, LOCALE, DESCRIPTION, NAME, CREATED_AT, UPDATED_AT, UPDATED_BY, CREATED_BY, ACTION, PARAMETERS, CATEGORY, SEQ, P_FUNCTION_ID)
+values ('101050', 'en', '', 'Workflow Maintain', to_date('28-03-2016', 'dd-mm-yyyy'), to_date('28-03-2016', 'dd-mm-yyyy'), '10000', '10000', '/WEB-INF/infa/infa_edit_tsk.xml#infa_edit_tsk', '', 'Workflow Maintain', 101050, '');
+
+insert into DMS_FUNCTION (ID, LOCALE, DESCRIPTION, NAME, CREATED_AT, UPDATED_AT, UPDATED_BY, CREATED_BY, ACTION, PARAMETERS, CATEGORY, SEQ, P_FUNCTION_ID)
+values ('101050', 'zh_CN', '', 'Workflow维护', to_date('14-03-2016', 'dd-mm-yyyy'), to_date('14-03-2016', 'dd-mm-yyyy'), '10000', '10000', '/WEB-INF/infa/infa_edit_tsk.xml#infa_edit_tsk', '', 'Workflow维护', 101050, '');
+
+insert into DMS_FUNCTION (ID, LOCALE, DESCRIPTION, NAME, CREATED_AT, UPDATED_AT, UPDATED_BY, CREATED_BY, ACTION, PARAMETERS, CATEGORY, SEQ, P_FUNCTION_ID)
+values ('101051', 'en', '', 'Workflow Authority', to_date('28-03-2016', 'dd-mm-yyyy'), to_date('28-03-2016', 'dd-mm-yyyy'), '10000', '10000', '/WEB-INF/infa/infa_authority_tsk.xml#infa_authority_tsk', '', 'Workflow Authority', 101051, '');
+
+insert into DMS_FUNCTION (ID, LOCALE, DESCRIPTION, NAME, CREATED_AT, UPDATED_AT, UPDATED_BY, CREATED_BY, ACTION, PARAMETERS, CATEGORY, SEQ, P_FUNCTION_ID)
+values ('101051', 'zh_CN', '', 'Workflow权限', to_date('14-03-2016', 'dd-mm-yyyy'), to_date('14-03-2016', 'dd-mm-yyyy'), '10000', '10000', '/WEB-INF/infa/infa_authority_tsk.xml#infa_authority_tsk', '', 'Workflow权限', 101051, '');
+
+insert into DMS_FUNCTION (ID, LOCALE, DESCRIPTION, NAME, CREATED_AT, UPDATED_AT, UPDATED_BY, CREATED_BY, ACTION, PARAMETERS, CATEGORY, SEQ, P_FUNCTION_ID)
+values ('107000', 'en', '', 'Informatica Interface', to_date('28-03-2016', 'dd-mm-yyyy'), to_date('28-03-2016', 'dd-mm-yyyy'), '10000', '10000', 'infaIndex', '', 'General', 107000, '');
+
+insert into DMS_FUNCTION (ID, LOCALE, DESCRIPTION, NAME, CREATED_AT, UPDATED_AT, UPDATED_BY, CREATED_BY, ACTION, PARAMETERS, CATEGORY, SEQ, P_FUNCTION_ID)
+values ('107000', 'zh_CN', '', 'Informatica接口', to_date('15-03-2016', 'dd-mm-yyyy'), to_date('15-03-2016', 'dd-mm-yyyy'), '10000', '10000', 'infaIndex', '', '通用', 107000, '');
+
+--ADD BY WTG
+
 /*==============================================================*/
 /* 初始化菜单                                                    */
 /*==============================================================*/
@@ -404,10 +422,33 @@ values('103000','zh_CN',100002,'ODI11G接口','Y',null,'103000',sysdate,sysdate,
 insert into dms_menu(id,locale,seq,label,enable_flag,p_id,function_id,created_at,updated_at,updated_by,created_by)
 values('103000','en',100002,'ODI11G Interface','Y',null,'103000',sysdate,sysdate,'10000','10000');
 
-insert into dms_menu(id,locale,seq,label,enable_flag,p_id,function_id,created_at,updated_at,updated_by,created_by)
-values('104000','zh_CN',100003,'底稿平台','Y',null,'104000',sysdate,sysdate,'10000','10000');
-insert into dms_menu(id,locale,seq,label,enable_flag,p_id,function_id,created_at,updated_at,updated_by,created_by)
-values('104000','en',100003,'Papers Platform','Y',null,'104000',sysdate,sysdate,'10000','10000');
+--ADD BY WTG
+insert into DMS_MENU (ID, LOCALE, SEQ, LABEL, ENABLE_FLAG, P_ID, FUNCTION_ID, CREATED_AT, UPDATED_AT, UPDATED_BY, CREATED_BY)
+values ('101078', 'en', 101078, 'Informatica Manage', 'Y', '101000', '', to_date('28-03-2016', 'dd-mm-yyyy'), to_date('28-03-2016', 'dd-mm-yyyy'), '10000', '10000');
+
+insert into DMS_MENU (ID, LOCALE, SEQ, LABEL, ENABLE_FLAG, P_ID, FUNCTION_ID, CREATED_AT, UPDATED_AT, UPDATED_BY, CREATED_BY)
+values ('101078', 'zh_CN', 101078, 'Informatica管理', 'Y', '101000', '', to_date('14-03-2016', 'dd-mm-yyyy'), to_date('14-03-2016', 'dd-mm-yyyy'), '10000', '10000');
+
+insert into DMS_MENU (ID, LOCALE, SEQ, LABEL, ENABLE_FLAG, P_ID, FUNCTION_ID, CREATED_AT, UPDATED_AT, UPDATED_BY, CREATED_BY)
+values ('101079', 'en', 101079, 'Workflow Maintain', 'Y', '101078', '101050', to_date('28-03-2016', 'dd-mm-yyyy'), to_date('28-03-2016', 'dd-mm-yyyy'), '10000', '10000');
+
+insert into DMS_MENU (ID, LOCALE, SEQ, LABEL, ENABLE_FLAG, P_ID, FUNCTION_ID, CREATED_AT, UPDATED_AT, UPDATED_BY, CREATED_BY)
+values ('101079', 'zh_CN', 101079, 'Workflow维护', 'Y', '101078', '101050', to_date('14-03-2016', 'dd-mm-yyyy'), to_date('14-03-2016', 'dd-mm-yyyy'), '10000', '10000');
+
+insert into DMS_MENU (ID, LOCALE, SEQ, LABEL, ENABLE_FLAG, P_ID, FUNCTION_ID, CREATED_AT, UPDATED_AT, UPDATED_BY, CREATED_BY)
+values ('101080', 'en', 101080, 'Workflow Authority', 'Y', '101078', '101051', to_date('28-03-2016', 'dd-mm-yyyy'), to_date('28-03-2016', 'dd-mm-yyyy'), '10000', '10000');
+
+insert into DMS_MENU (ID, LOCALE, SEQ, LABEL, ENABLE_FLAG, P_ID, FUNCTION_ID, CREATED_AT, UPDATED_AT, UPDATED_BY, CREATED_BY)
+values ('101080', 'zh_CN', 101080, 'Workflow权限', 'Y', '101078', '101051', to_date('14-03-2016', 'dd-mm-yyyy'), to_date('14-03-2016', 'dd-mm-yyyy'), '10000', '10000');
+
+insert into DMS_MENU (ID, LOCALE, SEQ, LABEL, ENABLE_FLAG, P_ID, FUNCTION_ID, CREATED_AT, UPDATED_AT, UPDATED_BY, CREATED_BY)
+values ('107000', 'en', 100002, 'Informatica interface', 'Y', '', '107000', to_date('15-03-2016', 'dd-mm-yyyy'), to_date('15-03-2016', 'dd-mm-yyyy'), '10000', '10000');
+
+insert into DMS_MENU (ID, LOCALE, SEQ, LABEL, ENABLE_FLAG, P_ID, FUNCTION_ID, CREATED_AT, UPDATED_AT, UPDATED_BY, CREATED_BY)
+values ('107000', 'zh_CN', 100002, 'Informatica接口', 'Y', '', '107000', to_date('15-03-2016', 'dd-mm-yyyy'), to_date('15-03-2016', 'dd-mm-yyyy'), '10000', '10000');
+
+--ADD BY WTG
+
 /*==============================================================*/
 /* 初始化系统属性                                                 */
 /*==============================================================*/
