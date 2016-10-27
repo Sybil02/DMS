@@ -230,7 +230,7 @@ public class DataManager {
             try {
                 Map<String, String> keyValue = new HashMap<String, String>();
                 keyValue.put("KOSTL", cost.getKostl());
-                keyValue.put("BKZKP", cost.getDatbi());
+                keyValue.put("BKZKP", cost.getBkzkp());
                 keyValue.put("ABTEI", cost.getAbtei());
                 if (!this.pkValidate(statExs, "DMS_COST_CENTER", keyValue)) {
                     stat.setString(1, cost.getKostl());
