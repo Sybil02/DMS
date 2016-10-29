@@ -540,6 +540,7 @@ public class RPCostBean {
             cs.setString(2, this.TYPE_ROLL.toString());
             cs.registerOutParameter(3, Types.VARCHAR);
             cs.execute();
+            System.out.println(cs.getString(3)+"*******");
             if("N".equals(cs.getString(3))){
                 flag = false;
             }
@@ -608,6 +609,7 @@ public class RPCostBean {
         sql.append("LGF_NUM,LGF_TYPE,PLAN_QUANTITY,PLAN_AMOUNT,OCCURRED_QUANTITY,OCCURRED_AMOUNT)");
         sql_value.append("?,\'"+connectId+"\',\'"+this.curUser.getId()+"\',?,\'"+this.TYPE_ROLL+"\',");
         sql_value.append("?,?,?,?,?,?)");
+        System.out.println(sql.toString()+sql_value.toString());
         PreparedStatement stmt = trans.createPreparedStatement(sql.toString()+sql_value.toString(), 0);
         //获取数据
         int rowNum = 1;
@@ -642,8 +644,7 @@ public class RPCostBean {
     public void deleteTempAndError(){
         DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
         //清空临时表数据
-        String sqldelete = "DELETE FROM PRO_PLAN_COST_BODY_TEMP T WHERE T.CREATED_BY = \'"+this.curUser.getId()+"\'" +
-            " AND CONNECT_ID=\'"+this.connectId+"\'";
+        String sqldelete = "DELETE FROM PRO_PLAN_COST_BODY_TEMP T WHERE T.CREATED_BY = \'"+this.curUser.getId()+"\'";
         Statement st = trans.createStatement(DBTransaction.DEFAULT);
         try {
             st.executeUpdate(sqldelete);
@@ -794,6 +795,7 @@ public class RPCostBean {
             //若出现错误则显示错误信息提示框
     //            JSFUtils.addFacesErrorMessage("WBS等字段不可修改");
     //            return;
+            
             this.showErrorPop();
         }
         //刷新数据
