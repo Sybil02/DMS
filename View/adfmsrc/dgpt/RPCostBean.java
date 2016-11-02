@@ -540,7 +540,6 @@ public class RPCostBean {
             cs.setString(2, this.TYPE_ROLL.toString());
             cs.registerOutParameter(3, Types.VARCHAR);
             cs.execute();
-            System.out.println(cs.getString(3)+"*******");
             if("N".equals(cs.getString(3))){
                 flag = false;
             }
@@ -609,7 +608,6 @@ public class RPCostBean {
         sql.append("LGF_NUM,LGF_TYPE,PLAN_QUANTITY,PLAN_AMOUNT,OCCURRED_QUANTITY,OCCURRED_AMOUNT)");
         sql_value.append("?,\'"+connectId+"\',\'"+this.curUser.getId()+"\',?,\'"+this.TYPE_ROLL+"\',");
         sql_value.append("?,?,?,?,?,?)");
-        System.out.println(sql.toString()+sql_value.toString());
         PreparedStatement stmt = trans.createPreparedStatement(sql.toString()+sql_value.toString(), 0);
         //获取数据
         int rowNum = 1;
@@ -633,7 +631,6 @@ public class RPCostBean {
                     stmt.addBatch();
                     stmt.executeBatch();
                 } catch (SQLException e) {
-                    System.out.println("----------------------------" + rowdata.get("PLAN_QUANTITY") + "" + rowdata.get("PLAN_AMOUNT") );
                     e.printStackTrace();
                 }
             //}        
@@ -777,7 +774,6 @@ public class RPCostBean {
                 sql.append("UPDATE PRO_PLAN_COST_BODY_TEMP T SET(T.PLAN_QUANTITY,T.PLAN_AMOUNT,T.OCCURRED_QUANTITY,T.OCCURRED_AMOUNT,T.LGF_NUM,T.LGF_TYPE,T.WBS,T.NETWORK,T.WORK,T.WORK_CODE,T.TERM_CODE,T.TERM,T.COST_DETAIL,T.CENTER,T.WORK_TYPE,T.BOM_CODE) ")
                     .append("=(SELECT P.PLAN_QUANTITY,P.PLAN_AMOUNT,P.OCCURRED_QUANTITY,P.OCCURRED_AMOUNT,P.LGF_NUM,P.LGF_TYPE,P.WBS,P.NETWORK,P.WORK,P.WORK_CODE,P.TERM_CODE,P.TERM,P.COST_DETAIL,P.CENTER,P.WORK_TYPE,P.BOM_CODE FROM PRO_PLAN_COST_BODY P WHERE P.CONNECT_ID = '").append(this.connectId)
                     .append("' AND T.ROW_ID = P.ROWID)").append(" WHERE T.CONNECT_ID='").append(this.connectId).append("' AND T.CREATED_BY = '").append(this.curUser.getId()).append("'");  
-                System.out.println(sql.toString());
                 try {
                     stat.executeUpdate(sql.toString());
                     trans.commit();
