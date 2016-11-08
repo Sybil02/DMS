@@ -334,7 +334,7 @@
               <af:commandButton text="#{viewBundle['dms.dgpt.block.status']}" id="cb6"
                                 actionListener="#{viewScope.ProjectZxBean.blockStatusPop}"/>
               <af:commandButton text="#{viewBundle['dms.dgpt.fblock']}" id="cb4"
-                                rendered="#{sessionScope.authoriedFunction['UNFREEZE'] or viewScope.ProjectZxBean.isManager}"
+                                rendered="#{(sessionScope.authoriedFunction['UNFREEZE'] eq null) or viewScope.ProjectZxBean.isManager}"
                                 actionListener="#{viewScope.ProjectZxBean.outBlock}"
                                 disabled="#{not viewScope.ProjectZxBean.isBlock}"
                                 partialTriggers="::soc1 ::iclov2 ::soc3 ::pc2:cb10"/>
