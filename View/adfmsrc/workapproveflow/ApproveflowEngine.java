@@ -269,10 +269,11 @@ public class ApproveflowEngine {
         uaSql.append("AND TEMPLATE_ID = '").append(templateId).append("' ");
         uaSql.append("AND COM_ID = '").append(comId).append("' ");
         uaSql.append("AND PERSON_ID = '").append(userId).append("' ");
+        uaSql.append("AND APPROVAL_STATUS = 'APPROVEING'");
         try {
             int backRow3 = stat.executeUpdate(uaSql.toString());
             if(backRow3 == 0){
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("修改审批通过失败，请联系管理员！"));
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("修改审批通过失败，请查看工作流是否已经回退到前面步骤！"));
                 trans.rollback();
             }else if(backRow3 > 1){
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("修改审批通过返回多条记录，请联系管理员！"));

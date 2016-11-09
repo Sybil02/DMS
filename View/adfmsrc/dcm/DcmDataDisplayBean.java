@@ -1851,7 +1851,8 @@ public class DcmDataDisplayBean extends TablePagination {
         updateWs.append("FINISH_AT = SYSDATE ");
         updateWs.append("WHERE RUN_ID = '").append(this.curRunId).append("' ");
         updateWs.append("AND TEMPLATE_ID = '").append(this.curTempalte.getId()).append("' ");
-        updateWs.append("AND COM_ID ='").append(this.curCombiantionRecord).append("'");
+        updateWs.append("AND COM_ID ='").append(this.curCombiantionRecord).append("' ");
+        updateWs.append("AND WRITE_STATUS = 'N'");
         //关闭组合
         StringBuffer updateCom = new StringBuffer();
         updateCom.append("UPDATE DCM_TEMPLATE_COMBINATION SET STATUS = 'CLOSE',UPDATED_AT = SYSDATE,UPDATED_BY = '").append(this.curUser.getId()).append("' ");
@@ -1864,6 +1865,10 @@ public class DcmDataDisplayBean extends TablePagination {
                 stat.executeUpdate(updateCom.toString());    
             }else if(backRow > 1){
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("修改输入状态返回多条记录，请联系管理员！"));   
+                trans.rollback();
+                return;
+            }else if(backRow == 0){
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("提交失败，请查看工作流状态是否已经回退到前面步骤！"));
                 trans.rollback();
                 return;
             }else{
