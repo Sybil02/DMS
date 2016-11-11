@@ -192,7 +192,7 @@
                               disabled="#{viewScope.HtChangeBean.isSelected or viewScope.HtChangeBean.isEdited}"
                               partialTriggers="::soc1 ::iclov2 ::soc3"/>
               <af:commandButton text="#{viewBundle['dms.dgpt.fblock']}" id="cb12"
-                                rendered="#{(sessionScope.authoriedFunction['UNFREEZE'] eq null) or viewScope.HtChangeBean.isManager}"
+                                rendered="#{(sessionScope.authoriedFunction['UNFREEZE'] ne null) or viewScope.HtChangeBean.isManager}"
                                 actionListener="#{viewScope.HtChangeBean.outBlock}"
                                 partialTriggers="::soc1 ::iclov2 ::soc3"
                                 disabled="#{viewScope.HtChangeBean.isSelected or not viewScope.HtChangeBean.isEdited}"/>

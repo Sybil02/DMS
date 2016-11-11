@@ -321,7 +321,7 @@
               <af:commandButton text="#{viewBundle['dms.dgpt.block.status']}" id="cb9"
                                 actionListener="#{viewScope.RPCostBean.blockStatusPop}"/>
               <af:commandButton text="#{viewBundle['dms.dgpt.fblock']}" id="cb5"
-                                rendered="#{(sessionScope.authoriedFunction['UNFREEZE'] eq null) or viewScope.RPCostBean.isManager}"
+                                rendered="#{(sessionScope.authoriedFunction['UNFREEZE'] ne null) or viewScope.RPCostBean.isManager}"
                                 actionListener="#{viewScope.RPCostBean.outBlock}"
                                 disabled="#{not viewScope.RPCostBean.isBlock}"
                                 partialTriggers="::soc1 ::iclov2 ::soc3"/>

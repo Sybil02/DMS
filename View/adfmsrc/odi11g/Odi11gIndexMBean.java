@@ -213,7 +213,7 @@ public class Odi11gIndexMBean {
         }else{
             sql = "SELECT DISTINCT T.PRO_CODE AS CODE,T.PRO_CODE||'-'||T.PRO_DESC AS MEANING FROM SAP_DMS_PROJECT_PRIVILEGE T "
                 + "WHERE T.PRO_MANAGER = '" + curU + "' " +
-                "AND T.ATTRIBUTE3=1 OR (T.ATTRIBUTE3=2 AND T.ATTRIBUTE8 IN (1100,1200))";
+                "AND (T.ATTRIBUTE3=1 OR (T.ATTRIBUTE3=2 AND T.ATTRIBUTE8 IN (1100,1200)))";
         }
         List<ValueSetRow> vsList = new ArrayList<ValueSetRow>();
         DmsComBoxLov lov = new DmsComBoxLov(vsList);
