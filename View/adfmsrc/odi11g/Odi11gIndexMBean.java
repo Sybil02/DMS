@@ -369,7 +369,6 @@ public class Odi11gIndexMBean {
         String sql = "INSERT INTO DMS_JOB_DETAILS(JOB_ID,JOB_TYPE,JOB_OBJECT,JOB_STATUS,CREATED_AT,CREATED_BY,FILE_NAME,JOB_LOG,END_TIME,FILE_PATH) "
             + "VALUES('" + jobId + "','ODI','" + sceneName + "','R',SYSDATE,'" + curUser.getName()
             + "','" + args + "','','','','" + idNum + "')" ;
-        System.out.println(sql);
         DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
         Statement stat = trans.createStatement(1);
 

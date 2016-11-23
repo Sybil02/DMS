@@ -247,7 +247,7 @@ public class ProjectZxBean {
             if(i<11){
                 PcColumnDef newCol = new PcColumnDef(list.get(i),map.getValue(),false,"");
                 this.pcColsDef.add(newCol);
-            }else if(i>=11&&i<34){
+            }else if(i>=11&&i<35){
                 PcColumnDef newCol = new PcColumnDef(list.get(i),map.getValue(),false,"NUMBER");
                 this.pcColsDef.add(newCol);
             }else{
