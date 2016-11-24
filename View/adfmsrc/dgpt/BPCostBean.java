@@ -1290,15 +1290,18 @@ public class BPCostBean {
     }
 
     public void copyToRpcost(ActionEvent actionEvent) {
-        String s = UUID.randomUUID().toString();
-        String sql = "SELECT COUNT(1) COUNT FROM PRO_PLAN_COST_HEADER T WHERE T.HLS_YEAR = '"+this.year+"' " +
-            "AND T.PROJECT_NAME = '"+this.pname+"' AND T.DATA_TYPE = 'ROLL'";
-        String sqlConnect = "SELECT T.CONNECT_ID FROM PRO_PLAN_COST_HEADER T WHERE T.HLS_YEAR = '"+this.year+"' " +
-            "AND T.PROJECT_NAME = '"+this.pname+"' AND T.DATA_TYPE = 'ROLL'";
+        //String s = UUID.randomUUID().toString();
+        //使用序列号作为ID
         DBTransaction trans = (DBTransaction)DmsUtils.getDcmApplicationModule().getDBTransaction();
-        Statement stat = trans.createStatement(DBTransaction.DEFAULT);
-        ResultSet rs;
         try {
+            
+            //查看滚动计划成本版本
+            String sql = "SELECT COUNT(1) COUNT FROM PRO_PLAN_COST_HEADER T WHERE T.HLS_YEAR = '"+this.year+"' " +
+                "AND T.PROJECT_NAME = '"+this.pname+"' AND T.DATA_TYPE = 'ROLL'";
+            String sqlConnect = "SELECT T.CONNECT_ID FROM PRO_PLAN_COST_HEADER T WHERE T.HLS_YEAR = '"+this.year+"' " +
+                "AND T.PROJECT_NAME = '"+this.pname+"' AND T.DATA_TYPE = 'ROLL'";
+            Statement stat = trans.createStatement(DBTransaction.DEFAULT);
+            ResultSet rs;
             rs = stat.executeQuery(sql);
             int count = -1;
             while(rs.next()){
@@ -1306,7 +1309,14 @@ public class BPCostBean {
             }
             if(count==0){
                 //滚动计划成本没有任何一版数据，则直接同步
-                this.newConnectId = s.substring(0,8)+s.substring(9,13)+s.substring(14,18)+s.substring(19,23)+s.substring(24);
+                //this.newConnectId = s.substring(0,8)+s.substring(9,13)+s.substring(14,18)+s.substring(19,23)+s.substring(24);
+                String sqlGetId="select hpdw.sap_dms_project_header_s.Nextval NEW_ID from dual";
+                Statement statGetId = trans.createStatement(DBTransaction.DEFAULT);
+                ResultSet rsGetId;
+                rsGetId = statGetId.executeQuery(sqlGetId);
+                while(rsGetId.next()){
+                    this.newConnectId = rsGetId.getString("NEW_ID");
+                }
                 if(this.copyValidate("COPY")){
                     this.popupMessage("info", "复制成功");
                 }
@@ -1327,8 +1337,18 @@ public class BPCostBean {
     
     public void coverFirst(DialogEvent dialogEvent){
         if (dialogEvent.getOutcome().equals(DialogEvent.Outcome.ok)) {
-            String s = UUID.randomUUID().toString();
-            this.newConnectId = s.substring(0,8)+s.substring(9,13)+s.substring(14,18)+s.substring(19,23)+s.substring(24);
+            DBTransaction trans = (DBTransaction)DmsUtils.getDcmApplicationModule().getDBTransaction();
+            String sqlGetId="select hpdw.sap_dms_project_header_s.Nextval NEW_ID from dual";
+            Statement statGetId = trans.createStatement(DBTransaction.DEFAULT);
+            ResultSet rsGetId;
+            try {
+                rsGetId = statGetId.executeQuery(sqlGetId);
+                while(rsGetId.next()){
+                    this.newConnectId = rsGetId.getString("NEW_ID");
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
             //先复制，后删除
             if(this.copyValidate("DELETE")){
                 this.popupMessage("info", "复制成功");
