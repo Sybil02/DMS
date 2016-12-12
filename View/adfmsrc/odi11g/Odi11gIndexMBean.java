@@ -332,12 +332,13 @@ public class Odi11gIndexMBean {
             //插入执行记录
             ViewObject execVo =
                 DmsUtils.getOdi11gApplicationModule().getOdi11SceneExecView();
-            String clearHistorySql =
-                "delete from odi11_scene_exec t where t.scene_id='" + sceneId +
-                "' and t.params " +
-                (params.isEmpty() ? "is null" : ("='" + parmStr.toString() +
-                                                 "'"));
-            ((DBTransaction)execVo.getApplicationModule().getTransaction()).executeCommand(clearHistorySql);
+            //记录所有，不需删除历史记录
+//            String clearHistorySql =
+//                "delete from odi11_scene_exec t where t.scene_id='" + sceneId +
+//                "' and t.params " +
+//                (params.isEmpty() ? "is null" : ("='" + parmStr.toString() +
+//                                                 "'"));
+//            ((DBTransaction)execVo.getApplicationModule().getTransaction()).executeCommand(clearHistorySql);
             Row execRow = execVo.createRow();
             execRow.setAttribute("SceneId", sceneId);
             execRow.setAttribute("Params", parmStr.toString());
@@ -515,6 +516,7 @@ public class Odi11gIndexMBean {
         ViewCriteriaRow vcr = vc.createViewCriteriaRow();
         vcr.setAttribute("SceneId", "='" + sceneId + "'");
         vcr.setAttribute("CreatedBy", "='" + userId + "'");
+        //添加连接词and
         vcr.setConjunction(vcr.VC_CONJ_AND);
         vc.addElement(vcr);
         sceneExecVo.applyViewCriteria(vc);

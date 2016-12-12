@@ -180,7 +180,7 @@ public class DcmIndexBean {
         String uri = httpStr + "://" + host + ":"
             + prot + "/wsh/services/BatchServices/DataIntegration?WSDL";
         String sapce = "http://www.informatica.com/wsh";
-        System.out.println(uri+":"+sapce);
+//        System.out.println(uri+":"+sapce);
         
         URL url = new URL(uri);
         QName qname = new QName(sapce,"DataIntegrationService");
@@ -208,7 +208,7 @@ public class DcmIndexBean {
         String str = dig.login(loginReq, Context);
         JSFUtils.addFacesInformationMessage("SUCCESS:"+str);
         this.sessionId = str;
-        System.out.println(str);
+//        System.out.println(str);
         
     }
     

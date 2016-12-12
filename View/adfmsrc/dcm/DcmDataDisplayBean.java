@@ -322,7 +322,6 @@ public class DcmDataDisplayBean extends TablePagination{
         }
         //获取文件上传路径
         String filePath = this.uploadFile();
-        System.out.println(filePath);
         this.fileInput.resetValue();
         if (null == filePath) {
             return;
@@ -876,7 +875,6 @@ public class DcmDataDisplayBean extends TablePagination{
         String combinationRecord = ObjectUtils.toString(curComRecordId);
         //清空已有零时表数据
         this.clearTmpTableAndErrTable(curComRecordId);
-        System.out.println(this.curTempalte.getDataStartLine().getValue());
         RowReader reader =new RowReader(trans, (int)this.curTempalte.getDataStartLine().getValue(), this.curTempalte.getId(),combinationRecord, this.curTempalte.getTmpTable(),
                           this.colsdef, this.curUser.getId(),this.curTempalte.getName());
         try {

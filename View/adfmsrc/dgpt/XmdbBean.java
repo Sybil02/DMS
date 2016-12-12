@@ -225,7 +225,6 @@ public class XmdbBean {
         sql.append(" AND VERSION = '").append(version).append("'");
         sql.append(" AND ENTITY_NAME = '").append(entity).append("'");
         sql.append(" AND PROJECT_TYPE = '").append(type).append("' ORDER BY PROJECT_NAME");
-        System.out.println(sql);
         return sql.toString();
     }
     //时间段
