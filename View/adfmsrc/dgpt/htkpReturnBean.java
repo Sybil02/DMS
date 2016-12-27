@@ -85,6 +85,11 @@ public class htkpReturnBean {
     public htkpReturnBean() {
         super();
         this.curUser = (Person)(ADFContext.getCurrent().getSessionScope().get("cur_user"));
+        if("10000".equals(this.curUser.getId())){
+            isEDITABLE = true;
+        }else{
+            isEDITABLE = false;
+        }
         this.dataModel = new PcDataTableModel();
         List<Map> d = new ArrayList<Map>();
         this.dataModel.setWrappedData(d);
@@ -122,6 +127,7 @@ public class htkpReturnBean {
     //表体下拉框列表
     private List<SelectItem> detailList;
     private List<SelectItem> taxList;
+    private boolean isEDITABLE ;
 
     public void initList(){
         this.versionList = queryValues("version");
@@ -216,6 +222,26 @@ public class htkpReturnBean {
             e.printStackTrace();
         }
         return values;
+    }
+    
+    //查询是否为可编辑此项目
+    public void selectIsEditable(){
+        DBTransaction trans = (DBTransaction)DmsUtils.getDmsApplicationModule().getTransaction();
+        Statement stat = trans.createStatement(DBTransaction.DEFAULT);
+        String sql = "SELECT ATTRIBUTE7 FROM SAP_DMS_PROJECT_PRIVILEGE WHERE " +
+            "PRO_CODE ||'-'||PRO_DESC = '"+this.pName+"'";
+        ResultSet rs;
+        try {
+            rs = stat.executeQuery(sql);
+            while(rs.next()){
+                if(this.curUser.getAcc().equals(rs.getString("ATTRIBUTE7"))){
+                    isEDITABLE= true;
+                    break;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
     
     //查询数据
@@ -367,6 +393,7 @@ public class htkpReturnBean {
         }
         this.dataModel.setWrappedData(data);
         ((PcDataTableModel)this.dataModel).setLabelMap(labelMap);
+        this.selectIsEditable();
     }
     //获取行业线等信息
     public void getLine(){
@@ -437,6 +464,7 @@ public class htkpReturnBean {
     //项目下拉框值改变
     public void pnameChange(ValueChangeEvent valueChangeEvent) {
         pName = (String) valueChangeEvent.getNewValue();
+        System.out.println(pName);
         if(year==null||pName==null||version==null){
             return;
         }
@@ -1049,5 +1077,13 @@ public class htkpReturnBean {
 
     public DmsComBoxLov getProLov() {
         return proLov;
+    }
+
+    public void setIsEDITABLE(boolean isEDITABLE) {
+        this.isEDITABLE = isEDITABLE;
+    }
+
+    public boolean isIsEDITABLE() {
+        return isEDITABLE;
     }
 }

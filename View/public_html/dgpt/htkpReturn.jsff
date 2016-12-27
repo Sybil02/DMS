@@ -124,14 +124,15 @@
               <af:commandButton text="#{viewBundle['dcm.common.new']}" id="cb1"
                                 actionListener="#{viewScope.htkpReturnBean.operation_new}"
                                 partialTriggers="::soc4 ::iclov2 ::soc3"
-                                disabled="#{viewScope.htkpReturnBean.isSelected}"/>
+                                disabled="#{viewScope.htkpReturnBean.isSelected or not viewScope.htkpReturnBean.isEDITABLE}"/>
                                 <!-- #{bindings.CreateInsert.execute}-->
               <af:commandButton text="#{viewBundle['dms.common.save']}" id="cb2"
                                 actionListener="#{viewScope.htkpReturnBean.operation_save}"
                                 partialTriggers="::soc4 ::soc3 ::iclov2"
-                                disabled="#{viewScope.htkpReturnBean.isSelected}"/>
+                                disabled="#{viewScope.htkpReturnBean.isSelected or not viewScope.htkpReturnBean.isEDITABLE}"/>
               <af:commandButton text="#{viewBundle['dcm.common.delete']}" id="cb3"
-                                actionListener="#{viewScope.htkpReturnBean.operation_delete}"/>
+                                actionListener="#{viewScope.htkpReturnBean.operation_delete}"
+                                disabled="#{not viewScope.htkpReturnBean.isEDITABLE}"/>
               <af:commandButton text="#{viewBundle['dcm.action.reset']}" id="cb4"
                                 actionListener="#{viewScope.htkpReturnBean.reset}"/>
             </af:group>
@@ -167,7 +168,7 @@
             <af:selectOneChoice 
                             value="#{row[viewScope.htkpReturnBean.dataModel.labelMap['合同开票回款明细']]}" 
                             autoSubmit="true"
-                            id="soc6"
+                            id="soc6" readOnly="#{not viewScope.htkpReturnBean.isEDITABLE}"
                             >
           <f:selectItems value="#{viewScope.htkpReturnBean.detailList}" id="si12"/>
         </af:selectOneChoice>
@@ -251,7 +252,8 @@
                      headerText="#{viewBundle['dms.dgpt.htkp.occurCost']}" id="c23"
                      width="105">
             <af:inputText value="#{row[viewScope.htkpReturnBean.dataModel.labelMap['已发生']]}" 
-                            id="it28"/>
+                            id="it28"
+                            readOnly="#{not viewScope.htkpReturnBean.isEDITABLE}"/>
           </af:column>
           <af:column sortable="false"
                             inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
@@ -260,7 +262,8 @@
                      headerText="#{viewBundle['dms.dgpt.htkp.last10']}" id="c11"
                      width="105">
             <af:inputText value="#{row[viewScope.htkpReturnBean.dataModel.labelMap['上年10月']]}" 
-                            id="it9"/>
+                            id="it9"
+                            readOnly="#{not viewScope.htkpReturnBean.isEDITABLE}"/>
           </af:column>
           <af:column sortable="false"
                             inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
@@ -269,7 +272,8 @@
                      headerText="#{viewBundle['dms.dgpt.htkp.last11']}" id="c25"
                      width="105">
             <af:inputText value="#{row[viewScope.htkpReturnBean.dataModel.labelMap['上年11月']]}" 
-                            id="it10"/>
+                            id="it10"
+                            readOnly="#{not viewScope.htkpReturnBean.isEDITABLE}"/>
           </af:column>
           <af:column sortable="false"
                             inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
@@ -278,7 +282,8 @@
                      headerText="#{viewBundle['dms.dgpt.htkp.last12']}" id="c21"
                      width="105">
             <af:inputText value="#{row[viewScope.htkpReturnBean.dataModel.labelMap['上年12月']]}" 
-                            id="it11"/>
+                            id="it11"
+                            readOnly="#{not viewScope.htkpReturnBean.isEDITABLE}"/>
           </af:column>
           <af:column sortable="false"
                             inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
@@ -286,7 +291,8 @@
                                     #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}"
                      headerText="#{viewBundle['dms.dgpt.htkp.cur1']}" id="c13">
             <af:inputText value="#{row[viewScope.htkpReturnBean.dataModel.labelMap['本年1月']]}" 
-                            id="it12"/>
+                            id="it12"
+                            readOnly="#{not viewScope.htkpReturnBean.isEDITABLE}"/>
           </af:column>
           <af:column sortable="false"
                             inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
@@ -294,7 +300,8 @@
                                     #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}"
                      headerText="#{viewBundle['dms.dgpt.htkp.cur2']}" id="c29">
             <af:inputText value="#{row[viewScope.htkpReturnBean.dataModel.labelMap['本年2月']]}" 
-                            id="it13"/>
+                            id="it13"
+                            readOnly="#{not viewScope.htkpReturnBean.isEDITABLE}"/>
           </af:column>
           <af:column sortable="false"
                             inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
@@ -302,7 +309,8 @@
                                     #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}"
                      headerText="#{viewBundle['dms.dgpt.htkp.cur3']}" id="c18">
             <af:inputText value="#{row[viewScope.htkpReturnBean.dataModel.labelMap['本年3月']]}" 
-                            id="it14"/>
+                            id="it14"
+                            readOnly="#{not viewScope.htkpReturnBean.isEDITABLE}"/>
           </af:column>
           <af:column sortable="false"
                             inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
@@ -310,7 +318,8 @@
                                     #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}"
                      headerText="#{viewBundle['dms.dgpt.htkp.cur4']}" id="c31">
             <af:inputText value="#{row[viewScope.htkpReturnBean.dataModel.labelMap['本年4月']]}" 
-                            id="it33"/>
+                            id="it33"
+                            readOnly="#{not viewScope.htkpReturnBean.isEDITABLE}"/>
           </af:column>
           <af:column sortable="false"
                             inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
@@ -318,7 +327,8 @@
                                     #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}"
                      headerText="#{viewBundle['dms.dgpt.htkp.cur5']}" id="c1">
             <af:inputText value="#{row[viewScope.htkpReturnBean.dataModel.labelMap['本年5月']]}"
-                            id="it15"/>
+                            id="it15"
+                            readOnly="#{not viewScope.htkpReturnBean.isEDITABLE}"/>
           </af:column>
           <af:column sortable="false"
                             inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
@@ -326,7 +336,8 @@
                                     #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}"
                      headerText="#{viewBundle['dms.dgpt.htkp.cur6']}" id="c7">
             <af:inputText value="#{row[viewScope.htkpReturnBean.dataModel.labelMap['本年6月']]}" 
-                            id="it16"/>
+                            id="it16"
+                            readOnly="#{not viewScope.htkpReturnBean.isEDITABLE}"/>
           </af:column>
           <af:column sortable="false"
                             inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
@@ -334,7 +345,8 @@
                                     #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}"
                      headerText="#{viewBundle['dms.dgpt.htkp.cur7']}" id="c22">
             <af:inputText value="#{row[viewScope.htkpReturnBean.dataModel.labelMap['本年7月']]}" 
-                            id="it17"/>
+                            id="it17"
+                            readOnly="#{not viewScope.htkpReturnBean.isEDITABLE}"/>
           </af:column>
           <af:column sortable="false"
                             inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
@@ -342,7 +354,8 @@
                                     #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}"
                      headerText="#{viewBundle['dms.dgpt.htkp.cur8']}" id="c32">
             <af:inputText value="#{row[viewScope.htkpReturnBean.dataModel.labelMap['本年8月']]}" 
-                            id="it18"/>
+                            id="it18"
+                            readOnly="#{not viewScope.htkpReturnBean.isEDITABLE}"/>
           </af:column>
           <af:column sortable="false"
                             inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
@@ -350,7 +363,8 @@
                                     #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}"
                      headerText="#{viewBundle['dms.dgpt.htkp.cur9']}" id="c26">
             <af:inputText value="#{row[viewScope.htkpReturnBean.dataModel.labelMap['本年9月']]}" 
-                            id="it19"/>
+                            id="it19"
+                            readOnly="#{not viewScope.htkpReturnBean.isEDITABLE}"/>
           </af:column>
           <af:column sortable="false"
                             inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
@@ -358,7 +372,8 @@
                                     #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}"
                      headerText="#{viewBundle['dms.dgpt.htkp.cur10']}" id="c16">
             <af:inputText value="#{row[viewScope.htkpReturnBean.dataModel.labelMap['本年10月']]}" 
-                            id="it32"/>
+                            id="it32"
+                            readOnly="#{not viewScope.htkpReturnBean.isEDITABLE}"/>
           </af:column>
           <af:column sortable="false"
                             inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
@@ -366,7 +381,8 @@
                                     #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}"
                      headerText="#{viewBundle['dms.dgpt.htkp.cur11']}" id="c30">
             <af:inputText value="#{row[viewScope.htkpReturnBean.dataModel.labelMap['本年11月']]}" 
-                            id="it20"/>
+                            id="it20"
+                            readOnly="#{not viewScope.htkpReturnBean.isEDITABLE}"/>
           </af:column>
           <af:column sortable="false"
                             inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
@@ -374,7 +390,8 @@
                                     #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}"
                      headerText="#{viewBundle['dms.dgpt.htkp.cur12']}" id="c9">
             <af:inputText value="#{row[viewScope.htkpReturnBean.dataModel.labelMap['本年12月']]}" 
-                            id="it21"/>
+                            id="it21"
+                            readOnly="#{not viewScope.htkpReturnBean.isEDITABLE}"/>
           </af:column>
           <af:column sortable="false"
                             inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
@@ -382,7 +399,8 @@
                                     #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}"
                      headerText="#{viewBundle['dms.dgpt.htkp.next1']}" id="c20">
             <af:inputText value="#{row[viewScope.htkpReturnBean.dataModel.labelMap['下年1月']]}" 
-                            id="it22"/>
+                            id="it22"
+                            readOnly="#{not viewScope.htkpReturnBean.isEDITABLE}"/>
           </af:column>
           <af:column sortable="false"
                             inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
@@ -390,7 +408,8 @@
                                     #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}"
                      headerText="#{viewBundle['dms.dgpt.htkp.next2']}" id="c4">
             <af:inputText value="#{row[viewScope.htkpReturnBean.dataModel.labelMap['下年2月']]}" 
-                            id="it23"/>
+                            id="it23"
+                            readOnly="#{not viewScope.htkpReturnBean.isEDITABLE}"/>
           </af:column>
           <af:column sortable="false"
                             inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
@@ -398,7 +417,8 @@
                                     #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}"
                      headerText="#{viewBundle['dms.dgpt.htkp.next3']}" id="c27">
             <af:inputText value="#{row[viewScope.htkpReturnBean.dataModel.labelMap['下年3月']]}" 
-                            id="it24"/>
+                            id="it24"
+                            readOnly="#{not viewScope.htkpReturnBean.isEDITABLE}"/>
           </af:column>
           <af:column sortable="false"
                             inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
@@ -406,7 +426,8 @@
                                     #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}"
                      headerText="#{viewBundle['dms.dgpt.htkp.next4']}" id="c6">
             <af:inputText value="#{row[viewScope.htkpReturnBean.dataModel.labelMap['下年4月']]}" 
-                            id="it31"/>
+                            id="it31"
+                            readOnly="#{not viewScope.htkpReturnBean.isEDITABLE}"/>
           </af:column>
           <af:column sortable="false"
                             inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
@@ -414,7 +435,8 @@
                                     #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}"
                      headerText="#{viewBundle['dms.dgpt.htkp.next5']}" id="c28">
             <af:inputText value="#{row[viewScope.htkpReturnBean.dataModel.labelMap['下年5月']]}" 
-                            id="it25"/>
+                            id="it25"
+                            readOnly="#{not viewScope.htkpReturnBean.isEDITABLE}"/>
           </af:column>
           <af:column sortable="false"
                             inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
@@ -422,7 +444,8 @@
                                     #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}"
                      headerText="#{viewBundle['dms.dgpt.htkp.next6']}" id="c15">
             <af:inputText value="#{row[viewScope.htkpReturnBean.dataModel.labelMap['下年6月']]}"
-                            id="it26"/>
+                            id="it26"
+                            readOnly="#{not viewScope.htkpReturnBean.isEDITABLE}"/>
           </af:column>
           <af:column sortable="false"
                             inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
@@ -430,7 +453,8 @@
                                     #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}"
                      headerText="#{viewBundle['dms.dgpt.htkp.nextOhters']}" id="c19">
             <af:inputText value="#{row[viewScope.htkpReturnBean.dataModel.labelMap['下年7月以后']]}"
-                            id="it27"/>
+                            id="it27"
+                            readOnly="#{not viewScope.htkpReturnBean.isEDITABLE}"/>
           </af:column>
         </af:table>
       </af:panelCollection>
