@@ -4,8 +4,16 @@
   <parameters/>
   <executables>
     <variableIterator id="variables"/>
-    <iterator Binds="ProPlanCostView" RangeSize="25"
-              DataControl="DmsModuleDataControl" id="ProPlanCostViewIterator"/>
+    <searchRegion Binds="PtHtkpStatusIterator" Criteria=""
+                  Customizer="oracle.jbo.uicli.binding.JUSearchBindingCustomizer"
+                  id="PtHtkpStatusQuery"/>
+    <iterator Binds="PtHtkpStatus" RangeSize="25"
+              DataControl="DmsModuleDataControl" id="PtHtkpStatusIterator"/>
+    <iterator Binds="AdminHtkpStatus" RangeSize="25"
+              DataControl="DmsModuleDataControl" id="AdminHtkpStatusIterator"/>
+    <searchRegion Binds="AdminHtkpStatusIterator" Criteria=""
+                  Customizer="oracle.jbo.uicli.binding.JUSearchBindingCustomizer"
+                  id="AdminHtkpStatusQuery"/>
   </executables>
   <bindings>
     <tree IterBinding="ProPlanCostViewIterator" id="ProPlanCostView">
@@ -16,6 +24,28 @@
           <Item Value="Msg"/>
           <Item Value="CreatedAt"/>
           <Item Value="CreatedBy"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <tree IterBinding="PtHtkpStatusIterator" id="PtHtkpStatus">
+      <nodeDefinition DefName="team.epm.dms.view.PtHtkpStatus"
+                      Name="PtHtkpStatus0">
+        <AttrNames>
+          <Item Value="Year"/>
+          <Item Value="ProName"/>
+          <Item Value="Version"/>
+          <Item Value="IsBlock"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <tree IterBinding="AdminHtkpStatusIterator" id="AdminHtkpStatus">
+      <nodeDefinition DefName="team.epm.dms.view.AdminHtkpStatus"
+                      Name="AdminHtkpStatus0">
+        <AttrNames>
+          <Item Value="Year"/>
+          <Item Value="Proname"/>
+          <Item Value="Version"/>
+          <Item Value="IsBlock"/>
         </AttrNames>
       </nodeDefinition>
     </tree>

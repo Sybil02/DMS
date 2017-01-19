@@ -5,7 +5,7 @@
           xmlns:f="http://java.sun.com/jsf/core">
   <c:set var="viewBundle" value="#{adfBundle['dms_v']}"/>
   <af:panelStretchLayout id="psl1" startWidth="0px" endWidth="4px"
-                         topHeight="33px" bottomHeight="2px">
+                         topHeight="33px" bottomHeight="1px">
     <f:facet name="bottom">
       <af:panelGroupLayout id="pgl2">
         <af:popup id="p1" binding="#{viewScope.htkpReturnBean.dataExportWnd}">
@@ -113,6 +113,113 @@
             </af:panelStretchLayout>
           </af:panelWindow>
         </af:popup>
+        <af:popup id="p4"  autoCancel="disabled"
+                  binding="#{viewScope.htkpReturnBean.adminBlockPoup}">
+          <af:panelWindow id="pw4"
+                          title="#{viewBundle['dms.dgpt.block_status.select']}">
+            <af:panelCollection id="pc2" inlineStyle="width:800px;height:400px">
+              <f:facet name="menus"/>
+              <f:facet name="toolbar">
+                <af:toolbar id="t5">
+                  <af:commandButton text="#{viewBundle['dms.dgpt.fblock']}" id="cb13"
+                                    actionListener="#{viewScope.htkpReturnBean.outBlock2}"/>
+                </af:toolbar>
+              </f:facet>
+              <f:facet name="statusbar"/>
+              <af:table value="#{bindings.AdminHtkpStatus.collectionModel}"
+                        var="row" rows="#{bindings.AdminHtkpStatus.rangeSize}"
+                        emptyText="#{bindings.AdminHtkpStatus.viewable ? 'No data to display.' : 'Access Denied.'}"
+                        fetchSize="#{bindings.AdminHtkpStatus.rangeSize}"
+                        rowBandingInterval="0"
+                        filterModel="#{bindings.AdminHtkpStatusQuery.queryDescriptor}"
+                        queryListener="#{bindings.AdminHtkpStatusQuery.processQuery}"
+                        filterVisible="false" varStatus="vs"
+                        selectionListener="#{bindings.AdminHtkpStatus.collectionModel.makeCurrent}"
+                        rowSelection="multiple" id="t4"
+                        columnStretching="column:c38"
+                        binding="#{viewScope.htkpReturnBean.subTable}">
+                <af:column sortProperty="#{bindings.AdminHtkpStatus.hints.Year.name}"
+                           filterable="true" sortable="true"
+                           headerText="#{bindings.AdminHtkpStatus.hints.Year.label}"
+                           id="c39">
+                  <af:outputText value="#{row.Year}" id="ot8"/>
+                </af:column>
+                <af:column sortProperty="#{bindings.AdminHtkpStatus.hints.Proname.name}"
+                           filterable="true" sortable="true"
+                           headerText="#{bindings.AdminHtkpStatus.hints.Proname.label}"
+                           id="c38">
+                  <af:outputText value="#{row.Proname}" id="ot9"/>
+                </af:column>
+                <af:column sortProperty="#{bindings.AdminHtkpStatus.hints.Version.name}"
+                           filterable="true" sortable="true"
+                           headerText="#{bindings.AdminHtkpStatus.hints.Version.label}"
+                           id="c37">
+                  <af:outputText value="#{row.Version}" id="ot10"/>
+                </af:column>
+                <af:column sortProperty="#{bindings.AdminHtkpStatus.hints.IsBlock.name}"
+                           filterable="true" sortable="true"
+                           headerText="#{bindings.AdminHtkpStatus.hints.IsBlock.label}"
+                           id="c36">
+                  <af:outputText value="#{row.IsBlock}" id="ot5"/>
+                </af:column>
+              </af:table>
+            </af:panelCollection>
+          </af:panelWindow>
+        </af:popup>
+        <af:popup id="p5" autoCancel="disabled"
+                  binding="#{viewScope.htkpReturnBean.ptBlockPoup}">
+          <af:panelWindow id="pw5"
+                          title="#{viewBundle['dms.dgpt.block_status.select']}">
+            <af:panelCollection id="pc3" inlineStyle="width:800px;height:400px">
+              <f:facet name="menus"/>
+              <f:facet name="toolbar">
+                <af:toolbar id="t7">
+                  <af:commandButton text="#{viewBundle['dms.dgpt.fblock']}" id="cb14"
+                                    rendered="#{(sessionScope.authoriedFunction['UNFREEZE'])}"
+                                    actionListener="#{viewScope.htkpReturnBean.outBlock3}"/>
+                </af:toolbar>
+              </f:facet>
+              <f:facet name="statusbar"/>
+              <af:table value="#{bindings.PtHtkpStatus.collectionModel}"
+                        var="row" rows="#{bindings.PtHtkpStatus.rangeSize}"
+                        emptyText="#{bindings.PtHtkpStatus.viewable ? 'No data to display.' : 'Access Denied.'}"
+                        fetchSize="#{bindings.PtHtkpStatus.rangeSize}"
+                        rowBandingInterval="0"
+                        filterModel="#{bindings.PtHtkpStatusQuery.queryDescriptor}"
+                        queryListener="#{bindings.PtHtkpStatusQuery.processQuery}"
+                        filterVisible="false" varStatus="vs"
+                        selectionListener="#{bindings.PtHtkpStatus.collectionModel.makeCurrent}"
+                        rowSelection="multiple" id="t6"
+                        columnStretching="column:c41"
+                        binding="#{viewScope.htkpReturnBean.subTable2}">
+                <af:column sortProperty="#{bindings.PtHtkpStatus.hints.Year.name}"
+                           filterable="true" sortable="true"
+                           headerText="#{bindings.PtHtkpStatus.hints.Year.label}"
+                           id="c42">
+                  <af:outputText value="#{row.Year}" id="ot13"/>
+                </af:column>
+                <af:column sortProperty="#{bindings.PtHtkpStatus.hints.ProName.name}"
+                           filterable="true" sortable="true"
+                           headerText="#{bindings.PtHtkpStatus.hints.ProName.label}"
+                           id="c41">
+                  <af:outputText value="#{row.ProName}" id="ot12"/>
+                </af:column>
+                <af:column sortProperty="#{bindings.PtHtkpStatus.hints.Version.name}"
+                           filterable="true" sortable="true"
+                           headerText="#{bindings.PtHtkpStatus.hints.Version.label}"
+                           id="c40">
+                  <af:outputText value="#{row.Version}" id="ot11"/>
+                </af:column>
+                <af:column sortProperty="#{bindings.PtHtkpStatus.hints.IsBlock.name}"
+                           filterable="true" sortable="true"
+                           headerText="#{bindings.PtHtkpStatus.hints.IsBlock.label}"
+                           id="c43">
+                  <af:outputText value="#{row.IsBlock}" id="ot14"/>
+                </af:column>
+              </af:table>
+            </af:panelCollection>
+          </af:panelWindow>
+        </af:popup>
       </af:panelGroupLayout>
     </f:facet>
     <f:facet name="center">
@@ -124,20 +231,28 @@
               <af:commandButton text="#{viewBundle['dcm.common.new']}" id="cb1"
                                 actionListener="#{viewScope.htkpReturnBean.operation_new}"
                                 partialTriggers="::soc4 ::iclov2 ::soc3"
-                                disabled="#{viewScope.htkpReturnBean.isSelected or not viewScope.htkpReturnBean.isEDITABLE}"/>
+                                disabled="#{(viewScope.htkpReturnBean.isSelected eq false) 
+                                            and (viewScope.htkpReturnBean.isBlock eq true)}"
+                                rendered="#{viewScope.htkpReturnBean.isEDITABLE}"/>
                                 <!-- #{bindings.CreateInsert.execute}-->
               <af:commandButton text="#{viewBundle['dms.common.save']}" id="cb2"
                                 actionListener="#{viewScope.htkpReturnBean.operation_save}"
                                 partialTriggers="::soc4 ::soc3 ::iclov2"
-                                disabled="#{viewScope.htkpReturnBean.isSelected or not viewScope.htkpReturnBean.isEDITABLE}"/>
+                                disabled="#{(viewScope.htkpReturnBean.isSelected eq false) and (viewScope.htkpReturnBean.isBlock eq true)}"
+                                rendered="#{viewScope.htkpReturnBean.isEDITABLE}"/>
               <af:commandButton text="#{viewBundle['dcm.common.delete']}" id="cb3"
                                 actionListener="#{viewScope.htkpReturnBean.operation_delete}"
-                                disabled="#{not viewScope.htkpReturnBean.isEDITABLE}"/>
-              <af:commandButton text="#{viewBundle['dcm.action.reset']}" id="cb4"
+                                partialTriggers="::soc4 ::soc3 ::iclov2"
+                                disabled="#{(viewScope.htkpReturnBean.isSelected eq false) and (viewScope.htkpReturnBean.isBlock eq true)}"
+                                rendered="#{viewScope.htkpReturnBean.isEDITABLE}"/>
+              <af:commandButton text="#{viewScope.htkpReturnBean.isEDITABLE}" id="cb4"
                                 actionListener="#{viewScope.htkpReturnBean.reset}"/>
             </af:group>
             <af:group id="g2">
-              <af:commandButton text="#{viewBundle['dms.dgpt.excel.import']}" id="cb5">
+              <af:commandButton text="#{viewBundle['dms.dgpt.excel.import']}" id="cb5"
+                                partialTriggers="::soc4 ::soc3 ::iclov2"
+                                disabled="#{(viewScope.htkpReturnBean.isSelected eq false) and (viewScope.htkpReturnBean.isBlock eq true)}"
+                                rendered="#{viewScope.htkpReturnBean.isEDITABLE}">
                 <af:showPopupBehavior popupId="::p2"/>
               </af:commandButton>
               <af:commandButton text="#{viewBundle['dcm.action.export']}" id="cb6"
@@ -145,9 +260,22 @@
                                 disabled="#{viewScope.htkpReturnBean.isSelected}">
                 <af:showPopupBehavior popupId="::p1"/>
               </af:commandButton>
-              <af:commandButton text="#{viewBundle['dcm.import_error']}" id="cb9"
-                                actionListener="#{viewScope.htkpReturnBean.errorPop}">
+              <af:commandButton text="#{viewBundle['dms.dgpt.block']}" id="cb10"
+                                actionListener="#{viewScope.htkpReturnBean.beBlocked}"
+                                rendered="#{viewScope.htkpReturnBean.isEDITABLE}"
+                                disabled="#{(viewScope.htkpReturnBean.isSelected eq false) and (viewScope.htkpReturnBean.isBlock eq true)}"
+                                partialTriggers="::soc4 ::soc3 ::iclov2"/>
+              <af:commandButton text="#{viewBundle['dms.dgpt.fblock']}" id="cb11"
+                                actionListener="#{viewScope.htkpReturnBean.outBlock}"
+                                rendered="#{(sessionScope.authoriedFunction['UNFREEZE'] ne null) or viewScope.htkpReturnBean.isManager}"
+                                disabled="#{(viewScope.htkpReturnBean.isSelected eq false) and (viewScope.htkpReturnBean.isBlock eq false)}"
+                                partialTriggers="::soc4 ::soc3 ::iclov2"/>
+              <af:commandButton text="#{viewBundle['dms.dgpt.block.status']}" id="cb12"
+                                actionListener="#{viewScope.htkpReturnBean.showBlockStatus}">
               </af:commandButton>
+              <af:commandButton text="#{viewBundle['dcm.import_error']}"
+                                id="cb9"
+                                actionListener="#{viewScope.htkpReturnBean.errorPop}"/>
             </af:group>
           </af:toolbar>
         </f:facet>
@@ -168,7 +296,8 @@
             <af:selectOneChoice 
                             value="#{row[viewScope.htkpReturnBean.dataModel.labelMap['合同开票回款明细']]}" 
                             autoSubmit="true"
-                            id="soc6" readOnly="#{not viewScope.htkpReturnBean.isEDITABLE}"
+                            id="soc6" 
+                            readOnly="#{viewScope.htkpReturnBean.isBlock or not viewScope.htkpReturnBean.isEDITABLE}"
                             >
           <f:selectItems value="#{viewScope.htkpReturnBean.detailList}" id="si12"/>
         </af:selectOneChoice>
@@ -253,7 +382,7 @@
                      width="105">
             <af:inputText value="#{row[viewScope.htkpReturnBean.dataModel.labelMap['已发生']]}" 
                             id="it28"
-                            readOnly="#{not viewScope.htkpReturnBean.isEDITABLE}"/>
+                            readOnly="#{not viewScope.htkpReturnBean.isEDITABLE or viewScope.htkpReturnBean.isBlock}"/>
           </af:column>
           <af:column sortable="false"
                             inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
@@ -263,7 +392,7 @@
                      width="105">
             <af:inputText value="#{row[viewScope.htkpReturnBean.dataModel.labelMap['上年10月']]}" 
                             id="it9"
-                            readOnly="#{not viewScope.htkpReturnBean.isEDITABLE}"/>
+                            readOnly="#{not viewScope.htkpReturnBean.isEDITABLE or viewScope.htkpReturnBean.isBlock}"/>
           </af:column>
           <af:column sortable="false"
                             inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
@@ -273,7 +402,7 @@
                      width="105">
             <af:inputText value="#{row[viewScope.htkpReturnBean.dataModel.labelMap['上年11月']]}" 
                             id="it10"
-                            readOnly="#{not viewScope.htkpReturnBean.isEDITABLE}"/>
+                            readOnly="#{not viewScope.htkpReturnBean.isEDITABLE or viewScope.htkpReturnBean.isBlock}"/>
           </af:column>
           <af:column sortable="false"
                             inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
@@ -283,7 +412,7 @@
                      width="105">
             <af:inputText value="#{row[viewScope.htkpReturnBean.dataModel.labelMap['上年12月']]}" 
                             id="it11"
-                            readOnly="#{not viewScope.htkpReturnBean.isEDITABLE}"/>
+                            readOnly="#{not viewScope.htkpReturnBean.isEDITABLE or viewScope.htkpReturnBean.isBlock}"/>
           </af:column>
           <af:column sortable="false"
                             inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
@@ -292,7 +421,7 @@
                      headerText="#{viewBundle['dms.dgpt.htkp.cur1']}" id="c13">
             <af:inputText value="#{row[viewScope.htkpReturnBean.dataModel.labelMap['本年1月']]}" 
                             id="it12"
-                            readOnly="#{not viewScope.htkpReturnBean.isEDITABLE}"/>
+                            readOnly="#{not viewScope.htkpReturnBean.isEDITABLE or viewScope.htkpReturnBean.isBlock}"/>
           </af:column>
           <af:column sortable="false"
                             inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
@@ -301,7 +430,7 @@
                      headerText="#{viewBundle['dms.dgpt.htkp.cur2']}" id="c29">
             <af:inputText value="#{row[viewScope.htkpReturnBean.dataModel.labelMap['本年2月']]}" 
                             id="it13"
-                            readOnly="#{not viewScope.htkpReturnBean.isEDITABLE}"/>
+                            readOnly="#{not viewScope.htkpReturnBean.isEDITABLE or viewScope.htkpReturnBean.isBlock}"/>
           </af:column>
           <af:column sortable="false"
                             inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
@@ -310,7 +439,7 @@
                      headerText="#{viewBundle['dms.dgpt.htkp.cur3']}" id="c18">
             <af:inputText value="#{row[viewScope.htkpReturnBean.dataModel.labelMap['本年3月']]}" 
                             id="it14"
-                            readOnly="#{not viewScope.htkpReturnBean.isEDITABLE}"/>
+                            readOnly="#{not viewScope.htkpReturnBean.isEDITABLE or viewScope.htkpReturnBean.isBlock}"/>
           </af:column>
           <af:column sortable="false"
                             inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
@@ -319,7 +448,7 @@
                      headerText="#{viewBundle['dms.dgpt.htkp.cur4']}" id="c31">
             <af:inputText value="#{row[viewScope.htkpReturnBean.dataModel.labelMap['本年4月']]}" 
                             id="it33"
-                            readOnly="#{not viewScope.htkpReturnBean.isEDITABLE}"/>
+                            readOnly="#{not viewScope.htkpReturnBean.isEDITABLE or viewScope.htkpReturnBean.isBlock}"/>
           </af:column>
           <af:column sortable="false"
                             inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
@@ -328,7 +457,7 @@
                      headerText="#{viewBundle['dms.dgpt.htkp.cur5']}" id="c1">
             <af:inputText value="#{row[viewScope.htkpReturnBean.dataModel.labelMap['本年5月']]}"
                             id="it15"
-                            readOnly="#{not viewScope.htkpReturnBean.isEDITABLE}"/>
+                            readOnly="#{not viewScope.htkpReturnBean.isEDITABLE or viewScope.htkpReturnBean.isBlock}"/>
           </af:column>
           <af:column sortable="false"
                             inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
@@ -337,7 +466,7 @@
                      headerText="#{viewBundle['dms.dgpt.htkp.cur6']}" id="c7">
             <af:inputText value="#{row[viewScope.htkpReturnBean.dataModel.labelMap['本年6月']]}" 
                             id="it16"
-                            readOnly="#{not viewScope.htkpReturnBean.isEDITABLE}"/>
+                            readOnly="#{not viewScope.htkpReturnBean.isEDITABLE or viewScope.htkpReturnBean.isBlock}"/>
           </af:column>
           <af:column sortable="false"
                             inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
@@ -346,7 +475,7 @@
                      headerText="#{viewBundle['dms.dgpt.htkp.cur7']}" id="c22">
             <af:inputText value="#{row[viewScope.htkpReturnBean.dataModel.labelMap['本年7月']]}" 
                             id="it17"
-                            readOnly="#{not viewScope.htkpReturnBean.isEDITABLE}"/>
+                            readOnly="#{not viewScope.htkpReturnBean.isEDITABLE or viewScope.htkpReturnBean.isBlock}"/>
           </af:column>
           <af:column sortable="false"
                             inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
@@ -355,7 +484,7 @@
                      headerText="#{viewBundle['dms.dgpt.htkp.cur8']}" id="c32">
             <af:inputText value="#{row[viewScope.htkpReturnBean.dataModel.labelMap['本年8月']]}" 
                             id="it18"
-                            readOnly="#{not viewScope.htkpReturnBean.isEDITABLE}"/>
+                            readOnly="#{not viewScope.htkpReturnBean.isEDITABLE or viewScope.htkpReturnBean.isBlock}"/>
           </af:column>
           <af:column sortable="false"
                             inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
@@ -364,7 +493,7 @@
                      headerText="#{viewBundle['dms.dgpt.htkp.cur9']}" id="c26">
             <af:inputText value="#{row[viewScope.htkpReturnBean.dataModel.labelMap['本年9月']]}" 
                             id="it19"
-                            readOnly="#{not viewScope.htkpReturnBean.isEDITABLE}"/>
+                            readOnly="#{not viewScope.htkpReturnBean.isEDITABLE or viewScope.htkpReturnBean.isBlock}"/>
           </af:column>
           <af:column sortable="false"
                             inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
@@ -373,7 +502,7 @@
                      headerText="#{viewBundle['dms.dgpt.htkp.cur10']}" id="c16">
             <af:inputText value="#{row[viewScope.htkpReturnBean.dataModel.labelMap['本年10月']]}" 
                             id="it32"
-                            readOnly="#{not viewScope.htkpReturnBean.isEDITABLE}"/>
+                            readOnly="#{not viewScope.htkpReturnBean.isEDITABLE or viewScope.htkpReturnBean.isBlock}"/>
           </af:column>
           <af:column sortable="false"
                             inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
@@ -382,7 +511,7 @@
                      headerText="#{viewBundle['dms.dgpt.htkp.cur11']}" id="c30">
             <af:inputText value="#{row[viewScope.htkpReturnBean.dataModel.labelMap['本年11月']]}" 
                             id="it20"
-                            readOnly="#{not viewScope.htkpReturnBean.isEDITABLE}"/>
+                            readOnly="#{not viewScope.htkpReturnBean.isEDITABLE or viewScope.htkpReturnBean.isBlock}"/>
           </af:column>
           <af:column sortable="false"
                             inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
@@ -391,7 +520,7 @@
                      headerText="#{viewBundle['dms.dgpt.htkp.cur12']}" id="c9">
             <af:inputText value="#{row[viewScope.htkpReturnBean.dataModel.labelMap['本年12月']]}" 
                             id="it21"
-                            readOnly="#{not viewScope.htkpReturnBean.isEDITABLE}"/>
+                            readOnly="#{not viewScope.htkpReturnBean.isEDITABLE or viewScope.htkpReturnBean.isBlock}"/>
           </af:column>
           <af:column sortable="false"
                             inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
@@ -400,7 +529,7 @@
                      headerText="#{viewBundle['dms.dgpt.htkp.next1']}" id="c20">
             <af:inputText value="#{row[viewScope.htkpReturnBean.dataModel.labelMap['下年1月']]}" 
                             id="it22"
-                            readOnly="#{not viewScope.htkpReturnBean.isEDITABLE}"/>
+                            readOnly="#{not viewScope.htkpReturnBean.isEDITABLE or viewScope.htkpReturnBean.isBlock}"/>
           </af:column>
           <af:column sortable="false"
                             inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
@@ -409,7 +538,7 @@
                      headerText="#{viewBundle['dms.dgpt.htkp.next2']}" id="c4">
             <af:inputText value="#{row[viewScope.htkpReturnBean.dataModel.labelMap['下年2月']]}" 
                             id="it23"
-                            readOnly="#{not viewScope.htkpReturnBean.isEDITABLE}"/>
+                            readOnly="#{not viewScope.htkpReturnBean.isEDITABLE or viewScope.htkpReturnBean.isBlock}"/>
           </af:column>
           <af:column sortable="false"
                             inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
@@ -418,7 +547,7 @@
                      headerText="#{viewBundle['dms.dgpt.htkp.next3']}" id="c27">
             <af:inputText value="#{row[viewScope.htkpReturnBean.dataModel.labelMap['下年3月']]}" 
                             id="it24"
-                            readOnly="#{not viewScope.htkpReturnBean.isEDITABLE}"/>
+                            readOnly="#{not viewScope.htkpReturnBean.isEDITABLE or viewScope.htkpReturnBean.isBlock}"/>
           </af:column>
           <af:column sortable="false"
                             inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
@@ -427,7 +556,7 @@
                      headerText="#{viewBundle['dms.dgpt.htkp.next4']}" id="c6">
             <af:inputText value="#{row[viewScope.htkpReturnBean.dataModel.labelMap['下年4月']]}" 
                             id="it31"
-                            readOnly="#{not viewScope.htkpReturnBean.isEDITABLE}"/>
+                            readOnly="#{not viewScope.htkpReturnBean.isEDITABLE or viewScope.htkpReturnBean.isBlock}"/>
           </af:column>
           <af:column sortable="false"
                             inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
@@ -436,7 +565,7 @@
                      headerText="#{viewBundle['dms.dgpt.htkp.next5']}" id="c28">
             <af:inputText value="#{row[viewScope.htkpReturnBean.dataModel.labelMap['下年5月']]}" 
                             id="it25"
-                            readOnly="#{not viewScope.htkpReturnBean.isEDITABLE}"/>
+                            readOnly="#{not viewScope.htkpReturnBean.isEDITABLE or viewScope.htkpReturnBean.isBlock}"/>
           </af:column>
           <af:column sortable="false"
                             inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
@@ -445,7 +574,7 @@
                      headerText="#{viewBundle['dms.dgpt.htkp.next6']}" id="c15">
             <af:inputText value="#{row[viewScope.htkpReturnBean.dataModel.labelMap['下年6月']]}"
                             id="it26"
-                            readOnly="#{not viewScope.htkpReturnBean.isEDITABLE}"/>
+                            readOnly="#{not viewScope.htkpReturnBean.isEDITABLE or viewScope.htkpReturnBean.isBlock}"/>
           </af:column>
           <af:column sortable="false"
                             inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
@@ -454,7 +583,7 @@
                      headerText="#{viewBundle['dms.dgpt.htkp.nextOhters']}" id="c19">
             <af:inputText value="#{row[viewScope.htkpReturnBean.dataModel.labelMap['下年7月以后']]}"
                             id="it27"
-                            readOnly="#{not viewScope.htkpReturnBean.isEDITABLE}"/>
+                            readOnly="#{not viewScope.htkpReturnBean.isEDITABLE or viewScope.htkpReturnBean.isBlock}"/>
           </af:column>
         </af:table>
       </af:panelCollection>

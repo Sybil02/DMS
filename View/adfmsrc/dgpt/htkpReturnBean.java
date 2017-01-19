@@ -43,6 +43,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -62,6 +63,10 @@ import oracle.adf.view.rich.component.rich.input.RichInputFile;
 
 import oracle.adf.view.rich.component.rich.input.RichSelectOneChoice;
 
+import oracle.adf.view.rich.component.rich.nav.RichCommandButton;
+import oracle.adf.view.rich.context.AdfFacesContext;
+
+import oracle.jbo.Key;
 import oracle.jbo.Row;
 import oracle.jbo.ViewObject;
 import oracle.jbo.server.DBTransaction;
@@ -81,14 +86,23 @@ public class htkpReturnBean {
     private RichInputFile fileInput;
     private RichPopup dataImportWnd;
     private RichPopup errorWindow;
+    private RichTable subTable;
+    private RichTable subTable2;
+    private RichPopup ptBlockPoup;
+    private RichPopup adminBlockPoup;
+    private RichCommandButton newbtn;
 
     public htkpReturnBean() {
         super();
+        System.out.println(this);
+        System.out.println("ssssssss");
         this.curUser = (Person)(ADFContext.getCurrent().getSessionScope().get("cur_user"));
         if("10000".equals(this.curUser.getId())){
             isEDITABLE = true;
+            isManager = true;
         }else{
             isEDITABLE = false;
+            isManager = false;
         }
         this.dataModel = new PcDataTableModel();
         List<Map> d = new ArrayList<Map>();
@@ -123,6 +137,9 @@ public class htkpReturnBean {
     private boolean isXlsx = true;
     //是否已选表头
     private boolean isSelected;
+    
+    private boolean isBlock;
+    private boolean isManager;
     DmsLog dmsLog = new DmsLog();
     //表体下拉框列表
     private List<SelectItem> detailList;
@@ -242,6 +259,13 @@ public class htkpReturnBean {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        
+        this.newbtn.setRendered(false);
+        AdfFacesContext adfFacesContext = AdfFacesContext.getCurrentInstance();
+        adfFacesContext.addPartialTarget(this.newbtn);
+
+        
+        System.out.println("isEditable:"+this.isEDITABLE);
     }
     
     //查询数据
@@ -269,6 +293,24 @@ public class htkpReturnBean {
             qSql.append(entry.getValue()).append(",");
         }
         qSql.append("ROWID AS ROW_ID FROM CONT_INVOICE_RETURN_BUDGET_5 WHERE COM_RECORD_ID='").append(this.connectId).append("'");
+        //查询是否冻结
+        String isBlockSql = "SELECT COUNT(1) AS COUNTS FROM DMS_HTKP_BLOCK WHERE COM_RECORD_ID ='"+this.connectId+"'";
+        Statement isBlockStat = trans.createStatement(DBTransaction.DEFAULT);
+        ResultSet isBlockRs;
+        try {
+            isBlockRs = isBlockStat.executeQuery(isBlockSql);
+            while(isBlockRs.next()){
+            System.out.println(Integer.parseInt(isBlockRs.getString("COUNTS")));
+                if(Integer.parseInt(isBlockRs.getString("COUNTS"))>0){
+                    System.out.println(">0");
+                    isBlock = true;
+                }else{
+                    isBlock = false;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return qSql.toString();
     }
     
@@ -393,7 +435,6 @@ public class htkpReturnBean {
         }
         this.dataModel.setWrappedData(data);
         ((PcDataTableModel)this.dataModel).setLabelMap(labelMap);
-        this.selectIsEditable();
     }
     //获取行业线等信息
     public void getLine(){
@@ -456,29 +497,33 @@ public class htkpReturnBean {
             e.printStackTrace();
         }
         if(year==null||pName==null||version==null){
+            isSelected = false;
             return;
         }
-        isSelected = false;
-        this.createTableModel();
+        this.selectIsEditable();
+        //this.createTableModel();
     }
     //项目下拉框值改变
     public void pnameChange(ValueChangeEvent valueChangeEvent) {
         pName = (String) valueChangeEvent.getNewValue();
         System.out.println(pName);
         if(year==null||pName==null||version==null){
+            isSelected = false;
             return;
         }
-        isSelected = false;
-        this.createTableModel();
+        this.selectIsEditable();
+        //this.createTableModel();
     }
     //版本下拉框值改变
     public void versionChange(ValueChangeEvent valueChangeEvent) {
         version = (String) valueChangeEvent.getNewValue();
         if(year==null||pName==null||version==null){
+            isSelected = false;
             return;
         }
-        isSelected = false;
-        this.createTableModel();
+
+        this.selectIsEditable();
+        //this.createTableModel();
     }
     //调整数字显示格式
     public static String getPrettyNumber(String number) {  
@@ -1084,6 +1129,172 @@ public class htkpReturnBean {
     }
 
     public boolean isIsEDITABLE() {
+        System.out.println("return : "+isEDITABLE);
         return isEDITABLE;
+    }
+
+    public void beBlocked(ActionEvent actionEvent) {
+        System.out.println(this.connectId);
+        //查询表中是否有该组合的记录，没有则插入
+        String beBlockSql = "INSERT INTO DMS_HTKP_BLOCK (COM_RECORD_ID,IS_BLOCK) VALUES ('"+this.connectId+
+            "','true')";
+        DBTransaction trans = (DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
+        Statement stat = trans.createStatement(DBTransaction.DEFAULT);
+        try {
+            stat.executeUpdate(beBlockSql);
+            trans.commit();
+            stat.close();
+            this.isBlock = true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void outBlock(ActionEvent actionEvent) {
+        String outBlockSql = "DELETE FROM DMS_HTKP_BLOCK WHERE COM_RECORD_ID = '"+this.connectId+"'";
+        DBTransaction trans = (DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
+        Statement stat = trans.createStatement(DBTransaction.DEFAULT);
+        try {
+            stat.executeUpdate(outBlockSql);
+            trans.commit();
+            stat.close();
+            this.isBlock = false;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void setIsBlock(boolean isBlock) {
+        this.isBlock = isBlock;
+    }
+
+    public boolean isIsBlock() {
+        return isBlock;
+    }
+
+    public void setSubTable(RichTable subTable) {
+        this.subTable = subTable;
+    }
+
+    public RichTable getSubTable() {
+        return subTable;
+    }
+
+    public void outBlock2(ActionEvent actionEvent) {
+        if(this.subTable.getSelectedRowKeys() ==  null ) return;
+        RowKeySet rks = this.subTable.getSelectedRowKeys();
+        ViewObject vo = ADFUtils.findIterator("AdminHtkpStatusIterator").getViewObject();
+        DBTransaction trans = (DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
+        Statement stat = trans.createStatement(DBTransaction.DEFAULT);
+        Iterator itr = rks.iterator();
+        try {
+            while(itr.hasNext()){
+                List ls = (List)itr.next();
+                Key key =(Key)ls.get(0);
+                Row row = vo.getRow(key);
+                StringBuffer sql = new StringBuffer();
+                if(row.getAttribute("IsBlock").equals("已冻结")){
+                    sql.append("DELETE FROM DMS_HTKP_BLOCK WHERE COM_RECORD_ID = '").append(row.getAttribute("Id")).append("'");
+                    stat.executeUpdate(sql.toString());
+                }
+                if(row.getAttribute("Proname").equals(this.pName)){
+                    this.isBlock = false;
+                }
+            }
+            stat.close();
+            trans.commit();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void setIsManager(boolean isManager) {
+        this.isManager = isManager;
+    }
+
+    public boolean isIsManager() {
+        return isManager;
+    }
+
+    public void setSubTable2(RichTable subTable2) {
+        this.subTable2 = subTable2;
+    }
+
+    public RichTable getSubTable2() {
+        return subTable2;
+    }
+
+    public void setPtBlockPoup(RichPopup ptBlockPoup) {
+        this.ptBlockPoup = ptBlockPoup;
+    }
+
+    public RichPopup getPtBlockPoup() {
+        return ptBlockPoup;
+    }
+
+    public void setAdminBlockPoup(RichPopup adminBlockPoup) {
+        this.adminBlockPoup = adminBlockPoup;
+    }
+
+    public RichPopup getAdminBlockPoup() {
+        return adminBlockPoup;
+    }
+
+    public void showBlockStatus(ActionEvent actionEvent) {
+        if(this.curUser.getId().equals("10000")){
+            this.showAdminStatus();
+        }else{
+            this.showPtStatus();
+        }
+    }
+    
+    public void showAdminStatus(){
+        RichPopup.PopupHints ph = new RichPopup.PopupHints();
+        this.adminBlockPoup.show(ph);
+    }
+    
+    public void showPtStatus(){
+        ViewObject vo = ADFUtils.findIterator("PtHtkpStatusIterator").getViewObject();
+        vo.setNamedWhereClauseParam("userId", this.curUser.getId());
+        vo.setNamedWhereClauseParam("userAcc", this.curUser.getAcc());
+        vo.executeQuery();
+        RichPopup.PopupHints ph = new RichPopup.PopupHints();
+        this.ptBlockPoup.show(ph);
+    }
+
+    public void outBlock3(ActionEvent actionEvent) {
+        if(this.subTable2.getSelectedRowKeys() ==  null ) return;
+        RowKeySet rks = this.subTable2.getSelectedRowKeys();
+        ViewObject vo = ADFUtils.findIterator("PtHtkpStatusIterator").getViewObject();
+        DBTransaction trans = (DBTransaction)DmsUtils.getDcmApplicationModule().getTransaction();
+        Statement stat = trans.createStatement(DBTransaction.DEFAULT);
+        Iterator itr = rks.iterator();
+        try {
+            while(itr.hasNext()){
+                List ls = (List)itr.next();
+                Key key =(Key)ls.get(0);
+                Row row = vo.getRow(key);
+                StringBuffer sql = new StringBuffer();
+                if(row.getAttribute("IsBlock").equals("已冻结")){
+                    sql.append("DELETE FROM DMS_HTKP_BLOCK WHERE COM_RECORD_ID = '").append(row.getAttribute("Id")).append("'");
+                    stat.executeUpdate(sql.toString());
+                }
+                if(row.getAttribute("Proname").equals(this.pName)){
+                    this.isBlock = false;
+                }
+            }
+            stat.close();
+            trans.commit();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void setNewbtn(RichCommandButton newbtn) {
+        this.newbtn = newbtn;
+    }
+
+    public RichCommandButton getNewbtn() {
+        return newbtn;
     }
 }
