@@ -108,7 +108,8 @@
                 </af:table>
               </f:facet>
               <f:facet name="start"/>
-              <f:facet name="end"/>
+              <f:facet name="end">
+              </f:facet>
               <f:facet name="top"/>
             </af:panelStretchLayout>
           </af:panelWindow>

@@ -14,6 +14,11 @@
     <searchRegion Binds="AdminHtkpStatusIterator" Criteria=""
                   Customizer="oracle.jbo.uicli.binding.JUSearchBindingCustomizer"
                   id="AdminHtkpStatusQuery"/>
+    <iterator Binds="ProPlanCostView" RangeSize="25"
+              DataControl="DmsModuleDataControl" id="ProPlanCostViewIterator"/>
+    <searchRegion Binds="ProPlanCostViewIterator" Criteria=""
+                  Customizer="oracle.jbo.uicli.binding.JUSearchBindingCustomizer"
+                  id="ProPlanCostView1Query"/>
   </executables>
   <bindings>
     <tree IterBinding="ProPlanCostViewIterator" id="ProPlanCostView">
