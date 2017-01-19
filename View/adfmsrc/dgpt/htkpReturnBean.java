@@ -90,12 +90,9 @@ public class htkpReturnBean {
     private RichTable subTable2;
     private RichPopup ptBlockPoup;
     private RichPopup adminBlockPoup;
-    private RichCommandButton newbtn;
 
     public htkpReturnBean() {
         super();
-        System.out.println(this);
-        System.out.println("ssssssss");
         this.curUser = (Person)(ADFContext.getCurrent().getSessionScope().get("cur_user"));
         if("10000".equals(this.curUser.getId())){
             isEDITABLE = true;
@@ -107,7 +104,6 @@ public class htkpReturnBean {
         this.dataModel = new PcDataTableModel();
         List<Map> d = new ArrayList<Map>();
         this.dataModel.setWrappedData(d);
-        isSelected = true;
         this.initList();
     }
     private Person curUser;
@@ -136,7 +132,7 @@ public class htkpReturnBean {
     //是否是2007及以上格式
     private boolean isXlsx = true;
     //是否已选表头
-    private boolean isSelected;
+    private boolean isSelected = false;
     
     private boolean isBlock;
     private boolean isManager;
@@ -259,12 +255,6 @@ public class htkpReturnBean {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        
-        this.newbtn.setRendered(false);
-        AdfFacesContext adfFacesContext = AdfFacesContext.getCurrentInstance();
-        adfFacesContext.addPartialTarget(this.newbtn);
-
-        
         System.out.println("isEditable:"+this.isEDITABLE);
     }
     
@@ -499,9 +489,12 @@ public class htkpReturnBean {
         if(year==null||pName==null||version==null){
             isSelected = false;
             return;
+        }else{
+            isSelected = true;  
         }
+        System.out.println("San of ---------");
         this.selectIsEditable();
-        //this.createTableModel();
+        this.createTableModel();
     }
     //项目下拉框值改变
     public void pnameChange(ValueChangeEvent valueChangeEvent) {
@@ -510,9 +503,12 @@ public class htkpReturnBean {
         if(year==null||pName==null||version==null){
             isSelected = false;
             return;
+        }else{
+            isSelected = true;  
         }
+        System.out.println("San of ---------");
         this.selectIsEditable();
-        //this.createTableModel();
+        this.createTableModel();
     }
     //版本下拉框值改变
     public void versionChange(ValueChangeEvent valueChangeEvent) {
@@ -520,10 +516,13 @@ public class htkpReturnBean {
         if(year==null||pName==null||version==null){
             isSelected = false;
             return;
+        }else{
+            isSelected = true;  
         }
+        System.out.println("San of ---------");
 
         this.selectIsEditable();
-        //this.createTableModel();
+        this.createTableModel();
     }
     //调整数字显示格式
     public static String getPrettyNumber(String number) {  
@@ -1129,7 +1128,6 @@ public class htkpReturnBean {
     }
 
     public boolean isIsEDITABLE() {
-        System.out.println("return : "+isEDITABLE);
         return isEDITABLE;
     }
 
@@ -1290,11 +1288,4 @@ public class htkpReturnBean {
         }
     }
 
-    public void setNewbtn(RichCommandButton newbtn) {
-        this.newbtn = newbtn;
-    }
-
-    public RichCommandButton getNewbtn() {
-        return newbtn;
-    }
 }

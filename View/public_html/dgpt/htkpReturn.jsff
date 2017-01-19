@@ -231,44 +231,47 @@
               <af:commandButton text="#{viewBundle['dcm.common.new']}" id="cb1"
                                 actionListener="#{viewScope.htkpReturnBean.operation_new}"
                                 partialTriggers="::soc4 ::iclov2 ::soc3"
-                                disabled="#{(viewScope.htkpReturnBean.isSelected eq false) 
-                                            and (viewScope.htkpReturnBean.isBlock eq true)}"
-                                rendered="#{viewScope.htkpReturnBean.isEDITABLE}"/>
+                                disabled="#{!(viewScope.htkpReturnBean.isSelected eq true and viewScope.htkpReturnBean.isBlock eq false 
+                                and viewScope.htkpReturnBean.isEDITABLE eq true)}" />
                                 <!-- #{bindings.CreateInsert.execute}-->
               <af:commandButton text="#{viewBundle['dms.common.save']}" id="cb2"
                                 actionListener="#{viewScope.htkpReturnBean.operation_save}"
                                 partialTriggers="::soc4 ::soc3 ::iclov2"
-                                disabled="#{(viewScope.htkpReturnBean.isSelected eq false) and (viewScope.htkpReturnBean.isBlock eq true)}"
-                                rendered="#{viewScope.htkpReturnBean.isEDITABLE}"/>
+                                disabled="#{!(viewScope.htkpReturnBean.isSelected eq true and viewScope.htkpReturnBean.isBlock eq false 
+                                    and viewScope.htkpReturnBean.isEDITABLE eq true)}"/>
               <af:commandButton text="#{viewBundle['dcm.common.delete']}" id="cb3"
                                 actionListener="#{viewScope.htkpReturnBean.operation_delete}"
                                 partialTriggers="::soc4 ::soc3 ::iclov2"
-                                disabled="#{(viewScope.htkpReturnBean.isSelected eq false) and (viewScope.htkpReturnBean.isBlock eq true)}"
-                                rendered="#{viewScope.htkpReturnBean.isEDITABLE}"/>
-              <af:commandButton text="#{viewScope.htkpReturnBean.isEDITABLE}" id="cb4"
+                                disabled="#{!(viewScope.htkpReturnBean.isSelected eq true and viewScope.htkpReturnBean.isBlock eq false 
+                                and viewScope.htkpReturnBean.isEDITABLE eq true)}"/>
+              <af:commandButton text="#{viewBundle['dms.common.cancel']}" id="cb4"
+                                partialTriggers="::soc4 ::iclov2 ::soc3"
+                                disabled="#{!(viewScope.htkpReturnBean.isSelected eq true and viewScope.htkpReturnBean.isBlock eq false 
+                                and viewScope.htkpReturnBean.isEDITABLE eq true)}"
                                 actionListener="#{viewScope.htkpReturnBean.reset}"/>
             </af:group>
             <af:group id="g2">
               <af:commandButton text="#{viewBundle['dms.dgpt.excel.import']}" id="cb5"
                                 partialTriggers="::soc4 ::soc3 ::iclov2"
-                                disabled="#{(viewScope.htkpReturnBean.isSelected eq false) and (viewScope.htkpReturnBean.isBlock eq true)}"
-                                rendered="#{viewScope.htkpReturnBean.isEDITABLE}">
+                                disabled="#{!(viewScope.htkpReturnBean.isSelected eq true and viewScope.htkpReturnBean.isBlock eq false 
+                                and viewScope.htkpReturnBean.isEDITABLE eq true)}">
                 <af:showPopupBehavior popupId="::p2"/>
               </af:commandButton>
               <af:commandButton text="#{viewBundle['dcm.action.export']}" id="cb6"
                                 partialTriggers="::soc4 ::soc3 ::iclov2"
-                                disabled="#{viewScope.htkpReturnBean.isSelected}">
+                                disabled="#{viewScope.htkpReturnBean.isSelected eq false}">
                 <af:showPopupBehavior popupId="::p1"/>
               </af:commandButton>
               <af:commandButton text="#{viewBundle['dms.dgpt.block']}" id="cb10"
                                 actionListener="#{viewScope.htkpReturnBean.beBlocked}"
                                 rendered="#{viewScope.htkpReturnBean.isEDITABLE}"
-                                disabled="#{(viewScope.htkpReturnBean.isSelected eq false) and (viewScope.htkpReturnBean.isBlock eq true)}"
+                                disabled="#{!(viewScope.htkpReturnBean.isSelected eq true and viewScope.htkpReturnBean.isBlock eq false 
+                                and viewScope.htkpReturnBean.isEDITABLE eq true)}"
                                 partialTriggers="::soc4 ::soc3 ::iclov2"/>
               <af:commandButton text="#{viewBundle['dms.dgpt.fblock']}" id="cb11"
                                 actionListener="#{viewScope.htkpReturnBean.outBlock}"
                                 rendered="#{(sessionScope.authoriedFunction['UNFREEZE'] ne null) or viewScope.htkpReturnBean.isManager}"
-                                disabled="#{(viewScope.htkpReturnBean.isSelected eq false) and (viewScope.htkpReturnBean.isBlock eq false)}"
+                                disabled="#{!(viewScope.htkpReturnBean.isSelected eq true and viewScope.htkpReturnBean.isBlock eq true)}"
                                 partialTriggers="::soc4 ::soc3 ::iclov2"/>
               <af:commandButton text="#{viewBundle['dms.dgpt.block.status']}" id="cb12"
                                 actionListener="#{viewScope.htkpReturnBean.showBlockStatus}">
