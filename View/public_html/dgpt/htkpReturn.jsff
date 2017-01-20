@@ -265,7 +265,6 @@
               </af:commandButton>
               <af:commandButton text="#{viewBundle['dms.dgpt.block']}" id="cb10"
                                 actionListener="#{viewScope.htkpReturnBean.beBlocked}"
-                                rendered="#{viewScope.htkpReturnBean.isEDITABLE}"
                                 disabled="#{!(viewScope.htkpReturnBean.isSelected eq true and viewScope.htkpReturnBean.isBlock eq false 
                                 and viewScope.htkpReturnBean.isEDITABLE eq true)}"
                                 partialTriggers="::soc4 ::soc3 ::iclov2"/>
