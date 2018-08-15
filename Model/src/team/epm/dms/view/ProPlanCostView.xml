@@ -50,7 +50,8 @@
     t.CENTER, 
     t.WORK_TYPE, 
     t.BOM_CODE, 
-    t.ROW_NUM 
+    t.ROW_NUM,
+    t.MILESTONE 
 FROM 
     PRO_PLAN_COST_ERROR t 
 WHERE 
@@ -318,6 +319,27 @@ WHERE
       <SchemaBasedProperties>
         <LABEL
           ResId="dcm.error.rownum"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="Milestone"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="200"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="MILESTONE"
+    Expression="MILESTONE"
+    SQLType="VARCHAR">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="200"/>
+    </DesignTime>
+    <Properties>
+      <SchemaBasedProperties>
+        <LABEL
+          ResId="team.epm.dms.view.ProPlanCostView.Milestone_LABEL"/>
       </SchemaBasedProperties>
     </Properties>
   </ViewAttribute>

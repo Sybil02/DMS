@@ -51,6 +51,8 @@
       <page path="/dgpt/HtChange.jsff" usageId="__HtChangePageDef"/>
       <page path="/dgpt/rpcostView.jsff" usageId="__rpcostViewPageDef"/>
       <page path="/dgpt/htkpReturn.jsff" usageId="__htkpReturnPageDef"/>
+      <page path="/dgpt/ProjectZx_Hh.jsff" usageId="__ProjectZx_HhPageDef"/>
+      <page path="/dgpt/htkpReturn_HH.jsff" usageId="__htkpReturn_HHPageDef"/>
    </pageMap>
    <pageDefinitionUsages>
       <page id="__dynamicTabShellPageDef"
@@ -97,6 +99,8 @@
       <page id="__HtChangePageDef" path="dgpt.HtChangePageDef"/>
       <page id="__rpcostViewPageDef" path="dgpt.rpcostViewPageDef"/>
       <page id="__htkpReturnPageDef" path="dgpt.htkpReturnPageDef"/>
+      <page id="__ProjectZx_HhPageDef" path="dgpt.ProjectZx_HhPageDef"/>
+      <page id="__htkpReturn_HHPageDef" path="dgpt.htkpReturn_HHPageDef"/>
    </pageDefinitionUsages>
    <dataControlUsages>
       <BC4JDataControl id="DmsModuleDataControl" Package="team.epm.module"

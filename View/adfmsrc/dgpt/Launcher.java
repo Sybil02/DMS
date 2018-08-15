@@ -32,6 +32,12 @@ public class Launcher extends TabLauncher{
                         false);
     }
     
+    public void launcherProjectZxHh(ActionEvent actionEvent) {
+        _launchActivity("年度预算-在执行项目-杭和",
+                        "/WEB-INF/dgpt/dms_projectzx_hh.xml#dms_projectzx_hh",
+                        false);
+    }
+    
     public void launcherProjectZxo(ActionEvent actionEvent) {
         _launchActivity("年度预算-在执行项目、合同预算表-料、工、费",
                         "/WEB-INF/dgpt/dms.zzxout_tsk.xml#dms.zzxout_tsk",
@@ -56,6 +62,11 @@ public class Launcher extends TabLauncher{
     public void launcherHtkpChange(ActionEvent actionEvent) {
         _launchActivity("年度预算-合同开票回款（在执行）",
                         "/WEB-INF/dgpt/dms_htkpreturn_tsk.xml#dms_htkpreturn_tsk",
+                        false);
+    }
+    public void launcherHtkpHhChange(ActionEvent actionEvent) {
+        _launchActivity("年度预算-合同开票回款（在执行）_杭和",
+                        "/WEB-INF/dgpt/dms_htkpreturn_hh_task.xml#dms_htkpreturn_hh_task",
                         false);
     }
 

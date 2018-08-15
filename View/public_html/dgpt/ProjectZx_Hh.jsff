@@ -1,0 +1,738 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.1"
+          xmlns:af="http://xmlns.oracle.com/adf/faces/rich"
+          xmlns:f="http://java.sun.com/jsf/core"
+          xmlns:c="http://java.sun.com/jsp/jstl/core">
+  <c:set var="viewBundle" value="#{adfBundle['dms_v']}"/>
+  <af:panelStretchLayout id="psl1" startWidth="0px" topHeight="63px"
+                         bottomHeight="7px">
+    <f:facet name="bottom">
+      <af:panelGroupLayout layout="scroll"
+                           xmlns:af="http://xmlns.oracle.com/adf/faces/rich"
+                           id="pgl4">
+        <af:popup id="p2" autoCancel="disabled" childCreation="deferred"
+                  binding="#{viewScope.ProjectZxHhBean.dataExportWnd}">
+          <af:panelWindow id="pw2" title="#{viewBundle['dms.dgpt.dataExport']}">
+            <af:panelGridLayout id="pgl5">
+              <af:gridRow marginTop="5px" height="auto" id="gr2">
+                <af:gridCell marginStart="5px" width="auto" id="gc6"
+                             inlineStyle="padding-top:5px">
+                  <af:outputText value="#{viewBundle['dms.dgpt.excel.format']}"
+                                 id="ot10"/>
+                </af:gridCell>
+                <af:gridCell marginStart="5px" marginEnd="5px" width="auto"
+                             id="gc9">
+                  <!-- <af:selectBooleanRadio text="#{viewBundle['dms.dgpt.excel.03format']}"
+                                         id="sbr3" group="excelFormat1"
+                                         simple="true"/>-->
+                  <af:selectBooleanRadio text="#{viewBundle['dms.dgpt.excel.07format']}"
+                                         id="sbr4" group="excelFormat1"
+                                         simple="true" autoSubmit="true"
+                                         value="#{viewScope.ProjectZxHhBean.isXlsx}"/>
+                </af:gridCell>
+              </af:gridRow>
+              <af:gridRow marginTop="5px" marginBottom="5px" height="auto"
+                          id="gr1">
+                <af:gridCell marginStart="5px" width="auto" columnSpan="2"
+                             halign="center" id="gc8"
+                             inlineStyle="margin-top:5px">
+                  <af:commandButton text="#{viewBundle['dcm.action.export']}"
+                                    id="cb11">
+                    <af:fileDownloadActionListener contentType="application/vnd.ms-excel"
+                                                   method="#{viewScope.ProjectZxHhBean.operation_export}"
+                                                   filename="#{viewScope.ProjectZxHhBean.exportDataExcelName}"/>
+                  </af:commandButton>
+                </af:gridCell>
+              </af:gridRow>
+            </af:panelGridLayout>
+          </af:panelWindow>
+        </af:popup>
+        <af:popup id="p1" binding="#{viewScope.ProjectZxHhBean.errorWindow}">
+          <af:panelWindow id="pw1" title="#{viewBundle['dcm.import_error']}">
+            <af:panelStretchLayout id="psl2"
+                                   inlineStyle="width:800px;height:400px">
+              <f:facet name="bottom"/>
+              <f:facet name="center">
+                <af:table value="#{bindings.ProPlanCostView1.collectionModel}"
+                          var="row"
+                          rows="#{bindings.ProPlanCostView1.rangeSize}"
+                          emptyText="#{bindings.ProPlanCostView1.viewable ? 'No data to display.' : 'Access Denied.'}"
+                          fetchSize="#{bindings.ProPlanCostView1.rangeSize}"
+                          rowBandingInterval="0"
+                          selectedRowKeys="#{bindings.ProPlanCostView1.collectionModel.selectedRow}"
+                          selectionListener="#{bindings.ProPlanCostView1.collectionModel.makeCurrent}"
+                          rowSelection="single" id="t3"
+                          columnStretching="column:c45">
+                  <af:column sortProperty="#{bindings.ProPlanCostView1.hints.Network.name}"
+                             sortable="false"
+                             headerText="#{bindings.ProPlanCostView1.hints.Network.label}"
+                             id="c33">
+                    <af:outputText value="#{row.Network}" id="ot7"/>
+                  </af:column>
+                  <af:column sortProperty="#{bindings.ProPlanCostView1.hints.WorkCode.name}"
+                             sortable="false"
+                             headerText="#{bindings.ProPlanCostView1.hints.WorkCode.label}"
+                             id="c41">
+                    <af:outputText value="#{row.WorkCode}" id="ot9"/>
+                  </af:column>
+                  <af:column headerText="#{bindings.ProPlanCostView1.hints.Milestone.label}"
+                             id="c57">
+                    <af:outputText value="#{row.Milestone}" id="ot27"/>
+                  </af:column>
+                  <af:column sortProperty="#{bindings.ProPlanCostView1.hints.Work.name}"
+                             sortable="false"
+                             headerText="#{bindings.ProPlanCostView1.hints.Work.label}"
+                             id="c43">
+                    <af:outputText value="#{row.Work}" id="ot6"/>
+                  </af:column>
+                  <af:column sortProperty="#{bindings.ProPlanCostView1.hints.Term.name}"
+                             sortable="false"
+                             headerText="#{bindings.ProPlanCostView1.hints.Term.label}"
+                             id="c32">
+                    <af:outputText value="#{row.Term}" id="ot12"/>
+                  </af:column>
+                  <af:column sortProperty="#{bindings.ProPlanCostView1.hints.CostDetail.name}"
+                             sortable="false"
+                             headerText="#{bindings.ProPlanCostView1.hints.CostDetail.label}"
+                             id="c44">
+                    <af:outputText value="#{row.CostDetail}" id="ot11"/>
+                  </af:column>
+                  <af:column sortProperty="#{bindings.ProPlanCostView1.hints.Center.name}"
+                             sortable="false"
+                             headerText="#{bindings.ProPlanCostView1.hints.Center.label}"
+                             id="c37">
+                    <af:outputText value="#{row.Center}" id="ot17"/>
+                  </af:column>
+                  <af:column sortProperty="#{bindings.ProPlanCostView1.hints.WorkType.name}"
+                             sortable="false"
+                             headerText="#{bindings.ProPlanCostView1.hints.WorkType.label}"
+                             id="c46">
+                    <af:outputText value="#{row.WorkType}" id="ot15"/>
+                  </af:column>
+                  <af:column sortProperty="#{bindings.ProPlanCostView1.hints.BomCode.name}"
+                             sortable="false"
+                             headerText="#{bindings.ProPlanCostView1.hints.BomCode.label}"
+                             id="c38">
+                    <af:outputText value="#{row.BomCode}" id="ot14"/>
+                  </af:column>
+                  <af:column sortProperty="#{bindings.ProPlanCostView1.hints.Msg.name}"
+                             sortable="false"
+                             headerText="#{bindings.ProPlanCostView1.hints.Msg.label}"
+                             id="c45">
+                    <af:outputText value="#{row.Msg}" id="ot19"/>
+                  </af:column>
+                  <af:column sortProperty="#{bindings.ProPlanCostView1.hints.CreatedAt.name}"
+                             sortable="false"
+                             headerText="#{bindings.ProPlanCostView1.hints.CreatedAt.label}"
+                             id="c34">
+                    <af:outputText value="#{row.CreatedAt}" id="ot18">
+                      <af:convertDateTime pattern="#{bindings.ProPlanCostView1.hints.CreatedAt.format}"/>
+                    </af:outputText>
+                  </af:column>
+                  <af:column sortProperty="#{bindings.ProPlanCostView1.hints.CreatedBy.name}"
+                             sortable="false"
+                             headerText="#{bindings.ProPlanCostView1.hints.CreatedBy.label}"
+                             id="c35">
+                    <af:outputText value="#{row.CreatedBy}" id="ot8"/>
+                  </af:column>
+                </af:table>
+              </f:facet>
+              <f:facet name="start"/>
+              <f:facet name="end"/>
+              <f:facet name="top"/>
+            </af:panelStretchLayout>
+          </af:panelWindow>
+        </af:popup>
+        <af:popup id="p3" autoCancel="disabled" childCreation="deferred"
+                  binding="#{viewScope.ProjectZxHhBean.dataImportWnd}">
+          <af:panelWindow id="pw3"
+                          title="#{viewBundle['dcm.template.data_import']}"
+                          modal="true">
+            <af:panelGridLayout id="pgl6">
+              <af:gridRow marginTop="5px" height="auto" id="gr3">
+                <af:gridCell width="auto" id="gc1"
+                             inlineStyle="padding-top:5px">
+                  <af:outputText value="#{viewBundle['dcm.template.import_file']}"
+                                 id="ot13"/>
+                </af:gridCell>
+                <af:gridCell marginStart="5px" marginEnd="5px" width="auto"
+                             id="gc4">
+                  <af:inputFile id="if2" simple="true" columns="15"
+                                binding="#{viewScope.ProjectZxHhBean.fileInput}"
+                                valueChangeListener="#{viewScope.ProjectZxHhBean.inputFile_valueChangeListener}"/>
+                </af:gridCell>
+              </af:gridRow>
+              <!--<af:gridRow marginTop="5px" marginBottom="5px" height="auto"
+                          id="gr4">
+                <af:gridCell width="auto" id="gc3"
+                             inlineStyle="padding-top:5px">
+                  <af:outputText value="#{viewBundle['dcm.template.import_type_msg']}"
+                                 id="ot14"/>
+                </af:gridCell>
+                <af:gridCell marginStart="5px" marginEnd="5px" width="auto"
+                             id="gc2">
+                  <af:selectBooleanRadio text="#{viewBundle['dcm.import.increment']}"
+                                         id="sbr5" group="handleMode"
+                                         simple="true"
+                                         value="#{viewScope.ProjectZxHhBean.isIncrement}"
+                                         />
+                  <af:selectBooleanRadio text="#{viewBundle['dcm.import.repalce']}"
+                                         id="sbr6" group="handleMode"
+                                         simple="true"
+                                         value="#{viewScope.ProjectZxHhBean.isReplaceDefault}"
+                                         />
+                </af:gridCell>
+              </af:gridRow>-->
+              <af:gridRow marginTop="5px" marginBottom="5px" height="auto"
+                          id="gr5">
+                <af:gridCell halign="center" width="auto" id="gc5">
+                  <af:commandButton text="#{viewBundle['dcm.action.import']}"
+                                    id="cb9" inlineStyle="margin-top:5px"
+                                    actionListener="#{viewScope.ProjectZxHhBean.operation_import}"/>
+                </af:gridCell>
+              </af:gridRow>
+            </af:panelGridLayout>
+          </af:panelWindow>
+        </af:popup>
+        <af:popup id="p4" binding="#{viewScope.ProjectZxHhBean.statusWindow}"
+                  autoCancel="disabled">
+          <af:panelWindow id="pw4"
+                          title="#{viewBundle['dms.dgpt.block_status.select']}">
+            <af:panelCollection id="pc3" inlineStyle="width:800px;height:400px">
+              <f:facet name="menus"/>
+              <f:facet name="toolbar">
+                <af:toolbar id="t7">
+                  <af:group id="g4">
+                    <af:commandButton text="#{viewBundle['dms.dgpt.fblock']}"
+                                      id="cb12"
+                                      rendered="#{sessionScope.authoriedFunction['UNFREEZE']}"
+                                      actionListener="#{viewScope.ProjectZxHhBean.goUnBlock2}"/>
+                  </af:group>
+                </af:toolbar>
+              </f:facet>
+              <f:facet name="statusbar"/>
+              <af:table value="#{bindings.PTBlockStatus.collectionModel}"
+                        var="row" rows="#{bindings.PTBlockStatus.rangeSize}"
+                        emptyText="#{bindings.PTBlockStatus.viewable ? 'No data to display.' : 'Access Denied.'}"
+                        fetchSize="#{bindings.PTBlockStatus.rangeSize}"
+                        rowBandingInterval="0"
+                        filterModel="#{bindings.PTBlockStatusQuery.queryDescriptor}"
+                        queryListener="#{bindings.PTBlockStatusQuery.processQuery}"
+                        filterVisible="false" varStatus="vs"
+                        selectionListener="#{bindings.PTBlockStatus.collectionModel.makeCurrent}"
+                        rowSelection="multiple" id="t4"
+                        columnStretching="column:c48"
+                        binding="#{viewScope.ProjectZxHhBean.subTable2}">
+                <af:column sortProperty="#{bindings.PTBlockStatus.hints.Meaning.name}"
+                           filterable="true" sortable="true"
+                           headerText="#{bindings.PTBlockStatus.hints.Meaning.label}"
+                           id="c42">
+                  <af:outputText value="#{row.Meaning}" id="ot16"/>
+                </af:column>
+                <af:column sortProperty="#{bindings.PTBlockStatus.hints.ProjectName.name}"
+                           filterable="true" sortable="true"
+                           headerText="#{bindings.PTBlockStatus.hints.ProjectName.label}"
+                           id="c48">
+                  <af:outputText value="#{row.ProjectName}" id="ot20"/>
+                </af:column>
+                <af:column sortProperty="#{bindings.PTBlockStatus.hints.Version.name}"
+                           filterable="true" sortable="true"
+                           headerText="#{bindings.PTBlockStatus.hints.Version.label}"
+                           id="c49">
+                  <af:outputText value="#{row.Version}" id="ot21"/>
+                </af:column>
+                <af:column sortProperty="#{bindings.PTBlockStatus.hints.IsBlock.name}"
+                           filterable="true" sortable="true"
+                           headerText="#{bindings.PTBlockStatus.hints.IsBlock.label}"
+                           id="c47">
+                  <af:outputText value="#{row.IsBlock}" id="ot22"/>
+                </af:column>
+              </af:table>
+            </af:panelCollection>
+          </af:panelWindow>
+        </af:popup>
+        <af:popup id="p5" binding="#{viewScope.ProjectZxHhBean.adminBlockPop}"
+                  autoCancel="disabled">
+          <af:panelWindow id="pw5"
+                          title="#{viewBundle['dms.dgpt.block_status.select']}">
+            <af:panelCollection id="pc2" inlineStyle="width:800px;height:400px">
+              <f:facet name="menus"/>
+              <f:facet name="toolbar">
+                <af:toolbar id="t6">
+                  <af:group id="g3">
+                    <af:commandButton text="#{viewBundle['dms.dgpt.fblock']}"
+                                      id="cb10"
+                                      actionListener="#{viewScope.ProjectZxHhBean.goUnBlock}"/>
+                  </af:group>
+                </af:toolbar>
+              </f:facet>
+              <f:facet name="statusbar"/>
+              <af:table value="#{bindings.adminBlockStatus.collectionModel}"
+                        var="row" rows="#{bindings.adminBlockStatus.rangeSize}"
+                        emptyText="#{bindings.adminBlockStatus.viewable ? 'No data to display.' : 'Access Denied.'}"
+                        fetchSize="#{bindings.adminBlockStatus.rangeSize}"
+                        rowBandingInterval="0"
+                        filterModel="#{bindings.adminBlockStatusQuery.queryDescriptor}"
+                        queryListener="#{bindings.adminBlockStatusQuery.processQuery}"
+                        filterVisible="false" varStatus="vs"
+                        selectionListener="#{bindings.adminBlockStatus.collectionModel.makeCurrent}"
+                        rowSelection="multiple" id="t5"
+                        columnStretching="column:c51"
+                        binding="#{viewScope.ProjectZxHhBean.subTable}">
+                <af:column sortProperty="#{bindings.adminBlockStatus.hints.Meaning.name}"
+                           filterable="true" sortable="false"
+                           headerText="#{bindings.adminBlockStatus.hints.Meaning.label}"
+                           id="c50">
+                  <af:outputText value="#{row.Meaning}" id="ot24"/>
+                </af:column>
+                <af:column sortProperty="#{bindings.adminBlockStatus.hints.ProjectName.name}"
+                           filterable="true" sortable="false"
+                           headerText="#{bindings.adminBlockStatus.hints.ProjectName.label}"
+                           id="c51">
+                  <af:outputText value="#{row.ProjectName}" id="ot23"/>
+                </af:column>
+                <af:column sortProperty="#{bindings.adminBlockStatus.hints.Version.name}"
+                           filterable="true" sortable="false"
+                           headerText="#{bindings.adminBlockStatus.hints.Version.label}"
+                           id="c53">
+                  <af:outputText value="#{row.Version}" id="ot26"/>
+                </af:column>
+                <af:column sortProperty="#{bindings.adminBlockStatus.hints.IsBlock.name}"
+                           filterable="true" sortable="false"
+                           headerText="#{bindings.adminBlockStatus.hints.IsBlock.label}"
+                           id="c52">
+                  <af:outputText value="#{row.IsBlock}" id="ot25"/>
+                </af:column>
+              </af:table>
+            </af:panelCollection>
+          </af:panelWindow>
+        </af:popup>
+      </af:panelGroupLayout>
+    </f:facet>
+    <f:facet name="center">
+      <af:panelCollection id="pc1">
+        <f:facet name="menus"/>
+        <f:facet name="toolbar">
+          <af:toolbar id="t1">
+            <af:group id="g2">
+              <af:commandButton text="#{viewBundle['dms.common.save']}" id="cb2"
+                                action="#{viewScope.ProjectZxHhBean.operation_save}"
+                                disabled="#{viewScope.ProjectZxHhBean.isSelected or not viewScope.ProjectZxHhBean.isEDITABLE or viewScope.ProjectZxHhBean.isBlock}"
+                                partialTriggers="::soc1 ::iclov2 ::soc3"/>
+              <af:commandButton text="#{viewBundle['dms.common.cancel']}"
+                                id="cb3"
+                                actionListener="#{viewScope.ProjectZxHhBean.reset}"/>
+            </af:group>
+            <af:group id="g1">
+              <af:commandButton text="#{viewBundle['dms.dgpt.import']}" id="cb5"
+                                disabled="#{viewScope.ProjectZxHhBean.isBlock or not viewScope.ProjectZxHhBean.isEDITABLE or viewScope.ProjectZxHhBean.isSelected}"
+                                partialTriggers="cb8 ::pc2:cb10">
+                <af:showPopupBehavior popupId="::p3" alignId=""/>
+              </af:commandButton>
+              <af:commandButton text="#{viewBundle['dcm.action.export']}"
+                                id="cb7"
+                                disabled="#{viewScope.ProjectZxHhBean.isSelected}"
+                                partialTriggers="::soc1 ::iclov2 ::soc3">
+                <af:showPopupBehavior popupId="::p2"/>
+              </af:commandButton>
+              <af:commandButton text="#{viewBundle['dms.dgpt.block']}" id="cb8"
+                                actionListener="#{viewScope.ProjectZxHhBean.beBlocked}"
+                                disabled="#{viewScope.ProjectZxHhBean.isBlock or not viewScope.ProjectZxHhBean.isEDITABLE}"
+                                partialTriggers="::soc1 ::iclov2 ::soc3 ::pc2:cb10"/>
+              <af:commandButton text="#{viewBundle['dms.dgpt.block.status']}"
+                                id="cb6"
+                                actionListener="#{viewScope.ProjectZxHhBean.blockStatusPop}"/>
+              <af:commandButton text="#{viewBundle['dms.dgpt.fblock']}" id="cb4"
+                                rendered="#{(sessionScope.authoriedFunction['UNFREEZE'] ne null) or viewScope.ProjectZxHhBean.isManager}"
+                                actionListener="#{viewScope.ProjectZxHhBean.outBlock}"
+                                disabled="#{not viewScope.ProjectZxHhBean.isBlock}"
+                                partialTriggers="::soc1 ::iclov2 ::soc3 ::pc2:cb10"/>
+              <af:commandButton text="#{viewBundle['dcm.import_error']}"
+                                id="cb1"
+                                actionListener="#{viewScope.ProjectZxHhBean.errorPop}"/>
+            </af:group>
+          </af:toolbar>
+        </f:facet>
+        <f:facet name="statusbar"/>
+        <af:table var="row" rowBandingInterval="0" id="t2"
+                  value="#{viewScope.ProjectZxHhBean.dataModel}"
+                  selectionListener="#{viewScope.ProjectZxHhBean.rowSelectionListener}"
+                  selectedRowKeys="#{viewScope.ProjectZxHhBean.dataModel.selectedRows}"
+                  rowSelection="multiple" editingMode="clickToEdit"
+                  emptyText="#{viewBundle['dms.common.nodata']}"
+                  partialTriggers=":::iclov2 :::soc1 :::soc3">
+          <af:column sortable="false"
+                     headerText="#{viewBundle['dms.dgpt.zzx.wbs']}" id="c2" width="105">
+            <af:inputText value="#{row[viewScope.ProjectZxHhBean.dataModel.labelMap['WBS']]}"
+                          id="it26" readOnly="true"/>
+          </af:column>
+          <af:column id="c36" sortable="false"
+                     headerText="#{viewBundle['dms.dgpt.zzx.network']}" width="105">
+            <af:inputText value="#{row[viewScope.ProjectZxHhBean.dataModel.labelMap['NETWORK']]}"
+                          id="it32" readOnly="true"/>
+          </af:column>
+          <af:column sortable="false"
+                     headerText="#{viewBundle['dms.dgpt.zzx.workcode']}" id="c39" width="105">
+            <af:inputText value="#{row[viewScope.ProjectZxHhBean.dataModel.labelMap['WORK_CODE']]}"
+                          id="it39" readOnly="true"/>
+          </af:column>
+          <af:column sortable="false"
+                     headerText="#{viewBundle['dms.dgpt.zzx.milestone']}" id="c54" width="105">
+            <af:inputText value="#{row[viewScope.ProjectZxHhBean.dataModel.labelMap['MILESTONE']]}"
+                          id="it54" readOnly="true"/>
+          </af:column>
+          <af:column sortable="false"
+                     headerText="#{viewBundle['dms.dgpt.zzx.work']}" id="c5" width="105">
+            <af:inputText value="#{row[viewScope.ProjectZxHhBean.dataModel.labelMap['WORK']]}"
+                          id="it14" readOnly="true"/>
+          </af:column>
+          <af:column id="c55" sortable="false"
+                     headerText="#{viewBundle['dms.dgpt.zzx.termcode']}" width="105">
+            <af:inputText readOnly="true" id="it33"
+                          value="#{row[viewScope.ProjectZxHhBean.dataModel.labelMap['TERM_CODE']]}"/>
+          </af:column>
+          <af:column sortable="false"
+                     headerText="#{viewBundle['dms.dgpt.zzx.term']}" id="c19" width="105">
+            <af:inputText value="#{row[viewScope.ProjectZxHhBean.dataModel.labelMap['TERM']]}"
+                          id="it3" readOnly="true"/>
+          </af:column>
+          <af:column sortable="false"
+                     headerText="#{viewBundle['dms.dgpt.zzx.acccode']}" id="c40" width="103">
+            <af:inputText value="#{row[viewScope.ProjectZxHhBean.dataModel.labelMap['COST_DETAIL']]}"
+                          id="it40" readOnly="true"/>
+          </af:column>
+          <af:column sortable="false"
+                     headerText="#{viewBundle['dms.dgpt.zzx.center']}" id="c29" width="107">
+            <af:inputText value="#{row[viewScope.ProjectZxHhBean.dataModel.labelMap['CENTER']]}"
+                          id="it12" readOnly="true"/>
+          </af:column>
+          <af:column sortable="false"
+                     headerText="#{viewBundle['dms.quartz.jobtype']}" id="c7" width="105">
+            <af:inputText value="#{row[viewScope.ProjectZxHhBean.dataModel.labelMap['WORK_TYPE']]}"
+                          id="it5" readOnly="true"/>
+          </af:column>
+          <af:column sortable="false"
+                     headerText="#{viewBundle['dms.dgpt.zzx.bomcode']}" id="c20" width="105">
+            <af:inputText value="#{row[viewScope.ProjectZxHhBean.dataModel.labelMap['BOM_CODE']]}"
+                          id="it28" readOnly="true"/>
+          </af:column>
+          <af:column sortable="false"
+                     headerText="#{viewBundle['dms.dgpt.zzx.unit']}" id="c14" width="105">
+            <af:inputText value="#{row[viewScope.ProjectZxHhBean.dataModel.labelMap['UNIT']]}"
+                          id="it27" readOnly="true"/>
+          </af:column>
+          <af:column sortable="false"
+                     headerText="#{viewBundle['dms.dgpt.zzx.plancost']}" id="c1" width="105">
+            <af:inputText value="#{row[viewScope.ProjectZxHhBean.dataModel.labelMap['PLAN_COST']]}"
+                          id="it16" readOnly="true"/>
+          </af:column>
+          <af:column sortable="false"
+                     headerText="#{viewBundle['dms.dgpt.htkp.occurCost']}" id="c25" width="88">
+            <af:inputText value="#{row[viewScope.ProjectZxHhBean.dataModel.labelMap['OCCURRED']]}"
+                          id="it23" readOnly="true"/>
+          </af:column>
+          <af:column sortable="false"
+                     headerText="#{viewBundle['dms.dgpt.zzx.surplus']}" id="c56">
+            <af:inputText value="#{row[viewScope.ProjectZxHhBean.dataModel.labelMap['SURPLUS']]}"
+                          id="it56" readOnly="true"/>
+          </af:column>
+          <!--<af:column sortable="false" headerText="预计总数量" id="c37">
+            <af:inputText value="#{row[viewScope.ProjectZxHhBean.dataModel.labelMap['PLAN_QUANTITY']]}" id="it33" readOnly="true"/>
+          </af:column>
+          <af:column sortable="false" headerText="预计总金额" id="c38">
+            <af:inputText value="#{row[viewScope.ProjectZxHhBean.dataModel.labelMap['PLAN_AMOUNT']]}" id="it34" readOnly="true"/>
+          </af:column>
+          <af:column sortable="false" headerText="已发生数量" id="c39">
+            <af:inputText value="#{row[viewScope.ProjectZxHhBean.dataModel.labelMap['OCCURRED_QUANTITY']]}" id="it35" readOnly="true"/>
+          </af:column>
+          <af:column sortable="false" headerText="已发生金额" id="c40">
+            <af:inputText value="#{row[viewScope.ProjectZxHhBean.dataModel.labelMap['OCCURRED_AMOUNT']]}" id="it36" readOnly="true"/>
+          </af:column>-->
+          <af:column sortable="false"
+                     headerText="#{viewBundle['dms.dgpt.htkp.last10']}" id="c16"
+                     inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
+                                    #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
+                                    #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}">
+            <af:inputText value="#{viewScope.ProjectZxHhBean.dataModel.labelMap['M0']==null ? ' ' : row[viewScope.ProjectZxHhBean.dataModel.labelMap['M0']]}"
+                          id="it30"
+                          valueChangeListener="#{viewScope.ProjectZxHhBean.valueChangeLinstener}"
+                          readOnly="#{ viewScope.ProjectZxHhBean.isBlock or not viewScope.ProjectZxHhBean.isEDITABLE}"/>
+          </af:column>
+          <af:column sortable="false"
+                     headerText="#{viewBundle['dms.dgpt.htkp.last11']}" id="c28"
+                     inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
+                                    #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
+                                    #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}">
+            <af:inputText value="#{viewScope.ProjectZxHhBean.dataModel.labelMap['M1']==null ? ' ' : row[viewScope.ProjectZxHhBean.dataModel.labelMap['M1']]}"
+                          id="it15"
+                          valueChangeListener="#{viewScope.ProjectZxHhBean.valueChangeLinstener}"
+                          readOnly="#{ viewScope.ProjectZxHhBean.isBlock or not viewScope.ProjectZxHhBean.isEDITABLE}"/>
+          </af:column>
+          <af:column sortable="false"
+                     headerText="#{viewBundle['dms.dgpt.htkp.last12']}" id="c18"
+                     inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
+                                    #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
+                                    #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}">
+            <af:inputText value="#{viewScope.ProjectZxHhBean.dataModel.labelMap['M2']==null ? ' ' : row[viewScope.ProjectZxHhBean.dataModel.labelMap['M2']]}"
+                          id="it1"
+                          valueChangeListener="#{viewScope.ProjectZxHhBean.valueChangeLinstener}"
+                          readOnly="#{ viewScope.ProjectZxHhBean.isBlock or not viewScope.ProjectZxHhBean.isEDITABLE}"/>
+          </af:column>
+          <af:column sortable="false"
+                     headerText="#{viewBundle['dms.dgpt.htkp.cur1']}" id="c11"
+                     inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
+                                    #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
+                                    #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}">
+            <af:inputText value="#{viewScope.ProjectZxHhBean.dataModel.labelMap['M3']==null ? ' ' : row[viewScope.ProjectZxHhBean.dataModel.labelMap['M3']]}"
+                          id="it10"
+                          valueChangeListener="#{viewScope.ProjectZxHhBean.valueChangeLinstener}"
+                          readOnly="#{ viewScope.ProjectZxHhBean.isBlock or not viewScope.ProjectZxHhBean.isEDITABLE}"/>
+          </af:column>
+          <af:column sortable="false"
+                     headerText="#{viewBundle['dms.dgpt.htkp.cur2']}" id="c27"
+                     inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
+                                    #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
+                                    #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}">
+            <af:inputText value="#{viewScope.ProjectZxHhBean.dataModel.labelMap['M4']==null ? ' ' : row[viewScope.ProjectZxHhBean.dataModel.labelMap['M4']]}"
+                          id="it24"
+                          valueChangeListener="#{viewScope.ProjectZxHhBean.valueChangeLinstener}"
+                          readOnly="#{ viewScope.ProjectZxHhBean.isBlock or not viewScope.ProjectZxHhBean.isEDITABLE}"/>
+          </af:column>
+          <af:column sortable="false"
+                     headerText="#{viewBundle['dms.dgpt.htkp.cur3']}" id="c8"
+                     inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
+                                    #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
+                                    #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}">
+            <af:inputText value="#{viewScope.ProjectZxHhBean.dataModel.labelMap['M5']==null ? ' ' : row[viewScope.ProjectZxHhBean.dataModel.labelMap['M5']]}"
+                          id="it11"
+                          valueChangeListener="#{viewScope.ProjectZxHhBean.valueChangeLinstener}"
+                          readOnly="#{ viewScope.ProjectZxHhBean.isBlock or not viewScope.ProjectZxHhBean.isEDITABLE}"/>
+          </af:column>
+          <af:column sortable="false"
+                     headerText="#{viewBundle['dms.dgpt.htkp.cur4']}" id="c22"
+                     inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
+                                    #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
+                                    #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}">
+            <af:inputText value="#{viewScope.ProjectZxHhBean.dataModel.labelMap['M6']==null ? ' ' : row[viewScope.ProjectZxHhBean.dataModel.labelMap['M6']]}"
+                          id="it18"
+                          valueChangeListener="#{viewScope.ProjectZxHhBean.valueChangeLinstener}"
+                          readOnly="#{ viewScope.ProjectZxHhBean.isBlock or not viewScope.ProjectZxHhBean.isEDITABLE}"/>
+          </af:column>
+          <af:column sortable="false"
+                     headerText="#{viewBundle['dms.dgpt.htkp.cur5']}" id="c6"
+                     inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
+                                    #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
+                                    #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}">
+            <af:inputText value="#{viewScope.ProjectZxHhBean.dataModel.labelMap['M7']==null ? ' ' : row[viewScope.ProjectZxHhBean.dataModel.labelMap['M7']]}"
+                          id="it13"
+                          valueChangeListener="#{viewScope.ProjectZxHhBean.valueChangeLinstener}"
+                          readOnly="#{ viewScope.ProjectZxHhBean.isBlock or not viewScope.ProjectZxHhBean.isEDITABLE}"/>
+          </af:column>
+          <af:column sortable="false"
+                     headerText="#{viewBundle['dms.dgpt.htkp.cur6']}" id="c12"
+                     inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
+                                    #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
+                                    #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}">
+            <af:inputText value="#{viewScope.ProjectZxHhBean.dataModel.labelMap['M8']==null ? ' ' : row[viewScope.ProjectZxHhBean.dataModel.labelMap['M8']]}"
+                          id="it4"
+                          valueChangeListener="#{viewScope.ProjectZxHhBean.valueChangeLinstener}"
+                          readOnly="#{ viewScope.ProjectZxHhBean.isBlock or not viewScope.ProjectZxHhBean.isEDITABLE}"/>
+          </af:column>
+          <af:column sortable="false"
+                     headerText="#{viewBundle['dms.dgpt.htkp.cur7']}" id="c23"
+                     inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
+                                    #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
+                                    #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}">
+            <af:inputText value="#{viewScope.ProjectZxHhBean.dataModel.labelMap['M9']==null ? ' ' : row[viewScope.ProjectZxHhBean.dataModel.labelMap['M9']]}"
+                          id="it6"
+                          valueChangeListener="#{viewScope.ProjectZxHhBean.valueChangeLinstener}"
+                          readOnly="#{ viewScope.ProjectZxHhBean.isBlock or not viewScope.ProjectZxHhBean.isEDITABLE}"/>
+          </af:column>
+          <af:column sortable="false"
+                     headerText="#{viewBundle['dms.dgpt.htkp.cur8']}" id="c15"
+                     inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
+                                    #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
+                                    #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}">
+            <af:inputText value="#{viewScope.ProjectZxHhBean.dataModel.labelMap['M10']==null ? '' : row[viewScope.ProjectZxHhBean.dataModel.labelMap['M10']]}"
+                          id="it25"
+                          valueChangeListener="#{viewScope.ProjectZxHhBean.valueChangeLinstener}"
+                          readOnly="#{ viewScope.ProjectZxHhBean.isBlock or not viewScope.ProjectZxHhBean.isEDITABLE}"/>
+          </af:column>
+          <af:column sortable="false"
+                     headerText="#{viewBundle['dms.dgpt.htkp.cur9']}" id="c4"
+                     inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
+                                    #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
+                                    #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}">
+            <af:inputText value="#{viewScope.ProjectZxHhBean.dataModel.labelMap['M11']==null ? ' ' : row[viewScope.ProjectZxHhBean.dataModel.labelMap['M11']]}"
+                          id="it21"
+                          valueChangeListener="#{viewScope.ProjectZxHhBean.valueChangeLinstener}"
+                          readOnly="#{ viewScope.ProjectZxHhBean.isBlock or not viewScope.ProjectZxHhBean.isEDITABLE}"/>
+          </af:column>
+          <af:column sortable="false"
+                     headerText="#{viewBundle['dms.dgpt.htkp.cur10']}" id="c13"
+                     inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
+                                    #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
+                                    #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}">
+            <af:inputText value="#{viewScope.ProjectZxHhBean.dataModel.labelMap['M12']==null ? ' ' : row[viewScope.ProjectZxHhBean.dataModel.labelMap['M12']]}"
+                          id="it19"
+                          valueChangeListener="#{viewScope.ProjectZxHhBean.valueChangeLinstener}"
+                          readOnly="#{ viewScope.ProjectZxHhBean.isBlock or not viewScope.ProjectZxHhBean.isEDITABLE}"/>
+          </af:column>
+          <af:column sortable="false"
+                     headerText="#{viewBundle['dms.dgpt.htkp.cur11']}" id="c24"
+                     inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
+                                    #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
+                                    #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}">
+            <af:inputText value="#{viewScope.ProjectZxHhBean.dataModel.labelMap['M13']==null ? ' ' : row[viewScope.ProjectZxHhBean.dataModel.labelMap['M13']]}"
+                          id="it9"
+                          valueChangeListener="#{viewScope.ProjectZxHhBean.valueChangeLinstener}"
+                          readOnly="#{ viewScope.ProjectZxHhBean.isBlock or not viewScope.ProjectZxHhBean.isEDITABLE}"/>
+          </af:column>
+          <af:column sortable="false"
+                     headerText="#{viewBundle['dms.dgpt.htkp.cur12']}" id="c21"
+                     inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
+                                    #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
+                                    #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}">
+            <af:inputText value="#{viewScope.ProjectZxHhBean.dataModel.labelMap['M14']==null ? ' ' : row[viewScope.ProjectZxHhBean.dataModel.labelMap['M14']]}"
+                          id="it8"
+                          valueChangeListener="#{viewScope.ProjectZxHhBean.valueChangeLinstener}"
+                          readOnly="#{ viewScope.ProjectZxHhBean.isBlock or not viewScope.ProjectZxHhBean.isEDITABLE}"/>
+          </af:column>
+          <af:column sortable="false"
+                     headerText="#{viewBundle['dms.dgpt.htkp.next1']}" id="c26"
+                     inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
+                                    #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
+                                    #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}">
+            <af:inputText value="#{viewScope.ProjectZxHhBean.dataModel.labelMap['M15']==null ? ' ' : row[viewScope.ProjectZxHhBean.dataModel.labelMap['M15']]}"
+                          id="it22"
+                          valueChangeListener="#{viewScope.ProjectZxHhBean.valueChangeLinstener}"
+                          readOnly="#{ viewScope.ProjectZxHhBean.isBlock or not viewScope.ProjectZxHhBean.isEDITABLE}"/>
+          </af:column>
+          <af:column sortable="false"
+                     headerText="#{viewBundle['dms.dgpt.htkp.next2']}" id="c31"
+                     inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
+                                    #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
+                                    #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}">
+            <af:inputText value="#{viewScope.ProjectZxHhBean.dataModel.labelMap['M16']==null ? ' ' : row[viewScope.ProjectZxHhBean.dataModel.labelMap['M16']]}"
+                          id="it2"
+                          valueChangeListener="#{viewScope.ProjectZxHhBean.valueChangeLinstener}"
+                          readOnly="#{ viewScope.ProjectZxHhBean.isBlock or not viewScope.ProjectZxHhBean.isEDITABLE}"/>
+          </af:column>
+          <af:column sortable="false"
+                     headerText="#{viewBundle['dms.dgpt.htkp.next3']}" id="c17"
+                     inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
+                                    #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
+                                    #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}">
+            <af:inputText value="#{viewScope.ProjectZxHhBean.dataModel.labelMap['M17']==null ? ' ' : row[viewScope.ProjectZxHhBean.dataModel.labelMap['M17']]}"
+                          id="it7"
+                          valueChangeListener="#{viewScope.ProjectZxHhBean.valueChangeLinstener}"
+                          readOnly="#{ viewScope.ProjectZxHhBean.isBlock or not viewScope.ProjectZxHhBean.isEDITABLE}"/>
+          </af:column>
+          <af:column sortable="false"
+                     headerText="#{viewBundle['dms.dgpt.htkp.next4']}" id="c3"
+                     inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
+                                    #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
+                                    #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}">
+            <af:inputText value="#{viewScope.ProjectZxHhBean.dataModel.labelMap['M18']==null ? ' ' : row[viewScope.ProjectZxHhBean.dataModel.labelMap['M18']]}"
+                          id="it20"
+                          valueChangeListener="#{viewScope.ProjectZxHhBean.valueChangeLinstener}"
+                          readOnly="#{ viewScope.ProjectZxHhBean.isBlock or not viewScope.ProjectZxHhBean.isEDITABLE}"/>
+          </af:column>
+          <af:column sortable="false"
+                     headerText="#{viewBundle['dms.dgpt.htkp.next5']}" id="c10"
+                     inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
+                                    #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
+                                    #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}">
+            <af:inputText value="#{viewScope.ProjectZxHhBean.dataModel.labelMap['M19']==null ? ' ' : row[viewScope.ProjectZxHhBean.dataModel.labelMap['M19']]}"
+                          id="it17"
+                          valueChangeListener="#{viewScope.ProjectZxHhBean.valueChangeLinstener}"
+                          readOnly="#{ viewScope.ProjectZxHhBean.isBlock or not viewScope.ProjectZxHhBean.isEDITABLE}"/>
+          </af:column>
+          <af:column sortable="false"
+                     headerText="#{viewBundle['dms.dgpt.htkp.next6']}" id="c9"
+                     inlineStyle="#{'UPDATE' eq row['OPERATION'] ? 'background-color:GREEN;' : ''}
+                                    #{'CREATE' eq row['OPERATION'] ? 'background-color:RED;' : ''}
+                                    #{'DELETE' eq row['OPERATION'] ? 'background-color:YELLOW;' : ''}">
+            <af:inputText value="#{viewScope.ProjectZxHhBean.dataModel.labelMap['M20']==null ? ' ' : row[viewScope.ProjectZxHhBean.dataModel.labelMap['M20']]}"
+                          id="it31"
+                          valueChangeListener="#{viewScope.ProjectZxHhBean.valueChangeLinstener}"
+                          readOnly="#{ viewScope.ProjectZxHhBean.isBlock or not viewScope.ProjectZxHhBean.isEDITABLE}"/>
+          </af:column>
+          <af:column sortable="false"
+                     headerText="#{viewBundle['dms.dgpt.zzx.sumafter7']}" id="c30">
+            <af:inputText value="#{row[viewScope.ProjectZxHhBean.dataModel.labelMap['SUM_AFTER_JUL']]}"
+                          id="it29"
+                          valueChangeListener="#{viewScope.ProjectZxHhBean.valueChangeLinstener}"
+                          readOnly="#{ viewScope.ProjectZxHhBean.isBlock or not viewScope.ProjectZxHhBean.isEDITABLE}"/>
+          </af:column>
+        </af:table>
+      </af:panelCollection>
+    </f:facet>
+    <f:facet name="start"/>
+    <f:facet name="end"/>
+    <f:facet name="top">
+      <af:panelGroupLayout id="pgl1" layout="vertical">
+        <af:panelGroupLayout id="pgl2" layout="horizontal">
+          <af:selectOneChoice value="#{viewScope.ProjectZxHhBean.year}"
+                              label="#{viewBundle['dms.dgpt.htkp.year']}"
+                              autoSubmit="true" id="soc1"
+                              valueChangeListener="#{viewScope.ProjectZxHhBean.yearChange}">
+            <f:selectItems value="#{viewScope.ProjectZxHhBean.yearList}"
+                           id="si1"/>
+          </af:selectOneChoice>
+          <af:selectOneChoice value="#{viewScope.ProjectZxHhBean.version}"
+                              label="#{viewBundle['dms.dgpt.htkp.version']}" autoSubmit="true" id="soc3"
+                              valueChangeListener="#{viewScope.ProjectZxHhBean.versionChange}"
+                              partialTriggers="iclov2 soc1">
+            <f:selectItems value="#{viewScope.ProjectZxHhBean.versionList}"
+                           id="si3"/>
+          </af:selectOneChoice>
+          <af:inputComboboxListOfValues label="#{viewBundle['dms.dgpt.htkp.pname']}"
+                                        inlineStyle="margin-right:5px"
+                                        value="#{viewScope.ProjectZxHhBean.pname}"
+                                        autoSubmit="true" clientComponent="true"
+                                        validator="#{viewScope.ProjectZxHhBean.proLov.listOfValuesModel.validate}"
+                                        model="#{viewScope.ProjectZxHhBean.proLov.listOfValuesModel}"
+                                        id="iclov2" columns="80"
+                                        valueChangeListener="#{viewScope.ProjectZxHhBean.projectChange}"
+                                        usage="auto">
+            <af:autoSuggestBehavior suggestedItems="#{viewScope.ProjectZxHhBean.proLov.listOfValuesModel.suggest}"/>
+          </af:inputComboboxListOfValues>
+          <af:panelLabelAndMessage label="#{viewBundle['dms.dgpt.htkp.entity']}" id="plam1">
+            <af:outputText value="#{viewScope.ProjectZxHhBean.entity}"
+                           partialTriggers="iclov2 soc1 soc3" id="ot1"/>
+          </af:panelLabelAndMessage>
+          <!--af:selectOneChoice value="#{viewScope.ProjectZxHhBean.pname}"
+                              label="项目名称" autoSubmit="true"
+                              id="iclov2"
+                              valueChangeListener="#{viewScope.ProjectZxHhBean.projectChange}">
+            <f:selectItems value="#{viewScope.ProjectZxHhBean.pnameList}" id="si2"/>
+          </af:selectOneChoice-->
+          
+        </af:panelGroupLayout>
+        <af:panelGroupLayout id="pgl3" layout="horizontal">
+          <af:panelLabelAndMessage label="#{viewBundle['dms.dgpt.projectzx.proType']}" id="plam3">
+            <af:outputText value="#{viewScope.ProjectZxHhBean.proType}"
+                           partialTriggers="iclov2 soc1 soc3" id="ot3"/>
+          </af:panelLabelAndMessage>
+          <af:panelLabelAndMessage label="#{viewBundle['dms.dgpt.htkp.productLine']}" id="plam2">
+            <af:outputText value="#{viewScope.ProjectZxHhBean.PLine}"
+                           partialTriggers="iclov2 soc1 soc3" id="ot2"/>
+          </af:panelLabelAndMessage>
+          <af:panelLabelAndMessage label="#{viewBundle['dms.dgpt.htkp.industryLine']}" id="plam4">
+            <af:outputText value="#{viewScope.ProjectZxHhBean.HLine}"
+                           partialTriggers="iclov2 soc1 soc3" id="ot4"/>
+          </af:panelLabelAndMessage>
+          <af:panelLabelAndMessage label="#{viewBundle['dms.dgpt.htkp.businessLine']}" id="plam5">
+            <af:outputText value="#{viewScope.ProjectZxHhBean.YLine}"
+                           partialTriggers="iclov2 soc1 soc3" id="ot5"/>
+          </af:panelLabelAndMessage>
+          <af:panelLabelAndMessage label="#{viewBundle['dms.dgpt.zzx.department']}" id="plam6">
+            <af:outputText value="#{viewScope.ProjectZxHhBean.department}"
+                           partialTriggers="iclov2 soc1 soc3" id="ot100"/>
+          </af:panelLabelAndMessage>
+        </af:panelGroupLayout>
+      </af:panelGroupLayout>
+    </f:facet>
+  </af:panelStretchLayout>
+</jsp:root>

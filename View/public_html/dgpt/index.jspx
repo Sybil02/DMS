@@ -22,6 +22,8 @@
                                 actionListener="#{backingBeanScope.Launcher.launcherHtysBH}"/-->
                 <af:commandLink text="年度预算-在执行项目" id="cl4"
                                 actionListener="#{backingBeanScope.Launcher.launcherProjectZx}"/>
+                <af:commandLink text="年度预算-在执行项目-杭和" id="c21"
+                                actionListener="#{backingBeanScope.Launcher.launcherProjectZxHh}"/>                
                 <af:commandLink text="年度预算-在执行项目、合同预算表-料、工、费" id="cl7"
                                 actionListener="#{backingBeanScope.Launcher.launcherProjectZxo}"/>
                 <af:commandLink text="项目预算-基准计划成本" id="cl5"
@@ -32,6 +34,8 @@
                                 actionListener="#{backingBeanScope.Launcher.launcherRollChange}"/>
                 <af:commandLink text="年度预算-合同开票回款（在执行）" id="cl9"
                                 actionListener="#{backingBeanScope.Launcher.launcherHtkpChange}"/>
+                <af:commandLink text="年度预算-合同开票回款（在执行）_杭和" id="c22"
+                                actionListener="#{backingBeanScope.Launcher.launcherHtkpHhChange}"/>
                 <af:commandLink text="年度预算-项目大表" id="c20"
                                 actionListener="#{backingBeanScope.Launcher.launcherXmdb}"/>
               </af:panelList>

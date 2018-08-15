@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pageDefinition xmlns="http://xmlns.oracle.com/adfm/uimodel"
+                version="11.1.1.64.93" id="ProjectZx_HhPageDef" Package="dgpt">
+  <parameters/>
+  <executables>
+    <variableIterator id="variables"/>
+    <iterator Binds="PTBlockStatus" RangeSize="25"
+              DataControl="DmsModuleDataControl" id="PTBlockStatusIterator"/>
+    <iterator Binds="adminBlockStatus" RangeSize="25"
+              DataControl="DmsModuleDataControl" id="adminBlockStatusIterator"/>
+    <iterator Binds="ProPlanCostView" RangeSize="25"
+              DataControl="DmsModuleDataControl" id="ProPlanCostViewIterator"/>
+  </executables>
+  <bindings>
+    <tree IterBinding="PTBlockStatusIterator" id="PTBlockStatus">
+      <nodeDefinition DefName="team.epm.dms.view.PTBlockStatus"
+                      Name="PTBlockStatus0">
+        <AttrNames>
+          <Item Value="Meaning"/>
+          <Item Value="ProjectName"/>
+          <Item Value="IsBlock"/>
+          <Item Value="Version"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <tree IterBinding="adminBlockStatusIterator" id="adminBlockStatus">
+      <nodeDefinition DefName="team.epm.dms.view.adminBlockStatus"
+                      Name="adminBlockStatus0">
+        <AttrNames>
+          <Item Value="Code"/>
+          <Item Value="Meaning"/>
+          <Item Value="ProjectName"/>
+          <Item Value="IsBlock"/>
+          <Item Value="Version"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <tree IterBinding="ProPlanCostViewIterator" id="ProPlanCostView1">
+      <nodeDefinition DefName="team.epm.dms.view.ProPlanCostView"
+                      Name="ProPlanCostView0">
+        <AttrNames>
+          <Item Value="Wbs"/>
+          <Item Value="Work"/>
+          <Item Value="Msg"/>
+          <Item Value="CreatedAt"/>
+          <Item Value="CreatedBy"/>
+          <Item Value="Network"/>
+          <Item Value="WorkCode"/>
+          <Item Value="Term"/>
+          <Item Value="CostDetail"/>
+          <Item Value="Center"/>
+          <Item Value="WorkType"/>
+          <Item Value="BomCode"/>
+          <Item Value="RowNum"/>
+          <Item Value="Locale"/>
+          <Item Value="DataType"/>
+          <Item Value="Milestone"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+  </bindings>
+</pageDefinition>

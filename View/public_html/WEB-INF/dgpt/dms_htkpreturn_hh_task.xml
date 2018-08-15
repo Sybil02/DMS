@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<adfc-config xmlns="http://xmlns.oracle.com/adf/controller" version="1.2">
+  <task-flow-definition id="dms_htkpreturn_hh_task">
+    <default-activity id="__1">htkpReturnHh</default-activity>
+    <managed-bean id="__2">
+      <managed-bean-name id="__3">htkpReturnHhBean</managed-bean-name>
+      <managed-bean-class id="__5">dgpt.HtkpReturnHhBean</managed-bean-class>
+      <managed-bean-scope id="__4">view</managed-bean-scope>
+    </managed-bean>
+    <view id="htkpReturnHh">
+      <page>/dgpt/htkpReturn_HH.jsff</page>
+    </view>
+    <use-page-fragments/>
+  </task-flow-definition>
+</adfc-config>
